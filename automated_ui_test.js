@@ -90,7 +90,7 @@ assert(html.includes('甜口牛肉咖哩'), '洋食：甜口牛肉咖哩');
 assert(html.includes('蛤蜊味噌湯'), '熱湯：蛤蜊味噌湯');
 assert(html.includes('熊本阿蘇高菜拌飯'), '主食：熊本阿蘇高菜拌飯');
 assert(html.includes('火鍋高湯'), '湯頭類：火鍋高湯 (已正確歸入菜餚類)');
-assert(html.includes('豚骨拉麵湯頭'), '湯頭類：豚骨拉麵湯頭 (已正確歸入菜餚類)');
+assert(html.includes('豚骨拉麵'), '餐點類：豚骨拉麵 (已正確歸入餐點類)');
 assert(html.includes('玉子燒壽司') && html.includes('藍鰭鮪魚壽司') && html.includes('鮭魚壽司'), '壽司：玉子、鮪魚、鮭魚');
 assert(html.includes('鰻魚壽司') && html.includes('花枝壽司') && html.includes('鮮蝦壽司'), '壽司：鰻魚、花枝、鮮蝦');
 assert(html.includes('哈密瓜') && html.includes('巧克力布朗尼切塊蛋糕') && html.includes('抹茶蕨餅') && html.includes('和菓子'), '水果甜點：哈密瓜、巧克力蛋糕、抹茶蕨餅、和菓子');

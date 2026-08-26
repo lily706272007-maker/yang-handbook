@@ -434,6 +434,60 @@
   @media (min-width: 481px) and (max-width: 768px)  { .vocab-word-grid { grid-template-columns: repeat(4, 1fr); } }
   @media (max-width: 480px)  { .vocab-word-grid { grid-template-columns: repeat(3, 1fr); } }
 
+  /* 對話類專屬：一句話一行 (滿版單行排列) */
+  .dialog-vocab-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .dialog-vocab-row {
+    background: var(--bg-card);
+    border: 1px solid rgba(200,192,182,0.35);
+    border-left: 3.5px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;
+    box-shadow: 0 1px 3px var(--shadow);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dialog-vocab-row:hover {
+    background: var(--surface);
+    border-color: var(--primary);
+    transform: translateX(2px);
+  }
+  .dialog-vocab-row .dialog-vocab-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .dialog-vocab-row .cell-ja {
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.9;
+    margin-bottom: 2px;
+    text-align: left;
+  }
+  .dialog-vocab-row .cell-zh {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.35;
+    text-align: left;
+  }
+  .dialog-vocab-row .cell-actions {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
   /* 單字卡片 */
   .word-cell {
     background: var(--bg-card);
@@ -1152,7 +1206,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v14';
+const STORAGE_KEY = 'yang_runner_handbook_v15';
 
 function createRealRunnerData() {
   return {
@@ -1867,11 +1921,11 @@ function createRealRunnerData() {
     },
     {
       "id": "vs_soup_2",
-      "ja": "とんこつスープ / <ruby>ラーメンスープ<rt>ra-men su-pu</rt></ruby>",
-      "zh": "豚骨拉麵湯頭",
+      "ja": "とんこつ<ruby>ラーメン<rt>ra-men</rt></ruby>",
+      "zh": "豚骨拉麵",
       "cat": "餐點",
       "imageUrl": "./photos/IMG_0852.jpg",
-      "note": "拉麵高湯"
+      "note": "拉麵"
     },
     {
       "id": "vs_sushi_1",
@@ -3178,7 +3232,31 @@ function renderVocabPage(type) {
     return;
   }
 
-  // 密集 Word 表格網格 (點一下發音・點兩下詳情・無相機圖示干擾)
+  // 1. 若當前分類為「對話」：一句話一行 (滿版排列，方便長句完整閱讀與朗讀)
+  if (currentFilter === '對話') {
+    let dialogHtml = '<div class="dialog-vocab-list">';
+    filtered.forEach(v => {
+      dialogHtml += `
+        <div class="dialog-vocab-row" 
+             onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+             ondblclick="openWordDetailModal('${v.id}')"
+             title="點一下發音・點兩下查看詳情">
+          <div class="dialog-vocab-main">
+            <div class="cell-ja">${v.ja}</div>
+            <div class="cell-zh">${escapeHtml(v.zh)}</div>
+          </div>
+          <div class="cell-actions" onclick="event.stopPropagation()">
+            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
+            <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
+          </div>
+        </div>`;
+    });
+    dialogHtml += '</div>';
+    listEl.innerHTML = dialogHtml;
+    return;
+  }
+
+  // 2. 其餘分類 (餐點、酒水、工具、名字、職稱、全部)：密集 Word 表格網格 (電腦6/平板5-4/手機3欄)
   let gridHtml = '<div class="vocab-word-grid">';
 
   filtered.forEach(v => {
@@ -3197,7 +3275,7 @@ function renderVocabPage(type) {
           </div>
         </div>`;
     } else {
-      // 餐點 / 酒水 / 工具 / 職稱 / 對話：上方日文 (含標音)，下方中文翻譯
+      // 一般單字卡片：上方日文 (含標音)，下方中文翻譯
       gridHtml += `
         <div class="word-cell" 
              onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
@@ -3411,9 +3489,9 @@ function handlePetTouchEnd() {
 }
 
 function startPetVoiceInput(continuous = false) {
-  if (!AppData.apiKey) {
-    setPetStatus('⚠️ 請先在「設定」頁填入 Gemini API Key');
-    showPetDialog('需要 Gemini API Key 才能啟動 AI 智能整理功能喔！');
+  if (!AppData.apiKey && !HARDCODED_GEMINI_API_KEY) {
+    setPetStatus('⚠️ Gemini API Key 尚未設定');
+    showPetDialog('需要 Gemini API 才能啟動 AI 智能整理功能喔！');
     return;
   }
   if (document.body.classList.contains('offline')) {
@@ -3424,41 +3502,61 @@ function startPetVoiceInput(continuous = false) {
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
-    showToast('瀏覽器不支援 Web Speech API，建議使用 Chrome 瀏覽器', 'error');
+    showToast('此瀏覽器不支援 Web Speech 語音辨識，請使用下方文字輸入框！', 'error');
+    setPetStatus('⚠️ 瀏覽器不支援語音，請使用下方輸入框');
+    showPetDialog('您的瀏覽器暫時無法開啟麥克風，請直接在下方輸入文字，我也能幫您整理喔！');
     return;
   }
 
-  petRecognition = new SR();
-  petRecognition.lang = 'ja-JP';
-  petRecognition.continuous = continuous;
-  petRecognition.interimResults = false;
-  isPetRecording = true;
+  try {
+    petRecognition = new SR();
+    petRecognition.lang = 'ja-JP';
+    petRecognition.continuous = continuous;
+    petRecognition.interimResults = false;
+    isPetRecording = true;
 
-  document.getElementById('pet-touch-zone').classList.add('recording');
-  setPetStatus('🔴 語音聆聽中… 請說話');
-  showPetDialog('小狐狸正在聆聽中，請說出傳菜指令、料理名稱或日文句子！');
+    document.getElementById('pet-touch-zone').classList.add('recording');
+    setPetStatus('🔴 語音聆聽中… 請說話');
+    showPetDialog('小狐狸正在聆聽中，請說出傳菜指令、料理名稱或日文句子！');
 
-  petRecognition.onresult = (e) => {
-    const transcript = e.results[e.results.length - 1][0].transcript;
-    setPetStatus('🤖 正在分析整理中…');
-    showPetDialog(`收到了：「${transcript}」，正在請 Gemini 整理中…`);
-    requestGeminiPetAnalysis(transcript);
-  };
+    petRecognition.onresult = (e) => {
+      const transcript = e.results[e.results.length - 1][0].transcript;
+      setPetStatus('🤖 正在請 Gemini 分析整理中…');
+      showPetDialog(`收到了：「${transcript}」，正在整理日文標音與單字…`);
+      requestGeminiPetAnalysis(transcript);
+    };
 
-  petRecognition.onerror = (e) => {
-    setPetStatus('語音辨識失敗：' + e.error);
-    isPetRecording = false;
-    document.getElementById('pet-touch-zone').classList.remove('recording');
-  };
-
-  petRecognition.onend = () => {
-    if (isPetRecording) {
+    petRecognition.onerror = (e) => {
+      console.warn('SpeechRecognition error:', e.error);
       isPetRecording = false;
       document.getElementById('pet-touch-zone').classList.remove('recording');
-    }
-  };
+      
+      if (e.error === 'service-not-allowed' || e.error === 'not-allowed') {
+        setPetStatus('⚠️ 麥克風未授權或語音功能受限');
+        showPetDialog('iPad/瀏覽器限制了語音辨識服務。請至 iPad「設定 > Safari > 麥克風」允許存取，或直接在下方輸入文字！');
+        showToast('語音辨識未被允許，您可直接使用下方文字框輸入', 'error');
+      } else if (e.error === 'no-speech') {
+        setPetStatus('未偵測到聲音，請再試一次');
+      } else {
+        setPetStatus('語音辨識失敗：' + e.error);
+      }
+    };
 
-  petRecognition.start();
+    petRecognition.onend = () => {
+      if (isPetRecording) {
+        isPetRecording = false;
+        document.getElementById('pet-touch-zone').classList.remove('recording');
+      }
+    };
+
+    petRecognition.start();
+  } catch (err) {
+    console.error('Failed to start speech recognition:', err);
+    isPetRecording = false;
+    document.getElementById('pet-touch-zone').classList.remove('recording');
+    setPetStatus('無法啟動語音，請使用下方輸入框');
+    showToast('無法啟動語音辨識，請使用文字輸入', 'error');
+  }
 }
 
 function stopPetVoiceInput() {
