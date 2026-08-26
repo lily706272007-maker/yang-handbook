@@ -1206,7 +1206,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v15';
+const STORAGE_KEY = 'yang_runner_handbook_v16';
 
 function createRealRunnerData() {
   return {
@@ -1680,165 +1680,749 @@ function createRealRunnerData() {
   ],
   "vocabSop": [
     {
-    "id": "vn_6",
-    "ja": "<ruby>市石<rt>いちいし</rt></ruby>",
-    "kana": "いちいし",
-    "isForeign": false,
-    "zh": "市石",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_1",
-    "ja": "<ruby>内間<rt>うちま</rt></ruby>",
-    "kana": "うちま",
-    "isForeign": false,
-    "zh": "內間",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁 / 主管"
-  },
-  {
-    "id": "vn_10",
-    "ja": "<ruby>古賀<rt>こが</rt></ruby>",
-    "kana": "こが",
-    "isForeign": false,
-    "zh": "古賀",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_7",
-    "ja": "<ruby>佐藤<rt>さとう</rt></ruby>",
-    "kana": "さとう",
-    "isForeign": false,
-    "zh": "佐藤",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_3",
-    "ja": "<ruby>須藤<rt>すどう</rt></ruby>",
-    "kana": "すどう",
-    "isForeign": false,
-    "zh": "須藤",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_8",
-    "ja": "<ruby>田中<rt>たなか</rt></ruby>",
-    "kana": "たなか",
-    "isForeign": false,
-    "zh": "田中",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_2",
-    "ja": "<ruby>長森<rt>ながもり</rt></ruby>",
-    "kana": "ながもり",
-    "isForeign": false,
-    "zh": "長森",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_4",
-    "ja": "<ruby>森田<rt>もりた</rt></ruby>",
-    "kana": "もりた",
-    "isForeign": false,
-    "zh": "森田",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_5",
-    "ja": "<ruby>森本<rt>もりもと</rt></ruby>",
-    "kana": "もりもと",
-    "isForeign": false,
-    "zh": "森本",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_9",
-    "ja": "<ruby>山邉<rt>やまべ</rt></ruby>",
-    "kana": "やまべ",
-    "isForeign": false,
-    "zh": "山邊",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_0",
-    "ja": "<ruby>楊<rt>よう</rt></ruby>",
-    "kana": "よう",
-    "isForeign": false,
-    "zh": "楊 (本人)",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "傳菜人員"
-  },
-  {
-    "id": "vn_15",
-    "ja": "<ruby>リク<rt>riku</rt></ruby>",
-    "kana": "りく",
-    "isForeign": false,
-    "zh": "Riku",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁"
-  },
-  {
-    "id": "vn_13",
-    "ja": "<ruby>ハン<rt>han</rt></ruby>",
-    "kana": "はん",
-    "isForeign": true,
-    "zh": "Han",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁 (外籍)"
-  },
-  {
-    "id": "vn_12",
-    "ja": "<ruby>ビム<rt>bimu</rt></ruby>",
-    "kana": "びむ",
-    "isForeign": true,
-    "zh": "Bim",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁 (外籍)"
-  },
-  {
-    "id": "vn_11",
-    "ja": "<ruby>ピョー<rt>pya-</rt></ruby>",
-    "kana": "ぴょー",
-    "isForeign": true,
-    "zh": "Pyaw",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁 (外籍)"
-  },
-  {
-    "id": "vn_14",
-    "ja": "<ruby>プラティマ<rt>puratima</rt></ruby>",
-    "kana": "ぷらてぃま",
-    "isForeign": true,
-    "zh": "Pratima",
-    "cat": "名字",
-    "imageUrl": "",
-    "note": "同仁 (外籍)"
-  },
+      "id": "vs_dashimaki",
+      "ja": "だし<ruby>巻<rt>ま</rt></ruby>き<ruby>玉子<rt>たまご</rt></ruby>",
+      "zh": "高湯煎蛋捲",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0873.jpg",
+      "note": "朝食熱菜・日式高湯厚蛋捲"
+    },
+    {
+      "id": "vs_salmon_saute",
+      "ja": "サーモンソテー",
+      "zh": "嫩煎鮭魚",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0872.jpg",
+      "note": "朝食熱菜"
+    },
+    {
+      "id": "vs_aji_nanban",
+      "ja": "アジの<ruby>南蛮漬<rt>なんばんづ</rt></ruby>け",
+      "zh": "南蠻漬竹莢魚",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0837.jpg",
+      "note": "朝食熱菜"
+    },
+    {
+      "id": "vs_asari_shoga",
+      "ja": "あさりの<ruby>生姜蒸<rt>しょうがむ</rt></ruby>し",
+      "zh": "薑汁蒸蛤蜊",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0843.jpg",
+      "note": "朝食熱菜"
+    },
+    {
+      "id": "vs_gyudon",
+      "ja": "<ruby>牛丼<rt>ぎゅうどん</rt></ruby>",
+      "zh": "牛丼",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0842.jpg",
+      "note": "朝食主食"
+    },
+    {
+      "id": "vs_corn_soup",
+      "ja": "コーンスープ",
+      "zh": "玉米濃湯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0858.jpg",
+      "note": "朝食湯品 (24-25まで)"
+    },
+    {
+      "id": "vs_akaushi_tomato",
+      "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>のトマト<ruby>煮<rt>に</rt></ruby>",
+      "zh": "番茄燉熊本赤牛",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0840.jpg",
+      "note": "朝食名物 (24-25まで)"
+    },
+    {
+      "id": "vs_reimen_pasta",
+      "ja": "<ruby>冷麺<rt>れいめん</rt></ruby>パスタ",
+      "zh": "冷麵義大利麵",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0852.jpg",
+      "note": "朝食主食 (24-25から)"
+    },
+    {
+      "id": "vs_wiener",
+      "ja": "ボイルウインナー",
+      "zh": "水煮維也納香腸",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0836.jpg",
+      "note": "朝食熱菜"
+    },
+    {
+      "id": "vs_scramble",
+      "ja": "スクランブルエッグ",
+      "zh": "美式炒蛋",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0873.jpg",
+      "note": "朝食熱菜"
+    },
+    {
+      "id": "vs_broccoli_bacon",
+      "ja": "ブロッコリーとベーコンのソテー",
+      "zh": "培根炒青花菜",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0840.jpg",
+      "note": "朝食熱菜"
+    },
+    {
+      "id": "vs_yudofu",
+      "ja": "<ruby>湯豆腐<rt>ゆどうふ</rt></ruby>",
+      "zh": "熱湯豆腐",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0857.jpg",
+      "note": "朝食豆腐料理"
+    },
+    {
+      "id": "vs_zaru_dofu",
+      "ja": "ざる<ruby>豆腐<rt>どうふ</rt></ruby>",
+      "zh": "竹簍冷豆腐",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0857.jpg",
+      "note": "朝食豆腐料理 (17-18)"
+    },
+    {
+      "id": "vs_nankan_miso",
+      "ja": "みそ<ruby>汁<rt>しる</rt></ruby>（<ruby>南関揚<rt>なんかんあ</rt></ruby>げ）",
+      "zh": "南關油豆腐味噌湯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0843.jpg",
+      "note": "朝食名物湯品"
+    },
+    {
+      "id": "vs_rice",
+      "ja": "<ruby>白<rt>しろ</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>",
+      "zh": "白飯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0845.jpg",
+      "note": "朝/夜 主食"
+    },
+    {
+      "id": "vs_natto_cup",
+      "ja": "<ruby>納豆<rt>なっとう</rt></ruby>（カップの<ruby>納豆<rt>なっとう</rt></ruby>）",
+      "zh": "杯裝納豆",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0850.jpg",
+      "note": "朝食"
+    },
+    {
+      "id": "vs_mentaiko",
+      "ja": "<ruby>明太子<rt>めんたいこ</rt></ruby>",
+      "zh": "明太子",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0872.jpg",
+      "note": "朝食名物"
+    },
+    {
+      "id": "vs_karashi_renkon",
+      "ja": "<ruby>辛子蓮根<rt>からしれんこん</rt></ruby>",
+      "zh": "辛子蓮藕",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "熊本鄉土名物料理"
+    },
+    {
+      "id": "vs_ika_natto",
+      "ja": "<ruby>烏賊納豆<rt>いかなっとう</rt></ruby>",
+      "zh": "花枝納豆",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0875.jpg",
+      "note": "朝食"
+    },
+    {
+      "id": "vs_onigiri_3",
+      "ja": "おにぎり<ruby>三種<rt>さんしゅ</rt></ruby>",
+      "zh": "飯糰三種",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0845.jpg",
+      "note": "朝食主食"
+    },
+    {
+      "id": "vs_okayu",
+      "ja": "お<ruby>粥<rt>かゆ</rt></ruby>",
+      "zh": "白粥",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0845.jpg",
+      "note": "朝食主食"
+    },
+    {
+      "id": "vs_curry",
+      "ja": "カレー",
+      "zh": "日式牛肉咖哩",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0842.jpg",
+      "note": "夕食名物料理"
+    },
+    {
+      "id": "vs_vege_stew",
+      "ja": "<ruby>彩<rt>いろど</rt></ruby>り<ruby>野菜<rt>やさい</rt></ruby>の<ruby>甘辛煮<rt>あまからに</rt></ruby>",
+      "zh": "甜辛彩蔬煮",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0840.jpg",
+      "note": "夕食熱菜"
+    },
+    {
+      "id": "vs_mabo",
+      "ja": "<ruby>麻婆豆腐<rt>まーぼーどうふ</rt></ruby>",
+      "zh": "麻婆豆腐",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0841.jpg",
+      "note": "夕食熱菜"
+    },
+    {
+      "id": "vs_hoikoro",
+      "ja": "<ruby>回鍋肉<rt>ホイコーロー</rt></ruby>",
+      "zh": "回鍋肉",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0839.jpg",
+      "note": "夕食熱菜 (17まで)"
+    },
+    {
+      "id": "vs_shumai",
+      "ja": "<ruby>焼売<rt>シューマイ</rt></ruby>",
+      "zh": "燒賣",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0836.jpg",
+      "note": "夕食熱菜"
+    },
+    {
+      "id": "vs_chicken_nanban",
+      "ja": "チキン<ruby>南蛮<rt>なんばん</rt></ruby>",
+      "zh": "南蠻炸雞",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0837.jpg",
+      "note": "夕食名物料理"
+    },
+    {
+      "id": "vs_roast_beef",
+      "ja": "ローストビーフ",
+      "zh": "爐烤牛肉",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0842.jpg",
+      "note": "夕食現切料理 (17まで)"
+    },
+    {
+      "id": "vs_roast_pork",
+      "ja": "ローストポーク",
+      "zh": "爐烤豬肉",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0839.jpg",
+      "note": "夕食現切料理 (18から)"
+    },
+    {
+      "id": "vs_tai_sashimi",
+      "ja": "<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>",
+      "zh": "真鯛生魚片",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "note": "夕食刺身料理"
+    },
+    {
+      "id": "vs_katsuo_tataki",
+      "ja": "カツオのたたき",
+      "zh": "炙燒鰹魚",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "note": "夕食名物料理"
+    },
+    {
+      "id": "vs_takana_rice",
+      "ja": "<ruby>高菜<rt>たかな</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>",
+      "zh": "阿蘇高菜拌飯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0845.jpg",
+      "note": "熊本阿蘇名物"
+    },
+    {
+      "id": "vs_asari_miso",
+      "ja": "あさりのみそ<ruby>汁<rt>しる</rt></ruby>",
+      "zh": "蛤蜊味噌湯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0843.jpg",
+      "note": "夕食熱湯"
+    },
+    {
+      "id": "vs_goma_dofu",
+      "ja": "<ruby>胡麻豆腐<rt>ごまどうふ</rt></ruby>",
+      "zh": "胡麻豆腐",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0857.jpg",
+      "note": "夕食小菜"
+    },
+    {
+      "id": "vs_ramen",
+      "ja": "とんこつ<ruby>ラーメン<rt>ra-men</rt></ruby>",
+      "zh": "豚骨拉麵",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0852.jpg",
+      "note": "夕食拉麵"
+    },
+    {
+      "id": "vs_hotpot",
+      "ja": "<ruby>火鍋<rt>ひなべ</rt></ruby>スープ / りんどうポークしゃぶしゃぶ",
+      "zh": "火鍋高湯 / 涮涮鍋",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0851.jpg",
+      "note": "夕食自助火鍋備品"
+    },
+    {
+      "id": "vs_nasu_fukumeni",
+      "ja": "<ruby>茄子<rt>なす</rt></ruby>の<ruby>含<rt>ふく</rt></ruby>め<ruby>煮<rt>に</rt></ruby>",
+      "zh": "燉茄子",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0840.jpg",
+      "note": "朝食小菜"
+    },
+    {
+      "id": "vs_kukiwakame_shibazuke",
+      "ja": "<ruby>茎<rt>くき</rt></ruby>わかめのしば<ruby>漬<rt>づ</rt></ruby>け",
+      "zh": "柴漬海帶梗",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0849.jpg",
+      "note": "朝食小菜"
+    },
+    {
+      "id": "vs_kanten_gomaae",
+      "ja": "パリパリ<ruby>寒天<rt>かんてん</rt></ruby>の<ruby>胡麻和<rt>ごまあ</rt></ruby>え",
+      "zh": "胡麻拌寒天",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0847.jpg",
+      "note": "朝食小菜"
+    },
+    {
+      "id": "vs_hakusai_okakaae",
+      "ja": "<ruby>白菜<rt>はくさい</rt></ruby>のおかか<ruby>和<rt>あ</rt></ruby>え",
+      "zh": "柴魚拌白菜",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0850.jpg",
+      "note": "朝食小菜"
+    },
+    {
+      "id": "vs_ganmo_ingen",
+      "ja": "がんもといんげん",
+      "zh": "油豆腐雁擬與四季豆煮",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0846.jpg",
+      "note": "夕食小菜"
+    },
+    {
+      "id": "vs_chingensai_namul",
+      "ja": "<ruby>青梗菜<rt>チンゲンサイ</rt></ruby>のナムル",
+      "zh": "涼拌青江菜",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0847.jpg",
+      "note": "夕食小菜"
+    },
+    {
+      "id": "vs_croissant",
+      "ja": "クロワッサン",
+      "zh": "可頌麵包",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0881.jpg",
+      "note": "朝食麵包"
+    },
+    {
+      "id": "vs_milk_bread",
+      "ja": "ミルク<ruby>食<rt>しょく</rt></ruby>パン",
+      "zh": "牛奶吐司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0881.jpg",
+      "note": "朝食麵包"
+    },
+    {
+      "id": "vs_ham_egg",
+      "ja": "ハムエッグ",
+      "zh": "火腿煎蛋",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0873.jpg",
+      "note": "朝食いろり"
+    },
+    {
+      "id": "vs_yaki_saba",
+      "ja": "<ruby>鯖<rt>さば</rt></ruby>",
+      "zh": "烤鯖魚",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "note": "朝食いろり烤魚"
+    },
+    {
+      "id": "vs_tai_kama",
+      "ja": "<ruby>鯛<rt>たい</rt></ruby>のカマ",
+      "zh": "烤鯛魚下巴",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "note": "朝食いろり烤魚"
+    },
+    {
+      "id": "vs_kanpachi_kama",
+      "ja": "<ruby>間八<rt>かんぱち</rt></ruby>のカマ",
+      "zh": "烤紅甘下巴",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "note": "朝食いろり烤魚"
+    },
+    {
+      "id": "vs_satsuma_age",
+      "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ",
+      "zh": "薩摩炸魚餅",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "朝食いろり炸物"
+    },
+    {
+      "id": "vs_yaki_ebi",
+      "ja": "<ruby>海老<rt>えび</rt></ruby>",
+      "zh": "烤蝦",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0876.jpg",
+      "note": "夕食いろり烤物"
+    },
+    {
+      "id": "vs_gobou_ten",
+      "ja": "ごぼう<ruby>天<rt>てん</rt></ruby>",
+      "zh": "牛蒡天婦羅",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "夕食いろり炸物"
+    },
+    {
+      "id": "vs_yaki_corn",
+      "ja": "とうもろこし",
+      "zh": "烤玉米",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0858.jpg",
+      "note": "夕食いろり烤物"
+    },
+    {
+      "id": "vs_salad_ninjin",
+      "ja": "にんじん",
+      "zh": "紅蘿蔔絲",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0858.jpg",
+      "note": "沙拉吧蔬菜"
+    },
+    {
+      "id": "vs_salad_murasaki",
+      "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ",
+      "zh": "紫甘藍",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0860.jpg",
+      "note": "沙拉吧蔬菜"
+    },
+    {
+      "id": "vs_salad_minitomato",
+      "ja": "ミニトマト",
+      "zh": "小番茄",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0856.jpg",
+      "note": "沙拉吧蔬菜"
+    },
+    {
+      "id": "vs_salad_babyleaf",
+      "ja": "ベビーリーフ",
+      "zh": "嫩葉生菜",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0858.jpg",
+      "note": "沙拉吧蔬菜"
+    },
+    {
+      "id": "vs_salad_kikuimo",
+      "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ",
+      "zh": "菊芋脆片",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0860.jpg",
+      "note": "沙拉吧配料"
+    },
+    {
+      "id": "vs_salad_beans",
+      "ja": "ビーンズ",
+      "zh": "綜合豆",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0858.jpg",
+      "note": "沙拉吧配料"
+    },
+    {
+      "id": "vs_salad_sweetcorn",
+      "ja": "スイートコーン",
+      "zh": "甜玉米粒",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0858.jpg",
+      "note": "沙拉吧配料"
+    },
+    {
+      "id": "vs_salad_banana",
+      "ja": "バナナ",
+      "zh": "香蕉",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0882.jpg",
+      "note": "朝食水果"
+    },
+    {
+      "id": "vs_salad_orange",
+      "ja": "オレンジ",
+      "zh": "柳橙",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0882.jpg",
+      "note": "朝食水果"
+    },
+    {
+      "id": "vs_salad_yogurt",
+      "ja": "ヨーグルト",
+      "zh": "優格",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0857.jpg",
+      "note": "朝食沙拉吧"
+    },
+    {
+      "id": "vs_sushi_tamago",
+      "ja": "たまご",
+      "zh": "玉子燒壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0873.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_maguro",
+      "ja": "まぐろ",
+      "zh": "鮪魚壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0871.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_salmon",
+      "ja": "サーモン",
+      "zh": "鮭魚壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0872.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_unagi",
+      "ja": "うなぎ",
+      "zh": "鰻魚壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0874.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_ika",
+      "ja": "いか",
+      "zh": "花枝壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0875.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_ebi",
+      "ja": "えび",
+      "zh": "鮮蝦壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0876.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_teriyaki",
+      "ja": "てりやき",
+      "zh": "照燒壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0871.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_desert_melon",
+      "ja": "メロン",
+      "zh": "哈密瓜",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0882.jpg",
+      "note": "夕食水果"
+    },
+    {
+      "id": "vs_desert_choco",
+      "ja": "チョコチップケーキ",
+      "zh": "巧克力蛋糕",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0881.jpg",
+      "note": "夕食甜點・巧克力布朗尼"
+    },
+    {
+      "id": "vs_desert_warabi",
+      "ja": "わらび<ruby>餅<rt>もち</rt></ruby>",
+      "zh": "蕨餅",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0880.jpg",
+      "note": "夕食甜點"
+    },
+    {
+      "id": "vs_desert_dango",
+      "ja": "<ruby>和菓子<rt>わがし</rt></ruby>の<ruby>団子<rt>だんご</rt></ruby>",
+      "zh": "和菓子丸子",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0879.jpg",
+      "note": "夕食甜點・日式串糰子"
+    },
+    {
+      "id": "vn_6",
+      "ja": "<ruby>市石<rt>いちいし</rt></ruby>",
+      "kana": "いちいし",
+      "isForeign": false,
+      "zh": "市石",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_1",
+      "ja": "<ruby>内間<rt>うちま</rt></ruby>",
+      "kana": "うちま",
+      "isForeign": false,
+      "zh": "內間",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁 / 主管"
+    },
+    {
+      "id": "vn_10",
+      "ja": "<ruby>古賀<rt>こが</rt></ruby>",
+      "kana": "こが",
+      "isForeign": false,
+      "zh": "古賀",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_7",
+      "ja": "<ruby>佐藤<rt>さとう</rt></ruby>",
+      "kana": "さとう",
+      "isForeign": false,
+      "zh": "佐藤",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_3",
+      "ja": "<ruby>須藤<rt>すどう</rt></ruby>",
+      "kana": "すどう",
+      "isForeign": false,
+      "zh": "須藤",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_8",
+      "ja": "<ruby>田中<rt>たなか</rt></ruby>",
+      "kana": "たなか",
+      "isForeign": false,
+      "zh": "田中",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_2",
+      "ja": "<ruby>長森<rt>ながもり</rt></ruby>",
+      "kana": "ながもり",
+      "isForeign": false,
+      "zh": "長森",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_4",
+      "ja": "<ruby>森田<rt>もりた</rt></ruby>",
+      "kana": "もりた",
+      "isForeign": false,
+      "zh": "森田",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_5",
+      "ja": "<ruby>森本<rt>もりもと</rt></ruby>",
+      "kana": "もりもと",
+      "isForeign": false,
+      "zh": "森本",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_9",
+      "ja": "<ruby>山邉<rt>やまべ</rt></ruby>",
+      "kana": "やまべ",
+      "isForeign": false,
+      "zh": "山邊",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_0",
+      "ja": "<ruby>楊<rt>よう</rt></ruby>",
+      "kana": "よう",
+      "isForeign": false,
+      "zh": "楊 (本人)",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "傳菜人員"
+    },
+    {
+      "id": "vn_15",
+      "ja": "<ruby>リク<rt>riku</rt></ruby>",
+      "kana": "りく",
+      "isForeign": false,
+      "zh": "Riku",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁"
+    },
+    {
+      "id": "vn_13",
+      "ja": "<ruby>ハン<rt>han</rt></ruby>",
+      "kana": "はん",
+      "isForeign": true,
+      "zh": "Han",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁 (外籍)"
+    },
+    {
+      "id": "vn_12",
+      "ja": "<ruby>ビム<rt>bimu</rt></ruby>",
+      "kana": "びむ",
+      "isForeign": true,
+      "zh": "Bim",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁 (外籍)"
+    },
+    {
+      "id": "vn_11",
+      "ja": "<ruby>ピョー<rt>pya-</rt></ruby>",
+      "kana": "ぴょー",
+      "isForeign": true,
+      "zh": "Pyaw",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁 (外籍)"
+    },
+    {
+      "id": "vn_14",
+      "ja": "<ruby>プラティマ<rt>puratima</rt></ruby>",
+      "kana": "ぷらてぃま",
+      "isForeign": true,
+      "zh": "Pratima",
+      "cat": "名字",
+      "imageUrl": "",
+      "note": "同仁 (外籍)"
+    },
     {
       "id": "vpos_1",
       "ja": "<ruby>ランナー<rt>ranna-</rt></ruby>",
@@ -1910,358 +2494,6 @@ function createRealRunnerData() {
       "cat": "職稱",
       "imageUrl": "",
       "note": "打烊閉館檢查"
-    },
-    {
-      "id": "vs_soup_1",
-      "ja": "<ruby>鍋出汁<rt>なべだし</rt></ruby>",
-      "zh": "火鍋高湯",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0851.jpg",
-      "note": "火鍋高湯備品"
-    },
-    {
-      "id": "vs_soup_2",
-      "ja": "とんこつ<ruby>ラーメン<rt>ra-men</rt></ruby>",
-      "zh": "豚骨拉麵",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0852.jpg",
-      "note": "拉麵"
-    },
-    {
-      "id": "vs_sushi_1",
-      "ja": "<ruby>本鮪<rt>ほんまぐろ</rt></ruby>",
-      "zh": "藍鰭鮪魚壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0871.jpg",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_2",
-      "ja": "<ruby>サーモン<rt>sa-mon</rt></ruby>",
-      "zh": "鮭魚壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0872.jpg",
-      "note": "壽司台"
-    },
-    {
-      "id": "vs_sushi_3",
-      "ja": "うなぎ",
-      "zh": "鰻魚壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0873.jpg",
-      "note": "壽司台"
-    },
-    {
-      "id": "vs_sushi_4",
-      "ja": "うなぎの<ruby>甘<rt>あま</rt></ruby>たれ",
-      "zh": "鰻魚甜醬汁",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0792.jpg",
-      "note": "鰻魚專用甜醬"
-    },
-    {
-      "id": "vs_sushi_5",
-      "ja": "<ruby>烏賊<rt>いか</rt></ruby>",
-      "zh": "花枝壽司 / 烏賊握壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0874.jpg",
-      "note": "壽司台"
-    },
-    {
-      "id": "vs_sushi_6",
-      "ja": "<ruby>海老<rt>えび</rt></ruby>",
-      "zh": "鮮蝦壽司 / 熟蝦握壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0875.jpg",
-      "note": "壽司台"
-    },
-    {
-      "id": "vs_sushi_7",
-      "ja": "<ruby>玉子<rt>たまご</rt></ruby><ruby>握<rt>にぎ</rt></ruby>り",
-      "zh": "玉子燒壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0870.jpg",
-      "note": "壽司台"
-    },
-    {
-      "id": "vs_sushi_8",
-      "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き<ruby>寿司<rt>ずし</rt></ruby> / とり<ruby>貝<rt>がい</rt></ruby>",
-      "zh": "照燒壽司 / 貝類壽司",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0876.jpg",
-      "note": "壽司台"
-    },
-    {
-      "id": "vs_sashimi_1",
-      "ja": "<ruby>鯛姿造<rt>たいすがたづく</rt></ruby>り",
-      "zh": "鯛魚生魚片小碟",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0834.jpg",
-      "note": "冷藏保鮮"
-    },
-    {
-      "id": "vs_sashimi_2",
-      "ja": "<ruby>カツオ<rt>katsuo</rt></ruby>のタタキ",
-      "zh": "炙燒鰹魚 (附洋蔥蔥花)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0835 2.jpg",
-      "note": "冷藏刺身"
-    },
-    {
-      "id": "vs_sashimi_3",
-      "ja": "<ruby>馬刺<rt>ばさ</rt></ruby>し",
-      "zh": "熊本名物 馬肉刺身",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "放進冰箱"
-    },
-    {
-      "id": "vs_sashimi_4",
-      "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>",
-      "zh": "阿蘇赤牛刺身 / 炙燒",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "放進冰箱"
-    },
-    {
-      "id": "vs_hot_1",
-      "ja": "<ruby>海老<rt>えび</rt></ruby>の<ruby>塩焼<rt>しおや</rt></ruby>き",
-      "zh": "圍爐裏 鹽烤大蝦",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0865.jpg",
-      "note": "炭火燒烤區"
-    },
-    {
-      "id": "vs_hot_2",
-      "ja": "<ruby>野菜串<rt>やさいくし</rt></ruby>・<ruby>肉串<rt>にくくし</rt></ruby>",
-      "zh": "圍爐裏 蔬菜串・肉串",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0865.jpg",
-      "note": "炭火燒烤區"
-    },
-    {
-      "id": "vs_hot_3",
-      "ja": "<ruby>揚<rt>あ</rt></ruby>げたて<ruby>天<rt>てん</rt></ruby>ぷら",
-      "zh": "現炸天婦羅 (海老/舞菇/地瓜)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
-      "note": "熱食炸物台"
-    },
-    {
-      "id": "vs_hot_4",
-      "ja": "<ruby>天<rt>てん</rt></ruby>つゆ",
-      "zh": "天婦羅沾醬汁",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
-      "note": "沾醬"
-    },
-    {
-      "id": "vs_hot_5",
-      "ja": "りんどうポーク<ruby>肩<rt>かた</rt></ruby>ロースステーキ",
-      "zh": "龍膽豬肩里肌牛排",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
-      "note": "鐵板熱食"
-    },
-    {
-      "id": "vs_hot_6",
-      "ja": "<ruby>フライドポテト<rt>furaido poteto</rt></ruby>",
-      "zh": "炸薯條",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
-      "note": "炸物台"
-    },
-    {
-      "id": "vs_hot_7",
-      "ja": "<ruby>鶏<rt>とり</rt></ruby>の<ruby>唐揚<rt>からあ</rt></ruby>げ",
-      "zh": "日式唐揚炸雞塊",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0836.jpg",
-      "note": "炸物熟食"
-    },
-    {
-      "id": "vs_hot_8",
-      "ja": "<ruby>宮崎名物<rt>みやざきめいぶつ</rt></ruby> <ruby>鶏南蛮<rt>とになんばん</rt></ruby>",
-      "zh": "宮崎名物 南蠻炸雞 (佐塔塔醬)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0837.jpg",
-      "note": "更換餐盤重點菜"
-    },
-    {
-      "id": "vs_hot_9",
-      "ja": "<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>",
-      "zh": "中華豬肉燒賣",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0839.jpg",
-      "note": "蒸籠點心"
-    },
-    {
-      "id": "vs_hot_10",
-      "ja": "<ruby>彩<rt>いろど</rt></ruby>り<ruby>野菜<rt>やさい</rt></ruby>の<ruby>甘辛煮<rt>あまからに</rt></ruby>",
-      "zh": "時蔬甜辛煮 (彩椒蓮藕時蔬)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0840.jpg",
-      "note": "和食燉煮"
-    },
-    {
-      "id": "vs_hot_11",
-      "ja": "<ruby>麻婆豆腐<rt>まーぼーどうふ</rt></ruby>",
-      "zh": "麻婆豆腐",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0841.jpg",
-      "note": "中華熱菜"
-    },
-    {
-      "id": "vs_hot_12",
-      "ja": "ビーフカレー<ruby>甘口<rt>あまくち</rt></ruby>",
-      "zh": "洋食 甜口牛肉咖哩",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0842.jpg",
-      "note": "咖哩區"
-    },
-    {
-      "id": "vs_hot_13",
-      "ja": "あさりの<ruby>味噌汁<rt>みそしる</rt></ruby>",
-      "zh": "和食 蛤蜊味噌湯",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0843.jpg",
-      "note": "熱湯區"
-    },
-    {
-      "id": "vs_hot_14",
-      "ja": "<ruby>高菜<rt>たかな</rt></ruby><ruby>混<rt>ま</rt></ruby>ぜご<ruby>飯<rt>はん</rt></ruby>",
-      "zh": "熊本阿蘇高菜拌飯",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0844 2.jpg",
-      "note": "米飯主食"
-    },
-    {
-      "id": "vs_hot_15",
-      "ja": "がんもとインゲン",
-      "zh": "油豆腐與四季豆煮物",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0845.jpg",
-      "note": "和食煮物"
-    },
-    {
-      "id": "vs_hot_16",
-      "ja": "<ruby>肉巻<rt>にくま</rt></ruby>き",
-      "zh": "肉卷",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "和食料理"
-    },
-    {
-      "id": "vs_hot_17",
-      "ja": "<ruby>チャーシュー<rt>cha-shu-</rt></ruby>",
-      "zh": "叉燒",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "拉麵配料"
-    },
-    {
-      "id": "vs_hot_18",
-      "ja": "<ruby>ピーマン<rt>pi-man</rt></ruby>",
-      "zh": "青椒",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "蔬菜"
-    },
-    {
-      "id": "vs_hot_19",
-      "ja": "にんじん",
-      "zh": "胡蘿蔔",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "蔬菜"
-    },
-    {
-      "id": "vs_cold_1",
-      "ja": "えだまめ",
-      "zh": "毛豆",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0848.jpg",
-      "note": "冷盤前菜"
-    },
-    {
-      "id": "vs_cold_2",
-      "ja": "<ruby>自家製<rt>じかせい</rt></ruby><ruby>ピクルス<rt>pikurusu</rt></ruby>",
-      "zh": "自製醃菜 (蕪菁與杏鮑菇)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0849.jpg",
-      "note": "醃菜區"
-    },
-    {
-      "id": "vs_cold_3",
-      "ja": "<ruby>漬物<rt>つけもの</rt></ruby>（つぼ<ruby>漬<rt>づ</rt></ruby>け / <ruby>梅干<rt>うめぼ</rt></ruby>し）",
-      "zh": "醬菜（壺漬醬菜 / 梅干）",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0850.jpg",
-      "note": "漬物配菜"
-    },
-    {
-      "id": "vs_cold_4",
-      "ja": "<ruby>胡麻豆腐<rt>ごまどうふ</rt></ruby>",
-      "zh": "芝麻豆腐",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0857.jpg",
-      "note": "和食小缽"
-    },
-    {
-      "id": "vs_cold_5",
-      "ja": "<ruby>冷<rt>ひ</rt></ruby>やし<ruby>茶碗蒸<rt>ちゃわんむ</rt></ruby>し",
-      "zh": "冷茶碗蒸 (佐三杯酢果凍)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0833.jpg",
-      "note": "和食小缽"
-    },
-    {
-      "id": "vs_cold_6",
-      "ja": "りんどうポーク<ruby>味<rt>あじ</rt></ruby> しゃぶしゃぶ",
-      "zh": "龍膽豬涮涮鍋 (附瓦斯爐)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0851.jpg",
-      "note": "鍋物"
-    },
-    {
-      "id": "vs_cold_7",
-      "ja": "<ruby>季節<rt>きせつ</rt></ruby>の<ruby>野菜<rt>やさい</rt></ruby><ruby>サラダ<rt>sarada</rt></ruby>バー",
-      "zh": "沙拉吧 (玉米/綜合豆/菊芋片/小蕃茄/嫩葉生菜/豆苗)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0856.jpg",
-      "note": "沙拉吧全品項"
-    },
-    {
-      "id": "vs_sweet_1",
-      "ja": "<ruby>甘味<rt>かんみ</rt></ruby> <ruby>和菓子<rt>わがし</rt></ruby>いろいろ",
-      "zh": "日式和菓子 (一口大福/草餅/胡麻糰子)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0879.jpg",
-      "note": "甜點區"
-    },
-    {
-      "id": "vs_sweet_2",
-      "ja": "<ruby>抹茶<rt>まっちゃ</rt></ruby>わらび<ruby>餅<rt>もち</rt></ruby>",
-      "zh": "抹茶蕨餅 (佐黃豆粉與紅豆泥)",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0880.jpg",
-      "note": "和風甜點"
-    },
-    {
-      "id": "vs_sweet_3",
-      "ja": "<ruby>ダイスケーキ<rt>daisu ke-ki</rt></ruby> ブラウニーチョコチップ",
-      "zh": "巧克力布朗尼切塊蛋糕",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0881.jpg",
-      "note": "西式甜點"
-    },
-    {
-      "id": "vs_sweet_4",
-      "ja": "<ruby>フルーツ<rt>furu-tsu</rt></ruby> <ruby>メロン<rt>meron</rt></ruby>",
-      "zh": "哈密瓜切片水果",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0882.jpg",
-      "note": "水果區"
     },
     {
       "id": "vd_1",

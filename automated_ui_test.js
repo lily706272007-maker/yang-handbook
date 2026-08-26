@@ -74,26 +74,25 @@ assert(textContent.includes('冷蔵庫'), '冰箱: 冷蔵庫');
 assert(textContent.includes('保温庫'), '保溫庫: 保温庫');
 assert(textContent.includes('元の場所'), '原位: 元の場所');
 
-// 測試 6: 必須記住的料理名稱與湯頭分類
-console.log('\n【測試 6：必須記住的料理名稱與分類】');
-assert(html.includes('南蠻炸雞'), '肉類海鮮：南蠻炸雞');
-assert(html.includes('鯛魚生魚片'), '肉類海鮮：鯛魚生魚片');
-assert(html.includes('炙燒鰹魚'), '肉類海鮮：炙燒鰹魚');
-assert(html.includes('馬肉刺身'), '肉類海鮮：馬肉刺身');
-assert(html.includes('赤牛'), '肉類海鮮：赤牛');
-assert(html.includes('鹽烤大蝦'), '炭火圍爐裏：鹽烤大蝦');
-assert(html.includes('現炸天婦羅'), '熱食炸物：現炸天婦羅');
-assert(html.includes('龍膽豬肩里肌牛排'), '熱食鐵板：龍膽豬肩里肌牛排');
-assert(html.includes('時蔬甜辛煮'), '和食燉煮：時蔬甜辛煮');
-assert(html.includes('麻婆豆腐'), '中華料理：麻婆豆腐');
-assert(html.includes('甜口牛肉咖哩'), '洋食：甜口牛肉咖哩');
+// 測試 6: 必須記住的料理名稱與分類 (100% 依據 2026/7/16 朝＆夜 現場真實菜單)
+console.log('\n【測試 6：必須記住的料理名稱與分類 (紙本菜單核對)】');
+assert(html.includes('南蠻炸雞'), '肉類：南蠻炸雞');
+assert(html.includes('真鯛生魚片'), '生魚片：真鯛生魚片');
+assert(html.includes('炙燒鰹魚'), '生魚片：炙燒鰹魚');
+assert(html.includes('赤牛'), '朝食名物：番茄燉熊本赤牛');
+assert(html.includes('烤蝦'), 'いろり：烤蝦');
+assert(html.includes('牛蒡天婦羅'), 'いろり：牛蒡天婦羅');
+assert(html.includes('甜辛彩蔬煮'), '熱食燉煮：甜辛彩蔬煮');
+assert(html.includes('麻婆豆腐'), '熱食：麻婆豆腐');
+assert(html.includes('日式牛肉咖哩'), '主食：日式牛肉咖哩');
 assert(html.includes('蛤蜊味噌湯'), '熱湯：蛤蜊味噌湯');
-assert(html.includes('熊本阿蘇高菜拌飯'), '主食：熊本阿蘇高菜拌飯');
-assert(html.includes('火鍋高湯'), '湯頭類：火鍋高湯 (已正確歸入菜餚類)');
-assert(html.includes('豚骨拉麵'), '餐點類：豚骨拉麵 (已正確歸入餐點類)');
-assert(html.includes('玉子燒壽司') && html.includes('藍鰭鮪魚壽司') && html.includes('鮭魚壽司'), '壽司：玉子、鮪魚、鮭魚');
-assert(html.includes('鰻魚壽司') && html.includes('花枝壽司') && html.includes('鮮蝦壽司'), '壽司：鰻魚、花枝、鮮蝦');
-assert(html.includes('哈密瓜') && html.includes('巧克力布朗尼切塊蛋糕') && html.includes('抹茶蕨餅') && html.includes('和菓子'), '水果甜點：哈密瓜、巧克力蛋糕、抹茶蕨餅、和菓子');
+assert(html.includes('阿蘇高菜拌飯'), '主食：阿蘇高菜拌飯');
+assert(html.includes('火鍋高湯'), '湯頭類：火鍋高湯');
+assert(html.includes('豚骨拉麵'), '主食：豚骨拉麵');
+assert(html.includes('玉子燒壽司') && html.includes('鮪魚壽司') && html.includes('鮭魚壽司'), '壽司：玉子、鮪魚、鮭魚');
+assert(html.includes('鰻魚壽司') && html.includes('花枝壽司') && html.includes('鮮蝦壽司') && html.includes('照燒壽司'), '壽司：鰻魚、花枝、鮮蝦、照燒');
+assert(html.includes('哈密瓜') && html.includes('巧克力蛋糕') && html.includes('蕨餅') && html.includes('和菓子丸子'), '水果甜點：哈密瓜、巧克力蛋糕、蕨餅、和菓子');
+assert(html.includes('紅蘿蔔絲') && html.includes('紫甘藍') && html.includes('小番茄') && html.includes('甜玉米粒') && html.includes('綜合豆') && html.includes('菊芋脆片'), '沙拉吧個別細項：紅蘿蔔、紫甘藍、小番茄、玉米、綜合豆、菊芋');
 
 // 測試 7: 收桌與撤盤 SOP (バッシング)
 console.log('\n【測試 7：收桌與撤盤 SOP (バッシング) 與會話】');
