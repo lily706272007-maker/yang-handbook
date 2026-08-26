@@ -1,0 +1,4055 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#3A5244" />
+  <meta name="description" content="日本打工度假個人專用手帳 PWA - 優彩打工應對與會話手帳" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="楊の手帳" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="./logo.png" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <title>楊の手帳 — 優彩傳菜人員実務手帳</title>
+  
+  <style>
+  /* ============================================================
+     楊の手帳 — 日式溫泉禪意主題 v2 "湯けむり"
+     設計原則：和紙質感、竹叢清新、簡約留白、溫泉暖橘點綴
+  ============================================================ */
+  :root {
+    /* ── 配色系統 ── */
+    --bg:           #F4F0E8;   /* 手漉き和紙底色 */
+    --bg-card:      #FEFCF8;   /* 純白和紙卡片 */
+    --surface:      #EDE7DB;   /* 薄霧灰 / 次級容器 */
+    --primary:      #3A5244;   /* 深竹叢綠 */
+    --primary-light:#4E6B5A;   /* 淺竹綠 hover */
+    --ink:          #2B2926;   /* 墨水色 */
+    --accent:       #B86B3F;   /* 溫泉流木橘 */
+    --accent-light: #D4916A;   /* 柔橘 */
+    --accent-bg:    rgba(184,107,63,0.08);
+    --muted:        #8C8178;   /* 枯茶灰 */
+    --border:       #E0D9CE;   /* 和紙邊界（極淡） */
+    --shadow:       rgba(43,41,38,0.05);
+    --shadow-md:    rgba(43,41,38,0.10);
+    --shadow-lg:    rgba(43,41,38,0.16);
+    /* ── 排版 ── */
+    --radius:    14px;
+    --radius-sm:  9px;
+    --radius-xs:  6px;
+    --font-serif:'Noto Serif TC','Noto Serif JP','Songti TC',Georgia,serif;
+    --font-sans: 'Noto Sans TC',system-ui,-apple-system,sans-serif;
+    --header-h:  48px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    /* 超淡和紙紋路 SVG（細小纖維質感，幾乎不可見） */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 400px 400px;
+  }
+
+  /* 標音 ruby */
+  ruby { ruby-position: over; font-style: normal; }
+  ruby rt {
+    font-size: 0.55em;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--accent);
+    user-select: none;
+    letter-spacing: 0;
+  }
+
+  button { cursor: pointer; border: none; background: none; font-family: inherit; }
+  input, textarea, select {
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    background: var(--bg-card);
+    color: var(--ink);
+    font-size: 0.93rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(58,82,68,0.08);
+  }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ============================================================
+     Layout
+  ============================================================ */
+  #app { display: flex; flex-direction: column; min-height: 100dvh; }
+
+  main {
+    flex: 1;
+    padding: 14px 14px 48px;
+    overflow-y: auto;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ============================================================
+     Header — 極簡單行 48px，竹叢深綠
+  ============================================================ */
+  header.compact-top-header {
+    position: sticky; top: 0; z-index: 200;
+    height: var(--header-h);
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 14px;
+    box-shadow: 0 1px 12px rgba(43,41,38,0.2);
+  }
+
+  .header-brand-wrap {
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+    min-width: 0;
+  }
+  #logo-wrap {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  }
+  #logo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #logo-wrap.no-img {
+    font-family: var(--font-serif); font-size: 1.1rem; font-weight: 900; color: var(--primary);
+  }
+  .header-brand-info {
+    display: flex; align-items: center; gap: 5px;
+    min-width: 0; overflow: hidden;
+  }
+  .header-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #FDFBF7;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .header-badge {
+    font-size: 0.56rem;
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 頂部導航 Tabs */
+  nav#top-nav-bar.compact-nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    justify-content: flex-end;
+    padding: 0 2px;
+  }
+  nav#top-nav-bar.compact-nav-bar::-webkit-scrollbar { display: none; }
+
+  .top-nav-btn {
+    display: flex; align-items: center; justify-content: center;
+    gap: 4px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: rgba(253,251,247,0.1);
+    border: 1px solid rgba(253,251,247,0.15);
+    color: rgba(253,251,247,0.8);
+    font-size: 0.77rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .top-nav-btn .nav-icon { font-size: 0.9rem; line-height: 1; }
+  .top-nav-btn .nav-label { display: inline; }
+
+  /* 手機版：只顯示 Emoji */
+  @media (max-width: 600px) {
+    .top-nav-btn .nav-label { display: none; }
+    .top-nav-btn { padding: 6px 7px; }
+    header.compact-top-header { padding: 0 10px; gap: 6px; }
+  }
+
+  .top-nav-btn:hover { background: rgba(253,251,247,0.2); color: #fff; }
+  .top-nav-btn.active {
+    background: #FEFCF8;
+    color: var(--primary);
+    border-color: #FEFCF8;
+    font-weight: 700;
+    box-shadow: 0 1px 5px rgba(43,41,38,0.18);
+  }
+
+  #offline-badge {
+    display: none;
+    font-size: 0.6rem;
+    color: rgba(253,251,247,0.9);
+    background: rgba(0,0,0,0.25);
+    padding: 2px 7px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  body.offline #offline-badge { display: inline-block; }
+
+  /* ============================================================
+     頁面切換
+  ============================================================ */
+  .page { display: none; }
+  .page.active { display: block; animation: zenFadeIn 0.28s ease-out; }
+  @keyframes zenFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 移除冗餘的 page-heading，設定 page-sub 使用 */
+  .page-heading { display: none; }
+  .page-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* ============================================================
+     卡片 Card
+  ============================================================ */
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 15px 16px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(200,192,182,0.3);
+    box-shadow: 0 1px 6px var(--shadow);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 2px 12px var(--shadow-md); }
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .card-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%; background: var(--accent); flex-shrink: 0;
+  }
+
+  /* ============================================================
+     Section Label
+  ============================================================ */
+  .section-label {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+    margin: 18px 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-label-left { display: flex; align-items: center; gap: 7px; }
+  .section-label-left::before {
+    content: ''; display: block;
+    width: 3px; height: 13px;
+    background: var(--accent); border-radius: 2px;
+  }
+
+  /* ============================================================
+     按鈕 Buttons
+  ============================================================ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 5px; padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem; font-weight: 600;
+    transition: all 0.18s; white-space: nowrap; user-select: none;
+  }
+  .btn-primary {
+    background: var(--primary); color: #FEFCF8;
+    box-shadow: 0 2px 5px rgba(58,82,68,0.22);
+  }
+  .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(58,82,68,0.28); }
+  .btn-accent {
+    background: var(--accent); color: #FEFCF8;
+    box-shadow: 0 2px 5px rgba(184,107,63,0.22);
+  }
+  .btn-accent:hover { background: var(--accent-light); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: var(--primary);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface); border-color: var(--primary); }
+  .btn-sm { padding: 5px 11px; font-size: 0.77rem; border-radius: 7px; }
+  .btn-danger { background: #A83220; color: #fff; }
+  .btn-danger:hover { background: #8E2A1B; }
+
+  /* ============================================================
+     SOP 分頁 Tab Bar（在 page-sop 內）
+  ============================================================ */
+  .tab-bar {
+    display: flex; gap: 6px;
+    overflow-x: auto; padding-bottom: 2px; margin-bottom: 14px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    border-bottom: 1px solid var(--border); padding-bottom: 8px;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-pill {
+    flex-shrink: 0;
+    padding: 5px 14px; border-radius: 0;
+    font-size: 0.82rem; font-weight: 600;
+    border: none; background: none; color: var(--muted);
+    transition: all 0.18s;
+    position: relative; bottom: -1px;
+    border-bottom: 2px solid transparent;
+  }
+  .tab-pill.active {
+    color: var(--primary); font-weight: 700;
+    border-bottom-color: var(--primary);
+  }
+  .tab-pill:hover { color: var(--primary); }
+
+  /* ============================================================
+     SOP 條目
+  ============================================================ */
+  .compact-sop-item {
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(200,192,182,0.3);
+    border-left: 3px solid var(--primary);
+    margin-bottom: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .compact-sop-item:hover { background: var(--surface); transform: translateX(2px); }
+  .sop-step-badge {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #FEFCF8;
+    font-size: 0.65rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .compact-sop-zh {
+    font-family: var(--font-serif);
+    font-size: 0.93rem; font-weight: 700; color: var(--ink); line-height: 1.45;
+  }
+  .compact-sop-ja {
+    font-size: 0.86rem; color: var(--muted); margin-top: 3px; line-height: 1.9;
+  }
+
+  /* ============================================================
+     對話條目
+  ============================================================ */
+  .dialog-bubble-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .dialog-bubble-item {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 9px 13px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    border: 1px solid rgba(200,192,182,0.25);
+    box-shadow: 0 1px 3px var(--shadow);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .dialog-bubble-item:hover { background: var(--surface); border-color: var(--border); }
+  .dialog-bubble-item.speaker-kitchen { border-left: 3px solid #C8843A; }
+  .dialog-bubble-item.speaker-me      { border-left: 3px solid var(--primary); }
+  .dialog-bubble-item.speaker-guest   { border-left: 3px solid var(--accent); }
+  .dialog-bubble-content { flex: 1; }
+  .dialog-bubble-speaker {
+    font-size: 0.68rem; font-weight: 700; color: var(--muted); margin-bottom: 2px; display: inline-block;
+  }
+  .dialog-bubble-ja { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.9; }
+  .dialog-bubble-zh { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+
+  /* ============================================================
+     單字篩選 Filter Pills
+  ============================================================ */
+  .vocab-filter-bar {
+    display: flex; gap: 5px;
+    overflow-x: auto; margin-bottom: 12px; padding-bottom: 4px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .vocab-filter-bar::-webkit-scrollbar { display: none; }
+  .filter-pill {
+    flex-shrink: 0; padding: 5px 13px;
+    border-radius: 18px; font-size: 0.78rem; font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--bg-card); color: var(--muted);
+    transition: all 0.16s;
+  }
+  .filter-pill.active {
+    background: var(--primary); color: #FEFCF8; border-color: var(--primary);
+    box-shadow: 0 1px 5px rgba(58,82,68,0.2);
+  }
+  .filter-pill:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+
+  /* ============================================================
+     單字網格 Word Grid (響應式：6/5/4/3 欄)
+  ============================================================ */
+  .vocab-word-grid {
+    display: grid; gap: 7px; width: 100%; margin-bottom: 20px;
+  }
+  @media (min-width: 1025px) { .vocab-word-grid { grid-template-columns: repeat(6, 1fr); } }
+  @media (min-width: 769px) and (max-width: 1024px) { .vocab-word-grid { grid-template-columns: repeat(5, 1fr); } }
+  @media (min-width: 481px) and (max-width: 768px)  { .vocab-word-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 480px)  { .vocab-word-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* 單字卡片 */
+  .word-cell {
+    background: var(--bg-card);
+    border: 1px solid rgba(200,192,182,0.35);
+    border-radius: 10px;
+    padding: 8px 5px;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; min-height: 70px;
+    position: relative; cursor: pointer; user-select: none;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+    box-shadow: 0 1px 2px var(--shadow);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .word-cell:hover { background: var(--surface); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 3px 8px var(--shadow-md); }
+  .word-cell:active { transform: scale(0.97); background: rgba(58,82,68,0.08); }
+
+  /* 名字卡 */
+  .word-cell.name-cell { background: #EFF4F1; border-color: rgba(58,82,68,0.12); min-height: 58px; }
+  .word-cell.name-cell .cell-ja { font-size: 1.0rem; font-weight: 700; color: var(--primary); line-height: 1.9; }
+
+  /* 卡片文字 */
+  .cell-ja { font-size: 0.88rem; font-weight: 700; color: var(--ink); line-height: 1.85; margin-bottom: 2px; word-break: break-word; }
+  .cell-zh { font-size: 0.72rem; color: var(--muted); line-height: 1.25; word-break: break-word; }
+
+  /* 卡片小操作按鈕 */
+  .cell-actions { position: absolute; top: 2px; right: 3px; }
+  .cell-btn-mini {
+    background: transparent; border: none; font-size: 0.68rem; cursor: pointer;
+    padding: 2px 3px; border-radius: 3px; opacity: 0.45; transition: opacity 0.15s;
+    color: var(--muted);
+  }
+  .cell-btn-mini:hover { opacity: 1; background: rgba(0,0,0,0.05); }
+
+  /* ============================================================
+     舊版 vocab-card（對話/SOP 頁中的卡片樣式）
+  ============================================================ */
+  .vocab-card {
+    background: var(--bg-card); border-radius: var(--radius);
+    padding: 12px 14px; margin-bottom: 10px;
+    box-shadow: 0 1px 5px var(--shadow);
+    border: 1px solid rgba(200,192,182,0.3); transition: box-shadow 0.18s;
+  }
+  .vocab-card:hover { box-shadow: 0 3px 10px var(--shadow-md); }
+  .vocab-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .vocab-ja { font-size: 1.1rem; font-weight: 600; color: var(--ink); line-height: 2.1; flex: 1; }
+  .vocab-zh { font-size: 0.84rem; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .vocab-tag {
+    font-size: 0.65rem; padding: 2px 8px; border-radius: 12px;
+    background: var(--surface); color: var(--primary); font-weight: 700; flex-shrink: 0;
+  }
+  .vocab-actions { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+
+  /* ============================================================
+     高密度速查表格
+  ============================================================ */
+  .cheat-sheet-container {
+    background: var(--bg-card); border-radius: var(--radius);
+    border: 1px solid rgba(200,192,182,0.3); overflow: hidden;
+    box-shadow: 0 1px 6px var(--shadow); margin-bottom: 14px;
+  }
+  .cheat-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .cheat-table th {
+    background: var(--surface); color: var(--primary);
+    font-size: 0.73rem; font-weight: 700; padding: 7px 12px;
+    border-bottom: 1px solid var(--border); letter-spacing: 0.04em;
+  }
+  .cheat-table tr { border-bottom: 1px solid rgba(200,192,182,0.3); cursor: pointer; transition: background 0.13s; }
+  .cheat-table tr:last-child { border-bottom: none; }
+  .cheat-table tr:hover { background: var(--surface); }
+  .cheat-table tr:active { background: rgba(58,82,68,0.07); }
+  .cheat-ja-cell { padding: 8px 12px; font-size: 1.0rem; font-weight: 600; color: var(--ink); line-height: 1.85; vertical-align: middle; }
+  .cheat-zh-cell { padding: 8px 12px; font-size: 0.83rem; color: var(--muted); vertical-align: middle; line-height: 1.4; }
+  .cheat-note-text { display: block; font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  .cheat-action-cell { padding: 5px 8px; text-align: right; white-space: nowrap; vertical-align: middle; width: 72px; }
+  .btn-icon-mini {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 27px; height: 27px; border-radius: 50%;
+    background: transparent; border: none; color: var(--primary);
+    font-size: 0.9rem; cursor: pointer; transition: all 0.14s;
+  }
+  .btn-icon-mini:hover { background: var(--surface); transform: scale(1.1); }
+
+  /* ============================================================
+     AI 小寵物
+  ============================================================ */
+  .pet-wrapper { text-align: center; padding: 18px 10px; }
+  .pet-interactive-area {
+    position: relative; display: inline-block;
+    cursor: pointer; user-select: none; padding: 10px;
+  }
+  .pet-bubble {
+    position: absolute; bottom: 96%; left: 50%; transform: translateX(-50%);
+    background: var(--bg-card); border: 1.5px solid var(--primary);
+    border-radius: 14px 14px 14px 4px;
+    padding: 11px 14px; font-size: 0.83rem; color: var(--ink);
+    width: 230px; text-align: left;
+    box-shadow: 0 5px 18px var(--shadow-md);
+    margin-bottom: 8px; display: none; line-height: 1.6; z-index: 10;
+  }
+  .pet-bubble.show { display: block; animation: popBubble 0.24s cubic-bezier(0.175,0.885,0.32,1.275); }
+  @keyframes popBubble {
+    from { opacity: 0; transform: translateX(-50%) scale(0.84); }
+    to   { opacity: 1; transform: translateX(-50%) scale(1); }
+  }
+  .pet-avatar {
+    font-size: 5.2rem; display: block;
+    animation: petBreathe 3.5s ease-in-out infinite;
+    line-height: 1;
+    filter: drop-shadow(0 3px 10px rgba(58,82,68,0.15));
+    transition: transform 0.2s, filter 0.3s;
+  }
+  .pet-interactive-area:hover .pet-avatar { transform: scale(1.07); }
+  .pet-interactive-area.recording .pet-avatar {
+    animation: petListening 0.8s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 10px var(--accent));
+  }
+  @keyframes petBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-4px); } }
+  @keyframes petListening { from { transform: scale(1) rotate(-3deg); } to { transform: scale(1.1) rotate(3deg); } }
+  .pet-title { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-top: 8px; }
+  .pet-hint  { font-size: 0.77rem; color: var(--muted); margin-top: 3px; }
+  .pet-status-bar { margin-top: 8px; font-size: 0.8rem; color: var(--accent); font-weight: 700; min-height: 1.2em; }
+  .ai-quick-input { display: flex; gap: 7px; margin-top: 14px; }
+  .ai-quick-input input { flex: 1; }
+  .ai-result-panel { text-align: left; margin-top: 14px; border: 1.5px solid var(--primary); }
+  .ai-result-ja { font-size: 1.1rem; line-height: 2.2; color: var(--ink); font-weight: 600; }
+  .ai-result-zh { font-size: 0.87rem; color: var(--muted); margin-top: 7px; }
+  .ai-keywords-container { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .keyword-pill {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--primary); border-radius: 18px; padding: 4px 11px;
+    font-size: 0.79rem; display: inline-flex; align-items: center; gap: 5px;
+  }
+
+  /* ============================================================
+     情境模擬
+  ============================================================ */
+  .scenario-grid { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+  .scenario-card {
+    background: var(--bg-card); border-radius: var(--radius-sm);
+    padding: 11px 13px; display: flex; align-items: center; gap: 11px;
+    border: 1px solid rgba(200,192,182,0.3); cursor: pointer; transition: all 0.18s;
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  .scenario-card:hover { border-color: var(--primary); transform: translateY(-1px); box-shadow: 0 2px 8px var(--shadow-md); }
+  .scenario-card.active { border-color: var(--primary); background: #EFF4F1; }
+  .scenario-avatar { font-size: 1.7rem; line-height: 1; flex-shrink: 0; }
+  .scenario-body { flex: 1; overflow: hidden; }
+  .scenario-title { font-size: 0.9rem; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 5px; }
+  .scenario-role-tag { font-size: 0.63rem; background: var(--surface); color: var(--primary); padding: 1px 6px; border-radius: 7px; font-weight: 600; }
+  .scenario-desc { font-size: 0.74rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .scenario-switch {
+    width: 40px; height: 22px; border-radius: 11px;
+    background: var(--border); position: relative; cursor: pointer;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .scenario-switch::after {
+    content: ''; position: absolute;
+    width: 17px; height: 17px; background: #fff; border-radius: 50%;
+    top: 2.5px; left: 2.5px; transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .scenario-switch.on { background: var(--primary); }
+  .scenario-switch.on::after { transform: translateX(17px); }
+
+  /* 聊天室 */
+  #chat-box {
+    height: 360px; overflow-y: auto;
+    background: var(--surface); border-radius: var(--radius);
+    padding: 12px; margin-bottom: 12px;
+    display: flex; flex-direction: column; gap: 10px;
+    border: 1px solid rgba(200,192,182,0.25);
+  }
+  .chat-bubble-row { display: flex; align-items: flex-end; gap: 7px; }
+  .chat-bubble-row.user { flex-direction: row-reverse; }
+  .chat-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; flex-shrink: 0; box-shadow: 0 1px 5px var(--shadow);
+  }
+  .chat-bubble-row.user .chat-avatar { background: var(--accent); font-family: var(--font-serif); font-weight: 700; }
+  .chat-bubble {
+    max-width: 82%; background: var(--bg-card);
+    border-radius: 16px 16px 16px 4px;
+    padding: 10px 13px; box-shadow: 0 1px 8px var(--shadow);
+    border: 1px solid rgba(200,192,182,0.3);
+  }
+  .chat-bubble-row.user .chat-bubble {
+    background: var(--primary); color: #FEFCF8;
+    border-radius: 16px 16px 4px 16px; border: none;
+  }
+  .bubble-ja-text { font-size: 1.02rem; line-height: 2.2; color: var(--ink); }
+  .chat-bubble-row.user .bubble-ja-text { color: #FEFCF8; }
+  .bubble-zh-text { font-size: 0.78rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .chat-bubble-row.user .bubble-zh-text { color: rgba(253,251,247,0.7); }
+  .bubble-correction {
+    font-size: 0.74rem; color: var(--accent); margin-top: 7px;
+    padding: 5px 9px; background: var(--accent-bg); border-radius: 7px; line-height: 1.4;
+  }
+  .bubble-action-btn {
+    font-size: 0.7rem; color: var(--primary); margin-top: 6px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 3px;
+    font-weight: 700; background: var(--surface); padding: 3px 7px; border-radius: 5px;
+  }
+  .bubble-action-btn:hover { background: var(--border); }
+  .chat-input-bar { display: flex; gap: 7px; align-items: center; }
+  .chat-input-bar input { flex: 1; }
+
+  /* ============================================================
+     設定頁
+  ============================================================ */
+  .settings-group { margin-bottom: 22px; }
+  .settings-group-title {
+    font-family: var(--font-serif); font-size: 0.98rem; font-weight: 700; color: var(--primary);
+    margin-bottom: 10px; padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ============================================================
+     Modal
+  ============================================================ */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(43,41,38,0.55); backdrop-filter: blur(4px);
+    z-index: 400; display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.22s ease;
+  }
+  .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+  .modal-content {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 17px 34px; width: 100%; max-width: 600px;
+    max-height: 86dvh; overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 -3px 22px rgba(43,41,38,0.22);
+  }
+  .modal-backdrop.open .modal-content { transform: translateY(0); }
+  .modal-drag-handle { width: 38px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 14px; }
+  .modal-header { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+  .modal-footer { display: flex; gap: 8px; margin-top: 18px; }
+  .modal-footer .btn { flex: 1; }
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+
+  /* ============================================================
+     Quick Menu Action Sheet
+  ============================================================ */
+  .quick-menu-backdrop {
+    position: fixed; inset: 0; background: rgba(43,41,38,0.4);
+    z-index: 500; display: none; align-items: flex-end; justify-content: center;
+  }
+  .quick-menu-backdrop.open,.quick-menu-backdrop.show { display: flex; animation: zenFadeIn 0.18s ease; }
+  .quick-menu-sheet {
+    width: 100%; max-width: 480px;
+    background: var(--bg-card); border-radius: 18px 18px 0 0;
+    padding: 16px 18px calc(18px + env(safe-area-inset-bottom));
+    box-shadow: 0 -3px 22px rgba(43,41,38,0.2);
+    animation: slideUpSheet 0.22s ease-out;
+  }
+  @keyframes slideUpSheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .quick-menu-title {
+    font-family: var(--font-serif); font-size: 1.0rem; font-weight: 700;
+    color: var(--primary); margin-bottom: 11px; text-align: center;
+  }
+  .quick-menu-btn {
+    width: 100%; padding: 11px 15px; font-size: 0.9rem; font-weight: 600;
+    border-radius: var(--radius-sm); border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); margin-bottom: 7px;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    cursor: pointer; transition: all 0.14s;
+  }
+  .quick-menu-btn:hover { background: var(--border); }
+  .quick-menu-btn.danger { color: #A83220; }
+
+  /* ============================================================
+     Toast
+  ============================================================ */
+  #toast-shelf {
+    position: fixed; top: calc(var(--header-h) + 10px);
+    left: 50%; transform: translateX(-50%);
+    z-index: 600; display: flex; flex-direction: column; gap: 7px;
+    align-items: center; width: 90%; max-width: 360px; pointer-events: none;
+  }
+  .toast-item {
+    background: var(--ink); color: #FEFCF8;
+    padding: 10px 16px; border-radius: 11px; font-size: 0.86rem; font-weight: 500;
+    box-shadow: 0 3px 14px rgba(43,41,38,0.22);
+    animation: toastEnter 0.28s ease, toastExit 0.28s ease 2.7s forwards;
+    text-align: center; pointer-events: auto;
+  }
+  .toast-item.success { background: var(--primary); }
+  .toast-item.error   { background: #A83220; }
+  @keyframes toastEnter { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes toastExit  { from { opacity: 1; } to { opacity: 0; transform: translateY(-8px); } }
+
+  /* 空狀態 */
+  .empty-box { text-align: center; padding: 32px 16px; color: var(--muted); }
+  .empty-box-icon { font-size: 2.4rem; margin-bottom: 8px; line-height: 1; }
+  .empty-box p { font-size: 0.87rem; line-height: 1.7; }
+
+  /* 燈箱照片 Modal */
+  #modal-photo-lightbox .modal-content {
+    text-align: center; padding-bottom: 40px;
+  }
+  .lightbox-img-wrap { border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); margin-bottom: 14px; }
+  .lightbox-img-wrap img { width: 100%; max-height: 300px; object-fit: cover; display: block; }
+  .lightbox-ja-text { font-size: 1.15rem; font-weight: 600; color: var(--ink); line-height: 2.1; margin-bottom: 6px; }
+  .lightbox-zh-text { font-size: 0.88rem; color: var(--muted); }
+  .lightbox-note-text { font-size: 0.8rem; color: var(--accent); margin-top: 8px; }
+
+  /* ============================================================
+     響應式補充
+  ============================================================ */
+  @media (min-width: 640px) {
+    main { padding: 18px 24px 48px; }
+    header.compact-top-header { padding: 0 20px; }
+  }
+  @media (min-width: 900px) {
+    .top-nav-btn { padding: 5px 12px; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- 頂部導航列 (Header)：圓形水墨 Logo + 楊書法主題 + 打工度假 Badge + 繁中副標 -->
+      <header class="compact-top-header">
+    <div class="header-brand-wrap">
+      <div id="logo-wrap">
+        <img src="./logo.png" alt="楊" onerror="this.parentElement.classList.add('no-img'); this.parentElement.textContent='楊';" />
+      </div>
+      <div class="header-brand-info">
+        <span class="header-title">楊の手帳</span>
+        <span class="header-badge">打工度假</span>
+      </div>
+    </div>
+
+    <!-- 單行緊湊導航 Tabs -->
+    <nav id="top-nav-bar" class="compact-nav-bar">
+      <button class="top-nav-btn active" data-page="page-sop" onclick="switchNavPage('page-sop', this)"><span class="nav-icon">📋</span><span class="nav-label">實務SOP</span></button>
+      <button class="top-nav-btn" data-page="page-vocab-sop" onclick="switchNavPage('page-vocab-sop', this)"><span class="nav-icon">📖</span><span class="nav-label">實戰單字庫</span></button>
+      <button class="top-nav-btn" data-page="page-ai" onclick="switchNavPage('page-ai', this)"><span class="nav-icon">🦊</span><span class="nav-label">AI小寵物</span></button>
+      <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">模擬訓練</span></button>
+      <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
+    </nav>
+    <span id="offline-badge">📵 離線</span>
+  </header>
+
+  <!-- 全局 Toast 提示容器 -->
+  <div id="toast-shelf"></div>
+
+  <!-- 主要內容區 -->
+  <main>
+    <!-- ==============================================================
+         分頁 1：傳菜人員工作手冊與情境分頁 (CMS)
+         每個分頁固定順序呈現三大區塊：
+         第一區 (SOP)：中文大字在頂，日文在下
+         第二區 (對話應答)：日文大字在頂 (帶標音)，中文在下
+         第三區 (單字庫)：卡片清單展示 (支援類別篩選與圖片收折)
+    ============================================================== -->
+    <section class="page active" id="page-sop">
+      <div class="page-sub">熊本「優彩」溫泉旅館自助餐廳傳菜 SOP、現場應對與配置</div>
+
+      <div class="tab-bar" id="sop-tabs-bar"></div>
+
+      
+
+      <!-- 分頁內容呈現容器 (三大固定區塊) -->
+      <div id="sop-content-container"></div>
+    </section>
+
+    <!-- ==============================================================
+         分頁 2：SOP / 工作必備單字庫 (獨立全局單字庫)
+    ============================================================== -->
+    <section class="page" id="page-vocab-sop">
+      <div class="page-sub">涵蓋餐點、酒水、工具、名字、職稱與實用對話之高密度速查庫</div>
+
+      <div class="vocab-filter-bar" id="filter-bar-sop"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <button class="btn btn-primary btn-sm" onclick="openModalVocab('sop', 'add')">＋ 新增工作單字</button>
+        <span style="font-size:0.78rem; color:var(--muted)" id="count-vocab-sop"></span>
+      </div>
+
+      <div id="vocab-list-sop"></div>
+    </section>
+
+    <!-- ==============================================================
+         分頁 3：會話發現單字庫 (獨立全局單字庫)
+    ============================================================== -->
+    <section class="page" id="page-vocab-conv">
+      <div class="page-sub">現場應對、無線電回報或 AI 對話中發現的新詞彙</div>
+
+      <div class="vocab-filter-bar" id="filter-bar-conv"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <button class="btn btn-primary btn-sm" onclick="openModalVocab('conv', 'add')">＋ 新增會話單字</button>
+        <span style="font-size:0.78rem; color:var(--muted)" id="count-vocab-conv"></span>
+      </div>
+
+      <div id="vocab-list-conv"></div>
+    </section>
+
+    <!-- ==============================================================
+         分頁 4：電子小寵物「即時 AI 自動規劃」
+    ============================================================== -->
+    <section class="page" id="page-ai">
+      <div class="page-sub">點擊小寵物語音輸入，AI 自動整理日文、標音、翻譯與關鍵單字</div>
+
+      <div class="pet-wrapper">
+        <div class="pet-interactive-area" id="pet-touch-zone" onclick="handlePetTrigger()" ontouchstart="handlePetTouchStart(event)" ontouchend="handlePetTouchEnd()">
+          <div class="pet-bubble" id="pet-dialog-bubble"></div>
+          <span class="pet-avatar" id="pet-avatar-icon">🦊</span>
+          <div class="pet-title">手帳小狐狸</div>
+          <div class="pet-hint">點擊開始語音・長按持續錄音</div>
+          <div class="pet-status-bar" id="pet-status-text"></div>
+        </div>
+      </div>
+
+      <!-- 文字輸入備用 -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>快速文字 / 語音測試</div>
+        <div class="ai-quick-input">
+          <input type="text" id="ai-text-input" placeholder="輸入日文或中文句子（例：チキン南蛮できました）…" onkeydown="if(event.key==='Enter')handleAiTextSubmit()" />
+          <button class="btn btn-primary btn-sm" onclick="handleAiTextSubmit()">送出</button>
+        </div>
+      </div>
+
+      <!-- AI 整理結果展示 -->
+      <div class="card ai-result-panel" id="ai-result-panel" style="display:none">
+        <div class="card-title"><span class="dot"></span>AI 結構化整理完成</div>
+        <div class="ai-result-ja" id="ai-res-ja"></div>
+        <div class="ai-result-zh" id="ai-res-zh"></div>
+        <div class="ai-keywords-container" id="ai-res-keywords"></div>
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="saveCurrentAiKeywordsToSop()">📥 存入工作單字庫</button>
+          <button class="btn btn-ghost btn-sm" onclick="saveCurrentAiKeywordsToConv()">💬 存入會話單字庫</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeAiResultPanel()">✕ 關閉</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         分頁 5：實務情境模擬訓練室 (Roleplay Room)
+    ============================================================== -->
+    <section class="page" id="page-roleplay">
+      <div class="page-sub">地點：熊本「優彩 (Yusai)」溫泉旅館自助餐廳傳菜現場</div>
+
+      <div class="section-label">
+        <div class="section-label-left">選擇角色與訓練情境</div>
+        <button class="btn btn-ghost btn-sm" onclick="openModalScenario('add')">＋ 新增情境</button>
+      </div>
+
+      <div class="scenario-grid" id="scenario-selector-grid"></div>
+
+      <div class="section-label">
+        <div class="section-label-left">情境對話模擬</div>
+        <button class="btn btn-ghost btn-sm" onclick="clearCurrentChat()">🔄 清空對話</button>
+      </div>
+
+      <div id="chat-box"></div>
+
+      <div class="chat-input-bar">
+        <input type="text" id="chat-user-input" placeholder="請輸入日文或中文回覆（例：了解です！）…" onkeydown="if(event.key==='Enter')sendRoleplayMessage()" />
+        <button class="btn btn-accent" onclick="sendRoleplayMessage()">送出</button>
+        <button class="btn btn-primary" id="btn-chat-mic" onclick="toggleRoleplayVoice()" title="語音輸入">🎤</button>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         分頁 6：設定 (100% 繁體中文)
+    ============================================================== -->
+    <section class="page" id="page-settings">
+      <div class="page-sub">工作情境自訂與手帳資料備份還原</div>
+
+
+
+      <!-- 角色與情境設定管理 -->
+      <div class="settings-group">
+        <div class="settings-group-title">🎭 模擬訓練情境管理</div>
+        <p style="font-size:0.84rem; color:var(--muted); margin-bottom:10px;">
+          自由開啟、關閉或自訂各角色工作情境。
+        </p>
+        <div id="settings-scenario-list"></div>
+        <button class="btn btn-ghost btn-sm" onclick="openModalScenario('add')" style="margin-top:8px;">＋ 新增自訂情境</button>
+      </div>
+
+      <!-- 資料備份與還原 -->
+      <div class="settings-group">
+        <div class="settings-group-title">📦 資料備份與還原</div>
+        <p style="font-size:0.84rem; color:var(--muted); margin-bottom:10px;">
+          匯出包含所有 SOP 分頁、工作單字、會話單字與情境設定的 JSON 檔案。
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="exportDataJson()">📤 匯出 JSON 備份</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('file-import-input').click()">📥 匯入 JSON 備份</button>
+          <input type="file" id="file-import-input" accept=".json" style="display:none" onchange="importDataJson(event)" />
+          <button class="btn btn-danger btn-sm" onclick="confirmResetAllData()">🗑 一鍵清空重置為真實工作手冊</button>
+        </div>
+      </div>
+
+      <!-- 關於本手帳 -->
+      <div class="settings-group">
+        <div class="settings-group-title">ℹ️ 關於本應用</div>
+        <div class="card" style="font-size:0.85rem; color:var(--muted); line-height:1.9;">
+          <p><strong>版本：</strong>2.0.0 正式版（傳菜人員專屬實務手冊）</p>
+          <p><strong>手帳主題：</strong>楊の手帳 — 優彩傳菜人員実務手帳</p>
+          <p><strong>地點背景：</strong>熊本「優彩 (Yusai)」溫泉旅館自助餐廳傳菜人員（Runner）</p>
+          <p><strong>離線支援：</strong>支援 Service Worker 離線快取瀏覽</p>
+          <p><strong>標音標準：</strong>漢字標平假名、片假名標羅馬拼音、平假名不標</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  
+</div>
+
+<!-- ==============================================================
+     彈出視窗 Modals
+============================================================== -->
+
+<!-- Modal 1: 新增 / 編輯 分頁 -->
+<div class="modal-backdrop" id="modal-tab">
+  <div class="modal-content">
+    <div class="modal-drag-handle"></div>
+    <div class="modal-header" id="modal-tab-title">新增情境分頁</div>
+    <div class="form-group">
+      <label>分頁名稱</label>
+      <input type="text" id="tab-name-field" placeholder="例：傳菜流程 SOP、現場對話、料理位置…" />
+    </div>
+    <div class="form-group">
+      <label>代表圖示 Emoji</label>
+      <input type="text" id="tab-icon-field" placeholder="例：🍱" maxlength="4" style="max-width:90px" />
+    </div>
+    <input type="hidden" id="tab-edit-id-field" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tab')">取消</button>
+      <button class="btn btn-primary" onclick="submitTabForm()">儲存分頁</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: 合併分頁 -->
+<div class="modal-backdrop" id="modal-merge-tab">
+  <div class="modal-content">
+    <div class="modal-drag-handle"></div>
+    <div class="modal-header">🔀 合併分頁至當前分頁</div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;">
+      請選擇要合併進來的分頁。合併後，目標分頁的 SOP、對話應答與單字將全部收納至當前分頁中。
+    </p>
+    <div class="form-group">
+      <label>選擇要合併來源的分頁</label>
+      <select id="merge-source-select"></select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-merge-tab')">取消</button>
+      <button class="btn btn-primary" onclick="submitMergeTab()">確認合併</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3: 新增 / 編輯 SOP 或 對話條目 -->
+<div class="modal-backdrop" id="modal-item">
+  <div class="modal-content">
+    <div class="modal-drag-handle"></div>
+    <div class="modal-header" id="modal-item-title">新增條目</div>
+    <div class="form-group">
+      <label>條目所屬區塊類型</label>
+      <select id="item-type-field" onchange="handleItemTypeChange()">
+        <option value="sop">第一區：SOP 工作指引（中文大字在頂，日文在下）</option>
+        <option value="dialog">第二區：對話應答（日文大字在頂帶標音，中文在下）</option>
+      </select>
+    </div>
+    <div class="form-group" id="item-speaker-group">
+      <label>發話角色（對話應答專用）</label>
+      <input type="text" id="item-speaker-field" placeholder="例：廚房人員、傳菜人員(我)、外場主管…" />
+    </div>
+    <div class="form-group">
+      <label>中文內容</label>
+      <textarea id="item-zh-field" rows="3" placeholder="請輸入繁體中文內容…"></textarea>
+    </div>
+    <div class="form-group">
+      <label>日文內容（支援標準 &lt;ruby&gt; 標音）</label>
+      <textarea id="item-ja-field" rows="3" placeholder="例：<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。"></textarea>
+      <div style="font-size:0.75rem; color:var(--muted); margin-top:4px;">
+        規範：漢字標平假名、片假名標羅馬拼音、平假名不標。
+      </div>
+    </div>
+    <input type="hidden" id="item-tab-id-field" />
+    <input type="hidden" id="item-edit-id-field" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-item')">取消</button>
+      <button class="btn btn-primary" onclick="submitItemForm()">儲存條目</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 4: 新增 / 編輯 單字 (附圖與本地上傳功能) -->
+<div class="modal-backdrop" id="modal-vocab">
+  <div class="modal-content">
+    <div class="modal-drag-handle"></div>
+    <div class="modal-header" id="modal-vocab-title">新增單字</div>
+    <div class="form-group">
+      <label>日文（支援標準 &lt;ruby&gt; 標音）</label>
+      <input type="text" id="vocab-ja-field" placeholder="例：<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby> 或 <ruby>ワゴン<rt>wagon</rt></ruby>" />
+    </div>
+    <div class="form-group">
+      <label>中文釋義</label>
+      <input type="text" id="vocab-zh-field" placeholder="例：南蠻炸雞、推車/餐車…" />
+    </div>
+    <div class="form-group">
+      <label>五大分類標籤</label>
+      <select id="vocab-cat-field">
+        <option value="菜餚類">🍱 菜餚類（壽司、生魚片、天婦羅、和牛、炸雞、拉麵等）</option>
+        <option value="酒水飲品類">🥤 酒水飲品類（高湯、拉麵湯頭、飲品等）</option>
+        <option value="名字類">👤 名字類（廚房人員、傳菜人員、主管等姓名稱呼）</option>
+        <option value="工具類">🧹 工具類（推車、布巾、無線電、抹布、托盤、冰箱、保溫庫等）</option>
+        <option value="聊天類">💬 聊天類（日常應答、了解です、追加確認等）</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>單字卡片圖片（可輸入網址或上傳本機圖片）</label>
+      <input type="url" id="vocab-img-url-field" placeholder="https://… 圖片網址" />
+      <div class="file-upload-row">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('vocab-file-input').click()">📁 本地上傳圖片</button>
+        <span id="vocab-file-name" style="font-size:0.75rem; color:var(--muted)">未選擇檔案</span>
+        <input type="file" id="vocab-file-input" accept="image/*" style="display:none" onchange="handleVocabImageUpload(event)" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>備註說明（選填）</label>
+      <input type="text" id="vocab-note-field" placeholder="選填放置位置或使用注意事項…" />
+    </div>
+    <input type="hidden" id="vocab-target-type-field" value="sop" />
+    <input type="hidden" id="vocab-edit-id-field" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-vocab')">取消</button>
+      <button class="btn btn-primary" onclick="submitVocabForm()">儲存單字</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal: 快捷操作選單 (Action Sheet) -->
+<div class="quick-menu-backdrop" id="modal-quick-menu" onclick="closeQuickMenu(event)">
+  <div class="quick-menu-sheet" onclick="event.stopPropagation()">
+    <div class="quick-menu-title" id="quick-menu-title">單字操作</div>
+    <div id="quick-menu-actions"></div>
+    <button class="quick-menu-btn" style="margin-top:10px; background:transparent; border-color:transparent;" onclick="closeModal('modal-quick-menu')">取消</button>
+  </div>
+</div>
+
+<!-- Modal 6: 照片全螢幕燈箱 Lightbox -->
+<div class="modal-backdrop" id="modal-photo-lightbox" style="align-items:center;">
+  <div class="modal-content" style="border-radius:20px; max-width:540px; padding:18px;">
+    <div class="modal-header" id="lightbox-title" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <span id="lightbox-title-text" style="font-size:1.1rem; color:var(--primary); font-weight:700;">📷 現場照片檢視</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-photo-lightbox')">✕ 關閉</button>
+    </div>
+    <div style="width:100%; border-radius:12px; overflow:hidden; background:#1C1B1A; display:flex; align-items:center; justify-content:center; max-height:58dvh;">
+      <img id="lightbox-img" src="" alt="" style="max-width:100%; max-height:58dvh; object-fit:contain; display:block;" />
+    </div>
+    <div id="lightbox-caption" style="margin-top:14px; text-align:center;">
+      <div id="lightbox-ja" style="font-size:1.2rem; font-weight:700; color:var(--primary); font-family:var(--font-serif);"></div>
+      <div id="lightbox-zh" style="font-size:0.95rem; color:var(--ink); margin-top:4px; font-weight:600;"></div>
+      <div id="lightbox-note" style="font-size:0.8rem; color:var(--muted); margin-top:2px;"></div>
+    </div>
+    <div class="modal-footer" style="margin-top:16px;">
+      <button class="btn btn-primary" id="lightbox-speak-btn">🔊 朗讀日文</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-photo-lightbox')">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 5: 新增 / 編輯 角色情境 (Roleplay Room) -->
+<div class="modal-backdrop" id="modal-scenario">
+  <div class="modal-content">
+    <div class="modal-drag-handle"></div>
+    <div class="modal-header" id="modal-scenario-title">新增情境設定</div>
+    <div class="form-group">
+      <label>情境名稱</label>
+      <input type="text" id="scenario-name-field" placeholder="例：廚房通知取餐應答" />
+    </div>
+    <div class="form-group">
+      <label>角色代表圖示 Emoji</label>
+      <input type="text" id="scenario-icon-field" placeholder="例：👨‍🍳" maxlength="4" style="max-width:90px" />
+    </div>
+    <div class="form-group">
+      <label>角色類別</label>
+      <select id="scenario-role-field">
+        <option value="廚房人員">廚房人員 (Kitchen Staff)</option>
+        <option value="主管">主管/店長 (Boss/Manager)</option>
+        <option value="同事">同事/接駁車司機 (Colleague/Driver)</option>
+        <option value="顧客">顧客 (Customer)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>情境詳細描述與背景說明</label>
+      <textarea id="scenario-desc-field" rows="3" placeholder="說明情境背景，例如：廚房完成南蠻炸雞後呼叫取餐…"></textarea>
+    </div>
+    <input type="hidden" id="scenario-edit-id-field" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-scenario')">取消</button>
+      <button class="btn btn-primary" onclick="submitScenarioForm()">儲存情境</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==============================================================
+     JavaScript 核心邏輯 (填充使用者真實傳菜手冊資料)
+============================================================== -->
+<script>
+/* ==============================================================
+   1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
+============================================================== */
+const STORAGE_KEY = 'yang_runner_handbook_v14';
+
+function createRealRunnerData() {
+  return {
+  "tabs": [
+    {
+      "id": "tab_runner_all",
+      "name": "傳菜全手冊 (ランナー)",
+      "icon": "🍱",
+      "items": [
+        {
+          "id": "sop_1",
+          "type": "sop",
+          "speaker": "",
+          "zh": "1. 首先，請先記住所有料理的名稱。",
+          "ja": "まず、<ruby>料理<rt>りょうり</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えます。"
+        },
+        {
+          "id": "sop_2",
+          "type": "sop",
+          "speaker": "",
+          "zh": "2. 料理完成後，廚房工作人員會通知你去取餐。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。"
+        },
+        {
+          "id": "sop_3",
+          "type": "sop",
+          "speaker": "",
+          "zh": "3. 前往廚房取餐時，一定要帶著布巾。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>く<ruby>時<rt>とき</rt></ruby>は、<ruby>布<rt>ぬの</rt></ruby>を<ruby>必<rt>かなら</rt></ruby>ず<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。"
+        },
+        {
+          "id": "sop_4",
+          "type": "sop",
+          "speaker": "",
+          "zh": "4. 離開餐廳入口時，請隨手關門。",
+          "ja": "<ruby>レストラン<rt>resutoran</rt></ruby>の<ruby>入口<rt>いりぐち</rt></ruby>を<ruby>出<rt>で</rt></ruby>る<ruby>時<rt>とき</rt></ruby>は、<ruby>扉<rt>とびら</rt></ruby>を<ruby>閉<rt>し</rt></ruby>めて<ruby>行<rt>い</rt></ruby>きます。"
+        },
+        {
+          "id": "sop_5",
+          "type": "sop",
+          "speaker": "",
+          "zh": "5. 到達廚房後，請確認料理的名稱與內容，再將料理放到餐車上，運回餐廳。",
+          "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、<ruby>料理<rt>りょうり</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>台車<rt>だいしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>せ、<ruby>レストラン<rt>resutoran</rt></ruby>へ<ruby>運<rt>はこ</rt></ruby>んできます。"
+        },
+        {
+          "id": "sop_6",
+          "type": "sop",
+          "speaker": "",
+          "zh": "6. 餐廳入口處有斜坡。經過斜坡時，請稍微抬起餐車使餐車保持水平。若未保持水平料理可能滑落，請小心。",
+          "ja": "<ruby>入口<rt>いりぐち</rt></ruby>は<ruby>坂<rt>さか</rt></ruby>になっているので、<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>少<rt>すこ</rt></ruby>し<ruby>持<rt>も</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げて<ruby>水平<rt>すいへい</rt></ruby>にします。そうしないと<ruby>料理<rt>りょうり</rt></ruby>が<ruby>滑<rt>すべ</rt></ruby>り<ruby>落<rt>お</rt></ruby>ちる<ruby>可能性<rt>かのうせい</rt></ruby>があるので、<ruby>気<rt>き</rt></ruby>をつけてください。"
+        },
+        {
+          "id": "sop_7",
+          "type": "sop",
+          "speaker": "",
+          "zh": "7. 將料理送到餐廳後，請使用無線電通報送來的料理名稱。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきたら、<ruby>持<rt>も</rt></ruby>ってきた<ruby>料理<rt>りょうり</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>を<ruby>インカム<rt>inkamu</rt></ruby>で<ruby>伝<rt>つた</rt></ruby>えます。"
+        },
+        {
+          "id": "sop_8",
+          "type": "sop",
+          "speaker": "",
+          "zh": "8. 請將料理放在指定的位置，推車用完後歸位。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>は<ruby>規定<rt>きてい</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>き、<ruby>使<rt>つか</rt></ruby>った<ruby>台車<rt>だいしゃ</rt></ruby>は<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。"
+        },
+        {
+          "id": "plc_1",
+          "type": "sop",
+          "speaker": "",
+          "zh": "【放進冰箱】鯛魚生魚片、赤牛、馬肉生魚片。",
+          "ja": "【<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れる】<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>、<ruby>赤牛<rt>あかうし</rt></ruby>、<ruby>馬刺<rt>ばさ</rt></ruby>し。"
+        },
+        {
+          "id": "plc_2",
+          "type": "sop",
+          "speaker": "",
+          "zh": "【放在餐廳內廚房作業區】南蠻炸雞等需要更換餐盤的料理。",
+          "ja": "【<ruby>レストラン<rt>resutoran</rt></ruby><ruby>内<rt>ない</rt></ruby>の<ruby>厨房<rt>ちゅうぼう</rt></ruby><ruby>スペース<rt>supe-su</rt></ruby>に<ruby>置<rt>お</rt></ruby>く】<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby>などのお<ruby>皿<rt>さら</rt></ruby>を<ruby>交換<rt>こうかん</rt></ruby>する<ruby>料理<rt>りょうり</rt></ruby>。"
+        },
+        {
+          "id": "plc_3",
+          "type": "sop",
+          "speaker": "",
+          "zh": "【放進保溫庫】火鍋、湯品等需要保持溫度的料理。",
+          "ja": "【<ruby>保温庫<rt>ほおんこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れる】<ruby>鍋<rt>なべ</rt></ruby>、スープなど<ruby>温<rt>あたた</rt></ruby>かさを<ruby>保<rt>たも</rt></ruby>つ<ruby>料理<rt>りょうり</rt></ruby>。"
+        },
+        {
+          "id": "dlg_1",
+          "type": "dialog",
+          "speaker": "廚房人員",
+          "zh": "南蠻炸雞做好了！",
+          "ja": "<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby>できました！"
+        },
+        {
+          "id": "dlg_2",
+          "type": "dialog",
+          "speaker": "傳菜人員(我)",
+          "zh": "收到！ / 了解！",
+          "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です！"
+        },
+        {
+          "id": "dlg_3",
+          "type": "dialog",
+          "speaker": "傳菜人員(我)",
+          "zh": "（無線電）南蠻炸雞送到了。",
+          "ja": "<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby><ruby>持<rt>も</rt></ruby>ってきました。"
+        },
+        {
+          "id": "dlg_4",
+          "type": "dialog",
+          "speaker": "傳菜人員(我)",
+          "zh": "（無線電）〇〇沒有了。",
+          "ja": "〇〇がなくなりました。"
+        }
+      ],
+      "vocabs": [
+        {
+          "id": "v_sop_1",
+          "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>",
+          "zh": "推車 / 餐車",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "傳菜專用"
+        },
+        {
+          "id": "v_sop_2",
+          "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>",
+          "zh": "布巾 / 蓋料理的布",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "取餐必帶"
+        },
+        {
+          "id": "v_sop_3",
+          "ja": "<ruby>インカム<rt>inkamu</rt></ruby>",
+          "zh": "無線電對講機",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "通報送達與缺菜"
+        },
+        {
+          "id": "v_sop_4",
+          "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>",
+          "zh": "冰箱",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "放生魚片、赤牛、馬刺"
+        },
+        {
+          "id": "v_sop_5",
+          "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>",
+          "zh": "保溫庫",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "放熱湯、火鍋"
+        },
+        {
+          "id": "v_sop_6",
+          "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>",
+          "zh": "原位 / 原本的位置",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "餐車用完歸位"
+        }
+      ]
+    },
+    {
+      "id": "tab_order_sop",
+      "name": "點菜與端菜應對 (注文)",
+      "icon": "📝",
+      "items": [
+        {
+          "id": "ord_1",
+          "type": "dialog",
+          "speaker": "點單/傳菜(我)",
+          "zh": "給負責點單的同仁：麻煩請準備〇〇。（向廚房/點單人員叫菜）",
+          "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします。"
+        },
+        {
+          "id": "ord_2",
+          "type": "dialog",
+          "speaker": "端菜人員(我)",
+          "zh": "讓您久等了（端菜出去給等待中的客人）。",
+          "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。"
+        },
+        {
+          "id": "ord_3",
+          "type": "dialog",
+          "speaker": "撤菜人員(我)",
+          "zh": "我把〇〇撤下去（送回廚房補充）。",
+          "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。"
+        }
+      ],
+      "vocabs": [
+        {
+          "id": "vo_1",
+          "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ",
+          "zh": "給負責點單的同仁",
+          "cat": "對話",
+          "imageUrl": "",
+          "note": "叫菜開頭用語"
+        },
+        {
+          "id": "vo_2",
+          "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました",
+          "zh": "讓您久等了",
+          "cat": "對話",
+          "imageUrl": "",
+          "note": "端菜給等候客人"
+        },
+        {
+          "id": "vo_3",
+          "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます",
+          "zh": "我把〇〇撤下去補菜",
+          "cat": "對話",
+          "imageUrl": "",
+          "note": "撤盤補菜通報"
+        }
+      ]
+    },
+    {
+      "id": "tab_bashing_sop",
+      "name": "收桌與撤盤 (バッシング)",
+      "icon": "🍽️",
+      "items": [
+        {
+          "id": "bs_1",
+          "type": "sop",
+          "speaker": "",
+          "zh": "1. 用餐中巡桌收空盤：主動詢問客人「請問盤子可以幫您收走嗎？」。",
+          "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>のバッシング：お<ruby>客様<rt>きゃくさま</rt></ruby>に「お<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？」とお<ruby>声<rt>こえ</rt></ruby>がけします。"
+        },
+        {
+          "id": "bs_2",
+          "type": "sop",
+          "speaker": "",
+          "zh": "2. 客人離席清桌：確認桌上牌子已翻至「食事終了」，並回收該牌子。",
+          "ja": "<ruby>離席後<rt>りせきご</rt></ruby>のバッシング：テーブルの「お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>」カードを<ruby>確認<rt>かくにん</rt></ruby>し、カードを<ruby>回収<rt>かいしゅう</rt></ruby>します。"
+        },
+        {
+          "id": "bs_3",
+          "type": "sop",
+          "speaker": "",
+          "zh": "3. 使用推車撤收所有餐盤、碗筷、杯子並做好分類堆疊。",
+          "ja": "バッシングワゴンを<ruby>使<rt>つか</rt></ruby>い、お<ruby>皿<rt>さら</rt></ruby>・お<ruby>椀<rt>わん</rt></ruby>・グラスを<ruby>分別<rt>ぶんべつ</rt></ruby>して<ruby>下<rt>さ</rt></ruby>げます。"
+        },
+        {
+          "id": "bs_4",
+          "type": "sop",
+          "speaker": "",
+          "zh": "4. 用專用抹布（ダスター）搭配消毒液將桌面、椅面徹底擦拭乾淨。",
+          "ja": "ダスターとアルコール<ruby>消毒<rt>しょうどく</rt></ruby>でテーブルと<ruby>椅子<rt>いす</rt></ruby>をキレイに<ruby>拭<rt>ふ</rt></ruby>きます。"
+        },
+        {
+          "id": "bs_5",
+          "type": "sop",
+          "speaker": "",
+          "zh": "5. 將椅子靠攏推齊，檢查周遭地面，準備迎接下一組客人。",
+          "ja": "<ruby>椅子<rt>いす</rt></ruby>を<ruby>整頓<rt>せいとん</rt></ruby>し、<ruby>床<rt>ゆか</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>次<rt>つぎ</rt></ruby>のお<ruby>客様<rt>きゃくさま</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>える<ruby>準備<rt>じゅんび</rt></ruby>をします。"
+        },
+        {
+          "id": "bs_d1",
+          "type": "dialog",
+          "speaker": "我 (主動詢問)",
+          "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？",
+          "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？"
+        },
+        {
+          "id": "bs_d2_guest",
+          "type": "dialog",
+          "speaker": "顧客 (表示可以收)",
+          "zh": "好，已經吃完了，麻煩你了。",
+          "ja": "はい、もう<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。お<ruby>願<rt>ねが</rt></ruby>いします。"
+        },
+        {
+          "id": "bs_d2_me",
+          "type": "dialog",
+          "speaker": "我 (應答收盤)",
+          "zh": "好的，馬上為您收拾（打擾了）。",
+          "ja": "かしこまりました。<ruby>失礼<rt>しつれい</rt></ruby>いたします。"
+        },
+        {
+          "id": "bs_d3_guest",
+          "type": "dialog",
+          "speaker": "顧客 (向我道謝)",
+          "zh": "謝謝你。",
+          "ja": "ありがとうございます。"
+        },
+        {
+          "id": "bs_d3_me",
+          "type": "dialog",
+          "speaker": "我 (應答道謝)",
+          "zh": "您太客氣了，請慢慢享用。",
+          "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。"
+        },
+        {
+          "id": "bs_d4_guest",
+          "type": "dialog",
+          "speaker": "顧客 (表示還在吃)",
+          "zh": "啊，這個我還在吃。",
+          "ja": "あ、これまだ<ruby>食<rt>た</rt></ruby>べてます。"
+        },
+        {
+          "id": "bs_d4_me",
+          "type": "dialog",
+          "speaker": "我 (致歉請慢用)",
+          "zh": "非常抱歉打擾了，請您慢慢享用。",
+          "ja": "<ruby>大変<rt>たいへん</rt></ruby><ruby>失礼<rt>しつれい</rt></ruby>いたしました。ごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりくださいませ。"
+        }
+      ],
+      "vocabs": [
+        {
+          "id": "v_bs_1",
+          "ja": "<ruby>バッシング<rt>basshingu</rt></ruby>",
+          "zh": "收桌 / 撤盤撤桌",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "Bashing 現場業務術語"
+        },
+        {
+          "id": "v_bs_2",
+          "ja": "お<ruby>下<rt>さ</rt></ruby>げ",
+          "zh": "收拾空盤",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "撤盤專用語"
+        },
+        {
+          "id": "v_bs_3",
+          "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>／お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>カード",
+          "zh": "用餐中／用餐結束牌",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "離席收桌時回收"
+        },
+        {
+          "id": "v_bs_4",
+          "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby>",
+          "zh": "抹布 (擦桌專用)",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "清潔桌面"
+        }
+      ]
+    },
+    {
+      "id": "tab_drink_sop",
+      "name": "酒水服務與機台 (ドリンク)",
+      "icon": "🥤",
+      "items": [
+        {
+          "id": "dk_1",
+          "type": "sop",
+          "speaker": "",
+          "zh": "1. 自動生啤酒機：放上杯子，按一次黃色按鈕，機器自動注入啤酒與綿密泡沫。",
+          "ja": "自動ビールサーバー：グラスをセットし、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、自動でビールと<ruby>泡<rt>あわ</rt></ruby>が<ruby>注<rt>そそ</rt></ruby>がれます。"
+        },
+        {
+          "id": "dk_2",
+          "type": "sop",
+          "speaker": "",
+          "zh": "2. 飲料機：冰開水與碳酸氣泡皆由飲料機台按鈕取用。",
+          "ja": "お<ruby>水<rt>みず</rt></ruby>とソーダ（<ruby>炭酸<rt>たんさん</rt></ruby>）はドリンクサーバーのボタンでご<ruby>利用<rt>りよう</rt></ruby>いただけます。"
+        },
+        {
+          "id": "dk_3",
+          "type": "sop",
+          "speaker": "",
+          "zh": "3. 無酒精飲品：MONIN 糖漿與 ALL-FREE 均為 0.00% 無酒精，可安心飲用。",
+          "ja": "モナンシロップとオールフリーはアルコール０％（ノンアルコール）でございます。"
+        },
+        {
+          "id": "dk_4",
+          "type": "sop",
+          "speaker": "",
+          "zh": "4. 分酒機：提供紅酒、白酒與阿蘇名酒「靈山」純米酒。",
+          "ja": "ワインサーバーでは、<ruby>赤<rt>あか</rt></ruby>・<ruby>白<rt>しろ</rt></ruby>ワインと<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>地酒<rt>じざけ</rt></ruby>「れいざん<ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>」をご<ruby>用意<rt>ようい</rt></ruby>しています。"
+        },
+        {
+          "id": "dk_d1_guest",
+          "type": "dialog",
+          "speaker": "顧客 (詢問糖漿)",
+          "zh": "請問這是什麼東西？",
+          "ja": "これ、<ruby>何<rt>なん</rt></ruby>ですか？"
+        },
+        {
+          "id": "dk_d1_me",
+          "type": "dialog",
+          "speaker": "我 (回答糖漿)",
+          "zh": "這是無酒精的風味糖漿。",
+          "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。"
+        },
+        {
+          "id": "dk_d2_guest",
+          "type": "dialog",
+          "speaker": "顧客 (詢問啤酒)",
+          "zh": "這款啤酒有含酒精嗎？",
+          "ja": "このビールはアルコール<ruby>入<rt>はい</rt></ruby>ってますか？"
+        },
+        {
+          "id": "dk_d2_me",
+          "type": "dialog",
+          "speaker": "我 (回答無酒精)",
+          "zh": "這是無酒精啤酒（0.00%），請安心飲用。",
+          "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。"
+        },
+        {
+          "id": "dk_d3_guest",
+          "type": "dialog",
+          "speaker": "顧客 (詢問碳酸/水)",
+          "zh": "不好意思，請問碳酸／水在哪裡？",
+          "ja": "すみません、ソーダ／お<ruby>水<rt>みず</rt></ruby>はどこですか？"
+        },
+        {
+          "id": "dk_d3_me",
+          "type": "dialog",
+          "speaker": "我 (指引機器)",
+          "zh": "碳酸與開水都在這臺機器裡面。",
+          "ja": "ソーダとお<ruby>水<rt>みず</rt></ruby>はこちらのサーバーの<ruby>中<rt>なか</rt></ruby>にございます。"
+        },
+        {
+          "id": "dk_d4_guest",
+          "type": "dialog",
+          "speaker": "顧客 (詢問生啤機)",
+          "zh": "這個生啤酒機要怎麼使用呢？",
+          "ja": "このビールサーバーはどうやって<ruby>使<rt>つか</rt></ruby>いますか？"
+        },
+        {
+          "id": "dk_d4_me",
+          "type": "dialog",
+          "speaker": "我 (說明生啤機)",
+          "zh": "請放上玻璃杯，按一次這個黃色按鈕，機器會自動注酒完成。",
+          "ja": "グラスをセットして、こちらの<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、<ruby>自動<rt>じどう</rt></ruby>で<ruby>注<rt>そそ</rt></ruby>がれます。"
+        }
+      ],
+      "vocabs": [
+        {
+          "id": "v_dk_1",
+          "ja": "<ruby>黄色<rt>きいろ</rt></ruby>いボタン",
+          "zh": "黃色按鈕",
+          "cat": "工具",
+          "imageUrl": "",
+          "note": "生啤酒機操作按鈕"
+        },
+        {
+          "id": "v_dk_2",
+          "ja": "ノンアルコール<ruby>シロップ<rt>siroppu</rt></ruby>",
+          "zh": "無酒精糖漿",
+          "cat": "酒水",
+          "imageUrl": "./photos/IMG_0884.jpg",
+          "note": "MONIN 各式果汁糖漿"
+        },
+        {
+          "id": "v_dk_3",
+          "ja": "ノンアルコールビール",
+          "zh": "無酒精啤酒 (All-Free)",
+          "cat": "酒水",
+          "imageUrl": "./photos/IMG_0890.jpg",
+          "note": "SUNTORY ALL-FREE 瓶裝"
+        },
+        {
+          "id": "v_dk_4",
+          "ja": "ソーダ / <ruby>炭酸<rt>たんさん</rt></ruby>",
+          "zh": "碳酸 / 氣泡水",
+          "cat": "酒水",
+          "imageUrl": "",
+          "note": "飲料機內"
+        }
+      ]
+    }
+  ],
+  "vocabSop": [
+    {
+    "id": "vn_6",
+    "ja": "<ruby>市石<rt>いちいし</rt></ruby>",
+    "kana": "いちいし",
+    "isForeign": false,
+    "zh": "市石",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_1",
+    "ja": "<ruby>内間<rt>うちま</rt></ruby>",
+    "kana": "うちま",
+    "isForeign": false,
+    "zh": "內間",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁 / 主管"
+  },
+  {
+    "id": "vn_10",
+    "ja": "<ruby>古賀<rt>こが</rt></ruby>",
+    "kana": "こが",
+    "isForeign": false,
+    "zh": "古賀",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_7",
+    "ja": "<ruby>佐藤<rt>さとう</rt></ruby>",
+    "kana": "さとう",
+    "isForeign": false,
+    "zh": "佐藤",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_3",
+    "ja": "<ruby>須藤<rt>すどう</rt></ruby>",
+    "kana": "すどう",
+    "isForeign": false,
+    "zh": "須藤",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_8",
+    "ja": "<ruby>田中<rt>たなか</rt></ruby>",
+    "kana": "たなか",
+    "isForeign": false,
+    "zh": "田中",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_2",
+    "ja": "<ruby>長森<rt>ながもり</rt></ruby>",
+    "kana": "ながもり",
+    "isForeign": false,
+    "zh": "長森",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_4",
+    "ja": "<ruby>森田<rt>もりた</rt></ruby>",
+    "kana": "もりた",
+    "isForeign": false,
+    "zh": "森田",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_5",
+    "ja": "<ruby>森本<rt>もりもと</rt></ruby>",
+    "kana": "もりもと",
+    "isForeign": false,
+    "zh": "森本",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_9",
+    "ja": "<ruby>山邉<rt>やまべ</rt></ruby>",
+    "kana": "やまべ",
+    "isForeign": false,
+    "zh": "山邊",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_0",
+    "ja": "<ruby>楊<rt>よう</rt></ruby>",
+    "kana": "よう",
+    "isForeign": false,
+    "zh": "楊 (本人)",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "傳菜人員"
+  },
+  {
+    "id": "vn_15",
+    "ja": "<ruby>リク<rt>riku</rt></ruby>",
+    "kana": "りく",
+    "isForeign": false,
+    "zh": "Riku",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁"
+  },
+  {
+    "id": "vn_13",
+    "ja": "<ruby>ハン<rt>han</rt></ruby>",
+    "kana": "はん",
+    "isForeign": true,
+    "zh": "Han",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁 (外籍)"
+  },
+  {
+    "id": "vn_12",
+    "ja": "<ruby>ビム<rt>bimu</rt></ruby>",
+    "kana": "びむ",
+    "isForeign": true,
+    "zh": "Bim",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁 (外籍)"
+  },
+  {
+    "id": "vn_11",
+    "ja": "<ruby>ピョー<rt>pya-</rt></ruby>",
+    "kana": "ぴょー",
+    "isForeign": true,
+    "zh": "Pyaw",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁 (外籍)"
+  },
+  {
+    "id": "vn_14",
+    "ja": "<ruby>プラティマ<rt>puratima</rt></ruby>",
+    "kana": "ぷらてぃま",
+    "isForeign": true,
+    "zh": "Pratima",
+    "cat": "名字",
+    "imageUrl": "",
+    "note": "同仁 (外籍)"
+  },
+    {
+      "id": "vpos_1",
+      "ja": "<ruby>ランナー<rt>ranna-</rt></ruby>",
+      "zh": "傳菜人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "出餐傳菜"
+    },
+    {
+      "id": "vpos_2",
+      "ja": "すし<ruby>ランナー<rt>ranna-</rt></ruby>",
+      "zh": "壽司傳菜人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "壽司補充"
+    },
+    {
+      "id": "vpos_3",
+      "ja": "<ruby>受付<rt>うけつけ</rt></ruby>",
+      "zh": "接待 / 領位人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "入口接待"
+    },
+    {
+      "id": "vpos_4",
+      "ja": "ＣＢ<ruby>注文<rt>ちゅうもん</rt></ruby>",
+      "zh": "CB 點單人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "點單崗"
+    },
+    {
+      "id": "vpos_5",
+      "ja": "ＣＢ<ruby>補助<rt>ほじょ</rt></ruby>",
+      "zh": "CB 支援補助人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "支援崗"
+    },
+    {
+      "id": "vpos_6",
+      "ja": "いろり（<ruby>囲炉裏<rt>いろり</rt></ruby>）",
+      "zh": "圍爐裏炭烤崗人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "炭烤區"
+    },
+    {
+      "id": "vpos_7",
+      "ja": "<ruby>ドリンク<rt>dorinku</rt></ruby>",
+      "zh": "酒水吧人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "飲料酒吧"
+    },
+    {
+      "id": "vpos_8",
+      "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>し",
+      "zh": "赤牛與馬肉刺身崗人員",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "生肉刺身"
+    },
+    {
+      "id": "vpos_9",
+      "ja": "<ruby>最後<rt>さいご</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>する<ruby>人<rt>ひと</rt></ruby>",
+      "zh": "最後總檢查主管",
+      "cat": "職稱",
+      "imageUrl": "",
+      "note": "打烊閉館檢查"
+    },
+    {
+      "id": "vs_soup_1",
+      "ja": "<ruby>鍋出汁<rt>なべだし</rt></ruby>",
+      "zh": "火鍋高湯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0851.jpg",
+      "note": "火鍋高湯備品"
+    },
+    {
+      "id": "vs_soup_2",
+      "ja": "とんこつスープ / <ruby>ラーメンスープ<rt>ra-men su-pu</rt></ruby>",
+      "zh": "豚骨拉麵湯頭",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0852.jpg",
+      "note": "拉麵高湯"
+    },
+    {
+      "id": "vs_sushi_1",
+      "ja": "<ruby>本鮪<rt>ほんまぐろ</rt></ruby>",
+      "zh": "藍鰭鮪魚壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0871.jpg",
+      "note": "壽司台名物"
+    },
+    {
+      "id": "vs_sushi_2",
+      "ja": "<ruby>サーモン<rt>sa-mon</rt></ruby>",
+      "zh": "鮭魚壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0872.jpg",
+      "note": "壽司台"
+    },
+    {
+      "id": "vs_sushi_3",
+      "ja": "うなぎ",
+      "zh": "鰻魚壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0873.jpg",
+      "note": "壽司台"
+    },
+    {
+      "id": "vs_sushi_4",
+      "ja": "うなぎの<ruby>甘<rt>あま</rt></ruby>たれ",
+      "zh": "鰻魚甜醬汁",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0792.jpg",
+      "note": "鰻魚專用甜醬"
+    },
+    {
+      "id": "vs_sushi_5",
+      "ja": "<ruby>烏賊<rt>いか</rt></ruby>",
+      "zh": "花枝壽司 / 烏賊握壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0874.jpg",
+      "note": "壽司台"
+    },
+    {
+      "id": "vs_sushi_6",
+      "ja": "<ruby>海老<rt>えび</rt></ruby>",
+      "zh": "鮮蝦壽司 / 熟蝦握壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0875.jpg",
+      "note": "壽司台"
+    },
+    {
+      "id": "vs_sushi_7",
+      "ja": "<ruby>玉子<rt>たまご</rt></ruby><ruby>握<rt>にぎ</rt></ruby>り",
+      "zh": "玉子燒壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0870.jpg",
+      "note": "壽司台"
+    },
+    {
+      "id": "vs_sushi_8",
+      "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き<ruby>寿司<rt>ずし</rt></ruby> / とり<ruby>貝<rt>がい</rt></ruby>",
+      "zh": "照燒壽司 / 貝類壽司",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0876.jpg",
+      "note": "壽司台"
+    },
+    {
+      "id": "vs_sashimi_1",
+      "ja": "<ruby>鯛姿造<rt>たいすがたづく</rt></ruby>り",
+      "zh": "鯛魚生魚片小碟",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0834.jpg",
+      "note": "冷藏保鮮"
+    },
+    {
+      "id": "vs_sashimi_2",
+      "ja": "<ruby>カツオ<rt>katsuo</rt></ruby>のタタキ",
+      "zh": "炙燒鰹魚 (附洋蔥蔥花)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "note": "冷藏刺身"
+    },
+    {
+      "id": "vs_sashimi_3",
+      "ja": "<ruby>馬刺<rt>ばさ</rt></ruby>し",
+      "zh": "熊本名物 馬肉刺身",
+      "cat": "餐點",
+      "imageUrl": "",
+      "note": "放進冰箱"
+    },
+    {
+      "id": "vs_sashimi_4",
+      "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>",
+      "zh": "阿蘇赤牛刺身 / 炙燒",
+      "cat": "餐點",
+      "imageUrl": "",
+      "note": "放進冰箱"
+    },
+    {
+      "id": "vs_hot_1",
+      "ja": "<ruby>海老<rt>えび</rt></ruby>の<ruby>塩焼<rt>しおや</rt></ruby>き",
+      "zh": "圍爐裏 鹽烤大蝦",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0865.jpg",
+      "note": "炭火燒烤區"
+    },
+    {
+      "id": "vs_hot_2",
+      "ja": "<ruby>野菜串<rt>やさいくし</rt></ruby>・<ruby>肉串<rt>にくくし</rt></ruby>",
+      "zh": "圍爐裏 蔬菜串・肉串",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0865.jpg",
+      "note": "炭火燒烤區"
+    },
+    {
+      "id": "vs_hot_3",
+      "ja": "<ruby>揚<rt>あ</rt></ruby>げたて<ruby>天<rt>てん</rt></ruby>ぷら",
+      "zh": "現炸天婦羅 (海老/舞菇/地瓜)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "熱食炸物台"
+    },
+    {
+      "id": "vs_hot_4",
+      "ja": "<ruby>天<rt>てん</rt></ruby>つゆ",
+      "zh": "天婦羅沾醬汁",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "沾醬"
+    },
+    {
+      "id": "vs_hot_5",
+      "ja": "りんどうポーク<ruby>肩<rt>かた</rt></ruby>ロースステーキ",
+      "zh": "龍膽豬肩里肌牛排",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "鐵板熱食"
+    },
+    {
+      "id": "vs_hot_6",
+      "ja": "<ruby>フライドポテト<rt>furaido poteto</rt></ruby>",
+      "zh": "炸薯條",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0867.jpg",
+      "note": "炸物台"
+    },
+    {
+      "id": "vs_hot_7",
+      "ja": "<ruby>鶏<rt>とり</rt></ruby>の<ruby>唐揚<rt>からあ</rt></ruby>げ",
+      "zh": "日式唐揚炸雞塊",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0836.jpg",
+      "note": "炸物熟食"
+    },
+    {
+      "id": "vs_hot_8",
+      "ja": "<ruby>宮崎名物<rt>みやざきめいぶつ</rt></ruby> <ruby>鶏南蛮<rt>とになんばん</rt></ruby>",
+      "zh": "宮崎名物 南蠻炸雞 (佐塔塔醬)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0837.jpg",
+      "note": "更換餐盤重點菜"
+    },
+    {
+      "id": "vs_hot_9",
+      "ja": "<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>",
+      "zh": "中華豬肉燒賣",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0839.jpg",
+      "note": "蒸籠點心"
+    },
+    {
+      "id": "vs_hot_10",
+      "ja": "<ruby>彩<rt>いろど</rt></ruby>り<ruby>野菜<rt>やさい</rt></ruby>の<ruby>甘辛煮<rt>あまからに</rt></ruby>",
+      "zh": "時蔬甜辛煮 (彩椒蓮藕時蔬)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0840.jpg",
+      "note": "和食燉煮"
+    },
+    {
+      "id": "vs_hot_11",
+      "ja": "<ruby>麻婆豆腐<rt>まーぼーどうふ</rt></ruby>",
+      "zh": "麻婆豆腐",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0841.jpg",
+      "note": "中華熱菜"
+    },
+    {
+      "id": "vs_hot_12",
+      "ja": "ビーフカレー<ruby>甘口<rt>あまくち</rt></ruby>",
+      "zh": "洋食 甜口牛肉咖哩",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0842.jpg",
+      "note": "咖哩區"
+    },
+    {
+      "id": "vs_hot_13",
+      "ja": "あさりの<ruby>味噌汁<rt>みそしる</rt></ruby>",
+      "zh": "和食 蛤蜊味噌湯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0843.jpg",
+      "note": "熱湯區"
+    },
+    {
+      "id": "vs_hot_14",
+      "ja": "<ruby>高菜<rt>たかな</rt></ruby><ruby>混<rt>ま</rt></ruby>ぜご<ruby>飯<rt>はん</rt></ruby>",
+      "zh": "熊本阿蘇高菜拌飯",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0844 2.jpg",
+      "note": "米飯主食"
+    },
+    {
+      "id": "vs_hot_15",
+      "ja": "がんもとインゲン",
+      "zh": "油豆腐與四季豆煮物",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0845.jpg",
+      "note": "和食煮物"
+    },
+    {
+      "id": "vs_hot_16",
+      "ja": "<ruby>肉巻<rt>にくま</rt></ruby>き",
+      "zh": "肉卷",
+      "cat": "餐點",
+      "imageUrl": "",
+      "note": "和食料理"
+    },
+    {
+      "id": "vs_hot_17",
+      "ja": "<ruby>チャーシュー<rt>cha-shu-</rt></ruby>",
+      "zh": "叉燒",
+      "cat": "餐點",
+      "imageUrl": "",
+      "note": "拉麵配料"
+    },
+    {
+      "id": "vs_hot_18",
+      "ja": "<ruby>ピーマン<rt>pi-man</rt></ruby>",
+      "zh": "青椒",
+      "cat": "餐點",
+      "imageUrl": "",
+      "note": "蔬菜"
+    },
+    {
+      "id": "vs_hot_19",
+      "ja": "にんじん",
+      "zh": "胡蘿蔔",
+      "cat": "餐點",
+      "imageUrl": "",
+      "note": "蔬菜"
+    },
+    {
+      "id": "vs_cold_1",
+      "ja": "えだまめ",
+      "zh": "毛豆",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0848.jpg",
+      "note": "冷盤前菜"
+    },
+    {
+      "id": "vs_cold_2",
+      "ja": "<ruby>自家製<rt>じかせい</rt></ruby><ruby>ピクルス<rt>pikurusu</rt></ruby>",
+      "zh": "自製醃菜 (蕪菁與杏鮑菇)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0849.jpg",
+      "note": "醃菜區"
+    },
+    {
+      "id": "vs_cold_3",
+      "ja": "<ruby>漬物<rt>つけもの</rt></ruby>（つぼ<ruby>漬<rt>づ</rt></ruby>け / <ruby>梅干<rt>うめぼ</rt></ruby>し）",
+      "zh": "醬菜（壺漬醬菜 / 梅干）",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0850.jpg",
+      "note": "漬物配菜"
+    },
+    {
+      "id": "vs_cold_4",
+      "ja": "<ruby>胡麻豆腐<rt>ごまどうふ</rt></ruby>",
+      "zh": "芝麻豆腐",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0857.jpg",
+      "note": "和食小缽"
+    },
+    {
+      "id": "vs_cold_5",
+      "ja": "<ruby>冷<rt>ひ</rt></ruby>やし<ruby>茶碗蒸<rt>ちゃわんむ</rt></ruby>し",
+      "zh": "冷茶碗蒸 (佐三杯酢果凍)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0833.jpg",
+      "note": "和食小缽"
+    },
+    {
+      "id": "vs_cold_6",
+      "ja": "りんどうポーク<ruby>味<rt>あじ</rt></ruby> しゃぶしゃぶ",
+      "zh": "龍膽豬涮涮鍋 (附瓦斯爐)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0851.jpg",
+      "note": "鍋物"
+    },
+    {
+      "id": "vs_cold_7",
+      "ja": "<ruby>季節<rt>きせつ</rt></ruby>の<ruby>野菜<rt>やさい</rt></ruby><ruby>サラダ<rt>sarada</rt></ruby>バー",
+      "zh": "沙拉吧 (玉米/綜合豆/菊芋片/小蕃茄/嫩葉生菜/豆苗)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0856.jpg",
+      "note": "沙拉吧全品項"
+    },
+    {
+      "id": "vs_sweet_1",
+      "ja": "<ruby>甘味<rt>かんみ</rt></ruby> <ruby>和菓子<rt>わがし</rt></ruby>いろいろ",
+      "zh": "日式和菓子 (一口大福/草餅/胡麻糰子)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0879.jpg",
+      "note": "甜點區"
+    },
+    {
+      "id": "vs_sweet_2",
+      "ja": "<ruby>抹茶<rt>まっちゃ</rt></ruby>わらび<ruby>餅<rt>もち</rt></ruby>",
+      "zh": "抹茶蕨餅 (佐黃豆粉與紅豆泥)",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0880.jpg",
+      "note": "和風甜點"
+    },
+    {
+      "id": "vs_sweet_3",
+      "ja": "<ruby>ダイスケーキ<rt>daisu ke-ki</rt></ruby> ブラウニーチョコチップ",
+      "zh": "巧克力布朗尼切塊蛋糕",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0881.jpg",
+      "note": "西式甜點"
+    },
+    {
+      "id": "vs_sweet_4",
+      "ja": "<ruby>フルーツ<rt>furu-tsu</rt></ruby> <ruby>メロン<rt>meron</rt></ruby>",
+      "zh": "哈密瓜切片水果",
+      "cat": "餐點",
+      "imageUrl": "./photos/IMG_0882.jpg",
+      "note": "水果區"
+    },
+    {
+      "id": "vd_1",
+      "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>赤<rt>あか</rt></ruby>ワイン",
+      "zh": "王之淚 紅葡萄酒 (VINO TINTO)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0889.jpg",
+      "note": "FunVino 分酒機"
+    },
+    {
+      "id": "vd_2",
+      "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>ワイン",
+      "zh": "王之淚 白葡萄酒 (VINO BLANCO)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0889.jpg",
+      "note": "FunVino 分酒機"
+    },
+    {
+      "id": "vd_3",
+      "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>",
+      "zh": "阿蘇地酒 靈山 (れいざん) 純米酒",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0889.jpg",
+      "note": "FunVino 清酒分酒機"
+    },
+    {
+      "id": "vd_4",
+      "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>本醸造<rt>ほんじょうぞう</rt></ruby>",
+      "zh": "阿蘇地酒 靈山 本釀造清酒",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0889.jpg",
+      "note": "FunVino 清酒分酒機"
+    },
+    {
+      "id": "vd_5",
+      "ja": "サントリー オールフリー",
+      "zh": "Suntory ALL-FREE 無酒精啤酒 (瓶裝 0.00%)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0890.jpg",
+      "note": "冷藏冰箱內"
+    },
+    {
+      "id": "vd_6",
+      "ja": "<ruby>生<rt>なま</rt></ruby>ビール / <ruby>自動<rt>じどう</rt></ruby>ビールサーバー",
+      "zh": "生啤酒 / 自動生啤酒機",
+      "cat": "酒水",
+      "imageUrl": "",
+      "note": "放杯按黃色按鈕自動注酒"
+    },
+    {
+      "id": "vd_7",
+      "ja": "モナン <ruby>シロップ<rt>siroppu</rt></ruby>",
+      "zh": "MONIN 無酒精風味糖漿 (薄荷/黑加侖/百香果/白桃/青蘋果)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0884.jpg",
+      "note": "吧台調味糖漿"
+    },
+    {
+      "id": "vd_8",
+      "ja": "サントリー こだわり<ruby>酒場<rt>さかば</rt></ruby>のレモンサワーの<ruby>素<rt>もと</rt></ruby>",
+      "zh": "三得利 檸檬沙瓦濃縮基底酒",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0884.jpg",
+      "note": "沙瓦調酒"
+    },
+    {
+      "id": "vd_9",
+      "ja": "サントリー <ruby>翠<rt>すい</rt></ruby>",
+      "zh": "Suntory 翠 (SUI 日本琴酒)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0884.jpg",
+      "note": "琴酒調酒"
+    },
+    {
+      "id": "vd_10",
+      "ja": "<ruby>業務用<rt>ぎょうむよう</rt></ruby> ピーチ / カシス",
+      "zh": "業務用 水蜜桃 / 黑加侖 調酒香甜酒",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0885.jpg",
+      "note": "附定量壓頭"
+    },
+    {
+      "id": "vd_11",
+      "ja": "メーカーズマーク",
+      "zh": "Maker's Mark 波本威士忌",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0886.jpg",
+      "note": "洋酒區"
+    },
+    {
+      "id": "vd_12",
+      "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> ゆず<ruby>酒<rt>しゅ</rt></ruby>",
+      "zh": "白岳 柚子香甜酒",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0886.jpg",
+      "note": "利口酒"
+    },
+    {
+      "id": "vd_13",
+      "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> しろ",
+      "zh": "白岳 白 (熊本本格米燒酎)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0886.jpg",
+      "note": "熊本在地燒酎"
+    },
+    {
+      "id": "vd_14",
+      "ja": "<ruby>本格焼酎<rt>ほんかくしょうちゅう</rt></ruby>",
+      "zh": "本格燒酎 (芋燒酎 / 麥燒酎)",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0886.jpg",
+      "note": "燒酎區"
+    },
+    {
+      "id": "vd_15",
+      "ja": "こだわりの<ruby>梅酒<rt>うめしゅ</rt></ruby>",
+      "zh": "嚴選熟成梅酒",
+      "cat": "酒水",
+      "imageUrl": "./photos/IMG_0886.jpg",
+      "note": "梅酒區"
+    },
+    {
+      "id": "vd_16",
+      "ja": "ソーダ / <ruby>炭酸<rt>たんさん</rt></ruby>",
+      "zh": "碳酸 / 氣泡水",
+      "cat": "酒水",
+      "imageUrl": "",
+      "note": "飲料機內取用"
+    },
+    {
+      "id": "vd_17",
+      "ja": "お<ruby>水<rt>みず</rt></ruby> / <ruby>冷水<rt>れいすい</rt></ruby>",
+      "zh": "開水 / 冰開水",
+      "cat": "酒水",
+      "imageUrl": "",
+      "note": "飲料機內取用"
+    },
+    {
+      "id": "vd_18",
+      "ja": "<ruby>ドリンクサーバー<rt>dorinku sa-ba-</rt></ruby>",
+      "zh": "飲料機 / 飲品吧機台",
+      "cat": "酒水",
+      "imageUrl": "",
+      "note": "提供水與碳酸氣泡"
+    },
+    {
+      "id": "vt_1",
+      "ja": "<ruby>ワゴン<rt>wagon</rt></ruby> / <ruby>台車<rt>だいしゃ</rt></ruby>",
+      "zh": "推車 / 餐車",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "傳菜與運送料理專用"
+    },
+    {
+      "id": "vt_2",
+      "ja": "<ruby>クロス<rt>kurosu</rt></ruby> / <ruby>布<rt>ぬの</rt></ruby>",
+      "zh": "布巾 / 蓋料理的布",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "去廚房取餐必須隨身攜帶"
+    },
+    {
+      "id": "vt_3",
+      "ja": "<ruby>インカム<rt>inkamu</rt></ruby>",
+      "zh": "無線電對講機",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "送達通報與缺菜聯繫"
+    },
+    {
+      "id": "vt_tray",
+      "ja": "<ruby>トレー<rt>tore-</rt></ruby> / お<ruby>盆<rt>ぼん</rt></ruby>",
+      "zh": "托盤 / 盛盤",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "出餐端菜專用托盤"
+    },
+    {
+      "id": "vt_tai",
+      "ja": "<ruby>タイ<rt>tai</rt></ruby>のお<ruby>皿<rt>さら</rt></ruby>",
+      "zh": "鯛魚盤",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0834.jpg",
+      "note": "盛裝鯛魚生魚片專用盤"
+    },
+    {
+      "id": "vt_4",
+      "ja": "<ruby>バッシングカート<rt>basshingu ka-to</rt></ruby>",
+      "zh": "收桌推車 / 撤盤推車",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "收桌撤盤專用"
+    },
+    {
+      "id": "vt_5",
+      "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>／お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>カード",
+      "zh": "用餐中／用餐結束牌",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "收桌時需回收確認"
+    },
+    {
+      "id": "vt_6",
+      "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby> / <ruby>雑巾<rt>ぞうきん</rt></ruby>",
+      "zh": "擦桌專用抹布",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "搭配酒精擦拭桌面"
+    },
+    {
+      "id": "vt_7",
+      "ja": "アルコール<ruby>消毒液<rt>しょうどくえき</rt></ruby>",
+      "zh": "酒精消毒液噴霧",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "清潔消毒桌面"
+    },
+    {
+      "id": "vt_8",
+      "ja": "<ruby>トング<rt>tongu</rt></ruby>",
+      "zh": "料理夾子",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0848.jpg",
+      "note": "夾取毛豆/小菜"
+    },
+    {
+      "id": "vt_9",
+      "ja": "<ruby>卓上<rt>たくじょう</rt></ruby><ruby>コンロ<rt>konro</rt></ruby>",
+      "zh": "桌上型卡式瓦斯爐",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0851.jpg",
+      "note": "涮涮鍋專用"
+    },
+    {
+      "id": "vt_10",
+      "ja": "<ruby>湯切<rt>ゆぎ</rt></ruby>り",
+      "zh": "燙麵瀝水網杓",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0852.jpg",
+      "note": "拉麵自煮區"
+    },
+    {
+      "id": "vt_11",
+      "ja": "<ruby>炊飯器<rt>すいはんき</rt></ruby>",
+      "zh": "營業用大電鍋",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0845.jpg",
+      "note": "保溫高菜飯"
+    },
+    {
+      "id": "vt_12",
+      "ja": "<ruby>ディスペンサーポンプ<rt>disupensa- ponpu</rt></ruby>",
+      "zh": "定量壓頭 (30ml)",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0885.jpg",
+      "note": "調酒定量使用"
+    },
+    {
+      "id": "vt_13",
+      "ja": "<ruby>メジャーカップ<rt>meja- kappu</rt></ruby> / <ruby>ポアラー<rt>poara-</rt></ruby>",
+      "zh": "量酒杯 / 注酒嘴",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0886.jpg",
+      "note": "吧台調酒用"
+    },
+    {
+      "id": "vt_14",
+      "ja": "<ruby>マドラー<rt>madora-</rt></ruby> / <ruby>グラス<rt>gurasu</rt></ruby>",
+      "zh": "攪拌棒 / 玻璃杯",
+      "cat": "工具",
+      "imageUrl": "./photos/IMG_0884.jpg",
+      "note": "飲品調製"
+    },
+    {
+      "id": "vt_15",
+      "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>",
+      "zh": "冰箱",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "放生魚片、赤牛、馬刺"
+    },
+    {
+      "id": "vt_16",
+      "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>",
+      "zh": "保溫庫",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "放火鍋、湯品等保溫料理"
+    },
+    {
+      "id": "vt_17",
+      "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>",
+      "zh": "原位 / 原本的位置",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "餐車用完歸位"
+    },
+    {
+      "id": "vc_order",
+      "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします",
+      "zh": "給點單同仁：麻煩請準備〇〇（向廚房叫菜）",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "向廚房/點單同仁叫菜"
+    },
+    {
+      "id": "vc_wait",
+      "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました",
+      "zh": "讓您久等了（端菜給等待中的客人）",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "菜端出去時有客人在等"
+    },
+    {
+      "id": "vc_down",
+      "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます",
+      "zh": "我把〇〇撤下去（送回廚房補充）",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "撤下菜餚送回廚房補"
+    },
+    {
+      "id": "vc_1",
+      "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です！",
+      "zh": "收到／了解！",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "廚房通知時應答"
+    },
+    {
+      "id": "vc_2",
+      "ja": "<ruby>持<rt>も</rt></ruby>ってきました",
+      "zh": "送到了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "無線電通報料理送達"
+    },
+    {
+      "id": "vc_3",
+      "ja": "〇〇がなくなりました",
+      "zh": "〇〇沒有了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "回報缺菜"
+    },
+    {
+      "id": "vc_5",
+      "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます",
+      "zh": "這是無酒精的風味糖漿",
+      "cat": "對話",
+      "imageUrl": "./photos/IMG_0884.jpg",
+      "note": "客人詢問糖漿時回覆"
+    },
+    {
+      "id": "vc_6",
+      "ja": "こちらはノンアルコールビールでございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください",
+      "zh": "這是無酒精啤酒，請安心飲用",
+      "cat": "對話",
+      "imageUrl": "./photos/IMG_0890.jpg",
+      "note": "客人詢問啤酒酒精時回覆"
+    },
+    {
+      "id": "vc_7",
+      "ja": "ソーダ・お<ruby>水<rt>みず</rt></ruby>はこちらのサーバーの<ruby>中<rt>なか</rt></ruby>にございます",
+      "zh": "碳酸與開水在這臺機器裡面",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "引導機器位置"
+    },
+    {
+      "id": "vc_8",
+      "ja": "グラスをセットして、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと<ruby>自動<rt>じどう</rt></ruby>で<ruby>注<rt>そそ</rt></ruby>がれます",
+      "zh": "放上玻璃杯，按一次黃色按鈕就會自動注酒完成",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "生啤酒機操作說明"
+    },
+    {
+      "id": "vc_9",
+      "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
+      "zh": "打擾了，請問這個盤子可以幫您收走嗎？",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "收桌主動詢問"
+    },
+    {
+      "id": "vc_10",
+      "ja": "かしこまりました。<ruby>失礼<rt>しつれい</rt></ruby>いたします。",
+      "zh": "好的，馬上為您收拾（打擾了）。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "客人同意收盤時回覆"
+    },
+    {
+      "id": "vc_11",
+      "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。",
+      "zh": "您太客氣了，請慢慢享用。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "客人向我道謝時回覆"
+    },
+    {
+      "id": "vc_12",
+      "ja": "<ruby>大変<rt>たいへん</rt></ruby><ruby>失礼<rt>しつれい</rt></ruby>いたしました。ごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりくださいませ。",
+      "zh": "非常抱歉打擾了，請慢慢享用。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "客人表示還在吃時回覆"
+    },
+    {
+      "id": "vc_13",
+      "ja": "お<ruby>食事<rt>しょくじ</rt></ruby>はお<ruby>済<rt>す</rt></ruby>みでしょうか？カードをお<ruby>下<rt>さ</rt></ruby>げいたします。",
+      "zh": "請問您用餐完畢了嗎？為您回收用餐卡。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "回收用餐結束牌"
+    }
+  ],
+  "vocabConv": [],
+  "scenarios": [
+    {
+      "id": "sc_runner_ready",
+      "name": "傳菜：廚房通知取餐與應答",
+      "icon": "👨‍🍳",
+      "role": "廚房人員",
+      "desc": "廚房出菜通知「チキン南蛮できました！」，傳菜人員回覆「了解です！」並帶布巾前往取餐。",
+      "enabled": true
+    },
+    {
+      "id": "sc_runner_radio",
+      "name": "傳菜：無線電通報料理送達",
+      "icon": "📻",
+      "role": "主管",
+      "desc": "將料理推回餐廳後，使用無線電對講機（インカム）回報「チキン南蛮持ってきました。」",
+      "enabled": true
+    },
+    {
+      "id": "sc_order_call",
+      "name": "點菜：向點單同仁叫菜與補菜",
+      "icon": "📢",
+      "role": "廚房人員",
+      "desc": "向點單崗位叫菜「ご注文の方へ、〇〇をお願いします」、撤菜「〇〇を下げます」、端菜給等候客人說「お待ちいただきました」。",
+      "enabled": true
+    },
+    {
+      "id": "sc_drink_guide",
+      "name": "酒水吧引導與機台說明",
+      "icon": "🥤",
+      "role": "顧客",
+      "desc": "客人詢問糖漿是否無酒精、All-Free啤酒、碳酸與開水位置、生啤酒機按一次黃色按鈕自動完成。",
+      "enabled": true
+    },
+    {
+      "id": "sc_bashing",
+      "name": "收桌撤盤與客人應對",
+      "icon": "🍽️",
+      "role": "顧客",
+      "desc": "詢問「お皿お下げしてもよろしいでしょうか？」，模擬客人說可以收、客人道謝、或客人表示還在吃之應答與收牌。",
+      "enabled": true
+    }
+  ],
+  "chatHistory": [],
+  "apiKey": "AQ.Ab8RN6JZ8f4qtcrVkBinSBiytSsmvRstdusa6_Yaq5LjL33EKA",
+  "activeScenarioId": "sc_runner_ready",
+  "currentTabId": "tab_runner_all"
+};
+}
+
+function loadAppData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      const data = createRealRunnerData();
+      saveAppData(data);
+      return data;
+    }
+    const data = JSON.parse(raw);
+    // 嚴格校驗：若 tabs 不完整或 vocabSop 數量小於 50 或未包含最新分類/外國人標記，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '餐點') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
+      const fresh = createRealRunnerData();
+      saveAppData(fresh);
+      return fresh;
+    }
+    if (!data.apiKey) {
+      data.apiKey = "AQ.Ab8RN6JZ8f4qtcrVkBinSBiytSsmvRstdusa6_Yaq5LjL33EKA";
+      saveAppData(data);
+    }
+    return data;
+  } catch (e) {
+    console.warn('載入資料錯誤，重置為真實傳菜資料：', e);
+    const fresh = createRealRunnerData();
+    saveAppData(fresh);
+    return fresh;
+  }
+}
+
+function saveAppData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+let AppData = loadAppData();
+
+/* ==============================================================
+   2. 通用輔助函式
+============================================================== */
+function uid() {
+  return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showToast(message, type = '') {
+  const shelf = document.getElementById('toast-shelf');
+  const el = document.createElement('div');
+  el.className = 'toast-item' + (type ? ' ' + type : '');
+  el.textContent = message;
+  shelf.appendChild(el);
+  setTimeout(() => el.remove(), 3100);
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+/* ==============================================================
+   3. 頁面導航切換 (Bottom Navigation)
+============================================================== */
+function switchNavPage(targetPageId, triggerBtn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.top-nav-btn, .nav-btn').forEach(b => b.classList.remove('active'));
+  
+  const target = document.getElementById(targetPageId);
+  if (target) target.classList.add('active');
+  if (triggerBtn) triggerBtn.classList.add('active');
+
+  // 切換時即時渲染
+  if (targetPageId === 'page-sop') renderSopTabs(); renderVocabPage('sop');
+  if (targetPageId === 'page-vocab-sop') renderVocabPage('sop');
+  if (targetPageId === 'page-vocab-conv') renderVocabPage('conv');
+  if (targetPageId === 'page-roleplay') renderRoleplayPage();
+  if (targetPageId === 'page-settings') renderSettingsPage();
+}
+
+/* ==============================================================
+   4. SOP 分頁管理 (CMS) - 支援動態新增/編輯/刪除/合併分頁
+      每個分頁固定順序呈現三大區塊：
+      • 第一區 (SOP)：中文為主 (大字/上方)，日文為輔 (小字/下方)
+      • 第二區 (對話應答)：日文為主 (大字/上方，支援標準標音)，中文為輔 (小字/下方)
+      • 第三區 (單字庫)：卡片清單展示 (支援類別篩選與圖片收折)
+============================================================== */
+let tabVocabFilter = '全部';
+let tabOpenImageIds = new Set();
+
+function renderSopTabs() {
+  const bar = document.getElementById('sop-tabs-bar');
+  bar.innerHTML = '';
+
+  if (!AppData.tabs.length) {
+    renderSopContent();
+    return;
+  }
+
+  if (!AppData.tabs.some(t => t.id === AppData.currentTabId)) {
+    AppData.currentTabId = AppData.tabs[0].id;
+    saveAppData(AppData);
+  }
+
+  AppData.tabs.forEach(tab => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-pill' + (tab.id === AppData.currentTabId ? ' active' : '');
+    btn.innerHTML = `<span>${tab.icon || '📋'}</span> <span>${escapeHtml(tab.name)}</span>`;
+    btn.onclick = () => {
+      AppData.currentTabId = tab.id;
+      tabVocabFilter = '全部';
+      saveAppData(AppData);
+      renderSopTabs();
+    };
+    bar.appendChild(btn);
+  });
+
+  renderSopContent();
+}
+
+
+/* ==============================================================
+   全新重構：高密度速查實戰渲染層
+============================================================== */
+
+let currentActionItem = null;
+
+function openItemQuickMenuById(id, contextType) {
+  let item = null;
+  let itemType = 'sop';
+  let tabOrGlobal = 'global_vocab';
+
+  if (contextType === 'global_vocab') {
+    item = (AppData.vocabSop || []).find(v => v.id === id);
+    if (!item) {
+      item = createRealRunnerData().vocabSop.find(v => v.id === id);
+    }
+    tabOrGlobal = 'global_vocab';
+  } else if (contextType === 'tab_item') {
+    const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+    if (tab) {
+      item = (tab.items || []).find(i => i.id === id);
+      itemType = item ? item.type : 'sop';
+      tabOrGlobal = 'sop_item';
+    }
+  } else if (contextType === 'tab_vocab') {
+    const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+    if (tab) {
+      item = (tab.vocabs || []).find(v => v.id === id);
+      tabOrGlobal = 'tab_vocab';
+    }
+  }
+
+  if (!item) return;
+  openItemQuickMenu(item, itemType, tabOrGlobal);
+}
+
+function openItemQuickMenu(item, type, tabOrGlobal) {
+  currentActionItem = { item, type, tabOrGlobal };
+  const modal = document.getElementById('modal-quick-menu');
+  const titleEl = document.getElementById('quick-menu-title');
+  const actionsEl = document.getElementById('quick-menu-actions');
+
+  if (!modal || !titleEl || !actionsEl) return;
+
+  titleEl.innerHTML = item.ja || item.zh || '單字操作';
+  
+  let btnsHtml = '';
+  btnsHtml += `<button class="quick-menu-btn" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}'); closeQuickMenuModal();">🔊 語音朗讀發音</button>`;
+  
+  const hasImg = item.imageUrl && item.imageUrl.trim() && item.cat !== '名字' && item.cat !== '職稱';
+  if (hasImg) {
+    btnsHtml += `<button class="quick-menu-btn" onclick="closeQuickMenuModal(); openPhotoLightbox('${escapeJs(item.imageUrl)}', '${escapeJs(item.ja)}', '${escapeJs(item.zh)}', '${escapeJs(item.note || '')}');">📷 查看現場實拍照</button>`;
+  }
+
+  if (tabOrGlobal === 'sop_item') {
+    btnsHtml += `<button class="quick-menu-btn" onclick="closeQuickMenuModal(); openModalItem('edit', '${type}', '${item.id}');">✎ 編輯此條目</button>`;
+    btnsHtml += `<button class="quick-menu-btn danger" onclick="closeQuickMenuModal(); deleteSopItem('${item.id}');">✕ 刪除此條目</button>`;
+  } else if (tabOrGlobal === 'tab_vocab') {
+    btnsHtml += `<button class="quick-menu-btn" onclick="closeQuickMenuModal(); openModalVocab('tab', 'edit', '${item.id}');">✎ 編輯此單字</button>`;
+    btnsHtml += `<button class="quick-menu-btn danger" onclick="closeQuickMenuModal(); deleteTabVocab('${item.id}');">✕ 刪除此單字</button>`;
+  } else if (tabOrGlobal === 'global_vocab') {
+    btnsHtml += `<button class="quick-menu-btn" onclick="closeQuickMenuModal(); openModalVocab('sop', 'edit', '${item.id}');">✎ 編輯此單字</button>`;
+    btnsHtml += `<button class="quick-menu-btn danger" onclick="closeQuickMenuModal(); deleteGlobalVocab('${item.id}', 'sop');">✕ 刪除此單字</button>`;
+  }
+
+  actionsEl.innerHTML = btnsHtml;
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+
+
+/* ==============================================================
+   單字卡片互動核心：點一下發音、點兩下看詳情 (包含照片與詳細筆記)
+============================================================== */
+let cellClickTimer = null;
+let lastClickCellId = null;
+let lastClickCellTime = 0;
+
+function handleWordCellClick(e, id, jaZh) {
+  const now = Date.now();
+  if (lastClickCellId === id && (now - lastClickCellTime) < 320) {
+    // 點兩下 (Double Click)：清除計時器並彈出詳情燈箱
+    if (cellClickTimer) {
+      clearTimeout(cellClickTimer);
+      cellClickTimer = null;
+    }
+    lastClickCellId = null;
+    lastClickCellTime = 0;
+    openWordDetailModal(id);
+  } else {
+    // 點一下 (Single Click)：延遲 200ms 發音
+    lastClickCellId = id;
+    lastClickCellTime = now;
+    if (cellClickTimer) clearTimeout(cellClickTimer);
+    cellClickTimer = setTimeout(() => {
+      speakJapanese(jaZh);
+      cellClickTimer = null;
+    }, 210);
+  }
+}
+
+function openWordDetailModal(id) {
+  let item = (AppData.vocabSop || []).find(v => v.id === id);
+  if (!item) {
+    item = createRealRunnerData().vocabSop.find(v => v.id === id);
+  }
+  if (!item) {
+    // 從各 tab 中查找
+    for (const t of AppData.tabs || []) {
+      item = (t.vocabs || []).find(v => v.id === id) || (t.items || []).find(i => i.id === id);
+      if (item) break;
+    }
+  }
+  if (!item) return;
+
+  const modal = document.getElementById('modal-photo-lightbox');
+  const imgEl = document.getElementById('lightbox-img');
+  const imgWrap = imgEl ? imgEl.parentElement : null;
+  const jaEl = document.getElementById('lightbox-ja');
+  const zhEl = document.getElementById('lightbox-zh');
+  const noteEl = document.getElementById('lightbox-note');
+  const titleText = document.getElementById('lightbox-title-text');
+  const speakBtn = document.getElementById('lightbox-speak-btn');
+
+  if (!modal) return;
+
+  if (titleText) titleText.textContent = item.imageUrl ? '📷 實拍照與詳細說明' : '📖 單字詳情與說明';
+
+  if (item.imageUrl && item.imageUrl.trim() && item.cat !== '名字' && item.cat !== '職稱') {
+    if (imgWrap) imgWrap.style.display = 'flex';
+    if (imgEl) {
+      imgEl.src = item.imageUrl;
+      imgEl.style.display = 'block';
+    }
+  } else {
+    if (imgWrap) imgWrap.style.display = 'none';
+  }
+
+  if (jaEl) jaEl.innerHTML = item.ja || '';
+  if (zhEl) zhEl.textContent = item.zh || '';
+  if (noteEl) noteEl.textContent = item.note ? ('💡 說明：' + item.note) : '';
+
+  if (speakBtn) {
+    speakBtn.onclick = () => speakJapanese(item.ja || item.zh);
+  }
+
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+function openPhotoLightbox(imageUrl, ja, zh, note) {
+  const modal = document.getElementById('modal-photo-lightbox');
+  const imgEl = document.getElementById('lightbox-img');
+  const jaEl = document.getElementById('lightbox-ja');
+  const zhEl = document.getElementById('lightbox-zh');
+  const noteEl = document.getElementById('lightbox-note');
+  const speakBtn = document.getElementById('lightbox-speak-btn');
+
+  if (!modal || !imgEl) return;
+
+  imgEl.src = imageUrl || '';
+  if (jaEl) jaEl.innerHTML = ja || '';
+  if (zhEl) zhEl.textContent = zh || '';
+  if (noteEl) noteEl.textContent = note || '';
+
+  if (speakBtn) {
+    speakBtn.onclick = () => speakJapanese(ja || zh);
+  }
+
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+function closeQuickMenuModal() {
+  const modal = document.getElementById('modal-quick-menu');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.classList.remove('show');
+  }
+}
+
+function escapeJs(str) {
+  if (!str) return '';
+  return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+function closeQuickMenu(e) {
+  if (e.target.id === 'modal-quick-menu') {
+    closeQuickMenuModal();
+  }
+}
+
+function renderSopContent() {
+  const container = document.getElementById('sop-content-container');
+  const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+
+  if (!tab) {
+    container.innerHTML = `
+      <div class="empty-box">
+        <div class="empty-box-icon">📋</div>
+        <p>目前尚無情境分頁，請點擊上方「＋ 新增分頁」建立第一筆情境！</p>
+      </div>`;
+    return;
+  }
+
+  const items = tab.items || [];
+  const sopItems = items.filter(i => i.type === 'sop');
+  const dialogItems = items.filter(i => i.type === 'dialog');
+  const vocabs = tab.vocabs || [];
+
+  let html = '';
+
+  // 1. SOP 流程步驟區塊 (高密度排版)
+  if (sopItems.length > 0) {
+    html += `
+      <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div class="section-label-left">業務流程與 SOP 指示 (${sopItems.length} 項)</div>
+        <button class="btn btn-ghost btn-sm" onclick="openModalItem('add', 'sop')">＋ 新增</button>
+      </div>
+      <div style="margin-bottom:18px;">`;
+
+    sopItems.forEach((item, idx) => {
+      html += `
+        <div class="compact-sop-item" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">
+          <div class="sop-step-badge">${idx + 1}</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div style="flex:1;">
+                <div class="compact-sop-zh">${escapeHtml(item.zh)}</div>
+                <div class="compact-sop-ja">${item.ja}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
+                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
+                <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 2. 現場對話與應答 (獨立交替氣泡，單句發音)
+  if (dialogItems.length > 0) {
+    html += `
+      <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; margin-top:20px;">
+        <div class="section-label-left">現場實用對話與通報 (${dialogItems.length} 組)</div>
+        <button class="btn btn-ghost btn-sm" onclick="openModalItem('add', 'dialog')">＋ 新增</button>
+      </div>
+      <div class="dialog-bubble-row">`;
+
+    dialogItems.forEach(item => {
+      let speakerClass = 'speaker-me';
+      let speakerIcon = '🧑';
+      if (item.speaker && (item.speaker.includes('廚房') || item.speaker.includes('廚'))) {
+        speakerClass = 'speaker-kitchen';
+        speakerIcon = '👨‍🍳';
+      } else if (item.speaker && (item.speaker.includes('客') || item.speaker.includes('顧客'))) {
+        speakerClass = 'speaker-guest';
+        speakerIcon = '👤';
+      }
+
+      html += `
+        <div class="dialog-bubble-item ${speakerClass}" onclick="speakJapanese('${escapeJs(item.ja)}')">
+          <div class="dialog-bubble-content">
+            <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(item.speaker || '對話')}</span>
+            <div class="dialog-bubble-ja">${item.ja}</div>
+            <div class="dialog-bubble-zh">${escapeHtml(item.zh)}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
+            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')">🔊</button>
+            <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 3. 情境必背單字 (Word 表格網格)
+  if (vocabs.length > 0) {
+    html += `
+      <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; margin-top:20px;">
+        <div class="section-label-left">本頁情境單字速查 (${vocabs.length} 個)</div>
+        <button class="btn btn-ghost btn-sm" onclick="openModalVocab('tab', 'add')">＋ 新增</button>
+      </div>
+      <div class="vocab-word-grid">`;
+
+    vocabs.forEach(v => {
+      const isName = v.cat === '名字';
+
+      if (isName) {
+        html += `
+          <div class="word-cell name-cell" 
+               onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+               ondblclick="openWordDetailModal('${v.id}')"
+               title="點一下發音・點兩下查看詳情">
+            <div class="cell-ja">${v.ja}</div>
+            <div class="cell-actions" onclick="event.stopPropagation()">
+              <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
+            </div>
+          </div>`;
+      } else {
+        html += `
+          <div class="word-cell" 
+               onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+               ondblclick="openWordDetailModal('${v.id}')"
+               title="點一下發音・點兩下查看詳情">
+            <div class="cell-ja">${v.ja}</div>
+            <div class="cell-zh">${escapeHtml(v.zh)}</div>
+            <div class="cell-actions" onclick="event.stopPropagation()">
+              <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
+            </div>
+          </div>`;
+      }
+    });
+
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+/* ==============================================================
+   5. 全局單字庫 (實務必備高密度速查庫)
+============================================================== */
+let globalFilterSop = '全部';
+
+
+
+function renderVocabPage(type) {
+  const filterBar = document.getElementById('filter-bar-sop');
+  const listEl = document.getElementById('vocab-list-sop');
+  const countEl = document.getElementById('count-vocab-sop');
+  if (!filterBar || !listEl) return;
+
+  const currentFilter = globalFilterSop || '全部';
+  let data = (AppData && AppData.vocabSop && AppData.vocabSop.length > 0) 
+    ? [...AppData.vocabSop] 
+    : [...createRealRunnerData().vocabSop];
+
+  const cats = ['全部', '餐點', '酒水', '工具', '名字', '職稱', '對話'];
+  const catIcons = { '全部': '🔍', '餐點': '🍱', '酒水': '🥤', '工具': '🧹', '名字': '👤', '職稱': '💼', '對話': '💬' };
+
+  filterBar.innerHTML = '';
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-pill ' + (cat === currentFilter ? 'active' : '');
+    btn.textContent = (catIcons[cat] || '🏷️') + ' ' + cat;
+    btn.onclick = () => {
+      globalFilterSop = cat;
+      renderVocabPage('sop');
+    };
+    filterBar.appendChild(btn);
+  });
+
+  let filtered = currentFilter === '全部' ? data : data.filter(v => v.cat === currentFilter);
+
+  // 若為名字分類：日本人排前面 (五十音順)，外國人排後面 (五十音順)
+  if (currentFilter === '名字') {
+    filtered.sort((a, b) => {
+      const aForeign = a.isForeign ? 1 : 0;
+      const bForeign = b.isForeign ? 1 : 0;
+      if (aForeign !== bForeign) return aForeign - bForeign;
+      return (a.kana || '').localeCompare(b.kana || '', 'ja');
+    });
+  }
+
+  if (countEl) countEl.textContent = '共 ' + filtered.length + ' 個項目';
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `
+      <div class="empty-box">
+        <div class="empty-box-icon">📖</div>
+        <p>此分類目前尚無項目，點擊上方按鈕新增！</p>
+      </div>`;
+    return;
+  }
+
+  // 密集 Word 表格網格 (點一下發音・點兩下詳情・無相機圖示干擾)
+  let gridHtml = '<div class="vocab-word-grid">';
+
+  filtered.forEach(v => {
+    const isName = v.cat === '名字';
+
+    if (isName) {
+      // 名字卡片：純日文姓名 (含標音)，無中文翻譯，居中大字
+      gridHtml += `
+        <div class="word-cell name-cell" 
+             onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+             ondblclick="openWordDetailModal('${v.id}')"
+             title="點一下發音・點兩下查看詳情">
+          <div class="cell-ja">${v.ja}</div>
+          <div class="cell-actions" onclick="event.stopPropagation()">
+            <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
+          </div>
+        </div>`;
+    } else {
+      // 餐點 / 酒水 / 工具 / 職稱 / 對話：上方日文 (含標音)，下方中文翻譯
+      gridHtml += `
+        <div class="word-cell" 
+             onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+             ondblclick="openWordDetailModal('${v.id}')"
+             title="點一下發音・點兩下查看詳情">
+          <div class="cell-ja">${v.ja}</div>
+          <div class="cell-zh">${escapeHtml(v.zh)}</div>
+          <div class="cell-actions" onclick="event.stopPropagation()">
+            <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
+          </div>
+        </div>`;
+    }
+  });
+
+  gridHtml += '</div>';
+  listEl.innerHTML = gridHtml;
+}
+
+
+
+
+
+function toggleGlobalVocabImg(vocabId, type) {
+  if (globalOpenImageIds.has(vocabId)) globalOpenImageIds.delete(vocabId);
+  else globalOpenImageIds.add(vocabId);
+  renderVocabPage(type);
+}
+
+function openModalVocab(targetType, mode, vocabId = null) {
+  const title = document.getElementById('modal-vocab-title');
+  const jaField = document.getElementById('vocab-ja-field');
+  const zhField = document.getElementById('vocab-zh-field');
+  const catField = document.getElementById('vocab-cat-field');
+  const imgUrlField = document.getElementById('vocab-img-url-field');
+  const noteField = document.getElementById('vocab-note-field');
+  const typeField = document.getElementById('vocab-target-type-field');
+  const editIdField = document.getElementById('vocab-edit-id-field');
+  const fileName = document.getElementById('vocab-file-name');
+
+  typeField.value = targetType;
+  fileName.textContent = '未選擇檔案';
+
+  if (mode === 'add') {
+    title.textContent = targetType === 'sop' ? '新增工作單字' : (targetType === 'conv' ? '新增會話單字' : '新增情境單字');
+    jaField.value = '';
+    zhField.value = '';
+    catField.value = '菜餚類';
+    imgUrlField.value = '';
+    noteField.value = '';
+    editIdField.value = '';
+  } else {
+    title.textContent = '編輯單字';
+    let v = null;
+    if (targetType === 'sop') v = AppData.vocabSop.find(x => x.id === vocabId);
+    else if (targetType === 'conv') v = AppData.vocabConv.find(x => x.id === vocabId);
+    else {
+      const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+      if (tab) v = (tab.vocabs || []).find(x => x.id === vocabId);
+    }
+    if (!v) return;
+
+    jaField.value = v.ja || '';
+    zhField.value = v.zh || '';
+    catField.value = v.cat || '菜餚類';
+    imgUrlField.value = v.imageUrl || '';
+    noteField.value = v.note || '';
+    editIdField.value = v.id;
+  }
+
+  openModal('modal-vocab');
+}
+
+function handleVocabImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  document.getElementById('vocab-file-name').textContent = file.name;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('vocab-img-url-field').value = e.target.result;
+    showToast('圖片已載入為本地預覽');
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitVocabForm() {
+  const ja = document.getElementById('vocab-ja-field').value.trim();
+  const zh = document.getElementById('vocab-zh-field').value.trim();
+  const cat = document.getElementById('vocab-cat-field').value;
+  const imageUrl = document.getElementById('vocab-img-url-field').value.trim();
+  const note = document.getElementById('vocab-note-field').value.trim();
+  const targetType = document.getElementById('vocab-target-type-field').value;
+  const editId = document.getElementById('vocab-edit-id-field').value;
+
+  if (!ja || !zh) { showToast('請填寫日文與中文釋義', 'error'); return; }
+
+  if (targetType === 'sop') {
+    if (editId) {
+      const v = AppData.vocabSop.find(x => x.id === editId);
+      if (v) { v.ja = ja; v.zh = zh; v.cat = cat; v.imageUrl = imageUrl; v.note = note; }
+    } else {
+      AppData.vocabSop.push({ id: uid(), ja, zh, cat, imageUrl, note });
+    }
+    saveAppData(AppData);
+    renderVocabPage('sop');
+  } else if (targetType === 'conv') {
+    if (editId) {
+      const v = AppData.vocabConv.find(x => x.id === editId);
+      if (v) { v.ja = ja; v.zh = zh; v.cat = cat; v.imageUrl = imageUrl; v.note = note; }
+    } else {
+      AppData.vocabConv.push({ id: uid(), ja, zh, cat, imageUrl, note });
+    }
+    saveAppData(AppData);
+    renderVocabPage('conv');
+  } else {
+    const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+    if (tab) {
+      if (!tab.vocabs) tab.vocabs = [];
+      if (editId) {
+        const v = tab.vocabs.find(x => x.id === editId);
+        if (v) { v.ja = ja; v.zh = zh; v.cat = cat; v.imageUrl = imageUrl; v.note = note; }
+      } else {
+        tab.vocabs.push({ id: uid(), ja, zh, cat, imageUrl, note });
+      }
+      saveAppData(AppData);
+      renderSopContent();
+    }
+  }
+
+  closeModal('modal-vocab');
+  showToast(editId ? '單字已更新' : '單字已成功儲存', 'success');
+}
+
+function deleteGlobalVocab(vocabId, type) {
+  if (!confirm('確定刪除此單字？')) return;
+  if (type === 'sop') {
+    AppData.vocabSop = AppData.vocabSop.filter(v => v.id !== vocabId);
+    renderVocabPage('sop');
+  } else {
+    AppData.vocabConv = AppData.vocabConv.filter(v => v.id !== vocabId);
+    renderVocabPage('conv');
+  }
+  saveAppData(AppData);
+  showToast('單字已刪除');
+}
+
+/* ==============================================================
+   6. 語音合成 (Text-to-Speech) - 智慧假名標音提取，確保 100% 正確發音
+============================================================== */
+function extractSpokenJapanese(htmlStr) {
+  if (!htmlStr) return '';
+  // 1. 若含有 <ruby> 標籤：
+  // 若 <rt> 是日文假名 (例如 <ruby>麻婆豆腐<rt>まーぼーどうふ</rt></ruby>)，取出 <rt> 假名！
+  // 若 <rt> 是羅馬拼音 (例如 <ruby>チキン<rt>chikin</rt></ruby>)，保留片假名本體 "チキン"！
+  let result = htmlStr.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/gi, (match, base, rt) => {
+    const cleanRt = (rt || '').trim();
+    const cleanBase = (base || '').trim();
+    if (/[\u3040-\u309F\u30A0-\u30FF]/.test(cleanRt)) {
+      return cleanRt;
+    } else {
+      return cleanBase;
+    }
+  });
+
+  // 2. 清除剩餘 HTML 標籤
+  result = result.replace(/<[^>]+>/g, '').trim();
+
+  // 3. 符號優化（斜線轉頓號以形成自然停頓）
+  result = result.replace(/[\/／]/g, '、');
+
+  return result;
+}
+
+function speakJapanese(text) {
+  if (!('speechSynthesis' in window)) {
+    showToast('您的瀏覽器不支援語音合成功能', 'error');
+    return;
+  }
+  const spokenText = extractSpokenJapanese(text);
+  if (!spokenText) return;
+
+  const utt = new SpeechSynthesisUtterance(spokenText);
+  utt.lang = 'ja-JP';
+  utt.rate = 0.92;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
+}
+
+/* ==============================================================
+   7. 核心功能 A：電子小寵物「即時 AI 自動規劃」
+============================================================== */
+let petRecognition = null;
+let isPetRecording = false;
+let petTouchTimer = null;
+let currentAiResult = null;
+
+function handlePetTrigger() {
+  if (isPetRecording) stopPetVoiceInput();
+  else startPetVoiceInput(false);
+}
+
+function handlePetTouchStart(e) {
+  petTouchTimer = setTimeout(() => {
+    showToast('長按觸發：持續語音監聽模式啟動！');
+    startPetVoiceInput(true);
+  }, 650);
+}
+
+function handlePetTouchEnd() {
+  if (petTouchTimer) clearTimeout(petTouchTimer);
+}
+
+function startPetVoiceInput(continuous = false) {
+  if (!AppData.apiKey) {
+    setPetStatus('⚠️ 請先在「設定」頁填入 Gemini API Key');
+    showPetDialog('需要 Gemini API Key 才能啟動 AI 智能整理功能喔！');
+    return;
+  }
+  if (document.body.classList.contains('offline')) {
+    setPetStatus('📵 離線狀態，AI 功能暫停');
+    showPetDialog('目前處於離線狀態，無法連線至 Gemini AI…');
+    return;
+  }
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showToast('瀏覽器不支援 Web Speech API，建議使用 Chrome 瀏覽器', 'error');
+    return;
+  }
+
+  petRecognition = new SR();
+  petRecognition.lang = 'ja-JP';
+  petRecognition.continuous = continuous;
+  petRecognition.interimResults = false;
+  isPetRecording = true;
+
+  document.getElementById('pet-touch-zone').classList.add('recording');
+  setPetStatus('🔴 語音聆聽中… 請說話');
+  showPetDialog('小狐狸正在聆聽中，請說出傳菜指令、料理名稱或日文句子！');
+
+  petRecognition.onresult = (e) => {
+    const transcript = e.results[e.results.length - 1][0].transcript;
+    setPetStatus('🤖 正在分析整理中…');
+    showPetDialog(`收到了：「${transcript}」，正在請 Gemini 整理中…`);
+    requestGeminiPetAnalysis(transcript);
+  };
+
+  petRecognition.onerror = (e) => {
+    setPetStatus('語音辨識失敗：' + e.error);
+    isPetRecording = false;
+    document.getElementById('pet-touch-zone').classList.remove('recording');
+  };
+
+  petRecognition.onend = () => {
+    if (isPetRecording) {
+      isPetRecording = false;
+      document.getElementById('pet-touch-zone').classList.remove('recording');
+    }
+  };
+
+  petRecognition.start();
+}
+
+function stopPetVoiceInput() {
+  if (petRecognition) petRecognition.stop();
+  isPetRecording = false;
+  document.getElementById('pet-touch-zone').classList.remove('recording');
+  setPetStatus('已停止錄音');
+}
+
+function setPetStatus(msg) {
+  document.getElementById('pet-status-text').textContent = msg;
+}
+
+function showPetDialog(msg) {
+  const bubble = document.getElementById('pet-dialog-bubble');
+  bubble.textContent = msg;
+  bubble.classList.add('show');
+  clearTimeout(showPetDialog._timer);
+  showPetDialog._timer = setTimeout(() => bubble.classList.remove('show'), 5000);
+}
+
+
+const HARDCODED_GEMINI_API_KEY = 'AQ.Ab8RN6JZ8f4qtcrVkBinSBiytSsmvRstdusa6_Yaq5LjL33EKA';
+// 使用 v1 正式端點（v1beta 對部分模型已停止支援 generateContent）
+const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1/models';
+const GEMINI_PRIMARY_MODEL  = 'gemini-2.5-flash-lite';  // 輕量快速穩定
+const GEMINI_FALLBACK_MODEL = 'gemini-2.0-flash';        // 備援
+
+async function callGeminiApiUnified(promptText) {
+  const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : HARDCODED_GEMINI_API_KEY;
+  const body = JSON.stringify({
+    contents: [{ role: 'user', parts: [{ text: promptText }] }],
+    generationConfig: { responseMimeType: 'application/json' }
+  });
+  const headers = { 'Content-Type': 'application/json' };
+
+  // ── 優先：gemini-2.5-flash-lite ──
+  try {
+    const res = await fetch(`${GEMINI_API_BASE}/${GEMINI_PRIMARY_MODEL}:generateContent?key=${key}`, {
+      method: 'POST', headers, body
+    });
+    const data = await res.json();
+    if (res.ok) {
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return JSON.parse(text);
+    }
+    console.warn('Primary model failed, trying fallback:', data?.error?.message);
+  } catch (err) {
+    console.warn('Primary model fetch error:', err);
+  }
+
+  // ── 備援：gemini-2.0-flash ──
+  try {
+    const fallbackRes = await fetch(`${GEMINI_API_BASE}/${GEMINI_FALLBACK_MODEL}:generateContent?key=${key}`, {
+      method: 'POST', headers, body
+    });
+    const fallbackData = await fallbackRes.json();
+    if (!fallbackRes.ok) {
+      throw new Error(fallbackData.error?.message || 'Gemini API 呼叫失敗');
+    }
+    const fallbackText = fallbackData.candidates?.[0]?.content?.parts?.[0]?.text;
+    return JSON.parse(fallbackText);
+  } catch (err) {
+    throw new Error(err.message || 'Gemini API 連線失敗，請稍後再試');
+  }
+}
+
+function handleAiTextSubmit() {
+  const input = document.getElementById('ai-text-input');
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  if (!AppData.apiKey && !HARDCODED_GEMINI_API_KEY) {
+    showToast('Gemini API 服務暫時不可用', 'error');
+    return;
+  }
+  setPetStatus('🤖 正在分析文字輸入…');
+  showPetDialog(`收到輸入：「${val}」，正在整理中…`);
+  requestGeminiPetAnalysis(val);
+}
+
+
+
+async function requestGeminiPetAnalysis(inputText) {
+  const systemPrompt = `你是一位日本打工度假生活與傳菜助理，使用者在熊本「優彩 (Yusai)」溫泉旅館自助餐廳擔任傳菜人員（Runner / ランナー）。
+請依據使用者輸入的語音或文字，回傳符合以下規定的 JSON 格式（純 JSON，請勿回傳任何額外 markdown 或文字）：
+
+【拼音標註規則（極度嚴格執行）】
+1. 漢字：上方標註平假名（例如：<ruby>料理<rt>りょうり</rt></ruby>、<ruby>南蛮<rt>なんばん</rt></ruby>）。
+2. 平假名：完全「不標註」羅馬拼音。
+3. 片假名：上方標註羅馬拼音（例如：<ruby>チキン<rt>chikin</rt></ruby>、<ruby>ワゴン<rt>wagon</rt></ruby>、<ruby>ラーメン<rt>ra-men</rt></ruby>）。
+
+【單字分類五大類】
+每筆單字必須分類至其中之一：餐點、酒水、工具、名字、職稱、對話。
+
+回傳 JSON 格式：
+{
+  "jaText": "對應之日文完整句子（嚴格遵循上述標音規則）",
+  "zhText": "繁體中文對照翻譯",
+  "keywords": [
+    {
+      "ja": "單字（嚴格遵循標音規則）",
+      "zh": "中文釋義",
+      "cat": "餐點|酒水|工具|名字|職稱|對話"
+    }
+  ],
+  "petMessage": "給傳菜人員楊的日系鼓勵短句（繁體中文，30字以內）"
+}`;
+
+  try {
+    const parsed = await callGeminiApiUnified(`${systemPrompt}\n\n使用者輸入：${inputText}`);
+
+    currentAiResult = parsed;
+    displayAiResult(parsed);
+
+    // 自動背景存入工作單字庫
+    if (parsed.keywords && parsed.keywords.length > 0) {
+      parsed.keywords.forEach(kw => {
+        AppData.vocabSop.push({
+          id: uid(),
+          ja: kw.ja,
+          zh: kw.zh,
+          cat: kw.cat || '餐點',
+          imageUrl: '',
+          note: 'AI 語音學習新增'
+        });
+      });
+      saveAppData(AppData);
+      renderVocabPage('sop');
+    }
+
+    setPetStatus('✅ 整理完成！');
+    showPetDialog(parsed.petMessage || '整理好了汪！已為您標註假名與翻譯！');
+    if (parsed.jaText) speakJapanese(parsed.jaText);
+  } catch (err) {
+    setPetStatus('整理失敗：' + err.message);
+    showPetDialog('抱歉，AI 整理遇到問題，請確認網路連線。');
+    showToast('AI 分析失敗：' + err.message, 'error');
+  }
+}
+
+function displayAiResult(result) {
+  const panel = document.getElementById('ai-result-panel');
+  panel.style.display = 'block';
+  document.getElementById('ai-res-ja').innerHTML = result.jaText || '';
+  document.getElementById('ai-res-zh').textContent = result.zhText || '';
+
+  const kwContainer = document.getElementById('ai-res-keywords');
+  kwContainer.innerHTML = '';
+  (result.keywords || []).forEach(kw => {
+    const el = document.createElement('span');
+    el.className = 'keyword-pill';
+    el.innerHTML = `<span>${kw.ja}</span> <small style="color:var(--muted)">(${escapeHtml(kw.zh)})</small>`;
+    kwContainer.appendChild(el);
+  });
+}
+
+function saveCurrentAiKeywordsToSop() {
+  if (!currentAiResult || !currentAiResult.keywords) return;
+  currentAiResult.keywords.forEach(kw => {
+    AppData.vocabSop.push({
+      id: uid(),
+      ja: kw.ja,
+      zh: kw.zh,
+      cat: kw.cat || '菜餚類',
+      imageUrl: '',
+      note: '手動存入工作單字'
+    });
+  });
+  saveAppData(AppData);
+  showToast('已存入 SOP 工作必備單字庫！', 'success');
+}
+
+function saveCurrentAiKeywordsToConv() {
+  if (!currentAiResult || !currentAiResult.keywords) return;
+  currentAiResult.keywords.forEach(kw => {
+    AppData.vocabConv.push({
+      id: uid(),
+      ja: kw.ja,
+      zh: kw.zh,
+      cat: kw.cat || '聊天類',
+      imageUrl: '',
+      note: '手動存入會話單字'
+    });
+  });
+  saveAppData(AppData);
+  showToast('已存入會話發現單字庫！', 'success');
+}
+
+function closeAiResultPanel() {
+  document.getElementById('ai-result-panel').style.display = 'none';
+  currentAiResult = null;
+  setPetStatus('');
+}
+
+/* ==============================================================
+   8. 核心功能 B：實務情境模擬訓練室 (Roleplay Room)
+============================================================== */
+function renderRoleplayPage() {
+  renderScenarioSelector();
+  renderChatBox();
+}
+
+function renderScenarioSelector() {
+  const grid = document.getElementById('scenario-selector-grid');
+  grid.innerHTML = '';
+
+  const enabledScenarios = AppData.scenarios.filter(s => s.enabled);
+  if (enabledScenarios.length === 0) {
+    grid.innerHTML = `<div style="font-size:0.85rem; color:var(--muted); padding:10px 0;">目前無啟用的情境，請至「設定」頁面開啟或新增情境。</div>`;
+    return;
+  }
+
+  if (!enabledScenarios.some(s => s.id === AppData.activeScenarioId)) {
+    AppData.activeScenarioId = enabledScenarios[0].id;
+    saveAppData(AppData);
+  }
+
+  enabledScenarios.forEach(sc => {
+    const isSelected = sc.id === AppData.activeScenarioId;
+    const card = document.createElement('div');
+    card.className = `scenario-card ${isSelected ? 'active' : ''}`;
+    card.innerHTML = `
+      <div class="scenario-avatar">${sc.icon || '🎭'}</div>
+      <div class="scenario-body">
+        <div class="scenario-title">
+          <span>${escapeHtml(sc.name)}</span>
+          <span class="scenario-role-tag">${escapeHtml(sc.role)}</span>
+        </div>
+        <div class="scenario-desc">${escapeHtml(sc.desc)}</div>
+      </div>
+      ${isSelected ? '<span style="color:var(--primary); font-weight:700; font-size:0.8rem">✓ 進行中</span>' : ''}
+    `;
+    card.onclick = () => {
+      if (AppData.activeScenarioId !== sc.id) {
+        AppData.activeScenarioId = sc.id;
+        AppData.chatHistory = [];
+        saveAppData(AppData);
+        renderRoleplayPage();
+        showToast(`已切換情境至「${sc.name}」`, 'success');
+      }
+    };
+    grid.appendChild(card);
+  });
+}
+
+function renderChatBox() {
+  const box = document.getElementById('chat-box');
+  const sc = AppData.scenarios.find(s => s.id === AppData.activeScenarioId);
+
+  if (!AppData.chatHistory || AppData.chatHistory.length === 0) {
+    box.innerHTML = `
+      <div class="empty-box" style="margin:auto">
+        <div class="empty-box-icon">${sc ? sc.icon : '🎭'}</div>
+        <p>
+          <strong>當前情境：</strong>${sc ? escapeHtml(sc.name) : '未選擇'}<br>
+          <strong>地點：</strong>熊本「優彩」溫泉旅館自助餐廳傳菜現場<br>
+          <span style="font-size:0.8rem; color:var(--muted)">在下方輸入框輸入日文或中文，開始模擬對話！</span>
+        </p>
+      </div>`;
+    return;
+  }
+
+  box.innerHTML = AppData.chatHistory.map(msg => {
+    const isUser = msg.role === 'user';
+    return `
+      <div class="chat-bubble-row ${isUser ? 'user' : ''}">
+        <div class="chat-avatar">${isUser ? '楊' : (sc ? sc.icon : '👨‍🍳')}</div>
+        <div class="chat-bubble">
+          <div class="bubble-ja-text">${msg.ja}</div>
+          <div class="bubble-zh-text">${escapeHtml(msg.zh)}</div>
+          ${msg.correction ? `<div class="bubble-correction">💡 <strong>日文修正建議：</strong>${escapeHtml(msg.correction)}</div>` : ''}
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+            <button class="bubble-action-btn" onclick='speakJapanese(${JSON.stringify(msg.ja)})'>🔊 朗讀</button>
+            ${!isUser ? `<button class="bubble-action-btn" onclick='saveRoleplayMessageToConv(${JSON.stringify(msg)})'>📌 存入會話單字庫</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  box.scrollTop = box.scrollHeight;
+}
+
+function saveRoleplayMessageToConv(msg) {
+  if (msg.keywords && msg.keywords.length > 0) {
+    msg.keywords.forEach(kw => {
+      AppData.vocabConv.push({
+        id: uid(),
+        ja: kw.ja,
+        zh: kw.zh,
+        cat: kw.cat || '聊天類',
+        imageUrl: '',
+        note: '💬 傳菜模擬收錄'
+      });
+    });
+  } else {
+    AppData.vocabConv.push({
+      id: uid(),
+      ja: msg.ja,
+      zh: msg.zh,
+      cat: '聊天類',
+      imageUrl: '',
+      note: '💬 傳菜模擬收錄'
+    });
+  }
+  saveAppData(AppData);
+  showToast('✅ 已存入會話發現單字庫！', 'success');
+}
+
+function clearCurrentChat() {
+  if (confirm('確定要清空當前對話歷史嗎？')) {
+    AppData.chatHistory = [];
+    saveAppData(AppData);
+    renderChatBox();
+    showToast('對話歷史已清空');
+  }
+}
+
+let roleplayVoiceRecording = false;
+
+function toggleRoleplayVoice() {
+  if (roleplayVoiceRecording) stopRoleplayVoice();
+  else startRoleplayVoice();
+}
+
+function startRoleplayVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('瀏覽器不支援語音輸入', 'error'); return; }
+
+  const r = new SR();
+  r.lang = 'ja-JP';
+  r.interimResults = false;
+  roleplayVoiceRecording = true;
+  document.getElementById('btn-chat-mic').textContent = '⏹';
+
+  r.onresult = (e) => {
+    document.getElementById('chat-user-input').value = e.results[0][0].transcript;
+    roleplayVoiceRecording = false;
+    document.getElementById('btn-chat-mic').textContent = '🎤';
+    sendRoleplayMessage();
+  };
+
+  r.onerror = () => {
+    roleplayVoiceRecording = false;
+    document.getElementById('btn-chat-mic').textContent = '🎤';
+    showToast('語音辨識出錯', 'error');
+  };
+
+  r.onend = () => {
+    roleplayVoiceRecording = false;
+    document.getElementById('btn-chat-mic').textContent = '🎤';
+  };
+
+  r.start();
+  window._activeRoleplaySR = r;
+}
+
+function stopRoleplayVoice() {
+  if (window._activeRoleplaySR) window._activeRoleplaySR.stop();
+  roleplayVoiceRecording = false;
+  document.getElementById('btn-chat-mic').textContent = '🎤';
+}
+
+
+
+async function sendRoleplayMessage() {
+  const input = document.getElementById('chat-user-input');
+  const userText = input.value.trim();
+  if (!userText) return;
+
+  input.value = '';
+
+  const userMsg = {
+    role: 'user',
+    ja: userText,
+    zh: '',
+    correction: '',
+    keywords: []
+  };
+
+  AppData.chatHistory.push(userMsg);
+  renderChatBox();
+
+  const scenario = AppData.scenarios.find(s => s.id === AppData.activeScenarioId) || AppData.scenarios[0];
+
+  const prompt = `你正在扮演熊本「優彩」溫泉旅館自助餐廳的【${scenario.role || '廚房工作人員'}】。
+情境背景：${scenario.desc || '自助餐廳出餐與傳菜應對'}。
+
+請以符合該角色口氣與職場禮貌，以道地日文回應使用者的傳菜發話，並附帶繁體中文翻譯。
+日文必須嚴格遵守以下標音規則：
+1. 漢字：上方標註平假名（例如：<ruby>料理<rt>りょうり</rt></ruby>）。
+2. 平假名：完全「不標註」羅馬拼音。
+3. 片假名：上方標註羅馬拼音（例如：<ruby>チキン<rt>chikin</rt></ruby>、<ruby>インカム<rt>inkamu</rt></ruby>、<ruby>ワゴン<rt>wagon</rt></ruby>）。
+
+使用者（傳菜人員 楊）說了：${userText}
+
+請回傳 JSON 格式（純 JSON，請勿回傳任何 markdown）：
+{
+  "jaText": "符合傳菜情境與角色的日文回應（帶標準標音）",
+  "zhText": "繁體中文翻譯",
+  "correction": "若使用者剛才的日文有文法錯誤或不道地之處，請給出繁體中文修正建議；若完全正確或輸入為中文則回傳空字串",
+  "keywords": [
+    {
+      "ja": "此段對話之關鍵單字（帶標準標音）",
+      "zh": "中文釋義",
+      "cat": "餐點|酒水|工具|名字|職稱|對話"
+    }
+  ]
+}`;
+
+  try {
+    const parsed = await callGeminiApiUnified(prompt);
+
+    if (parsed.correction) {
+      AppData.chatHistory[AppData.chatHistory.length - 1].correction = parsed.correction;
+    }
+
+    const aiMsg = {
+      role: 'ai',
+      ja: parsed.jaText || '',
+      zh: parsed.zhText || '',
+      correction: '',
+      keywords: parsed.keywords || []
+    };
+
+    AppData.chatHistory.push(aiMsg);
+    saveAppData(AppData);
+    renderChatBox();
+
+    if (parsed.jaText) speakJapanese(parsed.jaText);
+  } catch (err) {
+    showToast('AI 回覆失敗：' + err.message, 'error');
+  }
+}
+
+function renderSettingsPage() {
+  // API Key 已固化內建
+
+  const list = document.getElementById('settings-scenario-list');
+  list.innerHTML = AppData.scenarios.map(s => `
+    <div class="scenario-card" style="margin-bottom:8px;">
+      <div class="scenario-avatar">${s.icon || '🎭'}</div>
+      <div class="scenario-body">
+        <div class="scenario-title">
+          <span>${escapeHtml(s.name)}</span>
+          <span class="scenario-role-tag">${escapeHtml(s.role)}</span>
+        </div>
+        <div class="scenario-desc">${escapeHtml(s.desc)}</div>
+      </div>
+      <div class="scenario-switch ${s.enabled ? 'on' : ''}" onclick="toggleScenarioEnabled(event, '${s.id}')"></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteScenarioSetting(event, '${s.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+
+
+function toggleScenarioEnabled(e, scId) {
+  e.stopPropagation();
+  const sc = AppData.scenarios.find(s => s.id === scId);
+  if (sc) {
+    sc.enabled = !sc.enabled;
+    saveAppData(AppData);
+    renderSettingsPage();
+    showToast(`已${sc.enabled ? '開啟' : '關閉'}情境「${sc.name}」`);
+  }
+}
+
+function deleteScenarioSetting(e, scId) {
+  e.stopPropagation();
+  if (!confirm('確定刪除此情境設定？')) return;
+  AppData.scenarios = AppData.scenarios.filter(s => s.id !== scId);
+  if (AppData.activeScenarioId === scId) {
+    AppData.activeScenarioId = AppData.scenarios[0]?.id || '';
+  }
+  saveAppData(AppData);
+  renderSettingsPage();
+  showToast('情境已刪除');
+}
+
+function openModalScenario(mode) {
+  document.getElementById('scenario-name-field').value = '';
+  document.getElementById('scenario-icon-field').value = '👨‍🍳';
+  document.getElementById('scenario-role-field').value = '廚房人員';
+  document.getElementById('scenario-desc-field').value = '';
+  document.getElementById('scenario-edit-id-field').value = '';
+  openModal('modal-scenario');
+}
+
+function submitScenarioForm() {
+  const name = document.getElementById('scenario-name-field').value.trim();
+  const icon = document.getElementById('scenario-icon-field').value.trim() || '👨‍🍳';
+  const role = document.getElementById('scenario-role-field').value;
+  const desc = document.getElementById('scenario-desc-field').value.trim();
+
+  if (!name) { showToast('請填寫情境名稱', 'error'); return; }
+
+  AppData.scenarios.push({
+    id: uid(),
+    name,
+    icon,
+    role,
+    desc,
+    enabled: true
+  });
+
+  saveAppData(AppData);
+  closeModal('modal-scenario');
+  renderSettingsPage();
+  showToast('成功新增自訂情境！', 'success');
+}
+
+/* -------------------------------------------------------------
+   全局資料管理 (JSON 備份匯出 / 匯入 / 一鍵清空重置)
+------------------------------------------------------------- */
+function exportDataJson() {
+  const dataStr = JSON.stringify(AppData, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `楊_傳菜人員工作手帳備份_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('✅ 備份已成功匯出為 JSON 檔案！', 'success');
+}
+
+function importDataJson(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed.tabs || !Array.isArray(parsed.tabs)) throw new Error('檔案格式不相符');
+      AppData = parsed;
+      saveAppData(AppData);
+      showToast('✅ 備份資料已成功匯入！正在重新整理頁面…', 'success');
+      setTimeout(() => location.reload(), 1200);
+    } catch (err) {
+      showToast('❌ 匯入失敗：請確認 JSON 檔案結構是否正確', 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function confirmResetAllData() {
+  if (!confirm('確定要將手帳重置為您最新的傳菜手冊預設資料嗎？')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  AppData = createRealRunnerData();
+  saveAppData(AppData);
+  showToast('✅ 已重置為最新傳菜手冊內容！', 'success');
+  setTimeout(() => location.reload(), 1000);
+}
+
+/* ==============================================================
+   10. 離線狀態偵測與 PWA Service Worker
+============================================================== */
+function syncNetworkStatus() {
+  if (navigator.onLine) {
+    document.body.classList.remove('offline');
+  } else {
+    document.body.classList.add('offline');
+    showToast('📵 目前已離線，AI 功能暫時停用，可正常瀏覽 SOP 與單字庫');
+  }
+}
+
+window.addEventListener('online', syncNetworkStatus);
+window.addEventListener('offline', syncNetworkStatus);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW 註冊失敗：', err));
+  });
+}
+
+/* ==============================================================
+   11. 初始化
+============================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  syncNetworkStatus();
+  renderSopTabs();
+  renderVocabPage('sop');
+
+  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) backdrop.classList.remove('open');
+    });
+  });
+});
+</script>
+</body>
+</html>
