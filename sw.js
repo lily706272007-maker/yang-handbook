@@ -1,10 +1,12 @@
-const CACHE_NAME = 'yang-pwa-v22';
+const CACHE_NAME = 'yang-pwa-v23';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './logo.png',
   './favicon.png',
+  './apple-touch-icon.png',
+  './apple-touch-icon-precomposed.png',
   './icons/tanuki.png',
   './icons/apple-touch-icon.png',
   './icons/icon-192.png',
