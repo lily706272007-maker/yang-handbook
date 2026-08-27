@@ -1,9 +1,10 @@
-const CACHE_NAME = 'yang-pwa-v1';
+const CACHE_NAME = 'yang-pwa-v18';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './logo.png',
+  './icons/tanuki.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -22,23 +23,26 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// 網路優先 (Network-First) 策略：優先獲取最新程式碼，斷網時無縫切換快取
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type === 'opaque') {
-          return response;
+    fetch(event.request)
+      .then((response) => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         return response;
-      }).catch(() => {
-        if (event.request.destination === 'document') {
-          return caches.match('./index.html');
-        }
-      });
-    })
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cached) => {
+          if (cached) return cached;
+          if (event.request.destination === 'document') {
+            return caches.match('./index.html');
+          }
+        });
+      })
   );
 });

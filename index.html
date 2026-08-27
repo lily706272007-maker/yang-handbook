@@ -612,17 +612,17 @@
     to   { opacity: 1; transform: translateX(-50%) scale(1); }
   }
   .pet-avatar {
-    width: 120px; height: 120px; display: block; margin: 0 auto;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 175px; max-width: 75vw; height: auto; display: block; margin: 0 auto;
+    background: transparent;
+    object-fit: contain;
     animation: petBreathe 3.5s ease-in-out infinite;
-    filter: drop-shadow(0 3px 10px rgba(92,61,30,0.20));
+    filter: drop-shadow(0 8px 20px rgba(92,61,30,0.22));
     transition: transform 0.2s, filter 0.3s;
   }
-  .pet-interactive-area:hover .pet-avatar { transform: scale(1.07); }
+  .pet-interactive-area:hover .pet-avatar { transform: scale(1.06); }
   .pet-interactive-area.recording .pet-avatar {
     animation: petListening 0.8s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 14px var(--accent));
+    filter: drop-shadow(0 0 16px var(--accent)) drop-shadow(0 8px 20px rgba(92,61,30,0.25));
   }
   @keyframes petBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-4px); } }
   @keyframes petListening { from { transform: scale(1) rotate(-3deg); } to { transform: scale(1.1) rotate(3deg); } }
@@ -920,7 +920,7 @@
       <div class="pet-wrapper">
         <div class="pet-interactive-area" id="pet-touch-zone" onclick="handlePetTrigger()" ontouchstart="handlePetTouchStart(event)" ontouchend="handlePetTouchEnd()">
           <div class="pet-bubble" id="pet-dialog-bubble"></div>
-          <img class="pet-avatar" id="pet-avatar-icon" src="./icons/tanuki.jpg" alt="小狸貓">
+          <img class="pet-avatar" id="pet-avatar-icon" src="./icons/tanuki.png" alt="手帳小狸貓">
           <div class="pet-title">手帳小狸貓</div>
           <div class="pet-hint">點擊開始語音・長按持續錄音</div>
           <div class="pet-status-bar" id="pet-status-text"></div>
@@ -1225,7 +1225,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v17';
+const STORAGE_KEY = 'yang_runner_handbook_v18';
 
 function createRealRunnerData() {
   return {
