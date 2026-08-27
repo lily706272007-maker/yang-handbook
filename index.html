@@ -1225,7 +1225,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v16';
+const STORAGE_KEY = 'yang_runner_handbook_v17';
 
 function createRealRunnerData() {
   return {
@@ -2975,7 +2975,7 @@ function createRealRunnerData() {
     }
   ],
   "chatHistory": [],
-  "apiKey": "AQ.Ab8RN6JZ8f4qtcrVkBinSBiytSsmvRstdusa6_Yaq5LjL33EKA",
+  "apiKey": "AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w",
   "activeScenarioId": "sc_runner_ready",
   "currentTabId": "tab_runner_all"
 };
@@ -2996,8 +2996,8 @@ function loadAppData() {
       saveAppData(fresh);
       return fresh;
     }
-    if (!data.apiKey) {
-      data.apiKey = "AQ.Ab8RN6JZ8f4qtcrVkBinSBiytSsmvRstdusa6_Yaq5LjL33EKA";
+    if (!data.apiKey || data.apiKey.includes('AQ.Ab8RN6JZ8')) {
+      data.apiKey = "AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w";
       saveAppData(data);
     }
     return data;
@@ -3962,11 +3962,10 @@ function showPetDialog(msg) {
 }
 
 
-const HARDCODED_GEMINI_API_KEY = 'AQ.Ab8RN6JZ8f4qtcrVkBinSBiytSsmvRstdusa6_Yaq5LjL33EKA';
-// 使用 v1 正式端點（v1beta 對部分模型已停止支援 generateContent）
-const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1/models';
-const GEMINI_PRIMARY_MODEL  = 'gemini-2.5-flash-lite';  // 輕量快速穩定
-const GEMINI_FALLBACK_MODEL = 'gemini-2.0-flash';        // 備援
+const HARDCODED_GEMINI_API_KEY = 'AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w';
+const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
+const GEMINI_PRIMARY_MODEL  = 'gemini-3.6-flash';       // 穩定高效率主力模型
+const GEMINI_FALLBACK_MODEL = 'gemini-flash-latest';    // 備援模型
 
 async function callGeminiApiUnified(promptText) {
   const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : HARDCODED_GEMINI_API_KEY;
@@ -3974,13 +3973,16 @@ async function callGeminiApiUnified(promptText) {
     contents: [{ role: 'user', parts: [{ text: promptText }] }],
     generationConfig: { responseMimeType: 'application/json' }
   });
-  const headers = { 'Content-Type': 'application/json' };
 
-  // ── 優先：gemini-2.5-flash-lite ──
+  const headers = {
+    'Content-Type': 'application/json',
+    'x-goog-api-key': key
+  };
+
+  // ── 優先：gemini-3.6-flash ──
   try {
-    const res = await fetch(`${GEMINI_API_BASE}/${GEMINI_PRIMARY_MODEL}:generateContent?key=${key}`, {
-      method: 'POST', headers, body
-    });
+    const url = `${GEMINI_API_BASE}/${GEMINI_PRIMARY_MODEL}:generateContent`;
+    const res = await fetch(url, { method: 'POST', headers, body });
     const data = await res.json();
     if (res.ok) {
       const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -3991,11 +3993,10 @@ async function callGeminiApiUnified(promptText) {
     console.warn('Primary model fetch error:', err);
   }
 
-  // ── 備援：gemini-2.0-flash ──
+  // ── 備援：gemini-flash-latest ──
   try {
-    const fallbackRes = await fetch(`${GEMINI_API_BASE}/${GEMINI_FALLBACK_MODEL}:generateContent?key=${key}`, {
-      method: 'POST', headers, body
-    });
+    const fallbackUrl = `${GEMINI_API_BASE}/${GEMINI_FALLBACK_MODEL}:generateContent`;
+    const fallbackRes = await fetch(fallbackUrl, { method: 'POST', headers, body });
     const fallbackData = await fallbackRes.json();
     if (!fallbackRes.ok) {
       throw new Error(fallbackData.error?.message || 'Gemini API 呼叫失敗');
