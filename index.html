@@ -813,8 +813,25 @@
   #modal-photo-lightbox .modal-content {
     text-align: center; padding-bottom: 40px;
   }
-  .lightbox-img-wrap { border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); margin-bottom: 14px; }
-  .lightbox-img-wrap img { width: 100%; max-height: 300px; object-fit: cover; display: block; }
+  .lightbox-img-wrap { 
+    width: 100%; 
+    max-width: 320px; 
+    aspect-ratio: 1 / 1; 
+    margin: 0 auto 16px auto; 
+    border-radius: var(--radius-sm); 
+    overflow: hidden; 
+    background: var(--surface); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+  }
+  .lightbox-img-wrap img { 
+    width: 100%; 
+    height: 100%; 
+    aspect-ratio: 1 / 1; 
+    object-fit: cover; 
+    display: block; 
+  }
   .lightbox-ja-text { font-size: 1.15rem; font-weight: 600; color: var(--ink); line-height: 2.1; margin-bottom: 6px; }
   .lightbox-zh-text { font-size: 0.88rem; color: var(--muted); }
   .lightbox-note-text { font-size: 0.8rem; color: var(--accent); margin-top: 8px; }
@@ -1169,8 +1186,8 @@
       <span id="lightbox-title-text" style="font-size:1.1rem; color:var(--primary); font-weight:700;">📷 現場照片檢視</span>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-photo-lightbox')">✕ 關閉</button>
     </div>
-    <div style="width:100%; border-radius:12px; overflow:hidden; background:#1C1B1A; display:flex; align-items:center; justify-content:center; max-height:58dvh;">
-      <img id="lightbox-img" src="" alt="" style="max-width:100%; max-height:58dvh; object-fit:contain; display:block;" />
+    <div id="lightbox-img-wrap" class="lightbox-img-wrap" style="display:none;">
+      <img id="lightbox-img" src="" alt="" />
     </div>
     <div id="lightbox-caption" style="margin-top:14px; text-align:center;">
       <div id="lightbox-ja" style="font-size:1.2rem; font-weight:700; color:var(--primary); font-family:var(--font-serif);"></div>
@@ -1178,7 +1195,7 @@
       <div id="lightbox-note" style="font-size:0.8rem; color:var(--muted); margin-top:2px;"></div>
     </div>
     <div class="modal-footer" style="margin-top:16px;">
-      <button class="btn btn-primary" id="lightbox-speak-btn">🔊 朗讀日文</button>
+      <button class="btn btn-primary" id="lightbox-speak-btn">朗讀日文</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-photo-lightbox')">關閉</button>
     </div>
   </div>
@@ -1225,7 +1242,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v18';
+const STORAGE_KEY = 'yang_runner_handbook_v19';
 
 function createRealRunnerData() {
   return {
@@ -1775,7 +1792,7 @@ function createRealRunnerData() {
       "ja": "スクランブルエッグ",
       "zh": "美式炒蛋",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0873.jpg",
+      "imageUrl": "",
       "note": "朝食熱菜"
     },
     {
@@ -1799,7 +1816,7 @@ function createRealRunnerData() {
       "ja": "ざる<ruby>豆腐<rt>どうふ</rt></ruby>",
       "zh": "竹簍冷豆腐",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0857.jpg",
+      "imageUrl": "",
       "note": "朝食豆腐料理 (17-18)"
     },
     {
@@ -1807,7 +1824,7 @@ function createRealRunnerData() {
       "ja": "みそ<ruby>汁<rt>しる</rt></ruby>（<ruby>南関揚<rt>なんかんあ</rt></ruby>げ）",
       "zh": "南關油豆腐味噌湯",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0843.jpg",
+      "imageUrl": "",
       "note": "朝食名物湯品"
     },
     {
@@ -1831,7 +1848,7 @@ function createRealRunnerData() {
       "ja": "<ruby>明太子<rt>めんたいこ</rt></ruby>",
       "zh": "明太子",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0872.jpg",
+      "imageUrl": "",
       "note": "朝食名物"
     },
     {
@@ -1855,7 +1872,7 @@ function createRealRunnerData() {
       "ja": "おにぎり<ruby>三種<rt>さんしゅ</rt></ruby>",
       "zh": "飯糰三種",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0845.jpg",
+      "imageUrl": "",
       "note": "朝食主食"
     },
     {
@@ -1863,7 +1880,7 @@ function createRealRunnerData() {
       "ja": "お<ruby>粥<rt>かゆ</rt></ruby>",
       "zh": "白粥",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0845.jpg",
+      "imageUrl": "",
       "note": "朝食主食"
     },
     {
@@ -1951,7 +1968,7 @@ function createRealRunnerData() {
       "ja": "<ruby>高菜<rt>たかな</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>",
       "zh": "阿蘇高菜拌飯",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0845.jpg",
+      "imageUrl": "",
       "note": "熊本阿蘇名物"
     },
     {
@@ -2015,7 +2032,7 @@ function createRealRunnerData() {
       "ja": "<ruby>白菜<rt>はくさい</rt></ruby>のおかか<ruby>和<rt>あ</rt></ruby>え",
       "zh": "柴魚拌白菜",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0850.jpg",
+      "imageUrl": "",
       "note": "朝食小菜"
     },
     {
@@ -2031,7 +2048,7 @@ function createRealRunnerData() {
       "ja": "<ruby>青梗菜<rt>チンゲンサイ</rt></ruby>のナムル",
       "zh": "涼拌青江菜",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0847.jpg",
+      "imageUrl": "",
       "note": "夕食小菜"
     },
     {
@@ -2047,7 +2064,7 @@ function createRealRunnerData() {
       "ja": "ミルク<ruby>食<rt>しょく</rt></ruby>パン",
       "zh": "牛奶吐司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0881.jpg",
+      "imageUrl": "",
       "note": "朝食麵包"
     },
     {
@@ -2055,7 +2072,7 @@ function createRealRunnerData() {
       "ja": "ハムエッグ",
       "zh": "火腿煎蛋",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0873.jpg",
+      "imageUrl": "",
       "note": "朝食いろり"
     },
     {
@@ -2063,7 +2080,7 @@ function createRealRunnerData() {
       "ja": "<ruby>鯖<rt>さば</rt></ruby>",
       "zh": "烤鯖魚",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "imageUrl": "",
       "note": "朝食いろり烤魚"
     },
     {
@@ -2071,7 +2088,7 @@ function createRealRunnerData() {
       "ja": "<ruby>鯛<rt>たい</rt></ruby>のカマ",
       "zh": "烤鯛魚下巴",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "imageUrl": "",
       "note": "朝食いろり烤魚"
     },
     {
@@ -2079,7 +2096,7 @@ function createRealRunnerData() {
       "ja": "<ruby>間八<rt>かんぱち</rt></ruby>のカマ",
       "zh": "烤紅甘下巴",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0835 2.jpg",
+      "imageUrl": "",
       "note": "朝食いろり烤魚"
     },
     {
@@ -2087,7 +2104,7 @@ function createRealRunnerData() {
       "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ",
       "zh": "薩摩炸魚餅",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
+      "imageUrl": "",
       "note": "朝食いろり炸物"
     },
     {
@@ -2095,7 +2112,7 @@ function createRealRunnerData() {
       "ja": "<ruby>海老<rt>えび</rt></ruby>",
       "zh": "烤蝦",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0876.jpg",
+      "imageUrl": "",
       "note": "夕食いろり烤物"
     },
     {
@@ -2103,7 +2120,7 @@ function createRealRunnerData() {
       "ja": "ごぼう<ruby>天<rt>てん</rt></ruby>",
       "zh": "牛蒡天婦羅",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
+      "imageUrl": "",
       "note": "夕食いろり炸物"
     },
     {
@@ -2111,7 +2128,7 @@ function createRealRunnerData() {
       "ja": "とうもろこし",
       "zh": "烤玉米",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0858.jpg",
+      "imageUrl": "",
       "note": "夕食いろり烤物"
     },
     {
@@ -2119,7 +2136,7 @@ function createRealRunnerData() {
       "ja": "にんじん",
       "zh": "紅蘿蔔絲",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0858.jpg",
+      "imageUrl": "",
       "note": "沙拉吧蔬菜"
     },
     {
@@ -2127,7 +2144,7 @@ function createRealRunnerData() {
       "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ",
       "zh": "紫甘藍",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0860.jpg",
+      "imageUrl": "",
       "note": "沙拉吧蔬菜"
     },
     {
@@ -2143,7 +2160,7 @@ function createRealRunnerData() {
       "ja": "ベビーリーフ",
       "zh": "嫩葉生菜",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0858.jpg",
+      "imageUrl": "",
       "note": "沙拉吧蔬菜"
     },
     {
@@ -2151,7 +2168,7 @@ function createRealRunnerData() {
       "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ",
       "zh": "菊芋脆片",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0860.jpg",
+      "imageUrl": "",
       "note": "沙拉吧配料"
     },
     {
@@ -2159,7 +2176,7 @@ function createRealRunnerData() {
       "ja": "ビーンズ",
       "zh": "綜合豆",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0858.jpg",
+      "imageUrl": "",
       "note": "沙拉吧配料"
     },
     {
@@ -2167,7 +2184,7 @@ function createRealRunnerData() {
       "ja": "スイートコーン",
       "zh": "甜玉米粒",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0858.jpg",
+      "imageUrl": "",
       "note": "沙拉吧配料"
     },
     {
@@ -2175,7 +2192,7 @@ function createRealRunnerData() {
       "ja": "バナナ",
       "zh": "香蕉",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0882.jpg",
+      "imageUrl": "",
       "note": "朝食水果"
     },
     {
@@ -2183,7 +2200,7 @@ function createRealRunnerData() {
       "ja": "オレンジ",
       "zh": "柳橙",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0882.jpg",
+      "imageUrl": "",
       "note": "朝食水果"
     },
     {
@@ -2191,7 +2208,7 @@ function createRealRunnerData() {
       "ja": "ヨーグルト",
       "zh": "優格",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0857.jpg",
+      "imageUrl": "",
       "note": "朝食沙拉吧"
     },
     {
@@ -2199,7 +2216,7 @@ function createRealRunnerData() {
       "ja": "たまご",
       "zh": "玉子燒壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0873.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2207,7 +2224,7 @@ function createRealRunnerData() {
       "ja": "まぐろ",
       "zh": "鮪魚壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0871.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2215,7 +2232,7 @@ function createRealRunnerData() {
       "ja": "サーモン",
       "zh": "鮭魚壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0872.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2223,7 +2240,7 @@ function createRealRunnerData() {
       "ja": "うなぎ",
       "zh": "鰻魚壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0874.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2231,7 +2248,7 @@ function createRealRunnerData() {
       "ja": "いか",
       "zh": "花枝壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0875.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2239,7 +2256,7 @@ function createRealRunnerData() {
       "ja": "えび",
       "zh": "鮮蝦壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0876.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2247,7 +2264,7 @@ function createRealRunnerData() {
       "ja": "てりやき",
       "zh": "照燒壽司",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0871.jpg",
+      "imageUrl": "",
       "note": "壽司台名物"
     },
     {
@@ -2271,7 +2288,7 @@ function createRealRunnerData() {
       "ja": "わらび<ruby>餅<rt>もち</rt></ruby>",
       "zh": "蕨餅",
       "cat": "餐點",
-      "imageUrl": "./photos/IMG_0880.jpg",
+      "imageUrl": "",
       "note": "夕食甜點"
     },
     {
@@ -3041,7 +3058,17 @@ function openModal(id) {
 }
 
 function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.remove('open');
+    el.classList.remove('show');
+  }
+  if (id === 'modal-photo-lightbox') {
+    const imgEl = document.getElementById('lightbox-img');
+    const imgWrap = document.getElementById('lightbox-img-wrap');
+    if (imgEl) { imgEl.src = ''; imgEl.style.display = 'none'; }
+    if (imgWrap) imgWrap.style.display = 'none';
+  }
 }
 
 /* ==============================================================
@@ -3151,7 +3178,7 @@ function openItemQuickMenu(item, type, tabOrGlobal) {
   titleEl.innerHTML = item.ja || item.zh || '單字操作';
   
   let btnsHtml = '';
-  btnsHtml += `<button class="quick-menu-btn" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}'); closeQuickMenuModal();">🔊 語音朗讀發音</button>`;
+  btnsHtml += `<button class="quick-menu-btn" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}'); closeQuickMenuModal();">語音朗讀發音</button>`;
   
   const hasImg = item.imageUrl && item.imageUrl.trim() && item.cat !== '名字' && item.cat !== '職稱';
   if (hasImg) {
@@ -3222,7 +3249,7 @@ function openWordDetailModal(id) {
 
   const modal = document.getElementById('modal-photo-lightbox');
   const imgEl = document.getElementById('lightbox-img');
-  const imgWrap = imgEl ? imgEl.parentElement : null;
+  const imgWrap = document.getElementById('lightbox-img-wrap') || (imgEl ? imgEl.parentElement : null);
   const jaEl = document.getElementById('lightbox-ja');
   const zhEl = document.getElementById('lightbox-zh');
   const noteEl = document.getElementById('lightbox-note');
@@ -3231,16 +3258,30 @@ function openWordDetailModal(id) {
 
   if (!modal) return;
 
-  if (titleText) titleText.textContent = item.imageUrl ? '📷 實拍照與詳細說明' : '📖 單字詳情與說明';
+  // 1. 開啟時立即清空舊圖並隱藏容器，徹底解決串圖片問題
+  if (imgEl) {
+    imgEl.src = '';
+    imgEl.style.display = 'none';
+  }
+  if (imgWrap) {
+    imgWrap.style.display = 'none';
+  }
 
-  if (item.imageUrl && item.imageUrl.trim() && item.cat !== '名字' && item.cat !== '職稱') {
-    if (imgWrap) imgWrap.style.display = 'flex';
-    if (imgEl) {
-      imgEl.src = item.imageUrl;
-      imgEl.style.display = 'block';
-    }
-  } else {
-    if (imgWrap) imgWrap.style.display = 'none';
+  const hasPhoto = !!(item.imageUrl && item.imageUrl.trim() && item.cat !== '名字' && item.cat !== '職稱');
+  if (titleText) titleText.textContent = hasPhoto ? '📷 實拍照與詳細說明' : '📖 單字詳情與說明';
+
+  if (hasPhoto && imgEl && imgWrap) {
+    imgEl.onload = function() {
+      if (imgEl.src && !imgEl.src.endsWith('index.html')) {
+        imgWrap.style.display = 'flex';
+        imgEl.style.display = 'block';
+      }
+    };
+    imgEl.onerror = function() {
+      imgWrap.style.display = 'none';
+      imgEl.style.display = 'none';
+    };
+    imgEl.src = item.imageUrl;
   }
 
   if (jaEl) jaEl.innerHTML = item.ja || '';
@@ -3337,7 +3378,7 @@ function renderSopContent() {
                 <div class="compact-sop-ja">${item.ja}</div>
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
-                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
+                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')"></button>
                 <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
               </div>
             </div>
@@ -3375,7 +3416,7 @@ function renderSopContent() {
             <div class="dialog-bubble-zh">${escapeHtml(item.zh)}</div>
           </div>
           <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
-            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')">🔊</button>
+            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')"></button>
             <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
           </div>
         </div>`;
@@ -3469,7 +3510,7 @@ function renderSopContent() {
             <div class="cell-ja">${v.ja}</div>
             <div class="cell-zh">${escapeHtml(v.zh)}</div>
             <div class="cell-actions" onclick="event.stopPropagation()">
-              <button class="cell-btn-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
+              <button class="cell-btn-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')"></button>
             </div>
           </div>`;
       });
@@ -3552,7 +3593,7 @@ function renderVocabPage(type) {
             <div class="cell-zh">${escapeHtml(v.zh)}</div>
           </div>
           <div class="cell-actions" onclick="event.stopPropagation()">
-            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
+            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')"></button>
             <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
           </div>
         </div>`;
@@ -3599,7 +3640,7 @@ function renderVocabPage(type) {
                 <div class="cell-zh">${escapeHtml(v.zh)}</div>
               </div>
               <div class="cell-actions" onclick="event.stopPropagation()">
-                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
+                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')"></button>
                 <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
               </div>
             </div>`;
@@ -4214,7 +4255,7 @@ function renderChatBox() {
           <div class="bubble-zh-text">${escapeHtml(msg.zh)}</div>
           ${msg.correction ? `<div class="bubble-correction">💡 <strong>日文修正建議：</strong>${escapeHtml(msg.correction)}</div>` : ''}
           <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
-            <button class="bubble-action-btn" onclick='speakJapanese(${JSON.stringify(msg.ja)})'>🔊 朗讀</button>
+            <button class="bubble-action-btn" onclick='speakJapanese(${JSON.stringify(msg.ja)})'>朗讀</button>
             ${!isUser ? `<button class="bubble-action-btn" onclick='saveRoleplayMessageToConv(${JSON.stringify(msg)})'>📌 存入會話單字庫</button>` : ''}
           </div>
         </div>
