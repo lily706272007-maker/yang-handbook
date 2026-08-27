@@ -4,8 +4,8 @@
   "description": "熊本優彩溫泉旅館傳菜人員實務手帳 PWA",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#F4F0E8",
-  "theme_color": "#3A5244",
+  "background_color": "#F2E9DA",
+  "theme_color": "#5C3D1E",
   "orientation": "any",
   "icons": [
     {
@@ -13,6 +13,11 @@
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     },
     {
       "src": "./icons/icon-512.png",

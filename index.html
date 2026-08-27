@@ -2,15 +2,19 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#3A5244" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#5C3D1E" />
   <meta name="description" content="日本打工度假個人專用手帳 PWA - 優彩打工應對與會話手帳" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="楊の手帳" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/png" href="./logo.png" />
-  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="./icons/icon-512.png" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1242,7 +1246,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v19';
+const STORAGE_KEY = 'yang_runner_handbook_v20';
 
 function createRealRunnerData() {
   return {

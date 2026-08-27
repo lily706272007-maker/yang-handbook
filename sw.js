@@ -1,10 +1,14 @@
-const CACHE_NAME = 'yang-pwa-v19';
+const CACHE_NAME = 'yang-pwa-v20';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './logo.png',
+  './favicon.png',
   './icons/tanuki.png',
+  './icons/apple-touch-icon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
 ];
 
 self.addEventListener('install', (event) => {
