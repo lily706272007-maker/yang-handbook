@@ -20,25 +20,25 @@
   
   <style>
   /* ============================================================
-     楊の手帳 — 日式溫泉禪意主題 v2 "湯けむり"
-     設計原則：和紙質感、竹叢清新、簡約留白、溫泉暖橘點綴
+     楊の手帳 — 小狸貓主題 v3 "たぬきの手帳"
+     設計原則：狸貓暖棕、奶油肚皮底色、樹葉清綠點綴
   ============================================================ */
   :root {
-    /* ── 配色系統 ── */
-    --bg:           #F4F0E8;   /* 手漉き和紙底色 */
-    --bg-card:      #FEFCF8;   /* 純白和紙卡片 */
-    --surface:      #EDE7DB;   /* 薄霧灰 / 次級容器 */
-    --primary:      #3A5244;   /* 深竹叢綠 */
-    --primary-light:#4E6B5A;   /* 淺竹綠 hover */
-    --ink:          #2B2926;   /* 墨水色 */
-    --accent:       #B86B3F;   /* 溫泉流木橘 */
-    --accent-light: #D4916A;   /* 柔橘 */
-    --accent-bg:    rgba(184,107,63,0.08);
-    --muted:        #8C8178;   /* 枯茶灰 */
-    --border:       #E0D9CE;   /* 和紙邊界（極淡） */
-    --shadow:       rgba(43,41,38,0.05);
-    --shadow-md:    rgba(43,41,38,0.10);
-    --shadow-lg:    rgba(43,41,38,0.16);
+    /* ── 配色系統（從小狸貓身上抽色） ── */
+    --bg:           #F2E9DA;   /* 奶油肚皮底色 */
+    --bg-card:      #FDF8F2;   /* 純白卡片 */
+    --surface:      #E8DDD0;   /* 淡棕次級容器 */
+    --primary:      #5C3D1E;   /* 深棕（毛色/眼圈） */
+    --primary-light:#7A5230;   /* 中棕 hover */
+    --ink:          #2E1F0E;   /* 深墨棕 */
+    --accent:       #4A8640;   /* 葉子綠（頭頂那片葉） */
+    --accent-light: #6AA660;   /* 淺葉綠 */
+    --accent-bg:    rgba(74,134,64,0.09);
+    --muted:        #9A8472;   /* 枯草棕灰 */
+    --border:       #DDD0C0;   /* 棕米邊界 */
+    --shadow:       rgba(46,31,14,0.05);
+    --shadow-md:    rgba(46,31,14,0.10);
+    --shadow-lg:    rgba(46,31,14,0.16);
     /* ── 排版 ── */
     --radius:    14px;
     --radius-sm:  9px;
@@ -612,16 +612,17 @@
     to   { opacity: 1; transform: translateX(-50%) scale(1); }
   }
   .pet-avatar {
-    font-size: 5.2rem; display: block;
+    width: 120px; height: 120px; display: block; margin: 0 auto;
+    border-radius: 50%;
+    object-fit: cover;
     animation: petBreathe 3.5s ease-in-out infinite;
-    line-height: 1;
-    filter: drop-shadow(0 3px 10px rgba(58,82,68,0.15));
+    filter: drop-shadow(0 3px 10px rgba(92,61,30,0.20));
     transition: transform 0.2s, filter 0.3s;
   }
   .pet-interactive-area:hover .pet-avatar { transform: scale(1.07); }
   .pet-interactive-area.recording .pet-avatar {
     animation: petListening 0.8s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 10px var(--accent));
+    filter: drop-shadow(0 0 14px var(--accent));
   }
   @keyframes petBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-4px); } }
   @keyframes petListening { from { transform: scale(1) rotate(-3deg); } to { transform: scale(1.1) rotate(3deg); } }
@@ -848,7 +849,7 @@
     <nav id="top-nav-bar" class="compact-nav-bar">
       <button class="top-nav-btn active" data-page="page-sop" onclick="switchNavPage('page-sop', this)"><span class="nav-icon">📋</span><span class="nav-label">實務SOP</span></button>
       <button class="top-nav-btn" data-page="page-vocab-sop" onclick="switchNavPage('page-vocab-sop', this)"><span class="nav-icon">📖</span><span class="nav-label">實戰單字庫</span></button>
-      <button class="top-nav-btn" data-page="page-ai" onclick="switchNavPage('page-ai', this)"><span class="nav-icon">🦊</span><span class="nav-label">AI小寵物</span></button>
+      <button class="top-nav-btn" data-page="page-ai" onclick="switchNavPage('page-ai', this)"><span class="nav-icon">🦝</span><span class="nav-label">AI小寵物</span></button>
       <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">模擬訓練</span></button>
       <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
     </nav>
@@ -919,8 +920,8 @@
       <div class="pet-wrapper">
         <div class="pet-interactive-area" id="pet-touch-zone" onclick="handlePetTrigger()" ontouchstart="handlePetTouchStart(event)" ontouchend="handlePetTouchEnd()">
           <div class="pet-bubble" id="pet-dialog-bubble"></div>
-          <span class="pet-avatar" id="pet-avatar-icon">🦊</span>
-          <div class="pet-title">手帳小狐狸</div>
+          <img class="pet-avatar" id="pet-avatar-icon" src="./icons/tanuki.jpg" alt="小狸貓">
+          <div class="pet-title">手帳小狸貓</div>
           <div class="pet-hint">點擊開始語音・長按持續錄音</div>
           <div class="pet-status-bar" id="pet-status-text"></div>
         </div>
@@ -3387,16 +3388,21 @@ function renderSopContent() {
 
   // 從全局 vocabSop 中取各分類資料（供各 SOP 頁加入速查）
   const allVocabs = (AppData && AppData.vocabSop) ? AppData.vocabSop : [];
-  const sushiVocabs   = allVocabs.filter(v => v.cat === '餐點' && ['vs_sushi_tamago','vs_sushi_maguro','vs_sushi_salmon','vs_sushi_unagi','vs_sushi_ika','vs_sushi_ebi','vs_sushi_teriyaki'].includes(v.id));
-  const dessertVocabs = allVocabs.filter(v => v.cat === '餐點' && ['vs_desert_melon','vs_desert_choco','vs_desert_warabi','vs_desert_dango'].includes(v.id));
+  const sushiIds  = ['vs_sushi_tamago','vs_sushi_maguro','vs_sushi_salmon','vs_sushi_unagi','vs_sushi_ika','vs_sushi_ebi','vs_sushi_teriyaki'];
+  const dessertIds= ['vs_desert_melon','vs_desert_choco','vs_desert_warabi','vs_desert_dango'];
+  const sushiVocabs   = allVocabs.filter(v => v.cat === '餐點' && sushiIds.includes(v.id));
+  const dessertVocabs = allVocabs.filter(v => v.cat === '餐點' && dessertIds.includes(v.id));
+  // 餐點（排除壽司和點心）
+  const foodVocabs    = allVocabs.filter(v => v.cat === '餐點' && !sushiIds.includes(v.id) && !dessertIds.includes(v.id));
   const drinkVocabs   = allVocabs.filter(v => v.cat === '酒水');
 
   // 決定本頁要在速查中額外加入的分組
-  // tab_runner_all：傳菜全手冊 → 餐點（壽司 + 點心）
-  // tab_order_sop：點菜與端菜應對 → 餐點（壽司 + 點心）
+  // tab_runner_all：傳菜全手冊 → 餐點 + 壽司 + 點心
+  // tab_order_sop：點菜與端菜應對 → 餐點 + 壽司 + 點心
   // tab_drink_sop：酒水服務 → 酒水 + 壽司 + 點心
   const extraGroups = [];
   if (tabId === 'tab_runner_all' || tabId === 'tab_order_sop') {
+    extraGroups.push({ title: '🍱 餐點', items: foodVocabs });
     extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
     extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
   }
@@ -3894,7 +3900,7 @@ function startPetVoiceInput(continuous = false) {
 
     document.getElementById('pet-touch-zone').classList.add('recording');
     setPetStatus('🔴 語音聆聽中… 請說話');
-    showPetDialog('小狐狸正在聆聽中，請說出傳菜指令、料理名稱或日文句子！');
+    showPetDialog('小狸貓正在聆聽中，請說出傳菜指令、料理名稱或日文句子！');
 
     petRecognition.onresult = (e) => {
       const transcript = e.results[e.results.length - 1][0].transcript;
