@@ -87,7 +87,7 @@ assert(html.includes('麻婆豆腐'), '熱食：麻婆豆腐');
 assert(html.includes('日式牛肉咖哩'), '主食：日式牛肉咖哩');
 assert(html.includes('蛤蜊味噌湯'), '熱湯：蛤蜊味噌湯');
 assert(html.includes('阿蘇高菜拌飯'), '主食：阿蘇高菜拌飯');
-assert(html.includes('火鍋高湯'), '湯頭類：火鍋高湯');
+assert(html.includes('熊本龍膽豬涮涮鍋') || html.includes('りんどうポーク'), '名物鍋物：熊本龍膽豬涮涮鍋');
 assert(html.includes('豚骨拉麵'), '主食：豚骨拉麵');
 assert(html.includes('玉子燒壽司') && html.includes('鮪魚壽司') && html.includes('鮭魚壽司'), '壽司：玉子、鮪魚、鮭魚');
 assert(html.includes('鰻魚壽司') && html.includes('花枝壽司') && html.includes('鮮蝦壽司') && html.includes('照燒壽司'), '壽司：鰻魚、花枝、鮮蝦、照燒');
