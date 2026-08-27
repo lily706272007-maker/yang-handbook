@@ -1184,6 +1184,54 @@
   </div>
 </div>
 
+
+<!-- Modal 7: SOP 與 對話詳細文法解析 Lightbox -->
+<div class="modal-backdrop" id="modal-sop-grammar" style="align-items:center;">
+  <div class="modal-content" style="border-radius:20px; max-width:560px; max-height:88dvh; overflow-y:auto; padding:18px;">
+    <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid var(--border); padding-bottom:8px;">
+      <span id="grammar-modal-title" style="font-size:1.05rem; color:var(--primary); font-weight:700;">📝 語句與文法詳解</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-sop-grammar')">✕ 關閉</button>
+    </div>
+    
+    <!-- 日文與發音主卡片 -->
+    <div style="background:var(--bg-card); border:1.5px solid var(--border); border-radius:12px; padding:14px; margin-bottom:14px; text-align:left;">
+      <div id="grammar-speaker-badge" style="display:inline-block; font-size:0.75rem; font-weight:700; color:var(--primary); background:var(--accent-bg); padding:2px 8px; border-radius:12px; margin-bottom:6px;"></div>
+      <div id="grammar-ja-text" style="font-size:1.2rem; font-weight:700; color:var(--primary); line-height:2.2; font-family:var(--font-serif);"></div>
+      <div id="grammar-zh-text" style="font-size:0.95rem; color:var(--ink); margin-top:8px; font-weight:600; line-height:1.6; border-top:1px dashed var(--border); padding-top:8px;"></div>
+    </div>
+
+    <!-- 單字拆解區塊 -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:0.85rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:flex; align-items:center; gap:5px;">
+        <span>📚</span> 關鍵單字與語彙
+      </div>
+      <div id="grammar-vocabs-container" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <!-- 文法與句型拆解區塊 -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:0.85rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:flex; align-items:center; gap:5px;">
+        <span>💡</span> 文法重點與句型解析
+      </div>
+      <div id="grammar-points-container" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <!-- 職場實戰筆記 -->
+    <div id="grammar-tips-wrap" style="background:rgba(92,61,30,0.06); border-left:3px solid var(--primary); border-radius:0 8px 8px 0; padding:10px; font-size:0.82rem; color:var(--ink); line-height:1.6; margin-bottom:14px;">
+      <div style="font-weight:700; color:var(--primary); margin-bottom:2px;">📌 職場實戰與上司叮嚀：</div>
+      <div id="grammar-tips-text"></div>
+    </div>
+
+    <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+      <button class="btn btn-ghost btn-sm" id="grammar-edit-btn">✎ 編輯此條目</button>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-primary btn-sm" id="grammar-speak-btn">朗讀日文</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-sop-grammar')">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal 6: 照片全螢幕燈箱 Lightbox -->
 <div class="modal-backdrop" id="modal-photo-lightbox" style="align-items:center;">
   <div class="modal-content" style="border-radius:20px; max-width:540px; padding:18px;">
@@ -1247,7 +1295,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v24';
+const STORAGE_KEY = 'yang_runner_handbook_v25';
 
 function createRealRunnerData() {
   return {
@@ -1258,160 +1306,241 @@ function createRealRunnerData() {
       "icon": "🍱",
       "items": [
         {
-          "id": "sop_1",
+          "id": "rn_1",
           "type": "sop",
           "speaker": "",
-          "zh": "1. 首先，請先記住所有料理的名稱。",
-          "ja": "まず、<ruby>料理<rt>りょうり</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えます。"
+          "zh": "1. 廚房出菜時會通報「〇〇できました（〇〇做好了）」，請立即前往取菜。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "料理（りょうり）", "zh": "料理、菜餚" },
+              { "ja": "厨房（ちゅうぼう）", "zh": "廚房" },
+              { "ja": "できました", "zh": "做好了、完成了（できる的過去式）" },
+              { "ja": "取りに行く（とりにいく）", "zh": "去拿、前往領取" }
+            ],
+            "points": [
+              { "title": "【〜たら (假定條件)】", "desc": "料理ができたら（料理完成後/一做好…）。表示前項動作完成後，緊接著執行後項。" },
+              { "title": "【〜から言われる (被動態)】", "desc": "厨房から〜と言われる（被廚房告知…）。言われる為「言う」的被動形。" },
+              { "title": "【〜ので (原因理由)】", "desc": "表示客觀的因果關係，「因為被叫了，所以…」。比「から」語氣更溫和禮貌。" },
+              { "title": "【動詞連用形＋に行く (目的)】", "desc": "取りに行く（去拿）。動詞ます形去ます＋に行く，表示前往某處做某事的目的。" }
+            ],
+            "tips": "廚房喊「〇〇できました」時，要大聲回應「はい、伺います！」（好的，馬上過去！）。"
+          }
         },
         {
-          "id": "sop_2",
+          "id": "rn_2",
           "type": "sop",
           "speaker": "",
-          "zh": "2. 料理完成後，廚房工作人員會通知你去取餐。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。"
+          "zh": "2. 取餐時務必推餐車（台車），並隨身攜帶乾淨布巾（クロス）蓋上料理保持衛生。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>く<ruby>時<rt>とき</rt></ruby>は、<ruby>必<rt>かなら</rt></ruby>ず<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>押<rt>お</rt></ruby>し、<ruby>布<rt>ぬの</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていきます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "必ず（かならず）", "zh": "務必、一定" },
+              { "ja": "台車（だいしゃ）/ ワゴン", "zh": "推車、餐車" },
+              { "ja": "布（ぬの）/ クロス", "zh": "布巾、蓋菜布" },
+              { "ja": "持っていく（もっていく）", "zh": "帶去、隨身攜帶" }
+            ],
+            "points": [
+              { "title": "【動詞辞書形＋時は (時間子句)】", "desc": "料理を取りに行く時は（去取菜的時候）。" },
+              { "title": "【て形＋いく (動作延續/方向)】", "desc": "持っていく（帶過去）。て形接いく表示朝遠離說話者的方向進行動作。" }
+            ],
+            "tips": "熱菜或冷盤在走道推運時，一定要蓋上布巾以符合優彩衛生標準。"
+          }
         },
         {
-          "id": "sop_3",
+          "id": "rn_3",
           "type": "sop",
           "speaker": "",
-          "zh": "3. 前往廚房取餐時，一定要帶著布巾。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>く<ruby>時<rt>とき</rt></ruby>は、<ruby>布<rt>ぬの</rt></ruby>を<ruby>必<rt>かなら</rt></ruby>ず<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。"
+          "zh": "3. 生魚片（刺身）、熊本赤牛、馬刺等生鮮冷盤需存放在冰箱（冷蔵庫）。",
+          "ja": "<ruby>刺身<rt>さしみ</rt></ruby>・<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>しなどの<ruby>生鮮品<rt>せいせんひん</rt></ruby>は<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "刺身（さしみ）", "zh": "生魚片" },
+              { "ja": "赤牛（あかうし）", "zh": "熊本名產褐毛和牛" },
+              { "ja": "馬刺し（ばさし）", "zh": "熊本名產馬肉生魚片" },
+              { "ja": "冷蔵庫（れいぞうこ）", "zh": "冰箱" },
+              { "ja": "入れる（いれる）", "zh": "放進、存入" }
+            ],
+            "points": [
+              { "title": "【名詞＋などの (列舉)】", "desc": "刺身・赤牛・馬刺しなどの生鮮品（生魚片、赤牛、馬肉等生鮮品）。" },
+              { "title": "【格助詞 に (著落點/目標)】", "desc": "冷蔵庫に入れます（放入冰箱中）。" }
+            ],
+            "tips": "生鮮冷盤補菜時確認盤底保冰狀況。"
+          }
         },
         {
-          "id": "sop_4",
+          "id": "rn_4",
           "type": "sop",
           "speaker": "",
-          "zh": "4. 離開餐廳入口時，請隨手關門。",
-          "ja": "<ruby>レストラン<rt>resutoran</rt></ruby>の<ruby>入口<rt>いりぐち</rt></ruby>を<ruby>出<rt>で</rt></ruby>る<ruby>時<rt>とき</rt></ruby>は、<ruby>扉<rt>とびら</rt></ruby>を<ruby>閉<rt>し</rt></ruby>めて<ruby>行<rt>い</rt></ruby>きます。"
+          "zh": "4. 火鍋肉品、熱湯等保溫料理需存放在保溫庫（保温庫）。",
+          "ja": "<ruby>鍋<rt>なべ</rt></ruby>やスープなどの<ruby>温<rt>あたた</rt></ruby>かい<ruby>料理<rt>りょうり</rt></ruby>は<ruby>保温庫<rt>ほおんこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "鍋（なべ）", "zh": "火鍋、鍋物" },
+              { "ja": "温かい（あたたかい）", "zh": "溫暖的、熱的" },
+              { "ja": "保温庫（ほおんこ）", "zh": "保溫庫、保溫櫃" }
+            ],
+            "points": [
+              { "title": "【名詞＋や＋名詞 (不完全列舉)】", "desc": "鍋やスープ（火鍋與湯品等）。" },
+              { "title": "【い形容詞＋名詞】", "desc": "温かい料理（熱的料理）。" }
+            ],
+            "tips": "保溫庫拿取熱湯時注意防燙。"
+          }
         },
         {
-          "id": "sop_5",
+          "id": "rn_5",
           "type": "sop",
           "speaker": "",
-          "zh": "5. 到達廚房後，請確認料理的名稱與內容，再將料理放到餐車上，運回餐廳。",
-          "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、<ruby>料理<rt>りょうり</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>台車<rt>だいしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>せ、<ruby>レストラン<rt>resutoran</rt></ruby>へ<ruby>運<rt>はこ</rt></ruby>んできます。"
+          "zh": "5. 送達現場後，用無線電（インカム）向現場主管通報「〇〇〇〇番、〇〇届きました」。",
+          "ja": "<ruby>現場<rt>げんば</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、インカムで「〇〇〇〇<ruby>番<rt>ばん</rt></ruby>、〇〇<ruby>届<rt>とど</rt></ruby>きました」と<ruby>通報<rt>つうほう</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "現場（げんば）", "zh": "餐廳現場、外場" },
+              { "ja": "着く（つく）", "zh": "到達、抵達" },
+              { "ja": "インカム", "zh": "無線電對講機（intercom）" },
+              { "ja": "届く（とどく）", "zh": "送達、送到" },
+              { "ja": "通報する（つうほうする）", "zh": "通報、告知" }
+            ],
+            "points": [
+              { "title": "【道具格助詞 で】", "desc": "インカムで（使用對講機）。" },
+              { "title": "【動詞連用形＋ました (過去肯定)】", "desc": "届きました（已經送到了）。" }
+            ],
+            "tips": "報桌號與菜名時音量清晰，例如「2001番、チキン南蛮届きました」。"
+          }
         },
         {
-          "id": "sop_6",
+          "id": "rn_6",
           "type": "sop",
           "speaker": "",
-          "zh": "6. 餐廳入口處有斜坡。經過斜坡時，請稍微抬起餐車使餐車保持水平。若未保持水平料理可能滑落，請小心。",
-          "ja": "<ruby>入口<rt>いりぐち</rt></ruby>は<ruby>坂<rt>さか</rt></ruby>になっているので、<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>少<rt>すこ</rt></ruby>し<ruby>持<rt>も</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げて<ruby>水平<rt>すいへい</rt></ruby>にします。そうしないと<ruby>料理<rt>りょうり</rt></ruby>が<ruby>滑<rt>すべ</rt></ruby>り<ruby>落<rt>お</rt></ruby>ちる<ruby>可能性<rt>かのうせい</rt></ruby>があるので、<ruby>気<rt>き</rt></ruby>をつけてください。"
+          "zh": "6. 傳菜結束後，務必將推車推回原本的位置（元の場所に戻す）。",
+          "ja": "<ruby>運<rt>はこ</rt></ruby>び<ruby>終<rt>お</rt></ruby>わったら、<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "運び終わる（はこびおわる）", "zh": "搬運完畢、傳菜結束" },
+              { "ja": "元の場所（もとのばしょ）", "zh": "原來的位置" },
+              { "ja": "戻す（もどす）", "zh": "放回、歸位（他動詞）" }
+            ],
+            "points": [
+              { "title": "【動詞連用形＋終わる (動作完成)】", "desc": "運び終わる（搬運完畢）。" },
+              { "title": "【場所＋に戻す (歸位)】", "desc": "元の場所に戻す（放回原處）。" }
+            ],
+            "tips": "保持走道通暢，餐車不隨意停放在出入口。"
+          }
         },
         {
-          "id": "sop_7",
+          "id": "rn_7",
           "type": "sop",
           "speaker": "",
-          "zh": "7. 將料理送到餐廳後，請使用無線電通報送來的料理名稱。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきたら、<ruby>持<rt>も</rt></ruby>ってきた<ruby>料理<rt>りょうり</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>を<ruby>インカム<rt>inkamu</rt></ruby>で<ruby>伝<rt>つた</rt></ruby>えます。"
+          "zh": "7. 遇到缺菜（料理がない）時，立即透過無線電通知廚房補菜。",
+          "ja": "<ruby>料理<rt>りょうり</rt></ruby>がない<ruby>時<rt>とき</rt></ruby>は、インカムで<ruby>厨房<rt>ちゅうぼう</rt></ruby>に「〇〇がありません」と<ruby>連絡<rt>れんらく</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ない / ありません", "zh": "沒有、缺乏" },
+              { "ja": "連絡する（れんらくする）", "zh": "聯絡、通報" }
+            ],
+            "points": [
+              { "title": "【主格助詞 が】", "desc": "料理がない（菜餚沒有了）。" },
+              { "title": "【對象助詞 に】", "desc": "厨房に連絡します（向廚房聯絡）。" }
+            ],
+            "tips": "餐檯剩 1/3 時即可提前預警「〇〇少なくなっています」。"
+          }
         },
         {
-          "id": "sop_8",
-          "type": "sop",
-          "speaker": "",
-          "zh": "8. 請將料理放在指定的位置，推車用完後歸位。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>は<ruby>規定<rt>きてい</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>き、<ruby>使<rt>つか</rt></ruby>った<ruby>台車<rt>だいしゃ</rt></ruby>は<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。"
-        },
-        {
-          "id": "plc_1",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【放進冰箱】鯛魚生魚片、赤牛、馬肉生魚片。",
-          "ja": "【<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れる】<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>、<ruby>赤牛<rt>あかうし</rt></ruby>、<ruby>馬刺<rt>ばさ</rt></ruby>し。"
-        },
-        {
-          "id": "plc_2",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【放在餐廳內廚房作業區】南蠻炸雞等需要更換餐盤的料理。",
-          "ja": "【<ruby>レストラン<rt>resutoran</rt></ruby><ruby>内<rt>ない</rt></ruby>の<ruby>厨房<rt>ちゅうぼう</rt></ruby><ruby>スペース<rt>supe-su</rt></ruby>に<ruby>置<rt>お</rt></ruby>く】<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby>などのお<ruby>皿<rt>さら</rt></ruby>を<ruby>交換<rt>こうかん</rt></ruby>する<ruby>料理<rt>りょうり</rt></ruby>。"
-        },
-        {
-          "id": "plc_3",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【放進保溫庫】火鍋、湯品等需要保持溫度的料理。",
-          "ja": "【<ruby>保温庫<rt>ほおんこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れる】<ruby>鍋<rt>なべ</rt></ruby>、スープなど<ruby>温<rt>あたた</rt></ruby>かさを<ruby>保<rt>たも</rt></ruby>つ<ruby>料理<rt>りょうり</rt></ruby>。"
-        },
-        {
-          "id": "dlg_1",
+          "id": "rn_d1_kit",
           "type": "dialog",
-          "speaker": "廚房人員",
-          "zh": "南蠻炸雞做好了！",
-          "ja": "<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby>できました！"
+          "speaker": "廚房 (通知出菜)",
+          "zh": "〇〇做好了，請來拿！",
+          "ja": "〇〇できました！<ruby>取<rt>と</rt></ruby>りに<ruby>来<rt>き</rt></ruby>てください！",
+          "grammar": {
+            "vocabs": [
+              { "ja": "できました", "zh": "做好了" },
+              { "ja": "取りに来る", "zh": "來拿" }
+            ],
+            "points": [
+              { "title": "【動詞て形＋ください (請求)】", "desc": "取りに来てください（請過來拿）。" }
+            ],
+            "tips": "廚房大聲通知時，迅速回應確認。"
+          }
         },
         {
-          "id": "dlg_2",
+          "id": "rn_d1_me",
           "type": "dialog",
-          "speaker": "傳菜人員(我)",
-          "zh": "收到！ / 了解！",
-          "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です！"
+          "speaker": "傳菜(我) (確認領取)",
+          "zh": "好的！我馬上過去拿！",
+          "ja": "はい！すぐ<ruby>取<rt>と</rt></ruby>りに<ruby>伺<rt>うかが</rt></ruby>います！",
+          "grammar": {
+            "vocabs": [
+              { "ja": "すぐ", "zh": "立刻、馬上" },
+              { "ja": "伺う（うかがう）", "zh": "前往、拜訪（行く/来る的謙讓語）" }
+            ],
+            "points": [
+              { "title": "【謙讓語 伺います】", "desc": "用伺います代替行きます，展現極佳的職場敬意。" }
+            ],
+            "tips": "回答時保持精神與元氣。"
+          }
         },
         {
-          "id": "dlg_3",
+          "id": "rn_d2_me",
           "type": "dialog",
-          "speaker": "傳菜人員(我)",
-          "zh": "（無線電）南蠻炸雞送到了。",
-          "ja": "<ruby>チキン<rt>chikin</rt></ruby><ruby>南蛮<rt>なんばん</rt></ruby><ruby>持<rt>も</rt></ruby>ってきました。"
+          "speaker": "傳菜(我) (無線電通報送達)",
+          "zh": "這裡是楊。〇〇桌，〇〇料理已經送達。",
+          "ja": "楊ようですが、〇〇<ruby>番<rt>ばん</rt></ruby>テーブル、〇〇<ruby>届<rt>とど</rt></ruby>きました。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "〜ですが", "zh": "我是〜（自報姓名開頭）" },
+              { "ja": "テーブル", "zh": "餐桌（table）" },
+              { "ja": "届きました", "zh": "送到了" }
+            ],
+            "points": [
+              { "title": "【自報家門 〜ですが】", "desc": "無線電開頭先報名字，讓大家知道發話者。" }
+            ],
+            "tips": "發話前先按下按鈕 0.5 秒後再開口，避免開頭字被吃掉。"
+          }
         },
         {
-          "id": "dlg_4",
+          "id": "rn_d3_me",
           "type": "dialog",
-          "speaker": "傳菜人員(我)",
-          "zh": "（無線電）〇〇沒有了。",
-          "ja": "〇〇がなくなりました。"
+          "speaker": "傳菜(我) (無線電通報缺菜)",
+          "zh": "廚房同仁請注意，〇〇已經沒有了，麻煩請補充。",
+          "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇がなくなりましたので、お<ruby>願<rt>ねが</rt></ruby>いします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "〜の方へ（〜のかたへ）", "zh": "給負責〜的同仁" },
+              { "ja": "なくなる", "zh": "用盡、沒了" },
+              { "ja": "お願いします", "zh": "拜託了、麻煩您" }
+            ],
+            "points": [
+              { "title": "【動詞連用形＋なくなりました】", "desc": "なくなりました（已經用光了）。" },
+              { "title": "【〜ので (敬意原因)】", "desc": "なくなりましたので（因為已經沒有了…）。" }
+            ],
+            "tips": "禮貌而迅速地通知廚房補菜。"
+          }
+        },
+        {
+          "id": "rn_d4_me",
+          "type": "dialog",
+          "speaker": "傳菜(我) (推車借過應對)",
+          "zh": "不好意思，借過一下！（推餐車提醒周遭同仁與客人）",
+          "ja": "お<ruby>通<rt>とお</rt></ruby>りします！/ <ruby>失礼<rt>しつれい</rt></ruby>します！",
+          "grammar": {
+            "vocabs": [
+              { "ja": "お通りします（おとおりします）", "zh": "我要通過了、借過（謙讓語）" },
+              { "ja": "失礼します（しつれいします）", "zh": "失禮了、不好意思" }
+            ],
+            "points": [
+              { "title": "【お＋動詞連用形＋します (謙讓語)】", "desc": "お通りします（我要通過了）。" }
+            ],
+            "tips": "轉角處推車請先減速並說「お通りします」。"
+          }
         }
       ],
       "vocabs": [
-        {
-          "id": "v_sop_1",
-          "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>",
-          "zh": "推車 / 餐車",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "傳菜專用"
-        },
-        {
-          "id": "v_sop_2",
-          "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>",
-          "zh": "布巾 / 蓋料理的布",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "取餐必帶"
-        },
-        {
-          "id": "v_sop_3",
-          "ja": "<ruby>インカム<rt>inkamu</rt></ruby>",
-          "zh": "無線電對講機",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "通報送達與缺菜"
-        },
-        {
-          "id": "v_sop_4",
-          "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>",
-          "zh": "冰箱",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "放生魚片、赤牛、馬刺"
-        },
-        {
-          "id": "v_sop_5",
-          "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>",
-          "zh": "保溫庫",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "放熱湯、火鍋"
-        },
-        {
-          "id": "v_sop_6",
-          "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>",
-          "zh": "原位 / 原本的位置",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "餐車用完歸位"
-        }
+        { "id": "v_sop_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "推車 / 餐車", "cat": "工具", "imageUrl": "", "note": "傳菜專用" },
+        { "id": "v_sop_2", "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>", "zh": "布巾 / 蓋料理的布", "cat": "工具", "imageUrl": "", "note": "取餐必帶" },
+        { "id": "v_sop_3", "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機", "cat": "工具", "imageUrl": "", "note": "通報送達與缺菜" },
+        { "id": "v_sop_4", "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>", "zh": "冰箱", "cat": "工具", "imageUrl": "", "note": "放生魚片、赤牛、馬刺" },
+        { "id": "v_sop_5", "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>", "zh": "保溫庫", "cat": "工具", "imageUrl": "", "note": "放熱湯、火鍋" },
+        { "id": "v_sop_6", "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原位 / 原本的位置", "cat": "工具", "imageUrl": "", "note": "餐車用完歸位" }
       ]
     },
     {
@@ -1424,48 +1553,57 @@ function createRealRunnerData() {
           "type": "dialog",
           "speaker": "點單/傳菜(我)",
           "zh": "給負責點單的同仁：麻煩請準備〇〇。（向廚房/點單人員叫菜）",
-          "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします。"
+          "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ご注文（ごちゅうもん）", "zh": "點單、點菜（敬語）" },
+              { "ja": "の方へ（のかたへ）", "zh": "給負責〜的同仁" },
+              { "ja": "お願いします", "zh": "拜託了、請準備" }
+            ],
+            "points": [
+              { "title": "【接頭語 ご＋漢語 (美化語/敬語)】", "desc": "ご注文（顧客點單）。" },
+              { "title": "【名詞＋をお願いします】", "desc": "〇〇をお願いします（麻煩請準備〇〇）。" }
+            ],
+            "tips": "廚房備菜忙碌時，以這句話開頭最專業且易聽清。"
+          }
         },
         {
           "id": "ord_2",
           "type": "dialog",
           "speaker": "端菜人員(我)",
           "zh": "讓您久等了（端菜出去給等待中的客人）。",
-          "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。"
+          "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "お待ちいただく", "zh": "承蒙等候（待つ的尊敬語）" }
+            ],
+            "points": [
+              { "title": "【お＋動詞連用形＋いただく】", "desc": "等待客人端菜時專用，比「お待たせしました」更加優雅客氣。" }
+            ],
+            "tips": "送上料理給客人時微鞠躬並說這句話。"
+          }
         },
         {
           "id": "ord_3",
           "type": "dialog",
           "speaker": "撤菜人員(我)",
           "zh": "我把〇〇撤下去（送回廚房補充）。",
-          "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。"
+          "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "下げる（さげる）", "zh": "撤下、撤走（料理或盤子）" }
+            ],
+            "points": [
+              { "title": "【受詞助詞 を＋下げる】", "desc": "〇〇を下げる（將〇〇撤回廚房）。" }
+            ],
+            "tips": "從自助餐檯撤走空盤時向旁邊同仁告知。"
+          }
         }
       ],
       "vocabs": [
-        {
-          "id": "vo_1",
-          "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ",
-          "zh": "給負責點單的同仁",
-          "cat": "對話",
-          "imageUrl": "",
-          "note": "叫菜開頭用語"
-        },
-        {
-          "id": "vo_2",
-          "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました",
-          "zh": "讓您久等了",
-          "cat": "對話",
-          "imageUrl": "",
-          "note": "端菜給等候客人"
-        },
-        {
-          "id": "vo_3",
-          "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます",
-          "zh": "我把〇〇撤下去補菜",
-          "cat": "對話",
-          "imageUrl": "",
-          "note": "撤盤補菜通報"
-        }
+        { "id": "vo_1", "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ", "zh": "給負責點單的同仁", "cat": "對話", "imageUrl": "", "note": "叫菜開頭用語" },
+        { "id": "vo_2", "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました", "zh": "讓您久等了", "cat": "對話", "imageUrl": "", "note": "端菜給等候客人" },
+        { "id": "vo_3", "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます", "zh": "我把〇〇撤下去補菜", "cat": "對話", "imageUrl": "", "note": "撤盤補菜通報" }
       ]
     },
     {
@@ -1478,119 +1616,283 @@ function createRealRunnerData() {
           "type": "sop",
           "speaker": "",
           "zh": "1. 用餐中巡桌收空盤：主動詢問客人「請問盤子可以幫您收走嗎？」。",
-          "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>のバッシング：お<ruby>客様<rt>きゃくさま</rt></ruby>に「お<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？」とお<ruby>声<rt>こえ</rt></ruby>がけします。"
+          "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>のバッシング：お<ruby>客様<rt>きゃくさま</rt></ruby>に「お<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？」とお<ruby>声<rt>こえ</rt></ruby>がけします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "バッシング（bashing）", "zh": "收桌、撤盤" },
+              { "ja": "お皿（おさら）", "zh": "盤子、餐盤" },
+              { "ja": "お下げする（おさげする）", "zh": "撤走、收下（謙讓語）" },
+              { "ja": "お声がけ（おこえがけ）", "zh": "主動開口詢問、打招呼" }
+            ],
+            "points": [
+              { "title": "【動詞連用形＋てもよろしいでしょうか】", "desc": "極客氣的請求許可：「我可以收走盤子嗎？」。" },
+              { "title": "【お＋動詞連用形＋します (謙讓語)】", "desc": "お下げします / お下げしても。" }
+            ],
+            "tips": "客人桌上有疊高空盤時主動微笑詢問。"
+          }
         },
         {
           "id": "bs_2",
           "type": "sop",
           "speaker": "",
           "zh": "2. 客人離席清桌：確認桌上牌子已翻至「食事終了」，並回收該牌子。",
-          "ja": "<ruby>離席後<rt>りせきご</rt></ruby>のバッシング：テーブルの「お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>」カードを<ruby>確認<rt>かくにん</rt></ruby>し、カードを<ruby>回収<rt>かいしゅう</rt></ruby>します。"
+          "ja": "<ruby>離席後<rt>りせきご</rt></ruby>のバッシング：テーブルの「お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>」カードを<ruby>確認<rt>かくにん</rt></ruby>し、カードを<ruby>回収<rt>かいしゅう</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "離席後（りせきご）", "zh": "客人離席後" },
+              { "ja": "食事終了（しょくじしゅうりょう）", "zh": "用餐結束" },
+              { "ja": "回収する（かいしゅうする）", "zh": "回收、收回" }
+            ],
+            "points": [
+              { "title": "【動詞連用形＋し (並列)】", "desc": "確認し、回収します（確認後並回收）。" }
+            ],
+            "tips": "確認卡片翻面才開始大清桌，避免客人只是去取餐。"
+          }
         },
         {
-          "id": "bs_3",
+          "id": "bs_wagon_layers",
           "type": "sop",
           "speaker": "",
-          "zh": "3. 使用推車撤收所有餐盤、碗筷、杯子並做好分類堆疊。",
-          "ja": "バッシングワゴンを<ruby>使<rt>つか</rt></ruby>い、お<ruby>皿<rt>さら</rt></ruby>・お<ruby>椀<rt>わん</rt></ruby>・グラスを<ruby>分別<rt>ぶんべつ</rt></ruby>して<ruby>下<rt>さ</rt></ruby>げます。"
+          "zh": "3. 【上司交代】推車收餐盤三層擺放規則：第一層碗盤、第二層黑色餐盤、第三層四格餐盤。",
+          "ja": "ワゴン<ruby>積載<rt>せきさい</rt></ruby>ルール：<ruby>上段<rt>じょうだん</rt></ruby>にお<ruby>皿<rt>さら</rt></ruby>・お<ruby>椀<rt>わん</rt></ruby>、<ruby>中段<rt>ちゅうだん</rt></ruby>に<ruby>黒<rt>くろ</rt></ruby>トレイ、<ruby>下段<rt>げだん</rt></ruby>に4マス<ruby>仕切<rt>しき</rt></ruby>りプレートを<ruby>分別<rt>ぶんべつ</rt></ruby>して<ruby>積<rt>つ</rt></ruby>みます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "上段（じょうだん）/ 1段目", "zh": "第一層、頂層" },
+              { "ja": "お皿・お椀（おさら・おわん）", "zh": "盤子、湯碗" },
+              { "ja": "中段（ちゅうだん）/ 2段目", "zh": "第二層、中層" },
+              { "ja": "黒トレイ（くろトレイ）", "zh": "黑色餐盤、托盤" },
+              { "ja": "下段（げだん）/ 3段目", "zh": "第三層、底層" },
+              { "ja": "4マス仕切りプレート", "zh": "裝菜用四格餐盤" },
+              { "ja": "分別して積む（ぶんべつしてつむ）", "zh": "分類堆疊擺放" }
+            ],
+            "points": [
+              { "title": "【格助詞 に (位置著落)】", "desc": "上段に…、中段に…、下段に…（在上層放…在中層放…在底層放…）。" },
+              { "title": "【て形＋積む (方式)】", "desc": "分別して積みます（分類後堆疊）。" }
+            ],
+            "tips": "重物在下（四格盤最重放底層），保持推車重心平穩安全。"
+          }
         },
         {
-          "id": "bs_4",
+          "id": "bs_wipe_dishes",
           "type": "sop",
           "speaker": "",
-          "zh": "4. 用專用抹布（ダスター）搭配消毒液將桌面、椅面徹底擦拭乾淨。",
-          "ja": "ダスターとアルコール<ruby>消毒<rt>しょうどく</rt></ruby>でテーブルと<ruby>椅子<rt>いす</rt></ruby>をキレイに<ruby>拭<rt>ふ</rt></ruby>きます。"
+          "zh": "4. 【上司交代】擦盤子作業（お皿拭き）：用乾淨專用抹布將洗好的盤子、碗徹底擦乾歸位。",
+          "ja": "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き：キレイなダスターでお<ruby>皿<rt>さら</rt></ruby>とお<ruby>椀<rt>わん</rt></ruby>の<ruby>水分<rt>すいぶん</rt></ruby>をしっかり<ruby>拭<rt>ふ</rt></ruby>き<ruby>取<rt>と</rt></ruby>り、<ruby>所定<rt>しょてい</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "お皿拭き（おさらふき）", "zh": "擦盤子" },
+              { "ja": "ダスター", "zh": "專用抹布（duster）" },
+              { "ja": "水分（すいぶん）", "zh": "水分、水滴" },
+              { "ja": "拭き取る（ふきとる）", "zh": "擦拭乾淨、擦乾" },
+              { "ja": "所定の場所（しょていのばしょ）", "zh": "指定位置" }
+            ],
+            "points": [
+              { "title": "【副詞 しっかり】", "desc": "しっかり拭き取る（徹底擦乾、好好擦乾淨）。" },
+              { "title": "【工具格助詞 で】", "desc": "キレイなダスターで（使用乾淨抹布）。" }
+            ],
+            "tips": "邊擦邊檢查是否有殘留油漬或缺口，破損立即通報淘汰。"
+          }
         },
         {
-          "id": "bs_5",
+          "id": "bs_wipe_table",
           "type": "sop",
           "speaker": "",
-          "zh": "5. 將椅子靠攏推齊，檢查周遭地面，準備迎接下一組客人。",
-          "ja": "<ruby>椅子<rt>いす</rt></ruby>を<ruby>整頓<rt>せいとん</rt></ruby>し、<ruby>床<rt>ゆか</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>次<rt>つぎ</rt></ruby>のお<ruby>客様<rt>きゃくさま</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>える<ruby>準備<rt>じゅんび</rt></ruby>をします。"
+          "zh": "5. 桌面清潔：用專用抹布（ダスター）搭配消毒液將桌面、椅面徹底擦拭乾淨。",
+          "ja": "ダスターとアルコール<ruby>消毒<rt>しょうどく</rt></ruby>でテーブルと<ruby>椅子<rt>いす</rt></ruby>をキレイに<ruby>拭<rt>ふ</rt></ruby>きます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "アルコール消毒（しょうどく）", "zh": "酒精消毒" },
+              { "ja": "テーブル", "zh": "桌子" },
+              { "ja": "椅子（いす）", "zh": "椅子" },
+              { "ja": "キレイに", "zh": "乾淨地（形容動詞副詞化）" }
+            ],
+            "points": [
+              { "title": "【な形容詞＋に (副詞修飾)】", "desc": "キレイに拭く（乾淨地擦拭）。" }
+            ],
+            "tips": "椅面與桌緣也要一併擦拭。"
+          }
         },
         {
-          "id": "bs_d1",
+          "id": "bs_drink_cleanup",
+          "type": "sop",
+          "speaker": "",
+          "zh": "6. 【上司交代】收拾飲料區域：清理機台集水槽、補充杯子與備品、擦拭檯面。",
+          "ja": "ドリンクコーナーの<ruby>片付<rt>かたづ</rt></ruby>け：サーバーのドリップトレイを<ruby>洗<rt>あら</rt></ruby>い、グラスの<ruby>補充<rt>ほじゅう</rt></ruby>とカウンターの<ruby>拭<rt>ふ</rt></ruby>き<ruby>掃除<rt>そうじ</rt></ruby>をします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ドリンクコーナー", "zh": "飲料區域、飲料吧台" },
+              { "ja": "片付け（かたづけ）", "zh": "收拾、清理" },
+              { "ja": "ドリップトレイ", "zh": "機台集水盤（drip tray）" },
+              { "ja": "補充（ほじゅう）", "zh": "補充" },
+              { "ja": "拭き掃除（ふきそうじ）", "zh": "擦拭清潔" }
+            ],
+            "points": [
+              { "title": "【名詞＋の片付け】", "desc": "ドリンクコーナーの片付け（飲料區的收拾清理）。" }
+            ],
+            "tips": "生啤機與飲料機下方集水盤最容易積水，定時取下清洗。"
+          }
+        },
+        {
+          "id": "bs_vacuum",
+          "type": "sop",
+          "speaker": "",
+          "zh": "7. 【上司交代】使用吸塵器打掃地板：營業前後或離峰時徹底將用餐區地板吸乾淨。",
+          "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>をかける：テーブルの<ruby>下<rt>した</rt></ruby>や<ruby>通路<rt>つうろ</rt></ruby>の<ruby>床<rt>ゆか</rt></ruby>に<ruby>掃除機<rt>そうじき</rt></ruby>をかけてキレイにします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "掃除機をかける（そうじきをかける）", "zh": "用吸塵器吸地" },
+              { "ja": "通路（つうろ）", "zh": "走道、通道" },
+              { "ja": "床（ゆか）", "zh": "地板" }
+            ],
+            "points": [
+              { "title": "【慣用語 掃除機をかける】", "desc": "使用吸塵器清掃專用動詞為「かける」。" }
+            ],
+            "tips": "桌腳下容易掉落飯粒或紙屑，吸塵時特別注意桌底死角。"
+          }
+        },
+        {
+          "id": "bs_chair",
+          "type": "sop",
+          "speaker": "",
+          "zh": "8. 將椅子靠攏推齊，檢查周遭地面，準備迎接下一組客人。",
+          "ja": "<ruby>椅子<rt>いす</rt></ruby>を<ruby>整頓<rt>せいとん</rt></ruby>し、<ruby>床<rt>ゆか</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>次<rt>つぎ</rt></ruby>のお<ruby>客様<rt>きゃくさま</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>える<ruby>準備<rt>じゅんび</rt></ruby>をします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "整頓する（せいとんする）", "zh": "整理、排列整齊" },
+              { "ja": "次のお客様（つぎのおきゃくさま）", "zh": "下一組客人" },
+              { "ja": "迎える（むかえる）", "zh": "迎接" }
+            ],
+            "points": [
+              { "title": "【動詞辞書形＋名詞】", "desc": "迎える準備（迎接的準備）。" }
+            ],
+            "tips": "椅子靠齊後視覺效果大提升。"
+          }
+        },
+        {
+          "id": "bs_d1_me",
           "type": "dialog",
-          "speaker": "我 (主動詢問)",
+          "speaker": "收桌(我)",
           "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？",
-          "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？"
+          "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
+          "grammar": {
+            "vocabs": [
+              { "ja": "失礼いたします", "zh": "失禮了、打擾了" },
+              { "ja": "こちら", "zh": "這個（這方向，比「これ」更禮貌）" },
+              { "ja": "お下げしてもよろしいでしょうか", "zh": "可以收走嗎？" }
+            ],
+            "points": [
+              { "title": "【丁寧語 いたします】", "desc": "失礼します的高級禮貌說法。" },
+              { "title": "【〜てもよろしいでしょうか】", "desc": "詢問許可的頂級敬語。" }
+            ],
+            "tips": "語調輕柔，手指盤邊，切勿直接從客人正前方搶盤。"
+          }
         },
         {
-          "id": "bs_d2_guest",
+          "id": "bs_d1_gst",
           "type": "dialog",
-          "speaker": "顧客 (表示可以收)",
+          "speaker": "顧客 (表示可收)",
           "zh": "好，已經吃完了，麻煩你了。",
-          "ja": "はい、もう<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。お<ruby>願<rt>ねが</rt></ruby>いします。"
+          "ja": "はい、もう<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。お<ruby>願<rt>ねが</rt></ruby>いします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "もう大丈夫です", "zh": "已經不需要了 / 已經吃完了" }
+            ],
+            "points": [
+              { "title": "【日常口語 もう大丈夫】", "desc": "客人常用「大丈夫です」表示「可以收了 / 已經吃好了」。" }
+            ],
+            "tips": "客人點頭或回答大丈夫時即可動手收拾。"
+          }
         },
         {
           "id": "bs_d2_me",
           "type": "dialog",
-          "speaker": "我 (應答收盤)",
+          "speaker": "收桌(我)",
           "zh": "好的，馬上為您收拾（打擾了）。",
-          "ja": "かしこまりました。<ruby>失礼<rt>しつれい</rt></ruby>いたします。"
+          "ja": "かしこまりました。<ruby>失礼<rt>しつれい</rt></ruby>いたします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "かしこまりました", "zh": "我知道了、遵命（明白了的頂級謙讓語）" }
+            ],
+            "points": [
+              { "title": "【服務業核心應答語】", "desc": "服務業絕對不說「わかりました」，一律說「かしこまりました」。" }
+            ],
+            "tips": "撤盤時動作輕放，避免餐具碰撞發出巨響。"
+          }
         },
         {
-          "id": "bs_d3_guest",
+          "id": "bs_d3_gst",
           "type": "dialog",
-          "speaker": "顧客 (向我道謝)",
+          "speaker": "顧客 (表示感謝)",
           "zh": "謝謝你。",
-          "ja": "ありがとうございます。"
-        },
-        {
-          "id": "bs_d3_me",
-          "type": "dialog",
-          "speaker": "我 (應答道謝)",
-          "zh": "您太客氣了，請慢慢享用。",
-          "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。"
-        },
-        {
-          "id": "bs_d4_guest",
-          "type": "dialog",
-          "speaker": "顧客 (表示還在吃)",
-          "zh": "啊，這個我還在吃。",
-          "ja": "あ、これまだ<ruby>食<rt>た</rt></ruby>べてます。"
+          "ja": "ありがとうございます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ありがとうございます", "zh": "非常感謝（現在式禮貌感謝）" }
+            ],
+            "points": [
+              { "title": "【標準敬體】", "desc": "感謝對方當下的服務。" }
+            ],
+            "tips": "客人道謝時務必立即回應「恐れ入ります」。"
+          }
         },
         {
           "id": "bs_d4_me",
           "type": "dialog",
-          "speaker": "我 (致歉請慢用)",
+          "speaker": "收桌(我)",
+          "zh": "您太客氣了，請慢慢享用。",
+          "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "恐れ入ります（おそれいります）", "zh": "您太客氣了、不敢當（比どういたしまして更專業）" },
+              { "ja": "ごゆっくりどうぞ", "zh": "請慢用、請慢慢享受" }
+            ],
+            "points": [
+              { "title": "【接頭語 ご＋副詞 ゆっくり】", "desc": "美化語，祝福客人悠閒用餐。" }
+            ],
+            "tips": "日本高階飯店服務人員必備萬用語句！"
+          }
+        },
+        {
+          "id": "bs_d5_gst",
+          "type": "dialog",
+          "speaker": "顧客 (表示還在吃)",
+          "zh": "啊，這個我還在吃。",
+          "ja": "あ、これまだ<ruby>食<rt>た</rt></ruby>べてます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "まだ", "zh": "還、尚未" },
+              { "ja": "食べてます（たべてます）", "zh": "正在吃（食べています的口語省略）" }
+            ],
+            "points": [
+              { "title": "【て形＋いる (動作進行中)】", "desc": "食べている（正在吃）。" }
+            ],
+            "tips": "客人若表示還在吃，雙手立刻縮回並致歉退下。"
+          }
+        },
+        {
+          "id": "bs_d6_me",
+          "type": "dialog",
+          "speaker": "收桌(我)",
           "zh": "非常抱歉打擾了，請您慢慢享用。",
-          "ja": "<ruby>大変<rt>たいへん</rt></ruby><ruby>失礼<rt>しつれい</rt></ruby>いたしました。ごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりくださいませ。"
+          "ja": "<ruby>大変<rt>たいへん</rt></ruby><ruby>失礼<rt>しつれい</rt></ruby>いたしました。ごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりくださいませ。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "大変（たいへん）", "zh": "非常、極度" },
+              { "ja": "召し上がる（めしあがる）", "zh": "吃、喝（食べる/飲む的尊他語）" },
+              { "ja": "くださいませ", "zh": "請…（最客氣的委婉請求）" }
+            ],
+            "points": [
+              { "title": "【お＋動詞連用形＋くださいませ (頂級尊他)】", "desc": "お召し上がりくださいませ（請您享用）。" }
+            ],
+            "tips": "誠懇鞠躬後安靜退開，不給客人壓力。"
+          }
         }
       ],
       "vocabs": [
-        {
-          "id": "v_bs_1",
-          "ja": "<ruby>バッシング<rt>basshingu</rt></ruby>",
-          "zh": "收桌 / 撤盤撤桌",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "Bashing 現場業務術語"
-        },
-        {
-          "id": "v_bs_2",
-          "ja": "お<ruby>下<rt>さ</rt></ruby>げ",
-          "zh": "收拾空盤",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "撤盤專用語"
-        },
-        {
-          "id": "v_bs_3",
-          "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>／お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>カード",
-          "zh": "用餐中／用餐結束牌",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "離席收桌時回收"
-        },
-        {
-          "id": "v_bs_4",
-          "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby>",
-          "zh": "抹布 (擦桌專用)",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "清潔桌面"
-        }
+        { "id": "vb_1", "ja": "バッシング (bashing)", "zh": "收桌 / 撤盤", "cat": "工具", "imageUrl": "", "note": "撤下空盤與清桌" },
+        { "id": "vb_2", "ja": "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き", "zh": "擦盤子 / 擦碗", "cat": "餐具", "imageUrl": "", "note": "上司交代：用專用抹布擦乾洗好的碗盤" },
+        { "id": "vb_3", "ja": "4マス<ruby>仕切<rt>しき</rt></ruby>りプレート", "zh": "四格餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第三層（底層）堆疊" },
+        { "id": "vb_4", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ", "zh": "黑色餐盤 / 托盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層堆疊" }
       ]
     },
     {
@@ -1603,1392 +1905,389 @@ function createRealRunnerData() {
           "type": "sop",
           "speaker": "",
           "zh": "1. 自動生啤酒機：放上杯子，按一次黃色按鈕，機器自動注入啤酒與綿密泡沫。",
-          "ja": "自動ビールサーバー：グラスをセットし、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、自動でビールと<ruby>泡<rt>あわ</rt></ruby>が<ruby>注<rt>そそ</rt></ruby>がれます。"
+          "ja": "自動ビールサーバー：グラスをセットし、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、自動でビールと<ruby>泡<rt>あわ</rt></ruby>が<ruby>注<rt>そそ</rt></ruby>がれます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "グラス", "zh": "玻璃杯" },
+              { "ja": "セットする", "zh": "放置、安裝" },
+              { "ja": "黄色い（きいろい）", "zh": "黃色的" },
+              { "ja": "泡（あわ）", "zh": "泡沫" },
+              { "ja": "注がれる（そそがれる）", "zh": "被注入（注ぐ的被動態）" }
+            ],
+            "points": [
+              { "title": "【動詞辞書形＋と (恆常必然結果)】", "desc": "ボタンを押すと、自動で注がれる（一按按鈕就會自動注入）。" }
+            ],
+            "tips": "指導客人時只要說「黄色いボタンを１回押すだけです」。"
+          }
         },
         {
           "id": "dk_2",
           "type": "sop",
           "speaker": "",
-          "zh": "2. 飲料機：冰開水與碳酸氣泡皆由飲料機台按鈕取用。",
-          "ja": "お<ruby>水<rt>みず</rt></ruby>とソーダ（<ruby>炭酸<rt>たんさん</rt></ruby>）はドリンクサーバーのボタンでご<ruby>利用<rt>りよう</rt></ruby>いただけます。"
+          "zh": "2. 飲料機：冰開水與碳酸氣泡水皆由飲料機台按鈕取用（店內一律稱「炭酸」）。",
+          "ja": "お<ruby>水<rt>みず</rt></ruby>と<ruby>炭酸<rt>たんさん</rt></ruby>はドリンクサーバーのボタンでご<ruby>利用<rt>りよう</rt></ruby>いただけます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "炭酸（たんさん）", "zh": "碳酸水、氣泡水（店內不用soda）" },
+              { "ja": "ご利用いただく", "zh": "利用、使用（利用する的尊敬語）" }
+            ],
+            "points": [
+              { "title": "【ご＋名詞＋いただく (尊他)】", "desc": "ご利用いただけます（您可以利用）。" }
+            ],
+            "tips": "客人詢問氣泡水或soda時，回答「炭酸（たんさん）はこちらです」。"
+          }
         },
         {
           "id": "dk_3",
           "type": "sop",
           "speaker": "",
           "zh": "3. 無酒精飲品：MONIN 糖漿與 ALL-FREE 均為 0.00% 無酒精，可安心飲用。",
-          "ja": "モナンシロップとオールフリーはアルコール０％（ノンアルコール）でございます。"
+          "ja": "モナンシロップとオールフリーはアルコール０％（ノンアルコール）でございます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "モナンシロップ", "zh": "MONIN 風味糖漿" },
+              { "ja": "オールフリー", "zh": "SUNTORY ALL-FREE 無酒精啤酒" },
+              { "ja": "でございます", "zh": "是（です的極致敬體）" }
+            ],
+            "points": [
+              { "title": "【でございます (鄭重語)】", "desc": "比「です」更加莊重大方。" }
+            ],
+            "tips": "駕車或不喝酒的客人可主動推薦。"
+          }
         },
         {
           "id": "dk_4",
           "type": "sop",
           "speaker": "",
           "zh": "4. 分酒機：提供紅酒、白酒與阿蘇名酒「靈山」純米酒。",
-          "ja": "ワインサーバーでは、<ruby>赤<rt>あか</rt></ruby>・<ruby>白<rt>しろ</rt></ruby>ワインと<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>地酒<rt>じざけ</rt></ruby>「れいざん<ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>」をご<ruby>用意<rt>ようい</rt></ruby>しています。"
+          "ja": "ワインサーバーでは、<ruby>赤<rt>あか</rt></ruby>・<ruby>白<rt>しろ</rt></ruby>ワインと<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>地酒<rt>じざけ</rt></ruby>「れいざん<ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>」をご<ruby>用意<rt>ようい</rt></ruby>しています。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "地酒（じざけ）", "zh": "當地名酒、在地日本酒" },
+              { "ja": "純米酒（じゅんまいしゅ）", "zh": "純米酒（高品質清酒）" },
+              { "ja": "ご用意（ごようい）", "zh": "準備、備妥" }
+            ],
+            "points": [
+              { "title": "【ご＋名詞＋しています (謙讓敬體)】", "desc": "ご用意しています（我們為您準備了…）。" }
+            ],
+            "tips": "分酒機下方備有專用酒杯與酒嘴。"
+          }
         },
         {
           "id": "dk_d1_guest",
           "type": "dialog",
           "speaker": "顧客 (詢問糖漿)",
           "zh": "請問這是什麼東西？",
-          "ja": "これ、<ruby>何<rt>なん</rt></ruby>ですか？"
+          "ja": "これ、<ruby>何<rt>なん</rt></ruby>ですか？",
+          "grammar": {
+            "vocabs": [{ "ja": "何（なん/なに）", "zh": "什麼" }],
+            "points": [{ "title": "【疑問句 〜ですか】", "desc": "これ、何ですか？（這個是什麼呢？）。" }],
+            "tips": "客人指著彩色糖漿瓶時的常見提問。"
+          }
         },
         {
           "id": "dk_d1_me",
           "type": "dialog",
-          "speaker": "我 (回答糖漿)",
+          "speaker": "傳菜(我)",
           "zh": "這是無酒精的風味糖漿。",
-          "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。"
+          "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "入っていない（はいっていない）", "zh": "沒有含、沒有加入" }
+            ],
+            "points": [
+              { "title": "【動詞ない形＋名詞 (修飾名詞)】", "desc": "入っていないシロップ（沒含酒精的糖漿）。" }
+            ],
+            "tips": "可補充說明可加入碳酸水（炭酸水で割ってどうぞ）。"
+          }
         },
         {
           "id": "dk_d2_guest",
           "type": "dialog",
           "speaker": "顧客 (詢問啤酒)",
           "zh": "這款啤酒有含酒精嗎？",
-          "ja": "このビールはアルコール<ruby>入<rt>はい</rt></ruby>ってますか？"
+          "ja": "このビールはアルコール<ruby>入<rt>はい</rt></ruby>ってますか？",
+          "grammar": {
+            "vocabs": [{ "ja": "入ってますか", "zh": "有放/有含嗎？" }],
+            "points": [{ "title": "【動詞て形＋ますか】", "desc": "入っていますか的口語簡稱。" }],
+            "tips": "開車的客人常問這句。"
+          }
         },
         {
           "id": "dk_d2_me",
           "type": "dialog",
-          "speaker": "我 (回答無酒精)",
+          "speaker": "傳菜(我)",
           "zh": "這是無酒精啤酒（0.00%），請安心飲用。",
-          "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。"
+          "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ノンアルコール", "zh": "無酒精（non-alcohol）" },
+              { "ja": "安心して（あんしんして）", "zh": "放心地、安心地" }
+            ],
+            "points": [
+              { "title": "【ご＋動詞連用形＋ください (敬體請求)】", "desc": "ご利用ください（請使用/請享用）。" }
+            ],
+            "tips": "指著瓶身上的 0.00% 標誌向客人說明。"
+          }
         },
         {
           "id": "dk_d3_guest",
           "type": "dialog",
           "speaker": "顧客 (詢問碳酸/水)",
           "zh": "不好意思，請問碳酸／水在哪裡？",
-          "ja": "すみません、ソーダ／お<ruby>水<rt>みず</rt></ruby>はどこですか？"
+          "ja": "すみません、<ruby>炭酸<rt>たんさん</rt></ruby>／お<ruby>水<rt>みず</rt></ruby>はどこですか？",
+          "grammar": {
+            "vocabs": [
+              { "ja": "炭酸（たんさん）", "zh": "碳酸、氣泡水" },
+              { "ja": "どこですか", "zh": "在哪裡呢？" }
+            ],
+            "points": [{ "title": "【場所疑問詞 どこ】", "desc": "〜はどこですか（〜在哪裡？）。" }],
+            "tips": "帶客人走到飲料機前。"
+          }
         },
         {
           "id": "dk_d3_me",
           "type": "dialog",
-          "speaker": "我 (指引機器)",
+          "speaker": "傳菜(我)",
           "zh": "碳酸與開水都在這臺機器裡面。",
-          "ja": "ソーダとお<ruby>水<rt>みず</rt></ruby>はこちらのサーバーの<ruby>中<rt>なか</rt></ruby>にございます。"
+          "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>とお<ruby>水<rt>みず</rt></ruby>はこちらのサーバーの<ruby>中<rt>なか</rt></ruby>にございます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ございます", "zh": "有、在（あります的鄭重語）" }
+            ],
+            "points": [
+              { "title": "【存在動詞 ございます】", "desc": "〜の中にございます（在〜的裡面）。" }
+            ],
+            "tips": "用手掌引導指向機器按鈕。"
+          }
         },
         {
           "id": "dk_d4_guest",
           "type": "dialog",
           "speaker": "顧客 (詢問生啤機)",
           "zh": "這個生啤酒機要怎麼使用呢？",
-          "ja": "このビールサーバーはどうやって<ruby>使<rt>つか</rt></ruby>いますか？"
+          "ja": "このビールサーバーはどうやって<ruby>使<rt>つか</rt></ruby>いますか？",
+          "grammar": {
+            "vocabs": [
+              { "ja": "どうやって", "zh": "如何、怎麼做" },
+              { "ja": "使います（つかいます）", "zh": "使用" }
+            ],
+            "points": [{ "title": "【方法疑問詞 どうやって】", "desc": "詢問操作流程。" }],
+            "tips": "第一次使用自動生啤機的客人常會好奇提問。"
+          }
         },
         {
           "id": "dk_d4_me",
           "type": "dialog",
-          "speaker": "我 (說明生啤機)",
+          "speaker": "傳菜(我)",
           "zh": "請放上玻璃杯，按一次這個黃色按鈕，機器會自動注酒完成。",
-          "ja": "グラスをセットして、こちらの<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、<ruby>自動<rt>じどう</rt></ruby>で<ruby>注<rt>そそ</rt></ruby>がれます。"
+          "ja": "グラスをセットして、こちらの<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、<ruby>自動<rt>じどう</rt></ruby>で<ruby>注<rt>そそ</rt></ruby>がれます。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "１回（いっかい）", "zh": "一次" },
+              { "ja": "自動で（じどうで）", "zh": "自動地" }
+            ],
+            "points": [
+              { "title": "【動詞て形連用 (順序動作)】", "desc": "セットして、〜押すと（放上後，一按…）。" }
+            ],
+            "tips": "可以親自示範一次給客人看。"
+          }
         }
       ],
       "vocabs": [
-        {
-          "id": "v_dk_1",
-          "ja": "<ruby>黄色<rt>きいろ</rt></ruby>いボタン",
-          "zh": "黃色按鈕",
-          "cat": "工具",
-          "imageUrl": "",
-          "note": "生啤酒機操作按鈕"
-        },
-        {
-          "id": "v_dk_2",
-          "ja": "ノンアルコール<ruby>シロップ<rt>siroppu</rt></ruby>",
-          "zh": "無酒精糖漿",
-          "cat": "酒水",
-          "imageUrl": "./photos/IMG_0884.jpg",
-          "note": "MONIN 各式果汁糖漿"
-        },
-        {
-          "id": "v_dk_3",
-          "ja": "ノンアルコールビール",
-          "zh": "無酒精啤酒 (All-Free)",
-          "cat": "酒水",
-          "imageUrl": "./photos/IMG_0890.jpg",
-          "note": "SUNTORY ALL-FREE 瓶裝"
-        },
-        {
-          "id": "v_dk_4",
-          "ja": "ソーダ / <ruby>炭酸<rt>たんさん</rt></ruby>",
-          "zh": "碳酸 / 氣泡水",
-          "cat": "酒水",
-          "imageUrl": "",
-          "note": "飲料機內"
-        }
+        { "id": "v_dk_1", "ja": "<ruby>黄色<rt>きいろ</rt></ruby>いボタン", "zh": "黃色按鈕", "cat": "工具", "imageUrl": "", "note": "生啤酒機操作按鈕" },
+        { "id": "v_dk_2", "ja": "ノンアルコール<ruby>シロップ<rt>siroppu</rt></ruby>", "zh": "無酒精糖漿", "cat": "酒水", "imageUrl": "./photos/IMG_0884.jpg", "note": "MONIN 各式果汁糖漿" },
+        { "id": "v_dk_3", "ja": "ノンアルコールビール", "zh": "無酒精啤酒 (All-Free)", "cat": "酒水", "imageUrl": "./photos/IMG_0890.jpg", "note": "SUNTORY ALL-FREE 瓶裝" },
+        { "id": "v_dk_4", "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "飲料機內（不用 soda）" }
       ]
     }
   ],
   "vocabSop": [
-    {
-      "id": "vs_dashimaki",
-      "ja": "だし<ruby>巻<rt>ま</rt></ruby>き<ruby>玉子<rt>たまご</rt></ruby>",
-      "zh": "高湯煎蛋捲",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0873.jpg",
-      "note": "朝食熱菜・日式高湯厚蛋捲"
-    },
-    {
-      "id": "vs_salmon_saute",
-      "ja": "サーモンソテー",
-      "zh": "嫩煎鮭魚",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0872.jpg",
-      "note": "朝食熱菜"
-    },
-    {
-      "id": "vs_aji_nanban",
-      "ja": "アジの<ruby>南蛮漬<rt>なんばんづ</rt></ruby>け",
-      "zh": "南蠻漬竹莢魚",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0837.jpg",
-      "note": "朝食熱菜"
-    },
-    {
-      "id": "vs_asari_shoga",
-      "ja": "あさりの<ruby>生姜蒸<rt>しょうがむ</rt></ruby>し",
-      "zh": "薑汁蒸蛤蜊",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0843.jpg",
-      "note": "朝食熱菜"
-    },
-    {
-      "id": "vs_gyudon",
-      "ja": "<ruby>牛丼<rt>ぎゅうどん</rt></ruby>",
-      "zh": "牛丼",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0842.jpg",
-      "note": "朝食主食"
-    },
-    {
-      "id": "vs_corn_soup",
-      "ja": "コーンスープ",
-      "zh": "玉米濃湯",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0858.jpg",
-      "note": "朝食湯品 (24-25まで)"
-    },
-    {
-      "id": "vs_akaushi_tomato",
-      "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>のトマト<ruby>煮<rt>に</rt></ruby>",
-      "zh": "番茄燉熊本赤牛",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0840.jpg",
-      "note": "朝食名物 (24-25まで)"
-    },
-    {
-      "id": "vs_reimen_pasta",
-      "ja": "<ruby>冷麺<rt>れいめん</rt></ruby>パスタ",
-      "zh": "冷麵義大利麵",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0852.jpg",
-      "note": "朝食主食 (24-25から)"
-    },
-    {
-      "id": "vs_wiener",
-      "ja": "ボイルウインナー",
-      "zh": "水煮維也納香腸",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0836.jpg",
-      "note": "朝食熱菜"
-    },
-    {
-      "id": "vs_scramble",
-      "ja": "スクランブルエッグ",
-      "zh": "美式炒蛋",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食熱菜"
-    },
-    {
-      "id": "vs_broccoli_bacon",
-      "ja": "ブロッコリーとベーコンのソテー",
-      "zh": "培根炒青花菜",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食熱菜"
-    },
-    {
-      "id": "vs_yudofu",
-      "ja": "<ruby>湯豆腐<rt>ゆどうふ</rt></ruby>",
-      "zh": "熱湯豆腐",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0857.jpg",
-      "note": "朝食豆腐料理"
-    },
-    {
-      "id": "vs_zaru_dofu",
-      "ja": "ざる<ruby>豆腐<rt>どうふ</rt></ruby>",
-      "zh": "竹簍冷豆腐",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食豆腐料理 (17-18)"
-    },
-    {
-      "id": "vs_nankan_miso",
-      "ja": "みそ<ruby>汁<rt>しる</rt></ruby>（<ruby>南関揚<rt>なんかんあ</rt></ruby>げ）",
-      "zh": "南關油豆腐味噌湯",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食名物湯品"
-    },
-    {
-      "id": "vs_rice",
-      "ja": "<ruby>白<rt>しろ</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>",
-      "zh": "白飯",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0845.jpg",
-      "note": "朝/夜 主食"
-    },
-    {
-      "id": "vs_natto_cup",
-      "ja": "<ruby>納豆<rt>なっとう</rt></ruby>（カップの<ruby>納豆<rt>なっとう</rt></ruby>）",
-      "zh": "杯裝納豆",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0850.jpg",
-      "note": "朝食"
-    },
-    {
-      "id": "vs_mentaiko",
-      "ja": "<ruby>明太子<rt>めんたいこ</rt></ruby>",
-      "zh": "明太子",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食名物"
-    },
-    {
-      "id": "vs_karashi_renkon",
-      "ja": "<ruby>辛子蓮根<rt>からしれんこん</rt></ruby>",
-      "zh": "辛子蓮藕",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0867.jpg",
-      "note": "熊本鄉土名物料理"
-    },
-    {
-      "id": "vs_ika_natto",
-      "ja": "<ruby>烏賊納豆<rt>いかなっとう</rt></ruby>",
-      "zh": "花枝納豆",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0875.jpg",
-      "note": "朝食"
-    },
-    {
-      "id": "vs_onigiri_3",
-      "ja": "おにぎり<ruby>三種<rt>さんしゅ</rt></ruby>",
-      "zh": "飯糰三種",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食主食"
-    },
-    {
-      "id": "vs_okayu",
-      "ja": "お<ruby>粥<rt>かゆ</rt></ruby>",
-      "zh": "白粥",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食主食"
-    },
-    {
-      "id": "vs_curry",
-      "ja": "カレー",
-      "zh": "日式牛肉咖哩",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0842.jpg",
-      "note": "夕食名物料理"
-    },
-    {
-      "id": "vs_vege_stew",
-      "ja": "<ruby>彩<rt>いろど</rt></ruby>り<ruby>野菜<rt>やさい</rt></ruby>の<ruby>甘辛煮<rt>あまからに</rt></ruby>",
-      "zh": "甜辛彩蔬煮",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0840.jpg",
-      "note": "夕食熱菜"
-    },
-    {
-      "id": "vs_mabo",
-      "ja": "<ruby>麻婆豆腐<rt>まーぼーどうふ</rt></ruby>",
-      "zh": "麻婆豆腐",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0841.jpg",
-      "note": "夕食熱菜"
-    },
-    {
-      "id": "vs_hoikoro",
-      "ja": "<ruby>回鍋肉<rt>ホイコーロー</rt></ruby>",
-      "zh": "回鍋肉",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0839.jpg",
-      "note": "夕食熱菜 (17まで)"
-    },
-    {
-      "id": "vs_shumai",
-      "ja": "<ruby>焼売<rt>シューマイ</rt></ruby>",
-      "zh": "燒賣",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0836.jpg",
-      "note": "夕食熱菜"
-    },
-    {
-      "id": "vs_chicken_nanban",
-      "ja": "チキン<ruby>南蛮<rt>なんばん</rt></ruby>",
-      "zh": "南蠻炸雞",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0837.jpg",
-      "note": "夕食名物料理"
-    },
-    {
-      "id": "vs_roast_beef",
-      "ja": "ローストビーフ",
-      "zh": "爐烤牛肉",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食現切料理 (17まで)"
-    },
-    {
-      "id": "vs_roast_pork",
-      "ja": "ローストポーク",
-      "zh": "爐烤豬肉",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食現切料理 (18から)"
-    },
-    {
-      "id": "vs_tai_sashimi",
-      "ja": "<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>",
-      "zh": "真鯛生魚片",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食刺身料理"
-    },
-    {
-      "id": "vs_katsuo_tataki",
-      "ja": "カツオのたたき",
-      "zh": "炙燒鰹魚",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0835 2.jpg",
-      "note": "夕食名物料理"
-    },
-    {
-      "id": "vs_takana_rice",
-      "ja": "<ruby>高菜<rt>たかな</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>",
-      "zh": "阿蘇高菜拌飯",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "熊本阿蘇名物"
-    },
-    {
-      "id": "vs_asari_miso",
-      "ja": "あさりのみそ<ruby>汁<rt>しる</rt></ruby>",
-      "zh": "蛤蜊味噌湯",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0843.jpg",
-      "note": "夕食熱湯"
-    },
-    {
-      "id": "vs_goma_dofu",
-      "ja": "<ruby>胡麻豆腐<rt>ごまどうふ</rt></ruby>",
-      "zh": "胡麻豆腐",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0857.jpg",
-      "note": "夕食小菜"
-    },
-    {
-      "id": "vs_ramen",
-      "ja": "とんこつ<ruby>ラーメン<rt>ra-men</rt></ruby>",
-      "zh": "豚骨拉麵",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0852.jpg",
-      "note": "夕食拉麵"
-    },
-    {
-      "id": "vs_hotpot",
-      "ja": "<ruby>熊本<rt>くまもと</rt></ruby> りんどうポーク<ruby>味<rt>あじ</rt></ruby> しゃぶしゃぶ",
-      "zh": "熊本龍膽豬涮涮鍋",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0851.jpg",
-      "note": "夕食名物・熊本龍膽豬涮涮鍋"
-    },
-    {
-      "id": "vs_nasu_fukumeni",
-      "ja": "<ruby>茄子<rt>なす</rt></ruby>の<ruby>含<rt>ふく</rt></ruby>め<ruby>煮<rt>に</rt></ruby>",
-      "zh": "燉茄子",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食小菜"
-    },
-    {
-      "id": "vs_kukiwakame_shibazuke",
-      "ja": "<ruby>茎<rt>くき</rt></ruby>わかめのしば<ruby>漬<rt>づ</rt></ruby>け",
-      "zh": "柴漬海帶梗",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0849.jpg",
-      "note": "朝食小菜"
-    },
-    {
-      "id": "vs_kanten_gomaae",
-      "ja": "パリパリ<ruby>寒天<rt>かんてん</rt></ruby>の<ruby>胡麻和<rt>ごまあ</rt></ruby>え",
-      "zh": "胡麻拌寒天",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0847.jpg",
-      "note": "朝食小菜"
-    },
-    {
-      "id": "vs_hakusai_okakaae",
-      "ja": "<ruby>白菜<rt>はくさい</rt></ruby>のおかか<ruby>和<rt>あ</rt></ruby>え",
-      "zh": "柴魚拌白菜",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食小菜"
-    },
-    {
-      "id": "vs_ganmo_ingen",
-      "ja": "がんもといんげん",
-      "zh": "油豆腐雁擬與四季豆煮",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0846.jpg",
-      "note": "夕食小菜"
-    },
-    {
-      "id": "vs_chingensai_namul",
-      "ja": "<ruby>青梗菜<rt>チンゲンサイ</rt></ruby>のナムル",
-      "zh": "涼拌青江菜",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食小菜"
-    },
-    {
-      "id": "vs_croissant",
-      "ja": "クロワッサン",
-      "zh": "可頌麵包",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食麵包"
-    },
-    {
-      "id": "vs_milk_bread",
-      "ja": "ミルク<ruby>食<rt>しょく</rt></ruby>パン",
-      "zh": "牛奶吐司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食麵包"
-    },
-    {
-      "id": "vs_ham_egg",
-      "ja": "ハムエッグ",
-      "zh": "火腿煎蛋",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食いろり"
-    },
-    {
-      "id": "vs_yaki_saba",
-      "ja": "<ruby>鯖<rt>さば</rt></ruby>",
-      "zh": "烤鯖魚",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食いろり烤魚"
-    },
-    {
-      "id": "vs_tai_kama",
-      "ja": "<ruby>鯛<rt>たい</rt></ruby>のカマ",
-      "zh": "烤鯛魚下巴",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食いろり烤魚"
-    },
-    {
-      "id": "vs_kanpachi_kama",
-      "ja": "<ruby>間八<rt>かんぱち</rt></ruby>のカマ",
-      "zh": "烤紅甘下巴",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食いろり烤魚"
-    },
-    {
-      "id": "vs_satsuma_age",
-      "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ",
-      "zh": "薩摩炸魚餅",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食いろり炸物"
-    },
-    {
-      "id": "vs_yaki_ebi",
-      "ja": "<ruby>海老<rt>えび</rt></ruby>",
-      "zh": "烤蝦",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食いろり烤物"
-    },
-    {
-      "id": "vs_gobou_ten",
-      "ja": "ごぼう<ruby>天<rt>てん</rt></ruby>",
-      "zh": "牛蒡天婦羅",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食いろり炸物"
-    },
-    {
-      "id": "vs_yaki_corn",
-      "ja": "とうもろこし",
-      "zh": "烤玉米",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食いろり烤物"
-    },
-    {
-      "id": "vs_salad_ninjin",
-      "ja": "にんじん",
-      "zh": "紅蘿蔔絲",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧蔬菜"
-    },
-    {
-      "id": "vs_salad_murasaki",
-      "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ",
-      "zh": "紫甘藍",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧蔬菜"
-    },
-    {
-      "id": "vs_salad_minitomato",
-      "ja": "ミニトマト",
-      "zh": "小番茄",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧蔬菜"
-    },
-    {
-      "id": "vs_salad_babyleaf",
-      "ja": "ベビーリーフ",
-      "zh": "嫩葉生菜",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧蔬菜"
-    },
-    {
-      "id": "vs_salad_kikuimo",
-      "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ",
-      "zh": "菊芋脆片",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧配料"
-    },
-    {
-      "id": "vs_salad_beans",
-      "ja": "ビーンズ",
-      "zh": "綜合豆",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧配料"
-    },
-    {
-      "id": "vs_salad_sweetcorn",
-      "ja": "スイートコーン",
-      "zh": "甜玉米粒",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "沙拉吧配料"
-    },
-    {
-      "id": "vs_salad_banana",
-      "ja": "バナナ",
-      "zh": "香蕉",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食水果"
-    },
-    {
-      "id": "vs_salad_orange",
-      "ja": "オレンジ",
-      "zh": "柳橙",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食水果"
-    },
-    {
-      "id": "vs_salad_yogurt",
-      "ja": "ヨーグルト",
-      "zh": "優格",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "朝食沙拉吧"
-    },
-    {
-      "id": "vs_sushi_tamago",
-      "ja": "たまご",
-      "zh": "玉子燒壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_maguro",
-      "ja": "まぐろ",
-      "zh": "鮪魚壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_salmon",
-      "ja": "サーモン",
-      "zh": "鮭魚壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_unagi",
-      "ja": "うなぎ",
-      "zh": "鰻魚壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_ika",
-      "ja": "いか",
-      "zh": "花枝壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_ebi",
-      "ja": "えび",
-      "zh": "鮮蝦壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_sushi_teriyaki",
-      "ja": "てりやき",
-      "zh": "照燒壽司",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "壽司台名物"
-    },
-    {
-      "id": "vs_desert_melon",
-      "ja": "メロン",
-      "zh": "哈密瓜",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0882.jpg",
-      "note": "夕食水果"
-    },
-    {
-      "id": "vs_desert_choco",
-      "ja": "チョコチップケーキ",
-      "zh": "巧克力蛋糕",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0881.jpg",
-      "note": "夕食甜點・巧克力布朗尼"
-    },
-    {
-      "id": "vs_desert_warabi",
-      "ja": "わらび<ruby>餅<rt>もち</rt></ruby>",
-      "zh": "蕨餅",
-      "cat": "餐點",
-      "imageUrl": "",
-      "note": "夕食甜點"
-    },
-    {
-      "id": "vs_desert_dango",
-      "ja": "<ruby>和菓子<rt>わがし</rt></ruby>の<ruby>団子<rt>だんご</rt></ruby>",
-      "zh": "和菓子丸子",
-      "cat": "餐點",
-      "imageUrl": "./photos/IMG_0879.jpg",
-      "note": "夕食甜點・日式串糰子"
-    },
-    {
-      "id": "vn_6",
-      "ja": "<ruby>市石<rt>いちいし</rt></ruby>",
-      "kana": "いちいし",
-      "isForeign": false,
-      "zh": "市石",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_1",
-      "ja": "<ruby>内間<rt>うちま</rt></ruby>",
-      "kana": "うちま",
-      "isForeign": false,
-      "zh": "內間",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁 / 主管"
-    },
-    {
-      "id": "vn_10",
-      "ja": "<ruby>古賀<rt>こが</rt></ruby>",
-      "kana": "こが",
-      "isForeign": false,
-      "zh": "古賀",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_7",
-      "ja": "<ruby>佐藤<rt>さとう</rt></ruby>",
-      "kana": "さとう",
-      "isForeign": false,
-      "zh": "佐藤",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_3",
-      "ja": "<ruby>須藤<rt>すどう</rt></ruby>",
-      "kana": "すどう",
-      "isForeign": false,
-      "zh": "須藤",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_8",
-      "ja": "<ruby>田中<rt>たなか</rt></ruby>",
-      "kana": "たなか",
-      "isForeign": false,
-      "zh": "田中",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_2",
-      "ja": "<ruby>長森<rt>ながもり</rt></ruby>",
-      "kana": "ながもり",
-      "isForeign": false,
-      "zh": "長森",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_4",
-      "ja": "<ruby>森田<rt>もりた</rt></ruby>",
-      "kana": "もりた",
-      "isForeign": false,
-      "zh": "森田",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_5",
-      "ja": "<ruby>森本<rt>もりもと</rt></ruby>",
-      "kana": "もりもと",
-      "isForeign": false,
-      "zh": "森本",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_9",
-      "ja": "<ruby>山邉<rt>やまべ</rt></ruby>",
-      "kana": "やまべ",
-      "isForeign": false,
-      "zh": "山邊",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_0",
-      "ja": "<ruby>楊<rt>よう</rt></ruby>",
-      "kana": "よう",
-      "isForeign": false,
-      "zh": "楊 (本人)",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "傳菜人員"
-    },
-    {
-      "id": "vn_15",
-      "ja": "<ruby>リク<rt>riku</rt></ruby>",
-      "kana": "りく",
-      "isForeign": false,
-      "zh": "Riku",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁"
-    },
-    {
-      "id": "vn_13",
-      "ja": "<ruby>ハン<rt>han</rt></ruby>",
-      "kana": "はん",
-      "isForeign": true,
-      "zh": "Han",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁 (外籍)"
-    },
-    {
-      "id": "vn_12",
-      "ja": "<ruby>ビム<rt>bimu</rt></ruby>",
-      "kana": "びむ",
-      "isForeign": true,
-      "zh": "Bim",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁 (外籍)"
-    },
-    {
-      "id": "vn_11",
-      "ja": "<ruby>ピョー<rt>pya-</rt></ruby>",
-      "kana": "ぴょー",
-      "isForeign": true,
-      "zh": "Pyaw",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁 (外籍)"
-    },
-    {
-      "id": "vn_14",
-      "ja": "<ruby>プラティマ<rt>puratima</rt></ruby>",
-      "kana": "ぷらてぃま",
-      "isForeign": true,
-      "zh": "Pratima",
-      "cat": "名字",
-      "imageUrl": "",
-      "note": "同仁 (外籍)"
-    },
-    {
-      "id": "vpos_1",
-      "ja": "<ruby>ランナー<rt>ranna-</rt></ruby>",
-      "zh": "傳菜人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "出餐傳菜"
-    },
-    {
-      "id": "vpos_2",
-      "ja": "すし<ruby>ランナー<rt>ranna-</rt></ruby>",
-      "zh": "壽司傳菜人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "壽司補充"
-    },
-    {
-      "id": "vpos_3",
-      "ja": "<ruby>受付<rt>うけつけ</rt></ruby>",
-      "zh": "接待 / 領位人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "入口接待"
-    },
-    {
-      "id": "vpos_4",
-      "ja": "ＣＢ<ruby>注文<rt>ちゅうもん</rt></ruby>",
-      "zh": "CB 點單人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "點單崗"
-    },
-    {
-      "id": "vpos_5",
-      "ja": "ＣＢ<ruby>補助<rt>ほじょ</rt></ruby>",
-      "zh": "CB 支援補助人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "支援崗"
-    },
-    {
-      "id": "vpos_6",
-      "ja": "いろり（<ruby>囲炉裏<rt>いろり</rt></ruby>）",
-      "zh": "圍爐裏炭烤崗人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "炭烤區"
-    },
-    {
-      "id": "vpos_7",
-      "ja": "<ruby>ドリンク<rt>dorinku</rt></ruby>",
-      "zh": "酒水吧人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "飲料酒吧"
-    },
-    {
-      "id": "vpos_8",
-      "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>し",
-      "zh": "赤牛與馬肉刺身崗人員",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "生肉刺身"
-    },
-    {
-      "id": "vpos_9",
-      "ja": "<ruby>最後<rt>さいご</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>する<ruby>人<rt>ひと</rt></ruby>",
-      "zh": "最後總檢查主管",
-      "cat": "職稱",
-      "imageUrl": "",
-      "note": "打烊閉館檢查"
-    },
-    {
-      "id": "vd_1",
-      "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>赤<rt>あか</rt></ruby>ワイン",
-      "zh": "王之淚 紅葡萄酒 (VINO TINTO)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0889.jpg",
-      "note": "FunVino 分酒機"
-    },
-    {
-      "id": "vd_2",
-      "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>ワイン",
-      "zh": "王之淚 白葡萄酒 (VINO BLANCO)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0889.jpg",
-      "note": "FunVino 分酒機"
-    },
-    {
-      "id": "vd_3",
-      "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>",
-      "zh": "阿蘇地酒 靈山 (れいざん) 純米酒",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0889.jpg",
-      "note": "FunVino 清酒分酒機"
-    },
-    {
-      "id": "vd_4",
-      "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>本醸造<rt>ほんじょうぞう</rt></ruby>",
-      "zh": "阿蘇地酒 靈山 本釀造清酒",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0889.jpg",
-      "note": "FunVino 清酒分酒機"
-    },
-    {
-      "id": "vd_5",
-      "ja": "サントリー オールフリー",
-      "zh": "Suntory ALL-FREE 無酒精啤酒 (瓶裝 0.00%)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0890.jpg",
-      "note": "冷藏冰箱內"
-    },
-    {
-      "id": "vd_6",
-      "ja": "<ruby>生<rt>なま</rt></ruby>ビール / <ruby>自動<rt>じどう</rt></ruby>ビールサーバー",
-      "zh": "生啤酒 / 自動生啤酒機",
-      "cat": "酒水",
-      "imageUrl": "",
-      "note": "放杯按黃色按鈕自動注酒"
-    },
-    {
-      "id": "vd_7",
-      "ja": "モナン <ruby>シロップ<rt>siroppu</rt></ruby>",
-      "zh": "MONIN 無酒精風味糖漿 (薄荷/黑加侖/百香果/白桃/青蘋果)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0884.jpg",
-      "note": "吧台調味糖漿"
-    },
-    {
-      "id": "vd_8",
-      "ja": "サントリー こだわり<ruby>酒場<rt>さかば</rt></ruby>のレモンサワーの<ruby>素<rt>もと</rt></ruby>",
-      "zh": "三得利 檸檬沙瓦濃縮基底酒",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0884.jpg",
-      "note": "沙瓦調酒"
-    },
-    {
-      "id": "vd_9",
-      "ja": "サントリー <ruby>翠<rt>すい</rt></ruby>",
-      "zh": "Suntory 翠 (SUI 日本琴酒)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0884.jpg",
-      "note": "琴酒調酒"
-    },
-    {
-      "id": "vd_10",
-      "ja": "<ruby>業務用<rt>ぎょうむよう</rt></ruby> ピーチ / カシス",
-      "zh": "業務用 水蜜桃 / 黑加侖 調酒香甜酒",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0885.jpg",
-      "note": "附定量壓頭"
-    },
-    {
-      "id": "vd_11",
-      "ja": "メーカーズマーク",
-      "zh": "Maker's Mark 波本威士忌",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0886.jpg",
-      "note": "洋酒區"
-    },
-    {
-      "id": "vd_12",
-      "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> ゆず<ruby>酒<rt>しゅ</rt></ruby>",
-      "zh": "白岳 柚子香甜酒",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0886.jpg",
-      "note": "利口酒"
-    },
-    {
-      "id": "vd_13",
-      "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> しろ",
-      "zh": "白岳 白 (熊本本格米燒酎)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0886.jpg",
-      "note": "熊本在地燒酎"
-    },
-    {
-      "id": "vd_14",
-      "ja": "<ruby>本格焼酎<rt>ほんかくしょうちゅう</rt></ruby>",
-      "zh": "本格燒酎 (芋燒酎 / 麥燒酎)",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0886.jpg",
-      "note": "燒酎區"
-    },
-    {
-      "id": "vd_15",
-      "ja": "こだわりの<ruby>梅酒<rt>うめしゅ</rt></ruby>",
-      "zh": "嚴選熟成梅酒",
-      "cat": "酒水",
-      "imageUrl": "./photos/IMG_0886.jpg",
-      "note": "梅酒區"
-    },
-    {
-      "id": "vd_16",
-      "ja": "ソーダ / <ruby>炭酸<rt>たんさん</rt></ruby>",
-      "zh": "碳酸 / 氣泡水",
-      "cat": "酒水",
-      "imageUrl": "",
-      "note": "飲料機內取用"
-    },
-    {
-      "id": "vd_17",
-      "ja": "お<ruby>水<rt>みず</rt></ruby> / <ruby>冷水<rt>れいすい</rt></ruby>",
-      "zh": "開水 / 冰開水",
-      "cat": "酒水",
-      "imageUrl": "",
-      "note": "飲料機內取用"
-    },
-    {
-      "id": "vd_18",
-      "ja": "<ruby>ドリンクサーバー<rt>dorinku sa-ba-</rt></ruby>",
-      "zh": "飲料機 / 飲品吧機台",
-      "cat": "酒水",
-      "imageUrl": "",
-      "note": "提供水與碳酸氣泡"
-    },
-    {
-      "id": "vt_1",
-      "ja": "<ruby>ワゴン<rt>wagon</rt></ruby> / <ruby>台車<rt>だいしゃ</rt></ruby>",
-      "zh": "推車 / 餐車",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "傳菜與運送料理專用"
-    },
-    {
-      "id": "vt_2",
-      "ja": "<ruby>クロス<rt>kurosu</rt></ruby> / <ruby>布<rt>ぬの</rt></ruby>",
-      "zh": "布巾 / 蓋料理的布",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "去廚房取餐必須隨身攜帶"
-    },
-    {
-      "id": "vt_3",
-      "ja": "<ruby>インカム<rt>inkamu</rt></ruby>",
-      "zh": "無線電對講機",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "送達通報與缺菜聯繫"
-    },
-    {
-      "id": "vt_tray",
-      "ja": "<ruby>トレー<rt>tore-</rt></ruby> / お<ruby>盆<rt>ぼん</rt></ruby>",
-      "zh": "托盤 / 盛盤",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "出餐端菜專用托盤"
-    },
-    {
-      "id": "vt_tai",
-      "ja": "<ruby>タイ<rt>tai</rt></ruby>のお<ruby>皿<rt>さら</rt></ruby>",
-      "zh": "鯛魚盤",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0834.jpg",
-      "note": "盛裝鯛魚生魚片專用盤"
-    },
-    {
-      "id": "vt_4",
-      "ja": "<ruby>バッシングカート<rt>basshingu ka-to</rt></ruby>",
-      "zh": "收桌推車 / 撤盤推車",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "收桌撤盤專用"
-    },
-    {
-      "id": "vt_5",
-      "ja": "お<ruby>食事中<rt>しょくじちゅう</rt></ruby>／お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>カード",
-      "zh": "用餐中／用餐結束牌",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "收桌時需回收確認"
-    },
-    {
-      "id": "vt_6",
-      "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby> / <ruby>雑巾<rt>ぞうきん</rt></ruby>",
-      "zh": "擦桌專用抹布",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "搭配酒精擦拭桌面"
-    },
-    {
-      "id": "vt_7",
-      "ja": "アルコール<ruby>消毒液<rt>しょうどくえき</rt></ruby>",
-      "zh": "酒精消毒液噴霧",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "清潔消毒桌面"
-    },
-    {
-      "id": "vt_8",
-      "ja": "<ruby>トング<rt>tongu</rt></ruby>",
-      "zh": "料理夾子",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0848.jpg",
-      "note": "夾取毛豆/小菜"
-    },
-    {
-      "id": "vt_9",
-      "ja": "<ruby>卓上<rt>たくじょう</rt></ruby><ruby>コンロ<rt>konro</rt></ruby>",
-      "zh": "桌上型卡式瓦斯爐",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0851.jpg",
-      "note": "涮涮鍋專用"
-    },
-    {
-      "id": "vt_10",
-      "ja": "<ruby>湯切<rt>ゆぎ</rt></ruby>り",
-      "zh": "燙麵瀝水網杓",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0852.jpg",
-      "note": "拉麵自煮區"
-    },
-    {
-      "id": "vt_11",
-      "ja": "<ruby>炊飯器<rt>すいはんき</rt></ruby>",
-      "zh": "營業用大電鍋",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0845.jpg",
-      "note": "保溫高菜飯"
-    },
-    {
-      "id": "vt_12",
-      "ja": "<ruby>ディスペンサーポンプ<rt>disupensa- ponpu</rt></ruby>",
-      "zh": "定量壓頭 (30ml)",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0885.jpg",
-      "note": "調酒定量使用"
-    },
-    {
-      "id": "vt_13",
-      "ja": "<ruby>メジャーカップ<rt>meja- kappu</rt></ruby> / <ruby>ポアラー<rt>poara-</rt></ruby>",
-      "zh": "量酒杯 / 注酒嘴",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0886.jpg",
-      "note": "吧台調酒用"
-    },
-    {
-      "id": "vt_14",
-      "ja": "<ruby>マドラー<rt>madora-</rt></ruby> / <ruby>グラス<rt>gurasu</rt></ruby>",
-      "zh": "攪拌棒 / 玻璃杯",
-      "cat": "工具",
-      "imageUrl": "./photos/IMG_0884.jpg",
-      "note": "飲品調製"
-    },
-    {
-      "id": "vt_15",
-      "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>",
-      "zh": "冰箱",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "放生魚片、赤牛、馬刺"
-    },
-    {
-      "id": "vt_16",
-      "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>",
-      "zh": "保溫庫",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "放火鍋、湯品等保溫料理"
-    },
-    {
-      "id": "vt_17",
-      "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>",
-      "zh": "原位 / 原本的位置",
-      "cat": "工具",
-      "imageUrl": "",
-      "note": "餐車用完歸位"
-    },
-    {
-      "id": "vc_order",
-      "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします",
-      "zh": "給點單同仁：麻煩請準備〇〇（向廚房叫菜）",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "向廚房/點單同仁叫菜"
-    },
-    {
-      "id": "vc_wait",
-      "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました",
-      "zh": "讓您久等了（端菜給等待中的客人）",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "菜端出去時有客人在等"
-    },
-    {
-      "id": "vc_down",
-      "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます",
-      "zh": "我把〇〇撤下去（送回廚房補充）",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "撤下菜餚送回廚房補"
-    },
-    {
-      "id": "vc_1",
-      "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です！",
-      "zh": "收到／了解！",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "廚房通知時應答"
-    },
-    {
-      "id": "vc_2",
-      "ja": "<ruby>持<rt>も</rt></ruby>ってきました",
-      "zh": "送到了",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "無線電通報料理送達"
-    },
-    {
-      "id": "vc_3",
-      "ja": "〇〇がなくなりました",
-      "zh": "〇〇沒有了",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "回報缺菜"
-    },
-    {
-      "id": "vc_5",
-      "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます",
-      "zh": "這是無酒精的風味糖漿",
-      "cat": "對話",
-      "imageUrl": "./photos/IMG_0884.jpg",
-      "note": "客人詢問糖漿時回覆"
-    },
-    {
-      "id": "vc_6",
-      "ja": "こちらはノンアルコールビールでございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください",
-      "zh": "這是無酒精啤酒，請安心飲用",
-      "cat": "對話",
-      "imageUrl": "./photos/IMG_0890.jpg",
-      "note": "客人詢問啤酒酒精時回覆"
-    },
-    {
-      "id": "vc_7",
-      "ja": "ソーダ・お<ruby>水<rt>みず</rt></ruby>はこちらのサーバーの<ruby>中<rt>なか</rt></ruby>にございます",
-      "zh": "碳酸與開水在這臺機器裡面",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "引導機器位置"
-    },
-    {
-      "id": "vc_8",
-      "ja": "グラスをセットして、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと<ruby>自動<rt>じどう</rt></ruby>で<ruby>注<rt>そそ</rt></ruby>がれます",
-      "zh": "放上玻璃杯，按一次黃色按鈕就會自動注酒完成",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "生啤酒機操作說明"
-    },
-    {
-      "id": "vc_9",
-      "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
-      "zh": "打擾了，請問這個盤子可以幫您收走嗎？",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "收桌主動詢問"
-    },
-    {
-      "id": "vc_10",
-      "ja": "かしこまりました。<ruby>失礼<rt>しつれい</rt></ruby>いたします。",
-      "zh": "好的，馬上為您收拾（打擾了）。",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "客人同意收盤時回覆"
-    },
-    {
-      "id": "vc_11",
-      "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。",
-      "zh": "您太客氣了，請慢慢享用。",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "客人向我道謝時回覆"
-    },
-    {
-      "id": "vc_12",
-      "ja": "<ruby>大変<rt>たいへん</rt></ruby><ruby>失礼<rt>しつれい</rt></ruby>いたしました。ごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりくださいませ。",
-      "zh": "非常抱歉打擾了，請慢慢享用。",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "客人表示還在吃時回覆"
-    },
-    {
-      "id": "vc_13",
-      "ja": "お<ruby>食事<rt>しょくじ</rt></ruby>はお<ruby>済<rt>す</rt></ruby>みでしょうか？カードをお<ruby>下<rt>さ</rt></ruby>げいたします。",
-      "zh": "請問您用餐完畢了嗎？為您回收用餐卡。",
-      "cat": "對話",
-      "imageUrl": "",
-      "note": "回收用餐結束牌"
-    }
+    // ── 🍽️ 餐具類 (現場常用器皿・上司交代擺放備品) ──
+    { "id": "vt_shoyu_dish", "ja": "<ruby>醤油皿<rt>しょうゆざら</rt></ruby>", "zh": "醬油碟 / 調味小碟", "cat": "餐具", "imageUrl": "", "note": "壽司與生魚片區專用小碟" },
+    { "id": "vt_mini_tong", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>トング<rt>tongu</rt></ruby>", "zh": "小夾子 / 漬物夾", "cat": "餐具", "imageUrl": "", "note": "夾取小菜、漬物、沙拉配料" },
+    { "id": "vt_tong", "ja": "<ruby>トング<rt>tongu</rt></ruby>", "zh": "料理夾 / 取餐夾", "cat": "餐具", "imageUrl": "./photos/IMG_0848.jpg", "note": "熟食與炸物取餐用大夾子" },
+    { "id": "vt_service_spoon", "ja": "<ruby>サービススプーン<rt>sa-bisu supu-n</rt></ruby> / <ruby>おたま<rt>otama</rt></ruby>", "zh": "大湯匙 / 公勺 / 湯勺", "cat": "餐具", "imageUrl": "", "note": "舀取熱湯、燉菜、咖哩" },
+    { "id": "vt_tea_spoon", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>スプーン<rt>supu-n</rt></ruby> / <ruby>ティースプーン<rt>ti-supu-n</rt></ruby>", "zh": "小湯匙 / 甜點匙", "cat": "餐具", "imageUrl": "", "note": "優格、布丁、冰品甜點匙" },
+    { "id": "vt_dish_plate", "ja": "お<ruby>皿<rt>さら</rt></ruby>", "zh": "餐盤 / 圓盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：擦盤子；推車第一層放置" },
+    { "id": "vt_bowl", "ja": "お<ruby>椀<rt>わん</rt></ruby> / <ruby>小鉢<rt>こばち</rt></ruby>", "zh": "碗 / 湯碗 / 小缽", "cat": "餐具", "imageUrl": "", "note": "裝味噌湯或豆腐小菜；推車第一層放置" },
+    { "id": "vt_black_tray", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ / お<ruby>盆<rt>ぼん</rt></ruby>", "zh": "黑色餐盤 / 托盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層（中層）放置" },
+    { "id": "vt_4grid_plate", "ja": "4マス<ruby>仕切<rt>しき</rt></ruby>りプレート / <ruby>仕切<rt>しき</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>", "zh": "四格餐盤（裝菜用）", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第三層（底層）堆疊" },
+    { "id": "vt_chopsticks", "ja": "お<ruby>箸<rt>はし</rt></ruby> / <ruby>割<rt>わ</rt></ruby>り<ruby>箸<rt>ばし</rt></ruby>", "zh": "筷子 / 免洗竹筷", "cat": "餐具", "imageUrl": "", "note": "餐桌與自助吧取用筷" },
+    { "id": "vt_glass_cup", "ja": "<ruby>グラス<rt>gurasu</rt></ruby> / <ruby>コップ<rt>koppu</rt></ruby>", "zh": "水杯 / 玻璃杯", "cat": "餐具", "imageUrl": "", "note": "飲料機與生啤機用杯" },
+    { "id": "vt_duster", "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby> / <ruby>布巾<rt>ふきん</rt></ruby>", "zh": "專用抹布 / 擦拭布", "cat": "餐具", "imageUrl": "", "note": "擦盤子與擦桌子專用抹布" },
+    { "id": "vt_toothpick", "ja": "<ruby>爪楊枝<rt>つまようじ</rt></ruby>", "zh": "牙籤", "cat": "餐具", "imageUrl": "", "note": "餐桌調味區備品" },
+
+    // ── 🍱 餐點類 (現場真實紙本菜單核對・已刪除停供項目) ──
+    { "id": "vs_dashimaki", "ja": "だし<ruby>巻<rt>ま</rt></ruby>き<ruby>玉子<rt>たまご</rt></ruby>", "zh": "高湯煎蛋捲", "cat": "餐點", "imageUrl": "./photos/IMG_0873.jpg", "note": "朝食熱菜・日式高湯厚蛋捲" },
+    { "id": "vs_aji_nanban", "ja": "アジの<ruby>南蛮漬<rt>なんばんづ</rt></ruby>け", "zh": "南蠻漬竹莢魚", "cat": "餐點", "imageUrl": "./photos/IMG_0837.jpg", "note": "朝食熱菜" },
+    { "id": "vs_asari_shoga", "ja": "あさりの<ruby>生姜蒸<rt>しょうがむ</rt></ruby>し", "zh": "薑汁蒸蛤蜊", "cat": "餐點", "imageUrl": "./photos/IMG_0843.jpg", "note": "朝食熱菜" },
+    { "id": "vs_gyudon", "ja": "<ruby>牛丼<rt>ぎゅうどん</rt></ruby>", "zh": "牛丼", "cat": "餐點", "imageUrl": "./photos/IMG_0842.jpg", "note": "朝食主食" },
+    { "id": "vs_reimen_pasta", "ja": "<ruby>冷麺<rt>れいめん</rt></ruby>パスタ", "zh": "冷麵義大利麵", "cat": "餐點", "imageUrl": "", "note": "朝食熱菜" },
+    { "id": "vs_wiener", "ja": "ボイルウインナー", "zh": "水煮維也納香腸", "cat": "餐點", "imageUrl": "", "note": "朝食熱菜" },
+    { "id": "vs_scramble", "ja": "スクランブルエッグ", "zh": "美式炒蛋", "cat": "餐點", "imageUrl": "", "note": "朝食熱菜" },
+    { "id": "vs_broccoli_bacon", "ja": "ブロッコリーとベーコンのソテー", "zh": "培根炒青花菜", "cat": "餐點", "imageUrl": "", "note": "朝食熱菜" },
+    { "id": "vs_zaru_dofu", "ja": "ざる<ruby>豆腐<rt>どうふ</rt></ruby>", "zh": "竹簍冷豆腐", "cat": "餐點", "imageUrl": "", "note": "朝食豆腐料理 (17-18)" },
+    { "id": "vs_rice", "ja": "<ruby>ご飯<rt>はん</rt></ruby>", "zh": "白飯", "cat": "餐點", "imageUrl": "", "note": "朝食主食" },
+    { "id": "vs_mentaiko", "ja": "<ruby>明太子<rt>めんたいこ</rt></ruby>", "zh": "明太子", "cat": "餐點", "imageUrl": "", "note": "朝食名物" },
+    { "id": "vs_karashi_renkon", "ja": "<ruby>辛子<rt>からし</rt></ruby>れんこん", "zh": "辛子蓮藕", "cat": "餐點", "imageUrl": "./photos/IMG_0867.jpg", "note": "熊本名物" },
+    { "id": "vs_ika_natto", "ja": "いか<ruby>納豆<rt>なっとう</rt></ruby>", "zh": "花枝納豆", "cat": "餐點", "imageUrl": "", "note": "朝食生鮮小菜" },
+    { "id": "vs_onigiri_3", "ja": "おにぎり<ruby>三種<rt>さんしゅ</rt></ruby>", "zh": "飯糰三種", "cat": "餐點", "imageUrl": "", "note": "朝食主食" },
+    { "id": "vs_okayu", "ja": "お<ruby>粥<rt>かゆ</rt></ruby>", "zh": "白粥", "cat": "餐點", "imageUrl": "", "note": "朝食主食" },
+    { "id": "vs_curry", "ja": "ビーフカレー", "zh": "日式牛肉咖哩", "cat": "餐點", "imageUrl": "./photos/IMG_0727.jpg", "note": "夕食主食" },
+    { "id": "vs_vege_stew", "ja": "<ruby>彩<rt>いろど</rt></ruby>り<ruby>野菜<rt>やさい</rt></ruby>の<ruby>甘辛煮<rt>あまからに</rt></ruby>", "zh": "甜辛彩蔬煮", "cat": "餐點", "imageUrl": "./photos/IMG_0840.jpg", "note": "夕食熱菜" },
+    { "id": "vs_mabo", "ja": "<ruby>麻婆豆腐<rt>まーぼーどうふ</rt></ruby>", "zh": "麻婆豆腐", "cat": "餐點", "imageUrl": "./photos/IMG_0726.jpg", "note": "夕食熱菜" },
+    { "id": "vs_shumai", "ja": "<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>", "zh": "肉燒賣", "cat": "餐點", "imageUrl": "./photos/IMG_0836.jpg", "note": "夕食熱菜・肉燒賣" },
+    { "id": "vs_chicken_nanban", "ja": "チキン<ruby>南蛮<rt>なんばん</rt></ruby>", "zh": "南蠻炸雞", "cat": "餐點", "imageUrl": "./photos/IMG_0724.jpg", "note": "夕食熱菜" },
+    { "id": "vs_karaage", "ja": "<ruby>唐揚<rt>からあ</rt></ruby>げ", "zh": "日式炸雞塊", "cat": "餐點", "imageUrl": "./photos/IMG_0723.jpg", "note": "夕食炸物" },
+    { "id": "vs_katsuo_tataki", "ja": "<ruby>鰹<rt>カツオ</rt></ruby>のたたき", "zh": "鰹魚生魚片（刺身）", "cat": "餐點", "imageUrl": "./photos/IMG_0835 2.jpg", "note": "夕食名物・鰹魚生魚片（日式經典たたき，搭配蔥花、薑泥與椪醋醬）" },
+    { "id": "vs_takana_rice", "ja": "<ruby>高菜<rt>たかな</rt></ruby><ruby>ご飯<rt>はん</rt></ruby>", "zh": "阿蘇高菜拌飯", "cat": "餐點", "imageUrl": "", "note": "熊本阿蘇名物" },
+    { "id": "vs_asari_miso", "ja": "あさりのみそ<ruby>汁<rt>しる</rt></ruby>", "zh": "蛤蜊味噌湯", "cat": "餐點", "imageUrl": "./photos/IMG_0728.jpg", "note": "夕食名物湯品" },
+    { "id": "vs_goma_dofu", "ja": "<ruby>胡麻豆腐<rt>ごまどうふ</rt></ruby>", "zh": "胡麻豆腐", "cat": "餐點", "imageUrl": "./photos/IMG_0721.jpg", "note": "夕食名物小菜" },
+    { "id": "vs_ramen", "ja": "とんこつ<ruby>ラーメン<rt>ra-men</rt></ruby>", "zh": "豚骨拉麵", "cat": "餐點", "imageUrl": "./photos/IMG_0852.jpg", "note": "夕食拉麵" },
+    { "id": "vs_hotpot", "ja": "<ruby>熊本<rt>くまもと</rt></ruby> りんどうポーク<ruby>味<rt>あじ</rt></ruby> しゃぶしゃぶ", "zh": "熊本龍膽豬涮涮鍋", "cat": "餐點", "imageUrl": "./photos/IMG_0851.jpg", "note": "夕食名物・熊本龍膽豬涮涮鍋" },
+    { "id": "vs_kanten_gomaae", "ja": "パリパリ<ruby>寒天<rt>かんてん</rt></ruby>の<ruby>胡麻和<rt>ごまあ</rt></ruby>え", "zh": "胡麻拌寒天", "cat": "餐點", "imageUrl": "./photos/IMG_0847.jpg", "note": "朝食小菜" },
+    { "id": "vs_hakusai_okakaae", "ja": "<ruby>白菜<rt>はくさい</rt></ruby>のおかか<ruby>和<rt>あ</rt></ruby>え", "zh": "柴魚拌白菜", "cat": "餐點", "imageUrl": "", "note": "朝食小菜" },
+    { "id": "vs_ganmo_ingen", "ja": "がんもといんげん", "zh": "油豆腐雁擬與四季豆煮", "cat": "餐點", "imageUrl": "./photos/IMG_0846.jpg", "note": "朝食小菜" },
+    { "id": "vs_chingensai_namul", "ja": "<ruby>青梗菜<rt>チンゲンサイ</rt></ruby>のナムル", "zh": "涼拌青江菜", "cat": "餐點", "imageUrl": "", "note": "夕食小菜" },
+    { "id": "vs_milk_bread", "ja": "ミルク<ruby>食<rt>しょく</rt></ruby>パン", "zh": "牛奶吐司", "cat": "餐點", "imageUrl": "", "note": "朝食麵包" },
+    { "id": "vs_ham_egg", "ja": "ハムエッグ", "zh": "火腿煎蛋", "cat": "餐點", "imageUrl": "", "note": "朝食いろり" },
+    { "id": "vs_yaki_saba", "ja": "<ruby>鯖<rt>さば</rt></ruby>", "zh": "烤鯖魚", "cat": "餐點", "imageUrl": "", "note": "朝食いろり烤魚" },
+    { "id": "vs_satsuma_age", "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ", "zh": "薩摩炸魚餅", "cat": "餐點", "imageUrl": "", "note": "朝食いろり炸物" },
+    { "id": "vs_yaki_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "烤蝦", "cat": "餐點", "imageUrl": "", "note": "夕食いろり烤物" },
+    { "id": "vs_salad_ninjin", "ja": "にんじん", "zh": "紅蘿蔔絲", "cat": "餐點", "imageUrl": "", "note": "沙拉吧蔬菜" },
+    { "id": "vs_salad_murasaki", "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ", "zh": "紫甘藍", "cat": "餐點", "imageUrl": "", "note": "沙拉吧蔬菜" },
+    { "id": "vs_salad_minitomato", "ja": "ミニトマト", "zh": "小番茄", "cat": "餐點", "imageUrl": "", "note": "沙拉吧蔬菜" },
+    { "id": "vs_salad_babyleaf", "ja": "ベビーリーフ", "zh": "嫩葉生菜", "cat": "餐點", "imageUrl": "", "note": "沙拉吧蔬菜" },
+    { "id": "vs_salad_kikuimo", "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ", "zh": "菊芋脆片", "cat": "餐點", "imageUrl": "", "note": "沙拉吧配料" },
+    { "id": "vs_salad_beans", "ja": "ビーンズ", "zh": "綜合豆", "cat": "餐點", "imageUrl": "", "note": "沙拉吧配料" },
+    { "id": "vs_salad_sweetcorn", "ja": "スイートコーン", "zh": "甜玉米粒", "cat": "餐點", "imageUrl": "", "note": "沙拉吧配料" },
+    { "id": "vs_salad_banana", "ja": "バナナ", "zh": "香蕉", "cat": "餐點", "imageUrl": "", "note": "朝食水果" },
+    { "id": "vs_salad_orange", "ja": "オレンジ", "zh": "柳橙", "cat": "餐點", "imageUrl": "", "note": "朝食水果" },
+    { "id": "vs_salad_yogurt", "ja": "ヨーグルト", "zh": "優格", "cat": "餐點", "imageUrl": "", "note": "朝食沙拉吧" },
+
+    // ── 🍣 壽司類 ──
+    { "id": "vs_sushi_tamago", "ja": "たまご", "zh": "玉子燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    { "id": "vs_sushi_maguro", "ja": "まぐろ", "zh": "鮪魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    { "id": "vs_sushi_salmon", "ja": "サーモン", "zh": "鮭魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    { "id": "vs_sushi_unagi", "ja": "うなぎ", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    { "id": "vs_sushi_ika", "ja": "いか", "zh": "花枝壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    { "id": "vs_sushi_ebi", "ja": "えび", "zh": "鮮蝦壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    { "id": "vs_sushi_teriyaki", "ja": "てりやき", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+
+    // ── 🍮 點心類 ──
+    { "id": "vs_desert_melon", "ja": "メロン", "zh": "哈密瓜", "cat": "餐點", "imageUrl": "./photos/IMG_0882.jpg", "note": "夕食甜點水果" },
+    { "id": "vs_desert_choco", "ja": "チョコチップケーキ", "zh": "巧克力蛋糕", "cat": "餐點", "imageUrl": "./photos/IMG_0746.jpg", "note": "夕食甜點・巧克力碎片布朗尼" },
+    { "id": "vs_desert_warabi", "ja": "わらび<ruby>餅<rt>もち</rt></ruby>", "zh": "蕨餅", "cat": "餐點", "imageUrl": "", "note": "夕食甜點" },
+    { "id": "vs_desert_dango", "ja": "<ruby>和菓子<rt>わがし</rt></ruby>の<ruby>団子<rt>だんご</rt></ruby>", "zh": "和菓子丸子", "cat": "餐點", "imageUrl": "./photos/IMG_0748.jpg", "note": "夕食甜點・日式三色糰子" },
+
+    // ── 🥤 酒水類 ──
+    { "id": "vd_1", "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>赤<rt>あか</rt></ruby>ワイン", "zh": "王之淚 紅葡萄酒 (VINO TINTO)", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (左1)・西班牙進口紅酒" },
+    { "id": "vd_2", "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>ワイン", "zh": "王之淚 白葡萄酒 (VINO BLANCO)", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (左2)・西班牙進口白酒" },
+    { "id": "vd_3", "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>", "zh": "阿蘇地酒 靈山 (れいざん) 純米酒", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (右2)・阿蘇高砂酒造名酒" },
+    { "id": "vd_4", "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>本醸造<rt>ほんじょうぞう</rt></ruby>", "zh": "阿蘇地酒 靈山 本釀造清酒", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (右1)・阿蘇辛口清酒" },
+    { "id": "vd_5", "ja": "サントリー オールフリー", "zh": "Suntory ALL-FREE 無酒精啤酒 (瓶裝 0.00%)", "cat": "酒水", "imageUrl": "./photos/IMG_0890.jpg", "note": "0.00% 酒精・カロリーゼロ・糖質ゼロ" },
+    { "id": "vd_6", "ja": "<ruby>生<rt>なま</rt></ruby>ビール", "zh": "生啤酒 (The Premium Malt's)", "cat": "酒水", "imageUrl": "", "note": "生啤酒機黃色按鈕自動注入" },
+    { "id": "vd_7", "ja": "モナン <ruby>シロップ<rt>siroppu</rt></ruby>", "zh": "MONIN 無酒精風味糖漿 (薄荷/黑加侖/百香果/白桃/青蘋果)", "cat": "酒水", "imageUrl": "./photos/IMG_0884.jpg", "note": "0% 無酒精果汁糖漿" },
+    { "id": "vd_8", "ja": "サントリー こだわり<ruby>酒場<rt>さかば</rt></ruby>のレモンサワーの<ruby>素<rt>もと</rt></ruby>", "zh": "三得利 檸檬沙瓦濃縮基底酒", "cat": "酒水", "imageUrl": "./photos/IMG_0884.jpg", "note": "依比例加入碳酸水調製" },
+    { "id": "vd_9", "ja": "サントリー <ruby>翠<rt>すい</rt></ruby>", "zh": "Suntory 翠 (SUI 日本琴酒)", "cat": "酒水", "imageUrl": "./photos/IMG_0884.jpg", "note": "柚子・綠茶・生薑草本日本琴酒" },
+    { "id": "vd_10", "ja": "<ruby>業務<rt>ぎょうむ</rt></ruby><ruby>用<rt>よう</rt></ruby> ピーチ / カシス", "zh": "業務用 水蜜桃 / 黑加侖 調酒香甜酒", "cat": "酒水", "imageUrl": "./photos/IMG_0885.jpg", "note": "搭配定量壓頭 (30ml) 使用" },
+    { "id": "vd_11", "ja": "メーカーズマーク", "zh": "Maker's Mark 波本威士忌", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "美國手工波本威士忌" },
+    { "id": "vd_12", "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> ゆず<ruby>酒<rt>しゅ</rt></ruby>", "zh": "白岳 柚子香甜酒", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "熊本高橋酒造柚子利口酒" },
+    { "id": "vd_13", "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>", "zh": "白岳 白 (熊本本格米燒酎)", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "熊本名產純米蒸餾燒酎" },
+    { "id": "vd_14", "ja": "<ruby>本格<rt>ほんかく</rt></ruby><ruby>焼酎<rt>しょうちゅう</rt></ruby>", "zh": "本格燒酎 (芋燒酎 / 麥燒酎)", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "鹿兒島黑霧島芋燒酎 / 麥燒酎" },
+    { "id": "vd_15", "ja": "こだわりの<ruby>梅酒<rt>うめしゅ</rt></ruby>", "zh": "嚴選熟成梅酒", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "本格梅酒" },
+
+    // ── 🧹 工具類 ──
+    { "id": "vt_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "推車 / 餐車", "cat": "工具", "imageUrl": "", "note": "傳菜專用" },
+    { "id": "vt_2", "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>", "zh": "布巾 / 蓋料理的布", "cat": "工具", "imageUrl": "", "note": "取餐必帶" },
+    { "id": "vt_3", "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機", "cat": "工具", "imageUrl": "", "note": "通報送達與缺菜" },
+    { "id": "vt_4", "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>", "zh": "冰箱", "cat": "工具", "imageUrl": "", "note": "放生魚片、赤牛、馬刺" },
+    { "id": "vt_5", "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>", "zh": "保溫庫", "cat": "工具", "imageUrl": "", "note": "放熱湯、火鍋" },
+    { "id": "vt_6", "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原位 / 原本的位置", "cat": "工具", "imageUrl": "", "note": "餐車用完歸位" },
+    { "id": "vt_7", "ja": "バッシングワゴン", "zh": "撤餐專用推車", "cat": "工具", "imageUrl": "", "note": "收桌時撤收餐盤專用車" },
+    { "id": "vt_8", "ja": "<ruby>自動<rt>じどう</rt></ruby>ビールサーバー", "zh": "自動生啤酒機", "cat": "工具", "imageUrl": "", "note": "黃色按鈕操作" },
+    { "id": "vt_9", "ja": "<ruby>卓上<rt>たくじょう</rt></ruby><ruby>コンロ<rt>konro</rt></ruby>", "zh": "桌上型卡式瓦斯爐", "cat": "工具", "imageUrl": "./photos/IMG_0851.jpg", "note": "客人火鍋專用卡式爐" },
+    { "id": "vt_10", "ja": "<ruby>湯切<rt>ゆぎ</rt></ruby>り", "zh": "燙麵瀝水網杓", "cat": "工具", "imageUrl": "./photos/IMG_0852.jpg", "note": "煮拉麵專用甩水濾杓" },
+    { "id": "vt_11", "ja": "<ruby>炊飯器<rt>すいはんき</rt></ruby>", "zh": "營業用大電鍋", "cat": "工具", "imageUrl": "", "note": "盛裝白飯與高菜飯" },
+    { "id": "vt_12", "ja": "ディスペンサーポンプ", "zh": "定量壓頭 (30ml)", "cat": "工具", "imageUrl": "./photos/IMG_0885.jpg", "note": "酒水香甜酒瓶專用定量壓頭" },
+    { "id": "vt_13", "ja": "メジャーカップ / ポアラー", "zh": "量酒杯 / 注酒嘴", "cat": "工具", "imageUrl": "./photos/IMG_0886.jpg", "note": "調酒用量杯與酒瓶注酒嘴" },
+    { "id": "vt_14", "ja": "マドラー", "zh": "攪拌棒", "cat": "工具", "imageUrl": "./photos/IMG_0884.jpg", "note": "調酒攪拌用" },
+    { "id": "vt_15", "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>", "zh": "吸塵器", "cat": "工具", "imageUrl": "", "note": "上司交代：打掃地板用" },
+
+    // ── 👤 名字類 ──
+    { "id": "vn_1", "ja": "<ruby>市石<rt>いちいし</rt></ruby>", "kana": "いちいし", "zh": "市石", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_2", "ja": "<ruby>松本<rt>まつもと</rt></ruby>", "kana": "まつもと", "zh": "松本", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_3", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_4", "ja": "<ruby>田中<rt>たなか</rt></ruby>", "kana": "たなか", "zh": "田中", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_5", "ja": "<ruby>高橋<rt>たかはし</rt></ruby>", "kana": "たかはし", "zh": "高橋", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_6", "ja": "<ruby>中村<rt>なかむら</rt></ruby>", "kana": "なかむら", "zh": "中村", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_7", "ja": "<ruby>小林<rt>こばやし</rt></ruby>", "kana": "こばやし", "zh": "小林", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_8", "ja": "<ruby>山本<rt>やまもと</rt></ruby>", "kana": "やまもと", "zh": "山本", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_9", "ja": "<ruby>渡辺<rt>わたなべ</rt></ruby>", "kana": "わたなべ", "zh": "渡邊", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_10", "ja": "<ruby>伊藤<rt>いとう</rt></ruby>", "kana": "いとう", "zh": "伊藤", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
+    { "id": "vn_11", "ja": "<ruby>楊<rt>よう</rt></ruby>", "kana": "よう", "zh": "楊", "cat": "名字", "imageUrl": "", "note": "外國籍同仁（本人）", "isForeign": true },
+    { "id": "vn_12", "ja": "<ruby>陳<rt>ちん</rt></ruby>", "kana": "ちん", "zh": "陳", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_13", "ja": "<ruby>林<rt>りん</rt></ruby>", "kana": "りん", "zh": "林", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_14", "ja": "<ruby>黃<rt>こう</rt></ruby>", "kana": "こう", "zh": "黃", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_15", "ja": "<ruby>張<rt>ちょう</rt></ruby>", "kana": "ちょう", "zh": "張", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_16", "ja": "<ruby>王<rt>おう</rt></ruby>", "kana": "おう", "zh": "王", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_17", "ja": "<ruby>李<rt>り</rt></ruby>", "kana": "り", "zh": "李", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_18", "ja": "<ruby>劉<rt>りゅう</rt></ruby>", "kana": "りゅう", "zh": "劉", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_19", "ja": "<ruby>グエン<rt>guen</rt></ruby>", "kana": "ぐえん", "zh": "阮 (Nguyen)", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    { "id": "vn_20", "ja": "<ruby>トラン<rt>toran</rt></ruby>", "kana": "とらん", "zh": "陳 (Tran)", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+
+    // ── 💼 職稱類 ──
+    { "id": "vs_1", "ja": "<ruby>料理長<rt>りょうりちょう</rt></ruby>", "zh": "主廚 / 料理長", "cat": "職稱", "imageUrl": "", "note": "廚房最高負責人" },
+    { "id": "vs_2", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "zh": "經理 / 總經理", "cat": "職稱", "imageUrl": "", "note": "旅館營運主管" },
+    { "id": "vs_3", "ja": "<ruby>女将<rt>おかみ</rt></ruby>", "zh": "老闆娘 / 女將", "cat": "職稱", "imageUrl": "", "note": "旅館靈魂人物" },
+    { "id": "vs_4", "ja": "リーダー", "zh": "組長 / 領班", "cat": "職稱", "imageUrl": "", "note": "現場值班主管" },
+    { "id": "vs_5", "ja": "<ruby>先輩<rt>せんぱい</rt></ruby>", "zh": "前輩", "cat": "職稱", "imageUrl": "", "note": "資深同仁" },
+    { "id": "vs_6", "ja": "ランナー", "zh": "傳菜人員", "cat": "職稱", "imageUrl": "", "note": "負責廚房與外場間菜餚運送（本人職務）" },
+    { "id": "vs_7", "ja": "ホールスタッフ", "zh": "外場服務人員", "cat": "職稱", "imageUrl": "", "note": "接待客人與點餐收桌" },
+    { "id": "vs_8", "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>スタッフ", "zh": "廚房同仁 / 內場人員", "cat": "職稱", "imageUrl": "", "note": "烹飪與備菜人員" },
+    { "id": "vs_9", "ja": "<ruby>清掃<rt>せいそう</rt></ruby>スタッフ", "zh": "清潔人員", "cat": "職稱", "imageUrl": "", "note": "環境與洗碗清潔" },
+    { "id": "vs_10", "ja": "フロント", "zh": "櫃檯接待人員", "cat": "職稱", "imageUrl": "", "note": "大廳辦理入住與退房" },
+
+    // ── 💬 對話類 ──
+    { "id": "vc_1", "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。", "zh": "廚房出菜通報「做好了」時，請立即前往領取。", "cat": "對話", "imageUrl": "", "note": "取菜SOP" },
+    { "id": "vc_2", "ja": "<ruby>現場<rt>げんば</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、インカムで「〇〇〇〇<ruby>番<rt>ばん</rt></ruby>、〇〇<ruby>届<rt>とど</rt></ruby>きました」と<ruby>通報<rt>つうほう</rt></ruby>します。", "zh": "送達現場後用無線電通報「〇〇桌，〇〇送達」。", "cat": "對話", "imageUrl": "", "note": "送達通報SOP" },
+    { "id": "vc_3", "ja": "<ruby>料理<rt>りょうり</rt></ruby>がない<ruby>時<rt>とき</rt></ruby>は、インカムで<ruby>厨房<rt>ちゅうぼう</rt></ruby>に「〇〇がありません」と<ruby>連絡<rt>れんらく</rt></ruby>します。", "zh": "缺菜時，立即以無線電通報廚房「〇〇沒有了」。", "cat": "對話", "imageUrl": "", "note": "缺菜通報SOP" },
+    { "id": "vc_4", "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？", "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？", "cat": "對話", "imageUrl": "", "note": "收桌巡桌詢問" },
+    { "id": "vc_5", "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。", "zh": "這是無酒精的風味糖漿。", "cat": "對話", "imageUrl": "./photos/IMG_0884.jpg", "note": "酒水應答" },
+    { "id": "vc_6", "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。", "zh": "這是無酒精啤酒（0.00%），請安心飲用。", "cat": "對話", "imageUrl": "./photos/IMG_0890.jpg", "note": "酒水應答" },
+    { "id": "vc_7", "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。", "zh": "讓您久等了（端菜給等候客人）。", "cat": "對話", "imageUrl": "", "note": "端菜敬語" },
+    { "id": "vc_8", "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。", "zh": "我把〇〇撤下去（送回廚房補充）。", "cat": "對話", "imageUrl": "", "note": "撤盤通報" },
+    { "id": "vc_9", "ja": "お<ruby>通<rt>とお</rt></ruby>りします！/ <ruby>失礼<rt>しつれい</rt></ruby>します！", "zh": "借過一下！（推餐車提醒同仁與客人）", "cat": "對話", "imageUrl": "", "note": "推車提醒" },
+    { "id": "vc_10", "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。", "zh": "您太客氣了，請慢慢享用。", "cat": "對話", "imageUrl": "", "note": "客人道謝時回覆" }
   ],
-  "vocabConv": [],
   "scenarios": [
     {
       "id": "sc_runner_ready",
-      "name": "傳菜：廚房通知取餐與應答",
+      "name": "廚房取餐與通報應答",
       "icon": "👨‍🍳",
-      "role": "廚房人員",
-      "desc": "廚房出菜通知「チキン南蛮できました！」，傳菜人員回覆「了解です！」並帶布巾前往取餐。",
+      "role": "廚房主管",
+      "desc": "廚房大喊「〇〇できました！」，模擬你確認取餐、推車出發、以及到外場後用無線電通報之完整流程。",
       "enabled": true
     },
     {
-      "id": "sc_runner_radio",
-      "name": "傳菜：無線電通報料理送達",
-      "icon": "📻",
-      "role": "主管",
-      "desc": "將料理推回餐廳後，使用無線電對講機（インカム）回報「チキン南蛮持ってきました。」",
-      "enabled": true
-    },
-    {
-      "id": "sc_order_call",
-      "name": "點菜：向點單同仁叫菜與補菜",
-      "icon": "📢",
-      "role": "廚房人員",
-      "desc": "向點單崗位叫菜「ご注文の方へ、〇〇をお願いします」、撤菜「〇〇を下げます」、端菜給等候客人說「お待ちいただきました」。",
+      "id": "sc_guest_empty",
+      "name": "外場缺菜通報應答",
+      "icon": "⚠️",
+      "role": "外場領班",
+      "desc": "巡視餐檯發現赤牛、生魚片或熱湯見底，模擬用無線電向廚房通報補菜之口語對話。",
       "enabled": true
     },
     {
       "id": "sc_drink_guide",
-      "name": "酒水吧引導與機台說明",
+      "name": "酒水與生啤機引導",
       "icon": "🥤",
       "role": "顧客",
-      "desc": "客人詢問糖漿是否無酒精、All-Free啤酒、碳酸與開水位置、生啤酒機按一次黃色按鈕自動完成。",
+      "desc": "客人詢問生啤酒機使用方法、無酒精糖漿及 ALL-FREE 酒精濃度，模擬流暢日文引導。",
       "enabled": true
     },
     {
-      "id": "sc_bashing",
+      "id": "sc_bashing_guest",
       "name": "收桌撤盤與客人應對",
       "icon": "🍽️",
       "role": "顧客",
@@ -3012,8 +2311,8 @@ function loadAppData() {
       return data;
     }
     const data = JSON.parse(raw);
-    // 嚴格校驗：若 tabs 不完整或 vocabSop 數量小於 50 或未包含最新分類/外國人標記，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '餐點') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
+    // 嚴格校驗：若 tabs 不完整或 vocabSop 數量小於 50 或未包含最新餐具分類/外國人標記，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.cat === '餐點') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
@@ -3191,6 +2490,7 @@ function openItemQuickMenu(item, type, tabOrGlobal) {
   }
 
   if (tabOrGlobal === 'sop_item') {
+    btnsHtml += `<button class="quick-menu-btn" onclick="closeQuickMenuModal(); openItemGrammarModal('${item.id}');">📝 查看文法與詳解</button>`;
     btnsHtml += `<button class="quick-menu-btn" onclick="closeQuickMenuModal(); openModalItem('edit', '${type}', '${item.id}');">✎ 編輯此條目</button>`;
     btnsHtml += `<button class="quick-menu-btn danger" onclick="closeQuickMenuModal(); deleteSopItem('${item.id}');">✕ 刪除此條目</button>`;
   } else if (tabOrGlobal === 'tab_vocab') {
@@ -3206,6 +2506,288 @@ function openItemQuickMenu(item, type, tabOrGlobal) {
   modal.classList.add('show');
 }
 
+
+
+
+/* ==============================================================
+   條目點擊互動核心：點一下發音、點兩下彈出語句與文法詳解
+============================================================== */
+let sopItemClickTimer = null;
+let lastClickSopItemId = null;
+let lastClickSopItemTime = 0;
+
+function handleSopItemClick(e, id, jaZh) {
+  const now = Date.now();
+  if (lastClickSopItemId === id && (now - lastClickSopItemTime) < 320) {
+    if (sopItemClickTimer) {
+      clearTimeout(sopItemClickTimer);
+      sopItemClickTimer = null;
+    }
+    lastClickSopItemId = null;
+    lastClickSopItemTime = 0;
+    openItemGrammarModal(id);
+  } else {
+    lastClickSopItemId = id;
+    lastClickSopItemTime = now;
+    if (sopItemClickTimer) clearTimeout(sopItemClickTimer);
+    sopItemClickTimer = setTimeout(() => {
+      speakJapanese(jaZh);
+      sopItemClickTimer = null;
+    }, 210);
+  }
+}
+
+function handleDialogItemClick(e, id, ja) {
+  const now = Date.now();
+  if (lastClickSopItemId === id && (now - lastClickSopItemTime) < 320) {
+    if (sopItemClickTimer) {
+      clearTimeout(sopItemClickTimer);
+      sopItemClickTimer = null;
+    }
+    lastClickSopItemId = null;
+    lastClickSopItemTime = 0;
+    openItemGrammarModal(id);
+  } else {
+    lastClickSopItemId = id;
+    lastClickSopItemTime = now;
+    if (sopItemClickTimer) clearTimeout(sopItemClickTimer);
+    sopItemClickTimer = setTimeout(() => {
+      speakJapanese(ja);
+      sopItemClickTimer = null;
+    }, 210);
+  }
+}
+
+function openItemGrammarModal(id) {
+  let item = null;
+  let tabName = '';
+  
+  // 從所有 tab 中尋找該條目
+  for (const t of AppData.tabs || []) {
+    item = (t.items || []).find(i => i.id === id);
+    if (item) {
+      tabName = t.name;
+      break;
+    }
+  }
+  
+  if (!item) {
+    for (const t of createRealRunnerData().tabs) {
+      item = (t.items || []).find(i => i.id === id);
+      if (item) {
+        tabName = t.name;
+        break;
+      }
+    }
+  }
+
+  if (!item) return;
+
+  const modal = document.getElementById('modal-sop-grammar');
+  const titleEl = document.getElementById('grammar-modal-title');
+  const badgeEl = document.getElementById('grammar-speaker-badge');
+  const jaEl = document.getElementById('grammar-ja-text');
+  const zhEl = document.getElementById('grammar-zh-text');
+  const vocabsCont = document.getElementById('grammar-vocabs-container');
+  const pointsCont = document.getElementById('grammar-points-container');
+  const tipsWrap = document.getElementById('grammar-tips-wrap');
+  const tipsText = document.getElementById('grammar-tips-text');
+  const speakBtn = document.getElementById('grammar-speak-btn');
+  const editBtn = document.getElementById('grammar-edit-btn');
+
+  if (!modal) return;
+
+  if (titleEl) titleEl.textContent = (item.type === 'dialog' ? '💬 對話應答與文法詳解' : '🍱 業務流程 SOP 文法詳解');
+  
+  if (badgeEl) {
+    badgeEl.textContent = item.speaker ? ('發話者：' + item.speaker) : ('類別：' + tabName);
+  }
+
+  if (jaEl) jaEl.innerHTML = item.ja || '';
+  if (zhEl) zhEl.textContent = item.zh || '';
+
+  // 1. 單字拆解
+  if (vocabsCont) {
+    vocabsCont.innerHTML = '';
+    const vocabsList = item.grammar?.vocabs || [];
+    if (vocabsList.length > 0) {
+      vocabsList.forEach(v => {
+        const row = document.createElement('div');
+        row.style.cssText = 'background:var(--surface); border-radius:8px; padding:6px 10px; display:flex; justify-content:space-between; align-items:center; font-size:0.83rem; cursor:pointer;';
+        row.title = '點擊發音';
+        row.onclick = () => speakJapanese(v.ja);
+        row.innerHTML = `<span style="font-weight:700; color:var(--primary);">${escapeHtml(v.ja)}</span><span style="color:var(--muted);">${escapeHtml(v.zh)}</span>`;
+        vocabsCont.appendChild(row);
+      });
+    } else {
+      vocabsCont.innerHTML = '<div style="font-size:0.8rem; color:var(--muted); padding:4px 0;">點擊日文句子可直接聆聽朗讀發音。</div>';
+    }
+  }
+
+  // 2. 文法解析
+  if (pointsCont) {
+    pointsCont.innerHTML = '';
+    const pointsList = item.grammar?.points || [];
+    if (pointsList.length > 0) {
+      pointsList.forEach(p => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:0.82rem; line-height:1.6;';
+        card.innerHTML = `<div style="font-weight:700; color:var(--accent); margin-bottom:2px;">${escapeHtml(p.title)}</div><div style="color:var(--ink);">${escapeHtml(p.desc)}</div>`;
+        pointsCont.appendChild(card);
+      });
+    } else {
+      pointsCont.innerHTML = '<div style="font-size:0.8rem; color:var(--muted); padding:4px 0;">標準日語敬體句型，適合日本溫泉旅館餐飲現場應對。</div>';
+    }
+  }
+
+  // 3. 現場備忘提醒
+  if (tipsWrap && tipsText) {
+    if (item.grammar?.tips) {
+      tipsWrap.style.display = 'block';
+      tipsText.textContent = item.grammar.tips;
+    } else {
+      tipsWrap.style.display = 'none';
+    }
+  }
+
+  // 按鈕綁定
+  if (speakBtn) {
+    speakBtn.onclick = () => speakJapanese(item.ja || item.zh);
+  }
+  if (editBtn) {
+    editBtn.onclick = () => {
+      closeModal('modal-sop-grammar');
+      openModalItem('edit', item.type || 'sop', item.id);
+    };
+  }
+
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+/* ==============================================================
+   條目與單字 CRUD 模態框操作層
+============================================================== */
+function handleItemTypeChange() {
+  const typeField = document.getElementById('item-type-field');
+  const speakerGroup = document.getElementById('item-speaker-group');
+  if (!typeField || !speakerGroup) return;
+  speakerGroup.style.display = typeField.value === 'dialog' ? 'block' : 'none';
+}
+
+function openModalItem(mode, type = 'sop', itemId = null) {
+  const title = document.getElementById('modal-item-title');
+  const typeField = document.getElementById('item-type-field');
+  const speakerField = document.getElementById('item-speaker-field');
+  const zhField = document.getElementById('item-zh-field');
+  const jaField = document.getElementById('item-ja-field');
+  const tabIdField = document.getElementById('item-tab-id-field');
+  const editIdField = document.getElementById('item-edit-id-field');
+
+  tabIdField.value = AppData.currentTabId || 'tab_runner_all';
+  typeField.value = type;
+  handleItemTypeChange();
+
+  if (mode === 'add') {
+    title.textContent = type === 'dialog' ? '新增實用對話' : '新增 SOP 工作指引';
+    speakerField.value = type === 'dialog' ? '傳菜人員(我)' : '';
+    zhField.value = '';
+    jaField.value = '';
+    editIdField.value = '';
+  } else {
+    title.textContent = '編輯條目';
+    const tab = AppData.tabs.find(t => t.id === AppData.currentTabId) || AppData.tabs[0];
+    const item = tab ? (tab.items || []).find(i => i.id === itemId) : null;
+    if (!item) return;
+
+    typeField.value = item.type || 'sop';
+    speakerField.value = item.speaker || '';
+    zhField.value = item.zh || '';
+    jaField.value = item.ja || '';
+    editIdField.value = item.id;
+    handleItemTypeChange();
+  }
+
+  openModal('modal-item');
+}
+
+function submitItemForm() {
+  const tabId = document.getElementById('item-tab-id-field').value;
+  const editId = document.getElementById('item-edit-id-field').value;
+  const type = document.getElementById('item-type-field').value;
+  const speaker = document.getElementById('item-speaker-field').value.trim();
+  const zh = document.getElementById('item-zh-field').value.trim();
+  const ja = document.getElementById('item-ja-field').value.trim();
+
+  if (!zh && !ja) {
+    showToast('請輸入中文或日文內容', 'error');
+    return;
+  }
+
+  const tab = AppData.tabs.find(t => t.id === tabId);
+  if (!tab) {
+    showToast('找不到目標分頁', 'error');
+    return;
+  }
+
+  if (!tab.items) tab.items = [];
+
+  if (editId) {
+    const idx = tab.items.findIndex(i => i.id === editId);
+    if (idx !== -1) {
+      tab.items[idx].type = type;
+      tab.items[idx].speaker = type === 'dialog' ? speaker : '';
+      tab.items[idx].zh = zh;
+      tab.items[idx].ja = ja;
+    }
+    showToast('條目已成功更新！');
+  } else {
+    tab.items.push({
+      id: uid(),
+      type,
+      speaker: type === 'dialog' ? speaker : '',
+      zh,
+      ja
+    });
+    showToast('條目已成功新增！');
+  }
+
+  saveAppData(AppData);
+  renderSopContent();
+  closeModal('modal-item');
+}
+
+function deleteSopItem(itemId) {
+  if (!confirm('確定要刪除此條目嗎？')) return;
+  const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+  if (!tab || !tab.items) return;
+  tab.items = tab.items.filter(i => i.id !== itemId);
+  saveAppData(AppData);
+  renderSopContent();
+  showToast('條目已刪除');
+}
+
+function deleteTabVocab(vocabId) {
+  if (!confirm('確定要刪除此單字嗎？')) return;
+  const tab = AppData.tabs.find(t => t.id === AppData.currentTabId);
+  if (!tab || !tab.vocabs) return;
+  tab.vocabs = tab.vocabs.filter(v => v.id !== vocabId);
+  saveAppData(AppData);
+  renderSopContent();
+  showToast('單字已刪除');
+}
+
+function deleteGlobalVocab(vocabId, targetType = 'sop') {
+  if (!confirm('確定要刪除此單字嗎？')) return;
+  if (targetType === 'sop') {
+    AppData.vocabSop = (AppData.vocabSop || []).filter(v => v.id !== vocabId);
+  } else {
+    AppData.vocabConv = (AppData.vocabConv || []).filter(v => v.id !== vocabId);
+  }
+  saveAppData(AppData);
+  renderVocabPage(targetType);
+  showToast('單字已刪除');
+}
 
 
 /* ==============================================================
@@ -3374,7 +2956,7 @@ function renderSopContent() {
 
     sopItems.forEach((item, idx) => {
       html += `
-        <div class="compact-sop-item" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">
+        <div class="compact-sop-item" onclick="handleSopItemClick(event, '${item.id}', '${escapeJs(item.ja || item.zh)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
           <div class="sop-step-badge">${idx + 1}</div>
           <div style="flex:1;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
@@ -3414,7 +2996,7 @@ function renderSopContent() {
       }
 
       html += `
-        <div class="dialog-bubble-item ${speakerClass}" onclick="speakJapanese('${escapeJs(item.ja)}')">
+        <div class="dialog-bubble-item ${speakerClass}" onclick="handleDialogItemClick(event, '${item.id}', '${escapeJs(item.ja)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
           <div class="dialog-bubble-content">
             <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(item.speaker || '對話')}</span>
             <div class="dialog-bubble-ja">${item.ja}</div>
@@ -3436,24 +3018,24 @@ function renderSopContent() {
   const allVocabs = (AppData && AppData.vocabSop) ? AppData.vocabSop : [];
   const sushiIds  = ['vs_sushi_tamago','vs_sushi_maguro','vs_sushi_salmon','vs_sushi_unagi','vs_sushi_ika','vs_sushi_ebi','vs_sushi_teriyaki'];
   const dessertIds= ['vs_desert_melon','vs_desert_choco','vs_desert_warabi','vs_desert_dango'];
-  const sushiVocabs   = allVocabs.filter(v => v.cat === '餐點' && sushiIds.includes(v.id));
-  const dessertVocabs = allVocabs.filter(v => v.cat === '餐點' && dessertIds.includes(v.id));
-  // 餐點（排除壽司和點心）
-  const foodVocabs    = allVocabs.filter(v => v.cat === '餐點' && !sushiIds.includes(v.id) && !dessertIds.includes(v.id));
-  const drinkVocabs   = allVocabs.filter(v => v.cat === '酒水');
+  const sushiVocabs     = allVocabs.filter(v => v.cat === '餐點' && sushiIds.includes(v.id));
+  const dessertVocabs   = allVocabs.filter(v => v.cat === '餐點' && dessertIds.includes(v.id));
+  const foodVocabs      = allVocabs.filter(v => v.cat === '餐點' && !sushiIds.includes(v.id) && !dessertIds.includes(v.id));
+  const tablewareVocabs = allVocabs.filter(v => v.cat === '餐具');
+  const drinkVocabs     = allVocabs.filter(v => v.cat === '酒水');
 
   // 決定本頁要在速查中額外加入的分組
-  // tab_runner_all：傳菜全手冊 → 餐點 + 壽司 + 點心
-  // tab_order_sop：點菜與端菜應對 → 餐點 + 壽司 + 點心
-  // tab_drink_sop：酒水服務 → 酒水 + 壽司 + 點心
   const extraGroups = [];
   if (tabId === 'tab_runner_all' || tabId === 'tab_order_sop') {
+    extraGroups.push({ title: '🍽️ 現場餐具', items: tablewareVocabs });
     extraGroups.push({ title: '🍱 餐點', items: foodVocabs });
     extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
     extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
-  }
-  if (tabId === 'tab_drink_sop') {
+  } else if (tabId === 'tab_bashing_sop') {
+    extraGroups.push({ title: '🍽️ 現場餐具與器皿', items: tablewareVocabs });
+  } else if (tabId === 'tab_drink_sop') {
     extraGroups.push({ title: '🥤 酒水飲品', items: drinkVocabs });
+    extraGroups.push({ title: '🍽️ 現場杯具與器具', items: tablewareVocabs });
     extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
     extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
   }
@@ -3545,8 +3127,8 @@ function renderVocabPage(type) {
     : [...createRealRunnerData().vocabSop];
 
   // Tab 順序：名字 → 職稱 → 工具 → 餐點 → 酒水 → 對話
-  const cats = ['全部', '名字', '職稱', '工具', '餐點', '酒水', '對話'];
-  const catIcons = { '全部': '🔍', '名字': '👤', '職稱': '💼', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '對話': '💬' };
+  const cats = ['全部', '餐具', '工具', '餐點', '酒水', '名字', '職稱', '對話'];
+  const catIcons = { '全部': '🔍', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
 
   filterBar.innerHTML = '';
   cats.forEach(cat => {
@@ -3610,8 +3192,8 @@ function renderVocabPage(type) {
 
   // ── 2. 「全部」：按分類分組，各組有 title，順序：名字→職稱→工具→餐點→酒水→對話
   if (currentFilter === '全部') {
-    const groupOrder = ['名字', '職稱', '工具', '餐點', '酒水', '對話'];
-    const groupIcons = { '名字': '👤', '職稱': '💼', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '對話': '💬' };
+    const groupOrder = ['餐具', '工具', '餐點', '酒水', '名字', '職稱', '對話'];
+    const groupIcons = { '全部': '🔍', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
     let allHtml = '';
 
     groupOrder.forEach(cat => {
