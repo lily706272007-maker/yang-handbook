@@ -488,6 +488,24 @@
     flex-shrink: 0;
   }
 
+
+  /* 全部分類 - 分組區塊與標題 */
+  .vocab-group-section {
+    margin-bottom: 24px;
+  }
+  .vocab-group-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.06em;
+    padding: 5px 10px;
+    margin-bottom: 8px;
+    background: rgba(58,82,68,0.07);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    display: inline-block;
+  }
+
   /* 單字卡片 */
   .word-cell {
     background: var(--bg-card);
@@ -3364,30 +3382,79 @@ function renderSopContent() {
     html += `</div>`;
   }
 
-  // 3. 情境必背單字 (Word 表格網格)
-  if (vocabs.length > 0) {
+  // 3. 情境必背單字 (Word 表格網格 - 分組顯示)
+  const tabId = tab.id;
+
+  // 從全局 vocabSop 中取各分類資料（供各 SOP 頁加入速查）
+  const allVocabs = (AppData && AppData.vocabSop) ? AppData.vocabSop : [];
+  const sushiVocabs   = allVocabs.filter(v => v.cat === '餐點' && ['vs_sushi_tamago','vs_sushi_maguro','vs_sushi_salmon','vs_sushi_unagi','vs_sushi_ika','vs_sushi_ebi','vs_sushi_teriyaki'].includes(v.id));
+  const dessertVocabs = allVocabs.filter(v => v.cat === '餐點' && ['vs_desert_melon','vs_desert_choco','vs_desert_warabi','vs_desert_dango'].includes(v.id));
+  const drinkVocabs   = allVocabs.filter(v => v.cat === '酒水');
+
+  // 決定本頁要在速查中額外加入的分組
+  // tab_runner_all：傳菜全手冊 → 餐點（壽司 + 點心）
+  // tab_order_sop：點菜與端菜應對 → 餐點（壽司 + 點心）
+  // tab_drink_sop：酒水服務 → 酒水 + 壽司 + 點心
+  const extraGroups = [];
+  if (tabId === 'tab_runner_all' || tabId === 'tab_order_sop') {
+    extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
+    extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
+  }
+  if (tabId === 'tab_drink_sop') {
+    extraGroups.push({ title: '🥤 酒水飲品', items: drinkVocabs });
+    extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
+    extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
+  }
+
+  const hasVocab = vocabs.length > 0 || extraGroups.some(g => g.items.length > 0);
+  if (hasVocab) {
+    const totalCount = vocabs.length + extraGroups.reduce((s, g) => s + g.items.length, 0);
     html += `
       <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; margin-top:20px;">
-        <div class="section-label-left">本頁情境單字速查 (${vocabs.length} 個)</div>
+        <div class="section-label-left">本頁情境單字速查 (${totalCount} 個)</div>
         <button class="btn btn-ghost btn-sm" onclick="openModalVocab('tab', 'add')">＋ 新增</button>
-      </div>
-      <div class="vocab-word-grid">`;
+      </div>`;
 
-    vocabs.forEach(v => {
-      const isName = v.cat === '名字';
+    // 本頁自有單字
+    if (vocabs.length > 0) {
+      html += `<div class="vocab-group-title">📌 本頁關鍵字</div>
+        <div class="vocab-word-grid" style="margin-bottom:14px;">`;
+      vocabs.forEach(v => {
+        const isName = v.cat === '名字';
+        if (isName) {
+          html += `
+            <div class="word-cell name-cell" 
+                 onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                 ondblclick="openWordDetailModal('${v.id}')"
+                 title="點一下發音・點兩下查看詳情">
+              <div class="cell-ja">${v.ja}</div>
+              <div class="cell-actions" onclick="event.stopPropagation()">
+                <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
+              </div>
+            </div>`;
+        } else {
+          html += `
+            <div class="word-cell" 
+                 onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                 ondblclick="openWordDetailModal('${v.id}')"
+                 title="點一下發音・點兩下查看詳情">
+              <div class="cell-ja">${v.ja}</div>
+              <div class="cell-zh">${escapeHtml(v.zh)}</div>
+              <div class="cell-actions" onclick="event.stopPropagation()">
+                <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
+              </div>
+            </div>`;
+        }
+      });
+      html += `</div>`;
+    }
 
-      if (isName) {
-        html += `
-          <div class="word-cell name-cell" 
-               onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
-               ondblclick="openWordDetailModal('${v.id}')"
-               title="點一下發音・點兩下查看詳情">
-            <div class="cell-ja">${v.ja}</div>
-            <div class="cell-actions" onclick="event.stopPropagation()">
-              <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
-            </div>
-          </div>`;
-      } else {
+    // 額外加入的餐點 / 酒水分組速查
+    extraGroups.forEach(group => {
+      if (group.items.length === 0) return;
+      html += `<div class="vocab-group-title" style="margin-top:10px;">${group.title}</div>
+        <div class="vocab-word-grid" style="margin-bottom:14px;">`;
+      group.items.forEach(v => {
         html += `
           <div class="word-cell" 
                onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
@@ -3396,13 +3463,12 @@ function renderSopContent() {
             <div class="cell-ja">${v.ja}</div>
             <div class="cell-zh">${escapeHtml(v.zh)}</div>
             <div class="cell-actions" onclick="event.stopPropagation()">
-              <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
+              <button class="cell-btn-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
             </div>
           </div>`;
-      }
+      });
+      html += `</div>`;
     });
-
-    html += `</div>`;
   }
 
   container.innerHTML = html;
@@ -3426,8 +3492,9 @@ function renderVocabPage(type) {
     ? [...AppData.vocabSop] 
     : [...createRealRunnerData().vocabSop];
 
-  const cats = ['全部', '餐點', '酒水', '工具', '名字', '職稱', '對話'];
-  const catIcons = { '全部': '🔍', '餐點': '🍱', '酒水': '🥤', '工具': '🧹', '名字': '👤', '職稱': '💼', '對話': '💬' };
+  // Tab 順序：名字 → 職稱 → 工具 → 餐點 → 酒水 → 對話
+  const cats = ['全部', '名字', '職稱', '工具', '餐點', '酒水', '對話'];
+  const catIcons = { '全部': '🔍', '名字': '👤', '職稱': '💼', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '對話': '💬' };
 
   filterBar.innerHTML = '';
   cats.forEach(cat => {
@@ -3441,17 +3508,18 @@ function renderVocabPage(type) {
     filterBar.appendChild(btn);
   });
 
-  let filtered = currentFilter === '全部' ? data : data.filter(v => v.cat === currentFilter);
-
-  // 若為名字分類：日本人排前面 (五十音順)，外國人排後面 (五十音順)
+  // 名字分類排序
   if (currentFilter === '名字') {
-    filtered.sort((a, b) => {
+    data.sort((a, b) => {
+      if (a.cat !== '名字' || b.cat !== '名字') return 0;
       const aForeign = a.isForeign ? 1 : 0;
       const bForeign = b.isForeign ? 1 : 0;
       if (aForeign !== bForeign) return aForeign - bForeign;
       return (a.kana || '').localeCompare(b.kana || '', 'ja');
     });
   }
+
+  let filtered = currentFilter === '全部' ? data : data.filter(v => v.cat === currentFilter);
 
   if (countEl) countEl.textContent = '共 ' + filtered.length + ' 個項目';
 
@@ -3464,7 +3532,7 @@ function renderVocabPage(type) {
     return;
   }
 
-  // 1. 若當前分類為「對話」：一句話一行 (滿版排列，方便長句完整閱讀與朗讀)
+  // ── 1. 「對話」分類：一句話一行（滿版清單）
   if (currentFilter === '對話') {
     let dialogHtml = '<div class="dialog-vocab-list">';
     filtered.forEach(v => {
@@ -3488,14 +3556,93 @@ function renderVocabPage(type) {
     return;
   }
 
-  // 2. 其餘分類 (餐點、酒水、工具、名字、職稱、全部)：密集 Word 表格網格 (電腦6/平板5-4/手機3欄)
-  let gridHtml = '<div class="vocab-word-grid">';
+  // ── 2. 「全部」：按分類分組，各組有 title，順序：名字→職稱→工具→餐點→酒水→對話
+  if (currentFilter === '全部') {
+    const groupOrder = ['名字', '職稱', '工具', '餐點', '酒水', '對話'];
+    const groupIcons = { '名字': '👤', '職稱': '💼', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '對話': '💬' };
+    let allHtml = '';
 
+    groupOrder.forEach(cat => {
+      const group = data.filter(v => v.cat === cat);
+      if (group.length === 0) return;
+
+      // 名字組內依五十音排序（日本人前）
+      if (cat === '名字') {
+        group.sort((a, b) => {
+          const aF = a.isForeign ? 1 : 0;
+          const bF = b.isForeign ? 1 : 0;
+          if (aF !== bF) return aF - bF;
+          return (a.kana || '').localeCompare(b.kana || '', 'ja');
+        });
+      }
+
+      allHtml += `<div class="vocab-group-section">
+        <div class="vocab-group-title">${groupIcons[cat] || ''} ${cat}</div>`;
+
+      if (cat === '對話') {
+        // 對話組：滿版單行清單
+        allHtml += '<div class="dialog-vocab-list" style="margin-bottom:0;">';
+        group.forEach(v => {
+          allHtml += `
+            <div class="dialog-vocab-row" 
+                 onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                 ondblclick="openWordDetailModal('${v.id}')"
+                 title="點一下發音・點兩下查看詳情">
+              <div class="dialog-vocab-main">
+                <div class="cell-ja">${v.ja}</div>
+                <div class="cell-zh">${escapeHtml(v.zh)}</div>
+              </div>
+              <div class="cell-actions" onclick="event.stopPropagation()">
+                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
+                <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
+              </div>
+            </div>`;
+        });
+        allHtml += '</div>';
+      } else {
+        // 其他組：多欄網格
+        allHtml += '<div class="vocab-word-grid">';
+        group.forEach(v => {
+          const isName = cat === '名字';
+          if (isName) {
+            allHtml += `
+              <div class="word-cell name-cell" 
+                   onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                   ondblclick="openWordDetailModal('${v.id}')"
+                   title="點一下發音・點兩下查看詳情">
+                <div class="cell-ja">${v.ja}</div>
+                <div class="cell-actions" onclick="event.stopPropagation()">
+                  <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
+                </div>
+              </div>`;
+          } else {
+            allHtml += `
+              <div class="word-cell" 
+                   onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                   ondblclick="openWordDetailModal('${v.id}')"
+                   title="點一下發音・點兩下查看詳情">
+                <div class="cell-ja">${v.ja}</div>
+                <div class="cell-zh">${escapeHtml(v.zh)}</div>
+                <div class="cell-actions" onclick="event.stopPropagation()">
+                  <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
+                </div>
+              </div>`;
+          }
+        });
+        allHtml += '</div>';
+      }
+      allHtml += '</div>'; // end vocab-group-section
+    });
+
+    listEl.innerHTML = allHtml;
+    return;
+  }
+
+  // ── 3. 單一分類（餐點、酒水、工具、名字、職稱）：多欄網格
+  let gridHtml = '<div class="vocab-word-grid">';
   filtered.forEach(v => {
     const isName = v.cat === '名字';
-
     if (isName) {
-      // 名字卡片：純日文姓名 (含標音)，無中文翻譯，居中大字
       gridHtml += `
         <div class="word-cell name-cell" 
              onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
@@ -3507,7 +3654,6 @@ function renderVocabPage(type) {
           </div>
         </div>`;
     } else {
-      // 一般單字卡片：上方日文 (含標音)，下方中文翻譯
       gridHtml += `
         <div class="word-cell" 
              onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
@@ -3521,7 +3667,6 @@ function renderVocabPage(type) {
         </div>`;
     }
   });
-
   gridHtml += '</div>';
   listEl.innerHTML = gridHtml;
 }
