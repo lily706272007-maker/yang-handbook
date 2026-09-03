@@ -115,6 +115,7 @@ assert(!html.includes('卓上コンロ'), '已成功移除「桌上型卡式瓦�
 // 測試 6: 必須記住的料理名稱與分類 (已核對紙本菜單並剔除停供菜餚)
 console.log('\n【測試 6：料理名稱核對與剔除停供品項】');
 assert(html.includes('肉燒賣') && html.includes('肉焼売'), '熱菜：肉燒賣 (肉焼売)');
+assert(html.includes('赤牛') && html.includes('akaushi.jpg'), '生鮮名物：阿蘇赤牛 (赤牛・附現場實拍照)');
 assert(html.includes('馬刺') && html.includes('basashi.jpg'), '生鮮名物：生馬肉片 (馬刺し・附現場實拍照)');
 assert(html.includes('鰹魚生魚片') || html.includes('鰹のたたき'), '生魚片名物：鰹魚生魚片 (鰹のたたき)');
 assert(html.includes('南蠻炸雞'), '熱菜：南蠻炸雞');
