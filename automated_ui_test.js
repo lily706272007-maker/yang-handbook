@@ -115,7 +115,6 @@ assert(!html.includes('卓上コンロ'), '已成功移除「桌上型卡式瓦�
 // 測試 6: 必須記住的料理名稱與分類 (已核對紙本菜單並剔除停供菜餚)
 console.log('\n【測試 6：料理名稱核對與剔除停供品項】');
 assert(html.includes('肉燒賣') && html.includes('肉焼売'), '熱菜：肉燒賣 (肉焼売)');
-assert(html.includes('赤牛') && html.includes('akaushi.jpg'), '生鮮名物：阿蘇赤牛 (赤牛・附現場實拍照)');
 assert(html.includes('馬刺') && html.includes('basashi.jpg'), '生鮮名物：生馬肉片 (馬刺し・附現場實拍照)');
 assert(html.includes('鰹魚生魚片') || html.includes('鰹のたたき'), '生魚片名物：鰹魚生魚片 (鰹のたたき)');
 assert(html.includes('南蠻炸雞'), '熱菜：南蠻炸雞');
@@ -195,12 +194,16 @@ assert(html.includes('saveGeminiApiKeySetting'), '包含儲存 API Key 函式 (s
 assert(html.includes('testGeminiApiKeyConnection'), '包含測試 API Key 連線函式 (testGeminiApiKeyConnection)');
 assert(html.includes('getLocalRaccoonKnowledgeReply'), '包含小浣熊離線智慧知識庫函式 (getLocalRaccoonKnowledgeReply)');
 assert(html.includes('getLocalRoleplaySimulation'), '包含情境模擬離線智慧對話引擎 (getLocalRoleplaySimulation)');
-// 測試 14: 情境對話 AI 評分、〇〇朗讀為なになに、點擊日文句子直接朗讀
-console.log('\n【測試 14：AI 評分、〇〇轉なになに、點擊句子朗讀】');
+assert(html.includes('赤牛') && html.includes('akaushi.jpg'), '生鮮名物：阿蘇赤牛 (赤牛・附現場實拍照)');
+assert(html.includes('callGeminiApiUnified'), '包含統一 Gemini API 調用函式 (callGeminiApiUnified)');
+
+// 測試 14: 情境對話 AI 評分、〇〇朗讀為なになに、點擊日文句子直接朗讀、Ruby 標音防重複
+console.log('\n【測試 14：AI 評分、〇〇轉なになに、點擊句子朗讀、Ruby 標音】');
 assert(html.includes('user-eval-card'), '情境對話包含 AI 評分卡片 (user-eval-card)');
 assert(html.includes('grammarGrade') && html.includes('betterExpression'), 'AI 評分包含文法評級與更道地的推薦說法');
 assert(html.includes('なになに'), '語音合成 extractSpokenJapanese 將 〇〇 正確轉為 なになに');
 assert(html.includes('dialog-bubble-ja') && html.includes('speakJapanese'), '對話氣泡日文句子支援點擊直接朗讀');
+assert(html.includes('<ruby>了解<rt>りょうかい</rt></ruby>です') && html.includes('<ruby>伺<rt>うかが</rt></ruby>う'), '文法單字使用標準 Ruby 上方標音（無括號重複）');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
