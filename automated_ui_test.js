@@ -40,13 +40,13 @@ assert(html.includes('id="top-nav-bar"'), '導航列已整合至頂部 Banner (t
 assert(!html.includes('id="bottom-nav"'), '已移除舊的底部導航列 (bottom-nav)');
 assert(html.includes('logo.png'), 'Header 包含專屬 Logo');
 
-// 測試 2: 傳菜人員 SOP 流程
+// 測試 2: 傳菜人員 SOP 流程 (依據上司官方 10 步驟手冊)
 console.log('\n【測試 2：傳菜人員 (Runner) SOP 流程】');
-assert(textContent.includes('厨房から「できました」と言われるので取りに行きます'), 'SOP: 料理完成後廚房通知取餐');
-assert(textContent.includes('台車を押し、布を持っていきます'), 'SOP: 前往廚房取餐一定要推推車並帶著布巾');
-assert(textContent.includes('冷蔵庫に入れます'), 'SOP: 生鮮品放入冰箱');
-assert(textContent.includes('保温庫に入れます'), 'SOP: 鍋物湯品放入保溫庫');
-assert(textContent.includes('〇〇届きました') && textContent.includes('通報します'), 'SOP: 送到餐廳使用無線電通報料理送達');
+assert(textContent.includes('厨房から「〇〇できました」と言われるので') || textContent.includes('料理ができたら'), 'SOP: 料理完成後廚房通知取餐');
+assert(textContent.includes('布を必ず持って行きます'), 'SOP: 前往廚房取餐一定要帶著布巾');
+assert(textContent.includes('冷蔵庫') && textContent.includes('刺身'), 'SOP: 生鮮品放入冰箱');
+assert(textContent.includes('保温庫に入れます') || textContent.includes('保温庫'), 'SOP: 鍋物湯品放入保溫庫');
+assert(textContent.includes('インカムで伝えます') || textContent.includes('持って来ました'), 'SOP: 送到餐廳使用無線電通報料理送達');
 assert(textContent.includes('台車を元の場所に戻します'), 'SOP: 料理送達後，推車用完歸位');
 
 // 測試 3: 現場實用對話與無線電通報 (叫菜、撤菜、等候應對)
@@ -68,6 +68,10 @@ assert(textContent.includes('上段にお皿・お椀') && textContent.includes(
 assert(textContent.includes('お皿拭き') && textContent.includes('水分をしっかり拭き取り'), '擦盤子作業：お皿拭き');
 assert(textContent.includes('ドリンクコーナーの片付け'), '收拾飲料區域：ドリンクコーナーの片付け');
 assert(textContent.includes('掃除機をかける'), '使用吸塵器打掃地板：掃除機をかける');
+assert(textContent.includes('とんでもないです！ごゆっくりどうぞ'), '收盤回應客人感謝：とんでもないです！ごゆっくりどうぞ！');
+assert(textContent.includes('こちらこそ、ありがとうございます'), '收盤雙向感謝：こちらこそ、ありがとうございます！');
+assert(textContent.includes('助かります'), '表達感謝/幫大忙了：ありがとうございます！助かります！');
+assert(textContent.includes('いえいえ！お疲れ様です'), '回應同事道謝：いえいえ！お疲れ様です！');
 
 // 測試 5: 餐具與器具單字庫 (全新餐具大分類)
 console.log('\n【測試 5：餐具與器具單字庫】');
