@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v46';
+const STORAGE_KEY = 'yang_runner_handbook_v48';
 
 function createRealRunnerData() {
   return {
@@ -1830,12 +1830,14 @@ function createRealRunnerData() {
         }
       ],
       "vocabs": [
-        { "id": "v_sop_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "推車 / 餐車", "cat": "工具", "imageUrl": "", "note": "傳菜專用" },
-        { "id": "v_sop_2", "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>", "zh": "布巾 / 蓋料理的布", "cat": "工具", "imageUrl": "", "note": "取餐必帶" },
+        { "id": "v_sop_1_daisha", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby>", "zh": "推車（搬運推車）", "cat": "工具", "imageUrl": "", "note": "傳菜用台車" },
+        { "id": "v_sop_1_wagon", "ja": "<ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "餐車（三層餐車）", "cat": "工具", "imageUrl": "", "note": "送餐與收餐具餐車" },
+        { "id": "v_sop_2_nuno", "ja": "<ruby>布<rt>ぬの</rt></ruby>", "zh": "布巾（蓋料理的布）", "cat": "工具", "imageUrl": "", "note": "取餐必帶布巾" },
+        { "id": "v_sop_2_kurosu", "ja": "<ruby>クロス<rt>kurosu</rt></ruby>", "zh": "擦拭布（抹布）", "cat": "工具", "imageUrl": "", "note": "工作檯擦拭專用布" },
         { "id": "v_sop_3", "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機", "cat": "工具", "imageUrl": "", "note": "通報送達與缺菜" },
         { "id": "v_sop_4", "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>", "zh": "冰箱", "cat": "工具", "imageUrl": "", "note": "放生魚片、赤牛、馬刺" },
         { "id": "v_sop_5", "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>", "zh": "保溫庫", "cat": "工具", "imageUrl": "", "note": "放熱湯、火鍋" },
-        { "id": "v_sop_6", "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原位 / 原本的位置", "cat": "工具", "imageUrl": "", "note": "餐車用完歸位" }
+        { "id": "v_sop_6", "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原位（原本的位置）", "cat": "工具", "imageUrl": "", "note": "餐車用完歸位" }
       ]
     },
     {
@@ -2143,10 +2145,12 @@ function createRealRunnerData() {
         }
       ],
       "vocabs": [
-        { "id": "vb_1", "ja": "バッシング (bashing)", "zh": "收桌 / 撤盤", "cat": "工具", "imageUrl": "", "note": "撤下空盤與清桌" },
-        { "id": "vb_2", "ja": "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き", "zh": "擦盤子 / 擦碗", "cat": "餐具", "imageUrl": "", "note": "上司交代：用專用抹布擦乾洗好的碗盤" },
+        { "id": "vb_1", "ja": "バッシング (bashing)", "zh": "收桌（撤盤清桌）", "cat": "工具", "imageUrl": "", "note": "撤下空盤與清桌" },
+        { "id": "vb_2", "ja": "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き", "zh": "擦盤子作業", "cat": "餐具", "imageUrl": "", "note": "上司交代：擦乾洗好的碗盤" },
         { "id": "vb_3", "ja": "4マス<ruby>仕切<rt>しき</rt></ruby>りプレート", "zh": "四格餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第三層（底層）堆疊" },
-        { "id": "vb_4", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ", "zh": "黑色餐盤 / 托盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層堆疊" }
+        { "id": "vb_3_shikiri", "ja": "<ruby>仕切<rt>しき</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>", "zh": "分隔餐盤", "cat": "餐具", "imageUrl": "", "note": "外場取餐分隔盤" },
+        { "id": "vb_4", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ", "zh": "黑色餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層堆疊" },
+        { "id": "vb_4_obon", "ja": "お<ruby>盆<rt>ぼん</rt></ruby>", "zh": "圓托盤", "cat": "餐具", "imageUrl": "", "note": "端送茶水托盤" }
       ]
     },
     {
@@ -2358,20 +2362,29 @@ function createRealRunnerData() {
   ],
   "vocabSop": [
     // ── 🍽️ 餐具與醬料調味類 (現場器皿・調料瓶・實拍照配對) ──
-    { "id": "vt_fork", "ja": "<ruby>フォーク<rt>fo-ku</rt></ruby>", "zh": "叉子", "cat": "餐具", "imageUrl": "", "note": "西餐、水果、甜點用叉子" },
-    { "id": "vt_shoyu_dish", "ja": "<ruby>醤油皿<rt>しょうゆざら</rt></ruby> / <ruby>醤油<rt>しょうゆ</rt></ruby>", "zh": "醬油瓶 / 醬油小碟", "cat": "餐具", "imageUrl": "./photos/IMG_0931.jpg", "note": "壽司與生魚片區專用（龜甲萬生醬油）" },
-    { "id": "vt_mini_tong", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>トング<rt>tongu</rt></ruby>", "zh": "小夾子 / 漬物夾", "cat": "餐具", "imageUrl": "", "note": "夾取小菜、漬物、沙拉配料" },
-    { "id": "vt_tong", "ja": "<ruby>トング<rt>tongu</rt></ruby>", "zh": "料理夾 / 取餐夾", "cat": "餐具", "imageUrl": "./photos/IMG_0848.jpg", "note": "熟食與炸物取餐用大夾子" },
-    { "id": "vt_service_spoon", "ja": "<ruby>サービススプーン<rt>sa-bisu supu-n</rt></ruby> / <ruby>おたま<rt>otama</rt></ruby>", "zh": "大湯匙 / 公勺 / 湯勺", "cat": "餐具", "imageUrl": "", "note": "舀取熱湯、燉菜、咖哩" },
-    { "id": "vt_tea_spoon", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>スプーン<rt>supu-n</rt></ruby> / <ruby>ティースプーン<rt>ti-supu-n</rt></ruby>", "zh": "小湯匙 / 甜點匙", "cat": "餐具", "imageUrl": "", "note": "優格、布丁、冰品甜點匙" },
-    { "id": "vt_dish_plate", "ja": "お<ruby>皿<rt>さら</rt></ruby>", "zh": "餐盤 / 圓盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：擦盤子；推車第一層放置" },
-    { "id": "vt_bowl", "ja": "お<ruby>椀<rt>わん</rt></ruby> / <ruby>小鉢<rt>こばち</rt></ruby>", "zh": "碗 / 湯碗 / 小缽", "cat": "餐具", "imageUrl": "", "note": "裝味噌湯或豆腐小菜；推車第一層放置" },
-    { "id": "vt_black_tray", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ / お<ruby>盆<rt>ぼん</rt></ruby>", "zh": "黑色餐盤 / 托盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層（中層）放置" },
-    { "id": "vt_4grid_plate", "ja": "4マス<ruby>仕切<rt>しき</rt></ruby>りプレート / <ruby>仕切<rt>しき</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>", "zh": "四格餐盤（裝菜用）", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第三層（底層）堆疊" },
-    { "id": "vt_chopsticks", "ja": "お<ruby>箸<rt>はし</rt></ruby> / <ruby>割<rt>わ</rt></ruby>り<ruby>箸<rt>ばし</rt></ruby>", "zh": "筷子 / 免洗竹筷", "cat": "餐具", "imageUrl": "", "note": "餐桌與自助吧取用筷" },
-    { "id": "vt_glass_cup", "ja": "<ruby>グラス<rt>gurasu</rt></ruby> / <ruby>コップ<rt>koppu</rt></ruby>", "zh": "水杯 / 玻璃杯", "cat": "餐具", "imageUrl": "", "note": "飲料機與生啤機用杯" },
-    { "id": "vt_duster", "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby> / <ruby>布巾<rt>ふきん</rt></ruby>", "zh": "專用抹布 / 擦拭布", "cat": "餐具", "imageUrl": "", "note": "擦盤子與擦桌子專用抹布" },
-    { "id": "vt_toothpick", "ja": "<ruby>爪楊枝<rt>つまようじ</rt></ruby>", "zh": "牙籤", "cat": "餐具", "imageUrl": "", "note": "餐桌調味區備品" },
+            { "id": "vt_fork", "ja": "<ruby>フォーク<rt>fo-ku</rt></ruby>", "zh": "叉子", "cat": "餐具", "imageUrl": "", "note": "西餐與甜點用叉子" },
+        { "id": "vt_soy_dish", "ja": "<ruby>醤油皿<rt>しょうゆざら</rt></ruby>", "zh": "醬油小碟", "cat": "餐具", "imageUrl": "./photos/IMG_0877.jpg", "note": "壽司台旁盛裝醬油專用小碟" },
+        { "id": "vt_shoyu_bottle", "ja": "<ruby>醤油<rt>しょうゆ</rt></ruby>", "zh": "醬油（醬料瓶）", "cat": "餐具", "imageUrl": "./photos/IMG_0877.jpg", "note": "壽司與生魚片專用醬油瓶" },
+        { "id": "vt_mini_tong", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>トング<rt>tongu</rt></ruby>", "zh": "小夾子（漬物夾）", "cat": "餐具", "imageUrl": "", "note": "夾取小菜、漬物、沙拉配料小夾子" },
+        { "id": "vt_tong", "ja": "<ruby>トング<rt>tongu</rt></ruby>", "zh": "取餐夾（料理大夾）", "cat": "餐具", "imageUrl": "./photos/IMG_0848.jpg", "note": "熟食與炸物取餐用大夾子" },
+        { "id": "vt_service_spoon", "ja": "<ruby>サービススプーン<rt>sa-bisu supu-n</rt></ruby>", "zh": "大湯匙（公勺）", "cat": "餐具", "imageUrl": "", "note": "自助餐檯公用大湯匙" },
+        { "id": "vt_otama", "ja": "おたま", "zh": "湯勺（盛湯杓）", "cat": "餐具", "imageUrl": "", "note": "舀取熱湯、燉菜、咖哩專用湯勺" },
+        { "id": "vt_tea_spoon", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>スプーン<rt>supu-n</rt></ruby>", "zh": "小湯匙", "cat": "餐具", "imageUrl": "", "note": "一般攪拌與食用小湯匙" },
+        { "id": "vt_dessert_spoon", "ja": "<ruby>ティースプーン<rt>ti-supu-n</rt></ruby>", "zh": "甜點匙（茶匙）", "cat": "餐具", "imageUrl": "", "note": "優格、布丁、冰品專用甜點匙" },
+        { "id": "vt_dish_plate", "ja": "お<ruby>皿<rt>さら</rt></ruby>", "zh": "餐盤（圓盤）", "cat": "餐具", "imageUrl": "", "note": "上司交代：擦盤子；推車第一層（上層）放置" },
+        { "id": "vt_bowl", "ja": "お<ruby>椀<rt>わん</rt></ruby>", "zh": "湯碗（碗）", "cat": "餐具", "imageUrl": "", "note": "裝味噌湯或熱湯；推車第一層（上層）放置" },
+        { "id": "vt_kobachi", "ja": "<ruby>小鉢<rt>こばち</rt></ruby>", "zh": "小缽（小菜碟）", "cat": "餐具", "imageUrl": "", "note": "裝豆腐或涼拌小菜的小缽" },
+        { "id": "vt_black_tray", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ", "zh": "黑色餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層（中層）放置" },
+        { "id": "vt_obon", "ja": "お<ruby>盆<rt>ぼん</rt></ruby>", "zh": "托盤（圓托盤）", "cat": "餐具", "imageUrl": "", "note": "送餐與端飲料用托盤" },
+        { "id": "vt_4grid_plate", "ja": "4マス<ruby>仕切<rt>しき</rt></ruby>りプレート", "zh": "四格餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第三層（底層）堆疊" },
+        { "id": "vt_shikiri_zara", "ja": "<ruby>仕切<rt>しき</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>", "zh": "分隔餐盤", "cat": "餐具", "imageUrl": "", "note": "取餐分隔盤" },
+        { "id": "vt_chopsticks", "ja": "お<ruby>箸<rt>はし</rt></ruby>", "zh": "筷子（重複使用筷）", "cat": "餐具", "imageUrl": "", "note": "餐桌與自助吧專用筷" },
+        { "id": "vt_waribashi", "ja": "<ruby>割<rt>わ</rt></ruby>り<ruby>箸<rt>ばし</rt></ruby>", "zh": "免洗筷（免洗竹筷）", "cat": "餐具", "imageUrl": "", "note": "免洗竹筷" },
+        { "id": "vt_glass_cup", "ja": "<ruby>グラス<rt>gurasu</rt></ruby>", "zh": "玻璃杯（酒杯）", "cat": "餐具", "imageUrl": "", "note": "生啤酒與冷飲用玻璃杯" },
+        { "id": "vt_koppu", "ja": "<ruby>コップ<rt>koppu</rt></ruby>", "zh": "水杯（一般杯子）", "cat": "餐具", "imageUrl": "", "note": "水杯與一般飲料杯" },
+        { "id": "vt_duster", "ja": "<ruby>ダスター<rt>dasuta-</rt></ruby>", "zh": "專用抹布（清潔布）", "cat": "餐具", "imageUrl": "", "note": "擦盤子與擦桌子專用抹布" },
+        { "id": "vt_fukin", "ja": "<ruby>布巾<rt>ふきん</rt></ruby>", "zh": "餐具拭布（擦布）", "cat": "餐具", "imageUrl": "", "note": "擦拭餐盤水分的布巾" },
+        { "id": "vt_toothpick", "ja": "<ruby>爪楊枝<rt>つまようじ</rt></ruby>", "zh": "牙籤", "cat": "餐具", "imageUrl": "", "note": "餐桌備品牙籤" },
 
     // ── 🍱 餐點類 (現場真實紙本菜單與立牌核對・100% 配對現場實拍) ──
     { "id": "vs_dashimaki", "ja": "だし<ruby>巻<rt>ま</rt></ruby>き<ruby>玉子<rt>たまご</rt></ruby>", "zh": "高湯煎蛋捲", "cat": "餐點", "imageUrl": "./photos/IMG_0973.jpg", "note": "朝食熱菜・日式高湯厚蛋捲（現場立牌：だし巻き玉子）" },
@@ -2380,7 +2393,8 @@ function createRealRunnerData() {
     { "id": "vs_ebi_cutlet", "ja": "<ruby>海老<rt>えび</rt></ruby>カツソテー", "zh": "炸蝦排香煎", "cat": "餐點", "imageUrl": "./photos/IMG_0975.jpg", "note": "洋食熱菜・Shrimp Cutlet Saute 炸蝦排香煎" },
     { "id": "vs_asari_shoga", "ja": "<ruby>浅利<rt>あさり</rt></ruby>の<ruby>生姜蒸<rt>しょうがむ</rt></ruby>し", "zh": "薑汁蒸淺蜊（蛤蜊）", "cat": "餐點", "imageUrl": "./photos/IMG_0976.jpg", "note": "朝食熱菜・清酒與生薑蒸淺蜊蛤蜊" },
     { "id": "vs_asari_miso", "ja": "<ruby>浅利<rt>あさり</rt></ruby>のみそ<ruby>汁<rt>しる</rt></ruby>", "zh": "淺蜊味噌湯（蛤蜊味噌湯）", "cat": "餐點", "imageUrl": "./photos/IMG_0950.jpg", "note": "夕食名物湯品・先盛淺蜊蛤蜊於碗中，再淋熱高湯與味噌（現場立牌：あさりの味噌汁）" },
-    { "id": "vs_gyudon", "ja": "<ruby>朝牛<rt>あさぎゅう</rt></ruby> / <ruby>牛丼<rt>ぎゅうどん</rt></ruby>", "zh": "朝牛（日式牛丼）", "cat": "餐點", "imageUrl": "./photos/IMG_0978.jpg", "note": "朝食主食・現場名物「朝牛」特製牛丼" },
+    { "id": "vs_gyudon", "ja": "<ruby>朝牛<rt>あさぎゅう</rt></ruby>", "zh": "朝牛（優彩早餐特製牛丼）", "cat": "餐點", "imageUrl": "./photos/IMG_0978.jpg", "note": "朝食主食・現場名物「朝牛」" },
+        { "id": "vs_gyudon_std", "ja": "<ruby>牛丼<rt>ぎゅうどん</rt></ruby>", "zh": "牛丼（日式牛肉飯）", "cat": "餐點", "imageUrl": "./photos/IMG_0978.jpg", "note": "標準日式牛丼" },
     { "id": "vs_takana_rice", "ja": "<ruby>高菜<rt>たかな</rt></ruby><ruby>混<rt>ま</rt></ruby>ぜご<ruby>飯<rt>はん</rt></ruby>", "zh": "阿蘇高菜拌飯", "cat": "餐點", "imageUrl": "./photos/IMG_0947.jpg", "note": "熊本阿蘇名物・高菜混ぜご飯" },
     { "id": "vs_reimen_pasta", "ja": "<ruby>冷麺<rt>れいめん</rt></ruby>パスタ", "zh": "冷麵義大利麵", "cat": "餐點", "imageUrl": "", "note": "朝食熱菜" },
     { "id": "vs_wiener", "ja": "ボイルウインナー", "zh": "水煮維也納香腸", "cat": "餐點", "imageUrl": "", "note": "朝食熱菜" },
@@ -2402,7 +2416,8 @@ function createRealRunnerData() {
     { "id": "vs_katsuo_tataki", "ja": "<ruby>鰹<rt>カツオ</rt></ruby>のたたき", "zh": "鰹魚生魚片（刺身）", "cat": "餐點", "imageUrl": "./photos/IMG_0835 2.jpg", "note": "夕食名物・鰹魚生魚片（日式經典たたき，搭配蔥花、薑泥與椪醋醬）" },
     { "id": "vs_goma_dofu", "ja": "<ruby>胡麻豆腐<rt>ごまどうふ</rt></ruby>", "zh": "胡麻豆腐", "cat": "餐點", "imageUrl": "./photos/IMG_0721.jpg", "note": "夕食名物小菜" },
     { "id": "vs_ramen", "ja": "とんこつ<ruby>ラーメン<rt>ra-men</rt></ruby>", "zh": "豚骨拉麵", "cat": "餐點", "imageUrl": "./photos/IMG_0852.jpg", "note": "夕食拉麵・配料有叉燒、筍乾(メンマ)、蔥花" },
-    { "id": "vs_ramen_menma", "ja": "<ruby>メンマ<rt>menma</rt></ruby> / チャーシュー", "zh": "拉麵配料（筍乾／叉燒／蔥花）", "cat": "餐點", "imageUrl": "./photos/IMG_0938.jpg", "note": "豚骨拉麵專用配料檯" },
+    { "id": "vs_ramen_menma", "ja": "<ruby>メンマ<rt>menma</rt></ruby>", "zh": "拉麵筍乾", "cat": "餐點", "imageUrl": "./photos/IMG_0938.jpg", "note": "豚骨拉麵專用筍乾配料" },
+        { "id": "vs_ramen_chashu", "ja": "チャーシュー", "zh": "叉燒肉片", "cat": "餐點", "imageUrl": "./photos/IMG_0938.jpg", "note": "豚骨拉麵專用叉燒肉片" },
     { "id": "vs_hotpot", "ja": "<ruby>熊本<rt>くまもと</rt></ruby> りんどうポーク<ruby>味<rt>あじ</rt></ruby> しゃぶしゃぶ", "zh": "熊本龍膽豬涮涮鍋", "cat": "餐點", "imageUrl": "./photos/IMG_0952.jpg", "note": "夕食名物・熊本龍膽豬涮涮鍋（備有柑橘醋、胡麻醬與洋蔥醋）" },
     { "id": "vs_enoki_gomaae", "ja": "えのき<ruby>茸<rt>たけ</rt></ruby>の<ruby>胡麻和<rt>ごまあ</rt></ruby>え", "zh": "金針菇胡麻拌", "cat": "餐點", "imageUrl": "./photos/IMG_0946.jpg", "note": "朝食小菜・えのき茸の胡麻和え" },
     { "id": "vs_ganmo_ingen", "ja": "がんもといんげん", "zh": "油豆腐雁擬與四季豆煮", "cat": "餐點", "imageUrl": "./photos/IMG_0945.jpg", "note": "朝食小菜・がんもといんげん" },
@@ -2417,8 +2432,7 @@ function createRealRunnerData() {
     { "id": "vs_nikumaki", "ja": "<ruby>豚肉<rt>ぶたにく</rt></ruby><ruby>巻<rt>ま</rt></ruby>き", "zh": "豬肉蔬菜捲", "cat": "餐點", "imageUrl": "./photos/IMG_0966.jpg", "note": "熱菜・新鮮豬肉捲" },
 
         // ── 🥗 熊本市場直送 沙拉吧專區 (經 Vision 影像辨識與立牌雙重校正) ──
-    { "id": "vs_salad_bar", "ja": "サラダバー", "zh": "熊本市場直送生菜沙拉吧（全景立牌）", "cat": "餐點", "imageUrl": "./photos/IMG_0962.jpg", "note": "熊本市場直送・各式生菜與配料吧台" },
-    { "id": "vs_salad_sweetcorn", "ja": "スイートコーン", "zh": "甜玉米粒", "cat": "餐點", "imageUrl": "./photos/IMG_0958.jpg", "note": "沙拉吧配料・鮮黃香甜玉米粒" },
+        { "id": "vs_salad_sweetcorn", "ja": "スイートコーン", "zh": "甜玉米粒", "cat": "餐點", "imageUrl": "./photos/IMG_0958.jpg", "note": "沙拉吧配料・鮮黃香甜玉米粒" },
     { "id": "vs_salad_beans", "ja": "ビーンズ", "zh": "綜合豆", "cat": "餐點", "imageUrl": "./photos/IMG_0956.jpg", "note": "沙拉吧配料・多彩綜合健康豆" },
     { "id": "vs_salad_kikuimo", "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ", "zh": "菊芋脆片（洋芋脆片）", "cat": "餐點", "imageUrl": "./photos/IMG_0955.jpg", "note": "沙拉吧配料・金黃酥脆的菊芋薄片（洋芋脆片）" },
     { "id": "vs_salad_murasaki", "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ", "zh": "紫甘藍（紫高麗菜）", "cat": "餐點", "imageUrl": "./photos/IMG_0959.jpg", "note": "沙拉吧蔬菜・深紫色切絲紫甘藍菜" },
@@ -2431,11 +2445,12 @@ function createRealRunnerData() {
     { "id": "vs_salad_yogurt", "ja": "ヨーグルト", "zh": "優格", "cat": "餐點", "imageUrl": "", "note": "朝食沙拉吧" },
 
     // ── 🍣 壽司類 (對照招牌木牌與菜單・已配上現場實拍照) ──
-    { "id": "vs_sushi_maguro", "ja": "<ruby>本鮪<rt>ほんまぐろ</rt></ruby> / <ruby>まぐろ<rt>maguro</rt></ruby>", "zh": "本鮪魚壽司（鮪魚）", "cat": "餐點", "imageUrl": "./photos/IMG_0870.jpg", "note": "壽司台名物・招牌木牌標記「本鮪」、菜單標記「まぐろ」" },
+    { "id": "vs_sushi_maguro", "ja": "<ruby>本鮪<rt>ほんまぐろ</rt></ruby>", "zh": "本鮪魚壽司（黑鮪魚）", "cat": "餐點", "imageUrl": "./photos/IMG_0870.jpg", "note": "壽司台名物・招牌木牌標記「本鮪」" },
+        { "id": "vs_sushi_maguro_std", "ja": "<ruby>まぐろ<rt>maguro</rt></ruby>", "zh": "鮪魚壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0870.jpg", "note": "一般菜單標記「まぐろ」" },
     { "id": "vs_sushi_salmon", "ja": "<ruby>サーモン<rt>sa-mon</rt></ruby>", "zh": "鮭魚壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0871.jpg", "note": "壽司台名物・生/炙鮭魚握壽司" },
     { "id": "vs_sushi_ika", "ja": "<ruby>烏賊<rt>いか</rt></ruby>", "zh": "烏賊壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0872.jpg", "note": "壽司台名物・新鮮烏賊握壽司（現場招牌標記漢字「烏賊」）" },
     { "id": "vs_sushi_tamago", "ja": "<ruby>玉子<rt>たまご</rt></ruby>", "zh": "玉子燒壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0873.jpg", "note": "壽司台名物・日式厚煎甜蛋握壽司" },
-    { "id": "vs_sushi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby> / <ruby>えび<rt>ebi</rt></ruby>", "zh": "鮮蝦壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0874.jpg", "note": "壽司台名物・招牌標記「海老」、菜單標記「えび」" },
+    { "id": "vs_sushi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "鮮蝦壽司（海老）", "cat": "餐點", "imageUrl": "./photos/IMG_0874.jpg", "note": "壽司台名物・招牌漢字標記「海老」" },
     { "id": "vs_sushi_unagi", "ja": "<ruby>鰻<rt>うなぎ</rt></ruby>", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0875.jpg", "note": "壽司台名物・蒲燒甜醬鰻魚" },
     { "id": "vs_sushi_teriyaki", "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0876.jpg", "note": "壽司台名物・照燒肉類握壽司" },
     { "id": "vs_sushi_gari", "ja": "<ruby>ガリ<rt>gari</rt></ruby>", "zh": "壽司甜薑片", "cat": "餐點", "imageUrl": "./photos/IMG_0934.jpg", "note": "壽司台配料・解膩甜醋生薑片（無標牌直接拍攝）" },
@@ -2475,19 +2490,26 @@ function createRealRunnerData() {
     { "id": "vd_water_koori", "ja": "<ruby>氷<rt>こおり</rt></ruby> / ロックアイス", "zh": "食用冰塊（冰塊桶）", "cat": "酒水", "imageUrl": "", "note": "客人單純要冰塊加進飲料或酒水" },
     { "id": "vd_water_room", "ja": "<ruby>常温<rt>じょうおん</rt></ruby>のお<ruby>水<rt>みず</rt></ruby>", "zh": "常溫水（常温水・jōonsui）", "cat": "酒水", "imageUrl": "", "note": "完全不冰也不熱的室溫水（吃藥客人最愛點）" },
     { "id": "vd_water_nurumayu", "ja": "ぬるま<ruby>湯<rt>ゆ</rt></ruby>", "zh": "微溫水（約40度溫水）", "cat": "酒水", "imageUrl": "", "note": "比常溫稍溫一點、完全不燙口的水" },
-    { "id": "vd_water_oyu", "ja": "お<ruby>湯<rt>ゆ</rt></ruby> / <ruby>熱湯<rt>ねっとう</rt></ruby>", "zh": "熱水 / 熱開水（お湯・oyu）", "cat": "酒水", "imageUrl": "", "note": "泡茶或加水用熱開水" },
+    { "id": "vd_water_oyu", "ja": "お<ruby>湯<rt>ゆ</rt></ruby>", "zh": "熱水 / 溫熱水（お湯・oyu）", "cat": "酒水", "imageUrl": "", "note": "泡茶或加水用溫熱水" },
+        { "id": "vd_water_nettou", "ja": "<ruby>熱湯<rt>ねっとう</rt></ruby>", "zh": "滾水 / 剛煮開的熱開水", "cat": "酒水", "imageUrl": "", "note": "剛燒開的高溫滾水" },
     { "id": "vd_water_boiling", "ja": "<ruby>沸騰<rt>ふっとう</rt></ruby>したお<ruby>湯<rt>ゆ</rt></ruby>", "zh": "剛煮開的滾水（沸騰）", "cat": "酒水", "imageUrl": "", "note": "高溫滾燙的剛開熱水" },
     { "id": "vd_water_pitcher", "ja": "お<ruby>水<rt>みず</rt></ruby>のピッチャー / <ruby>水差<rt>みずさ</rt></ruby>し", "zh": "整壺冰水 / 水壺（Pitcher）", "cat": "酒水", "imageUrl": "", "note": "一整桌客人要一壺水放在桌上時使用" },
-    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby> / <ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內一律稱「炭酸 / 碳酸水」" },
-    { "id": "vd_tea_ocha", "ja": "お<ruby>茶<rt>ちゃ</rt></ruby> / <ruby>緑茶<rt>りょくちゃ</rt></ruby> / あがり", "zh": "熱茶 / 綠茶 / 煎茶（あがり）", "cat": "酒水", "imageUrl": "", "note": "壽司台或飯後常稱熱綠茶為「あがり」" },
+    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內標準氣泡水" },
+        { "id": "vd_water_tansan_short", "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸（店內簡稱）", "cat": "酒水", "imageUrl": "", "note": "店內同仁常用簡稱「炭酸」" },
+    { "id": "vd_tea_ocha", "ja": "お<ruby>茶<rt>ちゃ</rt></ruby>", "zh": "熱茶（統稱）", "cat": "酒水", "imageUrl": "", "note": "餐飲泛指的熱茶" },
+        { "id": "vd_tea_ryokucha", "ja": "<ruby>緑茶<rt>りょくちゃ</rt></ruby>", "zh": "綠茶 / 煎茶", "cat": "酒水", "imageUrl": "", "note": "日式綠茶" },
+        { "id": "vd_tea_agari", "ja": "あがり", "zh": "餐後熱茶（壽司店行話）", "cat": "酒水", "imageUrl": "", "note": "壽司台或飯後常稱熱綠茶為「あがり」" },
     { "id": "vd_tea_houjicha", "ja": "ほうじ<ruby>茶<rt>ちゃ</rt></ruby>", "zh": "焙茶 / 熟茶（熱焙茶）", "cat": "酒水", "imageUrl": "", "note": "溫泉旅館早晚餐最常提供的溫潤熱茶" },
     { "id": "vd_mizuwari", "ja": "<ruby>水割<rt>みずわ</rt></ruby>り", "zh": "兌水（水割調酒法）", "cat": "酒水", "imageUrl": "", "note": "燒酎或威士忌加水與冰塊飲用" },
     { "id": "vd_oyuwari", "ja": "お<ruby>湯割<rt>ゆわ</rt></ruby>り", "zh": "兌熱水（熱水割）", "cat": "酒水", "imageUrl": "", "note": "燒酎加熱開水溫飲" },
 
     // ── 🧹 工具類 ──
-    { "id": "vt_lighter", "ja": "<ruby>ライター<rt>raita-</rt></ruby> / チャッカマン", "zh": "打火機 / 點火器", "cat": "工具", "imageUrl": "", "note": "點火鍋與卡式爐用打火機・點火槍（長打火機）" },
-    { "id": "vt_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "推車 / 餐車", "cat": "工具", "imageUrl": "", "note": "傳菜專用" },
-    { "id": "vt_2", "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>", "zh": "布巾 / 蓋料理的布", "cat": "工具", "imageUrl": "", "note": "取餐必帶" },
+    { "id": "vt_lighter", "ja": "<ruby>ライター<rt>raita-</rt></ruby>", "zh": "打火機", "cat": "工具", "imageUrl": "", "note": "一般隨身打火機" },
+        { "id": "vt_chakkaman", "ja": "チャッカマン", "zh": "長嘴點火器（點火槍）", "cat": "工具", "imageUrl": "", "note": "點火鍋固體燃料專用長嘴點火槍" },
+    { "id": "vt_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby>", "zh": "推車（搬運推車）", "cat": "工具", "imageUrl": "", "note": "取餐傳菜用搬運台車" },
+        { "id": "vt_wagon", "ja": "<ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "餐車（三層餐車）", "cat": "工具", "imageUrl": "", "note": "送餐與收餐具三層餐車" },
+    { "id": "vt_2", "ja": "<ruby>布<rt>ぬの</rt></ruby>", "zh": "布巾（蓋料理的布）", "cat": "工具", "imageUrl": "", "note": "前往廚房取餐必帶的蓋菜布" },
+        { "id": "vt_cloth", "ja": "<ruby>クロス<rt>kurosu</rt></ruby>", "zh": "擦拭布（抹布）", "cat": "工具", "imageUrl": "", "note": "工作檯與推車擦拭專用布" },
     { "id": "vt_3", "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機", "cat": "工具", "imageUrl": "", "note": "通報送達與缺菜" },
     { "id": "vt_4", "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>", "zh": "冰箱", "cat": "工具", "imageUrl": "", "note": "放生魚片、赤牛、馬刺" },
     { "id": "vt_5", "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>", "zh": "保溫庫", "cat": "工具", "imageUrl": "", "note": "放熱湯、火鍋" },
@@ -2497,7 +2519,8 @@ function createRealRunnerData() {
     { "id": "vt_10", "ja": "<ruby>湯切<rt>ゆぎ</rt></ruby>り", "zh": "燙麵瀝水網杓", "cat": "工具", "imageUrl": "./photos/IMG_0852.jpg", "note": "煮拉麵專用甩水濾杓" },
     { "id": "vt_11", "ja": "<ruby>炊飯器<rt>すいはんき</rt></ruby>", "zh": "營業用大電鍋", "cat": "工具", "imageUrl": "", "note": "盛裝白飯與高菜飯" },
     { "id": "vt_12", "ja": "ディスペンサーポンプ", "zh": "定量壓頭 (30ml)", "cat": "工具", "imageUrl": "./photos/IMG_0885.jpg", "note": "酒水香甜酒瓶專用定量壓頭" },
-    { "id": "vt_13", "ja": "メジャーカップ / ポアラー", "zh": "量酒杯 / 注酒嘴", "cat": "工具", "imageUrl": "./photos/IMG_0886.jpg", "note": "調酒用量杯與酒瓶注酒嘴" },
+    { "id": "vt_13", "ja": "メジャーカップ", "zh": "量酒杯（Jigger）", "cat": "工具", "imageUrl": "./photos/IMG_0886.jpg", "note": "調酒用雙頭不銹鋼量杯 (30ml/45ml)" },
+        { "id": "vt_pourer", "ja": "ポアラー", "zh": "酒瓶注酒嘴（Pourer）", "cat": "工具", "imageUrl": "./photos/IMG_0886.jpg", "note": "插在酒瓶口方便定量倒酒的導流嘴" },
     { "id": "vt_14", "ja": "マドラー", "zh": "攪拌棒", "cat": "工具", "imageUrl": "./photos/IMG_0884.jpg", "note": "調酒攪拌用" },
     { "id": "vt_15", "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>", "zh": "吸塵器", "cat": "工具", "imageUrl": "", "note": "上司交代：打掃地板用" },
 
