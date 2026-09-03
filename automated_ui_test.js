@@ -195,7 +195,12 @@ assert(html.includes('saveGeminiApiKeySetting'), '包含儲存 API Key 函式 (s
 assert(html.includes('testGeminiApiKeyConnection'), '包含測試 API Key 連線函式 (testGeminiApiKeyConnection)');
 assert(html.includes('getLocalRaccoonKnowledgeReply'), '包含小浣熊離線智慧知識庫函式 (getLocalRaccoonKnowledgeReply)');
 assert(html.includes('getLocalRoleplaySimulation'), '包含情境模擬離線智慧對話引擎 (getLocalRoleplaySimulation)');
-assert(html.includes('callGeminiApiUnified'), '包含統一 Gemini API 調用函式 (callGeminiApiUnified)');
+// 測試 14: 情境對話 AI 評分、〇〇朗讀為なになに、點擊日文句子直接朗讀
+console.log('\n【測試 14：AI 評分、〇〇轉なになに、點擊句子朗讀】');
+assert(html.includes('user-eval-card'), '情境對話包含 AI 評分卡片 (user-eval-card)');
+assert(html.includes('grammarGrade') && html.includes('betterExpression'), 'AI 評分包含文法評級與更道地的推薦說法');
+assert(html.includes('なになに'), '語音合成 extractSpokenJapanese 將 〇〇 正確轉為 なになに');
+assert(html.includes('dialog-bubble-ja') && html.includes('speakJapanese'), '對話氣泡日文句子支援點擊直接朗讀');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);

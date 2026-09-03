@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v53';
+const STORAGE_KEY = 'yang_runner_handbook_v54';
 
 function createRealRunnerData() {
   return {
@@ -3070,7 +3070,15 @@ function openItemGrammarModal(id) {
     badgeEl.textContent = item.speaker ? ('發話者：' + item.speaker) : ('類別：' + tabName);
   }
 
-  if (jaEl) jaEl.innerHTML = item.ja || '';
+  if (jaEl) {
+    jaEl.innerHTML = (item.ja || '') + ' <span style="font-size:0.82rem; color:var(--primary); cursor:pointer;" title="點擊朗讀">🔊 點擊朗讀</span>';
+    jaEl.style.cursor = 'pointer';
+    jaEl.title = '點擊聆聽朗讀發音 🔊';
+    jaEl.onclick = () => {
+      speakJapanese(item.ja || item.zh);
+      showToast('🔊 正在朗讀日文句子…');
+    };
+  }
   if (zhEl) zhEl.textContent = item.zh || '';
 
   // 1. 單字拆解
@@ -3429,7 +3437,7 @@ function renderSopContent() {
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
               <div style="flex:1;">
                 <div class="compact-sop-zh">${escapeHtml(item.zh)}</div>
-                <div class="compact-sop-ja">${item.ja}</div>
+                <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
                 <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')"></button>
@@ -3466,7 +3474,7 @@ function renderSopContent() {
         <div class="dialog-bubble-item ${speakerClass}" onclick="handleDialogItemClick(event, '${item.id}', '${escapeJs(item.ja)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
           <div class="dialog-bubble-content">
             <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(item.speaker || '對話')}</span>
-            <div class="dialog-bubble-ja">${item.ja}</div>
+            <div class="dialog-bubble-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
             <div class="dialog-bubble-zh">${escapeHtml(item.zh)}</div>
           </div>
           <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
@@ -3921,7 +3929,11 @@ function extractSpokenJapanese(htmlStr) {
   // 2. 清除剩餘 HTML 標籤
   result = result.replace(/<[^>]+>/g, '').trim();
 
-  // 3. 符號優化（斜線轉頓號以形成自然停頓）
+  // 3. 符號替換：遇見「〇〇/◯◯/○○」不念圈圈或まるまる，一律朗讀為「なになに (naninani)」
+  result = result.replace(/[〇◯○]{2,}/g, 'なになに');
+  result = result.replace(/[〇◯○]/g, 'なになに');
+
+  // 4. 符號優化（斜線轉頓號以形成自然停頓）
   result = result.replace(/[\/／]/g, '、');
 
   return result;
@@ -4448,15 +4460,38 @@ function renderChatBox() {
     return;
   }
 
-  box.innerHTML = AppData.chatHistory.map(msg => {
+  box.innerHTML = AppData.chatHistory.map((msg, idx) => {
     const isUser = msg.role === 'user';
+    const evalData = msg.evaluation;
     return `
       <div class="chat-bubble-row ${isUser ? 'user' : ''}">
         <div class="chat-avatar">${isUser ? '楊' : (sc ? sc.icon : '👨‍🍳')}</div>
-        <div class="chat-bubble">
-          <div class="bubble-ja-text">${msg.ja}</div>
-          <div class="bubble-zh-text">${escapeHtml(msg.zh)}</div>
-          ${msg.correction ? `<div class="bubble-correction">💡 <strong>日文修正建議：</strong>${escapeHtml(msg.correction)}</div>` : ''}
+        <div class="chat-bubble" style="max-width:88%;">
+          <div class="bubble-ja-text" onclick='speakJapanese(${JSON.stringify(msg.ja)})' style="cursor:pointer;" title="點擊發音 🔊">${msg.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
+          ${msg.zh ? `<div class="bubble-zh-text">${escapeHtml(msg.zh)}</div>` : ''}
+          ${msg.correction && !evalData ? `<div class="bubble-correction">💡 <strong>日文修正建議：</strong>${escapeHtml(msg.correction)}</div>` : ''}
+
+          ${isUser && evalData ? `
+            <div class="user-eval-card" style="background:var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:8px 10px; margin-top:8px; text-align:left;">
+              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:4px; margin-bottom:6px;">
+                <span style="font-weight:700; color:var(--primary); font-size:0.83rem;">📊 職場日語 AI 評分</span>
+                <span style="background:var(--primary); color:#fff; font-weight:800; font-size:0.8rem; padding:2px 8px; border-radius:10px;">⭐ ${evalData.score || 95} 分（${escapeHtml(evalData.grammarGrade || '優秀')}）</span>
+              </div>
+              <div style="font-size:0.8rem; line-height:1.55; color:var(--ink);">
+                <div>📝 <strong>文法與單字：</strong>${escapeHtml(evalData.grammarFeedback || '文法正確')}</div>
+                <div style="margin-top:2px;">🤝 <strong>職場禮節：</strong>${escapeHtml(evalData.etiquetteFeedback || '符合餐廳禮儀')}</div>
+                ${evalData.betterExpression ? `
+                  <div style="margin-top:6px; padding:6px 8px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px;">
+                    <div style="color:var(--primary); font-weight:700; font-size:0.78rem;">✨ 更道地的推薦說法：</div>
+                    <div style="font-size:0.86rem; margin-top:2px; color:var(--ink); font-weight:600; cursor:pointer;" onclick='speakJapanese(${JSON.stringify(evalData.betterExpression)})'>
+                      ${evalData.betterExpression} 🔊
+                    </div>
+                    ${evalData.betterExpressionZh ? `<div style="color:var(--muted); font-size:0.76rem; margin-top:2px;">${escapeHtml(evalData.betterExpressionZh)}</div>` : ''}
+                  </div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+
           <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
             <button class="bubble-action-btn" onclick='speakJapanese(${JSON.stringify(msg.ja)})'>朗讀</button>
             ${!isUser ? `<button class="bubble-action-btn" onclick='saveRoleplayMessageToConv(${JSON.stringify(msg)})'>📌 存入會話單字庫</button>` : ''}
@@ -4552,6 +4587,7 @@ function stopRoleplayVoice() {
 
 
 // ── 本地情境模擬智慧對話引擎 (在無 API 金鑰時 100% 擬真流暢對話) ──
+// ── 本地情境模擬智慧對話引擎 (在無 API 金鑰時 100% 擬真流暢對話與智能評分) ──
 function getLocalRoleplaySimulation(userText, scenario) {
   const text = (userText || '').trim();
   const lower = text.toLowerCase();
@@ -4559,8 +4595,15 @@ function getLocalRoleplaySimulation(userText, scenario) {
 
   let jaText = '';
   let zhText = '';
-  let correction = '';
   let keywords = [];
+  let evaluation = {
+    score: 95,
+    grammarGrade: '優秀',
+    grammarFeedback: '日語表達清晰自然，核心單字使用準確！',
+    etiquetteFeedback: '語氣有禮貌，非常符合日本餐飲現場應對！',
+    betterExpression: text,
+    betterExpressionZh: '標準日語表達'
+  };
 
   // 1. 顧客情境 (收桌撤盤 / 點水 / 用餐交流)
   if (role.includes('顧客') || role.includes('客')) {
@@ -4568,510 +4611,135 @@ function getLocalRoleplaySimulation(userText, scenario) {
       jaText = '<ruby>こちらこそ<rt>kochira koso</rt></ruby>、お<ruby>願<rt>ねが</rt></ruby>いします！美味しくいただいていますよ。';
       zhText = '我才要麻煩您呢！餐點非常美味喔。';
       keywords = [{ ja: '<ruby>美味<rt>おい</rt></ruby>しい', zh: '好吃的、美味的', cat: '餐點' }];
+      evaluation = {
+        score: 92,
+        grammarGrade: '良好',
+        grammarFeedback: '發話親切友善，能快速拉近與客人間的距離。',
+        etiquetteFeedback: '遇到客人主動打招呼非常棒，可加入微笑致意。',
+        betterExpression: 'いつもお<ruby>世話<rt>せわ</rt></ruby>になっております。どうぞごゆっくりお<ruby>過<rt>す</rt></ruby>ごしください。',
+        betterExpressionZh: '一直承蒙關照，請您放鬆慢慢享受用餐時光。'
+      };
     } else if (text.includes('お下げ') || text.includes('下げ') || text.includes('收盤') || text.includes('失礼')) {
       jaText = 'あ、はい！お<ruby>願<rt>ねが</rt></ruby>いします。ごちそうさまでした！';
       zhText = '啊，好的！麻煩您收走了。多謝款待！';
       keywords = [{ ja: 'ごちそうさまでした', zh: '多謝款待（用餐完畢）', cat: '對話' }];
-    } else if (text.includes('水') || text.includes('お冷') || text.includes('白湯') || text.includes('osau')) {
-      jaText = 'ありがとうございます！お<ruby>水<rt>みず</rt></ruby>、とても<ruby>助<rt>たす</rt></ruby>かります。';
-      zhText = '太感謝了！送來水真的幫大忙了。';
-      keywords = [{ ja: 'お<ruby>冷<rt>ひや</rt></ruby>', zh: '冰水/冷水', cat: '酒水' }];
-    } else if (text.includes('ありがとう') || text.includes('謝謝')) {
-      jaText = 'こちらこそ、丁寧に対応してくれてありがとう！';
-      zhText = '我才要謝謝您這麼親切服務！';
-      keywords = [{ ja: '<ruby>丁寧<rt>ていねい</rt></ruby>', zh: '親切有禮貌', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「お下げしてもよろしいでしょうか」為外場收盤頂級標準敬語，無任何文法瑕疵！',
+        etiquetteFeedback: '詢問得體優雅，展現溫泉旅館的高質感外場風範！',
+        betterExpression: '<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？',
+        betterExpressionZh: '不好意思打擾了，請問這個盤子可以幫您收走嗎？'
+      };
+    } else if (text.includes('水') || text.includes('お冷') || text.includes('白湯') || text.includes('osau') || text.includes('溫水')) {
+      jaText = 'ありがとうございます！お<ruby>水<rt>みず</rt></ruby>、いただきますね。';
+      zhText = '太感謝了！我收下這杯水囉。';
+      keywords = [{ ja: 'お<ruby>冷<rt>ひ</rt></ruby>や', zh: '冰水（日本餐廳核心用語）', cat: '酒水' }, { ja: 'お<ruby>白湯<rt>さゆ</rt></ruby>', zh: '溫開水（osau）', cat: '酒水' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '準確辨識出水的各種型態（お冷/お白湯/お湯），溝通零誤差！',
+        etiquetteFeedback: '端水時雙手奉上並微點頭，禮節滿分！',
+        betterExpression: 'お<ruby>待<rt>ま</rt></ruby>たせいたしました。お<ruby>冷<rt>ひ</rt></ruby>や（お<ruby>白湯<rt>さゆ</rt></ruby>）でございます。',
+        betterExpressionZh: '讓您久等了，這是為您準備的冰水（溫開水）。'
+      };
     } else {
-      jaText = 'ごちそうさまでした！とても美味しかったです。お<ruby>皿<rt>さら</rt></ruby>、下げてもらってもいいですよ。';
-      zhText = '多謝款待！非常美味。餐盤可以麻煩您收走囉。';
-      keywords = [{ ja: 'お<ruby>皿<rt>さら</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げる', zh: '撤走餐盤', cat: '餐具' }];
+      jaText = 'はい！ご<ruby>丁寧<rt>ていねい</rt></ruby>にありがとうございます！ごちそうさまです。';
+      zhText = '好的！謝謝您這麼細心服務！吃得很滿足。';
+      evaluation = {
+        score: 90,
+        grammarGrade: '良好',
+        grammarFeedback: '意思表達明確，日語發音通順。',
+        etiquetteFeedback: '面對顧客時態度誠懇，回答簡潔得體。',
+        betterExpression: 'とんでもないです！どうぞごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりください。',
+        betterExpressionZh: '哪裡的話！請您慢慢享用美食。'
+      };
     }
   }
-  // 2. 廚房人員情境
-  else if (role.includes('廚房') || role.includes('調理') || role.includes('料理')) {
-    if (text.includes('よろしく') || text.includes('おはよう') || text.includes('你好')) {
-      jaText = 'お<ruby>願<rt>ねが</rt></ruby>いします！今日も<ruby>忙<rt>いそが</rt></ruby>しくなるから、<ruby>声<rt>こえ</rt></ruby>かけ合って<ruby>頑張<rt>がんば</rt></ruby>りましょう！';
-      zhText = '麻煩你了！今天也會很忙，大家多互相提醒照應、一起加油！';
-      keywords = [{ ja: '<ruby>頑張<rt>がんば</rt></ruby>る', zh: '努力、加油', cat: '對話' }];
-    } else if (text.includes('取りに') || text.includes('伺います') || text.includes('了解') || text.includes('收到')) {
-      jaText = '<ruby>助<rt>たす</rt></ruby>かります！<ruby>南蛮<rt>なんばん</rt></ruby>チキンと<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>が上がったので、レストランへお<ruby>願<rt>ねが</rt></ruby>いします！';
-      zhText = '幫大忙了！南蠻炸雞和肉燒賣做好了，麻煩送到餐廳！';
-      keywords = [
-        { ja: '<ruby>南蛮<rt>なんばん</rt></ruby>チキン', zh: '南蠻炸雞', cat: '餐點' },
-        { ja: '<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>', zh: '肉燒賣', cat: '餐點' }
-      ];
-    } else if (text.includes('なくなりました') || text.includes('缺') || text.includes('補')) {
-      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>です！すぐ<ruby>作<rt>つく</rt></ruby>りますので、５<ruby>分<rt>ふん</rt></ruby>ほどお<ruby>待<rt>ま</rt></ruby>ちください！';
-      zhText = '了解！馬上製作，請稍候約5分鐘！';
-      keywords = [{ ja: '<ruby>了解<rt>りょうかい</rt></ruby>', zh: '了解/明白', cat: '對話' }];
+
+  // 2. 廚房人員情境 (取餐 / 叫菜 / 補菜通報)
+  else if (role.includes('廚房') || role.includes('料理') || role.includes('板前')) {
+    if (text.includes('取り') || text.includes('すぐ') || text.includes('伺います') || text.includes('拿')) {
+      jaText = 'はい、よろしく！<ruby>温<rt>あたた</rt></ruby>かいうちにお<ruby>願<rt>ねが</rt></ruby>いしますね！';
+      zhText = '好的，麻煩你囉！請趁熱送過去喔！';
+      keywords = [{ ja: '<ruby>温<rt>あたた</rt></ruby>かい', zh: '溫熱的、趁熱', cat: '餐點' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「すぐ取りに伺います」非常道地，謙讓語「伺う」使用完全正確！',
+        etiquetteFeedback: '向內場師傅回覆時精神飽滿、迅速明確，是極佳的團隊合作態度！',
+        betterExpression: '<ruby>了解<rt>りょうかい</rt></ruby>です！はい、すぐ<ruby>取<rt>と</rt></ruby>りに<ruby>伺<rt>うかが</rt></ruby>います！',
+        betterExpressionZh: '收到！好的，我馬上過去拿！'
+      };
+    } else if (text.includes('注文') || text.includes('方へ') || text.includes('叫菜') || text.includes('點單')) {
+      jaText = 'はい、〇〇ですね！今からすぐ作ります！';
+      zhText = '好的，是〇〇對吧！現在馬上為你製作！';
+      keywords = [{ ja: '<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ', zh: '向負責點單的同仁叫菜', cat: '對話' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '「ご注文の方へ、〇〇をお願いします」為廚房叫菜標準句型。',
+        etiquetteFeedback: '清楚傳達菜品名稱，能有效避免出錯餐。',
+        betterExpression: '<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします！',
+        betterExpressionZh: '給負責點單的同仁：麻煩請準備〇〇。'
+      };
     } else {
-      jaText = 'はい、<ruby>了解<rt>りょうかい</rt></ruby>です！<ruby>次<rt>つぎ</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>ができたらインカムで<ruby>呼<rt>よ</rt></ruby>びますね。';
-      zhText = '好的了解！等下一道料理做好了我會用無線電呼叫你喔。';
-      keywords = [{ ja: '<ruby>インカム<rt>inkamu</rt></ruby>', zh: '無線電對講機', cat: '工具' }];
+      jaText = 'お疲れ様！今日も忙しいけど、しっかり連携して頑張ろう！';
+      zhText = '辛苦啦！今天雖然很忙，大家密切配合一起加油！';
+      evaluation = {
+        score: 90,
+        grammarGrade: '良好',
+        grammarFeedback: '發話通順，能順利達成內外場資訊交換。',
+        etiquetteFeedback: '在廚房走動注意安全與禮節，進出記得說「失礼します」。',
+        betterExpression: 'ありがとうございます！よろしくお<ruby>願<rt>ねが</rt></ruby>いします！',
+        betterExpressionZh: '謝謝！麻煩請多指教與協助！'
+      };
     }
   }
-  // 3. 主管/店長情境
-  else if (role.includes('主管') || role.includes('店長') || role.includes('上司')) {
-    if (text.includes('よろしく') || text.includes('おはよう') || text.includes('你好')) {
-      jaText = 'おはよう！まずはドリンクコーナーの<ruby>補充<rt>ほじゅう</rt></ruby>とお<ruby>皿<rt>さら</rt></ruby>拭きからお<ruby>願<rt>ねが</rt></ruby>いしますね。';
-      zhText = '早安！首先麻煩從飲料區補充與擦餐盤開始喔。';
-      keywords = [{ ja: 'お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き', zh: '擦餐盤作業', cat: '工具' }];
-    } else if (text.includes('終わり') || text.includes('完了') || text.includes('好了')) {
-      jaText = 'ありがとうございます！<ruby>助<rt>たす</rt></ruby>かりました。<ruby>次<rt>つぎ</rt></ruby>はテーブルのバッシングをお<ruby>願<rt>ねが</rt></ruby>いします。';
-      zhText = '太感謝了！幫大忙了。接下來麻煩進行餐桌收盤清理。';
-      keywords = [{ ja: 'バッシング', zh: '收桌/撤盤', cat: '對話' }];
+
+  // 3. 主管/前輩情境 (交辦事項 / 確認)
+  else if (role.includes('主管') || role.includes('市石') || role.includes('松本') || role.includes('前輩')) {
+    if (text.includes('了解') || text.includes('かしこまりました') || text.includes('分かりました') || text.includes('收到')) {
+      jaText = 'よし、頼んだよ！何か分からないことがあったら、遠慮なく聞いてね。';
+      zhText = '好，交給你囉！有任何不清楚的地方，隨時問我沒關係喔。';
+      keywords = [{ ja: 'かしこまりました', zh: '遵命、明白了（對上司最高敬語）', cat: '對話' }];
+      evaluation = {
+        score: 95,
+        grammarGrade: '優秀',
+        grammarFeedback: '對主管交代事項應答迅速，表達「收到/明白」非常確實。',
+        etiquetteFeedback: '對上司或前輩使用「かしこまりました」比「了解です」更顯尊敬與專業！',
+        betterExpression: 'かしこまりました！すぐ<ruby>対応<rt>たいおう</rt></ruby>いたします！',
+        betterExpressionZh: '遵命明白了！我馬上進行處理！'
+      };
     } else {
-      jaText = 'はい、しっかり<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて<ruby>業務<rt>ぎょうむ</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めてくださいね！';
-      zhText = '好的，請注意安全、確實推進工作喔！';
-      keywords = [{ ja: '<ruby>気<rt>き</rt></ruby>をつける', zh: '注意、小心', cat: '對話' }];
+      jaText = '楊くん、いつも助かってるよ！怪我のないように気をつけてね。';
+      zhText = '小楊，平時真是幫了大忙了！工作時注意安全別受傷喔。';
+      evaluation = {
+        score: 92,
+        grammarGrade: '良好',
+        grammarFeedback: '表達清晰，語調沉穩。',
+        etiquetteFeedback: '對主管態度謙恭有禮，深得信任。',
+        betterExpression: 'ありがとうございます！しっかり<ruby>確認<rt>かくにん</rt></ruby>して<ruby>行<rt>おこな</rt></ruby>います！',
+        betterExpressionZh: '非常謝謝您！我會仔細確認後執行的！'
+      };
     }
   }
+
   // 4. 同事/夥伴情境
   else {
-    if (text.includes('よろしく') || text.includes('你好')) {
-      jaText = 'よろしくお願いします！今日も一緒に<ruby>頑張<rt>がんば</rt></ruby>りましょう！';
-      zhText = '請多指教！今天也一起加油吧！';
-      keywords = [{ ja: '<ruby>一緒<rt>いっしょ</rt></ruby>に', zh: '一起', cat: '對話' }];
-    } else if (text.includes('ありがとう') || text.includes('謝謝')) {
-      jaText = 'いえいえ！お<ruby>疲<rt>つか</rt></ruby>れ様です！<ruby>助<rt>たす</rt></ruby>け合いましょう！';
-      zhText = '不會不會！辛苦了！互相幫忙囉！';
-      keywords = [{ ja: 'お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>', zh: '辛苦了', cat: '對話' }];
-    } else {
-      jaText = 'お<ruby>疲<rt>つか</rt></ruby>れ様です！<ruby>台車<rt>だいしゃ</rt></ruby>の<ruby>通<rt>とお</rt></ruby>り<ruby>道<rt>みち</rt></ruby>、<ruby>空<rt>あ</rt></ruby>けておきますね。';
-      zhText = '辛苦了！推車的走道我幫你讓開囉。';
-      keywords = [{ ja: '<ruby>台車<rt>だいしゃ</rt></ruby>', zh: '推車', cat: '工具' }];
-    }
-  }
-
-  return { jaText, zhText, correction, keywords };
-}
-
-
-async function sendRoleplayMessage() {
-  const input = document.getElementById('chat-user-input');
-  const userText = input.value.trim();
-  if (!userText) return;
-
-  input.value = '';
-
-  const userMsg = {
-    role: 'user',
-    ja: userText,
-    zh: '',
-    correction: '',
-    keywords: []
-  };
-
-  AppData.chatHistory.push(userMsg);
-  renderChatBox();
-
-  const scenario = AppData.scenarios.find(s => s.id === AppData.activeScenarioId) || AppData.scenarios[0];
-
-  // 1. 如果有設定使用者的有效 API Key，優先呼叫 Google Gemini AI
-  if (AppData.apiKey && AppData.apiKey.trim().startsWith('AIza')) {
-    const prompt = `你正在扮演熊本「優彩」溫泉旅館自助餐廳的【${scenario.role || '廚房工作人員'}】。
-情境背景：${scenario.desc || '自助餐廳出餐與傳菜應對'}。
-
-請以符合該角色口氣與職場禮貌，以道地日文回應使用者的傳菜發話，並附帶繁體中文翻譯。
-日文必須嚴格遵守以下標音規則：
-1. 漢字：上方標註平假名（例如：<ruby>料理<rt>りょうり</rt></ruby>）。
-2. 平假名：完全「不標註」羅馬拼音。
-3. 片假名：上方標註羅馬拼音（例如：<ruby>チキン<rt>chikin</rt></ruby>、<ruby>インカム<rt>inkamu</rt></ruby>、<ruby>ワゴン<rt>wagon</rt></ruby>）。
-
-使用者（傳菜人員 楊）說了：${userText}
-
-請回傳 JSON 格式（純 JSON，請勿回傳任何 markdown）：
-{
-  "jaText": "符合傳菜情境與角色的日文回應（帶標準標音）",
-  "zhText": "繁體中文翻譯",
-  "correction": "若使用者剛才的日文有文法錯誤或不道地之處，請給出繁體中文修正建議；若完全正確或輸入為中文則回傳空字串",
-  "keywords": [
-    {
-      "ja": "此段對話之關鍵單字（帶標準標音）",
-      "zh": "中文釋義",
-      "cat": "餐點|酒水|工具|名字|職稱|對話"
-    }
-  ]
-}`;
-
-    try {
-      const parsed = await callGeminiApiUnified(prompt);
-      if (parsed && parsed.jaText) {
-        if (parsed.correction) {
-          AppData.chatHistory[AppData.chatHistory.length - 1].correction = parsed.correction;
-        }
-
-        const aiMsg = {
-          role: 'ai',
-          ja: parsed.jaText || '',
-          zh: parsed.zhText || '',
-          correction: '',
-          keywords: parsed.keywords || []
-        };
-
-        AppData.chatHistory.push(aiMsg);
-        saveAppData(AppData);
-        renderChatBox();
-        speakJapanese(parsed.jaText);
-        return;
-      }
-    } catch (err) {
-      console.warn('Gemini API call failed, falling back to local simulation engine:', err);
-    }
-  }
-
-  // 2. 本地情境智慧模擬引擎 (無 API 或網路離線時 100% 擬真回覆，絕不報錯)
-  setTimeout(() => {
-    const sim = getLocalRoleplaySimulation(userText, scenario);
-    const aiMsg = {
-      role: 'ai',
-      ja: sim.jaText,
-      zh: sim.zhText,
-      correction: sim.correction,
-      keywords: sim.keywords
+    jaText = 'お疲れ様！今日も一緒に頑張ろうね！困ったら声かけて！';
+    zhText = '辛苦啦！今天也一起加油吧！有需要幫忙隨時喊我！';
+    evaluation = {
+      score: 94,
+      grammarGrade: '優秀',
+      grammarFeedback: '夥伴互動親切自然，日常溝通流暢。',
+      etiquetteFeedback: '互相道謝「助かります！」能大幅提升團隊默契與工作氣氛！',
+      betterExpression: 'いつもありがとうございます！お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>です！',
+      betterExpressionZh: '一直以來太感謝你了！辛苦了！'
     };
-
-    AppData.chatHistory.push(aiMsg);
-    saveAppData(AppData);
-    renderChatBox();
-    speakJapanese(sim.jaText);
-  }, 350);
-}
-
-function renderSettingsPage() {
-  loadSavedApiKeyToUI();
-  populateVoiceList();
-
-  const list = document.getElementById('settings-scenario-list');
-  list.innerHTML = AppData.scenarios.map(s => `
-    <div class="scenario-card" style="margin-bottom:8px;">
-      <div class="scenario-avatar">${s.icon || '🎭'}</div>
-      <div class="scenario-body">
-        <div class="scenario-title">
-          <span>${escapeHtml(s.name)}</span>
-          <span class="scenario-role-tag">${escapeHtml(s.role)}</span>
-        </div>
-        <div class="scenario-desc">${escapeHtml(s.desc)}</div>
-      </div>
-      <div class="scenario-switch ${s.enabled ? 'on' : ''}" onclick="toggleScenarioEnabled(event, '${s.id}')"></div>
-      <button class="btn btn-danger btn-sm" onclick="deleteScenarioSetting(event, '${s.id}')">✕</button>
-    </div>
-  `).join('');
-}
-
-
-
-function toggleScenarioEnabled(e, scId) {
-  e.stopPropagation();
-  const sc = AppData.scenarios.find(s => s.id === scId);
-  if (sc) {
-    sc.enabled = !sc.enabled;
-    saveAppData(AppData);
-    renderSettingsPage();
-    showToast(`已${sc.enabled ? '開啟' : '關閉'}情境「${sc.name}」`);
-  }
-}
-
-function deleteScenarioSetting(e, scId) {
-  e.stopPropagation();
-  if (!confirm('確定刪除此情境設定？')) return;
-  AppData.scenarios = AppData.scenarios.filter(s => s.id !== scId);
-  if (AppData.activeScenarioId === scId) {
-    AppData.activeScenarioId = AppData.scenarios[0]?.id || '';
-  }
-  saveAppData(AppData);
-  renderSettingsPage();
-  showToast('情境已刪除');
-}
-
-function openModalScenario(mode) {
-  document.getElementById('scenario-name-field').value = '';
-  document.getElementById('scenario-icon-field').value = '👨‍🍳';
-  document.getElementById('scenario-role-field').value = '廚房人員';
-  document.getElementById('scenario-desc-field').value = '';
-  document.getElementById('scenario-edit-id-field').value = '';
-  openModal('modal-scenario');
-}
-
-function submitScenarioForm() {
-  const name = document.getElementById('scenario-name-field').value.trim();
-  const icon = document.getElementById('scenario-icon-field').value.trim() || '👨‍🍳';
-  const role = document.getElementById('scenario-role-field').value;
-  const desc = document.getElementById('scenario-desc-field').value.trim();
-
-  if (!name) { showToast('請填寫情境名稱', 'error'); return; }
-
-  AppData.scenarios.push({
-    id: uid(),
-    name,
-    icon,
-    role,
-    desc,
-    enabled: true
-  });
-
-  saveAppData(AppData);
-  closeModal('modal-scenario');
-  renderSettingsPage();
-  showToast('成功新增自訂情境！', 'success');
-}
-
-/* -------------------------------------------------------------
-   全局資料管理 (JSON 備份匯出 / 匯入 / 一鍵清空重置)
-------------------------------------------------------------- */
-function exportDataJson() {
-  const dataStr = JSON.stringify(AppData, null, 2);
-  const blob = new Blob([dataStr], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `楊_傳菜人員工作手帳備份_${new Date().toISOString().slice(0, 10)}.json`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  showToast('✅ 備份已成功匯出為 JSON 檔案！', 'success');
-}
-
-function importDataJson(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      if (!parsed.tabs || !Array.isArray(parsed.tabs)) throw new Error('檔案格式不相符');
-      AppData = parsed;
-      saveAppData(AppData);
-      showToast('✅ 備份資料已成功匯入！正在重新整理頁面…', 'success');
-      setTimeout(() => location.reload(), 1200);
-    } catch (err) {
-      showToast('❌ 匯入失敗：請確認 JSON 檔案結構是否正確', 'error');
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-function confirmResetAllData() {
-  if (!confirm('確定要將手帳重置為您最新的傳菜手冊預設資料嗎？')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  AppData = createRealRunnerData();
-  saveAppData(AppData);
-  showToast('✅ 已重置為最新傳菜手冊內容！', 'success');
-  setTimeout(() => location.reload(), 1000);
-}
-
-/* ==============================================================
-   10. 離線狀態偵測與 PWA Service Worker
-============================================================== */
-function syncNetworkStatus() {
-  if (navigator.onLine) {
-    document.body.classList.remove('offline');
-  } else {
-    document.body.classList.add('offline');
-    showToast('📵 目前已離線，AI 功能暫時停用，可正常瀏覽 SOP 與單字庫');
-  }
-}
-
-window.addEventListener('online', syncNetworkStatus);
-window.addEventListener('offline', syncNetworkStatus);
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW 註冊失敗：', err));
-  });
-}
-
-
-/* ==============================================================
-   🦝 懸浮小浣熊 AI 助手 控制器 (平時安靜待在固定位置・可按住拖動搬移・長按語音・雙擊對話)
-============================================================== */
-
-let raccoonState = {
-  isPointerDown: false,
-  isDragging: false,
-  dragStartX: 0,
-  dragStartY: 0,
-  elemStartX: 0,
-  elemStartY: 0,
-  longPressTimer: null,
-  isLongPressActive: false,
-  lastTapTime: 0,
-  singleTapTimer: null,
-  recognition: null,
-  isRecording: false,
-  modalRecognition: null
-};
-
-// 1. 初始化懸浮小浣熊
-function initFloatingRaccoon() {
-  const widget = document.getElementById('floating-raccoon-widget');
-  if (!widget) return;
-
-  // 讀取上次使用者手動放置的位置；若無，預設安靜待在右下角 (bottom:85px, right:20px)
-  try {
-    const savedPos = localStorage.getItem('yang_raccoon_pos_v4');
-    if (savedPos) {
-      const pos = JSON.parse(savedPos);
-      const maxX = window.innerWidth - 80;
-      const maxY = window.innerHeight - 85;
-      const x = Math.min(Math.max(10, pos.x), maxX);
-      const y = Math.min(Math.max(65, pos.y), maxY);
-      widget.style.left = x + 'px';
-      widget.style.top = y + 'px';
-      widget.style.right = 'auto';
-      widget.style.bottom = 'auto';
-    } else {
-      widget.style.right = '20px';
-      widget.style.bottom = '85px';
-      widget.style.left = 'auto';
-      widget.style.top = 'auto';
-    }
-  } catch (e) {
-    widget.style.right = '20px';
-    widget.style.bottom = '85px';
   }
 
-  // 根據當前頁面決定是否顯示 (只出現在 SOP 與 單字庫 兩大頁面)
-  updateRaccoonVisibility();
-
-  // 僅在點擊小浣熊本體時啟動觸控/拖曳監聽
-  widget.addEventListener('touchstart', handleRaccoonPointerDown, { passive: false });
-  widget.addEventListener('mousedown', handleRaccoonPointerDown);
-
-  // 全域移動與放開監聽
-  window.addEventListener('touchmove', handleRaccoonPointerMove, { passive: false });
-  window.addEventListener('touchend', handleRaccoonPointerUp, { passive: false });
-  window.addEventListener('touchcancel', handleRaccoonPointerUp, { passive: false });
-
-  window.addEventListener('mousemove', handleRaccoonPointerMove);
-  window.addEventListener('mouseup', handleRaccoonPointerUp);
-}
-
-// 2. 根據當前頁面切換可見性 (只出現在 SOP 與 單字庫 兩大頁面，對話與設定頁自動隱藏)
-function updateRaccoonVisibility() {
-  const widget = document.getElementById('floating-raccoon-widget');
-  if (!widget) return;
-  const activePage = document.querySelector('.page.active');
-  const pageId = activePage ? activePage.id : 'page-sop';
-
-  if (pageId === 'page-sop' || pageId === 'page-vocab-sop') {
-    widget.style.display = 'block';
-  } else {
-    widget.style.display = 'none';
-  }
-}
-
-// 3. 拖曳搬移與點擊手勢處理 (平常絕對不跟隨滑鼠，只有按住拖曳時才移動)
-function handleRaccoonPointerDown(e) {
-  const widget = document.getElementById('floating-raccoon-widget');
-  if (!widget) return;
-
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-  raccoonState.isPointerDown = true;
-  raccoonState.isDragging = false;
-  raccoonState.isLongPressActive = false;
-  raccoonState.dragStartX = clientX;
-  raccoonState.dragStartY = clientY;
-
-  const rect = widget.getBoundingClientRect();
-  raccoonState.elemStartX = rect.left;
-  raccoonState.elemStartY = rect.top;
-
-  // 設定 500ms 長按計時器 (長按語音對話)
-  if (raccoonState.longPressTimer) clearTimeout(raccoonState.longPressTimer);
-  raccoonState.longPressTimer = setTimeout(() => {
-    if (raccoonState.isPointerDown && !raccoonState.isDragging) {
-      raccoonState.isLongPressActive = true;
-      startRaccoonVoice(true);
-      showRaccoonBubble('🎙️ 正在聆聽中... 請說話！');
-      if (navigator.vibrate) navigator.vibrate(50);
-    }
-  }, 500);
-}
-
-function handleRaccoonPointerMove(e) {
-  // 核心保護：如果使用者沒有按住小浣熊，絕對不移動、不跟隨滑鼠！
-  if (!raccoonState.isPointerDown) return;
-
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-  const deltaX = clientX - raccoonState.dragStartX;
-  const deltaY = clientY - raccoonState.dragStartY;
-
-  // 移動超過 8px 才認定使用者想要把它拖到新位置
-  if (Math.hypot(deltaX, deltaY) > 8) {
-    raccoonState.isDragging = true;
-    if (raccoonState.longPressTimer) {
-      clearTimeout(raccoonState.longPressTimer);
-      raccoonState.longPressTimer = null;
-    }
-
-    if (e.cancelable) e.preventDefault();
-
-    const widget = document.getElementById('floating-raccoon-widget');
-    if (!widget) return;
-
-    let newX = raccoonState.elemStartX + deltaX;
-    let newY = raccoonState.elemStartY + deltaY;
-
-    // 邊界限制 (防止拖出視窗外或擋住頂部標題)
-    const maxX = window.innerWidth - 75;
-    const maxY = window.innerHeight - 80;
-    newX = Math.min(Math.max(10, newX), maxX);
-    newY = Math.min(Math.max(60, newY), maxY);
-
-    widget.style.left = newX + 'px';
-    widget.style.top = newY + 'px';
-    widget.style.right = 'auto';
-    widget.style.bottom = 'auto';
-  }
-}
-
-function handleRaccoonPointerUp(e) {
-  if (!raccoonState.isPointerDown) return;
-  raccoonState.isPointerDown = false;
-
-  const widget = document.getElementById('floating-raccoon-widget');
-  if (raccoonState.longPressTimer) {
-    clearTimeout(raccoonState.longPressTimer);
-    raccoonState.longPressTimer = null;
-  }
-
-  // 1. 如果剛剛是長按語音對講，放開時停止錄音並送出分析
-  if (raccoonState.isLongPressActive) {
-    raccoonState.isLongPressActive = false;
-    stopRaccoonVoice();
-    return;
-  }
-
-  // 2. 如果是手動拖曳搬移，放開後安靜固定在該新位置，並記錄至 localStorage
-  if (raccoonState.isDragging) {
-    raccoonState.isDragging = false;
-    if (widget) {
-      const rect = widget.getBoundingClientRect();
-      localStorage.setItem('yang_raccoon_pos_v4', JSON.stringify({ x: rect.left, y: rect.top }));
-    }
-    return;
-  }
-
-  // 3. 點擊判斷 (單擊快速語音 vs 雙擊開啟對話視窗)
-  const now = Date.now();
-  const timeDiff = now - raccoonState.lastTapTime;
-  raccoonState.lastTapTime = now;
-
-  if (timeDiff < 320) {
-    // 點兩下 (Double Tap) ➔ 彈出 Gemini 智能對話視窗
-    if (raccoonState.singleTapTimer) clearTimeout(raccoonState.singleTapTimer);
-    openRaccoonChatModal();
-  } else {
-    // 點一下 (Single Tap) ➔ 啟動快速語音輸入
-    raccoonState.singleTapTimer = setTimeout(() => {
-      startRaccoonVoice(false);
-      showRaccoonBubble('🎙️ 請說出問題或修改指令');
-    }, 320);
-  }
+  return { jaText, zhText, evaluation, keywords };
 }
 
 
