@@ -166,6 +166,14 @@ assert(html.includes('openRaccoonChatModal'), '包含雙擊開啟對話窗函式
 assert(html.includes('updateRaccoonVisibility'), '包含跨頁面顯示/隱藏控制函式 (updateRaccoonVisibility)');
 assert(html.includes('executeRaccoonAction'), '包含小浣熊全網頁資料修訂執行函式 (executeRaccoonAction)');
 
+// 測試 13: Google Gemini API Key 設定與智慧離線大腦
+console.log('\n【測試 13：Gemini API Key 設定與離線智慧知識庫】');
+assert(html.includes('id="setting-gemini-api-key"'), '包含 Gemini API Key 設定輸入框 (setting-gemini-api-key)');
+assert(html.includes('saveGeminiApiKeySetting'), '包含儲存 API Key 函式 (saveGeminiApiKeySetting)');
+assert(html.includes('testGeminiApiKeyConnection'), '包含測試 API Key 連線函式 (testGeminiApiKeyConnection)');
+assert(html.includes('getLocalRaccoonKnowledgeReply'), '包含小浣熊離線智慧知識庫函式 (getLocalRaccoonKnowledgeReply)');
+assert(html.includes('callGeminiApiUnified'), '包含統一 Gemini API 調用函式 (callGeminiApiUnified)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -173,5 +181,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換與小浣熊AI測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊AI與API設定測試 100% 全部通過！');
 }

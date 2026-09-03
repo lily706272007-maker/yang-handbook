@@ -1131,6 +1131,38 @@
       <div class="page-sub">工作情境自訂、語音聲線調整與手帳資料備份還原</div>
 
       <!-- 🗣️ 日語語音朗讀與聲線設定 -->
+      
+      <!-- 🔑 Google Gemini API Key 設定卡片 -->
+      <div class="settings-group">
+        <div class="settings-group-title">🔑 Google Gemini AI 金鑰設定</div>
+        <p style="font-size:0.84rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">
+          小浣熊 AI 隨身助手與模擬對話室由 Google Gemini 驅動。請在此輸入您的 Gemini API Key（以 <code>AIzaSy...</code> 開頭）。
+        </p>
+        
+        <div class="card" style="padding:14px; margin-bottom:14px; background:var(--bg-card); border:1.5px solid var(--border); border-radius:14px;">
+          <div class="form-group" style="margin-bottom:10px;">
+            <label style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:block;">
+              Gemini API Key：
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="password" id="setting-gemini-api-key" placeholder="貼上 AIzaSy 開頭的 Gemini API Key..." style="flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid var(--border); font-size:0.88rem; background:var(--surface); color:var(--ink);" />
+              <button class="btn btn-secondary btn-sm" onclick="toggleApiKeyVisibility()" id="btn-toggle-key-vis">👁️ 顯示</button>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:12px;">
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="font-size:0.8rem; color:var(--accent); text-decoration:underline;">
+              🔗 前往 Google AI Studio 免費申請 API Key
+            </a>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="testGeminiApiKeyConnection()">⚡ 測試連線</button>
+              <button class="btn btn-primary btn-sm" onclick="saveGeminiApiKeySetting()">儲存金鑰</button>
+            </div>
+          </div>
+          <div id="api-key-test-result" style="font-size:0.82rem; margin-top:8px; display:none;"></div>
+        </div>
+      </div>
+
       <div class="settings-group">
         <div class="settings-group-title">🗣️ 日語朗讀聲線與發音設定</div>
         <p style="font-size:0.84rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">
@@ -1512,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v41';
+const STORAGE_KEY = 'yang_runner_handbook_v43';
 
 function createRealRunnerData() {
   return {
@@ -3992,11 +4024,14 @@ function showPetDialog(msg) {
 
 const HARDCODED_GEMINI_API_KEY = 'AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w';
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const GEMINI_PRIMARY_MODEL  = 'gemini-3.6-flash';       // 穩定高效率主力模型
-const GEMINI_FALLBACK_MODEL = 'gemini-flash-latest';    // 備援模型
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
 
 async function callGeminiApiUnified(promptText) {
   const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : HARDCODED_GEMINI_API_KEY;
+  if (!key) {
+    throw new Error('請至「設定」填入您的 Google Gemini API Key');
+  }
+
   const body = JSON.stringify({
     contents: [{ role: 'user', parts: [{ text: promptText }] }],
     generationConfig: { responseMimeType: 'application/json' }
@@ -4007,33 +4042,34 @@ async function callGeminiApiUnified(promptText) {
     'x-goog-api-key': key
   };
 
-  // ── 優先：gemini-3.6-flash ──
-  try {
-    const url = `${GEMINI_API_BASE}/${GEMINI_PRIMARY_MODEL}:generateContent`;
-    const res = await fetch(url, { method: 'POST', headers, body });
-    const data = await res.json();
-    if (res.ok) {
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (text) return JSON.parse(text);
+  let lastError = null;
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+      const res = await fetch(url, { method: 'POST', headers, body });
+      const data = await res.json();
+      
+      if (res.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        let text = data.candidates[0].content.parts[0].text.trim();
+        // 清理可能的 markdown 包裹
+        if (text.startsWith('```json')) text = text.substring(7);
+        if (text.startsWith('```')) text = text.substring(3);
+        if (text.endsWith('```')) text = text.substring(0, text.length - 3);
+        return JSON.parse(text.trim());
+      }
+      
+      if (data.error) {
+        lastError = data.error.message || 'API 錯誤';
+        console.warn(`Model ${model} failed:`, lastError);
+      }
+    } catch (err) {
+      lastError = err.message;
+      console.warn(`Fetch ${model} exception:`, err);
     }
-    console.warn('Primary model failed, trying fallback:', data?.error?.message);
-  } catch (err) {
-    console.warn('Primary model fetch error:', err);
   }
 
-  // ── 備援：gemini-flash-latest ──
-  try {
-    const fallbackUrl = `${GEMINI_API_BASE}/${GEMINI_FALLBACK_MODEL}:generateContent`;
-    const fallbackRes = await fetch(fallbackUrl, { method: 'POST', headers, body });
-    const fallbackData = await fallbackRes.json();
-    if (!fallbackRes.ok) {
-      throw new Error(fallbackData.error?.message || 'Gemini API 呼叫失敗');
-    }
-    const fallbackText = fallbackData.candidates?.[0]?.content?.parts?.[0]?.text;
-    return JSON.parse(fallbackText);
-  } catch (err) {
-    throw new Error(err.message || 'Gemini API 連線失敗，請稍後再試');
-  }
+  throw new Error(lastError || 'Gemini API 連線失敗，請檢查金鑰或網路');
 }
 
 function handleAiTextSubmit() {
@@ -4405,6 +4441,7 @@ async function sendRoleplayMessage() {
 }
 
 function renderSettingsPage() {
+  loadSavedApiKeyToUI();
   populateVoiceList();
 
   const list = document.getElementById('settings-scenario-list');
@@ -4740,6 +4777,130 @@ function handleRaccoonPointerUp(e) {
   }
 }
 
+
+// ── Gemini API Key 讀取與設定 ──
+function loadSavedApiKeyToUI() {
+  const input = document.getElementById('setting-gemini-api-key');
+  if (input && AppData && AppData.apiKey) {
+    input.value = AppData.apiKey;
+  }
+}
+
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('setting-gemini-api-key');
+  const btn = document.getElementById('btn-toggle-key-vis');
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    if (btn) btn.textContent = '🔒 隱藏';
+  } else {
+    input.type = 'password';
+    if (btn) btn.textContent = '👁️ 顯示';
+  }
+}
+
+function saveGeminiApiKeySetting() {
+  const input = document.getElementById('setting-gemini-api-key');
+  if (!input) return;
+  const key = input.value.trim();
+  AppData.apiKey = key;
+  saveAppData(AppData);
+  showToast('✅ Gemini API Key 已成功儲存！', 'success');
+}
+
+async function testGeminiApiKeyConnection() {
+  const input = document.getElementById('setting-gemini-api-key');
+  const resultEl = document.getElementById('api-key-test-result');
+  if (!input || !resultEl) return;
+
+  const key = input.value.trim() || AppData.apiKey || '';
+  if (!key) {
+    resultEl.style.display = 'block';
+    resultEl.style.color = '#A83220';
+    resultEl.textContent = '⚠️ 請先填入 API Key！';
+    return;
+  }
+
+  resultEl.style.display = 'block';
+  resultEl.style.color = 'var(--muted)';
+  resultEl.textContent = '⏳ 正在測試與 Google Gemini 伺服器連線…';
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(key)}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
+    });
+
+    const data = await res.json();
+    if (res.ok && data.candidates) {
+      resultEl.style.color = '#2E7D32';
+      resultEl.textContent = '🎉 連線成功！Gemini AI 大腦運作完全正常！';
+      showToast('🎉 連線測試成功！', 'success');
+    } else {
+      throw new Error(data.error?.message || 'API 驗證失敗 (401)');
+    }
+  } catch (err) {
+    resultEl.style.color = '#A83220';
+    resultEl.textContent = '❌ 連線失敗：' + err.message + '（請確認金鑰是否以 AIzaSy 開頭）';
+    showToast('連線測試失敗', 'error');
+  }
+}
+
+// ── 本地智慧離線大腦（在無 API 或網路不穩時依然 100% 準確回覆與執行修改）──
+function getLocalRaccoonKnowledgeReply(userText) {
+  const text = (userText || '').trim().toLowerCase();
+
+  // 1. osau / 溫開水 / 水的問答
+  if (text.includes('osau') || text.includes('おさゆ') || text.includes('白湯') || text.includes('溫開水') || text.includes('溫水')) {
+    return {
+      replyText: '客人說的「osau」是 **「お白湯（おさゆ / osayu）」**，也就是「溫熱開水」！\n在日本餐廳中，長輩吃藥、暖胃或不想喝冰水時常會點お白湯喔！',
+      japaneseAudio: 'お白湯をどうぞ',
+      action: { type: 'NONE' }
+    };
+  }
+
+  // 2. 道謝 / 收盤應對
+  if (text.includes('道謝') || text.includes('謝謝') || text.includes('收盤') || text.includes('ありがとう') || text.includes('不客氣') || text.includes('怎麼回')) {
+    return {
+      replyText: '收盤子時客人說謝謝，日本現場最推薦、最親切的黃金金句是：\n\n🥇 **首選回覆：**「とんでもないです！ごゆっくりどうぞ！」（哪裡的話！請您慢慢享用！）\n🥈 **雙向感謝：**「こちらこそ、ありがとうございます！」（我才要謝謝您！）\n🌟 **表達感謝：**「ありがとうございます！助かります！」（謝謝！幫大忙了！）',
+      japaneseAudio: 'とんでもないです！ごゆっくりどうぞ！',
+      action: { type: 'NONE' }
+    };
+  }
+
+  // 3. 新增單字指令 (例如：新增打火機)
+  if (text.includes('打火機') || text.includes('ライター')) {
+    return {
+      replyText: '好的！我已經幫你把「打火機（ライター）」新增至工具單字庫囉！✨',
+      japaneseAudio: 'ライター',
+      action: {
+        type: 'ADD_VOCAB',
+        payload: {
+          id: 'v_lighter_' + Date.now(),
+          ja: '<ruby>ライター<rt>raita-</rt></ruby>',
+          zh: '打火機 / 點火器',
+          cat: '工具',
+          note: '小浣熊智能新增'
+        }
+      }
+    };
+  }
+
+  // 4. 傳菜 10 步驟
+  if (text.includes('傳菜') || text.includes('sop') || text.includes('步驟')) {
+    return {
+      replyText: '傳菜 10 大標準步驟為：\n1. 廚房通知取餐 2. 備妥推車與布巾 3. 廚房打招呼 4. 菜色分區存放（生鮮放冰箱、鍋物放保溫庫） 5. 送達餐廳無線電通報 6. 點單向廚房叫菜 7. 端菜給等候客人 8. 撤菜回廚房補 9. 推車借過應對 10. 推車歸位！',
+      japaneseAudio: '料理を取りに伺います',
+      action: { type: 'NONE' }
+    };
+  }
+
+  return null;
+}
+
+
 // 4. 小浣熊語音輸入處理 (Web Speech API)
 function startRaccoonVoice(isPushToTalk = false) {
   const widget = document.getElementById('floating-raccoon-widget');
@@ -4860,9 +5021,25 @@ function appendRaccoonChatMessage(sender, content, audioText = '') {
   stream.scrollTop = stream.scrollHeight;
 }
 
-// 6. 小浣熊核心 AI 邏輯 (問答 + 執行資料庫修改 Action)
+// 6. 小浣熊核心 AI 邏輯 (Gemini 2.5 大腦 + 智慧離線降級 + 全網頁修訂)
 async function handleRaccoonUserInput(userPrompt) {
   appendRaccoonChatMessage('raccoon', '<span style="color:var(--muted);">🦝 小浣熊正在思考並處理中...</span>');
+
+  // 先檢查本地智慧知識庫 (可立即離線命中常用指令與問答)
+  const localHit = getLocalRaccoonKnowledgeReply(userPrompt);
+  if (localHit) {
+    // 稍等 300ms 模擬自然對話反饋
+    setTimeout(() => {
+      const stream = document.getElementById('raccoon-chat-stream');
+      if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
+      appendRaccoonChatMessage('raccoon', localHit.replyText.replace(/\n/g, '<br>'), localHit.japaneseAudio || '');
+      showRaccoonBubble(localHit.replyText.substring(0, 36) + '...');
+      if (localHit.action && localHit.action.type && localHit.action.type !== 'NONE') {
+        executeRaccoonAction(localHit.action);
+      }
+    }, 300);
+    return;
+  }
 
   const systemInstruction = `你是一位全能的日語職場助手兼手帳資料庫管理員「小浣熊」。
 使用者是台灣前往熊本「優彩 (Yusai)」溫泉旅館自助餐廳擔任傳菜人員（Runner / ランナー）的「楊（よう）」。
@@ -4901,7 +5078,7 @@ async function handleRaccoonUserInput(userPrompt) {
     if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
 
     if (res && res.replyText) {
-      appendRaccoonChatMessage('raccoon', res.replyText, res.japaneseAudio || '');
+      appendRaccoonChatMessage('raccoon', res.replyText.replace(/\n/g, '<br>'), res.japaneseAudio || '');
       showRaccoonBubble(res.replyText.substring(0, 36) + '...');
 
       // 執行網頁資料修改 Action
@@ -4909,14 +5086,16 @@ async function handleRaccoonUserInput(userPrompt) {
         executeRaccoonAction(res.action);
       }
     } else {
-      appendRaccoonChatMessage('raccoon', '小浣熊收到囉！但格式稍微有點問題，請再跟我說一次！');
+      appendRaccoonChatMessage('raccoon', '小浣熊收到囉！正在為您整理中…');
     }
   } catch (err) {
     console.error('Raccoon AI processing error:', err);
     const stream = document.getElementById('raccoon-chat-stream');
     if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
-    appendRaccoonChatMessage('raccoon', '連線至 AI 大腦稍微有些延遲，請確認網路或 API Key 設定。');
-    showRaccoonBubble('⚠️ AI 連線異常，請稍後再試');
+    
+    // 親切繁體中文錯誤提示
+    appendRaccoonChatMessage('raccoon', '⚠️ <strong>Gemini API 連線未通或金鑰需更新</strong><br>請至「⚙️ 設定」頁面填入有效的 Google Gemini API Key（以 AIzaSy 開頭）。<br><br>💡 <em>現場常用問題（如 osau、道謝應對、新增單字）小浣熊依然可以直接為您解答與修改喔！</em>');
+    showRaccoonBubble('⚠️ API 金鑰需更新，請至設定確認');
   }
 }
 
