@@ -873,6 +873,144 @@
   @media (min-width: 900px) {
     .top-nav-btn { padding: 5px 12px; font-size: 0.8rem; }
   }
+
+  /* ============================================================
+     🦝 懸浮小浣熊 AI 助手 樣式 (透明背景、自然陰影、可愛呼吸動畫)
+  ============================================================ */
+  .floating-raccoon-widget {
+    position: fixed;
+    z-index: 998;
+    width: 72px;
+    height: 72px;
+    bottom: 85px;
+    right: 18px;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transition: transform 0.15s ease-out;
+  }
+  .floating-raccoon-widget:active {
+    cursor: grabbing;
+    transform: scale(1.06);
+  }
+  .raccoon-avatar-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+  }
+  .raccoon-pet-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: transparent !important;
+    filter: drop-shadow(0 5px 12px rgba(0,0,0,0.25));
+    animation: raccoonFloat 3.2s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes raccoonFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(1.5deg); }
+  }
+  .floating-raccoon-widget.recording .raccoon-pet-img {
+    animation: raccoonBounce 0.6s infinite alternate;
+  }
+  @keyframes raccoonBounce {
+    0% { transform: scale(1) translateY(0); }
+    100% { transform: scale(1.12) translateY(-4px); }
+  }
+  .raccoon-pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(196, 98, 45, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .floating-raccoon-widget.recording .raccoon-pulse-ring {
+    opacity: 1;
+    animation: raccoonRingPulse 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  }
+  @keyframes raccoonRingPulse {
+    0% { width: 60px; height: 60px; opacity: 0.9; }
+    100% { width: 110px; height: 110px; opacity: 0; }
+  }
+  .raccoon-status-bubble {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    min-width: 130px;
+    max-width: 200px;
+    background: rgba(30, 24, 18, 0.94);
+    color: #FFF6EE;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.4;
+    padding: 7px 11px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 999;
+  }
+  .raccoon-status-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .raccoon-status-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 26px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: rgba(30, 24, 18, 0.94) transparent transparent transparent;
+  }
+  .raccoon-quick-chips .chip-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 16px;
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+  .raccoon-quick-chips .chip-btn:hover {
+    background: var(--accent-bg);
+    border-color: var(--primary);
+  }
+  .chat-msg.user-msg {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .chat-msg.user-msg .msg-bubble {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 16px 4px 16px 16px;
+    padding: 9px 13px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 82%;
+  }
+
 </style>
 </head>
 <body>
@@ -893,8 +1031,7 @@
     <nav id="top-nav-bar" class="compact-nav-bar">
       <button class="top-nav-btn active" data-page="page-sop" onclick="switchNavPage('page-sop', this)"><span class="nav-icon">📋</span><span class="nav-label">實務SOP</span></button>
       <button class="top-nav-btn" data-page="page-vocab-sop" onclick="switchNavPage('page-vocab-sop', this)"><span class="nav-icon">📖</span><span class="nav-label">實戰單字庫</span></button>
-      <button class="top-nav-btn" data-page="page-ai" onclick="switchNavPage('page-ai', this)"><span class="nav-icon">🦝</span><span class="nav-label">AI小寵物</span></button>
-      <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">模擬訓練</span></button>
+      <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">情境對話</span></button>
       <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
     </nav>
     <span id="offline-badge">📵 離線</span>
@@ -958,41 +1095,7 @@
     <!-- ==============================================================
          分頁 4：電子小寵物「即時 AI 自動規劃」
     ============================================================== -->
-    <section class="page" id="page-ai">
-      <div class="page-sub">點擊小寵物語音輸入，AI 自動整理日文、標音、翻譯與關鍵單字</div>
-
-      <div class="pet-wrapper">
-        <div class="pet-interactive-area" id="pet-touch-zone" onclick="handlePetTrigger()" ontouchstart="handlePetTouchStart(event)" ontouchend="handlePetTouchEnd()">
-          <div class="pet-bubble" id="pet-dialog-bubble"></div>
-          <img class="pet-avatar" id="pet-avatar-icon" src="./icons/tanuki.png" alt="手帳小狸貓">
-          <div class="pet-title">手帳小狸貓</div>
-          <div class="pet-hint">點擊開始語音・長按持續錄音</div>
-          <div class="pet-status-bar" id="pet-status-text"></div>
-        </div>
-      </div>
-
-      <!-- 文字輸入備用 -->
-      <div class="card">
-        <div class="card-title"><span class="dot"></span>快速文字 / 語音測試</div>
-        <div class="ai-quick-input">
-          <input type="text" id="ai-text-input" placeholder="輸入日文或中文句子（例：チキン南蛮できました）…" onkeydown="if(event.key==='Enter')handleAiTextSubmit()" />
-          <button class="btn btn-primary btn-sm" onclick="handleAiTextSubmit()">送出</button>
-        </div>
-      </div>
-
-      <!-- AI 整理結果展示 -->
-      <div class="card ai-result-panel" id="ai-result-panel" style="display:none">
-        <div class="card-title"><span class="dot"></span>AI 結構化整理完成</div>
-        <div class="ai-result-ja" id="ai-res-ja"></div>
-        <div class="ai-result-zh" id="ai-res-zh"></div>
-        <div class="ai-keywords-container" id="ai-res-keywords"></div>
-        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" onclick="saveCurrentAiKeywordsToSop()">📥 存入工作單字庫</button>
-          <button class="btn btn-ghost btn-sm" onclick="saveCurrentAiKeywordsToConv()">💬 存入會話單字庫</button>
-          <button class="btn btn-ghost btn-sm" onclick="closeAiResultPanel()">✕ 關閉</button>
-        </div>
-      </div>
-    </section>
+    
 
     <!-- ==============================================================
          分頁 5：實務情境模擬訓練室 (Roleplay Room)
@@ -1311,6 +1414,63 @@
   </div>
 </div>
 
+
+<!-- ==============================================================
+     🦝 懸浮小浣熊 AI 助手 (透明背景・自由拖曳・語音對話・全網頁修訂)
+============================================================== -->
+<div id="floating-raccoon-widget" class="floating-raccoon-widget" style="display:none;" title="🦝 小浣熊AI：單擊語音輸入、長按即時對話、點兩下開啟AI對話窗">
+  <div class="raccoon-pulse-ring" id="raccoon-pulse-ring"></div>
+  <div class="raccoon-avatar-wrap" id="raccoon-avatar-btn">
+    <img src="./photos/raccoon_pet.png" alt="小浣熊" class="raccoon-pet-img" id="raccoon-pet-img" draggable="false" />
+  </div>
+  <div class="raccoon-status-bubble" id="raccoon-status-bubble"></div>
+</div>
+
+<!-- Modal: 小浣熊 AI 智能對話與全網頁修訂視窗 (點兩下彈出) -->
+<div class="modal-backdrop" id="modal-raccoon-chat" style="align-items:flex-end;">
+  <div class="modal-content raccoon-chat-modal" style="border-radius:24px 24px 18px 18px; max-width:540px; padding:16px; margin:0 auto; max-height:85vh; display:flex; flex-direction:column;">
+    <div class="modal-drag-handle"></div>
+    <div class="raccoon-modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:10px; margin-bottom:10px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img src="./photos/raccoon_pet.png" style="width:42px; height:42px; object-fit:contain; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.15));" />
+        <div>
+          <div style="font-size:1.05rem; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:6px;">
+            小浣熊 AI 助手 <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); padding:1px 6px; border-radius:10px;">Gemini 驅動</span>
+          </div>
+          <div style="font-size:0.73rem; color:var(--muted);">隨身問答・即時發音・全網頁單字與流程修訂</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-raccoon-chat')">✕ 關閉</button>
+    </div>
+    
+    <!-- 快捷提問晶片 -->
+    <div class="raccoon-quick-chips" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:10px; scrollbar-width:none;">
+      <button class="chip-btn" onclick="askRaccoonQuick('剛剛客人跟我說 osau，是什麼意思？')">💬 客人說 osau 是什麼？</button>
+      <button class="chip-btn" onclick="askRaccoonQuick('收盤子時客人說謝謝，我該如何自然親切地回覆？')">🙏 收盤自然道謝應對</button>
+      <button class="chip-btn" onclick="askRaccoonQuick('幫我新增一個單字：打火機，日文是ライター，分類是工具')">➕ 新增單字：打火機</button>
+      <button class="chip-btn" onclick="askRaccoonQuick('幫我檢查今天傳菜SOP有哪10個步驟？')">📋 傳菜10大步驟</button>
+    </div>
+
+    <!-- 對話串訊息區 -->
+    <div class="raccoon-chat-stream" id="raccoon-chat-stream" style="flex:1; overflow-y:auto; min-height:220px; max-height:45vh; display:flex; flex-direction:column; gap:10px; padding:6px 2px; margin-bottom:10px;">
+      <div class="chat-msg raccoon-msg" style="display:flex; gap:8px; align-items:flex-start;">
+        <img src="./photos/raccoon_pet.png" style="width:32px; height:32px; object-fit:contain; flex-shrink:0;" />
+        <div class="msg-bubble" style="background:var(--surface); border:1px solid var(--border); border-radius:4px 16px 16px 16px; padding:10px 12px; font-size:0.88rem; line-height:1.5; color:var(--ink);">
+          哈囉楊！我是你的隨身小浣熊！🦝✨<br>
+          在現場有任何聽不懂的日文（例如客人說的俚語）、或是想幫手帳<strong>新增單字、修改句子、重新排版</strong>，隨時跟我說，我都能直接幫你修改喔！
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部輸入列 -->
+    <div class="raccoon-chat-input-bar" style="display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-secondary" id="raccoon-modal-mic-btn" onclick="toggleRaccoonModalMic()" style="padding:8px 12px; font-size:1.1rem;" title="語音輸入">🎤</button>
+      <input type="text" id="raccoon-chat-input" placeholder="問小浣熊事情，或下達修改指令..." style="flex:1; font-size:0.9rem;" onkeydown="if(event.key==='Enter') sendRaccoonChatMessage()" />
+      <button class="btn btn-primary btn-sm" onclick="sendRaccoonChatMessage()" style="padding:9px 14px;">發送</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal 5: 新增 / 編輯 角色情境 (Roleplay Room) -->
 <div class="modal-backdrop" id="modal-scenario">
   <div class="modal-content">
@@ -1352,7 +1512,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v38';
+const STORAGE_KEY = 'yang_runner_handbook_v40';
 
 function createRealRunnerData() {
   return {
@@ -2482,6 +2642,7 @@ function switchNavPage(targetPageId, triggerBtn) {
 
   // 切換時即時渲染
   if (targetPageId === 'page-sop') renderSopTabs(); renderVocabPage('sop');
+  initFloatingRaccoon();
   if (targetPageId === 'page-vocab-sop') renderVocabPage('sop');
   if (targetPageId === 'page-vocab-conv') renderVocabPage('conv');
   if (targetPageId === 'page-roleplay') renderRoleplayPage();
@@ -4384,6 +4545,460 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW 註冊失敗：', err));
   });
 }
+
+
+/* ==============================================================
+   🦝 懸浮小浣熊 AI 助手 核心控制器 (拖曳、長按語音、雙擊對話、全網頁修訂權限)
+============================================================== */
+
+let raccoonState = {
+  isDragging: false,
+  dragStartX: 0,
+  dragStartY: 0,
+  elemStartX: 0,
+  elemStartY: 0,
+  longPressTimer: null,
+  isLongPressActive: false,
+  lastTapTime: 0,
+  singleTapTimer: null,
+  recognition: null,
+  isRecording: false,
+  modalRecognition: null
+};
+
+// 1. 初始化懸浮小浣熊
+function initFloatingRaccoon() {
+  const widget = document.getElementById('floating-raccoon-widget');
+  if (!widget) return;
+
+  // 讀取上次記憶的位置
+  try {
+    const savedPos = localStorage.getItem('yang_raccoon_pos_v3');
+    if (savedPos) {
+      const pos = JSON.parse(savedPos);
+      const maxX = window.innerWidth - 85;
+      const maxY = window.innerHeight - 90;
+      const x = Math.min(Math.max(10, pos.x), maxX);
+      const y = Math.min(Math.max(65, pos.y), maxY);
+      widget.style.left = x + 'px';
+      widget.style.top = y + 'px';
+      widget.style.right = 'auto';
+      widget.style.bottom = 'auto';
+    }
+  } catch (e) {
+    console.warn('Load raccoon pos error:', e);
+  }
+
+  // 根據當前頁面決定是否顯示
+  updateRaccoonVisibility();
+
+  // 綁定觸控與滑鼠拖曳/長按/雙擊事件
+  widget.addEventListener('touchstart', handleRaccoonPointerDown, { passive: false });
+  widget.addEventListener('touchmove', handleRaccoonPointerMove, { passive: false });
+  widget.addEventListener('touchend', handleRaccoonPointerUp, { passive: false });
+
+  widget.addEventListener('mousedown', handleRaccoonPointerDown);
+  window.addEventListener('mousemove', handleRaccoonPointerMove);
+  window.addEventListener('mouseup', handleRaccoonPointerUp);
+}
+
+// 2. 根據當前頁面切換可見性 (只出現在 SOP 與 單字庫 兩大頁面)
+function updateRaccoonVisibility() {
+  const widget = document.getElementById('floating-raccoon-widget');
+  if (!widget) return;
+  const activePage = document.querySelector('.page.active');
+  const pageId = activePage ? activePage.id : 'page-sop';
+
+  if (pageId === 'page-sop' || pageId === 'page-vocab-sop') {
+    widget.style.display = 'block';
+  } else {
+    widget.style.display = 'none';
+  }
+}
+
+// 3. 拖曳、長按與點擊手勢處理
+function handleRaccoonPointerDown(e) {
+  const widget = document.getElementById('floating-raccoon-widget');
+  if (!widget) return;
+
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+  raccoonState.isDragging = false;
+  raccoonState.isLongPressActive = false;
+  raccoonState.dragStartX = clientX;
+  raccoonState.dragStartY = clientY;
+
+  const rect = widget.getBoundingClientRect();
+  raccoonState.elemStartX = rect.left;
+  raccoonState.elemStartY = rect.top;
+
+  // 設定 480ms 長按計時器 (長按語音對話)
+  if (raccoonState.longPressTimer) clearTimeout(raccoonState.longPressTimer);
+  raccoonState.longPressTimer = setTimeout(() => {
+    if (!raccoonState.isDragging) {
+      raccoonState.isLongPressActive = true;
+      startRaccoonVoice(true);
+      showRaccoonBubble('🎙️ 正在聆聽... 請說話！');
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+  }, 480);
+}
+
+function handleRaccoonPointerMove(e) {
+  if (e.touches && e.touches.length > 1) return;
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+  const deltaX = clientX - raccoonState.dragStartX;
+  const deltaY = clientY - raccoonState.dragStartY;
+
+  // 移動超過 7px 視為拖曳，取消長按
+  if (Math.hypot(deltaX, deltaY) > 7) {
+    raccoonState.isDragging = true;
+    if (raccoonState.longPressTimer) {
+      clearTimeout(raccoonState.longPressTimer);
+      raccoonState.longPressTimer = null;
+    }
+
+    if (e.cancelable) e.preventDefault();
+
+    const widget = document.getElementById('floating-raccoon-widget');
+    if (!widget) return;
+
+    let newX = raccoonState.elemStartX + deltaX;
+    let newY = raccoonState.elemStartY + deltaY;
+
+    // 邊界防跑出螢幕
+    const maxX = window.innerWidth - 80;
+    const maxY = window.innerHeight - 85;
+    newX = Math.min(Math.max(8, newX), maxX);
+    newY = Math.min(Math.max(60, newY), maxY);
+
+    widget.style.left = newX + 'px';
+    widget.style.top = newY + 'px';
+    widget.style.right = 'auto';
+    widget.style.bottom = 'auto';
+  }
+}
+
+function handleRaccoonPointerUp(e) {
+  const widget = document.getElementById('floating-raccoon-widget');
+  if (raccoonState.longPressTimer) {
+    clearTimeout(raccoonState.longPressTimer);
+    raccoonState.longPressTimer = null;
+  }
+
+  // 1. 如果剛剛是長按錄音模式，放開時停止錄音並送出分析
+  if (raccoonState.isLongPressActive) {
+    raccoonState.isLongPressActive = false;
+    stopRaccoonVoice();
+    return;
+  }
+
+  // 2. 如果是拖曳，儲存當前位置
+  if (raccoonState.isDragging) {
+    raccoonState.isDragging = false;
+    if (widget) {
+      const rect = widget.getBoundingClientRect();
+      localStorage.setItem('yang_raccoon_pos_v3', JSON.stringify({ x: rect.left, y: rect.top }));
+    }
+    return;
+  }
+
+  // 3. 點擊判斷 (單擊 vs 雙擊)
+  const now = Date.now();
+  const timeDiff = now - raccoonState.lastTapTime;
+  raccoonState.lastTapTime = now;
+
+  if (timeDiff < 320) {
+    // 雙擊 (Double Tap) ➔ 開啟 Gemini 對話視窗
+    if (raccoonState.singleTapTimer) clearTimeout(raccoonState.singleTapTimer);
+    openRaccoonChatModal();
+  } else {
+    // 單擊 (Single Tap) ➔ 啟動快速語音輸入
+    raccoonState.singleTapTimer = setTimeout(() => {
+      startRaccoonVoice(false);
+      showRaccoonBubble('🎙️ 請說出問題或修改指令');
+    }, 320);
+  }
+}
+
+// 4. 小浣熊語音輸入處理 (Web Speech API)
+function startRaccoonVoice(isPushToTalk = false) {
+  const widget = document.getElementById('floating-raccoon-widget');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SR) {
+    showRaccoonBubble('⚠️ 瀏覽器未支援語音，請點兩下輸入文字');
+    openRaccoonChatModal();
+    return;
+  }
+
+  if (raccoonState.isRecording) return;
+
+  try {
+    raccoonState.recognition = new SR();
+    raccoonState.recognition.lang = 'zh-TW';
+    raccoonState.recognition.interimResults = false;
+    raccoonState.recognition.continuous = isPushToTalk;
+    raccoonState.isRecording = true;
+
+    if (widget) widget.classList.add('recording');
+
+    raccoonState.recognition.onresult = (e) => {
+      const transcript = e.results[e.results.length - 1][0].transcript;
+      showRaccoonBubble('🤖 分析中：「' + transcript + '」');
+      handleRaccoonUserInput(transcript);
+    };
+
+    raccoonState.recognition.onerror = (e) => {
+      console.warn('Raccoon voice error:', e.error);
+      stopRaccoonVoice();
+      if (e.error === 'not-allowed') {
+        showRaccoonBubble('⚠️ 請允許麥克風權限');
+      } else {
+        showRaccoonBubble('未聽清，請點兩下對話');
+      }
+    };
+
+    raccoonState.recognition.onend = () => {
+      stopRaccoonVoice();
+    };
+
+    raccoonState.recognition.start();
+  } catch (err) {
+    console.error('Start raccoon voice error:', err);
+    stopRaccoonVoice();
+  }
+}
+
+function stopRaccoonVoice() {
+  const widget = document.getElementById('floating-raccoon-widget');
+  if (raccoonState.recognition && raccoonState.isRecording) {
+    try { raccoonState.recognition.stop(); } catch(e) {}
+  }
+  raccoonState.isRecording = false;
+  if (widget) widget.classList.remove('recording');
+}
+
+function showRaccoonBubble(text, duration = 4000) {
+  const bubble = document.getElementById('raccoon-status-bubble');
+  if (!bubble) return;
+  bubble.textContent = text;
+  bubble.classList.add('show');
+  clearTimeout(showRaccoonBubble._timer);
+  showRaccoonBubble._timer = setTimeout(() => {
+    bubble.classList.remove('show');
+  }, duration);
+}
+
+// 5. 開啟/管理小浣熊 Gemini 對話視窗
+function openRaccoonChatModal() {
+  openModal('modal-raccoon-chat');
+  const input = document.getElementById('raccoon-chat-input');
+  if (input) setTimeout(() => input.focus(), 300);
+}
+
+function askRaccoonQuick(questionText) {
+  const input = document.getElementById('raccoon-chat-input');
+  if (input) input.value = questionText;
+  sendRaccoonChatMessage();
+}
+
+function sendRaccoonChatMessage() {
+  const input = document.getElementById('raccoon-chat-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  appendRaccoonChatMessage('user', text);
+  handleRaccoonUserInput(text);
+}
+
+function appendRaccoonChatMessage(sender, content, audioText = '') {
+  const stream = document.getElementById('raccoon-chat-stream');
+  if (!stream) return;
+
+  const msgDiv = document.createElement('div');
+  if (sender === 'user') {
+    msgDiv.className = 'chat-msg user-msg';
+    msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(content) + '</div>';
+  } else {
+    msgDiv.className = 'chat-msg raccoon-msg';
+    msgDiv.style.cssText = 'display:flex; gap:8px; align-items:flex-start;';
+    
+    let playBtnHtml = '';
+    if (audioText) {
+      playBtnHtml = '<button class="btn btn-ghost btn-sm" style="margin-top:6px; padding:2px 8px; font-size:0.75rem;" onclick="speakJapanese(\'' + escapeHtml(audioText).replace(/'/g, "\\'") + '\')">🔊 聆聽日語發音</button>';
+    }
+
+    msgDiv.innerHTML = '<img src="./photos/raccoon_pet.png" style="width:32px; height:32px; object-fit:contain; flex-shrink:0;" />' +
+      '<div class="msg-bubble" style="background:var(--surface); border:1px solid var(--border); border-radius:4px 16px 16px 16px; padding:10px 12px; font-size:0.88rem; line-height:1.5; color:var(--ink);">' +
+      content + playBtnHtml +
+      '</div>';
+  }
+
+  stream.appendChild(msgDiv);
+  stream.scrollTop = stream.scrollHeight;
+}
+
+// 6. 小浣熊核心 AI 邏輯 (問答 + 執行資料庫修改 Action)
+async function handleRaccoonUserInput(userPrompt) {
+  appendRaccoonChatMessage('raccoon', '<span style="color:var(--muted);">🦝 小浣熊正在思考並處理中...</span>');
+
+  const systemInstruction = `你是一位全能的日語職場助手兼手帳資料庫管理員「小浣熊」。
+使用者是台灣前往熊本「優彩 (Yusai)」溫泉旅館自助餐廳擔任傳菜人員（Runner / ランナー）的「楊（よう）」。
+
+【你的兩大核心職責】
+職責 1：【日語與職場解惑】
+- 解釋現場日語、客人用語（如 osau 是 お白湯/溫開水）、道謝回覆（如 とんでもないです！ごゆっくりどうぞ）、菜名與發音。
+- 使用 100% 繁體中文回覆，親切溫暖、簡明精準。
+
+職責 2：【網頁資料管理員（具有新增/修改/刪除/排版權限）】
+- 當使用者要求新增單字、修改某個句子、刪除菜品、調整分類或重新排版時，你必須在 JSON 中回傳對應的 "action"！
+
+【回傳 JSON 格式規範（純 JSON）】
+{
+  "replyText": "給使用者的繁體中文親切說明",
+  "japaneseAudio": "若有包含日文句子或單字，填寫要發音的日文文字（無則填空字串）",
+  "action": {
+    "type": "NONE" | "ADD_VOCAB" | "EDIT_VOCAB" | "DELETE_VOCAB" | "ADD_SOP" | "EDIT_SOP" | "DELETE_SOP",
+    "payload": {
+      "id": "隨機或指定ID",
+      "ja": "<ruby>漢字<rt>標音</rt></ruby>",
+      "zh": "中文翻譯",
+      "cat": "餐具" | "工具" | "餐點" | "酒水" | "名字" | "職稱" | "對話",
+      "note": "備註說明"
+    }
+  }
+}`;
+
+  const prompt = systemInstruction + "\n\n【使用者輸入】\n" + userPrompt;
+
+  try {
+    const res = await callGeminiApiUnified(prompt);
+    
+    // 移除思考中的訊息
+    const stream = document.getElementById('raccoon-chat-stream');
+    if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
+
+    if (res && res.replyText) {
+      appendRaccoonChatMessage('raccoon', res.replyText, res.japaneseAudio || '');
+      showRaccoonBubble(res.replyText.substring(0, 36) + '...');
+
+      // 執行網頁資料修改 Action
+      if (res.action && res.action.type && res.action.type !== 'NONE') {
+        executeRaccoonAction(res.action);
+      }
+    } else {
+      appendRaccoonChatMessage('raccoon', '小浣熊收到囉！但格式稍微有點問題，請再跟我說一次！');
+    }
+  } catch (err) {
+    console.error('Raccoon AI processing error:', err);
+    const stream = document.getElementById('raccoon-chat-stream');
+    if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
+    appendRaccoonChatMessage('raccoon', '連線至 AI 大腦稍微有些延遲，請確認網路或 API Key 設定。');
+    showRaccoonBubble('⚠️ AI 連線異常，請稍後再試');
+  }
+}
+
+// 7. 執行小浣熊的網頁資料修訂指令
+function executeRaccoonAction(action) {
+  if (!AppData) return;
+
+  if (action.type === 'ADD_VOCAB' && action.payload) {
+    if (!AppData.vocabSop) AppData.vocabSop = [];
+    const newId = action.payload.id || ('v_custom_' + Date.now());
+    AppData.vocabSop.unshift({
+      id: newId,
+      ja: action.payload.ja || '',
+      zh: action.payload.zh || '',
+      cat: action.payload.cat || '餐具',
+      imageUrl: action.payload.imageUrl || '',
+      note: action.payload.note || '小浣熊新增'
+    });
+    saveAppData(AppData);
+    renderVocabSop();
+    showToast('🦝 小浣熊已成功為你新增單字！');
+  } else if (action.type === 'DELETE_VOCAB' && action.payload) {
+    if (AppData.vocabSop) {
+      AppData.vocabSop = AppData.vocabSop.filter(v => v.id !== action.payload.id && v.zh !== action.payload.zh);
+      saveAppData(AppData);
+      renderVocabSop();
+      showToast('🦝 小浣熊已幫你刪除該單字！');
+    }
+  } else if (action.type === 'ADD_SOP' && action.payload) {
+    const targetTab = AppData.tabs && AppData.tabs[0];
+    if (targetTab) {
+      if (!targetTab.items) targetTab.items = [];
+      targetTab.items.push({
+        id: action.payload.id || ('rn_custom_' + Date.now()),
+        type: action.payload.type || 'sop',
+        speaker: action.payload.speaker || '',
+        zh: action.payload.zh || '',
+        ja: action.payload.ja || '',
+        grammar: action.payload.grammar || { vocabs: [], points: [], tips: '' }
+      });
+      saveAppData(AppData);
+      renderActiveTab();
+      showToast('🦝 小浣熊已成功更新傳菜流程！');
+    }
+  }
+}
+
+function toggleRaccoonModalMic() {
+  const btn = document.getElementById('raccoon-modal-mic-btn');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SR) {
+    showToast('瀏覽器不支援語音輸入，請直接打字', 'error');
+    return;
+  }
+
+  if (raccoonState.modalRecognition) {
+    raccoonState.modalRecognition.stop();
+    raccoonState.modalRecognition = null;
+    if (btn) btn.textContent = '🎤';
+    return;
+  }
+
+  try {
+    const r = new SR();
+    r.lang = 'zh-TW';
+    r.interimResults = false;
+    r.continuous = false;
+
+    if (btn) btn.textContent = '🔴 聆聽中';
+
+    r.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      const input = document.getElementById('raccoon-chat-input');
+      if (input) input.value = transcript;
+      if (btn) btn.textContent = '🎤';
+      raccoonState.modalRecognition = null;
+      sendRaccoonChatMessage();
+    };
+
+    r.onerror = () => {
+      if (btn) btn.textContent = '🎤';
+      raccoonState.modalRecognition = null;
+    };
+
+    r.onend = () => {
+      if (btn) btn.textContent = '🎤';
+      raccoonState.modalRecognition = null;
+    };
+
+    r.start();
+    raccoonState.modalRecognition = r;
+  } catch (err) {
+    console.error('Modal mic error:', err);
+    if (btn) btn.textContent = '🎤';
+  }
+}
+
 
 /* ==============================================================
    11. 初始化

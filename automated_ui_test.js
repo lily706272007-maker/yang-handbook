@@ -155,6 +155,17 @@ assert(html.includes('saveVoiceSettings'), '包含自選聲線儲存功能函式
 assert(html.includes('populateVoiceList'), '包含設備語音清單動態載入函式 (populateVoiceList)');
 assert(html.includes('getSavedVoiceSettings'), '包含本機聲線偏好讀取函式 (getSavedVoiceSettings)');
 
+// 測試 12: 懸浮小浣熊 AI 助手 (透明背景、可拖曳、語音輸入、全網頁修訂)
+console.log('\n【測試 12：懸浮小浣熊 AI 助手】');
+assert(html.includes('id="floating-raccoon-widget"'), '包含懸浮小浣熊元件 (floating-raccoon-widget)');
+assert(html.includes('photos/raccoon_pet.png'), '使用新版透明背景小浣熊圖檔 (raccoon_pet.png)');
+assert(html.includes('id="modal-raccoon-chat"'), '包含小浣熊雙擊對話視窗 (modal-raccoon-chat)');
+assert(html.includes('initFloatingRaccoon'), '包含小浣熊拖曳與手勢初始化函式 (initFloatingRaccoon)');
+assert(html.includes('startRaccoonVoice'), '包含小浣熊語音輸入函式 (startRaccoonVoice)');
+assert(html.includes('openRaccoonChatModal'), '包含雙擊開啟對話窗函式 (openRaccoonChatModal)');
+assert(html.includes('updateRaccoonVisibility'), '包含跨頁面顯示/隱藏控制函式 (updateRaccoonVisibility)');
+assert(html.includes('executeRaccoonAction'), '包含小浣熊全網頁資料修訂執行函式 (executeRaccoonAction)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -162,5 +173,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析與聲線切換測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換與小浣熊AI測試 100% 全部通過！');
 }
