@@ -1352,7 +1352,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v33';
+const STORAGE_KEY = 'yang_runner_handbook_v34';
 
 function createRealRunnerData() {
   return {
@@ -2486,15 +2486,16 @@ function createRealRunnerData() {
     { "id": "vs_yaki_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "烤蝦", "cat": "餐點", "imageUrl": "", "note": "夕食いろり烤物" },
     { "id": "vs_nikumaki", "ja": "<ruby>豚肉<rt>ぶたにく</rt></ruby><ruby>巻<rt>ま</rt></ruby>き", "zh": "豬肉蔬菜捲", "cat": "餐點", "imageUrl": "./photos/IMG_0966.jpg", "note": "熱菜・新鮮豬肉捲" },
 
-    // ── 🥗 熊本市場直送 沙拉吧專區 (已對齊現場立牌實拍照) ──
-    { "id": "vs_salad_bar", "ja": "サラダバー", "zh": "熊本市場直送生菜沙拉吧", "cat": "餐點", "imageUrl": "./photos/IMG_0962.jpg", "note": "熊本市場直送・各式生菜與配料吧台" },
-    { "id": "vs_salad_sweetcorn", "ja": "スイートコーン", "zh": "甜玉米粒", "cat": "餐點", "imageUrl": "./photos/IMG_0958.jpg", "note": "沙拉吧配料・甜玉米粒" },
-    { "id": "vs_salad_beans", "ja": "ビーンズ", "zh": "綜合豆", "cat": "餐點", "imageUrl": "./photos/IMG_0955.jpg", "note": "沙拉吧配料・健康綜合豆" },
-    { "id": "vs_salad_babyleaf", "ja": "ベビーリーフ", "zh": "嫩葉生菜", "cat": "餐點", "imageUrl": "./photos/IMG_0961.jpg", "note": "沙拉吧蔬菜・嫩葉生菜" },
+        // ── 🥗 熊本市場直送 沙拉吧專區 (經 Vision 影像辨識與立牌雙重校正) ──
+    { "id": "vs_salad_bar", "ja": "サラダバー", "zh": "熊本市場直送生菜沙拉吧（全景立牌）", "cat": "餐點", "imageUrl": "./photos/IMG_0962.jpg", "note": "熊本市場直送・各式生菜與配料吧台" },
+    { "id": "vs_salad_sweetcorn", "ja": "スイートコーン", "zh": "甜玉米粒", "cat": "餐點", "imageUrl": "./photos/IMG_0958.jpg", "note": "沙拉吧配料・鮮黃香甜玉米粒" },
+    { "id": "vs_salad_beans", "ja": "ビーンズ", "zh": "綜合豆", "cat": "餐點", "imageUrl": "./photos/IMG_0956.jpg", "note": "沙拉吧配料・多彩綜合健康豆" },
+    { "id": "vs_salad_kikuimo", "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ", "zh": "菊芋脆片（洋芋脆片）", "cat": "餐點", "imageUrl": "./photos/IMG_0955.jpg", "note": "沙拉吧配料・金黃酥脆的菊芋薄片（洋芋脆片）" },
+    { "id": "vs_salad_murasaki", "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ", "zh": "紫甘藍（紫高麗菜）", "cat": "餐點", "imageUrl": "./photos/IMG_0959.jpg", "note": "沙拉吧蔬菜・深紫色切絲紫甘藍菜" },
+    { "id": "vs_salad_minitomato", "ja": "ミニトマト", "zh": "小番茄", "cat": "餐點", "imageUrl": "./photos/IMG_0960.jpg", "note": "沙拉吧蔬菜・鮮紅多汁小番茄" },
+    { "id": "vs_salad_babyleaf", "ja": "ベビーリーフ", "zh": "嫩葉生菜", "cat": "餐點", "imageUrl": "./photos/IMG_0961.jpg", "note": "沙拉吧蔬菜・鮮嫩綜合幼葉生菜" },
+    { "id": "vs_salad_toumyou", "ja": "<ruby>豆苗<rt>とうみょう</rt></ruby>", "zh": "豆苗", "cat": "餐點", "imageUrl": "./photos/IMG_0964.jpg", "note": "沙拉吧蔬菜・新鮮翠綠豆苗" },
     { "id": "vs_salad_ninjin", "ja": "にんじん", "zh": "紅蘿蔔絲", "cat": "餐點", "imageUrl": "./photos/IMG_0963.jpg", "note": "沙拉吧蔬菜・新鮮切絲紅蘿蔔" },
-    { "id": "vs_salad_kikuimo", "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>チップ", "zh": "菊芋脆片", "cat": "餐點", "imageUrl": "./photos/IMG_0959.jpg", "note": "沙拉吧配料・酥脆菊芋片" },
-    { "id": "vs_salad_minitomato", "ja": "ミニトマト", "zh": "小番茄", "cat": "餐點", "imageUrl": "./photos/IMG_0960.jpg", "note": "沙拉吧蔬菜・新鮮甜小番茄" },
-    { "id": "vs_salad_murasaki", "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ", "zh": "紫甘藍", "cat": "餐點", "imageUrl": "", "note": "沙拉吧蔬菜" },
     { "id": "vs_salad_banana", "ja": "バナナ", "zh": "香蕉", "cat": "餐點", "imageUrl": "", "note": "朝食水果" },
     { "id": "vs_salad_orange", "ja": "オレンジ", "zh": "柳橙", "cat": "餐點", "imageUrl": "", "note": "朝食水果" },
     { "id": "vs_salad_yogurt", "ja": "ヨーグルト", "zh": "優格", "cat": "餐點", "imageUrl": "", "note": "朝食沙拉吧" },
@@ -2509,7 +2510,7 @@ function createRealRunnerData() {
     { "id": "vs_sushi_teriyaki", "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0876.jpg", "note": "壽司台名物・照燒肉類握壽司" },
     { "id": "vs_sushi_gari", "ja": "<ruby>ガリ<rt>gari</rt></ruby>", "zh": "壽司甜薑片", "cat": "餐點", "imageUrl": "./photos/IMG_0934.jpg", "note": "壽司台配料・解膩甜醋生薑片（無標牌直接拍攝）" },
     { "id": "vs_sushi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵 / 哇沙比（芥末）", "cat": "餐點", "imageUrl": "./photos/IMG_0933.jpg", "note": "壽司台配料・現磨生山葵芥末小碟（無標牌直接拍攝）" },
-    { "id": "vs_sushi_counter", "ja": "<ruby>寿司<rt>すし</rt></ruby>カウンター", "zh": "壽司餐檯與招牌牌匾", "cat": "餐點", "imageUrl": "./photos/IMG_0992.jpg", "note": "優彩自助餐廳壽司現做餐檯與招牌木牌" },
+    { "id": "vs_sushi_counter", "ja": "<ruby>寿司<rt>すし</rt></ruby>カウンター", "zh": "壽司餐檯與招牌牌匾", "cat": "工具", "imageUrl": "./photos/IMG_0992.jpg", "note": "優彩自助餐廳壽司現做餐檯與招牌木牌" },
 
     // ── 🍮 點心類 ──
     { "id": "vs_desert_melon", "ja": "メロン", "zh": "哈密瓜", "cat": "餐點", "imageUrl": "./photos/IMG_0882.jpg", "note": "夕食甜點水果" },

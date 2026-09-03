@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yang-pwa-v33';
+const CACHE_NAME = 'yang-pwa-v34';
 const ASSETS = [
   './',
   './index.html',
