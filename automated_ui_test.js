@@ -135,6 +135,15 @@ assert(textContent.includes('市石') && html.includes('いちいし'), '同仁�
 assert(textContent.includes('松本') && html.includes('まつもと'), '同仁名：松本 (まつもと)');
 assert(textContent.includes('楊') && html.includes('よう'), '同仁名：楊 (よう)');
 
+// 測試 11: 語音聲線切換、試聽與自選語速功能
+console.log('\n【測試 11：語音聲線切換與試聽功能】');
+assert(html.includes('id="setting-voice-select"'), '包含設備語音聲線下拉選單 (setting-voice-select)');
+assert(html.includes('id="setting-rate-slider"'), '包含語音朗讀速度調整滑桿 (setting-rate-slider)');
+assert(html.includes('testCurrentVoice'), '包含即時語音試聽功能函式 (testCurrentVoice)');
+assert(html.includes('saveVoiceSettings'), '包含自選聲線儲存功能函式 (saveVoiceSettings)');
+assert(html.includes('populateVoiceList'), '包含設備語音清單動態載入函式 (populateVoiceList)');
+assert(html.includes('getSavedVoiceSettings'), '包含本機聲線偏好讀取函式 (getSavedVoiceSettings)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -142,5 +151,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具與文法解析手冊測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析與聲線切換測試 100% 全部通過！');
 }

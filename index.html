@@ -1007,9 +1007,44 @@
          分頁 6：設定 (100% 繁體中文)
     ============================================================== -->
     <section class="page" id="page-settings">
-      <div class="page-sub">工作情境自訂與手帳資料備份還原</div>
+      <div class="page-sub">工作情境自訂、語音聲線調整與手帳資料備份還原</div>
 
+      <!-- 🗣️ 日語語音朗讀與聲線設定 -->
+      <div class="settings-group">
+        <div class="settings-group-title">🗣️ 日語朗讀聲線與發音設定</div>
+        <p style="font-size:0.84rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">
+          為這台設備選擇最清晰、最喜歡的日語發音聲線。不同裝置（電腦、iPhone、iPad）系統內建的語音庫各不相同，您可以先點擊「試聽」確認效果後儲存。
+        </p>
+        
+        <div class="card" style="padding:14px; margin-bottom:10px;">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:block;">
+              選擇發音聲線（設備日語語音庫）：
+            </label>
+            <select id="setting-voice-select" style="width:100%; padding:9px 12px; border-radius:10px; border:1.5px solid var(--border); font-size:0.88rem; background:var(--bg-card); color:var(--ink);">
+              <option value="">正在載入此設備的語音清單…</option>
+            </select>
+          </div>
 
+          <div class="form-group" style="margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label style="font-size:0.82rem; font-weight:700; color:var(--primary);">語音朗讀速度 (語速)：</label>
+              <span id="setting-rate-val" style="font-size:0.82rem; font-weight:700; color:var(--accent);">0.92x</span>
+            </div>
+            <input type="range" id="setting-rate-slider" min="0.6" max="1.3" step="0.05" value="0.92" oninput="updateRateLabel(this.value)" style="width:100%;" />
+            <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--muted); margin-top:2px;">
+              <span>較慢 (0.6x)</span>
+              <span>適中 (0.92x 推薦)</span>
+              <span>較快 (1.3x)</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn btn-ghost btn-sm" onclick="testCurrentVoice()" style="flex:1; min-width:130px;">🔊 試聽目前聲線</button>
+            <button class="btn btn-primary btn-sm" onclick="saveVoiceSettings()" style="flex:1; min-width:130px;">💾 儲存此設備設定</button>
+          </div>
+        </div>
+      </div>
 
       <!-- 角色與情境設定管理 -->
       <div class="settings-group">
@@ -1299,7 +1334,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v30';
+const STORAGE_KEY = 'yang_runner_handbook_v31';
 
 function createRealRunnerData() {
   return {
@@ -3475,6 +3510,142 @@ function extractSpokenJapanese(htmlStr) {
   return result;
 }
 
+const VOICE_STORAGE_KEY = 'yang_handbook_voice_pref_v1';
+
+function getSavedVoiceSettings() {
+  try {
+    const raw = localStorage.getItem(VOICE_STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return { voiceURI: '', voiceName: '', rate: 0.92 };
+}
+
+function updateRateLabel(val) {
+  const el = document.getElementById('setting-rate-val');
+  if (el) el.textContent = parseFloat(val).toFixed(2) + 'x';
+}
+
+function populateVoiceList() {
+  const select = document.getElementById('setting-voice-select');
+  if (!select) return;
+  
+  if (!('speechSynthesis' in window)) {
+    select.innerHTML = '<option value="">您的瀏覽器不支援語音合成功能</option>';
+    return;
+  }
+
+  const allVoices = window.speechSynthesis.getVoices();
+  const saved = getSavedVoiceSettings();
+
+  // 篩選日文相關語音 (ja / ja-JP / ja_JP)
+  const jaVoices = allVoices.filter(v => v.lang && (v.lang.toLowerCase().startsWith('ja') || v.lang.includes('JP')));
+
+  select.innerHTML = '';
+
+  if (jaVoices.length === 0) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = '🌟 系統智慧推薦日語聲線 (預設)';
+    select.appendChild(opt);
+    
+    allVoices.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.voiceURI || v.name;
+      o.textContent = `${v.name} (${v.lang})`;
+      if (saved.voiceURI === v.voiceURI || saved.voiceName === v.name) o.selected = true;
+      select.appendChild(o);
+    });
+  } else {
+    const defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.textContent = '🌟 系統智慧推薦日語聲線 (預設)';
+    select.appendChild(defaultOpt);
+
+    jaVoices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.voiceURI || v.name;
+      
+      let friendlyName = v.name;
+      if (v.name.includes('Kyoko')) friendlyName += ' (日文・標準女聲)';
+      else if (v.name.includes('Otoya')) friendlyName += ' (日文・標準男聲)';
+      else if (v.name.includes('Siri')) friendlyName += ' (Apple Siri 日語)';
+      else if (v.name.includes('Google')) friendlyName += ' (Google 日語)';
+      else if (v.name.includes('Hattori')) friendlyName += ' (日文・標準男聲)';
+      else friendlyName += ` (${v.lang})`;
+
+      opt.textContent = friendlyName;
+      if (saved.voiceURI === v.voiceURI || saved.voiceName === v.name) {
+        opt.selected = true;
+      }
+      select.appendChild(opt);
+    });
+  }
+
+  const rateSlider = document.getElementById('setting-rate-slider');
+  if (rateSlider && saved.rate) {
+    rateSlider.value = saved.rate;
+    updateRateLabel(saved.rate);
+  }
+}
+
+function testCurrentVoice() {
+  const select = document.getElementById('setting-voice-select');
+  const rateSlider = document.getElementById('setting-rate-slider');
+  if (!select || !('speechSynthesis' in window)) {
+    showToast('您的設備不支援語音合成', 'error');
+    return;
+  }
+
+  const selectedURI = select.value;
+  const rate = rateSlider ? parseFloat(rateSlider.value) : 0.92;
+
+  const testPhrases = [
+    '失礼いたします。こちらのお皿、お下げしてもよろしいでしょうか？',
+    'ご注文の方へ、肉焼売をお願いします。',
+    '恐れ入ります。ごゆっくりどうぞ。'
+  ];
+  const testText = testPhrases[Math.floor(Math.random() * testPhrases.length)];
+
+  const utt = new SpeechSynthesisUtterance(testText);
+  utt.lang = 'ja-JP';
+  utt.rate = rate;
+
+  if (selectedURI) {
+    const allVoices = window.speechSynthesis.getVoices();
+    const voice = allVoices.find(v => v.voiceURI === selectedURI || v.name === selectedURI);
+    if (voice) utt.voice = voice;
+  }
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
+  showToast('正在試聽語音發音…');
+}
+
+function saveVoiceSettings() {
+  const select = document.getElementById('setting-voice-select');
+  const rateSlider = document.getElementById('setting-rate-slider');
+  if (!select) return;
+
+  const selectedURI = select.value;
+  const rate = rateSlider ? parseFloat(rateSlider.value) : 0.92;
+
+  let selectedName = '';
+  if (selectedURI && 'speechSynthesis' in window) {
+    const allVoices = window.speechSynthesis.getVoices();
+    const voice = allVoices.find(v => v.voiceURI === selectedURI || v.name === selectedURI);
+    if (voice) selectedName = voice.name;
+  }
+
+  const pref = {
+    voiceURI: selectedURI,
+    voiceName: selectedName,
+    rate: rate
+  };
+
+  localStorage.setItem(VOICE_STORAGE_KEY, JSON.stringify(pref));
+  showToast('已成功儲存此設備的專屬聲線與語速！');
+}
+
 function speakJapanese(text) {
   if (!('speechSynthesis' in window)) {
     showToast('您的瀏覽器不支援語音合成功能', 'error');
@@ -3485,7 +3656,16 @@ function speakJapanese(text) {
 
   const utt = new SpeechSynthesisUtterance(spokenText);
   utt.lang = 'ja-JP';
-  utt.rate = 0.92;
+
+  const pref = getSavedVoiceSettings();
+  utt.rate = pref.rate || 0.92;
+
+  if (pref.voiceURI || pref.voiceName) {
+    const allVoices = window.speechSynthesis.getVoices();
+    const voice = allVoices.find(v => (pref.voiceURI && v.voiceURI === pref.voiceURI) || (pref.voiceName && v.name === pref.voiceName));
+    if (voice) utt.voice = voice;
+  }
+
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utt);
 }
@@ -4020,7 +4200,7 @@ async function sendRoleplayMessage() {
 }
 
 function renderSettingsPage() {
-  // API Key 已固化內建
+  populateVoiceList();
 
   const list = document.getElementById('settings-scenario-list');
   list.innerHTML = AppData.scenarios.map(s => `
@@ -4168,6 +4348,13 @@ document.addEventListener('DOMContentLoaded', () => {
   syncNetworkStatus();
   renderSopTabs();
   renderVocabPage('sop');
+
+  if ('speechSynthesis' in window) {
+    populateVoiceList();
+    window.speechSynthesis.onvoiceschanged = () => {
+      populateVoiceList();
+    };
+  }
 
   document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
     backdrop.addEventListener('click', (e) => {
