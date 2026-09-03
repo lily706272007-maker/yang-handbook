@@ -1299,7 +1299,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v25';
+const STORAGE_KEY = 'yang_runner_handbook_v27';
 
 function createRealRunnerData() {
   return {
@@ -2170,14 +2170,19 @@ function createRealRunnerData() {
     { "id": "vs_salad_orange", "ja": "オレンジ", "zh": "柳橙", "cat": "餐點", "imageUrl": "", "note": "朝食水果" },
     { "id": "vs_salad_yogurt", "ja": "ヨーグルト", "zh": "優格", "cat": "餐點", "imageUrl": "", "note": "朝食沙拉吧" },
 
-    // ── 🍣 壽司類 ──
-    { "id": "vs_sushi_tamago", "ja": "たまご", "zh": "玉子燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
-    { "id": "vs_sushi_maguro", "ja": "まぐろ", "zh": "鮪魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
-    { "id": "vs_sushi_salmon", "ja": "サーモン", "zh": "鮭魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
-    { "id": "vs_sushi_unagi", "ja": "うなぎ", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
-    { "id": "vs_sushi_ika", "ja": "いか", "zh": "花枝壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
-    { "id": "vs_sushi_ebi", "ja": "えび", "zh": "鮮蝦壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
-    { "id": "vs_sushi_teriyaki", "ja": "てりやき", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物" },
+    // ── 🍣 壽司類 (標準漢字正寫與日文標音) ──
+    { "id": "vs_sushi_tamago", "ja": "<ruby>玉子<rt>たまご</rt></ruby>", "zh": "玉子燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・日式甜煎蛋握壽司" },
+    { "id": "vs_sushi_maguro", "ja": "<ruby>鮪<rt>まぐろ</rt></ruby>", "zh": "鮪魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・新鮮紅肉鮪魚" },
+    { "id": "vs_sushi_salmon", "ja": "<ruby>サーモン<rt>sa-mon</rt></ruby>", "zh": "鮭魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・人氣炙烤/生鮭魚" },
+    { "id": "vs_sushi_unagi", "ja": "<ruby>鰻<rt>うなぎ</rt></ruby>", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・蒲燒甜醬鰻魚" },
+    { "id": "vs_sushi_ika", "ja": "<ruby>烏賊<rt>いか</rt></ruby>", "zh": "花枝壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・軟絲花枝" },
+    { "id": "vs_sushi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "鮮蝦壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・熟白蝦握壽司" },
+    { "id": "vs_sushi_teriyaki", "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・照燒風味" },
+    { "id": "vs_sushi_kanpachi", "ja": "<ruby>間八<rt>かんぱち</rt></ruby>", "zh": "紅甘壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台・熊本近海紅甘魚" },
+    { "id": "vs_sushi_madai", "ja": "<ruby>真鯛<rt>まだい</rt></ruby>", "zh": "真鯛壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台・優彩白身真鯛握壽司" },
+    { "id": "vs_sushi_inari", "ja": "<ruby>稲荷<rt>いなり</rt></ruby><ruby>寿司<rt>ずし</rt></ruby>", "zh": "豆皮壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台・經典甜煮豆皮壽司" },
+    { "id": "vs_sushi_gari", "ja": "<ruby>ガリ<rt>gari</rt></ruby>", "zh": "壽司甜薑片", "cat": "餐點", "imageUrl": "", "note": "壽司台配料・解膩甜醋生薑片" },
+    { "id": "vs_sushi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵 / 哇沙比", "cat": "餐點", "imageUrl": "", "note": "壽司台配料・現磨生山葵" },
 
     // ── 🍮 點心類 ──
     { "id": "vs_desert_melon", "ja": "メロン", "zh": "哈密瓜", "cat": "餐點", "imageUrl": "./photos/IMG_0882.jpg", "note": "夕食甜點水果" },
@@ -2315,8 +2320,8 @@ function loadAppData() {
       return data;
     }
     const data = JSON.parse(raw);
-    // 嚴格校驗：若 tabs 不完整或 vocabSop 數量小於 50 或未包含最新餐具分類/外國人標記，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.cat === '餐點') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
+    // 嚴格校驗：若 tabs 不完整或 vocabSop 未包含最新壽司漢字標音/餐具分類/外國人標記，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
@@ -3020,7 +3025,7 @@ function renderSopContent() {
 
   // 從全局 vocabSop 中取各分類資料（供各 SOP 頁加入速查）
   const allVocabs = (AppData && AppData.vocabSop) ? AppData.vocabSop : [];
-  const sushiIds  = ['vs_sushi_tamago','vs_sushi_maguro','vs_sushi_salmon','vs_sushi_unagi','vs_sushi_ika','vs_sushi_ebi','vs_sushi_teriyaki'];
+  const sushiIds  = ['vs_sushi_tamago','vs_sushi_maguro','vs_sushi_salmon','vs_sushi_unagi','vs_sushi_ika','vs_sushi_ebi','vs_sushi_teriyaki','vs_sushi_kanpachi','vs_sushi_madai','vs_sushi_inari','vs_sushi_gari','vs_sushi_wasabi'];
   const dessertIds= ['vs_desert_melon','vs_desert_choco','vs_desert_warabi','vs_desert_dango'];
   const sushiVocabs     = allVocabs.filter(v => v.cat === '餐點' && sushiIds.includes(v.id));
   const dessertVocabs   = allVocabs.filter(v => v.cat === '餐點' && dessertIds.includes(v.id));
