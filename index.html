@@ -1512,7 +1512,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v40';
+const STORAGE_KEY = 'yang_runner_handbook_v41';
 
 function createRealRunnerData() {
   return {
@@ -4548,10 +4548,11 @@ if ('serviceWorker' in navigator) {
 
 
 /* ==============================================================
-   🦝 懸浮小浣熊 AI 助手 核心控制器 (拖曳、長按語音、雙擊對話、全網頁修訂權限)
+   🦝 懸浮小浣熊 AI 助手 控制器 (平時安靜待在固定位置・可按住拖動搬移・長按語音・雙擊對話)
 ============================================================== */
 
 let raccoonState = {
+  isPointerDown: false,
   isDragging: false,
   dragStartX: 0,
   dragStartY: 0,
@@ -4571,38 +4572,47 @@ function initFloatingRaccoon() {
   const widget = document.getElementById('floating-raccoon-widget');
   if (!widget) return;
 
-  // 讀取上次記憶的位置
+  // 讀取上次使用者手動放置的位置；若無，預設安靜待在右下角 (bottom:85px, right:20px)
   try {
-    const savedPos = localStorage.getItem('yang_raccoon_pos_v3');
+    const savedPos = localStorage.getItem('yang_raccoon_pos_v4');
     if (savedPos) {
       const pos = JSON.parse(savedPos);
-      const maxX = window.innerWidth - 85;
-      const maxY = window.innerHeight - 90;
+      const maxX = window.innerWidth - 80;
+      const maxY = window.innerHeight - 85;
       const x = Math.min(Math.max(10, pos.x), maxX);
       const y = Math.min(Math.max(65, pos.y), maxY);
       widget.style.left = x + 'px';
       widget.style.top = y + 'px';
       widget.style.right = 'auto';
       widget.style.bottom = 'auto';
+    } else {
+      widget.style.right = '20px';
+      widget.style.bottom = '85px';
+      widget.style.left = 'auto';
+      widget.style.top = 'auto';
     }
   } catch (e) {
-    console.warn('Load raccoon pos error:', e);
+    widget.style.right = '20px';
+    widget.style.bottom = '85px';
   }
 
-  // 根據當前頁面決定是否顯示
+  // 根據當前頁面決定是否顯示 (只出現在 SOP 與 單字庫 兩大頁面)
   updateRaccoonVisibility();
 
-  // 綁定觸控與滑鼠拖曳/長按/雙擊事件
+  // 僅在點擊小浣熊本體時啟動觸控/拖曳監聽
   widget.addEventListener('touchstart', handleRaccoonPointerDown, { passive: false });
-  widget.addEventListener('touchmove', handleRaccoonPointerMove, { passive: false });
-  widget.addEventListener('touchend', handleRaccoonPointerUp, { passive: false });
-
   widget.addEventListener('mousedown', handleRaccoonPointerDown);
+
+  // 全域移動與放開監聽
+  window.addEventListener('touchmove', handleRaccoonPointerMove, { passive: false });
+  window.addEventListener('touchend', handleRaccoonPointerUp, { passive: false });
+  window.addEventListener('touchcancel', handleRaccoonPointerUp, { passive: false });
+
   window.addEventListener('mousemove', handleRaccoonPointerMove);
   window.addEventListener('mouseup', handleRaccoonPointerUp);
 }
 
-// 2. 根據當前頁面切換可見性 (只出現在 SOP 與 單字庫 兩大頁面)
+// 2. 根據當前頁面切換可見性 (只出現在 SOP 與 單字庫 兩大頁面，對話與設定頁自動隱藏)
 function updateRaccoonVisibility() {
   const widget = document.getElementById('floating-raccoon-widget');
   if (!widget) return;
@@ -4616,7 +4626,7 @@ function updateRaccoonVisibility() {
   }
 }
 
-// 3. 拖曳、長按與點擊手勢處理
+// 3. 拖曳搬移與點擊手勢處理 (平常絕對不跟隨滑鼠，只有按住拖曳時才移動)
 function handleRaccoonPointerDown(e) {
   const widget = document.getElementById('floating-raccoon-widget');
   if (!widget) return;
@@ -4624,6 +4634,7 @@ function handleRaccoonPointerDown(e) {
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
+  raccoonState.isPointerDown = true;
   raccoonState.isDragging = false;
   raccoonState.isLongPressActive = false;
   raccoonState.dragStartX = clientX;
@@ -4633,28 +4644,30 @@ function handleRaccoonPointerDown(e) {
   raccoonState.elemStartX = rect.left;
   raccoonState.elemStartY = rect.top;
 
-  // 設定 480ms 長按計時器 (長按語音對話)
+  // 設定 500ms 長按計時器 (長按語音對話)
   if (raccoonState.longPressTimer) clearTimeout(raccoonState.longPressTimer);
   raccoonState.longPressTimer = setTimeout(() => {
-    if (!raccoonState.isDragging) {
+    if (raccoonState.isPointerDown && !raccoonState.isDragging) {
       raccoonState.isLongPressActive = true;
       startRaccoonVoice(true);
-      showRaccoonBubble('🎙️ 正在聆聽... 請說話！');
+      showRaccoonBubble('🎙️ 正在聆聽中... 請說話！');
       if (navigator.vibrate) navigator.vibrate(50);
     }
-  }, 480);
+  }, 500);
 }
 
 function handleRaccoonPointerMove(e) {
-  if (e.touches && e.touches.length > 1) return;
+  // 核心保護：如果使用者沒有按住小浣熊，絕對不移動、不跟隨滑鼠！
+  if (!raccoonState.isPointerDown) return;
+
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
   const deltaX = clientX - raccoonState.dragStartX;
   const deltaY = clientY - raccoonState.dragStartY;
 
-  // 移動超過 7px 視為拖曳，取消長按
-  if (Math.hypot(deltaX, deltaY) > 7) {
+  // 移動超過 8px 才認定使用者想要把它拖到新位置
+  if (Math.hypot(deltaX, deltaY) > 8) {
     raccoonState.isDragging = true;
     if (raccoonState.longPressTimer) {
       clearTimeout(raccoonState.longPressTimer);
@@ -4669,10 +4682,10 @@ function handleRaccoonPointerMove(e) {
     let newX = raccoonState.elemStartX + deltaX;
     let newY = raccoonState.elemStartY + deltaY;
 
-    // 邊界防跑出螢幕
-    const maxX = window.innerWidth - 80;
-    const maxY = window.innerHeight - 85;
-    newX = Math.min(Math.max(8, newX), maxX);
+    // 邊界限制 (防止拖出視窗外或擋住頂部標題)
+    const maxX = window.innerWidth - 75;
+    const maxY = window.innerHeight - 80;
+    newX = Math.min(Math.max(10, newX), maxX);
     newY = Math.min(Math.max(60, newY), maxY);
 
     widget.style.left = newX + 'px';
@@ -4683,40 +4696,43 @@ function handleRaccoonPointerMove(e) {
 }
 
 function handleRaccoonPointerUp(e) {
+  if (!raccoonState.isPointerDown) return;
+  raccoonState.isPointerDown = false;
+
   const widget = document.getElementById('floating-raccoon-widget');
   if (raccoonState.longPressTimer) {
     clearTimeout(raccoonState.longPressTimer);
     raccoonState.longPressTimer = null;
   }
 
-  // 1. 如果剛剛是長按錄音模式，放開時停止錄音並送出分析
+  // 1. 如果剛剛是長按語音對講，放開時停止錄音並送出分析
   if (raccoonState.isLongPressActive) {
     raccoonState.isLongPressActive = false;
     stopRaccoonVoice();
     return;
   }
 
-  // 2. 如果是拖曳，儲存當前位置
+  // 2. 如果是手動拖曳搬移，放開後安靜固定在該新位置，並記錄至 localStorage
   if (raccoonState.isDragging) {
     raccoonState.isDragging = false;
     if (widget) {
       const rect = widget.getBoundingClientRect();
-      localStorage.setItem('yang_raccoon_pos_v3', JSON.stringify({ x: rect.left, y: rect.top }));
+      localStorage.setItem('yang_raccoon_pos_v4', JSON.stringify({ x: rect.left, y: rect.top }));
     }
     return;
   }
 
-  // 3. 點擊判斷 (單擊 vs 雙擊)
+  // 3. 點擊判斷 (單擊快速語音 vs 雙擊開啟對話視窗)
   const now = Date.now();
   const timeDiff = now - raccoonState.lastTapTime;
   raccoonState.lastTapTime = now;
 
   if (timeDiff < 320) {
-    // 雙擊 (Double Tap) ➔ 開啟 Gemini 對話視窗
+    // 點兩下 (Double Tap) ➔ 彈出 Gemini 智能對話視窗
     if (raccoonState.singleTapTimer) clearTimeout(raccoonState.singleTapTimer);
     openRaccoonChatModal();
   } else {
-    // 單擊 (Single Tap) ➔ 啟動快速語音輸入
+    // 點一下 (Single Tap) ➔ 啟動快速語音輸入
     raccoonState.singleTapTimer = setTimeout(() => {
       startRaccoonVoice(false);
       showRaccoonBubble('🎙️ 請說出問題或修改指令');
