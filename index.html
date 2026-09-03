@@ -1450,7 +1450,7 @@
 <!-- ==============================================================
      🦝 懸浮小浣熊 AI 助手 (透明背景・自由拖曳・語音對話・全網頁修訂)
 ============================================================== -->
-<div id="floating-raccoon-widget" class="floating-raccoon-widget" style="display:none;" title="🦝 小浣熊AI：單擊語音輸入、長按即時對話、點兩下開啟AI對話窗">
+<div id="floating-raccoon-widget" class="floating-raccoon-widget" style="display:block;" title="🦝 小浣熊AI：單擊語音輸入、長按即時對話、點兩下開啟AI對話窗">
   <div class="raccoon-pulse-ring" id="raccoon-pulse-ring"></div>
   <div class="raccoon-avatar-wrap" id="raccoon-avatar-btn">
     <img src="./photos/raccoon_pet.png" alt="小浣熊" class="raccoon-pet-img" id="raccoon-pet-img" draggable="false" />
@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v43';
+const STORAGE_KEY = 'yang_runner_handbook_v44';
 
 function createRealRunnerData() {
   return {
@@ -2673,12 +2673,15 @@ function switchNavPage(targetPageId, triggerBtn) {
   if (triggerBtn) triggerBtn.classList.add('active');
 
   // 切換時即時渲染
-  if (targetPageId === 'page-sop') renderSopTabs(); renderVocabPage('sop');
-  initFloatingRaccoon();
+  if (targetPageId === 'page-sop') {
+    renderSopTabs();
+  }
   if (targetPageId === 'page-vocab-sop') renderVocabPage('sop');
   if (targetPageId === 'page-vocab-conv') renderVocabPage('conv');
   if (targetPageId === 'page-roleplay') renderRoleplayPage();
   if (targetPageId === 'page-settings') renderSettingsPage();
+  
+  updateRaccoonVisibility();
 }
 
 /* ==============================================================
@@ -5202,6 +5205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   syncNetworkStatus();
   renderSopTabs();
   renderVocabPage('sop');
+  initFloatingRaccoon();
 
   if ('speechSynthesis' in window) {
     populateVoiceList();
