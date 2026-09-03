@@ -1352,7 +1352,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v36';
+const STORAGE_KEY = 'yang_runner_handbook_v37';
 
 function createRealRunnerData() {
   return {
@@ -2253,13 +2253,13 @@ function createRealRunnerData() {
           "ja": "お<ruby>水<rt>みず</rt></ruby>と<ruby>炭酸<rt>たんさん</rt></ruby>はドリンクサーバーのボタンでご<ruby>利用<rt>りよう</rt></ruby>いただけます。",
           "grammar": {
             "vocabs": [
-              { "ja": "炭酸（たんさん）", "zh": "碳酸水、氣泡水（店內不用soda）" },
+              { "ja": "炭酸（たんさん）", "zh": "碳酸水、氣泡水（店內一律稱炭酸水）" },
               { "ja": "ご利用いただく", "zh": "利用、使用（利用する的尊敬語）" }
             ],
             "points": [
               { "title": "【ご＋名詞＋いただく (尊他)】", "desc": "ご利用いただけます（您可以利用）。" }
             ],
-            "tips": "客人詢問氣泡水或soda時，回答「炭酸（たんさん）はこちらです」。"
+            "tips": "客人詢問氣泡水或碳酸水時，回答「炭酸（たんさん）はこちらです」。"
           }
         },
         {
@@ -2423,7 +2423,7 @@ function createRealRunnerData() {
         { "id": "v_dk_1", "ja": "<ruby>黄色<rt>きいろ</rt></ruby>いボタン", "zh": "黃色按鈕", "cat": "工具", "imageUrl": "", "note": "生啤酒機操作按鈕" },
         { "id": "v_dk_2", "ja": "ノンアルコール<ruby>シロップ<rt>siroppu</rt></ruby>", "zh": "無酒精糖漿", "cat": "酒水", "imageUrl": "./photos/IMG_0884.jpg", "note": "MONIN 各式果汁糖漿" },
         { "id": "v_dk_3", "ja": "ノンアルコールビール", "zh": "無酒精啤酒 (All-Free)", "cat": "酒水", "imageUrl": "./photos/IMG_0890.jpg", "note": "SUNTORY ALL-FREE 瓶裝" },
-        { "id": "v_dk_4", "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "飲料機內（不用 soda）" }
+        { "id": "v_dk_4", "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "飲料機內（店內稱炭酸）" }
       ]
     }
   ],
@@ -2549,7 +2549,7 @@ function createRealRunnerData() {
     { "id": "vd_water_oyu", "ja": "お<ruby>湯<rt>ゆ</rt></ruby> / <ruby>熱湯<rt>ねっとう</rt></ruby>", "zh": "熱水 / 熱開水（お湯・oyu）", "cat": "酒水", "imageUrl": "", "note": "泡茶或加水用熱開水" },
     { "id": "vd_water_boiling", "ja": "<ruby>沸騰<rt>ふっとう</rt></ruby>したお<ruby>湯<rt>ゆ</rt></ruby>", "zh": "剛煮開的滾水（沸騰）", "cat": "酒水", "imageUrl": "", "note": "高溫滾燙的剛開熱水" },
     { "id": "vd_water_pitcher", "ja": "お<ruby>水<rt>みず</rt></ruby>のピッチャー / <ruby>水差<rt>みずさ</rt></ruby>し", "zh": "整壺冰水 / 水壺（Pitcher）", "cat": "酒水", "imageUrl": "", "note": "一整桌客人要一壺水放在桌上時使用" },
-    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby> / <ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內一律稱「炭酸」，不用 soda" },
+    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby> / <ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內一律稱「炭酸 / 碳酸水」" },
     { "id": "vd_tea_ocha", "ja": "お<ruby>茶<rt>ちゃ</rt></ruby> / <ruby>緑茶<rt>りょくちゃ</rt></ruby> / あがり", "zh": "熱茶 / 綠茶 / 煎茶（あがり）", "cat": "酒水", "imageUrl": "", "note": "壽司台或飯後常稱熱綠茶為「あがり」" },
     { "id": "vd_tea_houjicha", "ja": "ほうじ<ruby>茶<rt>ちゃ</rt></ruby>", "zh": "焙茶 / 熟茶（熱焙茶）", "cat": "酒水", "imageUrl": "", "note": "溫泉旅館早晚餐最常提供的溫潤熱茶" },
     { "id": "vd_mizuwari", "ja": "<ruby>水割<rt>みずわ</rt></ruby>り", "zh": "兌水（水割調酒法）", "cat": "酒水", "imageUrl": "", "note": "燒酎或威士忌加水與冰塊飲用" },
