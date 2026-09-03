@@ -84,6 +84,9 @@ assert(textContent.includes('お箸') && textContent.includes('割り箸'), '餐
 assert(textContent.includes('グラス') || textContent.includes('コップ'), '餐具：水杯/玻璃杯 (グラス/コップ)');
 assert(textContent.includes('ダスター'), '餐具/工具：專用抹布 (ダスター)');
 assert(textContent.includes('爪楊枝'), '餐具：牙籤 (爪楊枝)');
+assert(textContent.includes('フォーク'), '餐具：叉子 (フォーク)');
+assert(textContent.includes('ライター') || textContent.includes('チャッカマン'), '工具：打火機/點火器 (ライター/チャッカマン)');
+assert(!html.includes('卓上コンロ'), '已成功移除「桌上型卡式瓦斯爐」');
 
 // 測試 6: 必須記住的料理名稱與分類 (已核對紙本菜單並剔除停供菜餚)
 console.log('\n【測試 6：料理名稱核對與剔除停供品項】');
@@ -102,14 +105,18 @@ assert(html.includes('玉子燒壽司') && html.includes('鮪魚壽司') && html
 assert(html.includes('鰻魚壽司') && html.includes('烏賊壽司') && html.includes('鮮蝦壽司') && html.includes('照燒壽司'), '壽司：鰻魚、烏賊、鮮蝦、照燒');
 assert(html.includes('哈密瓜') && html.includes('巧克力蛋糕') && html.includes('和菓子丸子'), '水果甜點：哈密瓜、巧克力蛋糕、和菓子');
 
-// 測試 7: 酒水飲品與機台操作說明 (店內全面統稱「炭酸」)
-console.log('\n【測試 7：酒水飲品與機台操作說明 (碳酸)】');
+// 測試 7: 酒水飲品、水之型態與機台操作說明 (店內全面統稱「炭酸」)
+console.log('\n【測試 7：酒水飲品、水的型態與機台操作說明 (碳酸)】');
 assert(textContent.includes('王様の涙') && textContent.includes('赤ワイン') && textContent.includes('白ワイン'), '紅酒白酒：王様の涙 赤・白ワイン');
 assert(textContent.includes('れいざん') && textContent.includes('純米酒'), '阿蘇名酒：れいざん 純米酒');
 assert(textContent.includes('オールフリー') && textContent.includes('ノンアルコールビール'), '無酒精啤酒：Suntory ALL-FREE');
 assert(textContent.includes('黄色いボタンを１回押すと') && textContent.includes('自動で注がれます'), '生啤酒機操作：按一次黃色按鈕自動注酒');
 assert(textContent.includes('アルコールの入っていないシロップ'), '糖漿說明：這是無酒精的風味糖漿');
 assert(textContent.includes('炭酸') && html.includes('碳酸'), '已全面改用「炭酸」（無蘇打水字眼）');
+assert(textContent.includes('お冷') || textContent.includes('冷水'), '水的型態：冰水/冷水 (お冷/冷水)');
+assert(textContent.includes('白湯') || textContent.includes('常温'), '水的型態：溫開水/常溫水 (白湯/常温)');
+assert(textContent.includes('お湯') || textContent.includes('熱湯'), '水的型態：熱水/熱開水 (お湯/熱湯)');
+assert(textContent.includes('沸騰'), '水的型態：滾水/剛煮開的水 (沸騰したお湯)');
 
 // 測試 8: 單字七大核心分類 (餐具、工具、餐點、酒水、名字、職稱、對話)
 console.log('\n【測試 8：單字分類完整性】');

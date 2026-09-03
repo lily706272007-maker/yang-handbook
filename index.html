@@ -1352,7 +1352,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v34';
+const STORAGE_KEY = 'yang_runner_handbook_v35';
 
 function createRealRunnerData() {
   return {
@@ -2429,6 +2429,7 @@ function createRealRunnerData() {
   ],
   "vocabSop": [
     // ── 🍽️ 餐具與醬料調味類 (現場器皿・調料瓶・實拍照配對) ──
+    { "id": "vt_fork", "ja": "<ruby>フォーク<rt>fo-ku</rt></ruby>", "zh": "叉子", "cat": "餐具", "imageUrl": "", "note": "西餐、水果、甜點用叉子" },
     { "id": "vt_shoyu_dish", "ja": "<ruby>醤油皿<rt>しょうゆざら</rt></ruby> / <ruby>醤油<rt>しょうゆ</rt></ruby>", "zh": "醬油瓶 / 醬油小碟", "cat": "餐具", "imageUrl": "./photos/IMG_0931.jpg", "note": "壽司與生魚片區專用（龜甲萬生醬油）" },
     { "id": "vt_mini_tong", "ja": "<ruby>小<rt>しょう</rt></ruby><ruby>トング<rt>tongu</rt></ruby>", "zh": "小夾子 / 漬物夾", "cat": "餐具", "imageUrl": "", "note": "夾取小菜、漬物、沙拉配料" },
     { "id": "vt_tong", "ja": "<ruby>トング<rt>tongu</rt></ruby>", "zh": "料理夾 / 取餐夾", "cat": "餐具", "imageUrl": "./photos/IMG_0848.jpg", "note": "熟食與炸物取餐用大夾子" },
@@ -2519,6 +2520,14 @@ function createRealRunnerData() {
     { "id": "vs_desert_dango", "ja": "<ruby>和菓子<rt>わがし</rt></ruby>の<ruby>団子<rt>だんご</rt></ruby>", "zh": "和菓子丸子", "cat": "餐點", "imageUrl": "./photos/IMG_0748.jpg", "note": "夕食甜點・日式三色糰子" },
 
     // ── 🥤 酒水類 ──
+    // ── 💧 水的各種型態 (必備應對詞彙) ──
+    { "id": "vd_water_general", "ja": "お<ruby>水<rt>みず</rt></ruby>", "zh": "水 / 開水（統稱）", "cat": "酒水", "imageUrl": "", "note": "客人泛指要水時最常用" },
+    { "id": "vd_water_cold", "ja": "お<ruby>冷<rt>ひ</rt></ruby>や / <ruby>冷水<rt>れいすい</rt></ruby>", "zh": "冰水 / 冷水（お冷）", "cat": "酒水", "imageUrl": "", "note": "日本餐廳客人最常用「お冷（おひや）ください」指要冰水" },
+    { "id": "vd_water_room", "ja": "<ruby>常温<rt>じょうおん</rt></ruby>のお<ruby>水<rt>みず</rt></ruby> / ぬるま<ruby>湯<rt>ゆ</rt></ruby>", "zh": "常溫水 / 微溫水", "cat": "酒水", "imageUrl": "", "note": "不喝冰水或吃藥客人常要常溫水" },
+    { "id": "vd_water_sayu", "ja": "<ruby>白湯<rt>さゆ</rt></ruby>", "zh": "溫開水 / 白開水（白湯）", "cat": "酒水", "imageUrl": "", "note": "煮滾後降溫的溫熱開水（養生/長輩愛點）" },
+    { "id": "vd_water_hot", "ja": "お<ruby>湯<rt>ゆ</rt></ruby> / <ruby>熱湯<rt>ねっとう</rt></ruby>", "zh": "熱水 / 熱開水", "cat": "酒水", "imageUrl": "", "note": "泡茶或加水用熱水" },
+    { "id": "vd_water_boiling", "ja": "<ruby>沸騰<rt>ふっとう</rt></ruby>したお<ruby>湯<rt>ゆ</rt></ruby>", "zh": "剛煮開的水 / 滾水（沸騰）", "cat": "酒水", "imageUrl": "", "note": "高溫滾燙的剛開熱水" },
+    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby> / <ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內一律稱「炭酸」，不用 soda" },
     { "id": "vd_1", "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>赤<rt>あか</rt></ruby>ワイン", "zh": "王之淚 紅葡萄酒 (VINO TINTO)", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (左1)・西班牙進口紅酒" },
     { "id": "vd_2", "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>ワイン", "zh": "王之淚 白葡萄酒 (VINO BLANCO)", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (左2)・西班牙進口白酒" },
     { "id": "vd_3", "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>", "zh": "阿蘇地酒 靈山 (れいざん) 純米酒", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (右2)・阿蘇高砂酒造名酒" },
@@ -2536,6 +2545,7 @@ function createRealRunnerData() {
     { "id": "vd_15", "ja": "こだわりの<ruby>梅酒<rt>うめしゅ</rt></ruby>", "zh": "嚴選熟成梅酒", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "本格梅酒" },
 
     // ── 🧹 工具類 ──
+    { "id": "vt_lighter", "ja": "<ruby>ライター<rt>raita-</rt></ruby> / チャッカマン", "zh": "打火機 / 點火器", "cat": "工具", "imageUrl": "", "note": "點火鍋與卡式爐用打火機・點火槍（長打火機）" },
     { "id": "vt_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby> / <ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "推車 / 餐車", "cat": "工具", "imageUrl": "", "note": "傳菜專用" },
     { "id": "vt_2", "ja": "<ruby>布<rt>ぬの</rt></ruby> / <ruby>クロス<rt>kurosu</rt></ruby>", "zh": "布巾 / 蓋料理的布", "cat": "工具", "imageUrl": "", "note": "取餐必帶" },
     { "id": "vt_3", "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機", "cat": "工具", "imageUrl": "", "note": "通報送達與缺菜" },
@@ -2544,7 +2554,6 @@ function createRealRunnerData() {
     { "id": "vt_6", "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原位 / 原本的位置", "cat": "工具", "imageUrl": "", "note": "餐車用完歸位" },
     { "id": "vt_7", "ja": "バッシングワゴン", "zh": "撤餐專用推車", "cat": "工具", "imageUrl": "", "note": "收桌時撤收餐盤專用車" },
     { "id": "vt_8", "ja": "<ruby>自動<rt>じどう</rt></ruby>ビールサーバー", "zh": "自動生啤酒機", "cat": "工具", "imageUrl": "", "note": "黃色按鈕操作" },
-    { "id": "vt_9", "ja": "<ruby>卓上<rt>たくじょう</rt></ruby><ruby>コンロ<rt>konro</rt></ruby>", "zh": "桌上型卡式瓦斯爐", "cat": "工具", "imageUrl": "./photos/IMG_0851.jpg", "note": "客人火鍋專用卡式爐" },
     { "id": "vt_10", "ja": "<ruby>湯切<rt>ゆぎ</rt></ruby>り", "zh": "燙麵瀝水網杓", "cat": "工具", "imageUrl": "./photos/IMG_0852.jpg", "note": "煮拉麵專用甩水濾杓" },
     { "id": "vt_11", "ja": "<ruby>炊飯器<rt>すいはんき</rt></ruby>", "zh": "營業用大電鍋", "cat": "工具", "imageUrl": "", "note": "盛裝白飯與高菜飯" },
     { "id": "vt_12", "ja": "ディスペンサーポンプ", "zh": "定量壓頭 (30ml)", "cat": "工具", "imageUrl": "./photos/IMG_0885.jpg", "note": "酒水香甜酒瓶專用定量壓頭" },
