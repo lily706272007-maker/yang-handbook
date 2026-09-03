@@ -6,16 +6,16 @@
   <meta name="theme-color" content="#5C3D1E" />
   <meta name="description" content="日本打工度假個人專用手帳 PWA - 優彩打工應對與會話手帳" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="楊の手帳" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <link rel="manifest" href="./manifest.json?v=v23" />
-  <link rel="icon" type="image/png" href="./favicon.png?v=v23" />
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=v23" />
-  <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=v23" />
-  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=v23" />
-  <link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.png?v=v23" />
-  <link rel="apple-touch-icon" sizes="512x512" href="./icons/icon-512.png?v=v23" />
+  <link rel="manifest" href="./manifest.json?v=v26" />
+  <link rel="icon" type="image/png" href="./favicon.png?v=v26" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=v26" />
+  <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=v26" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=v26" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.png?v=v26" />
+  <link rel="apple-touch-icon" sizes="512x512" href="./icons/icon-512.png?v=v26" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -117,18 +117,22 @@
   }
 
   /* ============================================================
-     Header — 極簡單行 48px，竹叢深綠
+     Header — 沉浸式支援 iPhone 靈動島 / 瀏海安全區域
   ============================================================ */
   header.compact-top-header {
     position: sticky; top: 0; z-index: 200;
-    height: var(--header-h);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+    padding-bottom: 8px;
+    padding-left: max(env(safe-area-inset-left, 0px), 14px);
+    padding-right: max(env(safe-area-inset-right, 0px), 14px);
+    min-height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    height: auto;
     background: var(--primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 0 14px;
-    box-shadow: 0 1px 12px rgba(43,41,38,0.2);
+    box-shadow: 0 2px 14px rgba(46,31,14,0.22);
   }
 
   .header-brand-wrap {
