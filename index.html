@@ -1352,7 +1352,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v35';
+const STORAGE_KEY = 'yang_runner_handbook_v36';
 
 function createRealRunnerData() {
   return {
@@ -2520,14 +2520,7 @@ function createRealRunnerData() {
     { "id": "vs_desert_dango", "ja": "<ruby>和菓子<rt>わがし</rt></ruby>の<ruby>団子<rt>だんご</rt></ruby>", "zh": "和菓子丸子", "cat": "餐點", "imageUrl": "./photos/IMG_0748.jpg", "note": "夕食甜點・日式三色糰子" },
 
     // ── 🥤 酒水類 ──
-    // ── 💧 水的各種型態 (必備應對詞彙) ──
-    { "id": "vd_water_general", "ja": "お<ruby>水<rt>みず</rt></ruby>", "zh": "水 / 開水（統稱）", "cat": "酒水", "imageUrl": "", "note": "客人泛指要水時最常用" },
-    { "id": "vd_water_cold", "ja": "お<ruby>冷<rt>ひ</rt></ruby>や / <ruby>冷水<rt>れいすい</rt></ruby>", "zh": "冰水 / 冷水（お冷）", "cat": "酒水", "imageUrl": "", "note": "日本餐廳客人最常用「お冷（おひや）ください」指要冰水" },
-    { "id": "vd_water_room", "ja": "<ruby>常温<rt>じょうおん</rt></ruby>のお<ruby>水<rt>みず</rt></ruby> / ぬるま<ruby>湯<rt>ゆ</rt></ruby>", "zh": "常溫水 / 微溫水", "cat": "酒水", "imageUrl": "", "note": "不喝冰水或吃藥客人常要常溫水" },
-    { "id": "vd_water_sayu", "ja": "<ruby>白湯<rt>さゆ</rt></ruby>", "zh": "溫開水 / 白開水（白湯）", "cat": "酒水", "imageUrl": "", "note": "煮滾後降溫的溫熱開水（養生/長輩愛點）" },
-    { "id": "vd_water_hot", "ja": "お<ruby>湯<rt>ゆ</rt></ruby> / <ruby>熱湯<rt>ねっとう</rt></ruby>", "zh": "熱水 / 熱開水", "cat": "酒水", "imageUrl": "", "note": "泡茶或加水用熱水" },
-    { "id": "vd_water_boiling", "ja": "<ruby>沸騰<rt>ふっとう</rt></ruby>したお<ruby>湯<rt>ゆ</rt></ruby>", "zh": "剛煮開的水 / 滾水（沸騰）", "cat": "酒水", "imageUrl": "", "note": "高溫滾燙的剛開熱水" },
-    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby> / <ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內一律稱「炭酸」，不用 soda" },
+            // ── 🥤 酒水與飲品類 (名酒、無酒精飲品與調酒基酒) ──
     { "id": "vd_1", "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>赤<rt>あか</rt></ruby>ワイン", "zh": "王之淚 紅葡萄酒 (VINO TINTO)", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (左1)・西班牙進口紅酒" },
     { "id": "vd_2", "ja": "<ruby>王様<rt>おうさま</rt></ruby>の<ruby>涙<rt>なみだ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>ワイン", "zh": "王之淚 白葡萄酒 (VINO BLANCO)", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (左2)・西班牙進口白酒" },
     { "id": "vd_3", "ja": "<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>酒<rt>さけ</rt></ruby> れいざん <ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>", "zh": "阿蘇地酒 靈山 (れいざん) 純米酒", "cat": "酒水", "imageUrl": "./photos/IMG_0889.jpg", "note": "分酒機 (右2)・阿蘇高砂酒造名酒" },
@@ -2543,6 +2536,24 @@ function createRealRunnerData() {
     { "id": "vd_13", "ja": "<ruby>白岳<rt>はくたけ</rt></ruby> <ruby>白<rt>しろ</rt></ruby>", "zh": "白岳 白 (熊本本格米燒酎)", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "熊本名產純米蒸餾燒酎" },
     { "id": "vd_14", "ja": "<ruby>本格<rt>ほんかく</rt></ruby><ruby>焼酎<rt>しょうちゅう</rt></ruby>", "zh": "本格燒酎 (芋燒酎 / 麥燒酎)", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "鹿兒島黑霧島芋燒酎 / 麥燒酎" },
     { "id": "vd_15", "ja": "こだわりの<ruby>梅酒<rt>うめしゅ</rt></ruby>", "zh": "嚴選熟成梅酒", "cat": "酒水", "imageUrl": "./photos/IMG_0886.jpg", "note": "本格梅酒" },
+
+    // ── 💧 水的完整型態與客人點水用語 (含 osau / お白湯 等全情境) ──
+    { "id": "vd_water_osayu", "ja": "お<ruby>白湯<rt>さゆ</rt></ruby> / <ruby>白湯<rt>さゆ</rt></ruby>", "zh": "溫開水 / 熱白開水（お白湯・osayu）", "cat": "酒水", "imageUrl": "", "note": "🔥 客人說的「osau/osayu」就是這個！加了敬語お的溫熱開水（服藥、養生、不喝冰水必點）" },
+    { "id": "vd_water_ohiya", "ja": "お<ruby>冷<rt>ひ</rt></ruby>や", "zh": "冰水 / 冷水（お冷・ohiya）", "cat": "酒水", "imageUrl": "", "note": "🔥 日本餐廳客人要冰水最核心用語：「お冷（おひや）ください」" },
+    { "id": "vd_water_omizu", "ja": "お<ruby>水<rt>みず</rt></ruby>", "zh": "水 / 開水（統稱・omizu）", "cat": "酒水", "imageUrl": "", "note": "泛指飲用水的標準說法" },
+    { "id": "vd_water_koori_nashi", "ja": "<ruby>氷<rt>こおり</rt></ruby>なしのお<ruby>水<rt>みず</rt></ruby>", "zh": "去冰水 / 不加冰塊的水", "cat": "酒水", "imageUrl": "", "note": "客人不想喝太冰時常說「氷抜き（こおりぬき）で / 氷なしで」" },
+    { "id": "vd_water_koori_mizu", "ja": "<ruby>氷水<rt>こおりみず</rt></ruby>", "zh": "很多冰塊的冰水（冰塊水）", "cat": "酒水", "imageUrl": "", "note": "滿滿冰塊的冰開水" },
+    { "id": "vd_water_koori", "ja": "<ruby>氷<rt>こおり</rt></ruby> / ロックアイス", "zh": "食用冰塊（冰塊桶）", "cat": "酒水", "imageUrl": "", "note": "客人單純要冰塊加進飲料或酒水" },
+    { "id": "vd_water_room", "ja": "<ruby>常温<rt>じょうおん</rt></ruby>のお<ruby>水<rt>みず</rt></ruby>", "zh": "常溫水（常温水・jōonsui）", "cat": "酒水", "imageUrl": "", "note": "完全不冰也不熱的室溫水（吃藥客人最愛點）" },
+    { "id": "vd_water_nurumayu", "ja": "ぬるま<ruby>湯<rt>ゆ</rt></ruby>", "zh": "微溫水（約40度溫水）", "cat": "酒水", "imageUrl": "", "note": "比常溫稍溫一點、完全不燙口的水" },
+    { "id": "vd_water_oyu", "ja": "お<ruby>湯<rt>ゆ</rt></ruby> / <ruby>熱湯<rt>ねっとう</rt></ruby>", "zh": "熱水 / 熱開水（お湯・oyu）", "cat": "酒水", "imageUrl": "", "note": "泡茶或加水用熱開水" },
+    { "id": "vd_water_boiling", "ja": "<ruby>沸騰<rt>ふっとう</rt></ruby>したお<ruby>湯<rt>ゆ</rt></ruby>", "zh": "剛煮開的滾水（沸騰）", "cat": "酒水", "imageUrl": "", "note": "高溫滾燙的剛開熱水" },
+    { "id": "vd_water_pitcher", "ja": "お<ruby>水<rt>みず</rt></ruby>のピッチャー / <ruby>水差<rt>みずさ</rt></ruby>し", "zh": "整壺冰水 / 水壺（Pitcher）", "cat": "酒水", "imageUrl": "", "note": "一整桌客人要一壺水放在桌上時使用" },
+    { "id": "vd_water_tansan", "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby> / <ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "店內一律稱「炭酸」，不用 soda" },
+    { "id": "vd_tea_ocha", "ja": "お<ruby>茶<rt>ちゃ</rt></ruby> / <ruby>緑茶<rt>りょくちゃ</rt></ruby> / あがり", "zh": "熱茶 / 綠茶 / 煎茶（あがり）", "cat": "酒水", "imageUrl": "", "note": "壽司台或飯後常稱熱綠茶為「あがり」" },
+    { "id": "vd_tea_houjicha", "ja": "ほうじ<ruby>茶<rt>ちゃ</rt></ruby>", "zh": "焙茶 / 熟茶（熱焙茶）", "cat": "酒水", "imageUrl": "", "note": "溫泉旅館早晚餐最常提供的溫潤熱茶" },
+    { "id": "vd_mizuwari", "ja": "<ruby>水割<rt>みずわ</rt></ruby>り", "zh": "兌水（水割調酒法）", "cat": "酒水", "imageUrl": "", "note": "燒酎或威士忌加水與冰塊飲用" },
+    { "id": "vd_oyuwari", "ja": "お<ruby>湯割<rt>ゆわ</rt></ruby>り", "zh": "兌熱水（熱水割）", "cat": "酒水", "imageUrl": "", "note": "燒酎加熱開水溫飲" },
 
     // ── 🧹 工具類 ──
     { "id": "vt_lighter", "ja": "<ruby>ライター<rt>raita-</rt></ruby> / チャッカマン", "zh": "打火機 / 點火器", "cat": "工具", "imageUrl": "", "note": "點火鍋與卡式爐用打火機・點火槍（長打火機）" },
