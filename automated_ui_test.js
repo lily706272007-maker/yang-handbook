@@ -63,15 +63,35 @@ assert(textContent.includes('お通りします') || textContent.includes('失�
 console.log('\n【測試 4：上司交代事項與收桌撤盤 SOP】');
 assert(textContent.includes('バッシング') && textContent.includes('お下げ'), '包含收桌術語：バッシング / お下げ');
 assert(textContent.includes('食事終了') || textContent.includes('お食事終了'), '包含用餐結束牌：食事終了カード');
-assert(textContent.includes('お皿をお下げしてもよろしいでしょうか'), '收桌詢問：お皿をお下げしてもよろしいでしょうか？');
+assert(textContent.includes('お下げしてもよろしいでしょうか'), '收桌詢問：お下げしてもよろしいでしょうか？');
 assert(textContent.includes('上段にお皿・お椀') && textContent.includes('中段に黒トレイ') && textContent.includes('下段に4マス仕切りプレート'), '推車收餐盤三層擺放規則：上段碗盤、中段黑餐盤、下段四格盤');
 assert(textContent.includes('お皿拭き') && textContent.includes('水分をしっかり拭き取り'), '擦盤子作業：お皿拭き');
 assert(textContent.includes('ドリンクコーナーの片付け'), '收拾飲料區域：ドリンクコーナーの片付け');
 assert(textContent.includes('掃除機をかける'), '使用吸塵器打掃地板：掃除機をかける');
-assert(textContent.includes('とんでもないです！ごゆっくりどうぞ'), '收盤回應客人感謝：とんでもないです！ごゆっくりどうぞ！');
-assert(textContent.includes('こちらこそ、ありがとうございます'), '收盤雙向感謝：こちらこそ、ありがとうございます！');
-assert(textContent.includes('助かります'), '表達感謝/幫大忙了：ありがとうございます！助かります！');
-assert(textContent.includes('いえいえ！お疲れ様です'), '回應同事道謝：いえいえ！お疲れ様です！');
+
+// 收桌 6 種說法
+assert(textContent.includes('こちらのお皿、お下げしてもよろしいでしょうか'), '收桌①：標準萬用句');
+assert(textContent.includes('空いたお皿をお下げいたしますね'), '收桌②：空盤親切句');
+assert(textContent.includes('お食事はお済みでしょうか'), '收桌③：用餐完畢確認句');
+assert(textContent.includes('こちらのお椀、お下げしてもよろしいでしょうか'), '收桌④：專收湯碗小缽句');
+assert(textContent.includes('テーブルの上、お広くいたしますね'), '收桌⑤：騰出桌面空間句');
+assert(textContent.includes('まだ召し上がりますか'), '收桌⑥：確認還在吃與得體退下句');
+
+// 表達感謝 6 種說法
+assert(textContent.includes('ありがとうございます！助かります'), '道謝①：現場靈魂萬用句');
+assert(textContent.includes('お皿をまとめていただき'), '道謝②：感謝客人疊盤句');
+assert(textContent.includes('ご協力ありがとうございます'), '道謝③：感謝協助配合句');
+assert(textContent.includes('お気遣いいただき'), '道謝④：感謝體貼照顧句');
+assert(textContent.includes('いつもありがとうございます！お疲れ様です'), '道謝⑤：對內場同事感謝句');
+assert(textContent.includes('大変助かりました'), '道謝⑥：強烈感謝幫大忙句');
+
+// 回應道謝 6 種說法
+assert(textContent.includes('とんでもないです！ごゆっくりどうぞ'), '回覆①：No.1最推薦首選句');
+assert(textContent.includes('こちらこそ、ありがとうございます'), '回覆②：雙向真誠感謝句');
+assert(textContent.includes('恐れ入ります！ごゆっくりお過ごしください'), '回覆③：對長輩尊客敬意句');
+assert(textContent.includes('喜んでいただけて嬉しいです'), '回覆④：客人稱讚開心句');
+assert(textContent.includes('いえいえ！お疲れ様です'), '回覆⑤：同事夥伴默契句');
+assert(textContent.includes('また何かありましたらお声がけください'), '回覆⑥：離桌隨時召喚句');
 
 // 測試 5: 餐具與器具單字庫 (全新餐具大分類)
 console.log('\n【測試 5：餐具與器具單字庫】');
