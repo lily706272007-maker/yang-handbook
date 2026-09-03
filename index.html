@@ -1299,7 +1299,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v27';
+const STORAGE_KEY = 'yang_runner_handbook_v28';
 
 function createRealRunnerData() {
   return {
@@ -2170,19 +2170,15 @@ function createRealRunnerData() {
     { "id": "vs_salad_orange", "ja": "オレンジ", "zh": "柳橙", "cat": "餐點", "imageUrl": "", "note": "朝食水果" },
     { "id": "vs_salad_yogurt", "ja": "ヨーグルト", "zh": "優格", "cat": "餐點", "imageUrl": "", "note": "朝食沙拉吧" },
 
-    // ── 🍣 壽司類 (標準漢字正寫與日文標音) ──
-    { "id": "vs_sushi_tamago", "ja": "<ruby>玉子<rt>たまご</rt></ruby>", "zh": "玉子燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・日式甜煎蛋握壽司" },
-    { "id": "vs_sushi_maguro", "ja": "<ruby>鮪<rt>まぐろ</rt></ruby>", "zh": "鮪魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・新鮮紅肉鮪魚" },
-    { "id": "vs_sushi_salmon", "ja": "<ruby>サーモン<rt>sa-mon</rt></ruby>", "zh": "鮭魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・人氣炙烤/生鮭魚" },
-    { "id": "vs_sushi_unagi", "ja": "<ruby>鰻<rt>うなぎ</rt></ruby>", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・蒲燒甜醬鰻魚" },
-    { "id": "vs_sushi_ika", "ja": "<ruby>烏賊<rt>いか</rt></ruby>", "zh": "花枝壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・軟絲花枝" },
-    { "id": "vs_sushi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "鮮蝦壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・熟白蝦握壽司" },
-    { "id": "vs_sushi_teriyaki", "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台名物・照燒風味" },
-    { "id": "vs_sushi_kanpachi", "ja": "<ruby>間八<rt>かんぱち</rt></ruby>", "zh": "紅甘壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台・熊本近海紅甘魚" },
-    { "id": "vs_sushi_madai", "ja": "<ruby>真鯛<rt>まだい</rt></ruby>", "zh": "真鯛壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台・優彩白身真鯛握壽司" },
-    { "id": "vs_sushi_inari", "ja": "<ruby>稲荷<rt>いなり</rt></ruby><ruby>寿司<rt>ずし</rt></ruby>", "zh": "豆皮壽司", "cat": "餐點", "imageUrl": "", "note": "壽司台・經典甜煮豆皮壽司" },
-    { "id": "vs_sushi_gari", "ja": "<ruby>ガリ<rt>gari</rt></ruby>", "zh": "壽司甜薑片", "cat": "餐點", "imageUrl": "", "note": "壽司台配料・解膩甜醋生薑片" },
-    { "id": "vs_sushi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵 / 哇沙比", "cat": "餐點", "imageUrl": "", "note": "壽司台配料・現磨生山葵" },
+        // ── 🍣 壽司類 (對照招牌木牌與菜單・已配上現場實拍照) ──
+    { "id": "vs_sushi_maguro", "ja": "<ruby>本鮪<rt>ほんまぐろ</rt></ruby> / <ruby>まぐろ<rt>maguro</rt></ruby>", "zh": "本鮪魚壽司（鮪魚）", "cat": "餐點", "imageUrl": "./photos/IMG_0870.jpg", "note": "壽司台名物・招牌木牌標記「本鮪」、菜單標記「まぐろ」" },
+    { "id": "vs_sushi_salmon", "ja": "<ruby>サーモン<rt>sa-mon</rt></ruby>", "zh": "鮭魚壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0871.jpg", "note": "壽司台名物・生/炙鮭魚握壽司" },
+    { "id": "vs_sushi_ika", "ja": "<ruby>烏賊<rt>いか</rt></ruby> / <ruby>いか<rt>ika</rt></ruby>", "zh": "花枝壽司（烏賊）", "cat": "餐點", "imageUrl": "./photos/IMG_0872.jpg", "note": "壽司台名物・招牌標記漢字「烏賊」、菜單標記「いか」" },
+    { "id": "vs_sushi_tamago", "ja": "<ruby>玉子<rt>たまご</rt></ruby>", "zh": "玉子燒壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0873.jpg", "note": "壽司台名物・日式厚煎甜蛋握壽司" },
+    { "id": "vs_sushi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby> / <ruby>えび<rt>ebi</rt></ruby>", "zh": "鮮蝦壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0874.jpg", "note": "壽司台名物・招牌標記「海老」、菜單標記「えび」" },
+    { "id": "vs_sushi_unagi", "ja": "<ruby>鰻<rt>うなぎ</rt></ruby>", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0875.jpg", "note": "壽司台名物・蒲燒甜醬鰻魚" },
+    { "id": "vs_sushi_teriyaki", "ja": "<ruby>照<rt>て</rt></ruby>り<ruby>焼<rt>や</rt></ruby>き", "zh": "照燒壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0876.jpg", "note": "壽司台名物・照燒肉類握壽司" },
+    { "id": "vs_sushi_counter", "ja": "<ruby>寿司<rt>すし</rt></ruby>カウンター", "zh": "壽司餐檯與招牌牌匾", "cat": "餐點", "imageUrl": "./photos/IMG_0992.jpg", "note": "優彩自助餐廳壽司現做餐檯與招牌木牌" },
 
     // ── 🍮 點心類 ──
     { "id": "vs_desert_melon", "ja": "メロン", "zh": "哈密瓜", "cat": "餐點", "imageUrl": "./photos/IMG_0882.jpg", "note": "夕食甜點水果" },
