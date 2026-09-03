@@ -99,7 +99,7 @@ assert(html.includes('阿蘇高菜拌飯'), '主食：阿蘇高菜拌飯');
 assert(html.includes('熊本龍膽豬涮涮鍋') || html.includes('りんどうポーク'), '名物鍋物：熊本龍膽豬涮涮鍋');
 assert(html.includes('豚骨拉麵'), '主食：豚骨拉麵');
 assert(html.includes('玉子燒壽司') && html.includes('鮪魚壽司') && html.includes('鮭魚壽司'), '壽司：玉子、鮪魚、鮭魚');
-assert(html.includes('鰻魚壽司') && html.includes('花枝壽司') && html.includes('鮮蝦壽司') && html.includes('照燒壽司'), '壽司：鰻魚、花枝、鮮蝦、照燒');
+assert(html.includes('鰻魚壽司') && html.includes('烏賊壽司') && html.includes('鮮蝦壽司') && html.includes('照燒壽司'), '壽司：鰻魚、烏賊、鮮蝦、照燒');
 assert(html.includes('哈密瓜') && html.includes('巧克力蛋糕') && html.includes('和菓子丸子'), '水果甜點：哈密瓜、巧克力蛋糕、和菓子');
 
 // 測試 7: 酒水飲品與機台操作說明 (店內全面統稱「炭酸」)
