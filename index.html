@@ -1145,7 +1145,7 @@
               Gemini API Key：
             </label>
             <div style="display:flex; gap:8px;">
-              <input type="password" id="setting-gemini-api-key" placeholder="貼上 AIzaSy 開頭的 Gemini API Key..." style="flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid var(--border); font-size:0.88rem; background:var(--surface); color:var(--ink);" />
+              <input type="password" id="setting-gemini-api-key" placeholder="貼上 AQ. 或 AIzaSy 開頭的 Gemini API Key..." style="flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid var(--border); font-size:0.88rem; background:var(--surface); color:var(--ink);" />
               <button class="btn btn-secondary btn-sm" onclick="toggleApiKeyVisibility()" id="btn-toggle-key-vis">👁️ 顯示</button>
             </div>
           </div>
@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v50';
+const STORAGE_KEY = 'yang_runner_handbook_v51';
 
 function createRealRunnerData() {
   return {
@@ -4201,7 +4201,7 @@ function showPetDialog(msg) {
 
 const HARDCODED_GEMINI_API_KEY = '';
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
 
 async function callGeminiApiUnified(promptText) {
   const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : HARDCODED_GEMINI_API_KEY;
@@ -5117,27 +5117,39 @@ async function testGeminiApiKeyConnection() {
 
   resultEl.style.display = 'block';
   resultEl.style.color = 'var(--muted)';
-  resultEl.textContent = '⏳ 正在測試與 Google Gemini 伺服器連線…';
+  resultEl.textContent = '⏳ 正在測試與 Google Gemini 雲端伺服器連線…';
 
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(key)}`;
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
-    });
+  const modelsToTry = ['gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
+  let connected = false;
+  let lastErrMsg = '';
 
-    const data = await res.json();
-    if (res.ok && data.candidates) {
-      resultEl.style.color = '#2E7D32';
-      resultEl.textContent = '🎉 連線成功！Gemini AI 大腦運作完全正常！';
-      showToast('🎉 連線測試成功！', 'success');
-    } else {
-      throw new Error(data.error?.message || 'API 驗證失敗 (401)');
+  for (const model of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.candidates) {
+        connected = true;
+        resultEl.style.color = '#2E7D32';
+        resultEl.textContent = '🎉 連線成功！Gemini (' + model + ') AI 大腦連線完全正常！';
+        showToast('🎉 連線測試成功！', 'success');
+        break;
+      } else if (data.error) {
+        lastErrMsg = data.error.message || 'API 驗證失敗';
+      }
+    } catch (err) {
+      lastErrMsg = err.message;
     }
-  } catch (err) {
+  }
+
+  if (!connected) {
     resultEl.style.color = '#A83220';
-    resultEl.textContent = '❌ 連線失敗：' + err.message + '（請確認金鑰是否以 AIzaSy 開頭）';
+    resultEl.textContent = '❌ 連線失敗：' + lastErrMsg;
     showToast('連線測試失敗', 'error');
   }
 }
