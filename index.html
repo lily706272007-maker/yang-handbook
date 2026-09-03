@@ -121,17 +121,17 @@
   ============================================================ */
   header.compact-top-header {
     position: sticky; top: 0; z-index: 200;
-    padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
-    padding-bottom: 8px;
-    padding-left: max(env(safe-area-inset-left, 0px), 14px);
-    padding-right: max(env(safe-area-inset-right, 0px), 14px);
+    padding-top: max(calc(env(safe-area-inset-top, 0px) + 12px), 24px);
+    padding-bottom: 10px;
+    padding-left: max(env(safe-area-inset-left, 0px), 12px);
+    padding-right: max(env(safe-area-inset-right, 0px), 12px);
     min-height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
     height: auto;
     background: var(--primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     box-shadow: 0 2px 14px rgba(46,31,14,0.22);
   }
 
@@ -207,11 +207,24 @@
   .top-nav-btn .nav-icon { font-size: 0.9rem; line-height: 1; }
   .top-nav-btn .nav-label { display: inline; }
 
-  /* 手機版：只顯示 Emoji */
+  /* 手機版：只顯示 Emoji，並確保安全避開靈動島與頂部狀態列 */
   @media (max-width: 600px) {
     .top-nav-btn .nav-label { display: none; }
     .top-nav-btn { padding: 6px 7px; }
-    header.compact-top-header { padding: 0 10px; gap: 6px; }
+    header.compact-top-header {
+      padding-top: max(calc(env(safe-area-inset-top, 0px) + 14px), 32px);
+      padding-bottom: 10px;
+      padding-left: max(env(safe-area-inset-left, 0px), 10px);
+      padding-right: max(env(safe-area-inset-right, 0px), 10px);
+      gap: 6px;
+    }
+  }
+
+  /* PWA 桌面滿版獨立模式 (Standalone App)：保證向下推移避開時間、電量與靈動島 */
+  @media all and (display-mode: standalone) {
+    header.compact-top-header {
+      padding-top: max(calc(env(safe-area-inset-top, 0px) + 14px), 52px) !important;
+    }
   }
 
   .top-nav-btn:hover { background: rgba(253,251,247,0.2); color: #fff; }
@@ -850,7 +863,12 @@
   ============================================================ */
   @media (min-width: 640px) {
     main { padding: 14px 14px 48px; }
-    header.compact-top-header { padding: 0 16px; }
+    header.compact-top-header {
+      padding-top: max(calc(env(safe-area-inset-top, 0px) + 10px), 14px);
+      padding-bottom: 10px;
+      padding-left: max(env(safe-area-inset-left, 0px), 16px);
+      padding-right: max(env(safe-area-inset-right, 0px), 16px);
+    }
   }
   @media (min-width: 900px) {
     .top-nav-btn { padding: 5px 12px; font-size: 0.8rem; }
@@ -1334,7 +1352,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v31';
+const STORAGE_KEY = 'yang_runner_handbook_v32';
 
 function createRealRunnerData() {
   return {
