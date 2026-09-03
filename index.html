@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v49';
+const STORAGE_KEY = 'yang_runner_handbook_v50';
 
 function createRealRunnerData() {
   return {
@@ -5142,11 +5142,38 @@ async function testGeminiApiKeyConnection() {
   }
 }
 
-// ── 本地智慧離線大腦（在無 API 或網路不穩時依然 100% 準確回覆與執行修改）──
+// ── 本地智慧離線大腦（在無 API 或網路不穩時依然 100% 親切回覆、解答與執行修改）──
 function getLocalRaccoonKnowledgeReply(userText) {
   const text = (userText || '').trim().toLowerCase();
 
-  // 1. osau / 溫開水 / 水的問答
+  // 1. 問候與日常聊天
+  if (text.includes('說話') || text.includes('在嗎') || text.includes('可以') || text.includes('聊天') || text.includes('哈囉') || text.includes('你好') || text.includes('hi') || text.includes('hello')) {
+    return {
+      replyText: '當然可以跟你說話呀！🦝✨ 我是你的隨身小浣熊！\n在優彩餐廳現場有任何聽不懂的日語、或是想新增單字、修改手帳流程，隨時都可以跟我說喔！',
+      japaneseAudio: 'いつでも声をかけてくださいね',
+      action: { type: 'NONE' }
+    };
+  }
+
+  // 2. 鼓勵與打氣
+  if (text.includes('累') || text.includes('辛苦') || text.includes('好忙') || text.includes('加油')) {
+    return {
+      replyText: '楊辛苦了！打工度假外場跑來跑去真的不容易，記得適時喝口水休息一下，今天也一起加油！🦝🍵',
+      japaneseAudio: 'お疲れ様です！頑張りましょう！',
+      action: { type: 'NONE' }
+    };
+  }
+
+  // 3. 詢問身分與功能
+  if (text.includes('你是誰') || text.includes('能做什麼') || text.includes('功能') || text.includes('介紹')) {
+    return {
+      replyText: '我是你的專屬隨身手帳助理小浣熊！🦝\n我的三大超能力：\n1. 💬 解答現場日語、俚語與客人要求\n2. 🛠️ 具有全網頁修改權限（可直接幫你新增/刪除/排版單字與SOP）\n3. 🗣️ 即時日語標準發音朗讀！',
+      japaneseAudio: 'よろしくお願いします',
+      action: { type: 'NONE' }
+    };
+  }
+
+  // 4. osau / 溫開水 / 水的問答
   if (text.includes('osau') || text.includes('おさゆ') || text.includes('白湯') || text.includes('溫開水') || text.includes('溫水')) {
     return {
       replyText: '客人說的「osau」是 **「お白湯（おさゆ / osayu）」**，也就是「溫熱開水」！\n在日本餐廳中，長輩吃藥、暖胃或不想喝冰水時常會點お白湯喔！',
@@ -5155,7 +5182,7 @@ function getLocalRaccoonKnowledgeReply(userText) {
     };
   }
 
-  // 2. 道謝 / 收盤應對
+  // 5. 道謝 / 收盤應對
   if (text.includes('道謝') || text.includes('謝謝') || text.includes('收盤') || text.includes('ありがとう') || text.includes('不客氣') || text.includes('怎麼回')) {
     return {
       replyText: '收盤子時客人說謝謝，日本現場最推薦、最親切的黃金金句是：\n\n🥇 **首選回覆：**「とんでもないです！ごゆっくりどうぞ！」（哪裡的話！請您慢慢享用！）\n🥈 **雙向感謝：**「こちらこそ、ありがとうございます！」（我才要謝謝您！）\n🌟 **表達感謝：**「ありがとうございます！助かります！」（謝謝！幫大忙了！）',
@@ -5164,7 +5191,7 @@ function getLocalRaccoonKnowledgeReply(userText) {
     };
   }
 
-  // 3. 新增單字指令 (例如：新增打火機)
+  // 6. 新增單字指令 (例如：新增打火機)
   if (text.includes('打火機') || text.includes('ライター')) {
     return {
       replyText: '好的！我已經幫你把「打火機（ライター）」新增至工具單字庫囉！✨',
@@ -5182,7 +5209,7 @@ function getLocalRaccoonKnowledgeReply(userText) {
     };
   }
 
-  // 4. 傳菜 10 步驟
+  // 7. 傳菜 10 步驟
   if (text.includes('傳菜') || text.includes('sop') || text.includes('步驟')) {
     return {
       replyText: '傳菜 10 大標準步驟為：\n1. 廚房通知取餐 2. 備妥推車與布巾 3. 廚房打招呼 4. 菜色分區存放（生鮮放冰箱、鍋物放保溫庫） 5. 送達餐廳無線電通報 6. 點單向廚房叫菜 7. 端菜給等候客人 8. 撤菜回廚房補 9. 推車借過應對 10. 推車歸位！',
@@ -5191,9 +5218,13 @@ function getLocalRaccoonKnowledgeReply(userText) {
     };
   }
 
-  return null;
+  // 8. 兜底友善對話 (絕不跳冷冰冰的報錯)
+  return {
+    replyText: '小浣熊收到你的訊息囉！🦝✨\n「' + escapeHtml(userText) + '」\n\n💡 <em>小提醒：若要進行完全開放式的自由 AI 大腦問答，可在「⚙️ 設定」貼上您的免費 Google Gemini API Key（以 AIzaSy 開頭），小浣熊就會升級為無所不知的雲端超級大腦喔！</em>',
+    japaneseAudio: '',
+    action: { type: 'NONE' }
+  };
 }
-
 
 // 4. 小浣熊語音輸入處理 (Web Speech API)
 function startRaccoonVoice(isPushToTalk = false) {
