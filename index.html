@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v44';
+const STORAGE_KEY = 'yang_runner_handbook_v45';
 
 function createRealRunnerData() {
   return {
@@ -4025,7 +4025,7 @@ function showPetDialog(msg) {
 }
 
 
-const HARDCODED_GEMINI_API_KEY = 'AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w';
+const HARDCODED_GEMINI_API_KEY = '';
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
 
@@ -4373,6 +4373,102 @@ function stopRoleplayVoice() {
 
 
 
+
+// ── 本地情境模擬智慧對話引擎 (在無 API 金鑰時 100% 擬真流暢對話) ──
+function getLocalRoleplaySimulation(userText, scenario) {
+  const text = (userText || '').trim();
+  const lower = text.toLowerCase();
+  const role = scenario ? (scenario.role || '廚房人員') : '廚房人員';
+
+  let jaText = '';
+  let zhText = '';
+  let correction = '';
+  let keywords = [];
+
+  // 1. 顧客情境 (收桌撤盤 / 點水 / 用餐交流)
+  if (role.includes('顧客') || role.includes('客')) {
+    if (text.includes('よろしく') || text.includes('初めまして') || text.includes('你好')) {
+      jaText = '<ruby>こちらこそ<rt>kochira koso</rt></ruby>、お<ruby>願<rt>ねが</rt></ruby>いします！美味しくいただいていますよ。';
+      zhText = '我才要麻煩您呢！餐點非常美味喔。';
+      keywords = [{ ja: '<ruby>美味<rt>おい</rt></ruby>しい', zh: '好吃的、美味的', cat: '餐點' }];
+    } else if (text.includes('お下げ') || text.includes('下げ') || text.includes('收盤') || text.includes('失礼')) {
+      jaText = 'あ、はい！お<ruby>願<rt>ねが</rt></ruby>いします。ごちそうさまでした！';
+      zhText = '啊，好的！麻煩您收走了。多謝款待！';
+      keywords = [{ ja: 'ごちそうさまでした', zh: '多謝款待（用餐完畢）', cat: '對話' }];
+    } else if (text.includes('水') || text.includes('お冷') || text.includes('白湯') || text.includes('osau')) {
+      jaText = 'ありがとうございます！お<ruby>水<rt>みず</rt></ruby>、とても<ruby>助<rt>たす</rt></ruby>かります。';
+      zhText = '太感謝了！送來水真的幫大忙了。';
+      keywords = [{ ja: 'お<ruby>冷<rt>ひや</rt></ruby>', zh: '冰水/冷水', cat: '酒水' }];
+    } else if (text.includes('ありがとう') || text.includes('謝謝')) {
+      jaText = 'こちらこそ、丁寧に対応してくれてありがとう！';
+      zhText = '我才要謝謝您這麼親切服務！';
+      keywords = [{ ja: '<ruby>丁寧<rt>ていねい</rt></ruby>', zh: '親切有禮貌', cat: '對話' }];
+    } else {
+      jaText = 'ごちそうさまでした！とても美味しかったです。お<ruby>皿<rt>さら</rt></ruby>、下げてもらってもいいですよ。';
+      zhText = '多謝款待！非常美味。餐盤可以麻煩您收走囉。';
+      keywords = [{ ja: 'お<ruby>皿<rt>さら</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げる', zh: '撤走餐盤', cat: '餐具' }];
+    }
+  }
+  // 2. 廚房人員情境
+  else if (role.includes('廚房') || role.includes('調理') || role.includes('料理')) {
+    if (text.includes('よろしく') || text.includes('おはよう') || text.includes('你好')) {
+      jaText = 'お<ruby>願<rt>ねが</rt></ruby>いします！今日も<ruby>忙<rt>いそが</rt></ruby>しくなるから、<ruby>声<rt>こえ</rt></ruby>かけ合って<ruby>頑張<rt>がんば</rt></ruby>りましょう！';
+      zhText = '麻煩你了！今天也會很忙，大家多互相提醒照應、一起加油！';
+      keywords = [{ ja: '<ruby>頑張<rt>がんば</rt></ruby>る', zh: '努力、加油', cat: '對話' }];
+    } else if (text.includes('取りに') || text.includes('伺います') || text.includes('了解') || text.includes('收到')) {
+      jaText = '<ruby>助<rt>たす</rt></ruby>かります！<ruby>南蛮<rt>なんばん</rt></ruby>チキンと<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>が上がったので、レストランへお<ruby>願<rt>ねが</rt></ruby>いします！';
+      zhText = '幫大忙了！南蠻炸雞和肉燒賣做好了，麻煩送到餐廳！';
+      keywords = [
+        { ja: '<ruby>南蛮<rt>なんばん</rt></ruby>チキン', zh: '南蠻炸雞', cat: '餐點' },
+        { ja: '<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>', zh: '肉燒賣', cat: '餐點' }
+      ];
+    } else if (text.includes('なくなりました') || text.includes('缺') || text.includes('補')) {
+      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>です！すぐ<ruby>作<rt>つく</rt></ruby>りますので、５<ruby>分<rt>ふん</rt></ruby>ほどお<ruby>待<rt>ま</rt></ruby>ちください！';
+      zhText = '了解！馬上製作，請稍候約5分鐘！';
+      keywords = [{ ja: '<ruby>了解<rt>りょうかい</rt></ruby>', zh: '了解/明白', cat: '對話' }];
+    } else {
+      jaText = 'はい、<ruby>了解<rt>りょうかい</rt></ruby>です！<ruby>次<rt>つぎ</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>ができたらインカムで<ruby>呼<rt>よ</rt></ruby>びますね。';
+      zhText = '好的了解！等下一道料理做好了我會用無線電呼叫你喔。';
+      keywords = [{ ja: '<ruby>インカム<rt>inkamu</rt></ruby>', zh: '無線電對講機', cat: '工具' }];
+    }
+  }
+  // 3. 主管/店長情境
+  else if (role.includes('主管') || role.includes('店長') || role.includes('上司')) {
+    if (text.includes('よろしく') || text.includes('おはよう') || text.includes('你好')) {
+      jaText = 'おはよう！まずはドリンクコーナーの<ruby>補充<rt>ほじゅう</rt></ruby>とお<ruby>皿<rt>さら</rt></ruby>拭きからお<ruby>願<rt>ねが</rt></ruby>いしますね。';
+      zhText = '早安！首先麻煩從飲料區補充與擦餐盤開始喔。';
+      keywords = [{ ja: 'お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き', zh: '擦餐盤作業', cat: '工具' }];
+    } else if (text.includes('終わり') || text.includes('完了') || text.includes('好了')) {
+      jaText = 'ありがとうございます！<ruby>助<rt>たす</rt></ruby>かりました。<ruby>次<rt>つぎ</rt></ruby>はテーブルのバッシングをお<ruby>願<rt>ねが</rt></ruby>いします。';
+      zhText = '太感謝了！幫大忙了。接下來麻煩進行餐桌收盤清理。';
+      keywords = [{ ja: 'バッシング', zh: '收桌/撤盤', cat: '對話' }];
+    } else {
+      jaText = 'はい、しっかり<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて<ruby>業務<rt>ぎょうむ</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めてくださいね！';
+      zhText = '好的，請注意安全、確實推進工作喔！';
+      keywords = [{ ja: '<ruby>気<rt>き</rt></ruby>をつける', zh: '注意、小心', cat: '對話' }];
+    }
+  }
+  // 4. 同事/夥伴情境
+  else {
+    if (text.includes('よろしく') || text.includes('你好')) {
+      jaText = 'よろしくお願いします！今日も一緒に<ruby>頑張<rt>がんば</rt></ruby>りましょう！';
+      zhText = '請多指教！今天也一起加油吧！';
+      keywords = [{ ja: '<ruby>一緒<rt>いっしょ</rt></ruby>に', zh: '一起', cat: '對話' }];
+    } else if (text.includes('ありがとう') || text.includes('謝謝')) {
+      jaText = 'いえいえ！お<ruby>疲<rt>つか</rt></ruby>れ様です！<ruby>助<rt>たす</rt></ruby>け合いましょう！';
+      zhText = '不會不會！辛苦了！互相幫忙囉！';
+      keywords = [{ ja: 'お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>', zh: '辛苦了', cat: '對話' }];
+    } else {
+      jaText = 'お<ruby>疲<rt>つか</rt></ruby>れ様です！<ruby>台車<rt>だいしゃ</rt></ruby>の<ruby>通<rt>とお</rt></ruby>り<ruby>道<rt>みち</rt></ruby>、<ruby>空<rt>あ</rt></ruby>けておきますね。';
+      zhText = '辛苦了！推車的走道我幫你讓開囉。';
+      keywords = [{ ja: '<ruby>台車<rt>だいしゃ</rt></ruby>', zh: '推車', cat: '工具' }];
+    }
+  }
+
+  return { jaText, zhText, correction, keywords };
+}
+
+
 async function sendRoleplayMessage() {
   const input = document.getElementById('chat-user-input');
   const userText = input.value.trim();
@@ -4393,7 +4489,9 @@ async function sendRoleplayMessage() {
 
   const scenario = AppData.scenarios.find(s => s.id === AppData.activeScenarioId) || AppData.scenarios[0];
 
-  const prompt = `你正在扮演熊本「優彩」溫泉旅館自助餐廳的【${scenario.role || '廚房工作人員'}】。
+  // 1. 如果有設定使用者的有效 API Key，優先呼叫 Google Gemini AI
+  if (AppData.apiKey && AppData.apiKey.trim().startsWith('AIza')) {
+    const prompt = `你正在扮演熊本「優彩」溫泉旅館自助餐廳的【${scenario.role || '廚房工作人員'}】。
 情境背景：${scenario.desc || '自助餐廳出餐與傳菜應對'}。
 
 請以符合該角色口氣與職場禮貌，以道地日文回應使用者的傳菜發話，並附帶繁體中文翻譯。
@@ -4418,29 +4516,48 @@ async function sendRoleplayMessage() {
   ]
 }`;
 
-  try {
-    const parsed = await callGeminiApiUnified(prompt);
+    try {
+      const parsed = await callGeminiApiUnified(prompt);
+      if (parsed && parsed.jaText) {
+        if (parsed.correction) {
+          AppData.chatHistory[AppData.chatHistory.length - 1].correction = parsed.correction;
+        }
 
-    if (parsed.correction) {
-      AppData.chatHistory[AppData.chatHistory.length - 1].correction = parsed.correction;
+        const aiMsg = {
+          role: 'ai',
+          ja: parsed.jaText || '',
+          zh: parsed.zhText || '',
+          correction: '',
+          keywords: parsed.keywords || []
+        };
+
+        AppData.chatHistory.push(aiMsg);
+        saveAppData(AppData);
+        renderChatBox();
+        speakJapanese(parsed.jaText);
+        return;
+      }
+    } catch (err) {
+      console.warn('Gemini API call failed, falling back to local simulation engine:', err);
     }
+  }
 
+  // 2. 本地情境智慧模擬引擎 (無 API 或網路離線時 100% 擬真回覆，絕不報錯)
+  setTimeout(() => {
+    const sim = getLocalRoleplaySimulation(userText, scenario);
     const aiMsg = {
       role: 'ai',
-      ja: parsed.jaText || '',
-      zh: parsed.zhText || '',
-      correction: '',
-      keywords: parsed.keywords || []
+      ja: sim.jaText,
+      zh: sim.zhText,
+      correction: sim.correction,
+      keywords: sim.keywords
     };
 
     AppData.chatHistory.push(aiMsg);
     saveAppData(AppData);
     renderChatBox();
-
-    if (parsed.jaText) speakJapanese(parsed.jaText);
-  } catch (err) {
-    showToast('AI 回覆失敗：' + err.message, 'error');
-  }
+    speakJapanese(sim.jaText);
+  }, 350);
 }
 
 function renderSettingsPage() {

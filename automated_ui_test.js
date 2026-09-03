@@ -172,6 +172,7 @@ assert(html.includes('id="setting-gemini-api-key"'), '包含 Gemini API Key 設�
 assert(html.includes('saveGeminiApiKeySetting'), '包含儲存 API Key 函式 (saveGeminiApiKeySetting)');
 assert(html.includes('testGeminiApiKeyConnection'), '包含測試 API Key 連線函式 (testGeminiApiKeyConnection)');
 assert(html.includes('getLocalRaccoonKnowledgeReply'), '包含小浣熊離線智慧知識庫函式 (getLocalRaccoonKnowledgeReply)');
+assert(html.includes('getLocalRoleplaySimulation'), '包含情境模擬離線智慧對話引擎 (getLocalRoleplaySimulation)');
 assert(html.includes('callGeminiApiUnified'), '包含統一 Gemini API 調用函式 (callGeminiApiUnified)');
 
 console.log('====================================================');
