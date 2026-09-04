@@ -1544,7 +1544,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v56';
+const STORAGE_KEY = 'yang_runner_handbook_v57';
 
 function createRealRunnerData() {
   return {
@@ -2726,11 +2726,11 @@ function createRealRunnerData() {
   ],
   "scenarios": [
     {
-      "id": "sc_runner_ready",
-      "name": "廚房取餐與通報應答",
-      "icon": "👨‍🍳",
-      "role": "廚房主管",
-      "desc": "廚房大喊「〇〇できました！」，模擬你確認取餐、推車出發、以及到外場後用無線電通報之完整流程。",
+      "id": "sc_colleague",
+      "name": "同事工作與日常應對",
+      "icon": "🤝",
+      "role": "內外場同事",
+      "desc": "與內外場同事（如市石、松本、其他同仁）打招呼、換班交接、推車借過、互相幫忙及道謝「助かります/お疲れ様です」。",
       "enabled": true
     },
     {
@@ -2756,11 +2756,19 @@ function createRealRunnerData() {
       "role": "顧客",
       "desc": "詢問「お皿お下げしてもよろしいでしょうか？」，模擬客人說可以收、客人道謝、或客人表示還在吃之應答與收牌。",
       "enabled": true
+    },
+    {
+      "id": "sc_stranger",
+      "name": "陌生人/路人日常對話",
+      "icon": "🚶",
+      "role": "陌生人/遊客",
+      "desc": "在旅館外、周邊道路或公共區域遇到陌生人問路、詢問設施方向、打招呼或日常簡短日語交流。",
+      "enabled": true
     }
   ],
   "chatHistory": [],
   "apiKey": "AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w",
-  "activeScenarioId": "sc_runner_ready",
+  "activeScenarioId": "sc_colleague",
   "currentTabId": "tab_runner_all"
 };
 }
@@ -4594,104 +4602,220 @@ function stopRoleplayVoice() {
 function getLocalRoleplaySimulation(userText, scenario) {
   const text = (userText || '').trim();
   const lower = text.toLowerCase();
-  const role = scenario ? (scenario.role || '廚房人員') : '廚房人員';
+  const role = scenario ? (scenario.role || '內外場同事') : '內外場同事';
 
   let jaText = '';
   let zhText = '';
-  let correction = '';
   let keywords = [];
   let evaluation = {
     score: 95,
     grammarGrade: '優秀',
     grammarFeedback: '日語表達清晰自然，核心單字使用準確！',
-    etiquetteFeedback: '語氣有禮貌，非常符合日本餐飲現場應對！',
+    etiquetteFeedback: '語氣有禮貌，應對得體！',
     betterExpression: text,
     betterExpressionZh: '標準日語表達'
   };
 
-  // 1. 顧客情境 (收桌撤盤 / 點水 / 用餐交流)
-  if (role.includes('顧客') || role.includes('客')) {
+  // 1. 同事/同僚情境 (打招呼 / 互相協作 / 推車借過 / 互道辛苦)
+  if (role.includes('同事') || role.includes('同僚') || role.includes('夥伴')) {
+    if (text.includes('おはよう') || text.includes('早') || text.includes('よろしく')) {
+      jaText = 'おはようございます！<ruby>楊<rt>よう</rt></ruby>くん、<ruby>今日<rt>きょう</rt></ruby>もよろしくね！<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>頑張<rt>がんば</rt></ruby>ろう！';
+      zhText = '早安！小楊，今天也麻煩你多指教囉！一起加油吧！';
+      keywords = [{ ja: '<ruby>一緒<rt>いっしょ</rt></ruby>に', zh: '一起', cat: '對話' }, { ja: '<ruby>頑張<rt>がんば</rt></ruby>る', zh: '加油、努力', cat: '對話' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '晨間問候朝氣蓬勃，發音與禮貌俱佳！',
+        etiquetteFeedback: '上班第一時間與同仁互相道早安「おはようございます」，能建立極佳的團隊默契！',
+        betterExpression: 'おはようございます！<ruby>今日<rt>きょう</rt></ruby>もよろしくお<ruby>願<rt>ねが</rt></ruby>いします！',
+        betterExpressionZh: '早安！今天也請多多指教與協助！'
+      };
+    } else if (text.includes('助かり') || text.includes('ありがとう') || text.includes('謝謝') || text.includes('感謝')) {
+      jaText = '<ruby>助<rt>たす</rt></ruby>かります！いつもありがとう！お<ruby>互<rt>たが</rt></ruby>い<ruby>様<rt>さま</rt></ruby>だから<ruby>気<rt>き</rt></ruby>にしないでね！';
+      zhText = '幫了大忙了！一直以來太感謝你了！大家互相幫忙不用客氣啦！';
+      keywords = [{ ja: '<ruby>助<rt>たす</rt></ruby>かります', zh: '幫了大忙、太感謝了', cat: '對話' }, { ja: 'お<ruby>互<rt>たが</rt></ruby>い<ruby>様<rt>さま</rt></ruby>', zh: '互相幫忙', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「助かります！」是日本職場同仁間最受歡迎的靈魂感謝句！',
+        etiquetteFeedback: '主動向夥伴表達謝意，職場好感度滿分！',
+        betterExpression: 'いつもフォローしてくれて、本当に<ruby>助<rt>たす</rt></ruby>かります！ありがとうございます！',
+        betterExpressionZh: '一直以來都幫我照應，真的幫了大忙！非常謝謝你！'
+      };
+    } else if (text.includes('通り') || text.includes('通る') || text.includes('台車') || text.includes('借過') || text.includes('過')) {
+      jaText = 'はーい、どうぞ！<ruby>道<rt>みち</rt></ruby><ruby>空<rt>あ</rt></ruby>けましたよ。<ruby>気<rt>き</rt></ruby>をつけて<ruby>運<rt>はこ</rt></ruby>んでね！';
+      zhText = '好～請過！路幫你讓開囉。搬運時請小心喔！';
+      keywords = [{ ja: 'お<ruby>通<rt>とお</rt></ruby>りします', zh: '借過、我要通過了', cat: '對話' }, { ja: '<ruby>気<rt>き</rt></ruby>をつけて', zh: '請小心/注意', cat: '對話' }];
+      evaluation = {
+        score: 95,
+        grammarGrade: '優秀',
+        grammarFeedback: '推車過彎或進出時大聲通報「お通りします！」，安全意識極高！',
+        etiquetteFeedback: '簡短有力、口齒清晰，符合廚房走道通行安全標準。',
+        betterExpression: 'お<ruby>通<rt>とお</rt></ruby>りします！<ruby>台車<rt>だいしゃ</rt></ruby><ruby>通<rt>とお</rt></ruby>りまーす！',
+        betterExpressionZh: '借過一下！推車要通過囉！'
+      };
+    } else if (text.includes('お疲れ') || text.includes('下班') || text.includes('先走') || text.includes('上がり')) {
+      jaText = 'お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>でした！<ruby>今日<rt>きょう</rt></ruby>もたくさん<ruby>助<rt>たす</rt></ruby>かったよ！ゆっくり<ruby>休<rt>やす</rt></ruby>んでね！';
+      zhText = '辛苦啦！今天也幫了好多忙！回去好好休息喔！';
+      keywords = [{ ja: 'お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>でした', zh: '辛苦了（下班告別用語）', cat: '對話' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '下班互道「お疲れ様でした」，時態與敬意使用精確。',
+        etiquetteFeedback: '下班離開前向同仁致意是日本職場最重視的禮節之一。',
+        betterExpression: 'お<ruby>先<rt>さき</rt></ruby>に<ruby>失礼<rt>しつれい</rt></ruby>します！お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>でした！',
+        betterExpressionZh: '我先告退了！大家辛苦了！'
+      };
+    } else {
+      jaText = 'はい！<ruby>了解<rt>りょうかい</rt></ruby>です！<ruby>何<rt>なに</rt></ruby>かあったらいつでも<ruby>声<rt>こえ</rt></ruby>かけてね！';
+      zhText = '好的！收到！有任何狀況隨時喊我一聲喔！';
+      keywords = [{ ja: '<ruby>了解<rt>りょうかい</rt></ruby>', zh: '收到、了解', cat: '對話' }];
+      evaluation = {
+        score: 92,
+        grammarGrade: '良好',
+        grammarFeedback: '同儕溝通自然流暢，語調親切。',
+        etiquetteFeedback: '保持積極正向的團隊互動風格！',
+        betterExpression: 'ありがとうございます！またよろしくお<ruby>願<rt>ねが</rt></ruby>いします！',
+        betterExpressionZh: '謝謝！之後也請多多指教！'
+      };
+    }
+  }
+
+  // 2. 陌生人 / 路人 / 遊客情境 (問路 / 詢問設施 / 簡短交流 / 拍照)
+  else if (role.includes('陌生人') || role.includes('路人') || role.includes('遊客') || role.includes('通行人')) {
+    if (text.includes('どこ') || text.includes('駅') || text.includes('温泉') || text.includes('道') || text.includes('哪裡') || text.includes('路')) {
+      jaText = 'あちらの<ruby>道<rt>みち</rt></ruby>をまっすぐ<ruby>行<rt>い</rt></ruby>って、<ruby>右<rt>みぎ</rt></ruby>に<ruby>曲<rt>ま</rt></ruby>がったところにございますよ！';
+      zhText = '從那條路直走，在右轉的地方就會看到囉！';
+      keywords = [{ ja: 'まっすぐ', zh: '筆直、直走', cat: '對話' }, { ja: '<ruby>右<rt>みぎ</rt></ruby>に<ruby>曲<rt>ま</rt></ruby>がる', zh: '右轉', cat: '對話' }];
+      evaluation = {
+        score: 95,
+        grammarGrade: '優秀',
+        grammarFeedback: '指引方向清晰明確，使用「〜にございます」展現極佳的服務素養！',
+        etiquetteFeedback: '對陌生人或外來遊客親切指路，能留下非常好的印象。',
+        betterExpression: 'あちらをまっすぐ<ruby>進<rt>すす</rt></ruby>んでいただきますと、<ruby>右側<rt>みぎがわ</rt></ruby>に<ruby>見<rt>み</rt></ruby>えてまいります。',
+        betterExpressionZh: '沿著那邊直直往前走的話，就會在右手邊看見囉。'
+      };
+    } else if (text.includes('写真') || text.includes('撮') || text.includes('拍照') || text.includes('照相')) {
+      jaText = 'あ、はい！ぜひお<ruby>願<rt>ねが</rt></ruby>いします！シャッターお<ruby>願<rt>ねが</rt></ruby>いできますか？';
+      zhText = '啊，好的！太感謝了！可以麻煩您幫忙按快門嗎？';
+      keywords = [{ ja: '<ruby>写真<rt>しゃしん</rt></ruby>', zh: '照片', cat: '對話' }, { ja: '<ruby>撮<rt>と</rt></ruby>る', zh: '拍攝/照相', cat: '對話' }];
+      evaluation = {
+        score: 94,
+        grammarGrade: '優秀',
+        grammarFeedback: '主動詢問「写真を撮りましょうか？」或請人拍照用語十分地道。',
+        etiquetteFeedback: '樂於助人且語帶微笑，親和力滿分！',
+        betterExpression: 'お<ruby>写真<rt>しゃしん</rt></ruby>、お<ruby>撮<rt>と</rt></ruby>りいたしましょうか？ハイ、チーズ！',
+        betterExpressionZh: '需要幫您拍張照片嗎？來～笑一個（Say Cheese）！'
+      };
+    } else if (text.includes('こんにちは') || text.includes('すみません') || text.includes('你好') || text.includes('不好意思')) {
+      jaText = 'こんにちは！<ruby>今日<rt>きょう</rt></ruby>はいいお<ruby>天気<rt>てんき</rt></ruby>ですね！<ruby>何<rt>なに</rt></ruby>かお<ruby>困<rt>こま</rt></ruby>りですか？';
+      zhText = '您好！今天天氣真好呢！有什麼我可以幫忙的嗎？';
+      keywords = [{ ja: 'お<ruby>困<rt>こま</rt></ruby>りですか', zh: '有遇到什麼困難/需要幫忙嗎', cat: '對話' }];
+      evaluation = {
+        score: 95,
+        grammarGrade: '優秀',
+        grammarFeedback: '向路人或遊客打招呼自然得體，口氣親切。',
+        etiquetteFeedback: '主動釋出善意「何かお困りですか？」，展現極高素質。',
+        betterExpression: 'こんにちは！<ruby>何<rt>なに</rt></ruby>かお<ruby>手伝<rt>てつだ</rt></ruby>いできることはございますか？',
+        betterExpressionZh: '您好！有什麼我能為您協助的地方嗎？'
+      };
+    } else {
+      jaText = 'ご<ruby>丁寧<rt>ていねい</rt></ruby>にありがとうございます！どうぞよい<ruby>一日<rt>いちにち</rt></ruby>をお<ruby>過<rt>す</rt></ruby>ごしください！';
+      zhText = '非常謝謝您！祝您度過美好愉快的一天！';
+      keywords = [{ ja: 'よい<ruby>一日<rt>いちにち</rt></ruby>を', zh: '祝您有美好的一天', cat: '對話' }];
+      evaluation = {
+        score: 92,
+        grammarGrade: '良好',
+        grammarFeedback: '表達清晰，語意通順。',
+        etiquetteFeedback: '最後互道祝福，令人感到溫暖。',
+        betterExpression: 'ありがとうございます！どうぞお<ruby>気<rt>き</rt></ruby>をつけて！',
+        betterExpressionZh: '謝謝您！路上請多加小心保重！'
+      };
+    }
+  }
+
+  // 3. 顧客情境 (收桌撤盤 / 點水 / 酒水生啤 / 用餐交流)
+  else if (role.includes('顧客') || role.includes('客')) {
     if (text.includes('よろしく') || text.includes('初めまして') || text.includes('你好')) {
       jaText = '<ruby>こちらこそ<rt>kochira koso</rt></ruby>、お<ruby>願<rt>ねが</rt></ruby>いします！美味しくいただいていますよ。';
       zhText = '我才要麻煩您呢！餐點非常美味喔。';
       keywords = [{ ja: '<ruby>美味<rt>おい</rt></ruby>しい', zh: '好吃的、美味的', cat: '餐點' }];
+      evaluation = {
+        score: 92,
+        grammarGrade: '良好',
+        grammarFeedback: '發話親切友善，能快速拉近與客人間的距離。',
+        etiquetteFeedback: '遇到客人主動打招呼非常棒，可加入微笑致意。',
+        betterExpression: 'いつもお<ruby>世話<rt>せわ</rt></ruby>になっております。どうぞごゆっくりお<ruby>過<rt>す</rt></ruby>ごしください。',
+        betterExpressionZh: '一直承蒙關照，請您放鬆慢慢享受用餐時光。'
+      };
     } else if (text.includes('お下げ') || text.includes('下げ') || text.includes('收盤') || text.includes('失礼')) {
       jaText = 'あ、はい！お<ruby>願<rt>ねが</rt></ruby>いします。ごちそうさまでした！';
       zhText = '啊，好的！麻煩您收走了。多謝款待！';
       keywords = [{ ja: 'ごちそうさまでした', zh: '多謝款待（用餐完畢）', cat: '對話' }];
-    } else if (text.includes('水') || text.includes('お冷') || text.includes('白湯') || text.includes('osau')) {
-      jaText = 'ありがとうございます！お<ruby>水<rt>みず</rt></ruby>、とても<ruby>助<rt>たす</rt></ruby>かります。';
-      zhText = '太感謝了！送來水真的幫大忙了。';
-      keywords = [{ ja: 'お<ruby>冷<rt>ひや</rt></ruby>', zh: '冰水/冷水', cat: '酒水' }];
-    } else if (text.includes('ありがとう') || text.includes('謝謝')) {
-      jaText = 'こちらこそ、丁寧に対応してくれてありがとう！';
-      zhText = '我才要謝謝您這麼親切服務！';
-      keywords = [{ ja: '<ruby>丁寧<rt>ていねい</rt></ruby>', zh: '親切有禮貌', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「お下げしてもよろしいでしょうか」為外場收盤頂級標準敬語，無任何文法瑕疵！',
+        etiquetteFeedback: '詢問得體優雅，展現溫泉旅館的高質感外場風範！',
+        betterExpression: '<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？',
+        betterExpressionZh: '不好意思打擾了，請問這個盤子可以幫您收走嗎？'
+      };
+    } else if (text.includes('水') || text.includes('お冷') || text.includes('白湯') || text.includes('osau') || text.includes('溫水')) {
+      jaText = 'ありがとうございます！お<ruby>水<rt>みず</rt></ruby>、いただきますね。';
+      zhText = '太感謝了！我收下這杯水囉。';
+      keywords = [{ ja: 'お<ruby>冷<rt>ひ</rt></ruby>や', zh: '冰水（日本餐廳核心用語）', cat: '酒水' }, { ja: 'お<ruby>白湯<rt>さゆ</rt></ruby>', zh: '溫開水（osau）', cat: '酒水' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '準確辨識出水的各種型態（お冷/お白湯/お湯），溝通零誤差！',
+        etiquetteFeedback: '端水時雙手奉上並微點頭，禮節滿分！',
+        betterExpression: 'お<ruby>待<rt>ま</rt></ruby>たせいたしました。お<ruby>冷<rt>ひ</rt></ruby>や（お<ruby>白湯<rt>さゆ</rt></ruby>）でございます。',
+        betterExpressionZh: '讓您久等了，這是為您準備的冰水（溫開水）。'
+      };
     } else {
-      jaText = 'ごちそうさまでした！とても美味しかったです。お<ruby>皿<rt>さら</rt></ruby>、下げてもらってもいいですよ。';
-      zhText = '多謝款待！非常美味。餐盤可以麻煩您收走囉。';
-      keywords = [{ ja: 'お<ruby>皿<rt>さら</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げる', zh: '撤走餐盤', cat: '餐具' }];
+      jaText = 'はい！ご<ruby>丁寧<rt>ていねい</rt></ruby>にありがとうございます！ごちそうさまです。';
+      zhText = '好的！謝謝您這麼細心服務！吃得很滿足。';
+      evaluation = {
+        score: 90,
+        grammarGrade: '良好',
+        grammarFeedback: '意思表達明確，日語發音通順。',
+        etiquetteFeedback: '面對顧客時態度誠懇，回答簡潔得體。',
+        betterExpression: 'とんでもないです！どうぞごゆっくりお<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりください。',
+        betterExpressionZh: '哪裡的話！請您慢慢享用美食。'
+      };
     }
   }
-  // 2. 廚房人員情境
-  else if (role.includes('廚房') || role.includes('調理') || role.includes('料理')) {
-    if (text.includes('よろしく') || text.includes('おはよう') || text.includes('你好')) {
-      jaText = 'お<ruby>願<rt>ねが</rt></ruby>いします！今日も<ruby>忙<rt>いそが</rt></ruby>しくなるから、<ruby>声<rt>こえ</rt></ruby>かけ合って<ruby>頑張<rt>がんば</rt></ruby>りましょう！';
-      zhText = '麻煩你了！今天也會很忙，大家多互相提醒照應、一起加油！';
-      keywords = [{ ja: '<ruby>頑張<rt>がんば</rt></ruby>る', zh: '努力、加油', cat: '對話' }];
-    } else if (text.includes('取りに') || text.includes('伺います') || text.includes('了解') || text.includes('收到')) {
-      jaText = '<ruby>助<rt>たす</rt></ruby>かります！<ruby>南蛮<rt>なんばん</rt></ruby>チキンと<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>が上がったので、レストランへお<ruby>願<rt>ねが</rt></ruby>いします！';
-      zhText = '幫大忙了！南蠻炸雞和肉燒賣做好了，麻煩送到餐廳！';
-      keywords = [
-        { ja: '<ruby>南蛮<rt>なんばん</rt></ruby>チキン', zh: '南蠻炸雞', cat: '餐點' },
-        { ja: '<ruby>肉焼売<rt>にくしゅうまい</rt></ruby>', zh: '肉燒賣', cat: '餐點' }
-      ];
-    } else if (text.includes('なくなりました') || text.includes('缺') || text.includes('補')) {
-      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>です！すぐ<ruby>作<rt>つく</rt></ruby>りますので、５<ruby>分<rt>ふん</rt></ruby>ほどお<ruby>待<rt>ま</rt></ruby>ちください！';
-      zhText = '了解！馬上製作，請稍候約5分鐘！';
-      keywords = [{ ja: '<ruby>了解<rt>りょうかい</rt></ruby>', zh: '了解/明白', cat: '對話' }];
-    } else {
-      jaText = 'はい、<ruby>了解<rt>りょうかい</rt></ruby>です！<ruby>次<rt>つぎ</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>ができたらインカムで<ruby>呼<rt>よ</rt></ruby>びますね。';
-      zhText = '好的了解！等下一道料理做好了我會用無線電呼叫你喔。';
-      keywords = [{ ja: '<ruby>インカム<rt>inkamu</rt></ruby>', zh: '無線電對講機', cat: '工具' }];
-    }
-  }
-  // 3. 主管/店長情境
-  else if (role.includes('主管') || role.includes('店長') || role.includes('上司')) {
-    if (text.includes('よろしく') || text.includes('おはよう') || text.includes('你好')) {
-      jaText = 'おはよう！まずはドリンクコーナーの<ruby>補充<rt>ほじゅう</rt></ruby>とお<ruby>皿<rt>さら</rt></ruby>拭きからお<ruby>願<rt>ねが</rt></ruby>いしますね。';
-      zhText = '早安！首先麻煩從飲料區補充與擦餐盤開始喔。';
-      keywords = [{ ja: 'お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き', zh: '擦餐盤作業', cat: '工具' }];
-    } else if (text.includes('終わり') || text.includes('完了') || text.includes('好了')) {
-      jaText = 'ありがとうございます！<ruby>助<rt>たす</rt></ruby>かりました。<ruby>次<rt>つぎ</rt></ruby>はテーブルのバッシングをお<ruby>願<rt>ねが</rt></ruby>いします。';
-      zhText = '太感謝了！幫大忙了。接下來麻煩進行餐桌收盤清理。';
-      keywords = [{ ja: 'バッシング', zh: '收桌/撤盤', cat: '對話' }];
-    } else {
-      jaText = 'はい、しっかり<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて<ruby>業務<rt>ぎょうむ</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めてくださいね！';
-      zhText = '好的，請注意安全、確實推進工作喔！';
-      keywords = [{ ja: '<ruby>気<rt>き</rt></ruby>をつける', zh: '注意、小心', cat: '對話' }];
-    }
-  }
-  // 4. 同事/夥伴情境
+
+  // 4. 外場領班/主管情境 (缺菜通報 / 現場調度)
   else {
-    if (text.includes('よろしく') || text.includes('你好')) {
-      jaText = 'よろしくお願いします！今日も一緒に<ruby>頑張<rt>がんば</rt></ruby>りましょう！';
-      zhText = '請多指教！今天也一起加油吧！';
-      keywords = [{ ja: '<ruby>一緒<rt>いっしょ</rt></ruby>に', zh: '一起', cat: '對話' }];
-    } else if (text.includes('ありがとう') || text.includes('謝謝')) {
-      jaText = 'いえいえ！お<ruby>疲<rt>つか</rt></ruby>れ様です！<ruby>助<rt>たす</rt></ruby>け合いましょう！';
-      zhText = '不會不會！辛苦了！互相幫忙囉！';
-      keywords = [{ ja: 'お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>', zh: '辛苦了', cat: '對話' }];
+    if (text.includes('なく') || text.includes('補充') || text.includes('缺') || text.includes('補')) {
+      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>しました！すぐ厨房へ<ruby>連絡<rt>れんらく</rt></ruby>して<ruby>補充<rt>ほじゅう</rt></ruby>してもらいますね！';
+      zhText = '了解了！我馬上聯絡廚房請他們趕快補充喔！';
+      keywords = [{ ja: '<ruby>補充<rt>ほじゅう</rt></ruby>', zh: '補充、補菜', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '缺菜通報迅速準確，有效防止餐檯空盤！',
+        etiquetteFeedback: '使用無線電回報時簡潔有力，是優秀外場應對。',
+        betterExpression: '<ruby>了解<rt>りょうかい</rt></ruby>です！厨房へインカムで<ruby>補充<rt>ほじゅう</rt></ruby>を<ruby>依頼<rt>いらい</rt></ruby>します！',
+        betterExpressionZh: '收到！我馬上用無線電請廚房補充！'
+      };
     } else {
-      jaText = 'お<ruby>疲<rt>つか</rt></ruby>れ様です！<ruby>台車<rt>だいしゃ</rt></ruby>の<ruby>通<rt>とお</rt></ruby>り<ruby>道<rt>みち</rt></ruby>、<ruby>空<rt>あ</rt></ruby>けておきますね。';
-      zhText = '辛苦了！推車的走道我幫你讓開囉。';
-      keywords = [{ ja: '<ruby>台車<rt>だいしゃ</rt></ruby>', zh: '推車', cat: '工具' }];
+      jaText = '<ruby>楊<rt>よう</rt></ruby>さん、いつも<ruby>周<rt>まわ</rt></ruby>りをよく<ruby>見<rt>み</rt></ruby>てくれて<ruby>助<rt>たす</rt></ruby>かります！この<ruby>調子<rt>ちょうし</rt></ruby>でよろしくね！';
+      zhText = '小楊，你平時都很留意外場周遭狀況，真幫了大忙！保持這個步調繼續加油喔！';
+      evaluation = {
+        score: 94,
+        grammarGrade: '優秀',
+        grammarFeedback: '回報清晰明瞭，深得主管信任。',
+        etiquetteFeedback: '對主管態度謙恭有禮、積極負責！',
+        betterExpression: 'かしこまりました！しっかり<ruby>確認<rt>かくにん</rt></ruby>してまいります！',
+        betterExpressionZh: '遵命明白了！我會仔細確認巡視的！'
+      };
     }
   }
 
   return { jaText, zhText, correction, keywords, evaluation };
 }
-
 
 async function sendRoleplayMessage() {
   const input = document.getElementById('chat-user-input');

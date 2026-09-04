@@ -205,6 +205,12 @@ assert(html.includes('なになに'), '語音合成 extractSpokenJapanese 將 �
 assert(html.includes('dialog-bubble-ja') && html.includes('speakJapanese'), '對話氣泡日文句子支援點擊直接朗讀');
 assert(html.includes('<ruby>了解<rt>りょうかい</rt></ruby>です') && html.includes('<ruby>伺<rt>うかが</rt></ruby>う'), '文法單字使用標準 Ruby 上方標音（無括號重複）');
 
+// 測試 15: 情境對話角色更新（新增「同事」在最前、「陌生人」在最後，移除「廚房取餐」）
+console.log('\n【測試 15：情境對話角色更新（同事在最前、陌生人在最後）】');
+assert(html.includes('sc_colleague') && html.includes('同事工作與日常應對'), '情境清單開頭包含「同事工作與日常應對」');
+assert(html.includes('sc_stranger') && html.includes('陌生人/路人日常對話'), '情境清單結尾包含「陌生人/路人日常對話」');
+assert(!html.includes('sc_runner_ready') && !html.includes('廚房取餐與通報應答'), '已成功移除舊的「廚房取餐與通報應答」情境');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
