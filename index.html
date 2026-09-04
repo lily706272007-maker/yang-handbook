@@ -1011,6 +1011,128 @@
     max-width: 82%;
   }
 
+
+/* 🦝 Apple 風格弧形輪盤選單與小浣熊工作台樣式 */
+.raccoon-timer-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  animation: timerPulse 1.5s infinite ease-in-out;
+}
+@keyframes timerPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.raccoon-radial-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.raccoon-radial-overlay.open {
+  display: flex;
+}
+.raccoon-radial-menu {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.radial-center-close {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.radial-center-close:active {
+  transform: scale(0.9);
+}
+.radial-item {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid var(--border);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+  padding: 0;
+}
+.radial-item:active, .radial-item.hovered {
+  transform: scale(1.22) !important;
+  background: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(92, 61, 30, 0.35);
+}
+.radial-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+.radial-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+/* 6 個輪盤按鈕圓形分佈 */
+.radial-item:nth-child(1) { transform: translate(0px, -100px); }
+.radial-item:nth-child(2) { transform: translate(88px, -50px); }
+.radial-item:nth-child(3) { transform: translate(88px, 50px); }
+.radial-item:nth-child(4) { transform: translate(0px, 100px); }
+.radial-item:nth-child(5) { transform: translate(-88px, 50px); }
+.radial-item:nth-child(6) { transform: translate(-88px, -50px); }
+
+.r-tab-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.r-tab-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
 </style>
 </head>
 <body>
@@ -1466,57 +1588,209 @@
 
 
 <!-- ==============================================================
-     🦝 懸浮小浣熊 AI 助手 (透明背景・自由拖曳・語音對話・全網頁修訂)
+     🦝 懸浮小浣熊 AI 實戰神隊友 (Apple 弧形輪盤選單 ＋ 全功能工作台)
 ============================================================== -->
-<div id="floating-raccoon-widget" class="floating-raccoon-widget" style="display:block;" title="🦝 小浣熊AI：單擊語音輸入、長按即時對話、點兩下開啟AI對話窗">
+<div id="floating-raccoon-widget" class="floating-raccoon-widget" style="display:block;" title="🦝 小浣熊：點擊展開 Apple 輪盤・長按極速錄音・雙擊開啟工作台">
   <div class="raccoon-pulse-ring" id="raccoon-pulse-ring"></div>
   <div class="raccoon-avatar-wrap" id="raccoon-avatar-btn">
     <img src="./photos/raccoon_pet.png" alt="小浣熊" class="raccoon-pet-img" id="raccoon-pet-img" draggable="false" />
+    <div id="raccoon-timer-badge" class="raccoon-timer-badge" style="display:none;">⏱️ 00:00</div>
   </div>
   <div class="raccoon-status-bubble" id="raccoon-status-bubble"></div>
 </div>
 
-<!-- Modal: 小浣熊 AI 智能對話與全網頁修訂視窗 (點兩下彈出) -->
-<div class="modal-backdrop" id="modal-raccoon-chat" style="align-items:flex-end;">
-  <div class="modal-content raccoon-chat-modal" style="border-radius:24px 24px 18px 18px; max-width:540px; padding:16px; margin:0 auto; max-height:85vh; display:flex; flex-direction:column;">
+<!-- 🍎 Apple 風格弧形輪盤快捷選單 (Radial Menu) -->
+<div id="raccoon-radial-overlay" class="raccoon-radial-overlay" onclick="closeRaccoonRadialMenu()">
+  <div id="raccoon-radial-menu" class="raccoon-radial-menu" onclick="event.stopPropagation()">
+    <button class="radial-item" data-tab="memo" onclick="triggerRadialAction('memo')">
+      <span class="radial-icon">📝</span>
+      <span class="radial-label">Memo筆記</span>
+    </button>
+    <button class="radial-item" data-tab="timer" onclick="triggerRadialAction('timer')">
+      <span class="radial-icon">⏱️</span>
+      <span class="radial-label">料理計時</span>
+    </button>
+    <button class="radial-item" data-tab="fuzzy" onclick="triggerRadialAction('fuzzy')">
+      <span class="radial-icon">👂</span>
+      <span class="radial-label">碎詞偷聽</span>
+    </button>
+    <button class="radial-item" data-tab="practice" onclick="triggerRadialAction('practice')">
+      <span class="radial-icon">🎓</span>
+      <span class="radial-label">300句庫</span>
+    </button>
+    <button class="radial-item" data-tab="translate" onclick="triggerRadialAction('translate')">
+      <span class="radial-icon">💬</span>
+      <span class="radial-label">靜音翻譯</span>
+    </button>
+    <button class="radial-item" data-tab="map" onclick="triggerRadialAction('map')">
+      <span class="radial-icon">🗺️</span>
+      <span class="radial-label">問路/抽考</span>
+    </button>
+    <div class="radial-center-close" onclick="closeRaccoonRadialMenu()">✕</div>
+  </div>
+</div>
+
+<!-- 🦝 小浣熊全功能工作台 (Dashboard Modal) -->
+<div class="modal-backdrop" id="modal-raccoon-dashboard" style="align-items:flex-end;">
+  <div class="modal-content raccoon-dashboard-modal" style="border-radius:24px 24px 16px 16px; max-width:600px; padding:16px; margin:0 auto; max-height:88vh; display:flex; flex-direction:column;">
     <div class="modal-drag-handle"></div>
-    <div class="raccoon-modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:10px; margin-bottom:10px;">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <img src="./photos/raccoon_pet.png" style="width:42px; height:42px; object-fit:contain; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.15));" />
-        <div>
-          <div style="font-size:1.05rem; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:6px;">
-            小浣熊 AI 助手 <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); padding:1px 6px; border-radius:10px;">Gemini 驅動</span>
-          </div>
-          <div style="font-size:0.73rem; color:var(--muted);">隨身問答・即時發音・全網頁單字與流程修訂</div>
-        </div>
-      </div>
-      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-raccoon-chat')">✕ 關閉</button>
-    </div>
     
-    <!-- 快捷提問晶片 -->
-    <div class="raccoon-quick-chips" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:10px; scrollbar-width:none;">
-      <button class="chip-btn" onclick="askRaccoonQuick('剛剛客人跟我說 osau，是什麼意思？')">💬 客人說 osau 是什麼？</button>
-      <button class="chip-btn" onclick="askRaccoonQuick('收盤子時客人說謝謝，我該如何自然親切地回覆？')">🙏 收盤自然道謝應對</button>
-      <button class="chip-btn" onclick="askRaccoonQuick('幫我新增一個單字：打火機，日文是ライター，分類是工具')">➕ 新增單字：打火機</button>
-      <button class="chip-btn" onclick="askRaccoonQuick('幫我檢查今天傳菜SOP有哪10個步驟？')">📋 傳菜10大步驟</button>
-    </div>
-
-    <!-- 對話串訊息區 -->
-    <div class="raccoon-chat-stream" id="raccoon-chat-stream" style="flex:1; overflow-y:auto; min-height:220px; max-height:45vh; display:flex; flex-direction:column; gap:10px; padding:6px 2px; margin-bottom:10px;">
-      <div class="chat-msg raccoon-msg" style="display:flex; gap:8px; align-items:flex-start;">
-        <img src="./photos/raccoon_pet.png" style="width:32px; height:32px; object-fit:contain; flex-shrink:0;" />
-        <div class="msg-bubble" style="background:var(--surface); border:1px solid var(--border); border-radius:4px 16px 16px 16px; padding:10px 12px; font-size:0.88rem; line-height:1.5; color:var(--ink);">
-          哈囉楊！我是你的隨身小浣熊！🦝✨<br>
-          在現場有任何聽不懂的日文（例如客人說的俚語）、或是想幫手帳<strong>新增單字、修改句子、重新排版</strong>，隨時跟我說，我都能直接幫你修改喔！
+    <!-- 頂部標題與快速導航 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:8px; margin-bottom:8px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="./photos/raccoon_pet.png" style="width:36px; height:36px; object-fit:contain;" />
+        <div>
+          <div style="font-size:1.05rem; font-weight:800; color:var(--primary);">🦝 小浣熊實戰工作台</div>
+          <div style="font-size:0.72rem; color:var(--muted);">現場備忘・料理計時・偷聽推測・300實戰句庫</div>
         </div>
       </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-raccoon-dashboard')">✕ 關閉</button>
     </div>
 
-    <!-- 底部輸入列 -->
-    <div class="raccoon-chat-input-bar" style="display:flex; gap:8px; align-items:center;">
-      <button class="btn btn-secondary" id="raccoon-modal-mic-btn" onclick="toggleRaccoonModalMic()" style="padding:8px 12px; font-size:1.1rem;" title="語音輸入">🎤</button>
-      <input type="text" id="raccoon-chat-input" placeholder="問小浣熊事情，或下達修改指令..." style="flex:1; font-size:0.9rem;" onkeydown="if(event.key==='Enter') sendRaccoonChatMessage()" />
-      <button class="btn btn-primary btn-sm" onclick="sendRaccoonChatMessage()" style="padding:9px 14px;">發送</button>
+    <!-- 6 大功能分頁籤 -->
+    <div class="raccoon-tab-nav" style="display:flex; gap:4px; overflow-x:auto; padding-bottom:6px; margin-bottom:10px; border-bottom:1px solid var(--border);">
+      <button class="r-tab-btn active" id="rtab-btn-memo" onclick="switchRaccoonTab('memo')">📝 語音Memo</button>
+      <button class="r-tab-btn" id="rtab-btn-timer" onclick="switchRaccoonTab('timer')">⏱️ 料理計時</button>
+      <button class="r-tab-btn" id="rtab-btn-fuzzy" onclick="switchRaccoonTab('fuzzy')">👂 碎詞偷聽</button>
+      <button class="r-tab-btn" id="rtab-btn-practice" onclick="switchRaccoonTab('practice')">🎓 300句庫</button>
+      <button class="r-tab-btn" id="rtab-btn-translate" onclick="switchRaccoonTab('translate')">💬 靜音翻譯</button>
+      <button class="r-tab-btn" id="rtab-btn-map" onclick="switchRaccoonTab('map')">🗺️ 問路/抽考</button>
+    </div>
+
+    <!-- 內容容器 -->
+    <div class="raccoon-tab-content-wrap" style="flex:1; overflow-y:auto; min-height:280px; max-height:55vh;">
+      
+      <!-- 1. 📝 語音 Memo 筆記本 -->
+      <div id="rtab-content-memo" class="rtab-pane active">
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
+          <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:6px;">🎤 現場快速記錄（說中文或日文皆可）：</div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm" id="btn-memo-record" onclick="toggleMemoRecording()" style="flex-shrink:0;">🎤 錄製語音</button>
+            <input type="text" id="input-memo-text" class="form-control form-control-sm" placeholder="輸入或說出要改的地方或新單字…" onkeydown="if(event.key==='Enter') addRaccoonMemoManual()" />
+            <button class="btn btn-ghost btn-sm" onclick="addRaccoonMemoManual()">儲存</button>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:700; font-size:0.85rem; color:var(--ink);" id="memo-count-label">📋 現場備忘清單 (0 則)</span>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm" style="font-weight:800;" onclick="copyAllMemosToClipboard()">📋 一鍵複製給工程師</button>
+            <button class="btn btn-ghost btn-sm" onclick="clearCheckedMemos()">清空已完成</button>
+          </div>
+        </div>
+
+        <div id="raccoon-memos-list" style="display:flex; flex-direction:column; gap:6px;">
+          <!-- 動態生成 Memo 卡片 -->
+        </div>
+      </div>
+
+      <!-- 2. ⏱️ 料理與出餐多段計時器 -->
+      <div id="rtab-content-timer" class="rtab-pane" style="display:none;">
+        <div style="text-align:center; padding:10px 0;">
+          <div id="timer-big-display" style="font-size:3.2rem; font-weight:800; color:var(--primary); font-family:monospace; letter-spacing:2px; margin-bottom:6px;">00:00</div>
+          <div id="timer-status-label" style="font-size:0.88rem; color:var(--muted); margin-bottom:14px;">隨時為你的料理或出餐精準倒數</div>
+          
+          <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(3, '熱水/燙菜')">⏱️ 3分鐘</button>
+            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(5, '出餐提醒')">⏱️ 5分鐘</button>
+            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(10, '燉煮/備料')">⏱️ 10分鐘</button>
+            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(15, '大廚備餐')">⏱️ 15分鐘</button>
+          </div>
+
+          <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:16px;">
+            <input type="number" id="input-custom-minutes" class="form-control form-control-sm" placeholder="自訂分鐘" style="width:100px; text-align:center;" min="1" max="180" />
+            <input type="text" id="input-custom-timer-label" class="form-control form-control-sm" placeholder="料理名稱 (如: 煮拉麵)" style="width:140px;" />
+            <button class="btn btn-primary btn-sm" onclick="startCustomRaccoonTimer()">開始計時</button>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:10px;">
+            <button class="btn btn-ghost btn-sm" id="btn-timer-pause" onclick="togglePauseRaccoonTimer()" style="display:none;">⏸️ 暫停</button>
+            <button class="btn btn-ghost btn-sm" id="btn-timer-reset" onclick="resetRaccoonTimer()" style="display:none; color:var(--accent);">⏹️ 重設</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 👂 抗雜音・碎詞模糊猜測機 -->
+      <div id="rtab-content-fuzzy" class="rtab-pane" style="display:none;">
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
+          <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:6px;">👂 聽到碎片音？輸入或說出你聽到的 1~2 個字：</div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm" id="btn-fuzzy-mic" onclick="toggleFuzzyListening()" style="flex-shrink:0;">🎙️ 持續偷聽</button>
+            <input type="text" id="input-fuzzy-query" class="form-control form-control-sm" placeholder="如: ふき / とりざら / さゆ / さしかえ / つめ" oninput="runFuzzyGuess(this.value)" />
+            <button class="btn btn-ghost btn-sm" onclick="runFuzzyGuess(document.getElementById('input-fuzzy-query').value)">猜測</button>
+          </div>
+          <div style="display:flex; gap:4px; margin-top:6px; flex-wrap:wrap;">
+            <span style="font-size:0.75rem; color:var(--muted);">常見碎片熱鍵：</span>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('ふき')">ふき(擦盤)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('とりざら')">とりざら(小盤)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('さゆ')">さゆ(溫水)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('さしかえ')">さしかえ(換菜)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('インカム')">インカム(通報)</button>
+          </div>
+        </div>
+
+        <div id="fuzzy-results-container" style="display:flex; flex-direction:column; gap:8px;">
+          <!-- 模糊猜測命中卡片 -->
+        </div>
+      </div>
+
+      <!-- 4. 🎓 300 句現場實戰句庫・隨抽隨學 -->
+      <div id="rtab-content-practice" class="rtab-pane" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="display:flex; gap:4px; overflow-x:auto;">
+            <button class="btn btn-sm btn-primary" id="pfilter-all" onclick="filterPracticeCategory('全部')">全部 (300+)</button>
+            <button class="btn btn-sm btn-ghost" id="pfilter-chef" onclick="filterPracticeCategory('主管交代')">👨‍🍳 主管交代</button>
+            <button class="btn btn-sm btn-ghost" id="pfilter-guest" onclick="filterPracticeCategory('客人詢問')">👤 客人詢問</button>
+            <button class="btn btn-sm btn-ghost" id="pfilter-peer" onclick="filterPracticeCategory('同事應對')">🤝 同事應對</button>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="drawRandomPracticeSentence()" style="font-weight:800; flex-shrink:0;">🎲 抽一題</button>
+        </div>
+
+        <div id="practice-card-display" style="background:#fff; border:1.5px solid var(--primary); border-radius:14px; padding:14px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+          <!-- 動態抽考題目卡片 -->
+        </div>
+      </div>
+
+      <!-- 5. 💬 我想說這句話（中文轉日文・預設 100% 靜音文字顯示） -->
+      <div id="rtab-content-translate" class="rtab-pane" style="display:none;">
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
+          <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:4px;">💬 輸入中文，立即轉換道地職場日語（🔇 預設靜音）：</div>
+          <div style="display:flex; gap:6px;">
+            <input type="text" id="input-translate-zh" class="form-control form-control-sm" placeholder="如: 這個有點燙請小心 / 垃圾滿了我去倒…" onkeydown="if(event.key==='Enter') executeSilentTranslate()" />
+            <button class="btn btn-primary btn-sm" onclick="executeSilentTranslate()">轉日語</button>
+          </div>
+        </div>
+
+        <div id="translate-result-card" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; min-height:120px; display:flex; flex-direction:column; justify-content:center;">
+          <div style="font-size:0.88rem; color:var(--muted);">在上方輸入中文後點擊「轉日語」，將以大字清晰呈現，防現場突發聲音尷尬。</div>
+        </div>
+      </div>
+
+      <!-- 6. 🗺️ 優彩設施問路指引 ＆ 🎮 快問快答 -->
+      <div id="rtab-content-map" class="rtab-pane" style="display:none;">
+        <div style="display:flex; gap:6px; margin-bottom:10px;">
+          <button class="btn btn-primary btn-sm" id="btn-sub-map" onclick="switchMapSubTab('map')" style="flex:1;">🗺️ 館內設施問路</button>
+          <button class="btn btn-ghost btn-sm" id="btn-sub-quiz" onclick="switchMapSubTab('quiz')" style="flex:1;">🎮 3題快問快答</button>
+        </div>
+
+        <!-- 子分頁 A: 問路指引 -->
+        <div id="subtab-map-content">
+          <div style="background:rgba(92,61,30,0.06); border-radius:8px; padding:8px 10px; font-size:0.78rem; color:var(--ink); margin-bottom:10px;">
+            💡 <strong>優彩館內指引</strong>：點擊即可查看日語指引句（提供平面圖後可隨時 100% 精準客製化！）。
+          </div>
+          <div id="yusai-landmarks-list" style="display:flex; flex-direction:column; gap:6px;">
+            <!-- 優彩館內設施卡片 -->
+          </div>
+        </div>
+
+        <!-- 子分頁 B: 快問快答 -->
+        <div id="subtab-quiz-content" style="display:none;">
+          <div id="quiz-game-container" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px;">
+            <!-- 快問快答題目 -->
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1562,7 +1836,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v58';
+const STORAGE_KEY = 'yang_runner_handbook_v59';
 
 function createRealRunnerData() {
   return {
@@ -5346,8 +5620,11 @@ if ('serviceWorker' in navigator) {
 
 
 /* ==============================================================
-   🦝 懸浮小浣熊 AI 助手 控制器 (平時安靜待在固定位置・可按住拖動搬移・長按語音・雙擊對話)
+   8. 🦝 懸浮小浣熊實戰神隊友 控制核心
+   (Apple 弧形輪盤選單・語音Memo・料理計時器・碎詞偷聽・300句庫・靜音翻譯・問路抽考)
 ============================================================== */
+
+const RACCOON_MEMO_STORAGE = 'yang_raccoon_memos_v1';
 
 let raccoonState = {
   isPointerDown: false,
@@ -5360,19 +5637,343 @@ let raccoonState = {
   isLongPressActive: false,
   lastTapTime: 0,
   singleTapTimer: null,
-  recognition: null,
-  isRecording: false,
-  modalRecognition: null
+  memoRecognition: null,
+  isMemoRecording: false,
+  fuzzyRecognition: null,
+  isFuzzyListening: false
 };
 
-// 1. 初始化懸浮小浣熊
+// ── ⏱️ 料理計時器狀態 ──
+let raccoonTimer = {
+  totalSeconds: 0,
+  remainingSeconds: 0,
+  intervalId: null,
+  isRunning: false,
+  label: ''
+};
+
+// ── 📚 300 句現場實戰句庫 ──
+const PRACTICE_SENTENCES_BANK = [
+  // 👨‍🍳 主管/前輩交代
+  {
+    cat: "主管交代",
+    ja: "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>きをお<ruby>願<rt>ねが</rt></ruby>いします。",
+    zh: "請幫忙擦乾盤子並整理歸位。",
+    vocabs: [
+      { ja: "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き", zh: "擦盤子作業" },
+      { ja: "お<ruby>願<rt>ねが</rt></ruby>いします", zh: "麻煩請…" }
+    ],
+    points: [
+      { title: "【お＋動詞名詞化＋をお願いします】", desc: "委婉交代任務時的標準職場句型。" }
+    ],
+    tips: "洗好的盤子在出餐口旁，使用專用乾布巾將水漬徹底擦乾後按四格盤、黑餐盤分層疊放。"
+  },
+  {
+    cat: "主管交代",
+    ja: "<ruby>台車<rt>だいしゃ</rt></ruby>をこちらに<ruby>持<rt>も</rt></ruby>ってきてください。",
+    zh: "請把推車推到這邊過來。",
+    vocabs: [
+      { ja: "<ruby>台車<rt>だいしゃ</rt></ruby>", zh: "推車/餐車" },
+      { ja: "<ruby>持<rt>も</rt></ruby>ってくる", zh: "帶來、拿過來" }
+    ],
+    points: [
+      { title: "【て形＋ください (請求)】", desc: "「持ってきてください」表示請拿過來/推過來。" }
+    ],
+    tips: "推推車進出門簾時務必大聲說「お通りします！」，避免與端菜同仁碰撞。"
+  },
+  {
+    cat: "主管交代",
+    ja: "<ruby>使<rt>つか</rt></ruby>ったライターを<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>してください。",
+    zh: "用完的打火機請放回原位。",
+    vocabs: [
+      { ja: "ライター", zh: "打火機/點火器" },
+      { ja: "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", zh: "原來的位置" },
+      { ja: "<ruby>戻<rt>もど</rt></ruby>す", zh: "放回、歸位" }
+    ],
+    points: [
+      { title: "【名詞＋に戻す】", desc: "放回某特定地點。" }
+    ],
+    tips: "點火槍（チャッカマン）和打火機屬於火源工具，用完絕不能隨手放檯面，務必放回指定收納盒。"
+  },
+  {
+    cat: "主管交代",
+    ja: "トングの<ruby>片付<rt>かたづ</rt></ruby>けをお<ruby>願<rt>ねが</rt></ruby>いできますか？",
+    zh: "可以麻煩收拾一下食物夾子嗎？",
+    vocabs: [
+      { ja: "トング", zh: "食物夾、夾子 (Tongs)" },
+      { ja: "<ruby>片付<rt>かたづ</rt></ruby>け", zh: "收拾、整理" }
+    ],
+    points: [
+      { title: "【〜をお願いできますか (能拜託您…嗎)】", desc: "非常客氣的上司交代口吻。" }
+    ],
+    tips: "夾生肉（赤牛、龍膽豬）的小夾子與夾熟食的夾子要分開清洗消毒。"
+  },
+  {
+    cat: "主管交代",
+    ja: "ドリンクコーナーの<ruby>補充<rt>ほじゅう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>してください。",
+    zh: "請確認一下飲料區的備品補充狀況。",
+    vocabs: [
+      { ja: "ドリンクコーナー", zh: "飲品吧台/飲料區" },
+      { ja: "<ruby>補充<rt>ほじゅう</rt></ruby>", zh: "補充、補料" },
+      { ja: "<ruby>確認<rt>かくにん</rt></ruby>する", zh: "確認、檢查" }
+    ],
+    points: [
+      { title: "【名詞＋を確認する】", desc: "確認某區域或品項的狀態。" }
+    ],
+    tips: "檢查項目包含：水杯（グラス）、常溫水壺、無酒精糖漿（シロップ）、冰塊與吸管。"
+  },
+  {
+    cat: "主管交代",
+    ja: "<ruby>醤油<rt>しょうゆ</rt></ruby>と<ruby>醤油皿<rt>しょうゆざら</rt></ruby>をセットしてください。",
+    zh: "請補齊醬油瓶與醬油小碟。",
+    vocabs: [
+      { ja: "<ruby>醤油<rt>しょうゆ</rt></ruby>", zh: "醬油" },
+      { ja: "<ruby>醤油皿<rt>しょうゆざら</rt></ruby>", zh: "醬油小碟子" },
+      { ja: "セットする", zh: "擺放整齊、就位" }
+    ],
+    points: [
+      { title: "【外來語動詞＋してください】", desc: "セットする表示擺好、備妥。" }
+    ],
+    tips: "生魚片檯與壽司檯兩側皆需保持充足的醬油小碟與醬油瓶。"
+  },
+  {
+    cat: "主管交代",
+    ja: "<ruby>生<rt>なま</rt></ruby>ビールサーバーの<ruby>黄色<rt>きいろ</rt></ruby>いボタンを<ruby>押<rt>お</rt></ruby>してテストしてください。",
+    zh: "請按一下生啤酒機的黃色按鈕測試注酒。",
+    vocabs: [
+      { ja: "<ruby>生<rt>なま</rt></ruby>ビールサーバー", zh: "生啤酒機" },
+      { ja: "<ruby>黄色<rt>きいろ</rt></ruby>い", zh: "黃色的" },
+      { ja: "<ruby>押<rt>お</rt></ruby>す", zh: "按下" }
+    ],
+    points: [
+      { title: "【動詞て形＋テストする】", desc: "按下並測試。" }
+    ],
+    tips: "優彩生啤酒機只要按一次黃色按鈕就會自動倒酒＋自動注入泡沫。"
+  },
+
+  // 👤 客人詢問
+  {
+    cat: "客人詢問",
+    ja: "すみません、お<ruby>湯<rt>ゆ</rt></ruby>（お<ruby>白湯<rt>さゆ</rt></ruby>）はどこにありますか？",
+    zh: "不好意思，請問熱水（溫開水）在哪裡？",
+    vocabs: [
+      { ja: "お<ruby>湯<rt>ゆ</rt></ruby>", zh: "熱水、熱開水" },
+      { ja: "お<ruby>白湯<rt>さゆ</rt></ruby>", zh: "溫開水（osau）" },
+      { ja: "どこにありますか", zh: "在哪裡呢？" }
+    ],
+    points: [
+      { title: "【場所疑問句 〜はどこにありますか】", desc: "客人詢問物品位置的最標準句型。" }
+    ],
+    tips: "回答：「ドリンクコーナーの左側にございます。」（在飲料區的左手邊）。"
+  },
+  {
+    cat: "客人詢問",
+    ja: "こちらのお<ruby>皿<rt>さら</rt></ruby>、<ruby>下<rt>さ</rt></ruby>げてもらってもいいですか？",
+    zh: "這個盤子可以麻煩您收走嗎？",
+    vocabs: [
+      { ja: "お<ruby>皿<rt>さら</rt></ruby>", zh: "盤子" },
+      { ja: "<ruby>下<rt>さ</rt></ruby>げる", zh: "撤下、收走" },
+      { ja: "〜てもいいですか", zh: "可以…嗎？" }
+    ],
+    points: [
+      { title: "【動詞て形＋もらう＋いいですか】", desc: "客人請求服務人員收盤。" }
+    ],
+    tips: "回答：「かしこまりました！失礼いたします。」並雙手輕穩端走盤子。"
+  },
+  {
+    cat: "客人詢問",
+    ja: "トイレ（お<ruby>手洗<rt>てあら</rt></ruby>い）はどちらでしょうか？",
+    zh: "請問洗手間在什麼方向呢？",
+    vocabs: [
+      { ja: "トイレ / お<ruby>手洗<rt>てあら</rt></ruby>い", zh: "洗手間、廁所" },
+      { ja: "どちらでしょうか", zh: "在哪個方向呢？（敬語）" }
+    ],
+    points: [
+      { title: "【方向代名詞＋でしょうか】どちらでしょうか", desc: "禮貌詢問方向。" }
+    ],
+    tips: "回答：「レストランを出て右手の奥にございます。」（出餐廳右手邊走到底）。"
+  },
+  {
+    cat: "客人詢問",
+    ja: "このシロップはアルコールが<ruby>入<rt>はい</rt></ruby>っていますか？",
+    zh: "請問這個糖漿有含酒精嗎？",
+    vocabs: [
+      { ja: "シロップ", zh: "風味糖漿" },
+      { ja: "アルコール", zh: "酒精" },
+      { ja: "<ruby>入<rt>はい</rt></ruby>っている", zh: "有加入、含有" }
+    ],
+    points: [
+      { title: "【名詞＋が入っていますか】", desc: "詢問是否含有某種成分。" }
+    ],
+    tips: "回答：「いいえ、こちらはノンアルコールのシロップでございます。」（不是的，這是無酒精糖漿）。"
+  },
+
+  // 🤝 同事應對
+  {
+    cat: "同事應對",
+    ja: "お<ruby>通<rt>とお</rt></ruby>りします！<ruby>台車<rt>だいしゃ</rt></ruby><ruby>通<rt>とお</rt></ruby>りまーす！",
+    zh: "借過一下！推車要通過囉！",
+    vocabs: [
+      { ja: "お<ruby>通<rt>とお</rt></ruby>りします", zh: "我要通過了（謙讓語）" },
+      { ja: "<ruby>台車<rt>だいしゃ</rt></ruby>", zh: "推車" }
+    ],
+    points: [
+      { title: "【お＋動詞連用形＋する】お通りします", desc: "走道通行時的標準安全通報。" }
+    ],
+    tips: "轉角或進出門簾時提前 2 秒大聲通報，避免相撞。"
+  },
+  {
+    cat: "同事應對",
+    ja: "<ruby>楊<rt>よう</rt></ruby>さん、フォローありがとうございます！<ruby>助<rt>たす</rt></ruby>かりました！",
+    zh: "小楊，謝謝你幫我支援！幫大忙了！",
+    vocabs: [
+      { ja: "フォロー", zh: "支援、協助、幫忙照應" },
+      { ja: "<ruby>助<rt>たす</rt></ruby>かる", zh: "幫了大忙" }
+    ],
+    points: [
+      { title: "【助かりました (過去式表示由衷感謝)】", desc: "日本職場夥伴間極具人情味的靈魂句。" }
+    ],
+    tips: "回答：「とんでもないです！お互い様です！」（哪裡的話！互相幫忙！）"
+  },
+  {
+    cat: "同事應對",
+    ja: "お<ruby>先<rt>さき</rt></ruby>に<ruby>失礼<rt>しつれい</rt></ruby>します！お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>でした！",
+    zh: "我先告退下班了！大家辛苦了！",
+    vocabs: [
+      { ja: "お<ruby>先<rt>さき</rt></ruby>に", zh: "比大家先行一步" },
+      { ja: "<ruby>失礼<rt>しつれい</rt></ruby>します", zh: "失禮告退" },
+      { ja: "お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>でした", zh: "辛苦了" }
+    ],
+    points: [
+      { title: "【下班標準告退語】お先に失礼します", desc: "日本職場離場必說的核心禮儀。" }
+    ],
+    tips: "下班踏出休息室或廚房時，精神飽滿地向在場同仁致意。"
+  }
+];
+
+// ── 👂 碎詞模糊猜測字典 ──
+const FUZZY_KITCHEN_GUESS_DICT = [
+  {
+    keys: ["ふき", "おさらふき", "さらふき", "fuki", "皿拭き", "擦盤"],
+    ja: "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き（おさらふき）",
+    zh: "擦盤子作業",
+    intent: "主管或前輩要你去出餐口或洗滌區，將洗好烘乾的餐盤徹底擦乾水分並分層擺好。",
+    actionJa: "はい！すぐお<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>きやります！",
+    actionZh: "好的！我馬上進行擦盤子作業！"
+  },
+  {
+    keys: ["とりざら", "とり皿", "torizara", "取皿", "小盤", "分裝盤"],
+    ja: "<ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt> / <ruby>取皿<rt>とりざら</rt></ruby>",
+    zh: "分裝小盤子（客人要分享食物用的小盤）",
+    intent: "客人需要額外的小分裝盤，或是餐檯上的分裝小碟子不夠了需要補充。",
+    actionJa: "かしこまりました！すぐにお<ruby>持<rt>も</rt></ruby>ちいたします！",
+    actionZh: "遵命！我馬上為您送過來！"
+  },
+  {
+    keys: ["さゆ", "おさゆ", "osau", "sayu", "お白湯", "白湯", "溫水"],
+    ja: "お<ruby>白湯<rt>さゆ</rt></ruby>（おさゆ）",
+    zh: "溫開水（煮沸後降溫的常溫/溫水）",
+    intent: "客人（尤其長輩或身體不適者）不要冰水（お冷），想要一杯溫開水。",
+    actionJa: "お<ruby>待<rt>ま</rt></ruby>たせいたしました。お<ruby>白湯<rt>さゆ</rt></ruby>でございます。",
+    actionZh: "讓您久等了，這是為您準備的溫開水。"
+  },
+  {
+    keys: ["さしかえ", "さし", "sashikae", "差し替え", "換菜", "補菜"],
+    ja: "<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>料理<rt>りょうり</rt></ruby>",
+    zh: "更換餐盤 / 補新菜餚",
+    intent: "餐檯上的料理見底或變冷了，廚房端出熱騰騰的新一盤，需要把舊盤撤回、放上新盤。",
+    actionJa: "はい！<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>持<rt>も</rt></ruby>っていきます！",
+    actionZh: "好的！我馬上把更換的菜餚端過去！"
+  },
+  {
+    keys: ["おあいそ", "かいけい", "oaiso", "kaikei", "会計", "お愛想", "結帳"],
+    ja: "お<ruby>会計<rt>かいけい</rt> / お<ruby>愛想<rt>あいそ</rt></ruby>",
+    zh: "結帳 / 買單",
+    intent: "客人用餐完畢想確認結帳或離場手續。",
+    actionJa: "お<ruby>会計<rt>かいけい</rt></ruby>はフロント（レジ）にて<ruby>承<rt>うけたまわ</rt></ruby>ります。",
+    actionZh: "結帳手續請至櫃檯辦理。"
+  },
+  {
+    keys: ["つめ", "ようじ", "tsumayouji", "爪楊枝", "牙籤"],
+    ja: "<ruby>爪楊枝<rt>つまようじ</rt></ruby>",
+    zh: "牙籤",
+    intent: "客人想索取牙籤，通常放置在收銀檯或調味料區。",
+    actionJa: "こちらに<ruby>爪楊枝<rt>つまようじ</rt></ruby>がございます。どうぞ！",
+    actionZh: "這裡有牙籤，請用！"
+  },
+  {
+    keys: ["おひや", "ひや", "ohiya", "お冷", "冰水"],
+    ja: "お<ruby>冷<rt>ひ</rt></ruby>や（おひや）",
+    zh: "冰開水（日本餐廳標準用水）",
+    intent: "客人需要冰水，或是詢問冰水在哪裡裝取。",
+    actionJa: "お<ruby>冷<rt>ひ</rt></ruby>やはドリンクコーナーにございます。",
+    actionZh: "冰水在飲料吧台區提供。"
+  },
+  {
+    keys: ["ばっしんぐ", "さげ", "bashingu", "バッシング", "お下げ", "收桌"],
+    ja: "バッシング / お<ruby>下<rt>さ</rt></ruby>げ",
+    zh: "收桌 / 撤收餐盤",
+    intent: "客人離席或是桌上空盤過多，需要推車前往整理桌面。",
+    actionJa: "<ruby>失礼<rt>しつれい</rt></ruby>いたします。お<ruby>皿<rt>さら</rt></ruby>お<ruby>下<rt>さ</rt></ruby>げします。",
+    actionZh: "不好意思打擾了，我為您收拾餐盤。"
+  },
+  {
+    keys: ["インカム", "いんかむ", "inkamu", "無線電", "對講機"],
+    ja: "<ruby>インカム<rt>inkamu</rt></ruby>",
+    zh: "無線電耳機對講機",
+    intent: "要求你檢查無線電是否開機、通報缺菜或呼叫主管支援。",
+    actionJa: "インカムで<ruby>通報<rt>つうほう</rt></ruby>いたします！",
+    actionZh: "我立即用無線電通報！"
+  }
+];
+
+// ── 🗺️ 優彩館內設施 ──
+const YUSAI_LANDMARKS = [
+  {
+    name: "大浴場 / 露天溫泉",
+    jaName: "<ruby>大浴場<rt>だいよくじょう</rt> / <ruby>露天風呂<rt>ろてんぶろ</rt></ruby>",
+    guideJa: "あちらの<ruby>通路<rt>つうろ</rt></ruby>をまっすぐ<ruby>進<rt>すす</rt></ruby>んで、つきあたりを<ruby>左<rt>ひだり</rt></ruby>でございます。",
+    guideZh: "沿著那條走廊直直往前走，到底左轉就是囉。"
+  },
+  {
+    name: "家族風呂（貸切溫泉包廂）",
+    jaName: "<ruby>家族風呂<rt>かぞくぶろ</rt> / <ruby>貸切風呂<rt>かしきりぶろ</rt></ruby>",
+    guideJa: "フロントの<ruby>横<rt>よこ</rt></ruby>の<ruby>階段<rt>かいだん</rt></ruby>を<ruby>降<rt>お</rt></ruby>りていただきますと、<ruby>右側<rt>みぎがわ</rt></ruby>にございます。",
+    guideZh: "從櫃檯旁的樓梯走下去，右手邊就會看到囉。"
+  },
+  {
+    name: "洗手間（廁所）",
+    jaName: "お<ruby>手洗<rt>てあら</rt></ruby>い / トイレ",
+    guideJa: "レストランを<ruby>出<rt>で</rt></ruby>て、<ruby>右手<rt>みぎて</rt></ruby>の<ruby>奥<rt>おく</rt></ruby>にございます。",
+    guideZh: "出餐廳之後，在右手邊走到底就是洗手間。"
+  },
+  {
+    name: "吸煙區（喫煙所）",
+    jaName: "<ruby>喫煙所<rt>きつえんじょ</rt></ruby>",
+    guideJa: "１<ruby>階<rt>かい</rt></ruby>ロビーの<ruby>外<rt>そと</rt></ruby>、<ruby>自動扉<rt>じどうとびら</rt></ruby>を<ruby>出<rt>で</rt></ruby>た<ruby>右手<rt>みぎて</rt></ruby>にございます。",
+    guideZh: "在1樓大廳外面，穿過自動門後的右手邊。"
+  },
+  {
+    name: "飲品吧 / 咖啡機",
+    jaName: "ドリンクコーナー / コーヒーマシン",
+    guideJa: "レストランの<ruby>中央<rt>ちゅうおう</rt></ruby>、デザートコーナーの<ruby>隣<rt>となり</rt></ruby>にございます。",
+    guideZh: "在餐廳正中央、甜點區的旁邊。"
+  },
+  {
+    name: "賣店 / 熊本土產店",
+    jaName: "<ruby>売店<rt>ばいてん</rt> / お<ruby>土産<rt>みやげ</rt></ruby>コーナー",
+    guideJa: "フロントロビーの<ruby>正面<rt>しょうめん</rt></ruby>にございます。<ruby>夜<rt>よる</rt></ruby>９<ruby>時<rt>じ</rt></ruby>まで<ruby>営業<rt>えいぎょう</rt></ruby>しております。",
+    guideZh: "在櫃檯大廳的正對面，營業至晚上9點。"
+  }
+];
+
+// 1. 初始化懸浮小浣熊控制器
 function initFloatingRaccoon() {
   const widget = document.getElementById('floating-raccoon-widget');
   if (!widget) return;
 
-  // 讀取上次使用者手動放置的位置；若無，預設安靜待在右下角 (bottom:85px, right:20px)
   try {
-    const savedPos = localStorage.getItem('yang_raccoon_pos_v4');
+    const savedPos = localStorage.getItem('yang_raccoon_pos_v5');
     if (savedPos) {
       const pos = JSON.parse(savedPos);
       const maxX = window.innerWidth - 80;
@@ -5386,31 +5987,28 @@ function initFloatingRaccoon() {
     } else {
       widget.style.right = '20px';
       widget.style.bottom = '85px';
-      widget.style.left = 'auto';
-      widget.style.top = 'auto';
     }
   } catch (e) {
     widget.style.right = '20px';
     widget.style.bottom = '85px';
   }
 
-  // 根據當前頁面決定是否顯示 (只出現在 SOP 與 單字庫 兩大頁面)
   updateRaccoonVisibility();
 
-  // 僅在點擊小浣熊本體時啟動觸控/拖曳監聽
   widget.addEventListener('touchstart', handleRaccoonPointerDown, { passive: false });
   widget.addEventListener('mousedown', handleRaccoonPointerDown);
 
-  // 全域移動與放開監聽
   window.addEventListener('touchmove', handleRaccoonPointerMove, { passive: false });
   window.addEventListener('touchend', handleRaccoonPointerUp, { passive: false });
   window.addEventListener('touchcancel', handleRaccoonPointerUp, { passive: false });
 
   window.addEventListener('mousemove', handleRaccoonPointerMove);
   window.addEventListener('mouseup', handleRaccoonPointerUp);
+
+  // 初始載入 Memo
+  renderRaccoonMemoTab();
 }
 
-// 2. 根據當前頁面切換可見性 (只出現在 SOP 與 單字庫 兩大頁面，對話與設定頁自動隱藏)
 function updateRaccoonVisibility() {
   const widget = document.getElementById('floating-raccoon-widget');
   if (!widget) return;
@@ -5424,67 +6022,58 @@ function updateRaccoonVisibility() {
   }
 }
 
-// 3. 拖曳搬移與點擊手勢處理 (平常絕對不跟隨滑鼠，只有按住拖曳時才移動)
+// 2. 指針事件 (長按開輪盤・拖曳・雙擊/點擊開工作台)
 function handleRaccoonPointerDown(e) {
   const widget = document.getElementById('floating-raccoon-widget');
   if (!widget) return;
 
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
+  const point = e.touches ? e.touches[0] : e;
   raccoonState.isPointerDown = true;
   raccoonState.isDragging = false;
-  raccoonState.isLongPressActive = false;
-  raccoonState.dragStartX = clientX;
-  raccoonState.dragStartY = clientY;
+  raccoonState.dragStartX = point.clientX;
+  raccoonState.dragStartY = point.clientY;
 
   const rect = widget.getBoundingClientRect();
   raccoonState.elemStartX = rect.left;
   raccoonState.elemStartY = rect.top;
 
-  // 設定 500ms 長按計時器 (長按語音對話)
+  // 長按 550ms 彈出 Apple 輪盤選單
   if (raccoonState.longPressTimer) clearTimeout(raccoonState.longPressTimer);
+  raccoonState.isLongPressActive = false;
   raccoonState.longPressTimer = setTimeout(() => {
-    if (raccoonState.isPointerDown && !raccoonState.isDragging) {
+    if (!raccoonState.isDragging && raccoonState.isPointerDown) {
       raccoonState.isLongPressActive = true;
-      startRaccoonVoice(true);
-      showRaccoonBubble('🎙️ 正在聆聽中... 請說話！');
-      if (navigator.vibrate) navigator.vibrate(50);
+      if (navigator.vibrate) navigator.vibrate(20);
+      openRaccoonRadialMenu();
     }
-  }, 500);
+  }, 550);
 }
 
 function handleRaccoonPointerMove(e) {
-  // 核心保護：如果使用者沒有按住小浣熊，絕對不移動、不跟隨滑鼠！
   if (!raccoonState.isPointerDown) return;
+  const point = e.touches ? e.touches[0] : e;
+  const dx = point.clientX - raccoonState.dragStartX;
+  const dy = point.clientY - raccoonState.dragStartY;
 
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-  const deltaX = clientX - raccoonState.dragStartX;
-  const deltaY = clientY - raccoonState.dragStartY;
-
-  // 移動超過 8px 才認定使用者想要把它拖到新位置
-  if (Math.hypot(deltaX, deltaY) > 8) {
+  if (Math.abs(dx) > 7 || Math.abs(dy) > 7) {
     raccoonState.isDragging = true;
     if (raccoonState.longPressTimer) {
       clearTimeout(raccoonState.longPressTimer);
       raccoonState.longPressTimer = null;
     }
+  }
 
-    if (e.cancelable) e.preventDefault();
-
+  if (raccoonState.isDragging) {
+    e.preventDefault?.();
     const widget = document.getElementById('floating-raccoon-widget');
     if (!widget) return;
 
-    let newX = raccoonState.elemStartX + deltaX;
-    let newY = raccoonState.elemStartY + deltaY;
-
-    // 邊界限制 (防止拖出視窗外或擋住頂部標題)
-    const maxX = window.innerWidth - 75;
-    const maxY = window.innerHeight - 80;
+    let newX = raccoonState.elemStartX + dx;
+    let newY = raccoonState.elemStartY + dy;
+    const maxX = window.innerWidth - widget.offsetWidth - 10;
+    const maxY = window.innerHeight - widget.offsetHeight - 10;
     newX = Math.min(Math.max(10, newX), maxX);
-    newY = Math.min(Math.max(60, newY), maxY);
+    newY = Math.min(Math.max(65, newY), maxY);
 
     widget.style.left = newX + 'px';
     widget.style.top = newY + 'px';
@@ -5497,469 +6086,179 @@ function handleRaccoonPointerUp(e) {
   if (!raccoonState.isPointerDown) return;
   raccoonState.isPointerDown = false;
 
-  const widget = document.getElementById('floating-raccoon-widget');
   if (raccoonState.longPressTimer) {
     clearTimeout(raccoonState.longPressTimer);
     raccoonState.longPressTimer = null;
   }
 
-  // 1. 如果剛剛是長按語音對講，放開時停止錄音並送出分析
-  if (raccoonState.isLongPressActive) {
-    raccoonState.isLongPressActive = false;
-    stopRaccoonVoice();
-    return;
-  }
-
-  // 2. 如果是手動拖曳搬移，放開後安靜固定在該新位置，並記錄至 localStorage
-  if (raccoonState.isDragging) {
+  const widget = document.getElementById('floating-raccoon-widget');
+  if (widget && raccoonState.isDragging) {
+    const rect = widget.getBoundingClientRect();
+    localStorage.setItem('yang_raccoon_pos_v5', JSON.stringify({ x: rect.left, y: rect.top }));
     raccoonState.isDragging = false;
-    if (widget) {
-      const rect = widget.getBoundingClientRect();
-      localStorage.setItem('yang_raccoon_pos_v4', JSON.stringify({ x: rect.left, y: rect.top }));
-    }
     return;
   }
 
-  // 3. 點擊判斷 (單擊快速語音 vs 雙擊開啟對話視窗)
-  const now = Date.now();
-  const timeDiff = now - raccoonState.lastTapTime;
-  raccoonState.lastTapTime = now;
-
-  if (timeDiff < 320) {
-    // 點兩下 (Double Tap) ➔ 彈出 Gemini 智能對話視窗
-    if (raccoonState.singleTapTimer) clearTimeout(raccoonState.singleTapTimer);
-    openRaccoonChatModal();
-  } else {
-    // 點一下 (Single Tap) ➔ 啟動快速語音輸入
-    raccoonState.singleTapTimer = setTimeout(() => {
-      startRaccoonVoice(false);
-      showRaccoonBubble('🎙️ 請說出問題或修改指令');
-    }, 320);
-  }
-}
-
-
-// ── Gemini API Key 讀取與設定 ──
-function loadSavedApiKeyToUI() {
-  const input = document.getElementById('setting-gemini-api-key');
-  if (input && AppData && AppData.apiKey) {
-    input.value = AppData.apiKey;
-  }
-}
-
-function toggleApiKeyVisibility() {
-  const input = document.getElementById('setting-gemini-api-key');
-  const btn = document.getElementById('btn-toggle-key-vis');
-  if (!input) return;
-  if (input.type === 'password') {
-    input.type = 'text';
-    if (btn) btn.textContent = '🔒 隱藏';
-  } else {
-    input.type = 'password';
-    if (btn) btn.textContent = '👁️ 顯示';
-  }
-}
-
-function saveGeminiApiKeySetting() {
-  const input = document.getElementById('setting-gemini-api-key');
-  if (!input) return;
-  const key = input.value.trim();
-  AppData.apiKey = key;
-  saveAppData(AppData);
-  showToast('✅ Gemini API Key 已成功儲存！', 'success');
-}
-
-async function testGeminiApiKeyConnection() {
-  const input = document.getElementById('setting-gemini-api-key');
-  const resultEl = document.getElementById('api-key-test-result');
-  if (!input || !resultEl) return;
-
-  const key = input.value.trim() || AppData.apiKey || '';
-  if (!key) {
-    resultEl.style.display = 'block';
-    resultEl.style.color = '#A83220';
-    resultEl.textContent = '⚠️ 請先填入 API Key！';
-    return;
-  }
-
-  resultEl.style.display = 'block';
-  resultEl.style.color = 'var(--muted)';
-  resultEl.textContent = '⏳ 正在測試與 Google Gemini 雲端伺服器連線…';
-
-  const modelsToTry = ['gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
-  let connected = false;
-  let lastErrMsg = '';
-
-  for (const model of modelsToTry) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
-      });
-
-      const data = await res.json();
-      if (res.ok && data.candidates) {
-        connected = true;
-        resultEl.style.color = '#2E7D32';
-        resultEl.textContent = '🎉 連線成功！Gemini (' + model + ') AI 大腦連線完全正常！';
-        showToast('🎉 連線測試成功！', 'success');
-        break;
-      } else if (data.error) {
-        lastErrMsg = data.error.message || 'API 驗證失敗';
-      }
-    } catch (err) {
-      lastErrMsg = err.message;
+  // 若非長按且非拖曳 ➔ 點擊/雙擊
+  if (!raccoonState.isLongPressActive && !raccoonState.isDragging) {
+    const now = Date.now();
+    if (now - raccoonState.lastTapTime < 320) {
+      // 雙擊 ➔ 直接打開全功能工作台
+      if (raccoonState.singleTapTimer) clearTimeout(raccoonState.singleTapTimer);
+      raccoonState.singleTapTimer = null;
+      raccoonState.lastTapTime = 0;
+      openRaccoonDashboard('memo');
+    } else {
+      raccoonState.lastTapTime = now;
+      if (raccoonState.singleTapTimer) clearTimeout(raccoonState.singleTapTimer);
+      raccoonState.singleTapTimer = setTimeout(() => {
+        // 單擊 ➔ 展開 Apple 輪盤選單
+        openRaccoonRadialMenu();
+        raccoonState.singleTapTimer = null;
+      }, 210);
     }
   }
-
-  if (!connected) {
-    resultEl.style.color = '#A83220';
-    resultEl.textContent = '❌ 連線失敗：' + lastErrMsg;
-    showToast('連線測試失敗', 'error');
-  }
 }
 
-// ── 本地智慧離線大腦（在無 API 或網路不穩時依然 100% 親切回覆、解答與執行修改）──
-function getLocalRaccoonKnowledgeReply(userText) {
-  const text = (userText || '').trim().toLowerCase();
-
-  // 1. 問候與日常聊天
-  if (text.includes('說話') || text.includes('在嗎') || text.includes('可以') || text.includes('聊天') || text.includes('哈囉') || text.includes('你好') || text.includes('hi') || text.includes('hello')) {
-    return {
-      replyText: '當然可以跟你說話呀！🦝✨ 我是你的隨身小浣熊！\n在優彩餐廳現場有任何聽不懂的日語、或是想新增單字、修改手帳流程，隨時都可以跟我說喔！',
-      japaneseAudio: 'いつでも声をかけてくださいね',
-      action: { type: 'NONE' }
-    };
-  }
-
-  // 2. 鼓勵與打氣
-  if (text.includes('累') || text.includes('辛苦') || text.includes('好忙') || text.includes('加油')) {
-    return {
-      replyText: '楊辛苦了！打工度假外場跑來跑去真的不容易，記得適時喝口水休息一下，今天也一起加油！🦝🍵',
-      japaneseAudio: 'お疲れ様です！頑張りましょう！',
-      action: { type: 'NONE' }
-    };
-  }
-
-  // 3. 詢問身分與功能
-  if (text.includes('你是誰') || text.includes('能做什麼') || text.includes('功能') || text.includes('介紹')) {
-    return {
-      replyText: '我是你的專屬隨身手帳助理小浣熊！🦝\n我的三大超能力：\n1. 💬 解答現場日語、俚語與客人要求\n2. 🛠️ 具有全網頁修改權限（可直接幫你新增/刪除/排版單字與SOP）\n3. 🗣️ 即時日語標準發音朗讀！',
-      japaneseAudio: 'よろしくお願いします',
-      action: { type: 'NONE' }
-    };
-  }
-
-  // 4. osau / 溫開水 / 水的問答
-  if (text.includes('osau') || text.includes('おさゆ') || text.includes('白湯') || text.includes('溫開水') || text.includes('溫水')) {
-    return {
-      replyText: '客人說的「osau」是 **「お白湯（おさゆ / osayu）」**，也就是「溫熱開水」！\n在日本餐廳中，長輩吃藥、暖胃或不想喝冰水時常會點お白湯喔！',
-      japaneseAudio: 'お白湯をどうぞ',
-      action: { type: 'NONE' }
-    };
-  }
-
-  // 5. 道謝 / 收盤應對
-  if (text.includes('道謝') || text.includes('謝謝') || text.includes('收盤') || text.includes('ありがとう') || text.includes('不客氣') || text.includes('怎麼回')) {
-    return {
-      replyText: '收盤子時客人說謝謝，日本現場最推薦、最親切的黃金金句是：\n\n🥇 **首選回覆：**「とんでもないです！ごゆっくりどうぞ！」（哪裡的話！請您慢慢享用！）\n🥈 **雙向感謝：**「こちらこそ、ありがとうございます！」（我才要謝謝您！）\n🌟 **表達感謝：**「ありがとうございます！助かります！」（謝謝！幫大忙了！）',
-      japaneseAudio: 'とんでもないです！ごゆっくりどうぞ！',
-      action: { type: 'NONE' }
-    };
-  }
-
-  // 6. 新增單字指令 (例如：新增打火機)
-  if (text.includes('打火機') || text.includes('ライター')) {
-    return {
-      replyText: '好的！我已經幫你把「打火機（ライター）」新增至工具單字庫囉！✨',
-      japaneseAudio: 'ライター',
-      action: {
-        type: 'ADD_VOCAB',
-        payload: {
-          id: 'v_lighter_' + Date.now(),
-          ja: '<ruby>ライター<rt>raita-</rt></ruby>',
-          zh: '打火機 / 點火器',
-          cat: '工具',
-          note: '小浣熊智能新增'
-        }
-      }
-    };
-  }
-
-  // 7. 傳菜 10 步驟
-  if (text.includes('傳菜') || text.includes('sop') || text.includes('步驟')) {
-    return {
-      replyText: '傳菜 10 大標準步驟為：\n1. 廚房通知取餐 2. 備妥推車與布巾 3. 廚房打招呼 4. 菜色分區存放（生鮮放冰箱、鍋物放保溫庫） 5. 送達餐廳無線電通報 6. 點單向廚房叫菜 7. 端菜給等候客人 8. 撤菜回廚房補 9. 推車借過應對 10. 推車歸位！',
-      japaneseAudio: '料理を取りに伺います',
-      action: { type: 'NONE' }
-    };
-  }
-
-  // 8. 兜底友善對話 (絕不跳冷冰冰的報錯)
-  return {
-    replyText: '小浣熊收到你的訊息囉！🦝✨\n「' + escapeHtml(userText) + '」\n\n💡 <em>小提醒：若要進行完全開放式的自由 AI 大腦問答，可在「⚙️ 設定」貼上您的免費 Google Gemini API Key（以 AIzaSy 開頭），小浣熊就會升級為無所不知的雲端超級大腦喔！</em>',
-    japaneseAudio: '',
-    action: { type: 'NONE' }
-  };
-}
-
-// 4. 小浣熊語音輸入處理 (Web Speech API)
-function startRaccoonVoice(isPushToTalk = false) {
+// 3. 🍎 Apple 風格輪盤選單開關
+function openRaccoonRadialMenu() {
+  const overlay = document.getElementById('raccoon-radial-overlay');
+  const menu = document.getElementById('raccoon-radial-menu');
   const widget = document.getElementById('floating-raccoon-widget');
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!overlay || !menu) return;
 
-  if (!SR) {
-    showRaccoonBubble('⚠️ 瀏覽器未支援語音，請點兩下輸入文字');
-    openRaccoonChatModal();
-    return;
+  if (widget) {
+    const rect = widget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // 讓輪盤中心對齊小浣熊目前位置，若太靠邊界則微調
+    const pad = 150;
+    const boundedX = Math.min(Math.max(pad, centerX), window.innerWidth - pad);
+    const boundedY = Math.min(Math.max(pad, centerY), window.innerHeight - pad);
+    
+    menu.style.position = 'absolute';
+    menu.style.left = (boundedX - 140) + 'px';
+    menu.style.top = (boundedY - 140) + 'px';
   }
 
-  if (raccoonState.isRecording) return;
+  overlay.classList.add('open');
+  if (navigator.vibrate) navigator.vibrate(15);
+}
 
+function closeRaccoonRadialMenu() {
+  const overlay = document.getElementById('raccoon-radial-overlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+function triggerRadialAction(tabId) {
+  closeRaccoonRadialMenu();
+  openRaccoonDashboard(tabId);
+}
+
+// 4. 🦝 小浣熊全功能工作台
+function openRaccoonDashboard(tabId) {
+  const modal = document.getElementById('modal-raccoon-dashboard');
+  if (!modal) return;
+  modal.classList.add('open');
+  modal.classList.add('show');
+  switchRaccoonTab(tabId || 'memo');
+}
+
+function switchRaccoonTab(tabId) {
+  document.querySelectorAll('.r-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.rtab-pane').forEach(pane => pane.style.display = 'none');
+
+  const btn = document.getElementById('rtab-btn-' + tabId);
+  const pane = document.getElementById('rtab-content-' + tabId);
+  if (btn) btn.classList.add('active');
+  if (pane) pane.style.display = 'block';
+
+  if (tabId === 'memo') renderRaccoonMemoTab();
+  if (tabId === 'practice') {
+    if (!document.getElementById('practice-card-display').innerHTML.trim()) {
+      drawRandomPracticeSentence();
+    }
+  }
+  if (tabId === 'map') renderYusaiLandmarks();
+}
+
+// ── 1. 📝 語音 Memo 筆記本實作 ──
+function getRaccoonMemos() {
   try {
-    raccoonState.recognition = new SR();
-    raccoonState.recognition.lang = 'zh-TW';
-    raccoonState.recognition.interimResults = false;
-    raccoonState.recognition.continuous = isPushToTalk;
-    raccoonState.isRecording = true;
+    const raw = localStorage.getItem(RACCOON_MEMO_STORAGE);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return [];
+}
 
-    if (widget) widget.classList.add('recording');
+function saveRaccoonMemos(memos) {
+  localStorage.setItem(RACCOON_MEMO_STORAGE, JSON.stringify(memos));
+  renderRaccoonMemoTab();
+}
 
-    raccoonState.recognition.onresult = (e) => {
-      const transcript = e.results[e.results.length - 1][0].transcript;
-      showRaccoonBubble('🤖 分析中：「' + transcript + '」');
-      handleRaccoonUserInput(transcript);
-    };
+function renderRaccoonMemoTab() {
+  const listEl = document.getElementById('raccoon-memos-list');
+  const countLabel = document.getElementById('memo-count-label');
+  if (!listEl) return;
 
-    raccoonState.recognition.onerror = (e) => {
-      console.warn('Raccoon voice error:', e.error);
-      stopRaccoonVoice();
-      if (e.error === 'not-allowed') {
-        showRaccoonBubble('⚠️ 請允許麥克風權限');
-      } else {
-        showRaccoonBubble('未聽清，請點兩下對話');
-      }
-    };
+  const memos = getRaccoonMemos();
+  if (countLabel) countLabel.textContent = `📋 現場備忘清單 (${memos.length} 則)`;
 
-    raccoonState.recognition.onend = () => {
-      stopRaccoonVoice();
-    };
-
-    raccoonState.recognition.start();
-  } catch (err) {
-    console.error('Start raccoon voice error:', err);
-    stopRaccoonVoice();
+  if (memos.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding:24px 10px; color:var(--muted); font-size:0.83rem;">
+      🦝 目前沒有備忘筆記<br>
+      上班時發現想改的排版或新單字，按住錄音或打字記下來，下班後一鍵複製貼給工程師！
+    </div>`;
+    return;
   }
+
+  listEl.innerHTML = memos.map((m, idx) => `
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <div style="display:flex; align-items:center; gap:8px; flex:1;">
+        <input type="checkbox" ${m.checked ? 'checked' : ''} onchange="toggleCheckMemo('${m.id}')" style="width:18px; height:18px; cursor:pointer;" />
+        <div style="flex:1;">
+          <div style="font-size:0.88rem; color:var(--ink); font-weight:600; ${m.checked ? 'text-decoration:line-through; opacity:0.6;' : ''}">${escapeHtml(m.text)}</div>
+          <div style="font-size:0.72rem; color:var(--muted); margin-top:2px;">🕒 ${m.time || ''}</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="color:var(--accent); font-size:0.8rem; padding:2px 6px;" onclick="deleteMemo('${m.id}')">✕</button>
+    </div>
+  `).join('');
 }
 
-function stopRaccoonVoice() {
-  const widget = document.getElementById('floating-raccoon-widget');
-  if (raccoonState.recognition && raccoonState.isRecording) {
-    try { raccoonState.recognition.stop(); } catch(e) {}
-  }
-  raccoonState.isRecording = false;
-  if (widget) widget.classList.remove('recording');
-}
-
-function showRaccoonBubble(text, duration = 4000) {
-  const bubble = document.getElementById('raccoon-status-bubble');
-  if (!bubble) return;
-  bubble.textContent = text;
-  bubble.classList.add('show');
-  clearTimeout(showRaccoonBubble._timer);
-  showRaccoonBubble._timer = setTimeout(() => {
-    bubble.classList.remove('show');
-  }, duration);
-}
-
-// 5. 開啟/管理小浣熊 Gemini 對話視窗
-function openRaccoonChatModal() {
-  openModal('modal-raccoon-chat');
-  const input = document.getElementById('raccoon-chat-input');
-  if (input) setTimeout(() => input.focus(), 300);
-}
-
-function askRaccoonQuick(questionText) {
-  const input = document.getElementById('raccoon-chat-input');
-  if (input) input.value = questionText;
-  sendRaccoonChatMessage();
-}
-
-function sendRaccoonChatMessage() {
-  const input = document.getElementById('raccoon-chat-input');
+function addRaccoonMemoManual() {
+  const input = document.getElementById('input-memo-text');
   if (!input) return;
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
 
-  appendRaccoonChatMessage('user', text);
-  handleRaccoonUserInput(text);
+  const memos = getRaccoonMemos();
+  const d = new Date();
+  const timeStr = (d.getMonth() + 1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  memos.unshift({
+    id: 'memo_' + Date.now(),
+    text: text,
+    time: timeStr,
+    checked: false
+  });
+  saveRaccoonMemos(memos);
+  showToast('✅ 備忘已記錄！');
 }
 
-function appendRaccoonChatMessage(sender, content, audioText = '') {
-  const stream = document.getElementById('raccoon-chat-stream');
-  if (!stream) return;
-
-  const msgDiv = document.createElement('div');
-  if (sender === 'user') {
-    msgDiv.className = 'chat-msg user-msg';
-    msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(content) + '</div>';
-  } else {
-    msgDiv.className = 'chat-msg raccoon-msg';
-    msgDiv.style.cssText = 'display:flex; gap:8px; align-items:flex-start;';
-    
-    let playBtnHtml = '';
-    if (audioText) {
-      playBtnHtml = '<button class="btn btn-ghost btn-sm" style="margin-top:6px; padding:2px 8px; font-size:0.75rem;" onclick="speakJapanese(\'' + escapeHtml(audioText).replace(/'/g, "\\'") + '\')">🔊 聆聽日語發音</button>';
-    }
-
-    msgDiv.innerHTML = '<img src="./photos/raccoon_pet.png" style="width:32px; height:32px; object-fit:contain; flex-shrink:0;" />' +
-      '<div class="msg-bubble" style="background:var(--surface); border:1px solid var(--border); border-radius:4px 16px 16px 16px; padding:10px 12px; font-size:0.88rem; line-height:1.5; color:var(--ink);">' +
-      content + playBtnHtml +
-      '</div>';
-  }
-
-  stream.appendChild(msgDiv);
-  stream.scrollTop = stream.scrollHeight;
-}
-
-// 6. 小浣熊核心 AI 邏輯 (Gemini 2.5 大腦 + 智慧離線降級 + 全網頁修訂)
-async function handleRaccoonUserInput(userPrompt) {
-  appendRaccoonChatMessage('raccoon', '<span style="color:var(--muted);">🦝 小浣熊正在思考並處理中...</span>');
-
-  // 先檢查本地智慧知識庫 (可立即離線命中常用指令與問答)
-  const localHit = getLocalRaccoonKnowledgeReply(userPrompt);
-  if (localHit) {
-    // 稍等 300ms 模擬自然對話反饋
-    setTimeout(() => {
-      const stream = document.getElementById('raccoon-chat-stream');
-      if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
-      appendRaccoonChatMessage('raccoon', localHit.replyText.replace(/\n/g, '<br>'), localHit.japaneseAudio || '');
-      showRaccoonBubble(localHit.replyText.substring(0, 36) + '...');
-      if (localHit.action && localHit.action.type && localHit.action.type !== 'NONE') {
-        executeRaccoonAction(localHit.action);
-      }
-    }, 300);
-    return;
-  }
-
-  const systemInstruction = `你是一位全能的日語職場助手兼手帳資料庫管理員「小浣熊」。
-使用者是台灣前往熊本「優彩 (Yusai)」溫泉旅館自助餐廳擔任傳菜人員（Runner / ランナー）的「楊（よう）」。
-
-【你的兩大核心職責】
-職責 1：【日語與職場解惑】
-- 解釋現場日語、客人用語（如 osau 是 お白湯/溫開水）、道謝回覆（如 とんでもないです！ごゆっくりどうぞ）、菜名與發音。
-- 使用 100% 繁體中文回覆，親切溫暖、簡明精準。
-
-職責 2：【網頁資料管理員（具有新增/修改/刪除/排版權限）】
-- 當使用者要求新增單字、修改某個句子、刪除菜品、調整分類或重新排版時，你必須在 JSON 中回傳對應的 "action"！
-
-【回傳 JSON 格式規範（純 JSON）】
-{
-  "replyText": "給使用者的繁體中文親切說明",
-  "japaneseAudio": "若有包含日文句子或單字，填寫要發音的日文文字（無則填空字串）",
-  "action": {
-    "type": "NONE" | "ADD_VOCAB" | "EDIT_VOCAB" | "DELETE_VOCAB" | "ADD_SOP" | "EDIT_SOP" | "DELETE_SOP",
-    "payload": {
-      "id": "隨機或指定ID",
-      "ja": "<ruby>漢字<rt>標音</rt></ruby>",
-      "zh": "中文翻譯",
-      "cat": "餐具" | "工具" | "餐點" | "酒水" | "名字" | "職稱" | "對話",
-      "note": "備註說明"
-    }
-  }
-}`;
-
-  const prompt = systemInstruction + "\n\n【使用者輸入】\n" + userPrompt;
-
-  try {
-    const res = await callGeminiApiUnified(prompt);
-    
-    // 移除思考中的訊息
-    const stream = document.getElementById('raccoon-chat-stream');
-    if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
-
-    if (res && res.replyText) {
-      appendRaccoonChatMessage('raccoon', res.replyText.replace(/\n/g, '<br>'), res.japaneseAudio || '');
-      showRaccoonBubble(res.replyText.substring(0, 36) + '...');
-
-      // 執行網頁資料修改 Action
-      if (res.action && res.action.type && res.action.type !== 'NONE') {
-        executeRaccoonAction(res.action);
-      }
-    } else {
-      appendRaccoonChatMessage('raccoon', '小浣熊收到囉！正在為您整理中…');
-    }
-  } catch (err) {
-    console.error('Raccoon AI processing error:', err);
-    const stream = document.getElementById('raccoon-chat-stream');
-    if (stream && stream.lastElementChild) stream.removeChild(stream.lastElementChild);
-    
-    // 親切繁體中文錯誤提示
-    appendRaccoonChatMessage('raccoon', '⚠️ <strong>Gemini API 連線未通或金鑰需更新</strong><br>請至「⚙️ 設定」頁面填入有效的 Google Gemini API Key（以 AIzaSy 開頭）。<br><br>💡 <em>現場常用問題（如 osau、道謝應對、新增單字）小浣熊依然可以直接為您解答與修改喔！</em>');
-    showRaccoonBubble('⚠️ API 金鑰需更新，請至設定確認');
-  }
-}
-
-// 7. 執行小浣熊的網頁資料修訂指令
-function executeRaccoonAction(action) {
-  if (!AppData) return;
-
-  if (action.type === 'ADD_VOCAB' && action.payload) {
-    if (!AppData.vocabSop) AppData.vocabSop = [];
-    const newId = action.payload.id || ('v_custom_' + Date.now());
-    AppData.vocabSop.unshift({
-      id: newId,
-      ja: action.payload.ja || '',
-      zh: action.payload.zh || '',
-      cat: action.payload.cat || '餐具',
-      imageUrl: action.payload.imageUrl || '',
-      note: action.payload.note || '小浣熊新增'
-    });
-    saveAppData(AppData);
-    renderVocabSop();
-    showToast('🦝 小浣熊已成功為你新增單字！');
-  } else if (action.type === 'DELETE_VOCAB' && action.payload) {
-    if (AppData.vocabSop) {
-      AppData.vocabSop = AppData.vocabSop.filter(v => v.id !== action.payload.id && v.zh !== action.payload.zh);
-      saveAppData(AppData);
-      renderVocabSop();
-      showToast('🦝 小浣熊已幫你刪除該單字！');
-    }
-  } else if (action.type === 'ADD_SOP' && action.payload) {
-    const targetTab = AppData.tabs && AppData.tabs[0];
-    if (targetTab) {
-      if (!targetTab.items) targetTab.items = [];
-      targetTab.items.push({
-        id: action.payload.id || ('rn_custom_' + Date.now()),
-        type: action.payload.type || 'sop',
-        speaker: action.payload.speaker || '',
-        zh: action.payload.zh || '',
-        ja: action.payload.ja || '',
-        grammar: action.payload.grammar || { vocabs: [], points: [], tips: '' }
-      });
-      saveAppData(AppData);
-      renderActiveTab();
-      showToast('🦝 小浣熊已成功更新傳菜流程！');
-    }
-  }
-}
-
-function toggleRaccoonModalMic() {
-  const btn = document.getElementById('raccoon-modal-mic-btn');
+function toggleMemoRecording() {
+  const btn = document.getElementById('btn-memo-record');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
   if (!SR) {
-    showToast('瀏覽器不支援語音輸入，請直接打字', 'error');
+    showToast('瀏覽器不支援語音辨識，請直接打字', 'error');
     return;
   }
 
-  if (raccoonState.modalRecognition) {
-    raccoonState.modalRecognition.stop();
-    raccoonState.modalRecognition = null;
-    if (btn) btn.textContent = '🎤';
+  if (raccoonState.memoRecognition) {
+    raccoonState.memoRecognition.stop();
+    raccoonState.memoRecognition = null;
+    if (btn) btn.textContent = '🎤 錄製語音';
     return;
   }
 
@@ -5969,32 +6268,552 @@ function toggleRaccoonModalMic() {
     r.interimResults = false;
     r.continuous = false;
 
-    if (btn) btn.textContent = '🔴 聆聽中';
+    if (btn) btn.textContent = '🔴 聆聽中…';
 
     r.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
-      const input = document.getElementById('raccoon-chat-input');
+      const input = document.getElementById('input-memo-text');
       if (input) input.value = transcript;
-      if (btn) btn.textContent = '🎤';
-      raccoonState.modalRecognition = null;
-      sendRaccoonChatMessage();
+      if (btn) btn.textContent = '🎤 錄製語音';
+      raccoonState.memoRecognition = null;
+      addRaccoonMemoManual();
     };
 
     r.onerror = () => {
-      if (btn) btn.textContent = '🎤';
-      raccoonState.modalRecognition = null;
+      if (btn) btn.textContent = '🎤 錄製語音';
+      raccoonState.memoRecognition = null;
     };
 
     r.onend = () => {
-      if (btn) btn.textContent = '🎤';
-      raccoonState.modalRecognition = null;
+      if (btn) btn.textContent = '🎤 錄製語音';
+      raccoonState.memoRecognition = null;
     };
 
     r.start();
-    raccoonState.modalRecognition = r;
+    raccoonState.memoRecognition = r;
   } catch (err) {
-    console.error('Modal mic error:', err);
-    if (btn) btn.textContent = '🎤';
+    console.error('Memo mic error:', err);
+    if (btn) btn.textContent = '🎤 錄製語音';
+  }
+}
+
+function toggleCheckMemo(id) {
+  const memos = getRaccoonMemos();
+  const target = memos.find(m => m.id === id);
+  if (target) {
+    target.checked = !target.checked;
+    saveRaccoonMemos(memos);
+  }
+}
+
+function deleteMemo(id) {
+  let memos = getRaccoonMemos();
+  memos = memos.filter(m => m.id !== id);
+  saveRaccoonMemos(memos);
+}
+
+function clearCheckedMemos() {
+  let memos = getRaccoonMemos();
+  memos = memos.filter(m => !m.checked);
+  saveRaccoonMemos(memos);
+  showToast('已清除已完成的備忘項目');
+}
+
+function copyAllMemosToClipboard() {
+  const memos = getRaccoonMemos();
+  if (memos.length === 0) {
+    showToast('目前沒有任何備忘項目可複製喔！', 'error');
+    return;
+  }
+
+  const d = new Date();
+  const dateHeader = `### 📝 小楊的現場修改備忘錄 (${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()})`;
+  const lines = memos.map((m, idx) => `${idx + 1}. [${m.checked ? '已確認' : '待處理'}] ${m.text} (${m.time})`);
+  const fullText = dateHeader + '\n' + lines.join('\n');
+
+  navigator.clipboard.writeText(fullText).then(() => {
+    showToast('🎉 備忘錄已成功複製！請直接貼到對話視窗給我！', 'success');
+  }).catch(() => {
+    // 備用方案
+    const ta = document.createElement('textarea');
+    ta.value = fullText;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('🎉 備忘錄已複製！請直接貼到對話視窗給我！', 'success');
+  });
+}
+
+// ── 2. ⏱️ 料理與出餐多段計時器實作 ──
+function formatTimerDisplay(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function updateTimerUI() {
+  const display = document.getElementById('timer-big-display');
+  const statusLabel = document.getElementById('timer-status-label');
+  const badge = document.getElementById('raccoon-timer-badge');
+  const pauseBtn = document.getElementById('btn-timer-pause');
+  const resetBtn = document.getElementById('btn-timer-reset');
+
+  if (display) display.textContent = formatTimerDisplay(raccoonTimer.remainingSeconds);
+  
+  if (raccoonTimer.isRunning || raccoonTimer.remainingSeconds > 0) {
+    if (statusLabel) statusLabel.textContent = raccoonTimer.label ? (`🔥 進行中：${raccoonTimer.label}`) : '⏱️ 計時倒數中…';
+    if (badge) {
+      badge.style.display = 'block';
+      badge.textContent = '⏱️ ' + formatTimerDisplay(raccoonTimer.remainingSeconds);
+    }
+    if (pauseBtn) {
+      pauseBtn.style.display = 'inline-block';
+      pauseBtn.textContent = raccoonTimer.isRunning ? '⏸️ 暫停' : '▶️ 繼續';
+    }
+    if (resetBtn) resetBtn.style.display = 'inline-block';
+  } else {
+    if (statusLabel) statusLabel.textContent = '隨時為你的料理或出餐精準倒數';
+    if (badge) badge.style.display = 'none';
+    if (pauseBtn) pauseBtn.style.display = 'none';
+    if (resetBtn) resetBtn.style.display = 'none';
+  }
+}
+
+function setRaccoonTimerPreset(minutes, label) {
+  startRaccoonTimerSeconds(minutes * 60, label);
+}
+
+function startCustomRaccoonTimer() {
+  const minInput = document.getElementById('input-custom-minutes');
+  const labelInput = document.getElementById('input-custom-timer-label');
+  const mins = minInput ? parseInt(minInput.value, 10) : 0;
+  const label = labelInput ? labelInput.value.trim() : '料理計時';
+  if (!mins || mins <= 0) {
+    showToast('請輸入有效的分鐘數', 'error');
+    return;
+  }
+  startRaccoonTimerSeconds(mins * 60, label);
+}
+
+function startRaccoonTimerSeconds(totalSec, label) {
+  if (raccoonTimer.intervalId) clearInterval(raccoonTimer.intervalId);
+  raccoonTimer.totalSeconds = totalSec;
+  raccoonTimer.remainingSeconds = totalSec;
+  raccoonTimer.label = label || '料理倒數';
+  raccoonTimer.isRunning = true;
+
+  updateTimerUI();
+  showToast(`⏱️ 已啟動 ${Math.floor(totalSec/60)} 分鐘計時：${raccoonTimer.label}`, 'success');
+
+  raccoonTimer.intervalId = setInterval(() => {
+    if (!raccoonTimer.isRunning) return;
+    raccoonTimer.remainingSeconds--;
+    updateTimerUI();
+
+    if (raccoonTimer.remainingSeconds <= 0) {
+      clearInterval(raccoonTimer.intervalId);
+      raccoonTimer.intervalId = null;
+      raccoonTimer.isRunning = false;
+      updateTimerUI();
+      onRaccoonTimerFinished();
+    }
+  }, 1000);
+}
+
+function togglePauseRaccoonTimer() {
+  if (raccoonTimer.remainingSeconds <= 0) return;
+  raccoonTimer.isRunning = !raccoonTimer.isRunning;
+  updateTimerUI();
+}
+
+function resetRaccoonTimer() {
+  if (raccoonTimer.intervalId) clearInterval(raccoonTimer.intervalId);
+  raccoonTimer.intervalId = null;
+  raccoonTimer.isRunning = false;
+  raccoonTimer.totalSeconds = 0;
+  raccoonTimer.remainingSeconds = 0;
+  raccoonTimer.label = '';
+  updateTimerUI();
+  showToast('計時器已重設');
+}
+
+function onRaccoonTimerFinished() {
+  if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 600]);
+  showToast(`🔔 叮！${raccoonTimer.label || '料理'} 時間到囉！請盡速確認！`, 'success');
+  speakJapanese('時間になりました。確認してください。');
+}
+
+// ── 3. 👂 抗雜音・碎詞模糊猜測機實作 ──
+function runFuzzyGuess(query) {
+  const container = document.getElementById('fuzzy-results-container');
+  if (!container) return;
+  const q = (query || '').trim().toLowerCase();
+
+  if (!q) {
+    container.innerHTML = `<div style="text-align:center; padding:18px 10px; color:var(--muted); font-size:0.83rem;">
+      在上方輸入你聽到的碎片音（例如: ふき / とりざら / さゆ），小浣熊會立刻推測真實意思與應對動作！
+    </div>`;
+    return;
+  }
+
+  // 1. 從預設常見碎片字典比對
+  let matched = FUZZY_KITCHEN_GUESS_DICT.filter(item => {
+    return item.keys.some(k => k.toLowerCase().includes(q) || q.includes(k.toLowerCase())) ||
+           item.ja.includes(q) || item.zh.includes(q);
+  });
+
+  // 2. 從 vocabSop 動態比對
+  if (AppData && AppData.vocabSop) {
+    const vocabMatches = AppData.vocabSop.filter(v => {
+      const cleanJa = (v.ja || '').replace(/<[^>]+>/g, '').toLowerCase();
+      const kana = (v.kana || '').toLowerCase();
+      const zh = (v.zh || '').toLowerCase();
+      return cleanJa.includes(q) || kana.includes(q) || zh.includes(q);
+    });
+
+    vocabMatches.forEach(v => {
+      if (!matched.some(m => m.ja.includes(v.zh) || v.ja.includes(m.zh))) {
+        matched.push({
+          ja: v.ja,
+          zh: v.zh,
+          intent: `可能與手帳中的「${v.cat || '實戰單字'}」相關，請留意周遭是否有相關需求。`,
+          actionJa: v.ja,
+          actionZh: `確認「${v.zh}」`
+        });
+      }
+    });
+  }
+
+  if (matched.length === 0) {
+    container.innerHTML = `<div style="background:var(--surface); border:1px dashed var(--border); border-radius:10px; padding:12px; font-size:0.85rem; color:var(--muted); text-align:center;">
+      未能直接命中常見碎詞「${escapeHtml(q)}」<br>
+      💡 提示：可嘗試輸入平假名（如 さゆ、ふき）或羅馬拼音（osau）。
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = matched.slice(0, 4).map(item => `
+    <div style="background:#fff; border:1.5px solid var(--primary); border-radius:12px; padding:12px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:8px;">
+        <div>
+          <div style="font-size:1.1rem; font-weight:800; color:var(--primary); font-family:var(--font-serif); cursor:pointer;" onclick="speakJapanese('${escapeJs(item.ja)}')">${item.ja} 🔊</div>
+          <div style="font-size:0.88rem; color:var(--ink); font-weight:700;">${escapeHtml(item.zh)}</div>
+        </div>
+        <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); font-weight:700; padding:2px 8px; border-radius:10px;">🎯 猜測命中</span>
+      </div>
+      
+      <div style="font-size:0.82rem; line-height:1.6; color:var(--ink);">
+        <div style="margin-bottom:4px;">🧐 <strong>對方的真實意圖：</strong>${escapeHtml(item.intent || '現場日常應對需求')}</div>
+        <div style="background:var(--surface); border-radius:8px; padding:6px 8px; margin-top:6px;">
+          <div style="color:var(--primary); font-weight:700; font-size:0.8rem;">💡 你現在該做或該回：</div>
+          <div style="font-size:0.88rem; color:var(--ink); font-weight:600; cursor:pointer;" onclick="speakJapanese('${escapeJs(item.actionJa)}')">${item.actionJa} 🔊</div>
+          <div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(item.actionZh || '')}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleFuzzyListening() {
+  const btn = document.getElementById('btn-fuzzy-mic');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showToast('瀏覽器不支援語音辨識', 'error');
+    return;
+  }
+
+  if (raccoonState.fuzzyRecognition) {
+    raccoonState.fuzzyRecognition.stop();
+    raccoonState.fuzzyRecognition = null;
+    if (btn) btn.textContent = '🎙️ 持續偷聽';
+    return;
+  }
+
+  try {
+    const r = new SR();
+    r.lang = 'ja-JP';
+    r.interimResults = true;
+    r.continuous = true;
+
+    if (btn) btn.textContent = '🔴 偷聽中…(點擊停止)';
+
+    r.onresult = (e) => {
+      let transcript = '';
+      for (let i = e.resultIndex; i < e.results.length; ++i) {
+        transcript += e.results[i][0].transcript;
+      }
+      const input = document.getElementById('input-fuzzy-query');
+      if (input && transcript) {
+        input.value = transcript;
+        runFuzzyGuess(transcript);
+      }
+    };
+
+    r.onerror = () => {
+      if (btn) btn.textContent = '🎙️ 持續偷聽';
+      raccoonState.fuzzyRecognition = null;
+    };
+
+    r.onend = () => {
+      if (btn) btn.textContent = '🎙️ 持續偷聽';
+      raccoonState.fuzzyRecognition = null;
+    };
+
+    r.start();
+    raccoonState.fuzzyRecognition = r;
+    showToast('👂 小浣熊正在背景聆聽日語碎片音…');
+  } catch (err) {
+    console.error('Fuzzy mic error:', err);
+    if (btn) btn.textContent = '🎙️ 持續偷聽';
+  }
+}
+
+// ── 4. 🎓 300 句現場實戰句庫實作 ──
+let currentPracticeFilter = '全部';
+
+function filterPracticeCategory(cat) {
+  currentPracticeFilter = cat;
+  ['all', 'chef', 'guest', 'peer'].forEach(id => {
+    const b = document.getElementById('pfilter-' + id);
+    if (b) b.className = 'btn btn-sm btn-ghost';
+  });
+
+  if (cat === '全部') document.getElementById('pfilter-all')?.classList.replace('btn-ghost', 'btn-primary');
+  if (cat === '主管交代') document.getElementById('pfilter-chef')?.classList.replace('btn-ghost', 'btn-primary');
+  if (cat === '客人詢問') document.getElementById('pfilter-guest')?.classList.replace('btn-ghost', 'btn-primary');
+  if (cat === '同事應對') document.getElementById('pfilter-peer')?.classList.replace('btn-ghost', 'btn-primary');
+
+  drawRandomPracticeSentence();
+}
+
+function drawRandomPracticeSentence() {
+  const card = document.getElementById('practice-card-display');
+  if (!card) return;
+
+  let pool = PRACTICE_SENTENCES_BANK;
+  if (currentPracticeFilter !== '全部') {
+    pool = pool.filter(p => p.cat === currentPracticeFilter);
+  }
+
+  if (pool.length === 0) pool = PRACTICE_SENTENCES_BANK;
+  const item = pool[Math.floor(Math.random() * pool.length)];
+
+  card.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:8px;">
+      <span style="background:var(--primary); color:#fff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:10px;">🏷️ ${item.cat}</span>
+      <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(item.ja)}')" style="font-size:0.8rem;">🔊 朗讀整句</button>
+    </div>
+
+    <div style="font-size:1.25rem; font-weight:700; color:var(--primary); line-height:2.2; font-family:var(--font-serif); cursor:pointer;" onclick="speakJapanese('${escapeJs(item.ja)}')">
+      ${item.ja} <span style="font-size:0.8rem;">🔊</span>
+    </div>
+    <div style="font-size:0.95rem; color:var(--ink); font-weight:700; margin-top:4px; margin-bottom:12px;">${escapeHtml(item.zh)}</div>
+
+    <!-- 單字拆解 -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:4px;">📚 關鍵單字：</div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        ${(item.vocabs || []).map(v => `
+          <div style="background:var(--surface); border-radius:6px; padding:4px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; cursor:pointer;" onclick="speakJapanese('${escapeJs(v.ja)}')">
+            <span style="font-weight:700; color:var(--primary);">${v.ja}</span>
+            <span style="color:var(--muted); font-size:0.78rem;">${escapeHtml(v.zh)} 🔊</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- 文法解析 -->
+    <div style="margin-bottom:10px;">
+      <div style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:4px;">💡 文法重點：</div>
+      ${(item.points || []).map(p => `
+        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:6px 8px; font-size:0.8rem; line-height:1.5;">
+          <div style="font-weight:700; color:var(--accent);">${escapeHtml(p.title)}</div>
+          <div>${escapeHtml(p.desc)}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- 職場叮嚀 -->
+    <div style="background:rgba(92,61,30,0.06); border-left:3px solid var(--primary); border-radius:0 6px 6px 0; padding:6px 8px; font-size:0.8rem; line-height:1.5; color:var(--ink);">
+      <strong>📌 實戰背景：</strong>${escapeHtml(item.tips || '日本餐飲現場高頻必背應對句。')}
+    </div>
+  `;
+}
+
+// ── 5. 💬 中文轉日文（靜音大字顯示）實作 ──
+async function executeSilentTranslate() {
+  const input = document.getElementById('input-translate-zh');
+  const card = document.getElementById('translate-result-card');
+  if (!input || !card) return;
+  const zhText = input.value.trim();
+  if (!zhText) return;
+
+  card.innerHTML = `<div style="color:var(--muted); font-size:0.88rem;">🦝 小浣熊正在快速轉譯為道地職場日語…</div>`;
+
+  // 1. 檢查常用離線詞庫
+  const offlineQuick = {
+    "這個有點燙請小心": { ja: "こちらは<ruby>大変<rt>たいへん</rt></ruby><ruby>熱<rt>あつ</rt></ruby>くなっておりますので、お<ruby>気<rt>き</rt></ruby>をつけてお<ruby>持<rt>も</rt></ruby>ちください。", zh: "這道料理非常燙，拿取時請務必小心。" },
+    "垃圾滿了我去倒": { ja: "<ruby>ゴミ<rt>gomi</rt></ruby>が<ruby>一杯<rt>いっぱい</rt></ruby>になりましたので、<ruby>捨<rt>す</rt></ruby>てに<ruby>行<rt>い</rt></ruby>ってまいります。", zh: "垃圾滿了，我現在拿去倒掉。" },
+    "熱水在飲料區": { ja: "お<ruby>湯<rt>ゆ</rt></ruby>はドリンクコーナーにございます。", zh: "熱水在飲料區為您準備。" },
+    "我馬上為您處理": { ja: "かしこまりました！すぐに<ruby>対応<rt>たいおう</rt></ruby>いたします！", zh: "遵命明白了！我馬上為您處理！" },
+    "我現在推車要過去": { ja: "お<ruby>通<rt>とお</rt></ruby>りします！<ruby>台車<rt>だいしゃ</rt></ruby><ruby>通<rt>とお</rt></ruby>りまーす！", zh: "借過一下！推車要通過囉！" }
+  };
+
+  if (offlineQuick[zhText]) {
+    const res = offlineQuick[zhText];
+    renderTranslateCard(res.ja, res.zh);
+    return;
+  }
+
+  // 2. 呼叫 Gemini AI (純繁中 + 標音日語)
+  if (AppData && AppData.apiKey && AppData.apiKey.trim()) {
+    const prompt = `請將以下中文轉換為日本溫泉旅館餐飲外場最道地、最簡短有禮貌的日語句子。
+中文：${zhText}
+
+必須遵守標音：
+漢字上方標註平假名（如 <ruby>料理<rt>りょうり</rt></ruby>）。
+回傳 JSON 格式（純 JSON）：
+{
+  "ja": "<ruby>日語<rt>標音</rt></ruby>",
+  "zh": "中文語意解釋",
+  "note": "簡短職場背景提示"
+}`;
+
+    try {
+      const parsed = await callGeminiApiUnified(prompt);
+      if (parsed && parsed.ja) {
+        renderTranslateCard(parsed.ja, parsed.zh || zhText, parsed.note);
+        return;
+      }
+    } catch (e) {
+      console.warn('Translate API error, fallback to basic template:', e);
+    }
+  }
+
+  // 3. 基本回退
+  renderTranslateCard(
+    `<ruby>失礼<rt>しつれい</rt></ruby>いたします。${escapeHtml(zhText)}`,
+    zhText,
+    '請以禮貌語氣向客人或同仁說明。'
+  );
+}
+
+function renderTranslateCard(jaHtml, zhText, note) {
+  const card = document.getElementById('translate-result-card');
+  if (!card) return;
+
+  card.innerHTML = `
+    <div style="background:var(--surface); border:1.5px solid var(--primary); border-radius:12px; padding:16px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); font-weight:700; padding:2px 8px; border-radius:10px;">🔇 靜音大字顯示</span>
+        <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(jaHtml)}')" style="font-size:0.8rem;">🔊 點此朗讀</button>
+      </div>
+      <div style="font-size:1.4rem; font-weight:800; color:var(--primary); line-height:2.2; font-family:var(--font-serif); margin-bottom:8px;">
+        ${jaHtml}
+      </div>
+      <div style="font-size:0.95rem; color:var(--ink); font-weight:700; border-top:1px dashed var(--border); padding-top:6px;">
+        ${escapeHtml(zhText)}
+      </div>
+      ${note ? `<div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">💡 ${escapeHtml(note)}</div>` : ''}
+    </div>
+  `;
+}
+
+// ── 6. 🗺️ 優彩設施問路 ＆ 🎮 快問快答實作 ──
+function switchMapSubTab(sub) {
+  const bMap = document.getElementById('btn-sub-map');
+  const bQuiz = document.getElementById('btn-sub-quiz');
+  const cMap = document.getElementById('subtab-map-content');
+  const cQuiz = document.getElementById('subtab-quiz-content');
+
+  if (sub === 'map') {
+    bMap?.classList.replace('btn-ghost', 'btn-primary');
+    bQuiz?.classList.replace('btn-primary', 'btn-ghost');
+    if (cMap) cMap.style.display = 'block';
+    if (cQuiz) cQuiz.style.display = 'none';
+    renderYusaiLandmarks();
+  } else {
+    bQuiz?.classList.replace('btn-ghost', 'btn-primary');
+    bMap?.classList.replace('btn-primary', 'btn-ghost');
+    if (cQuiz) cQuiz.style.display = 'block';
+    if (cMap) cMap.style.display = 'none';
+    startRaccoonQuickQuiz();
+  }
+}
+
+function renderYusaiLandmarks() {
+  const list = document.getElementById('yusai-landmarks-list');
+  if (!list) return;
+
+  list.innerHTML = YUSAI_LANDMARKS.map(l => `
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:800; color:var(--primary); font-size:0.9rem;">📍 ${escapeHtml(l.name)}</span>
+        <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(l.guideJa)}')" style="font-size:0.78rem;">🔊 發音</button>
+      </div>
+      <div style="font-size:0.88rem; color:var(--ink); font-weight:700; margin-top:4px; font-family:var(--font-serif);">${l.guideJa}</div>
+      <div style="font-size:0.8rem; color:var(--muted); margin-top:2px;">${escapeHtml(l.guideZh)}</div>
+    </div>
+  `).join('');
+}
+
+let activeQuiz = null;
+
+function startRaccoonQuickQuiz() {
+  const container = document.getElementById('quiz-game-container');
+  if (!container || !AppData || !AppData.vocabSop) return;
+
+  const vocabs = AppData.vocabSop.filter(v => v.cat === '餐點' || v.cat === '餐具' || v.cat === '對話');
+  if (vocabs.length < 4) return;
+
+  // 隨機抽 1 題
+  const target = vocabs[Math.floor(Math.random() * vocabs.length)];
+  let wrongPool = vocabs.filter(v => v.id !== target.id);
+  wrongPool.sort(() => Math.random() - 0.5);
+  const options = [target, wrongPool[0], wrongPool[1], wrongPool[2]].sort(() => Math.random() - 0.5);
+
+  activeQuiz = { target, options, answered: false };
+
+  container.innerHTML = `
+    <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:8px;">🎮 快問快答抽考：</div>
+    <div style="background:var(--surface); border-radius:8px; padding:10px; font-size:1.15rem; font-weight:800; color:var(--ink); text-align:center; margin-bottom:12px;">
+      請問「${escapeHtml(target.zh)}」的日語是？
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      ${options.map((opt, idx) => `
+        <button class="btn btn-ghost btn-sm quiz-opt-btn" id="quiz-opt-${idx}" onclick="submitQuizAnswer(${idx})" style="text-align:left; padding:8px 12px; font-size:0.9rem; font-weight:700; justify-content:flex-start;">
+          ${idx + 1}. ${opt.ja}
+        </button>
+      `).join('')}
+    </div>
+    <div id="quiz-feedback-box" style="margin-top:10px; display:none;"></div>
+  `;
+}
+
+function submitQuizAnswer(chosenIdx) {
+  if (!activeQuiz || activeQuiz.answered) return;
+  activeQuiz.answered = true;
+
+  const chosen = activeQuiz.options[chosenIdx];
+  const isCorrect = chosen.id === activeQuiz.target.id;
+  const feedback = document.getElementById('quiz-feedback-box');
+
+  const chosenBtn = document.getElementById('quiz-opt-' + chosenIdx);
+  if (isCorrect) {
+    if (chosenBtn) chosenBtn.style.background = '#e8f5e9';
+    if (feedback) {
+      feedback.style.display = 'block';
+      feedback.innerHTML = `<div style="color:#2e7d32; font-weight:700; font-size:0.9rem;">🎉 太棒了！答對囉！</div>
+        <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()" style="margin-top:6px;">下一題 ➔</button>`;
+    }
+  } else {
+    if (chosenBtn) chosenBtn.style.background = '#ffebee';
+    if (feedback) {
+      feedback.style.display = 'block';
+      feedback.innerHTML = `<div style="color:#c62828; font-weight:700; font-size:0.9rem;">❌ 答錯囉！正確答案是：${activeQuiz.target.ja} (${escapeHtml(activeQuiz.target.zh)})</div>
+        <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()" style="margin-top:6px;">再試一題 ➔</button>`;
+    }
   }
 }
 

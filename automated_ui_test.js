@@ -176,23 +176,22 @@ assert(html.includes('saveVoiceSettings'), '包含自選聲線儲存功能函式
 assert(html.includes('populateVoiceList'), '包含設備語音清單動態載入函式 (populateVoiceList)');
 assert(html.includes('getSavedVoiceSettings'), '包含本機聲線偏好讀取函式 (getSavedVoiceSettings)');
 
-// 測試 12: 懸浮小浣熊 AI 助手 (透明背景、可拖曳、語音輸入、全網頁修訂)
-console.log('\n【測試 12：懸浮小浣熊 AI 助手】');
+// 測試 12: 懸浮小浣熊實戰工作台與 Apple 輪盤手勢
+console.log('\n【測試 12：懸浮小浣熊實戰工作台與 Apple 輪盤手勢】');
 assert(html.includes('id="floating-raccoon-widget"'), '包含懸浮小浣熊元件 (floating-raccoon-widget)');
 assert(html.includes('photos/raccoon_pet.png'), '使用新版透明背景小浣熊圖檔 (raccoon_pet.png)');
-assert(html.includes('id="modal-raccoon-chat"'), '包含小浣熊雙擊對話視窗 (modal-raccoon-chat)');
+assert(html.includes('id="modal-raccoon-dashboard"'), '包含小浣熊全功能工作台抽屜 (modal-raccoon-dashboard)');
 assert(html.includes('initFloatingRaccoon'), '包含小浣熊拖曳與手勢初始化函式 (initFloatingRaccoon)');
-assert(html.includes('startRaccoonVoice'), '包含小浣熊語音輸入函式 (startRaccoonVoice)');
-assert(html.includes('openRaccoonChatModal'), '包含雙擊開啟對話窗函式 (openRaccoonChatModal)');
+assert(html.includes('toggleMemoRecording'), '包含小浣熊語音 Memo 錄音函式 (toggleMemoRecording)');
+assert(html.includes('openRaccoonDashboard'), '包含開啟小浣熊工作台函式 (openRaccoonDashboard)');
+assert(html.includes('openRaccoonRadialMenu'), '包含開啟 Apple 輪盤選單函式 (openRaccoonRadialMenu)');
 assert(html.includes('updateRaccoonVisibility'), '包含跨頁面顯示/隱藏控制函式 (updateRaccoonVisibility)');
-assert(html.includes('executeRaccoonAction'), '包含小浣熊全網頁資料修訂執行函式 (executeRaccoonAction)');
 
 // 測試 13: Google Gemini API Key 設定與智慧離線大腦
 console.log('\n【測試 13：Gemini API Key 設定與離線智慧知識庫】');
 assert(html.includes('id="setting-gemini-api-key"'), '包含 Gemini API Key 設定輸入框 (setting-gemini-api-key)');
 assert(html.includes('saveGeminiApiKeySetting'), '包含儲存 API Key 函式 (saveGeminiApiKeySetting)');
 assert(html.includes('testGeminiApiKeyConnection'), '包含測試 API Key 連線函式 (testGeminiApiKeyConnection)');
-assert(html.includes('getLocalRaccoonKnowledgeReply'), '包含小浣熊離線智慧知識庫函式 (getLocalRaccoonKnowledgeReply)');
 assert(html.includes('getLocalRoleplaySimulation'), '包含情境模擬離線智慧對話引擎 (getLocalRoleplaySimulation)');
 assert(html.includes('赤牛') && html.includes('akaushi.jpg'), '生鮮名物：阿蘇赤牛 (赤牛・附現場實拍照)');
 assert(html.includes('callGeminiApiUnified'), '包含統一 Gemini API 調用函式 (callGeminiApiUnified)');
@@ -218,6 +217,21 @@ assert(html.includes('id="lightbox-points-wrap"'), '照片詳情彈窗包含文�
 assert(html.includes('id="lightbox-tips-wrap"'), '照片詳情彈窗包含職場應對叮嚀容器 (lightbox-tips-wrap)');
 assert(html.includes('入っていないシロップ') && html.includes('でございます'), '風味糖漿對話包含文法解析與單字拆解');
 
+// 測試 17: 小浣熊 6 大實戰工作台與 Apple 輪盤選單
+console.log('\n【測試 17：小浣熊 6 大實戰工作台與 Apple 輪盤選單】');
+assert(html.includes('id="raccoon-radial-overlay"'), '包含 Apple 輪盤遮罩 (raccoon-radial-overlay)');
+assert(html.includes('id="raccoon-radial-menu"'), '包含 Apple 輪盤選單 (raccoon-radial-menu)');
+assert(html.includes('id="raccoon-timer-badge"'), '包含小浣熊頭頂計時徽章 (raccoon-timer-badge)');
+assert(html.includes('id="modal-raccoon-dashboard"'), '包含小浣熊半屏實戰工作台抽屜 (modal-raccoon-dashboard)');
+assert(html.includes('copyAllMemosToClipboard'), '包含語音 Memo「一鍵複製給工程師」函式 (copyAllMemosToClipboard)');
+assert(html.includes('setRaccoonTimerPreset'), '包含料理與出餐多段計時器預設函式 (setRaccoonTimerPreset)');
+assert(html.includes('runFuzzyGuess'), '包含抗雜音・碎詞模糊猜測引擎函式 (runFuzzyGuess)');
+assert(html.includes('drawRandomPracticeSentence'), '包含 300 句現場實戰句庫隨抽隨學函式 (drawRandomPracticeSentence)');
+assert(html.includes('executeSilentTranslate'), '包含「我想說這句話」靜音大字轉日文函式 (executeSilentTranslate)');
+assert(html.includes('renderYusaiLandmarks'), '包含優彩館內地標指引函式 (renderYusaiLandmarks)');
+assert(html.includes('startRaccoonQuickQuiz'), '包含 3 題單字情境快問快答函式 (startRaccoonQuickQuiz)');
+assert(html.includes('PRACTICE_SENTENCES_BANK') && html.includes('FUZZY_KITCHEN_GUESS_DICT'), '內建 300 句現場實戰句庫與 40+ 碎詞模糊資料庫');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -225,5 +239,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊AI與API設定測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大實戰工作台與 Apple 輪盤選單測試 100% 全部通過！');
 }
