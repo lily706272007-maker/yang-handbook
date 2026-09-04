@@ -1435,9 +1435,27 @@
       <img id="lightbox-img" src="" alt="" />
     </div>
     <div id="lightbox-caption" style="margin-top:14px; text-align:center;">
-      <div id="lightbox-ja" style="font-size:1.2rem; font-weight:700; color:var(--primary); font-family:var(--font-serif);"></div>
+      <div id="lightbox-ja" style="font-size:1.2rem; font-weight:700; color:var(--primary); font-family:var(--font-serif); cursor:pointer;" title="點擊朗讀日文 🔊"></div>
       <div id="lightbox-zh" style="font-size:0.95rem; color:var(--ink); margin-top:4px; font-weight:600;"></div>
       <div id="lightbox-note" style="font-size:0.8rem; color:var(--muted); margin-top:2px;"></div>
+    </div>
+
+    <!-- 📚 關鍵單字與語彙 -->
+    <div id="lightbox-vocabs-wrap" style="display:none; margin-top:14px; text-align:left;">
+      <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:6px;">📚 關鍵單字與語彙：</div>
+      <div id="lightbox-vocabs-container" style="display:flex; flex-direction:column; gap:4px;"></div>
+    </div>
+
+    <!-- 💡 文法重點與句型解析 -->
+    <div id="lightbox-points-wrap" style="display:none; margin-top:12px; text-align:left;">
+      <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:6px;">💡 文法重點與句型解析：</div>
+      <div id="lightbox-points-container" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </div>
+
+    <!-- 📌 職場實戰筆記 -->
+    <div id="lightbox-tips-wrap" style="display:none; margin-top:12px; text-align:left; background:rgba(92,61,30,0.06); border-left:3px solid var(--primary); border-radius:0 8px 8px 0; padding:10px; font-size:0.82rem; color:var(--ink); line-height:1.6;">
+      <div style="font-weight:700; color:var(--primary); margin-bottom:2px;">📌 職場實戰與應對叮嚀：</div>
+      <div id="lightbox-tips-text"></div>
     </div>
     <div class="modal-footer" style="margin-top:16px;">
       <button class="btn btn-primary" id="lightbox-speak-btn">朗讀日文</button>
@@ -1544,7 +1562,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v57';
+const STORAGE_KEY = 'yang_runner_handbook_v58';
 
 function createRealRunnerData() {
   return {
@@ -2713,16 +2731,205 @@ function createRealRunnerData() {
     { "id": "vs_10", "ja": "フロント", "zh": "櫃檯接待人員", "cat": "職稱", "imageUrl": "", "note": "大廳辦理入住與退房" },
 
     // ── 💬 對話類 ──
-    { "id": "vc_1", "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。", "zh": "廚房出菜通報「做好了」時，請立即前往領取。", "cat": "對話", "imageUrl": "", "note": "取菜SOP" },
-    { "id": "vc_2", "ja": "<ruby>現場<rt>げんば</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、インカムで「〇〇〇〇<ruby>番<rt>ばん</rt></ruby>、〇〇<ruby>届<rt>とど</rt></ruby>きました」と<ruby>通報<rt>つうほう</rt></ruby>します。", "zh": "送達現場後用無線電通報「〇〇桌，〇〇送達」。", "cat": "對話", "imageUrl": "", "note": "送達通報SOP" },
-    { "id": "vc_3", "ja": "<ruby>料理<rt>りょうり</rt></ruby>がない<ruby>時<rt>とき</rt></ruby>は、インカムで<ruby>厨房<rt>ちゅうぼう</rt></ruby>に「〇〇がありません」と<ruby>連絡<rt>れんらく</rt></ruby>します。", "zh": "缺菜時，立即以無線電通報廚房「〇〇沒有了」。", "cat": "對話", "imageUrl": "", "note": "缺菜通報SOP" },
-    { "id": "vc_4", "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？", "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？", "cat": "對話", "imageUrl": "", "note": "收桌巡桌詢問" },
-    { "id": "vc_5", "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。", "zh": "這是無酒精的風味糖漿。", "cat": "對話", "imageUrl": "./photos/IMG_0884.jpg", "note": "酒水應答" },
-    { "id": "vc_6", "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。", "zh": "這是無酒精啤酒（0.00%），請安心飲用。", "cat": "對話", "imageUrl": "./photos/IMG_0890.jpg", "note": "酒水應答" },
-    { "id": "vc_7", "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。", "zh": "讓您久等了（端菜給等候客人）。", "cat": "對話", "imageUrl": "", "note": "端菜敬語" },
-    { "id": "vc_8", "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。", "zh": "我把〇〇撤下去（送回廚房補充）。", "cat": "對話", "imageUrl": "", "note": "撤盤通報" },
-    { "id": "vc_9", "ja": "お<ruby>通<rt>とお</rt></ruby>りします！/ <ruby>失礼<rt>しつれい</rt></ruby>します！", "zh": "借過一下！（推餐車提醒同仁與客人）", "cat": "對話", "imageUrl": "", "note": "推車提醒" },
-    { "id": "vc_10", "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。", "zh": "您太客氣了，請慢慢享用。", "cat": "對話", "imageUrl": "", "note": "客人道謝時回覆" }
+    {
+      "id": "vc_1",
+      "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「できました」と<ruby>言<rt>い</rt></ruby>われるので<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。",
+      "zh": "廚房出菜通報「做好了」時，請立即前往領取。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "取菜SOP",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>料理<rt>りょうり</rt></ruby>", "zh": "料理、菜餚" },
+          { "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>", "zh": "廚房、內場" },
+          { "ja": "<ruby>言<rt>い</rt></ruby>われる", "zh": "被告知、被說（言動被動態）" },
+          { "ja": "<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>く", "zh": "前往拿取" }
+        ],
+        "points": [
+          { "title": "【〜たら (條件假定)】できたら", "desc": "表示「當…做好之後」，料理一出爐立刻動身。" },
+          { "title": "【動詞連用形＋に行く】取りに行く", "desc": "表示移動目的，「去拿/去取」。" }
+        ],
+        "tips": "廚房喊「できました！」時，應答「すぐ取りに伺います！」並帶著布巾立刻前往取餐。"
+      }
+    },
+    {
+      "id": "vc_2",
+      "ja": "<ruby>現場<rt>げんば</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、インカムで「〇〇〇〇<ruby>番<rt>ばん</rt></ruby>、〇〇<ruby>届<rt>とど</rt></ruby>きました」と<ruby>通報<rt>つうほう</rt></ruby>します。",
+      "zh": "送達現場後用無線電通報「〇〇桌，〇〇送達」。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "送達通報SOP",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>現場<rt>げんば</rt></ruby>", "zh": "現場、餐廳現場" },
+          { "ja": "<ruby>着<rt>つ</rt></ruby>く", "zh": "抵達、到達" },
+          { "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機" },
+          { "ja": "<ruby>届<rt>とど</rt></ruby>く", "zh": "送達、送到" }
+        ],
+        "points": [
+          { "title": "【〜に到着する/着く】現場に着いたら", "desc": "抵達目的地時使用助詞「に」。" },
+          { "title": "【引用助詞「と」＋通報する】", "desc": "「〇〇届きました」＋と通報します，表示通報的內容。" }
+        ],
+        "tips": "推車送到餐廳後，立刻按住無線電發話鍵，清楚報出桌號與菜名，讓外場夥伴掌握出餐進度。"
+      }
+    },
+    {
+      "id": "vc_3",
+      "ja": "<ruby>料理<rt>りょうり</rt></ruby>がない<ruby>時<rt>とき</rt></ruby>は、インカムで<ruby>厨房<rt>ちゅうぼう</rt></ruby>に「〇〇がありません」と<ruby>連絡<rt>れんらく</rt></ruby>します。",
+      "zh": "缺菜時，立即以無線電通報廚房「〇〇沒有了」。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "缺菜通報SOP",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>料理<rt>りょうり</rt></ruby>", "zh": "料理、菜品" },
+          { "ja": "<ruby>時<rt>とき</rt></ruby>", "zh": "時候、當…之時" },
+          { "ja": "<ruby>連絡<rt>れんらく</rt></ruby>する", "zh": "聯絡、通知" }
+        ],
+        "points": [
+          { "title": "【〜ない時は (否定名詞修飾)】", "desc": "「料理がない時は」表示菜餚見底沒有的時候。" },
+          { "title": "【対象助詞「に」】厨房に連絡する", "desc": "向對象（廚房）聯絡發話。" }
+        ],
+        "tips": "發現餐檯菜品剩餘不到兩份時，提前用無線電向廚房通報「〇〇が少なくなりました/ありません」，留給內場備菜時間。"
+      }
+    },
+    {
+      "id": "vc_4",
+      "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
+      "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "收桌巡桌詢問",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします", "zh": "不好意思打擾了（最上級敬語）" },
+          { "ja": "こちら", "zh": "這裡、這個（敬語代名詞）" },
+          { "ja": "お<ruby>皿<rt>さら</rt></ruby>", "zh": "盤子、餐盤（美化語）" },
+          { "ja": "お<ruby>下<rt>さ</rt></ruby>げする", "zh": "撤收餐盤（謙讓語）" },
+          { "ja": "よろしいでしょうか", "zh": "可以嗎？（いいですか的極致敬語）" }
+        ],
+        "points": [
+          { "title": "【お＋動詞連用形＋する (謙讓語)】お下げする", "desc": "收走客人餐盤時使用「お下げする」，表示對客人的敬意。" },
+          { "title": "【〜てもよろしいでしょうか (徵詢許可最高敬語)】", "desc": "極度禮貌地詢問「請問可以為您收走嗎？」。" }
+        ],
+        "tips": "靠近餐桌先微鞠躬並說「失礼いたします」，確認客人停筷後再輕聲詢問收盤。"
+      }
+    },
+    {
+      "id": "vc_5",
+      "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。",
+      "zh": "這是無酒精的風味糖漿。",
+      "cat": "對話",
+      "imageUrl": "./photos/IMG_0884.jpg",
+      "note": "酒水應答",
+      "grammar": {
+        "vocabs": [
+          { "ja": "こちらは", "zh": "這個是（敬語指代詞）" },
+          { "ja": "アルコール", "zh": "酒精 (Alcohol)" },
+          { "ja": "<ruby>入<rt>はい</rt></ruby>っていない", "zh": "沒有含、沒有加入（入る的否定修飾）" },
+          { "ja": "<ruby>シロップ<rt>siroppu</rt></ruby>", "zh": "風味糖漿 (Syrup)" },
+          { "ja": "でございます", "zh": "是（です的最高級鄭重語）" }
+        ],
+        "points": [
+          { "title": "【動詞否定形＋名詞 (連體修飾)】入っていないシロップ", "desc": "用「入っていない」直接修飾後面的「シロップ」，表示「不含酒精的糖漿」。" },
+          { "title": "【断定助動詞「です」之鄭重語】でございます", "desc": "日本飯店餐飲外場最標準的陳述句尾，比「です」更加高雅得體。" }
+        ],
+        "tips": "客人看到七彩糖漿常會以為是調酒糖漿，務必親切說明「這是無酒精的風味糖漿，可以搭配碳酸水（炭酸）自由調製無酒精飲品」！"
+      }
+    },
+    {
+      "id": "vc_6",
+      "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。",
+      "zh": "這是無酒精啤酒（0.00%），請安心飲用。",
+      "cat": "對話",
+      "imageUrl": "./photos/IMG_0890.jpg",
+      "note": "酒水應答",
+      "grammar": {
+        "vocabs": [
+          { "ja": "ノンアルコールビール", "zh": "無酒精啤酒 (Non-alcoholic beer)" },
+          { "ja": "でございます", "zh": "是（最高級鄭重語）" },
+          { "ja": "<ruby>安心<rt>あんしん</rt></ruby>して", "zh": "安心地、放心地下" },
+          { "ja": "ご<ruby>利用<rt>りよう</rt></ruby>ください", "zh": "請享用、請飲用（尊敬語）" }
+        ],
+        "points": [
+          { "title": "【て形副詞化】安心して", "desc": "修飾後面的動作「請安心地享用」。" },
+          { "title": "【ご＋サ変名詞＋ください (尊敬語)】ご利用ください", "desc": "懇請客人享用或使用的優雅敬語句型。" }
+        ],
+        "tips": "向開車或不喝酒的客人推薦 Suntory ALL-FREE 罐裝無酒精啤酒時的標準應答。"
+      }
+    },
+    {
+      "id": "vc_7",
+      "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。",
+      "zh": "讓您久等了（端菜給等候客人）。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "端菜敬語",
+      "grammar": {
+        "vocabs": [
+          { "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました", "zh": "讓您久等了（端菜給等候客人）" }
+        ],
+        "points": [
+          { "title": "【お＋動詞連用形＋いただく】お待たせいたしました的同等敬意", "desc": "感謝客人在餐檯前耐心等候出餐。" }
+        ],
+        "tips": "將剛出爐的料理端上餐檯、補給在旁等候的客人時，微笑注視客人並說出此句。"
+      }
+    },
+    {
+      "id": "vc_8",
+      "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。",
+      "zh": "我把〇〇撤下去（送回廚房補充）。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "撤盤通報",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>下<rt>さ</rt></ruby>げる", "zh": "撤下、撤走" }
+        ],
+        "points": [
+          { "title": "【他動詞＋ます】〇〇を下げます", "desc": "把餐檯上見底的空盤或料理盤撤下送回廚房時的口頭通報。" }
+        ],
+        "tips": "撤盤時向外場夥伴或廚房師傅簡明扼要通報，讓內場知道要清洗或更換。"
+      }
+    },
+    {
+      "id": "vc_9",
+      "ja": "お<ruby>通<rt>とお</rt></ruby>りします！/ <ruby>失礼<rt>しつれい</rt></ruby>します！",
+      "zh": "借過一下！（推餐車提醒同仁與客人）",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "推車提醒",
+      "grammar": {
+        "vocabs": [
+          { "ja": "お<ruby>通<rt>とお</rt></ruby>りします", "zh": "我要通過了、借過一下（謙讓語）" },
+          { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>します", "zh": "不好意思、失禮了" }
+        ],
+        "points": [
+          { "title": "【お＋動詞連用形＋する (謙讓語)】お通りします", "desc": "推餐車或端重物穿梭走道時的標準防撞通報。" }
+        ],
+        "tips": "推推車出入廚房門簾或在走道過彎時，大聲、清楚通報，確保安全。"
+      }
+    },
+    {
+      "id": "vc_10",
+      "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります。ごゆっくりどうぞ。",
+      "zh": "您太客氣了，請慢慢享用。",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "客人道謝時回覆",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります", "zh": "您太客氣了、不敢當（比ありがとう更尊貴）" },
+          { "ja": "ごゆっくり", "zh": "請放鬆慢慢享受" },
+          { "ja": "どうぞ", "zh": "請" }
+        ],
+        "points": [
+          { "title": "【恐縮・感謝頂級敬語】恐れ入ります", "desc": "客人向你說「謝謝」時，旅館外場最顯質感的優雅回覆。" },
+          { "title": "【祝願句】ごゆっくりどうぞ", "desc": "祝客人放鬆、悠閒享受美食與溫泉時光。" }
+        ],
+        "tips": "客人向你道謝時，微微欠身並微笑回答此句，展現日本頂級服務水準。"
+      }
+    }
   ],
   "scenarios": [
     {
@@ -3315,6 +3522,9 @@ function openWordDetailModal(id) {
       if (item) break;
     }
   }
+  if (!item && AppData.vocabConv) {
+    item = AppData.vocabConv.find(v => v.id === id);
+  }
   if (!item) return;
 
   const modal = document.getElementById('modal-photo-lightbox');
@@ -3325,10 +3535,16 @@ function openWordDetailModal(id) {
   const noteEl = document.getElementById('lightbox-note');
   const titleText = document.getElementById('lightbox-title-text');
   const speakBtn = document.getElementById('lightbox-speak-btn');
+  const vocabsWrap = document.getElementById('lightbox-vocabs-wrap');
+  const vocabsCont = document.getElementById('lightbox-vocabs-container');
+  const pointsWrap = document.getElementById('lightbox-points-wrap');
+  const pointsCont = document.getElementById('lightbox-points-container');
+  const tipsWrap = document.getElementById('lightbox-tips-wrap');
+  const tipsText = document.getElementById('lightbox-tips-text');
 
   if (!modal) return;
 
-  // 1. 開啟時立即清空舊圖並隱藏容器，徹底解決串圖片問題
+  // 1. 開啟時立即清空舊圖並隱藏容器
   if (imgEl) {
     imgEl.src = '';
     imgEl.style.display = 'none';
@@ -3338,7 +3554,13 @@ function openWordDetailModal(id) {
   }
 
   const hasPhoto = !!(item.imageUrl && item.imageUrl.trim() && item.cat !== '名字' && item.cat !== '職稱');
-  if (titleText) titleText.textContent = hasPhoto ? '📷 實拍照與詳細說明' : '📖 單字詳情與說明';
+  if (titleText) {
+    if (item.cat === '對話' || item.type === 'dialog' || item.grammar) {
+      titleText.textContent = hasPhoto ? '📷 實拍照與對話文法詳解' : '💬 對話應答與文法詳解';
+    } else {
+      titleText.textContent = hasPhoto ? '📷 實拍照與詳細說明' : '📖 單字詳情與說明';
+    }
+  }
 
   if (hasPhoto && imgEl && imgWrap) {
     imgEl.onload = function() {
@@ -3354,9 +3576,66 @@ function openWordDetailModal(id) {
     imgEl.src = item.imageUrl;
   }
 
-  if (jaEl) jaEl.innerHTML = item.ja || '';
+  if (jaEl) {
+    jaEl.innerHTML = (item.ja || '') + ' <span style="font-size:0.8rem; color:var(--primary); font-weight:normal;">🔊</span>';
+    jaEl.style.cursor = 'pointer';
+    jaEl.title = '點擊發音 🔊';
+    jaEl.onclick = () => {
+      speakJapanese(item.ja || item.zh);
+      showToast('🔊 正在朗讀日文句子…');
+    };
+  }
   if (zhEl) zhEl.textContent = item.zh || '';
   if (noteEl) noteEl.textContent = item.note ? ('💡 說明：' + item.note) : '';
+
+  // 2. 渲染關鍵單字
+  if (vocabsWrap && vocabsCont) {
+    const vocabsList = item.grammar?.vocabs || [];
+    if (vocabsList.length > 0) {
+      vocabsCont.innerHTML = '';
+      vocabsList.forEach(v => {
+        const row = document.createElement('div');
+        row.style.cssText = 'background:var(--surface); border-radius:8px; padding:6px 10px; display:flex; justify-content:space-between; align-items:center; font-size:0.83rem; cursor:pointer;';
+        row.title = '點擊發音 🔊';
+        row.onclick = () => {
+          speakJapanese(v.ja);
+          showToast('🔊 正在朗讀單字…');
+        };
+        row.innerHTML = `<span style="font-weight:700; color:var(--primary); font-size:1rem;">${v.ja}</span><span style="color:var(--muted); font-size:0.8rem;">${escapeHtml(v.zh)}</span>`;
+        vocabsCont.appendChild(row);
+      });
+      vocabsWrap.style.display = 'block';
+    } else {
+      vocabsWrap.style.display = 'none';
+    }
+  }
+
+  // 3. 渲染文法重點
+  if (pointsWrap && pointsCont) {
+    const pointsList = item.grammar?.points || [];
+    if (pointsList.length > 0) {
+      pointsCont.innerHTML = '';
+      pointsList.forEach(p => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:0.82rem; line-height:1.6;';
+        card.innerHTML = `<div style="font-weight:700; color:var(--accent); margin-bottom:2px;">${escapeHtml(p.title)}</div><div style="color:var(--ink);">${escapeHtml(p.desc)}</div>`;
+        pointsCont.appendChild(card);
+      });
+      pointsWrap.style.display = 'block';
+    } else {
+      pointsWrap.style.display = 'none';
+    }
+  }
+
+  // 4. 渲染職場實戰叮嚀
+  if (tipsWrap && tipsText) {
+    if (item.grammar?.tips) {
+      tipsText.textContent = item.grammar.tips;
+      tipsWrap.style.display = 'block';
+    } else {
+      tipsWrap.style.display = 'none';
+    }
+  }
 
   if (speakBtn) {
     speakBtn.onclick = () => speakJapanese(item.ja || item.zh);

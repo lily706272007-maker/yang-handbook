@@ -211,6 +211,13 @@ assert(html.includes('sc_colleague') && html.includes('同事工作與日常應�
 assert(html.includes('sc_stranger') && html.includes('陌生人/路人日常對話'), '情境清單結尾包含「陌生人/路人日常對話」');
 assert(!html.includes('sc_runner_ready') && !html.includes('廚房取餐與通報應答'), '已成功移除舊的「廚房取餐與通報應答」情境');
 
+// 測試 16: 對話與實拍照詳情彈窗包含單字與文法解析
+console.log('\n【測試 16：對話彈窗包含單字與文法解析】');
+assert(html.includes('id="lightbox-vocabs-wrap"'), '照片詳情彈窗包含關鍵單字容器 (lightbox-vocabs-wrap)');
+assert(html.includes('id="lightbox-points-wrap"'), '照片詳情彈窗包含文法重點容器 (lightbox-points-wrap)');
+assert(html.includes('id="lightbox-tips-wrap"'), '照片詳情彈窗包含職場應對叮嚀容器 (lightbox-tips-wrap)');
+assert(html.includes('入っていないシロップ') && html.includes('でございます'), '風味糖漿對話包含文法解析與單字拆解');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
