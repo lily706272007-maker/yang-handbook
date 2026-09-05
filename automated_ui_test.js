@@ -402,9 +402,17 @@ assert(html.includes('convertAllMemosToTraditional'), '包含「✨ 全轉繁體
 assert(html.includes('copySingleMemo'), '包含單則備忘「📋 複製單則」按鈕與函式');
 assert(html.includes('editMemoItem'), '備忘卡片文字與按鈕支援點擊即刻進入原地編輯修字模式');
 
+// 測試 26: 長語音一律儲存完整筆記，徹底移除冗餘模式切換選項 (v72)
+console.log('\n【測試 26：長語音一律儲存完整筆記・徹底移除模式切換選項 (v72)】');
+assert(!html.includes('id="memo-mode-smart"'), 'HTML 已徹底移除 memo-mode-smart 條列選項');
+assert(!html.includes('id="memo-mode-full"'), 'HTML 已徹底移除 memo-mode-full 選項');
+assert(!html.includes('name="memo-split-mode"'), 'HTML 已徹底移除 memo-split-mode 單選群組');
+assert(html.includes('finishAndSaveMemoRecording') && html.includes('text: fullText'), 'finishAndSaveMemoRecording 一律以 fullText 完整筆記模式存檔');
+assert(html.includes('btn.textContent = \'⏹️ 說完了，儲存完整筆記\''), '錄音按鈕狀態文字提示為「⏹️ 說完了，儲存完整筆記」');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v71'), 'Service Worker 快取版本已升級至 yang-pwa-v71');
-assert(html.includes('yang_runner_handbook_v71'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v71');
+assert(swContent.includes('yang-pwa-v72'), 'Service Worker 快取版本已升級至 yang-pwa-v72');
+assert(html.includes('yang_runner_handbook_v72'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v72');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -413,6 +421,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字 (v71)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
 }
 

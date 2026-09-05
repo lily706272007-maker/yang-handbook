@@ -1965,29 +1965,16 @@
 
           <!-- 即時動態逐字稿顯示視窗 (隨說隨顯示，支援長語音動態串流) -->
           <div id="memo-live-transcript-box" style="display:none; background:#fff; border:1.5px dashed var(--primary); border-radius:10px; padding:10px; margin-bottom:8px; font-size:0.85rem; line-height:1.5; max-height:120px; overflow-y:auto;">
-            <div style="font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; display:flex; justify-content:space-between;">
+            <div style="font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
               <span>🔴 實時錄音中（中途停頓不會中斷）：</span>
-              <span style="font-size:0.72rem; color:var(--muted);">說完點擊「⏹️ 說完了，智慧儲存」</span>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-size:0.72rem; color:var(--muted);">說完點擊「⏹️ 說完了，儲存完整筆記」</span>
+                <button class="btn btn-ghost btn-sm" id="btn-memo-cancel-recording" onclick="cancelMemoRecording()" style="display:none; font-size:0.72rem; padding:1px 6px; color:var(--accent);">✕ 取消</button>
+              </div>
             </div>
             <div id="memo-live-stream-text" style="color:var(--ink); font-weight:600;">
               <span id="memo-stream-final"></span><span id="memo-stream-interim" style="color:#888; font-style:italic;"></span>
             </div>
-          </div>
-
-          <!-- 儲存選項切換 (條列式 vs 整段) -->
-          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; padding-top:6px; border-top:1px dashed var(--border); font-size:0.78rem;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-weight:700; color:var(--muted);">長語音儲存模式：</span>
-              <label style="cursor:pointer; display:flex; align-items:center; gap:3px;">
-                <input type="radio" name="memo-split-mode" value="smart" checked id="memo-mode-smart" />
-                <span>🧠 智慧拆為條列待辦 (推薦)</span>
-              </label>
-              <label style="cursor:pointer; display:flex; align-items:center; gap:3px;">
-                <input type="radio" name="memo-split-mode" value="full" id="memo-mode-full" />
-                <span>📝 整段完整筆記</span>
-              </label>
-            </div>
-            <button class="btn btn-ghost btn-sm" id="btn-memo-cancel-recording" onclick="cancelMemoRecording()" style="display:none; font-size:0.72rem; padding:1px 6px; color:var(--accent);">✕ 取消錄音</button>
           </div>
         </div>
 
@@ -2435,7 +2422,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v71';
+const STORAGE_KEY = 'yang_runner_handbook_v72';
 
 function createRealRunnerData() {
   return {
@@ -8496,7 +8483,7 @@ function startMemoContinuousRecording() {
   if (liveBox) liveBox.style.display = 'block';
   if (cancelBtn) cancelBtn.style.display = 'inline-block';
   if (btn) {
-    btn.textContent = '⏹️ 說完了，智慧儲存';
+    btn.textContent = '⏹️ 說完了，儲存完整筆記';
     btn.classList.remove('btn-primary');
     btn.classList.add('btn-accent');
     btn.style.background = '#d9534f';
@@ -8575,34 +8562,19 @@ function finishAndSaveMemoRecording() {
     return;
   }
 
-  // 檢查儲存模式 (smart: 智慧條列待辦, full: 整段完整筆記)
-  const isSmartMode = document.getElementById('memo-mode-smart')?.checked ?? true;
+  // 一律以完整筆記儲存
   const memos = getRaccoonMemos();
   const d = new Date();
   const timeStr = (d.getMonth() + 1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
 
-  if (isSmartMode) {
-    const items = parseSpeechToMemoItems(fullText);
-    items.forEach((itemText, idx) => {
-      memos.unshift({
-        id: 'memo_' + (Date.now() + idx) + '_' + Math.floor(Math.random()*1000),
-        text: toTraditionalChinese(itemText),
-        time: timeStr,
-        checked: false
-      });
-    });
-    saveRaccoonMemos(memos);
-    showToast(`🎉 成功記錄並智慧拆解為 ${items.length} 則待辦備忘！`, 'success');
-  } else {
-    memos.unshift({
-      id: 'memo_' + Date.now() + '_' + Math.floor(Math.random()*1000),
-      text: fullText,
-      time: timeStr,
-      checked: false
-    });
-    saveRaccoonMemos(memos);
-    showToast('🎉 成功記錄完整備忘！', 'success');
-  }
+  memos.unshift({
+    id: 'memo_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+    text: fullText,
+    time: timeStr,
+    checked: false
+  });
+  saveRaccoonMemos(memos);
+  showToast('🎉 成功記錄完整備忘筆記！', 'success');
 }
 
 function cancelMemoRecording() {
