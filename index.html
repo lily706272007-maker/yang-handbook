@@ -2099,14 +2099,44 @@
         </div>
       </div>
 
-      <!-- 6. 🎮 隨機抽考（快問快答遊戲） -->
+      <!-- 6. 🎮 隨機抽考（用聽的 🎧 / 用看的 👀 雙版本） -->
       <div id="rtab-content-quiz" class="rtab-pane" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="font-weight:700; font-size:0.85rem; color:var(--primary);">🎮 隨機快問快答抽考</span>
-          <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()">🎲 換一題</button>
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-size:0.86rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:6px;">
+              <span>🎮 隨機抽考實戰測驗</span>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz(true)" style="font-weight:800; padding:4px 10px; font-size:0.78rem;">🎲 換一題</button>
+          </div>
+
+          <!-- 模式雙切換按鈕 (用聽的 🎧 vs 用看的 👀) -->
+          <div style="display:flex; background:rgba(0,0,0,0.06); padding:3px; border-radius:10px; gap:4px; margin-bottom:8px;">
+            <button class="btn btn-sm" id="btn-quiz-mode-listen" onclick="setQuizMode('listen')" style="flex:1; font-weight:800; font-size:0.82rem; border-radius:8px; border:none; padding:6px 0; transition:all 0.2s ease;">
+              🎧 聽力抽考 (用聽的)
+            </button>
+            <button class="btn btn-sm" id="btn-quiz-mode-read" onclick="setQuizMode('read')" style="flex:1; font-weight:800; font-size:0.82rem; border-radius:8px; border:none; padding:6px 0; transition:all 0.2s ease;">
+              👀 看題抽考 (用看的)
+            </button>
+          </div>
+
+          <!-- 題庫分類篩選 -->
+          <div style="display:flex; gap:4px; overflow-x:auto; padding-bottom:2px; margin-bottom:6px;">
+            <button class="btn btn-sm btn-primary quiz-cat-btn" id="qfilter-all" onclick="setQuizCategory('all')" style="font-size:0.75rem; padding:2px 8px; flex-shrink:0;">🌟 全部混合</button>
+            <button class="btn btn-sm btn-ghost quiz-cat-btn" id="qfilter-food" onclick="setQuizCategory('食材餐點')" style="font-size:0.75rem; padding:2px 8px; flex-shrink:0;">🥦 食材餐點</button>
+            <button class="btn btn-sm btn-ghost quiz-cat-btn" id="qfilter-tableware" onclick="setQuizCategory('餐具器具')" style="font-size:0.75rem; padding:2px 8px; flex-shrink:0;">🍽️ 餐具器具</button>
+            <button class="btn btn-sm btn-ghost quiz-cat-btn" id="qfilter-sentence" onclick="setQuizCategory('實戰對話句')" style="font-size:0.75rem; padding:2px 8px; flex-shrink:0;">💬 實戰對話句</button>
+          </div>
+
+          <!-- 計分板 -->
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--muted); border-top:1px dashed var(--border); padding-top:6px;">
+            <div id="quiz-streak-counter" style="font-weight:700; color:var(--accent);">🔥 連對：0 題</div>
+            <div id="quiz-score-counter" style="font-weight:700; color:var(--ink);">📊 成績：0 / 0 題</div>
+            <button class="btn btn-ghost btn-sm" onclick="resetQuizStats()" style="font-size:0.7rem; padding:1px 6px; color:var(--muted);">重置</button>
+          </div>
         </div>
-        <div id="quiz-game-container" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px;">
-          <!-- 快問快答題目 -->
+
+        <div id="quiz-game-container" style="background:#fff; border:1.5px solid var(--primary); border-radius:14px; padding:14px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+          <!-- 題目卡片動態渲染 -->
         </div>
       </div>
 
@@ -2435,7 +2465,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v75';
+const STORAGE_KEY = 'yang_runner_handbook_v76';
 
 function createRealRunnerData() {
   return {
@@ -9804,38 +9834,284 @@ function renderYusaiLandmarks() {
   `).join('');
 }
 
-// ── 6. 🎮 隨機抽考（快問快答遊戲）實作 ──
+// ── 6. 🎮 隨機抽考（用聽的 🎧 / 用看的 👀 雙版本）實作 ──
 let activeQuiz = null;
+let quizState = {
+  mode: (function() {
+    try {
+      return localStorage.getItem('yang_quiz_mode') || 'listen';
+    } catch(e) {
+      return 'listen';
+    }
+  })(),
+  category: 'all',
+  score: { correct: 0, total: 0, streak: 0 },
+  revealedHint: false
+};
 
-function startRaccoonQuickQuiz() {
+function setQuizMode(mode) {
+  quizState.mode = mode;
+  try {
+    localStorage.setItem('yang_quiz_mode', mode);
+  } catch(e) {}
+  updateQuizModeButtons();
+  startRaccoonQuickQuiz(true);
+}
+
+function updateQuizModeButtons() {
+  const btnListen = document.getElementById('btn-quiz-mode-listen');
+  const btnRead = document.getElementById('btn-quiz-mode-read');
+  if (btnListen && btnRead) {
+    if (quizState.mode === 'listen') {
+      btnListen.style.background = 'var(--primary)';
+      btnListen.style.color = '#fff';
+      btnListen.style.boxShadow = '0 2px 6px rgba(92,61,30,0.2)';
+      btnRead.style.background = 'transparent';
+      btnRead.style.color = 'var(--ink)';
+      btnRead.style.boxShadow = 'none';
+    } else {
+      btnRead.style.background = 'var(--primary)';
+      btnRead.style.color = '#fff';
+      btnRead.style.boxShadow = '0 2px 6px rgba(92,61,30,0.2)';
+      btnListen.style.background = 'transparent';
+      btnListen.style.color = 'var(--ink)';
+      btnListen.style.boxShadow = 'none';
+    }
+  }
+}
+
+function setQuizCategory(cat) {
+  quizState.category = cat;
+  document.querySelectorAll('.quiz-cat-btn').forEach(btn => {
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-ghost');
+  });
+  const map = {
+    'all': 'qfilter-all',
+    '食材餐點': 'qfilter-food',
+    '餐具器具': 'qfilter-tableware',
+    '實戰對話句': 'qfilter-sentence'
+  };
+  const activeBtn = document.getElementById(map[cat] || 'qfilter-all');
+  if (activeBtn) {
+    activeBtn.classList.remove('btn-ghost');
+    activeBtn.classList.add('btn-primary');
+  }
+  startRaccoonQuickQuiz(true);
+}
+
+function resetQuizStats() {
+  quizState.score = { correct: 0, total: 0, streak: 0 };
+  updateQuizStatsDisplay();
+  showToast('📊 計分已重置');
+}
+
+function updateQuizStatsDisplay() {
+  const streakEl = document.getElementById('quiz-streak-counter');
+  const scoreEl = document.getElementById('quiz-score-counter');
+  if (streakEl) {
+    streakEl.innerHTML = `🔥 連對：<strong>${quizState.score.streak}</strong> 題`;
+  }
+  if (scoreEl) {
+    const rate = quizState.score.total > 0 ? Math.round((quizState.score.correct / quizState.score.total) * 100) : 0;
+    scoreEl.innerHTML = `📊 成績：<strong>${quizState.score.correct} / ${quizState.score.total}</strong> (${rate}%)`;
+  }
+}
+
+function getQuizQuestionPool(category) {
+  const pool = [];
+
+  // 1. 單字庫 (餐點、餐具、食材、酒水、對話)
+  if (AppData && Array.isArray(AppData.vocabSop)) {
+    AppData.vocabSop.forEach(v => {
+      if (!v.ja || !v.zh) return;
+      let catGroup = '實戰對話句';
+      if (v.cat === '食材' || v.cat === '餐點') catGroup = '食材餐點';
+      else if (v.cat === '餐具') catGroup = '餐具器具';
+      else if (v.cat === '對話' || v.cat === 'SOP') catGroup = '實戰對話句';
+
+      pool.push({
+        id: 'vocab_' + v.id,
+        type: 'vocab',
+        cat: v.cat || '單字',
+        catGroup: catGroup,
+        ja: v.ja,
+        zh: v.zh,
+        spokenJa: extractSpokenJapanese(v.ja),
+        tips: v.desc || v.notes || ''
+      });
+    });
+  }
+
+  // 2. 300 句外場實戰句庫
+  if (typeof PRACTICE_SENTENCES_BANK !== 'undefined' && Array.isArray(PRACTICE_SENTENCES_BANK)) {
+    PRACTICE_SENTENCES_BANK.forEach((p, idx) => {
+      if (!p.ja || !p.zh) return;
+      let cleanZh = p.zh;
+      if (cleanZh.startsWith('【') && cleanZh.includes('】')) {
+        cleanZh = cleanZh.replace(/【.*?】/, '').trim();
+      }
+      pool.push({
+        id: 'sentence_' + idx,
+        type: 'sentence',
+        cat: p.cat || '實戰句',
+        catGroup: '實戰對話句',
+        ja: p.ja,
+        zh: cleanZh,
+        fullZh: p.zh,
+        title: p.title || '',
+        variants: p.variants || [],
+        spokenJa: extractSpokenJapanese(p.ja),
+        vocabs: p.vocabs || [],
+        points: p.points || [],
+        tips: p.tips || ''
+      });
+    });
+  }
+
+  if (category && category !== 'all') {
+    const filtered = pool.filter(item => item.catGroup === category || item.cat === category);
+    if (filtered.length >= 4) return filtered;
+  }
+  return pool;
+}
+
+function startRaccoonQuickQuiz(autoSpeak = true) {
   const container = document.getElementById('quiz-game-container');
-  if (!container || !AppData || !AppData.vocabSop) return;
+  if (!container) return;
 
-  const vocabs = AppData.vocabSop.filter(v => v.cat === '餐點' || v.cat === '餐具' || v.cat === '食材' || v.cat === '對話');
-  if (vocabs.length < 4) return;
+  updateQuizModeButtons();
+  updateQuizStatsDisplay();
 
-  // 隨機抽 1 題
-  const target = vocabs[Math.floor(Math.random() * vocabs.length)];
-  let wrongPool = vocabs.filter(v => v.id !== target.id);
+  const pool = getQuizQuestionPool(quizState.category);
+  if (!pool || pool.length < 4) {
+    container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:20px;">題庫資料準備中…</div>';
+    return;
+  }
+
+  // 隨機抽選 1 題 target
+  const target = pool[Math.floor(Math.random() * pool.length)];
+
+  // 挑選 3 個同類型或混排的錯誤選項 (選項中文意思不能與 target 重複)
+  let wrongCandidates = pool.filter(p => p.id !== target.id && p.zh !== target.zh);
+  let sameCatWrongs = wrongCandidates.filter(p => p.catGroup === target.catGroup);
+  let wrongPool = (sameCatWrongs.length >= 3 ? sameCatWrongs : wrongCandidates);
   wrongPool.sort(() => Math.random() - 0.5);
+
   const options = [target, wrongPool[0], wrongPool[1], wrongPool[2]].sort(() => Math.random() - 0.5);
 
-  activeQuiz = { target, options, answered: false };
+  activeQuiz = {
+    target: target,
+    options: options,
+    answered: false,
+    mode: quizState.mode
+  };
+  quizState.revealedHint = false;
 
-  container.innerHTML = `
-    <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:8px;">🎮 快問快答抽考：</div>
-    <div style="background:var(--surface); border-radius:8px; padding:10px; font-size:1.15rem; font-weight:800; color:var(--ink); text-align:center; margin-bottom:12px;">
-      請問「${escapeHtml(target.zh)}」的日語是？
-    </div>
-    <div style="display:flex; flex-direction:column; gap:6px;">
-      ${options.map((opt, idx) => `
-        <button class="btn btn-ghost btn-sm quiz-opt-btn" id="quiz-opt-${idx}" onclick="submitQuizAnswer(${idx})" style="text-align:left; padding:8px 12px; font-size:0.9rem; font-weight:700; justify-content:flex-start;">
-          ${idx + 1}. ${opt.ja}
-        </button>
-      `).join('')}
-    </div>
-    <div id="quiz-feedback-box" style="margin-top:10px; display:none;"></div>
-  `;
+  const isListenMode = quizState.mode === 'listen';
+
+  if (isListenMode) {
+    // 🎧 聽力模式 UI
+    container.innerHTML = `
+      <div style="text-align:center; padding:12px 6px; background:linear-gradient(135deg, rgba(92,61,30,0.06), rgba(217,119,6,0.08)); border-radius:12px; margin-bottom:12px; border:1px solid rgba(92,61,30,0.12);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:0.75rem; font-weight:800; background:rgba(92,61,30,0.08); color:var(--primary); padding:2px 8px; border-radius:10px;">
+            🏷️ ${target.cat}
+          </span>
+          <span style="font-size:0.72rem; color:var(--accent); font-weight:700;">🎧 盲聽實戰訓練</span>
+        </div>
+
+        <div style="margin:10px 0;">
+          <button class="btn btn-primary" onclick="playCurrentQuizAudio()" style="font-size:1.02rem; font-weight:800; padding:10px 22px; border-radius:30px; box-shadow:0 4px 12px rgba(92,61,30,0.25); display:inline-flex; align-items:center; gap:8px;">
+            <span style="font-size:1.2rem;">🔊</span> 再次聆聽題目
+          </button>
+        </div>
+
+        <div style="font-size:0.9rem; font-weight:800; color:var(--ink); margin-top:4px;">
+          請問你聽到的這段日語，意思是？
+        </div>
+
+        <div style="margin-top:8px;">
+          <button class="btn btn-ghost btn-sm" id="btn-quiz-reveal-hint" onclick="revealQuizListenHint()" style="font-size:0.72rem; color:var(--muted); padding:2px 8px;">
+            👁️ 偷看文字提示
+          </button>
+          <div id="quiz-listen-hint-box" style="display:none; font-size:1.15rem; font-family:var(--font-serif); color:var(--primary); font-weight:800; margin-top:6px; background:#fff; padding:6px 10px; border-radius:8px; border:1px dashed var(--primary); line-height:1.8;">
+            ${target.ja}
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:0.78rem; font-weight:800; color:var(--primary); margin-bottom:6px;">請選擇正確的中文意思：</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        ${options.map((opt, idx) => `
+          <button class="btn btn-ghost quiz-opt-btn" id="quiz-opt-${idx}" onclick="submitQuizAnswer(${idx})" style="text-align:left; padding:10px 12px; font-size:0.9rem; font-weight:700; justify-content:flex-start; border:1.5px solid var(--border); border-radius:10px; line-height:1.4; transition:all 0.15s ease;">
+            <span style="font-weight:800; color:var(--primary); margin-right:8px; width:20px;">${['A', 'B', 'C', 'D'][idx]}.</span>
+            <span>${escapeHtml(opt.zh)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="quiz-feedback-box" style="margin-top:10px; display:none;"></div>
+    `;
+
+    // 聽力模式自動發音
+    if (autoSpeak) {
+      setTimeout(() => {
+        playCurrentQuizAudio(true);
+      }, 150);
+    }
+  } else {
+    // 👀 看題模式 UI
+    container.innerHTML = `
+      <div style="background:var(--surface); border-radius:12px; padding:12px; margin-bottom:12px; text-align:center; border:1px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span style="font-size:0.75rem; font-weight:800; background:rgba(92,61,30,0.08); color:var(--primary); padding:2px 8px; border-radius:10px;">
+            🏷️ ${target.cat}
+          </span>
+          <button class="btn btn-ghost btn-sm" onclick="playCurrentQuizAudio()" style="font-size:0.75rem; padding:1px 6px;">🔊 朗讀</button>
+        </div>
+        <div style="font-size:1.25rem; font-weight:800; color:var(--primary); font-family:var(--font-serif); line-height:1.8; margin:4px 0; cursor:pointer;" onclick="playCurrentQuizAudio()">
+          ${target.ja} <span style="font-size:0.85rem;">🔊</span>
+        </div>
+        <div style="font-size:0.88rem; color:var(--ink); font-weight:700;">
+          請問上方日語的正確中文意思是？
+        </div>
+      </div>
+
+      <div style="font-size:0.78rem; font-weight:800; color:var(--primary); margin-bottom:6px;">請選擇正確答案：</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        ${options.map((opt, idx) => `
+          <button class="btn btn-ghost quiz-opt-btn" id="quiz-opt-${idx}" onclick="submitQuizAnswer(${idx})" style="text-align:left; padding:10px 12px; font-size:0.9rem; font-weight:700; justify-content:flex-start; border:1.5px solid var(--border); border-radius:10px; line-height:1.4; transition:all 0.15s ease;">
+            <span style="font-weight:800; color:var(--primary); margin-right:8px; width:20px;">${['A', 'B', 'C', 'D'][idx]}.</span>
+            <span>${escapeHtml(opt.zh)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="quiz-feedback-box" style="margin-top:10px; display:none;"></div>
+    `;
+  }
+}
+
+function playCurrentQuizAudio(isAuto = false) {
+  if (!activeQuiz || !activeQuiz.target) return;
+  const target = activeQuiz.target;
+  const text = target.spokenJa || target.ja;
+  speakJapanese(text);
+  if (!isAuto) {
+    showToast('🔊 正在播放考題語音…');
+  }
+}
+
+function revealQuizListenHint() {
+  const hintBox = document.getElementById('quiz-listen-hint-box');
+  const btn = document.getElementById('btn-quiz-reveal-hint');
+  if (!hintBox || !btn) return;
+  if (hintBox.style.display === 'none') {
+    hintBox.style.display = 'block';
+    btn.textContent = '🙈 隱藏文字提示';
+  } else {
+    hintBox.style.display = 'none';
+    btn.textContent = '👁️ 偷看文字提示';
+  }
 }
 
 function submitQuizAnswer(chosenIdx) {
@@ -9843,24 +10119,83 @@ function submitQuizAnswer(chosenIdx) {
   activeQuiz.answered = true;
 
   const chosen = activeQuiz.options[chosenIdx];
-  const isCorrect = chosen.id === activeQuiz.target.id;
+  const target = activeQuiz.target;
+  const isCorrect = chosen.id === target.id;
   const feedback = document.getElementById('quiz-feedback-box');
 
-  const chosenBtn = document.getElementById('quiz-opt-' + chosenIdx);
+  // 更新計分
+  quizState.score.total++;
   if (isCorrect) {
-    if (chosenBtn) chosenBtn.style.background = '#e8f5e9';
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.innerHTML = `<div style="color:#2e7d32; font-weight:700; font-size:0.9rem;">🎉 太棒了！答對囉！</div>
-        <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()" style="margin-top:6px;">下一題 ➔</button>`;
-    }
+    quizState.score.correct++;
+    quizState.score.streak++;
   } else {
-    if (chosenBtn) chosenBtn.style.background = '#ffebee';
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.innerHTML = `<div style="color:#c62828; font-weight:700; font-size:0.9rem;">❌ 答錯囉！正確答案是：${activeQuiz.target.ja} (${escapeHtml(activeQuiz.target.zh)})</div>
-        <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()" style="margin-top:6px;">再試一題 ➔</button>`;
+    quizState.score.streak = 0;
+  }
+  updateQuizStatsDisplay();
+
+  // 標記選項按鈕狀態
+  activeQuiz.options.forEach((opt, idx) => {
+    const btn = document.getElementById('quiz-opt-' + idx);
+    if (!btn) return;
+    btn.disabled = true;
+    btn.style.cursor = 'default';
+    if (opt.id === target.id) {
+      btn.style.background = '#e8f5e9';
+      btn.style.borderColor = '#2e7d32';
+      btn.style.color = '#1b5e20';
+      btn.innerHTML += ' <span style="margin-left:auto; font-size:0.8rem; font-weight:800; color:#2e7d32;">✓ 正確答案</span>';
+    } else if (idx === chosenIdx && !isCorrect) {
+      btn.style.background = '#ffebee';
+      btn.style.borderColor = '#c62828';
+      btn.style.color = '#b71c1c';
+      btn.innerHTML += ' <span style="margin-left:auto; font-size:0.8rem; font-weight:800; color:#c62828;">✗ 你的選擇</span>';
     }
+  });
+
+  if (feedback) {
+    feedback.style.display = 'block';
+    let extraInfoHtml = '';
+    if (Array.isArray(target.points) && target.points.length > 0) {
+      extraInfoHtml += `
+        <div style="margin-top:6px; font-size:0.78rem; background:#fbfbfb; border:1px solid var(--border); border-radius:6px; padding:6px 8px;">
+          <div style="font-weight:800; color:var(--primary); margin-bottom:2px;">💡 文法重點：</div>
+          ${target.points.map(p => `<div><strong style="color:var(--accent);">${escapeHtml(p.title)}</strong> ${escapeHtml(p.desc)}</div>`).join('')}
+        </div>
+      `;
+    } else if (target.tips) {
+      extraInfoHtml += `
+        <div style="margin-top:6px; font-size:0.78rem; color:var(--muted);">
+          📌 說明：${escapeHtml(target.tips)}
+        </div>
+      `;
+    }
+
+    feedback.innerHTML = `
+      <div style="background:var(--bg-card); border:1.5px solid ${isCorrect ? '#2e7d32' : '#c62828'}; border-radius:12px; padding:12px; box-shadow:0 3px 10px rgba(0,0,0,0.06);">
+        <div style="font-size:1rem; font-weight:800; color:${isCorrect ? '#2e7d32' : '#c62828'}; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span>${isCorrect ? '🎉 太棒了！答對囉！' : '❌ 答錯囉！請記住正確說法'}</span>
+          ${isCorrect && quizState.score.streak > 1 ? `<span style="font-size:0.75rem; background:#fff3e0; color:#e65100; padding:2px 8px; border-radius:10px; font-weight:800;">🔥 連勝 ${quizState.score.streak} 題</span>` : ''}
+        </div>
+
+        <div style="background:#fff; border-radius:8px; padding:10px; border:1px solid var(--border); margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; color:var(--muted); font-weight:700;">標準日語：</span>
+            <button class="btn btn-ghost btn-sm" onclick="playCurrentQuizAudio()" style="font-size:0.78rem; padding:2px 8px; color:var(--primary);">🔊 再次朗讀</button>
+          </div>
+          <div style="font-size:1.25rem; font-weight:800; color:var(--primary); font-family:var(--font-serif); line-height:1.8; margin:4px 0; cursor:pointer;" onclick="playCurrentQuizAudio()">
+            ${target.ja}
+          </div>
+          <div style="font-size:0.9rem; font-weight:700; color:var(--ink);">
+            💡 中文：${escapeHtml(target.zh)}
+          </div>
+          ${extraInfoHtml}
+        </div>
+
+        <button class="btn btn-primary" onclick="startRaccoonQuickQuiz(true)" style="width:100%; font-weight:800; padding:10px; font-size:0.95rem; border-radius:10px; box-shadow:0 3px 8px rgba(92,61,30,0.2);">
+          ${isCorrect ? '下一題 ➔' : '再抽一題 ➔'}
+        </button>
+      </div>
+    `;
   }
 }
 

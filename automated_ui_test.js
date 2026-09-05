@@ -466,9 +466,22 @@ assert(html.includes('variants: [') && html.includes('① 標準口語') && html
 assert(html.includes('朗讀此句') && html.includes('朗讀全部 3 句'), 'UI 同時提供單句「🔊 朗讀此句」與整組「🔊 朗讀全部 3 句」');
 assert(html.includes('【名詞＋に戻す】') && html.includes('【〜といて（〜ておいて縮約）】') && html.includes('【名詞＋お願い】'), '文法重點全面升級為實用外場文法與口吻解析，不再重複列出三種說法');
 
+// 測試 30: 隨機抽考「聽力抽考 (用聽的 🎧)」與「看題抽考 (用看的 👀)」雙版本與題庫連擊計分 (v76)
+console.log('\n【測試 30：隨機抽考雙版本 (用聽的 🎧 / 用看的 👀)・自動發音・偷看提示・連擊計分 (v76)】');
+assert(html.includes('id="btn-quiz-mode-listen"') && html.includes('id="btn-quiz-mode-read"'), '介面包含「🎧 聽力抽考」與「👀 看題抽考」雙版本切換按鈕');
+assert(html.includes('function setQuizMode(mode)'), '包含抽考模式切換函式 (setQuizMode)');
+assert(html.includes('function updateQuizModeButtons()'), '包含模式按鈕外觀高亮更新函式 (updateQuizModeButtons)');
+assert(html.includes('function setQuizCategory(cat)'), '包含題庫分類切換函式 (setQuizCategory)');
+assert(html.includes('function getQuizQuestionPool(category)'), '包含單字與 300 句庫綜合題庫產生函式 (getQuizQuestionPool)');
+assert(html.includes('function playCurrentQuizAudio(isAuto = false)'), '包含考題語音播放函式 (playCurrentQuizAudio)');
+assert(html.includes('function revealQuizListenHint()'), '包含聽力模式「👁️ 偷看文字提示」切換函式 (revealQuizListenHint)');
+assert(html.includes('function resetQuizStats()') && html.includes('function updateQuizStatsDisplay()'), '包含抽考戰績重置與連擊分數看板更新函式 (resetQuizStats / updateQuizStatsDisplay)');
+assert(html.includes('id="quiz-streak-counter"') && html.includes('id="quiz-score-counter"'), 'UI 包含連勝紀錄與答對率計分板');
+assert(html.includes('id="qfilter-food"') && html.includes('id="qfilter-tableware"') && html.includes('id="qfilter-sentence"'), 'UI 包含食材餐點、餐具器具、實戰對話句等分類篩選');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v75'), 'Service Worker 快取版本已升級至 yang-pwa-v75');
-assert(html.includes('yang_runner_handbook_v75'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v75');
+assert(swContent.includes('yang-pwa-v76'), 'Service Worker 快取版本已升級至 yang-pwa-v76');
+assert(html.includes('yang_runner_handbook_v76'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v76');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -477,6 +490,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、「隨機抽考」用聽的 🎧 / 用看的 👀 雙版本切換・自動朗讀・偷看提示・連擊計分 (v76) 測試 100% 全部通過！');
 }
+
 
