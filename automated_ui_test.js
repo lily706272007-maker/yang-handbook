@@ -448,9 +448,19 @@ assert(kitchenResult.category.includes('出餐') || kitchenResult.category.inclu
 assert(runConversion('請打開頭部監測') === '請打開偷聽推測', '語音錯字「請打開頭部監測」智慧校正為「請打開偷聽推測」');
 assert(runConversion('頭部監控正在運作') === '偷聽推測正在運作', '語音錯字「頭部監控」智慧校正為「偷聽推測」');
 
+// 測試 28: 中翻日語音輸入選項與即時直譯功能 (v74)
+console.log('\n【測試 28：中翻日語音輸入選項與即時直譯功能 (v74)】');
+assert(html.includes('id="btn-translate-mic"'), '中翻日介面包含專屬語音輸入按鈕 (btn-translate-mic)');
+assert(html.includes('id="translate-voice-status"'), '包含即時中文語音辨識狀態指示欄 (translate-voice-status)');
+assert(html.includes('toggleTranslateVoiceInput'), '包含語音輸入開關控制函式 (toggleTranslateVoiceInput)');
+assert(html.includes('startTranslateVoiceInput') && html.includes('stopTranslateVoiceInput'), '包含語音辨識啟動與停止函式 (startTranslateVoiceInput / stopTranslateVoiceInput)');
+assert(html.includes('clearTranslateInput'), '包含中翻日文字一鍵清空函式 (clearTranslateInput)');
+assert(html.includes('translateVoiceState'), '包含中翻日語音辨識狀態管理物件 (translateVoiceState)');
+assert(html.includes("recognition.lang = 'zh-TW'"), '中翻日語音輸入設定為臺灣/繁體中文辨識 (zh-TW)');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v73'), 'Service Worker 快取版本已升級至 yang-pwa-v73');
-assert(html.includes('yang_runner_handbook_v73'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v73');
+assert(swContent.includes('yang-pwa-v74'), 'Service Worker 快取版本已升級至 yang-pwa-v74');
+assert(html.includes('yang_runner_handbook_v74'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v74');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -459,6 +469,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
 }
 
