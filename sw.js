@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yang-pwa-v59';
+const CACHE_NAME = 'yang-pwa-v60';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   './icon.png',
   './photos/raccoon_pet.png',
   './photos/raccoon_avatar.png',
+  './photos/avatar_yang.png',
   './photos/basashi.jpg',
   './photos/akaushi.jpg',
   './apple-touch-icon-precomposed.png',

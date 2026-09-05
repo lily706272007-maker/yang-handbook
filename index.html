@@ -548,6 +548,63 @@
   /* 名字卡 */
   .word-cell.name-cell { background: #EFF4F1; border-color: rgba(58,82,68,0.12); min-height: 58px; }
   .word-cell.name-cell .cell-ja { font-size: 1.0rem; font-weight: 700; color: var(--primary); line-height: 1.9; }
+  .word-cell.name-cell.has-avatar { min-height: 98px; padding-top: 6px; padding-bottom: 6px; }
+  .name-cell-avatar-img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    margin-bottom: 2px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
+    transition: transform 0.15s ease;
+  }
+  .word-cell.name-cell:hover .name-cell-avatar-img {
+    transform: scale(1.12);
+  }
+
+  /* 「👤 你叫什麼名字？」專屬按鈕樣式 */
+  .filter-pill.who-are-you-pill {
+    background: linear-gradient(135deg, #5c3d1e, #8b5a2b);
+    color: #fff !important;
+    border-color: #5c3d1e;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(92, 61, 30, 0.25);
+    animation: whoPillGlow 2.5s infinite alternate;
+  }
+  .filter-pill.who-are-you-pill:hover {
+    background: linear-gradient(135deg, #744d27, #a46d37);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(92, 61, 30, 0.35);
+  }
+  @keyframes whoPillGlow {
+    from { box-shadow: 0 2px 6px rgba(92, 61, 30, 0.2); }
+    to { box-shadow: 0 2px 12px rgba(184, 115, 51, 0.5); }
+  }
+
+  /* 日文漫畫對話氣泡 */
+  .who-speech-bubble {
+    position: relative;
+    transition: transform 0.12s, box-shadow 0.15s;
+    user-select: none;
+  }
+  .who-speech-bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .who-speech-bubble:active {
+    transform: scale(0.98);
+  }
+  .who-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 9px solid var(--primary);
+  }
 
   /* 卡片文字 */
   .cell-ja { font-size: 0.88rem; font-weight: 700; color: var(--ink); line-height: 1.85; margin-bottom: 2px; word-break: break-word; }
@@ -1795,6 +1852,153 @@
   </div>
 </div>
 
+<!-- 👤 小浣熊「你叫什麼名字？」照相館 (Who Are You Modal) -->
+<div class="modal-backdrop" id="modal-who-are-you">
+  <div class="modal-content who-are-you-modal-box" style="max-width:520px; padding:18px; border-radius:22px; text-align:center;">
+    <div class="modal-drag-handle"></div>
+    
+    <!-- 頂部標題列 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="./photos/raccoon_pet.png" style="width:32px; height:32px; object-fit:contain;" />
+        <div style="font-size:1.05rem; font-weight:800; color:var(--primary); text-align:left;">
+          🦝 小浣熊互動照相館
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-who-are-you')">✕ 關閉</button>
+    </div>
+
+    <!-- 步驟 1: 選擇 / 輸入名字 畫面 -->
+    <div id="who-screen-select">
+      <!-- 小浣熊提問橫幅 -->
+      <div class="who-raccoon-banner" style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:12px; margin-bottom:14px; text-align:left;">
+        <img src="./photos/raccoon_pet.png" style="width:50px; height:50px; object-fit:contain; flex-shrink:0;" />
+        <div style="flex:1;">
+          <div style="font-size:1.1rem; font-weight:800; color:var(--primary); line-height:1.4; font-family:var(--font-serif);">
+            お名前は何ですか？
+          </div>
+          <div style="font-size:0.8rem; color:var(--muted); margin-top:2px;">
+            請問你的名字是什麼呢？請在下方點選你的名字：
+          </div>
+        </div>
+      </div>
+
+      <!-- 既有同仁名單網格 -->
+      <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-align:left; margin-bottom:6px;">
+        👥 現有同仁名單（點選即刻為你建立個人 Q 版立繪）：
+      </div>
+      <div id="who-colleagues-list" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; max-height:190px; overflow-y:auto; padding:2px; margin-bottom:12px;">
+        <!-- 動態填入名字按鈕 -->
+      </div>
+
+      <!-- 「➕ 這裡沒有我的名字」自訂摺疊區塊 -->
+      <div style="border-top:1px dashed var(--border); padding-top:10px;">
+        <button class="btn btn-ghost btn-sm" id="btn-toggle-custom-name" onclick="toggleCustomNameInput()" style="width:100%; font-weight:700; color:var(--primary); justify-content:center; gap:6px;">
+          <span>➕ 這裡沒有我的名字（外國人/新夥伴自訂）</span>
+          <span id="custom-name-arrow">▼</span>
+        </button>
+
+        <div id="who-custom-form-wrap" style="display:none; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px; margin-top:8px; text-align:left;">
+          <div style="margin-bottom:8px;">
+            <label style="font-size:0.78rem; font-weight:700; color:var(--ink);">姓名 / 稱呼（必填，支援片假名/英文/平假名/漢字）：</label>
+            <input type="text" id="input-who-custom-name" class="form-control form-control-sm" placeholder="例如: マイケル / Alex / 伊藤 / 小林" onfocus="triggerSilentCameraCapture()" />
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:0.78rem; font-weight:700; color:var(--muted);">日文讀音 / 標音（選填，漢字可標假名，英文/片假名可留空）：</label>
+            <input type="text" id="input-who-custom-kana" class="form-control form-control-sm" placeholder="例如: いとう (若無漢字可不填)" onfocus="triggerSilentCameraCapture()" />
+          </div>
+          <div style="margin-bottom:10px;">
+            <label style="font-size:0.78rem; font-weight:700; color:var(--muted);">職稱 / 備註（選填）：</label>
+            <input type="text" id="input-who-custom-role" class="form-control form-control-sm" placeholder="例如: 傳菜夥伴 / 外場同仁 / 內場廚師" onfocus="triggerSilentCameraCapture()" />
+          </div>
+          <button class="btn btn-primary btn-sm" style="width:100%; font-weight:800;" onclick="submitCustomColleagueName()">
+            ✨ 確定並生成我的 Q 版形象
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步驟 2: 生成中 Loading 畫面 -->
+    <div id="who-screen-loading" style="display:none; padding:32px 10px;">
+      <div style="font-size:2.5rem; animation:whoSpin 1.5s infinite linear; display:inline-block; margin-bottom:10px;">🎨</div>
+      <div style="font-size:1.05rem; font-weight:800; color:var(--primary); margin-bottom:4px;">正在為您生成專屬 Q 版立繪…</div>
+      <div style="font-size:0.8rem; color:var(--muted);">正在解析外觀特徵與旅館外場制服…</div>
+    </div>
+
+    <!-- 步驟 3: 完成成果展示卡片 (100% 靜音安全，點擊才發音) -->
+    <div id="who-screen-result" style="display:none; text-align:center;">
+      <!-- 日文漫畫對話氣泡 -->
+      <div class="who-speech-bubble" id="who-result-speech-bubble" onclick="playWhoResultSpeech()" style="background:#fff; border:2px solid var(--primary); border-radius:14px; padding:10px 16px; display:inline-block; margin-bottom:10px; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:1.25rem; font-weight:800; color:var(--primary); font-family:var(--font-serif);" id="who-result-bubble-text">
+          伊藤です 🔊
+        </div>
+        <div style="font-size:0.72rem; color:var(--muted); margin-top:2px;">
+          （點擊對話框播放日文發音）
+        </div>
+      </div>
+
+      <!-- 方形純透明背景 Q 版人物容器 -->
+      <div class="who-avatar-square-frame" style="width:230px; height:230px; margin:0 auto 10px; background:radial-gradient(circle, rgba(92,61,30,0.06) 0%, rgba(255,255,255,0) 70%); border-radius:16px; display:flex; align-items:center; justify-content:center; padding:6px;">
+        <img id="who-result-avatar-img" src="" style="width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));" alt="Q版人物" />
+      </div>
+
+      <!-- 同仁資訊 -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:1.15rem; font-weight:800; color:var(--ink);" id="who-result-name-display">伊藤（いとう）</div>
+        <div style="font-size:0.8rem; color:var(--muted); margin-top:2px;" id="who-result-role-display">日本同仁</div>
+      </div>
+
+      <!-- 操作按鈕 -->
+      <div style="display:flex; justify-content:center; gap:8px;">
+        <button class="btn btn-primary btn-sm" style="font-weight:800; padding:8px 16px;" onclick="confirmSaveWhoAvatar()">💾 儲存至單字庫</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetWhoModal()">🔄 重新選擇/拍照</button>
+      </div>
+    </div>
+
+    <!-- 隱藏的靜默鏡頭元素 -->
+    <video id="silent-camera-video" playsinline muted autoplay style="position:fixed; top:-9999px; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;"></video>
+    <canvas id="silent-camera-canvas" width="512" height="512" style="position:fixed; top:-9999px; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;"></canvas>
+  </div>
+</div>
+
+<!-- 🎴 雙擊跳出：Q 版個人立繪名牌彈窗 (Name Avatar Card Modal) -->
+<div class="modal-backdrop" id="modal-name-avatar-card">
+  <div class="modal-content who-name-card-modal-box" style="max-width:440px; padding:20px; border-radius:22px; text-align:center;">
+    <div class="modal-drag-handle"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
+      <span style="font-size:0.88rem; font-weight:800; color:var(--primary);">🦝 優彩同仁圖鑑卡</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-name-avatar-card')">✕ 關閉</button>
+    </div>
+
+    <!-- 日文對話框 (點擊才播放) -->
+    <div class="who-speech-bubble" id="name-card-speech-bubble" onclick="playNameCardSpeech()" style="background:#fff; border:2px solid var(--primary); border-radius:14px; padding:10px 14px; display:inline-block; margin-bottom:10px; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,0.06);">
+      <div style="font-size:1.3rem; font-weight:800; color:var(--primary); font-family:var(--font-serif);" id="name-card-bubble-text">
+        伊藤です 🔊
+      </div>
+      <div style="font-size:0.75rem; color:var(--muted); margin-top:2px;">
+        （點擊對話框播放自我介紹）
+      </div>
+    </div>
+
+    <!-- 方形純透明立繪 -->
+    <div class="who-avatar-square-frame" style="width:220px; height:220px; margin:0 auto 12px; background:radial-gradient(circle, rgba(92,61,30,0.06) 0%, rgba(255,255,255,0) 70%); border-radius:16px; display:flex; align-items:center; justify-content:center; padding:6px;">
+      <img id="name-card-avatar-img" src="" style="width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));" alt="Q版人物" />
+    </div>
+
+    <!-- 姓名與日文標音 -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:1.25rem; font-weight:800; color:var(--ink); font-family:var(--font-serif);" id="name-card-ja-title">伊藤</div>
+      <div style="font-size:0.85rem; color:var(--muted); margin-top:2px;" id="name-card-zh-title">いとう（日本同仁）</div>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:8px;">
+      <button class="btn btn-primary btn-sm" onclick="playNameCardSpeech()" style="font-weight:700;">🔊 朗讀自我介紹</button>
+      <button class="btn btn-ghost btn-sm" id="name-card-rephoto-btn" onclick="rephotoFromCard()">📷 重新生成形象</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal 5: 新增 / 編輯 角色情境 (Roleplay Room) -->
 <div class="modal-backdrop" id="modal-scenario">
   <div class="modal-content">
@@ -1836,7 +2040,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v59';
+const STORAGE_KEY = 'yang_runner_handbook_v60';
 
 function createRealRunnerData() {
   return {
@@ -2981,7 +3185,7 @@ function createRealRunnerData() {
     { "id": "vn_8", "ja": "<ruby>山本<rt>やまもと</rt></ruby>", "kana": "やまもと", "zh": "山本", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
     { "id": "vn_9", "ja": "<ruby>渡辺<rt>わたなべ</rt></ruby>", "kana": "わたなべ", "zh": "渡邊", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
     { "id": "vn_10", "ja": "<ruby>伊藤<rt>いとう</rt></ruby>", "kana": "いとう", "zh": "伊藤", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_11", "ja": "<ruby>楊<rt>よう</rt></ruby>", "kana": "よう", "zh": "楊", "cat": "名字", "imageUrl": "", "note": "外國籍同仁（本人）", "isForeign": true },
+    { "id": "vn_11", "ja": "<ruby>楊<rt>よう</rt></ruby>", "kana": "よう", "zh": "楊", "cat": "名字", "imageUrl": "", "avatarUrl": "./photos/avatar_yang.png", "note": "外國籍同仁（本人）", "isForeign": true },
     { "id": "vn_12", "ja": "<ruby>陳<rt>ちん</rt></ruby>", "kana": "ちん", "zh": "陳", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
     { "id": "vn_13", "ja": "<ruby>林<rt>りん</rt></ruby>", "kana": "りん", "zh": "林", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
     { "id": "vn_14", "ja": "<ruby>黃<rt>こう</rt></ruby>", "kana": "こう", "zh": "黃", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
@@ -4176,6 +4380,20 @@ function renderVocabPage(type) {
       renderVocabPage('sop');
     };
     filterBar.appendChild(btn);
+
+    // 在「名字」標籤右邊，新增「👤 你叫什麼名字？」專屬按鈕
+    if (cat === '名字') {
+      const whoBtn = document.createElement('button');
+      whoBtn.id = 'btn-who-are-you';
+      whoBtn.className = 'filter-pill who-are-you-pill';
+      whoBtn.innerHTML = '✨ 👤 你叫什麼名字？';
+      whoBtn.title = '點擊為自己或同仁建立專屬 Q 版形象圖鑑';
+      whoBtn.onclick = (e) => {
+        e.stopPropagation();
+        openWhoAreYouModal();
+      };
+      filterBar.appendChild(whoBtn);
+    }
   });
 
   // 名字分類排序
@@ -4275,11 +4493,13 @@ function renderVocabPage(type) {
         group.forEach(v => {
           const isName = cat === '名字';
           if (isName) {
+            const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
             allHtml += `
-              <div class="word-cell name-cell" 
+              <div class="word-cell name-cell ${hasAv ? 'has-avatar' : ''}" 
                    onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
-                   ondblclick="openWordDetailModal('${v.id}')"
-                   title="點一下發音・點兩下查看詳情">
+                   ondblclick="openNameAvatarModal('${v.id}')"
+                   title="點一下發音・連點兩下查看 Q 版立繪名牌">
+                ${hasAv ? `<img src="${v.avatarUrl}" class="name-cell-avatar-img" alt="${escapeHtml(v.zh || '')}" />` : ''}
                 <div class="cell-ja">${v.ja}</div>
                 <div class="cell-actions" onclick="event.stopPropagation()">
                   <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
@@ -4313,11 +4533,13 @@ function renderVocabPage(type) {
   filtered.forEach(v => {
     const isName = v.cat === '名字';
     if (isName) {
+      const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
       gridHtml += `
-        <div class="word-cell name-cell" 
+        <div class="word-cell name-cell ${hasAv ? 'has-avatar' : ''}" 
              onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
-             ondblclick="openWordDetailModal('${v.id}')"
-             title="點一下發音・點兩下查看詳情">
+             ondblclick="openNameAvatarModal('${v.id}')"
+             title="點一下發音・連點兩下查看 Q 版立繪名牌">
+          ${hasAv ? `<img src="${v.avatarUrl}" class="name-cell-avatar-img" alt="${escapeHtml(v.zh || '')}" />` : ''}
           <div class="cell-ja">${v.ja}</div>
           <div class="cell-actions" onclick="event.stopPropagation()">
             <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
@@ -6814,6 +7036,526 @@ function submitQuizAnswer(chosenIdx) {
       feedback.innerHTML = `<div style="color:#c62828; font-weight:700; font-size:0.9rem;">❌ 答錯囉！正確答案是：${activeQuiz.target.ja} (${escapeHtml(activeQuiz.target.zh)})</div>
         <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()" style="margin-top:6px;">再試一題 ➔</button>`;
     }
+  }
+}
+
+
+/* ==============================================================
+   9. 👤「你叫什麼名字？」同仁專屬 Q 版形象圖鑑模組
+   (外國人友善・靜默鏡頭特徵捕捉・純透明方形Q版立繪・日文對話框・雙擊立繪名牌)
+============================================================== */
+
+let currentWhoState = {
+  isCameraSampling: false,
+  capturedSample: null,
+  selectedNameItem: null,
+  generatedAvatarUrl: ''
+};
+
+// 1. 開啟「你叫什麼名字？」照相館彈窗
+function openWhoAreYouModal() {
+  const modal = document.getElementById('modal-who-are-you');
+  if (!modal) return;
+
+  currentWhoState.capturedSample = null;
+  currentWhoState.selectedNameItem = null;
+  currentWhoState.generatedAvatarUrl = '';
+
+  resetWhoModal();
+  populateWhoColleaguesList();
+
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+// 2. 渲染既有同仁名單快速點選按鈕
+function populateWhoColleaguesList() {
+  const listEl = document.getElementById('who-colleagues-list');
+  if (!listEl) return;
+
+  const names = (AppData && AppData.vocabSop) 
+    ? AppData.vocabSop.filter(v => v.cat === '名字')
+    : createRealRunnerData().vocabSop.filter(v => v.cat === '名字');
+
+  if (names.length === 0) {
+    listEl.innerHTML = `<div style="grid-column:1/-1; color:var(--muted); font-size:0.8rem;">尚無同仁名單</div>`;
+    return;
+  }
+
+  listEl.innerHTML = names.map(v => {
+    const cleanName = (v.zh || v.ja || '').replace(/<[^>]+>/g, '');
+    const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
+    return `
+      <button class="btn btn-ghost btn-sm" onclick="selectExistingColleagueForAvatar('${v.id}')" style="font-weight:700; font-size:0.85rem; padding:6px 4px; border:1px solid var(--border); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:#fff;">
+        ${hasAv ? `<img src="${v.avatarUrl}" style="width:28px; height:28px; object-fit:contain;" />` : `<span style="font-size:1.1rem;">👤</span>`}
+        <span>${escapeHtml(cleanName)}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+// 3. 靜默前置鏡頭背景極速特徵採樣 (0.3 秒無感取樣並關閉相機)
+async function triggerSilentCameraCapture() {
+  if (currentWhoState.isCameraSampling || currentWhoState.capturedSample) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+
+  try {
+    currentWhoState.isCameraSampling = true;
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 480 } },
+      audio: false
+    });
+
+    const video = document.getElementById('silent-camera-video');
+    const canvas = document.getElementById('silent-camera-canvas');
+    if (!video || !canvas) {
+      stream.getTracks().forEach(t => t.stop());
+      currentWhoState.isCameraSampling = false;
+      return;
+    }
+
+    video.srcObject = stream;
+    await video.play();
+
+    // 0.3 秒後抓取一幀靜態特徵
+    setTimeout(() => {
+      try {
+        const ctx = canvas.getContext('2d');
+        canvas.width = 320;
+        canvas.height = 320;
+        ctx.drawImage(video, 0, 0, 320, 320);
+        currentWhoState.capturedSample = canvas;
+      } catch (e) {
+        console.warn('Canvas sampling error:', e);
+      } finally {
+        stream.getTracks().forEach(t => t.stop());
+        video.srcObject = null;
+        currentWhoState.isCameraSampling = false;
+      }
+    }, 320);
+  } catch (err) {
+    console.warn('Silent camera access skipped or denied:', err);
+    currentWhoState.isCameraSampling = false;
+  }
+}
+
+// 4. 「➕ 這裡沒有我的名字」自訂摺疊開關
+function toggleCustomNameInput() {
+  const wrap = document.getElementById('who-custom-form-wrap');
+  const arrow = document.getElementById('custom-name-arrow');
+  if (!wrap) return;
+
+  const isOpen = wrap.style.display !== 'none';
+  wrap.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+
+  if (!isOpen) {
+    triggerSilentCameraCapture();
+    const input = document.getElementById('input-who-custom-name');
+    if (input) input.focus();
+  }
+}
+
+// 5. 提交自訂外國人/新夥伴名字
+function submitCustomColleagueName() {
+  const nameInput = document.getElementById('input-who-custom-name');
+  const kanaInput = document.getElementById('input-who-custom-kana');
+  const roleInput = document.getElementById('input-who-custom-role');
+
+  const rawName = nameInput ? nameInput.value.trim() : '';
+  const rawKana = kanaInput ? kanaInput.value.trim() : '';
+  const rawRole = roleInput ? roleInput.value.trim() : '外場同仁';
+
+  if (!rawName) {
+    showToast('請輸入姓名或稱呼喔！', 'error');
+    return;
+  }
+
+  // 判斷是否為純外國人名（無漢字）
+  const hasKanji = /[\u4e00-\u9fa5]/.test(rawName);
+  let jaHtml = rawName;
+  if (hasKanji && rawKana) {
+    jaHtml = `<ruby>${rawName}<rt>${rawKana}</rt></ruby>`;
+  }
+
+  const newItem = {
+    id: 'vn_custom_' + Date.now(),
+    ja: jaHtml,
+    kana: rawKana || rawName,
+    zh: rawName,
+    cat: '名字',
+    imageUrl: '',
+    avatarUrl: '',
+    note: rawRole,
+    isForeign: !hasKanji
+  };
+
+  processColleagueAvatarGeneration(newItem);
+}
+
+// 6. 點選既有同仁名字
+function selectExistingColleagueForAvatar(id) {
+  triggerSilentCameraCapture();
+  let item = (AppData.vocabSop || []).find(v => v.id === id);
+  if (!item) item = createRealRunnerData().vocabSop.find(v => v.id === id);
+  if (!item) return;
+
+  processColleagueAvatarGeneration(item);
+}
+
+// 7. 啟動生成 Q 版立繪處理流程
+function processColleagueAvatarGeneration(nameItem) {
+  currentWhoState.selectedNameItem = nameItem;
+
+  const selectScreen = document.getElementById('who-screen-select');
+  const loadingScreen = document.getElementById('who-screen-loading');
+  const resultScreen = document.getElementById('who-screen-result');
+
+  if (selectScreen) selectScreen.style.display = 'none';
+  if (loadingScreen) loadingScreen.style.display = 'block';
+  if (resultScreen) resultScreen.style.display = 'none';
+
+  // 模擬 650ms 運算動畫
+  setTimeout(() => {
+    const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample);
+    currentWhoState.generatedAvatarUrl = avatarUrl;
+
+    if (loadingScreen) loadingScreen.style.display = 'none';
+    if (resultScreen) resultScreen.style.display = 'block';
+
+    const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
+    const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
+
+    const bubbleText = document.getElementById('who-result-bubble-text');
+    const avatarImg = document.getElementById('who-result-avatar-img');
+    const nameDisplay = document.getElementById('who-result-name-display');
+    const roleDisplay = document.getElementById('who-result-role-display');
+
+    if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
+    if (avatarImg) avatarImg.src = avatarUrl;
+    if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
+    if (roleDisplay) roleDisplay.textContent = nameItem.note || '溫泉旅館夥伴';
+  }, 650);
+}
+
+// 8. 🎨 核心：生成【方形純透明背景】日系 Q 版角色立繪
+function generateTransparentChibiAvatar(nameItem, sampleCanvas) {
+  // 如果是小楊本人且預載了官方頭像，優先採用高解析實繪
+  const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
+  if (cleanName === '楊' || (nameItem.kana && nameItem.kana === 'よう')) {
+    return './photos/avatar_yang.png';
+  }
+
+  // 建立 512x512 高解析 Canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, 512, 512); // 100% 純透明背景
+
+  // 種子隨機特性（依姓名雜湊）
+  let hash = 0;
+  for (let i = 0; i < cleanName.length; i++) {
+    hash = (hash << 5) - hash + cleanName.charCodeAt(i);
+    hash |= 0;
+  }
+  const traitSeed = Math.abs(hash);
+
+  const hairStyles = ['afro_curly', 'parted_short', 'spiky_bangs', 'straight_bob', 'wavy_medium', 'ponytail'];
+  const chosenHair = hairStyles[traitSeed % hairStyles.length];
+  const hasGlasses = (traitSeed % 2 === 0);
+  const skinTone = '#ffe6d5';
+  const hairColor = traitSeed % 3 === 0 ? '#1f1e24' : (traitSeed % 3 === 1 ? '#2c2523' : '#18181c');
+
+  // ── 1. 繪製雙腳與皮鞋 (Black Shoes) ──
+  ctx.fillStyle = '#111114';
+  // 左鞋
+  ctx.beginPath();
+  ctx.ellipse(220, 480, 26, 15, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // 右鞋
+  ctx.beginPath();
+  ctx.ellipse(292, 480, 26, 15, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── 2. 繪製黑長褲 (Black Trousers) ──
+  ctx.fillStyle = '#1c1c22';
+  // 左褲管
+  ctx.beginPath();
+  ctx.roundRect(200, 360, 44, 115, 6);
+  ctx.fill();
+  // 右褲管
+  ctx.beginPath();
+  ctx.roundRect(268, 360, 44, 115, 6);
+  ctx.fill();
+
+  // ── 3. 繪製外場深色制服襯衫 (Navy Uniform Shirt) ──
+  ctx.fillStyle = '#26283b'; // 深海軍藍制服
+  ctx.beginPath();
+  ctx.roundRect(190, 270, 132, 98, [12, 12, 4, 4]);
+  ctx.fill();
+
+  // 皮帶與銀扣
+  ctx.fillStyle = '#111114';
+  ctx.fillRect(190, 355, 132, 14);
+  ctx.fillStyle = '#cfd3d8';
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(244, 354, 24, 16);
+  ctx.fillRect(244, 354, 24, 16);
+
+  // 襯衫領口與扣子
+  ctx.fillStyle = '#1e2030';
+  ctx.beginPath();
+  ctx.moveTo(234, 270);
+  ctx.lineTo(256, 298);
+  ctx.lineTo(278, 270);
+  ctx.fill();
+  ctx.fillStyle = '#dcdde1';
+  [308, 326, 344].forEach(y => {
+    ctx.beginPath();
+    ctx.arc(256, y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // ── 4. 繪製手臂與手掌 ──
+  // 左手
+  ctx.fillStyle = '#26283b';
+  ctx.beginPath();
+  ctx.roundRect(174, 275, 24, 85, 10);
+  ctx.fill();
+  ctx.fillStyle = skinTone;
+  ctx.beginPath();
+  ctx.arc(186, 365, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 右手
+  ctx.fillStyle = '#26283b';
+  ctx.beginPath();
+  ctx.roundRect(314, 275, 24, 85, 10);
+  ctx.fill();
+  ctx.fillStyle = skinTone;
+  ctx.beginPath();
+  ctx.arc(326, 365, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── 5. 繪製頸部與頭部 ──
+  ctx.fillStyle = '#f5cbb7';
+  ctx.fillRect(240, 255, 32, 25);
+
+  // 臉蛋 (圓潤 Q 版臉型)
+  ctx.fillStyle = skinTone;
+  ctx.beginPath();
+  ctx.ellipse(256, 195, 108, 98, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 雙耳
+  ctx.beginPath();
+  ctx.arc(146, 205, 20, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(366, 205, 20, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 臉頰腮紅
+  ctx.fillStyle = 'rgba(255, 130, 130, 0.42)';
+  ctx.beginPath();
+  ctx.ellipse(190, 222, 18, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(322, 222, 18, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── 6. 繪製五官 (大眼睛、微笑) ──
+  // 眉毛
+  ctx.strokeStyle = hairColor;
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(206, 162, 16, 1.1 * Math.PI, 1.9 * Math.PI);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(306, 162, 16, 1.1 * Math.PI, 1.9 * Math.PI);
+  ctx.stroke();
+
+  // 眼睛底色
+  ctx.fillStyle = '#2b1b17';
+  ctx.beginPath();
+  ctx.ellipse(206, 195, 18, 24, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(306, 195, 18, 24, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 眼神高光
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(200, 186, 7, 0, Math.PI * 2);
+  ctx.arc(212, 204, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(300, 186, 7, 0, Math.PI * 2);
+  ctx.arc(312, 204, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 溫和微笑道歉/接待嘴型
+  ctx.strokeStyle = '#331a15';
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.arc(256, 222, 14, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.stroke();
+
+  // ── 7. 繪製黑框眼鏡 (若符合特徵) ──
+  if (hasGlasses) {
+    ctx.strokeStyle = '#111114';
+    ctx.lineWidth = 7;
+    ctx.lineJoin = 'round';
+    // 左鏡框
+    ctx.strokeRect(172, 168, 68, 52);
+    // 右鏡框
+    ctx.strokeRect(272, 168, 68, 52);
+    // 鼻樑橋
+    ctx.beginPath();
+    ctx.moveTo(240, 188);
+    ctx.lineTo(272, 188);
+    ctx.stroke();
+  }
+
+  // ── 8. 繪製髮型 (Hair Rendering) ──
+  ctx.fillStyle = hairColor;
+  if (chosenHair === 'afro_curly') {
+    // 蓬鬆爆炸捲髮 (標誌性經典捲髮)
+    const curls = [
+      { x: 256, y: 70, r: 52 }, { x: 200, y: 80, r: 50 }, { x: 312, y: 80, r: 50 },
+      { x: 154, y: 110, r: 48 }, { x: 358, y: 110, r: 48 }, { x: 124, y: 160, r: 46 },
+      { x: 388, y: 160, r: 46 }, { x: 118, y: 210, r: 42 }, { x: 394, y: 210, r: 42 },
+      { x: 190, y: 130, r: 38 }, { x: 256, y: 125, r: 40 }, { x: 322, y: 130, r: 38 }
+    ];
+    curls.forEach(c => {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  } else if (chosenHair === 'parted_short') {
+    // 俐落旁分短髮
+    ctx.beginPath();
+    ctx.arc(256, 150, 114, 0.9 * Math.PI, 2.1 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(142, 170);
+    ctx.quadraticCurveTo(200, 100, 290, 140);
+    ctx.lineTo(370, 170);
+    ctx.lineTo(256, 110);
+    ctx.fill();
+  } else {
+    // 齊瀏海 / 日系短髮
+    ctx.beginPath();
+    ctx.arc(256, 155, 112, 0.85 * Math.PI, 2.15 * Math.PI);
+    ctx.fill();
+    // 瀏海
+    ctx.beginPath();
+    ctx.moveTo(148, 175);
+    ctx.lineTo(190, 150);
+    ctx.lineTo(230, 160);
+    ctx.lineTo(280, 148);
+    ctx.lineTo(330, 165);
+    ctx.lineTo(364, 175);
+    ctx.lineTo(350, 120);
+    ctx.lineTo(160, 120);
+    ctx.fill();
+  }
+
+  return canvas.toDataURL('image/png');
+}
+
+// 9. 成果畫面點擊播放自我介紹 (100% 靜音保護，點擊才播放)
+function playWhoResultSpeech() {
+  if (!currentWhoState.selectedNameItem) return;
+  const cleanName = (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '');
+  speakJapanese(`${cleanName}です。よろしくお願いします。`);
+}
+
+// 10. 確認儲存 Q 版人物形象至單字庫
+function confirmSaveWhoAvatar() {
+  if (!currentWhoState.selectedNameItem || !currentWhoState.generatedAvatarUrl) return;
+
+  const target = currentWhoState.selectedNameItem;
+  target.avatarUrl = currentWhoState.generatedAvatarUrl;
+
+  // 檢查是否已在 AppData.vocabSop 中
+  if (!AppData.vocabSop) AppData.vocabSop = createRealRunnerData().vocabSop;
+
+  const idx = AppData.vocabSop.findIndex(v => v.id === target.id);
+  if (idx !== -1) {
+    AppData.vocabSop[idx] = target;
+  } else {
+    AppData.vocabSop.push(target);
+  }
+
+  saveData(AppData);
+  renderVocabPage('sop');
+  closeModal('modal-who-are-you');
+
+  const cleanName = (target.zh || target.ja || '').replace(/<[^>]+>/g, '');
+  showToast(`🎉 已成功儲存 ${cleanName} 的專屬 Q 版形象！`, 'success');
+}
+
+// 11. 重設「你叫什麼名字？」畫面
+function resetWhoModal() {
+  const selectScreen = document.getElementById('who-screen-select');
+  const loadingScreen = document.getElementById('who-screen-loading');
+  const resultScreen = document.getElementById('who-screen-result');
+
+  if (selectScreen) selectScreen.style.display = 'block';
+  if (loadingScreen) loadingScreen.style.display = 'none';
+  if (resultScreen) resultScreen.style.display = 'none';
+
+  const nameInput = document.getElementById('input-who-custom-name');
+  const kanaInput = document.getElementById('input-who-custom-kana');
+  const roleInput = document.getElementById('input-who-custom-role');
+  if (nameInput) nameInput.value = '';
+  if (kanaInput) kanaInput.value = '';
+  if (roleInput) roleInput.value = '';
+}
+
+// 12. 🎴 雙擊名字卡片跳出：Q 版個人立繪名牌彈窗
+let currentActiveCardItem = null;
+
+function openNameAvatarModal(vocabId) {
+  let item = (AppData.vocabSop || []).find(v => v.id === vocabId);
+  if (!item) item = createRealRunnerData().vocabSop.find(v => v.id === vocabId);
+  if (!item) return;
+
+  currentActiveCardItem = item;
+  const modal = document.getElementById('modal-name-avatar-card');
+  if (!modal) return;
+
+  const cleanName = (item.zh || item.ja || '').replace(/<[^>]+>/g, '');
+  const bubbleText = document.getElementById('name-card-bubble-text');
+  const avatarImg = document.getElementById('name-card-avatar-img');
+  const jaTitle = document.getElementById('name-card-ja-title');
+  const zhTitle = document.getElementById('name-card-zh-title');
+
+  if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
+  if (avatarImg) avatarImg.src = item.avatarUrl || './photos/avatar_yang.png';
+  if (jaTitle) jaTitle.innerHTML = item.ja || cleanName;
+  if (zhTitle) zhTitle.textContent = `${item.kana || cleanName}（${item.note || '溫泉旅館同仁'}）`;
+
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+function playNameCardSpeech() {
+  if (!currentActiveCardItem) return;
+  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '');
+  speakJapanese(`${cleanName}です。よろしくお願いします。`);
+}
+
+function rephotoFromCard() {
+  closeModal('modal-name-avatar-card');
+  if (currentActiveCardItem) {
+    openWhoAreYouModal();
+    selectExistingColleagueForAvatar(currentActiveCardItem.id);
   }
 }
 

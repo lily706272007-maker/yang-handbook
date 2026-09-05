@@ -232,6 +232,20 @@ assert(html.includes('renderYusaiLandmarks'), '包含優彩館內地標指引函
 assert(html.includes('startRaccoonQuickQuiz'), '包含 3 題單字情境快問快答函式 (startRaccoonQuickQuiz)');
 assert(html.includes('PRACTICE_SENTENCES_BANK') && html.includes('FUZZY_KITCHEN_GUESS_DICT'), '內建 300 句現場實戰句庫與 40+ 碎詞模糊資料庫');
 
+// 測試 18: 「你叫什麼名字？」同仁專屬 Q 版形象圖鑑與雙擊立繪互動
+console.log('\n【測試 18：「你叫什麼名字？」Q 版形象圖鑑與雙擊立繪互動】');
+assert(html.includes('id="btn-who-are-you"') || html.includes('who-are-you-pill'), '包含「👤 你叫什麼名字？」專屬入口按鈕');
+assert(html.includes('id="modal-who-are-you"'), '包含小浣熊「你叫什麼名字？」照相館彈窗 (modal-who-are-you)');
+assert(html.includes('id="modal-name-avatar-card"'), '包含雙擊跳出 Q 版個人立繪名牌彈窗 (modal-name-avatar-card)');
+assert(html.includes('openWhoAreYouModal'), '包含開啟照相館函式 (openWhoAreYouModal)');
+assert(html.includes('triggerSilentCameraCapture'), '包含靜默前鏡頭特徵捕捉函式 (triggerSilentCameraCapture)');
+assert(html.includes('submitCustomColleagueName'), '包含外國人/新夥伴自訂名字提交函式 (submitCustomColleagueName)');
+assert(html.includes('generateTransparentChibiAvatar'), '包含方形純透明背景 Q 版角色立繪生成函式 (generateTransparentChibiAvatar)');
+assert(html.includes('openNameAvatarModal'), '包含雙擊開啟同仁 Q 版名牌彈窗函式 (openNameAvatarModal)');
+assert(html.includes('playNameCardSpeech') && html.includes('playWhoResultSpeech'), '包含日文自我介紹發音播放函式 (100% 靜音保護)');
+assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
+assert(html.includes('photos/avatar_yang.png'), '包含小楊專屬 Q 版立繪圖檔參照 (avatar_yang.png)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -239,5 +253,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大實戰工作台與 Apple 輪盤選單測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台與「你叫什麼名字？」Q 版形象圖鑑測試 100% 全部通過！');
 }
