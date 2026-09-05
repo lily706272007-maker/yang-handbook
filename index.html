@@ -2314,7 +2314,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v62';
+const STORAGE_KEY = 'yang_runner_handbook_v63';
 
 function createRealRunnerData() {
   return {
@@ -2762,6 +2762,127 @@ function createRealRunnerData() {
               { "title": "【慣用語 掃除機をかける】", "desc": "使用吸塵器清掃專用動詞為「かける」。" }
             ],
             "tips": "特別注意桌腳底下死角的飯粒與紙屑。"
+          }
+        },
+        {
+          "id": "bs_sc1_std",
+          "type": "dialog",
+          "speaker": "外場撤盤・情境 1：標準撤盤 (自然應對流)",
+          "zh": "【店員詢問】「這邊方便幫您收走嗎？」(kochira, osage shite mo yoroshii deshō ka?)\n【客人回覆】「好的，麻煩你了。」(hai, onegai shimasu.)\n【店員應答】「謝謝，不好意思打擾了。」(arigatō gozaimasu. shitsurei shimasu.)",
+          "ja": "【店員】こちら、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？\n【客】はい、お<ruby>願<rt>ねが</rt></ruby>いします。\n【店員】ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "こちら", "zh": "這邊、這個（敬語代名詞）" },
+              { "ja": "お<ruby>下<rt>さ</rt></ruby>げする", "zh": "撤收餐盤（謙讓語）" },
+              { "ja": "よろしいでしょうか", "zh": "可以嗎？方便嗎？" },
+              { "ja": "お<ruby>願<rt>ねが</rt></ruby>いします", "zh": "麻煩你了、拜託了" },
+              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>します", "zh": "不好意思打擾了" }
+            ],
+            "points": [
+              { "title": "【標準撤盤 3 步驟自然應對流】", "desc": "①主動詢問 ➔ ②客人同意「はい、お願いします」 ➔ ③致謝「ありがとうございます。失礼します」並撤盤。" },
+              { "title": "【お下げしてもよろしいでしょうか】", "desc": "日本外場最普遍、親切且得體的標準詢問敬語。" }
+            ],
+            "tips": "手指示意要收的盤子，語氣輕柔，雙手端盤。"
+          }
+        },
+        {
+          "id": "bs_sc2_leftover",
+          "type": "dialog",
+          "speaker": "外場撤盤・情境 2：確認盤中剩餘物 (自然應對流)",
+          "zh": "【店員詢問】「這個您已經用餐完畢了嗎？」(kochira wa osumi deshō ka?)\n【客人回覆】「沒問題，請收走吧。」(daijōbu desu, sagete kudasai.)\n【店員應答】「謝謝您，幫您收走喔。」(arigatō gozaimasu. osage shimasu ne.)",
+          "ja": "【店員】こちらはお<ruby>済<rt>す</rt></ruby>みでしょうか？\n【客】<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。\n【店員】ありがとうございます。お<ruby>下<rt>さ</rt></ruby>げしますね。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "お<ruby>済<rt>す</rt></ruby>み", "zh": "結束、完畢（敬語）" },
+              { "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です", "zh": "沒問題、不用了" },
+              { "ja": "<ruby>下<rt>さ</rt></ruby>げてください", "zh": "請收走吧" },
+              { "ja": "お<ruby>下<rt>さ</rt></ruby>げしますね", "zh": "幫您收走喔（親切口吻）" }
+            ],
+            "points": [
+              { "title": "【確認剩餘物 お済みでしょうか】", "desc": "盤中還剩一點食物時，確認客人是否用餐完畢，避免誤收。" },
+              { "title": "【親切句尾 〜ね】", "desc": "お下げしますね 語調溫和親近，不給客人催促感。" }
+            ],
+            "tips": "目光徵詢客人確認停筷後，再微笑動手收盤。"
+          }
+        },
+        {
+          "id": "bs_sc3_empty",
+          "type": "dialog",
+          "speaker": "外場撤盤・情境 3：明顯空盤撤收 (自然應對流)",
+          "zh": "【店員告知】「幫您撤下空盤。」(aita osara o osage itashimasu.)\n【客人示意】「謝謝招待／我吃飽了。」(gochisōsama deshita.)\n【店員應答】「謝謝您！請繼續慢用。」(arigatō gozaimasu! goyukkuri dōzo.)",
+          "ja": "【店員】<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたします。\n【客】ごちそうさまでした。\n【店員】ありがとうございます！ごゆっくりどうぞ。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>", "zh": "空盤子" },
+              { "ja": "お<ruby>下<rt>さ</rt></ruby>げいたします", "zh": "幫您撤下（謙讓語）" },
+              { "ja": "ごちそうさまでした", "zh": "多謝款待、我吃飽了" },
+              { "ja": "ごゆっくりどうぞ", "zh": "請繼續慢用" }
+            ],
+            "points": [
+              { "title": "【明顯空盤主動告知】", "desc": "盤子已吃乾淨時直接說「空いたお皿をお下げいたします」。" },
+              { "title": "【回應客人ごちそうさま】", "desc": "客人說吃飽時，立刻熱情回應「ありがとうございます！ごゆっくりどうぞ」。" }
+            ],
+            "tips": "客人若把空盤推到桌外側，順勢俐落撤收並致意。"
+          }
+        },
+        {
+          "id": "bs_sc4_glass",
+          "type": "dialog",
+          "speaker": "外場撤盤・情境 4：撤收玻璃杯與空杯 (自然應對流)",
+          "zh": "【店員詢問】「不好意思，方便幫您收走杯子嗎？」(shitsurei itashimasu, gurasu o osage shite mo yoroshii desu ka?)\n【客人表示未完】「啊，我還在吃／喝。」(a, mada tabetemasu / nondemasu.)\n【店員應答】「啊，不好意思！請慢慢享用。」(a, shitsurei shimashita! goyukkuri dōzo.)",
+          "ja": "【店員】<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？\n【客】あ、まだ<ruby>食<rt>た</rt></ruby>べてます（<ruby>飲<rt>の</rt></ruby>んでます）。\n【店員】あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "グラス", "zh": "玻璃杯、飲料杯" },
+              { "ja": "まだ<ruby>食<rt>た</rt></ruby>べてます", "zh": "我還在吃" },
+              { "ja": "まだ<ruby>飲<rt>の</rt></ruby>んでます", "zh": "我還在喝" },
+              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました", "zh": "不好意思、失禮了（過去式致歉）" }
+            ],
+            "points": [
+              { "title": "【杯類撤收詢問】", "desc": "玻璃杯或咖啡杯見底時主動詢問「グラスをお下げしてもよろしいですか」。" },
+              { "title": "【客人未完時得體退下】", "desc": "客人表示還在享用時，立刻雙手收回，自然致歉「あ、失礼しました！ごゆっくりどうぞ」並微笑退開。" }
+            ],
+            "tips": "絕不催促客人，得體致歉後繼續巡視其他桌。"
+          }
+        },
+        {
+          "id": "bs_sc5_tidy",
+          "type": "dialog",
+          "speaker": "外場撤盤・情境 5：整理桌面空盤 (自然應對流)",
+          "zh": "【店員詢問】「方便幫您整理一下桌面嗎？」(tēburu no ue, okatazuke shite mo yoroshii deshō ka?)\n【客人指定保留】「這個請幫我先留著。」(kore wa sono mama de onegai shimasu.)\n【店員應答】「好的，那這邊先幫您收喔。」(wakarimashita. kochira wa sagemasu ne.)",
+          "ja": "【店員】テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>片付<rt>かたづ</rt></ruby>けしてもよろしいでしょうか？\n【客】これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。\n【店員】わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "テーブルの<ruby>上<rt>うえ</rt></ruby>", "zh": "桌面" },
+              { "ja": "お<ruby>片付<rt>かたづ</rt></ruby>けする", "zh": "整理、收拾（美化敬語）" },
+              { "ja": "そのままで", "zh": "保持原樣、先留著" },
+              { "ja": "わかりました", "zh": "好的、明白了" },
+              { "ja": "こちらは<ruby>下<rt>さ</rt></ruby>げますね", "zh": "那這邊先幫您收喔" }
+            ],
+            "points": [
+              { "title": "【整理桌面 お片付けしてもよろしいでしょうか】", "desc": "桌上碗盤較多時，以「整理桌面」的名義主動上前服務。" },
+              { "title": "【尊重客人指定保留】", "desc": "客人說「そのままで」時，只收走客人同意的空盤，保留客人想留的餐盤。" }
+            ],
+            "tips": "將桌面空間騰出，讓客人坐得更寬敞舒適。"
+          }
+        },
+        {
+          "id": "bs_sc6_casual",
+          "type": "dialog",
+          "speaker": "外場撤盤・情境 6：隨和親切口吻 (自然應對流)",
+          "zh": "【店員詢問】「這邊幫您收一下喔。」(kochira, osage shimasu ne.)\n【客人委婉推遲】「可以稍等一下再收嗎？」(a, mō chotto ato de ii desu ka?)\n【店員應答】「不好意思，那我等一下再來喔。」(shitsurei shimashita. mata ato de kimasu ne.)",
+          "ja": "【店員】こちら、お<ruby>下<rt>さ</rt></ruby>げしますね。\n【客】あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？\n【店員】<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "お<ruby>下<rt>さ</rt></ruby>げしますね", "zh": "幫您收一下喔" },
+              { "ja": "もうちょっと<ruby>後<rt>あと</rt></ruby>で", "zh": "稍等一下、再過一會兒" },
+              { "ja": "また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね", "zh": "那我等一下再來喔" }
+            ],
+            "points": [
+              { "title": "【隨和親切口吻 〜ますね】", "desc": "親切自然的外場互動風格。" },
+              { "title": "【委婉推遲應對 また後で来ますね】", "desc": "客人希望稍後再收時，輕快回應「失礼しました。また後で来ますね」，毫不尷尬。" }
+            ],
+            "tips": "親和力滿分，讓客人感受像在朋友家用餐般輕鬆自在。"
           }
         },
         {
@@ -3279,6 +3400,232 @@ function createRealRunnerData() {
         { "id": "v_dk_3", "ja": "ノンアルコールビール", "zh": "無酒精啤酒 (All-Free)", "cat": "酒水", "imageUrl": "./photos/IMG_0890.jpg", "note": "SUNTORY ALL-FREE 瓶裝" },
         { "id": "v_dk_4", "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "飲料機內（店內稱炭酸）" }
       ]
+    },
+    {
+      "id": "tab_colleague_tasks",
+      "name": "同事平級高頻指示 (指示)",
+      "icon": "🤝",
+      "items": [
+        {
+          "id": "ct_1_lighter",
+          "type": "dialog",
+          "speaker": "1. 請去放打火機 (3種說法)",
+          "zh": "【標準口語】去把打火機放回原位（ライター戻してきて。）\n【縮約隨和】打火機幫我先擺回原來那裡（ライター元の場所に置いといて。）\n【超簡短拜託】打火機歸位拜託了（ライター戻しお願い。）",
+          "ja": "① ライター<ruby>戻<rt>もど</rt></ruby>してきて。\n② ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いといて。\n③ ライター<ruby>戻<rt>もど</rt></ruby>しお<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ライター", "zh": "打火機、點火槍" },
+              { "ja": "<ruby>戻<rt>もど</rt></ruby>す", "zh": "放回、歸位" },
+              { "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原本的位置" },
+              { "ja": "<ruby>置<rt>お</rt></ruby>く", "zh": "放置、擺放" }
+            ],
+            "points": [
+              { "title": "【標準口語 〜てきて】", "desc": "戻してきて（戻す＋てくる）➔ 去放好再回來。" },
+              { "title": "【縮約隨和 〜といて】", "desc": "置いといて（置いておいて）➔ 先擺在那邊放著。" },
+              { "title": "【超簡短 名詞＋お願い】", "desc": "ライター戻しお願い ➔ 最乾脆俐落的同事交辦。" }
+            ],
+            "tips": "內場點火器用完時，平級同事最常用這三句互相提醒歸位。"
+          }
+        },
+        {
+          "id": "ct_2_wrap",
+          "type": "dialog",
+          "speaker": "2. 請用保鮮膜封起來 (3種說法)",
+          "zh": "【標準口語】這幫我包個保鮮膜（これ、ラップしといて。）\n【縮約隨和】去幫這個封一下保鮮膜（これ、ラップかけてきて。）\n【超簡短拜託】這包保鮮膜拜託囉（これラップお願い。）",
+          "ja": "① これ、ラップしといて。\n② これ、ラップかけてきて。\n③ これラップお<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ラップ", "zh": "保鮮膜 (plastic wrap)" },
+              { "ja": "ラップする", "zh": "包保鮮膜" },
+              { "ja": "かける", "zh": "覆蓋、封上" }
+            ],
+            "points": [
+              { "title": "【標準口語 ラップしといて】", "desc": "ラップしておいて ➔ ラップしといて（包好放著）。" },
+              { "title": "【縮約隨和 ラップかけてきて】", "desc": "去幫食材封上保鮮膜再回來。" },
+              { "title": "【超簡短 これラップお願い】", "desc": "把盤子推給同事時最直接的短語。" }
+            ],
+            "tips": "備餐或打烊時多餘食材封膜保鮮必用金句。"
+          }
+        },
+        {
+          "id": "ct_3_table_wipe",
+          "type": "dialog",
+          "speaker": "3. 請去擦桌子 (3種說法)",
+          "zh": "【標準口語】去把桌子擦乾淨（テーブル拭いてきて。）\n【縮約隨和】順手把桌子擦一下放著（テーブル拭いといて。）\n【超簡短拜託】那桌交給你處理囉（あそ公のテーブルお願い。）",
+          "ja": "① テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。\n② テーブル<ruby>拭<rt>ふ</rt></ruby>いといて。\n③ あそこのテーブルお<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "テーブル", "zh": "餐桌、桌面" },
+              { "ja": "<ruby>拭<rt>ふ</rt></ruby>く", "zh": "擦拭、擦乾淨" },
+              { "ja": "あそこの", "zh": "那邊的、那一桌" }
+            ],
+            "points": [
+              { "title": "【標準口語 拭いてきて】", "desc": "拭く ➔ 拭いて＋きて（去擦乾淨）。" },
+              { "title": "【縮約隨和 拭いといて】", "desc": "拭いておいて ➔ 拭いといて（擦好放著）。" },
+              { "title": "【超簡短 あそこのテーブルお願い】", "desc": "指著特定桌位交辦給夥伴。" }
+            ],
+            "tips": "客人離席清桌時，同事分工擦桌子最常用。"
+          }
+        },
+        {
+          "id": "ct_4_rice",
+          "type": "dialog",
+          "speaker": "4. 請去添飯 (3種說法)",
+          "zh": "【標準口語】去盛一碗飯來（ご飯盛ってきて。）\n【縮約隨和】順便先盛一下飯放著（ご飯よそっといて。）\n【超簡短拜託】客人續飯拜託了（ご飯おかわりお願い。）",
+          "ja": "① ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>ってきて。\n② ご<ruby>飯<rt>はん</rt></ruby>よそっといて。\n③ ご<ruby>飯<rt>はん</rt></ruby>おかわりお<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ご<ruby>飯<rt>はん</rt></ruby>", "zh": "米飯、白飯" },
+              { "ja": "<ruby>盛<rt>も</rt></ruby>る", "zh": "盛飯、裝碗" },
+              { "ja": "よそう", "zh": "添飯、盛裝" },
+              { "ja": "おかわり", "zh": "續碗、再來一碗" }
+            ],
+            "points": [
+              { "title": "【盛る vs よそう】", "desc": "兩者皆表示盛飯，よそっといて 口語特別道地。" },
+              { "title": "【縮約 よそっといて】", "desc": "よそっておいて ➔ よそっといて。" },
+              { "title": "【おかわりお願い】", "desc": "客人點續飯時向內場夥伴交辦。" }
+            ],
+            "tips": "朝食或客人在餐檯續飯時，互相支援盛飯用語。"
+          }
+        },
+        {
+          "id": "ct_5_inkamu",
+          "type": "dialog",
+          "speaker": "5. 請去擦拭對講機 (3種說法)",
+          "zh": "【標準口語】順手擦一下對講機耳麥（インカム拭いといて。）\n【縮約隨和】對講機酒精消毒一下（インカム消毒しといて。）\n【超簡短拜託】對講機清理拜託了（インカムの掃除お願い。）",
+          "ja": "① インカム<ruby>拭<rt>ふ</rt></ruby>いといて。\n② インカム<ruby>消毒<rt>しょうどく</rt></ruby>しといて。\n③ インカムの<ruby>掃除<rt>そうじ</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "インカム", "zh": "無線電對講機、耳麥" },
+              { "ja": "<ruby>消毒<rt>しょうどく</rt></ruby>する", "zh": "酒精消毒" },
+              { "ja": "<ruby>掃除<rt>そうじ</rt></ruby>", "zh": "清理、打掃" }
+            ],
+            "points": [
+              { "title": "【消毒しといて】", "desc": "消毒しておいて ➔ 消毒しといて。" },
+              { "title": "【拭いといて】", "desc": "拭いておいて ➔ 拭いといて。" },
+              { "title": "【インカムの掃除お願い】", "desc": "對講機日常清潔維護交代。" }
+            ],
+            "tips": "下班交接或上班領用無線電時，酒精消毒耳麥的日常交辦。"
+          }
+        },
+        {
+          "id": "ct_6_trash_gather",
+          "type": "dialog",
+          "speaker": "6. 請收集垃圾並丟掉 (3種說法)",
+          "zh": "【標準口語】把垃圾打包集中，拿去丟掉（ゴミまとめて捨ててきて。）\n【縮約隨和】把垃圾收過來順手扔了（ゴミ集めて捨てといて。）\n【超簡短拜託】去倒個垃圾（ゴミ出し行ってきて。）",
+          "ja": "① ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。\n② ゴミ<ruby>集<rt>あつ</rt></ruby>めて<ruby>捨<rt>す</rt></ruby>てといて。\n③ ゴミ<ruby>出<rt>だ</rt></ruby>し<ruby>行<rt>い</rt></ruby>ってきて。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ゴミ", "zh": "垃圾" },
+              { "ja": "まとめる", "zh": "整理、集中" },
+              { "ja": "<ruby>集<rt>あつ</rt></ruby>める", "zh": "收集、聚集" },
+              { "ja": "<ruby>捨<rt>す</rt></ruby>てる", "zh": "丟棄、扔掉" },
+              { "ja": "ゴミ<ruby>出<rt>だ</rt></ruby>し", "zh": "倒垃圾" }
+            ],
+            "points": [
+              { "title": "【連動 て形＋てきて】", "desc": "まとめて捨ててきて ➔ 打包集中後拿去丟掉。" },
+              { "title": "【縮約 捨てといて】", "desc": "捨てておいて ➔ 捨てといて。" },
+              { "title": "【ゴミ出し行ってきて】", "desc": "去倒垃圾再回來。" }
+            ],
+            "tips": "餐廳打烊或外場垃圾桶滿時，打包倒垃圾的俐落交辦。"
+          }
+        },
+        {
+          "id": "ct_7_trash_single",
+          "type": "dialog",
+          "speaker": "7. 請把這個丟掉 (3種說法)",
+          "zh": "【標準口語】這個順手幫我丟掉（これ捨てといて。）\n【縮約隨和】把這個扔了（これポイしといて。）\n【超簡短拜託】這處理掉拜託了（これ処分お願い。）",
+          "ja": "① これ<ruby>捨<rt>す</rt></ruby>てといて。\n② これポイしといて。\n③ これ<ruby>処分<rt>しょぶん</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "これ", "zh": "這個" },
+              { "ja": "ポイする", "zh": "扔掉、隨手丟棄（擬態詞口語）" },
+              { "ja": "<ruby>処分<rt>しょぶん</rt></ruby>", "zh": "處分、報廢處理" }
+            ],
+            "points": [
+              { "title": "【捨てといて】", "desc": "捨てておいて ➔ 捨てといて。" },
+              { "title": "【擬態語 ポイしといて】", "desc": "ポイ（隨手扔）＋しといて，日本同事口語極常見！" },
+              { "title": "【処分お願い】", "desc": "破損品或過期品報廢丟棄用語。" }
+            ],
+            "tips": "手上有廢棄包裝或用過的耗材時，順手交給同事幫忙扔。"
+          }
+        },
+        {
+          "id": "ct_8_tong",
+          "type": "dialog",
+          "speaker": "8. 請收集夾子 (3種說法)",
+          "zh": "【標準口語】去把夾子收攏過來（トング集めてきて。）\n【縮約隨和】夾子順便整批回收一下（トング回収しといて。）\n【超簡短拜託】夾子收集拜託你囉（トング集めお願い。）",
+          "ja": "① トング<ruby>集<rt>あつ</rt></ruby>めてきて。\n② トング<ruby>回収<rt>かいしゅう</rt></ruby>しといて。\n③ トング<ruby>集<rt>あつ</rt></ruby>めお<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "トング", "zh": "食物夾、料理夾" },
+              { "ja": "<ruby>集<rt>あつ</rt></ruby>める", "zh": "收集、集中" },
+              { "ja": "<ruby>回収<rt>かいしゅう</rt></ruby>する", "zh": "回收、收回" },
+              { "ja": "<ruby>集<rt>あつ</rt></ruby>め", "zh": "收集作業" }
+            ],
+            "points": [
+              { "title": "【集めてきて】", "desc": "集める＋てくる ➔ 去收集拿過來。" },
+              { "title": "【回収しといて】", "desc": "回収しておいて ➔ 回収しといて。" },
+              { "title": "【トング集めお願い】", "desc": "更換餐檯夾子時的極簡交代。" }
+            ],
+            "tips": "營業中定時更換自助餐檯夾子（衛生管理規範）時使用。"
+          }
+        },
+        {
+          "id": "ct_9_bowl_put_back",
+          "type": "dialog",
+          "speaker": "9. 請把碗放回該放的地方 (3種說法)",
+          "zh": "【標準口語】餐具放回原位收好（お皿・食器元の場所に戻しといて。）\n【縮約隨和】去把碗放回固定收納處（器、定位置にしまってきて。）\n【超簡短拜託】碗的收拾歸位拜託囉（お椀の片付けお願い。）",
+          "ja": "① お<ruby>皿<rt>さら</rt></ruby>（<ruby>食器<rt>しょっき</rt></ruby>）<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>しといて。\n② <ruby>器<rt>うつわ</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまってきて。\n③ お<ruby>椀<rt>わん</rt></ruby>の<ruby>片付<rt>かたづ</rt></ruby>けお<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "<ruby>食器<rt>しょっき</rt></ruby>", "zh": "餐具、器皿" },
+              { "ja": "<ruby>器<rt>うつわ</rt></ruby>", "zh": "器皿、碗盤" },
+              { "ja": "<ruby>定位置<rt>ていいち</rt></ruby>", "zh": "固定位置、原位" },
+              { "ja": "しまう", "zh": "收納、收好" }
+            ],
+            "points": [
+              { "title": "【戻しといて】", "desc": "戻しておいて ➔ 戻しといて。" },
+              { "title": "【定位置にしまってきて】", "desc": "收納到固定收納處再回來。" },
+              { "title": "【お椀の片付けお願い】", "desc": "碗類歸位請求。" }
+            ],
+            "tips": "洗滌區洗好的碗盤擦乾後，推回外場抽屜或推車定點收好。"
+          }
+        },
+        {
+          "id": "ct_10_ice",
+          "type": "dialog",
+          "speaker": "10. 請去補充冰塊 (3種說法)",
+          "zh": "【標準口語】去製冰機拿冰塊來（氷取ってきて。）\n【縮約隨和】冰槽順便補點冰進去（氷足しといて。）\n【超簡短拜託】冰塊補充拜託了（氷の補充お願い。）",
+          "ja": "① <ruby>氷<rt>こおり</rt></ruby><ruby>取<rt>と</rt></ruby>ってきて。\n② <ruby>氷<rt>こおり</rt></ruby><ruby>足<rt>た</rt></ruby>しといて。\n③ <ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "<ruby>氷<rt>こおり</rt></ruby>", "zh": "冰塊" },
+              { "ja": "<ruby>取<rt>と</rt></ruby>る", "zh": "拿取、取得" },
+              { "ja": "<ruby>足<rt>た</rt></ruby>す", "zh": "添加、補充" },
+              { "ja": "<ruby>補充<rt>ほじゅう</rt></ruby>", "zh": "補充" }
+            ],
+            "points": [
+              { "title": "【取ってきて】", "desc": "取る＋てくる ➔ 去拿來再回來。" },
+              { "title": "【足しといて】", "desc": "足しておいて ➔ 足しといて（補足一些放著）。" },
+              { "title": "【氷の補充お願い】", "desc": "冰塊用盡時的極簡交辦。" }
+            ],
+            "tips": "飲料區或冷飲冰槽冰塊見底時，同事間最常講的補冰三部曲。"
+          }
+        }
+      ],
+      "vocabs": [
+        { "id": "v_ct_1", "ja": "ライター", "zh": "打火機（點火器）", "cat": "工具", "imageUrl": "", "note": "同事交辦：放回原位" },
+        { "id": "v_ct_2", "ja": "ラップ", "zh": "保鮮膜 (plastic wrap)", "cat": "工具", "imageUrl": "", "note": "同事交辦：包保鮮膜" },
+        { "id": "v_ct_3", "ja": "テーブル<ruby>拭<rt>ふ</rt></ruby>き", "zh": "擦桌子", "cat": "工具", "imageUrl": "", "note": "同事交辦：擦乾淨桌子" },
+        { "id": "v_ct_4", "ja": "ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>り", "zh": "添飯 / 盛飯", "cat": "餐點", "imageUrl": "", "note": "同事交辦：盛飯 / 客人續飯" },
+        { "id": "v_ct_5", "ja": "インカム<ruby>消毒<rt>しょうどく</rt></ruby>", "zh": "對講機消毒", "cat": "工具", "imageUrl": "", "note": "同事交辦：耳麥酒精清潔" },
+        { "id": "v_ct_6", "ja": "ゴミ<ruby>出<rt>だ</rt></ruby>し", "zh": "倒垃圾 / 垃圾打包", "cat": "工具", "imageUrl": "", "note": "同事交辦：打包丟垃圾" },
+        { "id": "v_ct_7", "ja": "ポイする", "zh": "扔掉 / 隨手丟棄", "cat": "對話", "imageUrl": "", "note": "同事口語：把這個扔了" },
+        { "id": "v_ct_8", "ja": "トング<ruby>回収<rt>かいしゅう</rt></ruby>", "zh": "夾子整批回收", "cat": "餐具", "imageUrl": "", "note": "同事交辦：夾子收集" },
+        { "id": "v_ct_9", "ja": "<ruby>定位置<rt>ていいち</rt></ruby>", "zh": "固定收納處 (原位)", "cat": "工具", "imageUrl": "", "note": "同事交辦：碗盤歸位收好" },
+        { "id": "v_ct_10", "ja": "<ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>", "zh": "補充冰塊", "cat": "工具", "imageUrl": "", "note": "同事交辦：製冰機拿冰塊" }
+      ]
     }
   ],
   "vocabSop": [
@@ -3693,6 +4040,312 @@ function createRealRunnerData() {
         ],
         "tips": "客人向你道謝時，微微欠身並微笑回答此句，展現日本頂級服務水準。"
       }
+    },
+
+    // ── 🍽️ 外場撤盤自然應對 6 組 ──
+    {
+      "id": "vc_bs_1",
+      "ja": "【店員】こちら、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？\n【客】はい、お<ruby>願<rt>ねが</rt></ruby>いします。\n【店員】ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。",
+      "zh": "【情境1：標準撤盤】「這邊方便幫您收走嗎？」➔「好的，麻煩你了。」➔「謝謝，不好意思打擾了。」",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "標準撤盤 (3步驟應對)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "こちら", "zh": "這邊、這個（敬語代名詞）" },
+          { "ja": "お<ruby>下<rt>さ</rt></ruby>げする", "zh": "撤收餐盤（謙讓語）" },
+          { "ja": "よろしいでしょうか", "zh": "可以嗎？方便嗎？" }
+        ],
+        "points": [
+          { "title": "【標準撤盤 3 步驟】", "desc": "主動詢問 ➔ 客人同意「はい、お願いします」 ➔ 致謝「ありがとうございます。失礼します」並撤盤。" }
+        ],
+        "tips": "手指示意要收的盤子，語氣輕柔，雙手端盤。"
+      }
+    },
+    {
+      "id": "vc_bs_2",
+      "ja": "【店員】こちらはお<ruby>済<rt>す</rt></ruby>みでしょうか？\n【客】<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。\n【店員】ありがとうございます。お<ruby>下<rt>さ</rt></ruby>げしますね。",
+      "zh": "【情境2：確認盤中剩餘物】「這個您已經用餐完畢了嗎？」➔「沒問題，請收走吧。」➔「謝謝您，幫您收走喔。」",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "確認剩餘物 (3步驟應對)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "お<ruby>済<rt>す</rt></ruby>み", "zh": "結束、完畢（敬語）" },
+          { "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です", "zh": "沒問題、不用了" },
+          { "ja": "お<ruby>下<rt>さ</rt></ruby>げしますね", "zh": "幫您收走喔（親切口吻）" }
+        ],
+        "points": [
+          { "title": "【確認剩餘物 お済みでしょうか】", "desc": "盤中還剩一點食物時，確認客人是否用餐完畢，避免誤收。" }
+        ],
+        "tips": "目光徵詢客人確認停筷後，再微笑動手收盤。"
+      }
+    },
+    {
+      "id": "vc_bs_3",
+      "ja": "【店員】<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたします。\n【客】ごちそうさまでした。\n【店員】ありがとうございます！ごゆっくりどうぞ。",
+      "zh": "【情境3：明顯空盤撤收】「幫您撤下空盤。」➔「謝謝招待／我吃飽了。」➔「謝謝您！請繼續慢用。」",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "空盤撤收 (3步驟應對)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>", "zh": "空盤子" },
+          { "ja": "ごちそうさまでした", "zh": "多謝款待、我吃飽了" },
+          { "ja": "ごゆっくりどうぞ", "zh": "請繼續慢用" }
+        ],
+        "points": [
+          { "title": "【明顯空盤主動告知】", "desc": "盤子已吃乾淨時直接說「空いたお皿をお下げいたします」。" }
+        ],
+        "tips": "客人若把空盤推到桌外側，順勢俐落撤收並致意。"
+      }
+    },
+    {
+      "id": "vc_bs_4",
+      "ja": "【店員】<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？\n【客】あ、まだ<ruby>食<rt>た</rt></ruby>べてます（<ruby>飲<rt>の</rt></ruby>んでます）。\n【店員】あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。",
+      "zh": "【情境4：撤收玻璃杯與空杯】「不好意思，方便幫您收走杯子嗎？」➔「啊，我還在吃／喝。」➔「啊，不好意思！請慢慢享用。」",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "撤玻璃杯 (3步驟應對)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "グラス", "zh": "玻璃杯、飲料杯" },
+          { "ja": "まだ<ruby>飲<rt>の</rt></ruby>んでます", "zh": "我還在喝" },
+          { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました", "zh": "不好意思、失禮了" }
+        ],
+        "points": [
+          { "title": "【客人未完時得體退下】", "desc": "客人表示還在享用時，立刻雙手收回，自然致歉並微笑退開。" }
+        ],
+        "tips": "絕不催促客人，得體致歉後繼續巡視其他桌。"
+      }
+    },
+    {
+      "id": "vc_bs_5",
+      "ja": "【店員】テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>片付<rt>かたづ</rt></ruby>けしてもよろしいでしょうか？\n【客】これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。\n【店員】わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。",
+      "zh": "【情境5：整理桌面空盤】「方便幫您整理一下桌面嗎？」➔「這個請幫我先留著。」➔「好的，那這邊先幫您收喔。」",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "整理桌面 (3步驟應對)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "テーブルの<ruby>上<rt>うえ</rt></ruby>", "zh": "桌面" },
+          { "ja": "そのままで", "zh": "保持原樣、先留著" },
+          { "ja": "わかりました", "zh": "好的、明白了" }
+        ],
+        "points": [
+          { "title": "【尊重客人指定保留】", "desc": "客人說「そのままで」時，只收走客人同意的空盤，保留客人想留的餐盤。" }
+        ],
+        "tips": "將桌面空間騰出，讓客人坐得更寬敞舒適。"
+      }
+    },
+    {
+      "id": "vc_bs_6",
+      "ja": "【店員】こちら、お<ruby>下<rt>さ</rt></ruby>げしますね。\n【客】あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？\n【店員】<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。",
+      "zh": "【情境6：隨和親切口吻】「這邊幫您收一下喔。」➔「可以稍等一下再收嗎？」➔「不好意思，那我等一下再來喔。」",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "隨和親切口吻 (3步驟應對)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "お<ruby>下<rt>さ</rt></ruby>げしますね", "zh": "幫您收一下喔" },
+          { "ja": "もうちょっと<ruby>後<rt>あと</rt></ruby>で", "zh": "稍等一下、再過一會兒" },
+          { "ja": "また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね", "zh": "那我等一下再來喔" }
+        ],
+        "points": [
+          { "title": "【委婉推遲應對 また後で来ますね】", "desc": "客人希望稍後再收時，輕快回應「失礼しました。また後で来ますね」，毫不尷尬。" }
+        ],
+        "tips": "親和力滿分，讓客人感受像在朋友家用餐般輕鬆自在。"
+      }
+    },
+
+    // ── 🤝 同事平級高頻指示 (10大動作日常說法) ──
+    {
+      "id": "vc_ct_1",
+      "ja": "① ライター<ruby>戻<rt>もど</rt></ruby>してきて。\n② ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いといて。\n③ ライター<ruby>戻<rt>もど</rt></ruby>しお<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示1：請去放打火機】去把打火機放回原位 / 打火機幫我先擺回原來那裡 / 打火機歸位拜託了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "ライター", "zh": "打火機、點火槍" },
+          { "ja": "<ruby>戻<rt>もど</rt></ruby>す", "zh": "放回、歸位" },
+          { "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原本的位置" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①標準口語（戻してきて） / ②縮約隨和（置いといて） / ③超簡短拜託（ライター戻しお願い）" }
+        ],
+        "tips": "內場點火器用完時，平級同事最常用這三句互相提醒歸位。"
+      }
+    },
+    {
+      "id": "vc_ct_2",
+      "ja": "① これ、ラップしといて。\n② これ、ラップかけてきて。\n③ これラップお<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示2：請用保鮮膜封起來】這幫我包個保鮮膜 / 去幫這個封一下保鮮膜 / 這包保鮮膜拜託囉",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "ラップ", "zh": "保鮮膜 (plastic wrap)" },
+          { "ja": "ラップする", "zh": "包保鮮膜" },
+          { "ja": "かける", "zh": "覆蓋、封上" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①ラップしといて / ②ラップかけてきて / ③これラップお願い" }
+        ],
+        "tips": "備餐或打烊時多餘食材封膜保鮮必用金句。"
+      }
+    },
+    {
+      "id": "vc_ct_3",
+      "ja": "① テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。\n② テーブル<ruby>拭<rt>ふ</rt></ruby>いといて。\n③ あそこのテーブルお<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示3：請去擦桌子】去把桌子擦乾淨 / 順手把桌子擦一下放著 / 那桌交給你處理囉",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "テーブル", "zh": "餐桌、桌面" },
+          { "ja": "<ruby>拭<rt>ふ</rt></ruby>く", "zh": "擦拭、擦乾淨" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①テーブル拭いてきて / ②テーブル拭いといて / ③あそこのテーブルお願い" }
+        ],
+        "tips": "客人離席清桌時，同事分工擦桌子最常用。"
+      }
+    },
+    {
+      "id": "vc_ct_4",
+      "ja": "① ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>ってきて。\n② ご<ruby>飯<rt>はん</rt></ruby>よそっといて。\n③ ご<ruby>飯<rt>はん</rt></ruby>おかわりお<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示4：請去添飯】去盛一碗飯來 / 順便先盛一下飯放著 / 客人續飯拜託了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "ご<ruby>飯<rt>はん</rt></ruby>", "zh": "米飯、白飯" },
+          { "ja": "<ruby>盛<rt>も</rt></ruby>る", "zh": "盛飯、裝碗" },
+          { "ja": "よそう", "zh": "添飯、盛裝" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①ご飯盛ってきて / ②ご飯よそっといて / ③ご飯おかわりお願い" }
+        ],
+        "tips": "朝食或客人在餐檯續飯時，互相支援盛飯用語。"
+      }
+    },
+    {
+      "id": "vc_ct_5",
+      "ja": "① インカム<ruby>拭<rt>ふ</rt></ruby>いといて。\n② インカム<ruby>消毒<rt>しょうどく</rt></ruby>しといて。\n③ インカムの<ruby>掃除<rt>そうじ</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示5：請去擦拭對講機】順手擦一下對講機耳麥 / 對講機酒精消毒一下 / 對講機清理拜託了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "インカム", "zh": "無線電對講機、耳麥" },
+          { "ja": "<ruby>消毒<rt>しょうどく</rt></ruby>する", "zh": "酒精消毒" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①インカム拭いといて / ②インカム消毒しといて / ③インカムの掃除お願い" }
+        ],
+        "tips": "下班交接或上班領用無線電時，酒精消毒耳麥的日常交辦。"
+      }
+    },
+    {
+      "id": "vc_ct_6",
+      "ja": "① ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。\n② ゴミ<ruby>集<rt>あつ</rt></ruby>めて<ruby>捨<rt>す</rt></ruby>てといて。\n③ ゴミ<ruby>出<rt>だ</rt></ruby>し<ruby>行<rt>い</rt></ruby>ってきて。",
+      "zh": "【指示6：請收集垃圾並丟掉】把垃圾打包集中，拿去丟掉 / 把垃圾收過來順手扔了 / 去倒個垃圾",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "ゴミ", "zh": "垃圾" },
+          { "ja": "<ruby>集<rt>あつ</rt></ruby>める", "zh": "收集、聚集" },
+          { "ja": "<ruby>捨<rt>す</rt></ruby>てる", "zh": "丟棄、扔掉" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①ゴミまとめて捨ててきて / ②ゴミ集めて捨てといて / ③ゴミ出し行ってきて" }
+        ],
+        "tips": "餐廳打烊或外場垃圾桶滿時，打包倒垃圾的俐落交辦。"
+      }
+    },
+    {
+      "id": "vc_ct_7",
+      "ja": "① これ<ruby>捨<rt>す</rt></ruby>てといて。\n② これポイしといて。\n③ これ<ruby>処分<rt>しょぶん</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示7：請把這個丟掉】這個順手幫我丟掉 / 把這個扔了 / 這處理掉拜託了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "これ", "zh": "這個" },
+          { "ja": "ポイする", "zh": "扔掉、隨手丟棄" },
+          { "ja": "<ruby>処分<rt>しょぶん</rt></ruby>", "zh": "處分、報廢處理" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①これ捨てといて / ②これポイしといて / ③これ処分お願い" }
+        ],
+        "tips": "手上有廢棄包裝或用過的耗材時，順手交給同事幫忙扔。"
+      }
+    },
+    {
+      "id": "vc_ct_8",
+      "ja": "① トング<ruby>集<rt>あつ</rt></ruby>めてきて。\n② トング<ruby>回収<rt>かいしゅう</rt></ruby>しといて。\n③ トング<ruby>集<rt>あつ</rt></ruby>めお<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示8：請收集夾子】去把夾子收攏過來 / 夾子順便整批回收一下 / 夾子收集拜託你囉",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "トング", "zh": "食物夾、料理夾" },
+          { "ja": "<ruby>集<rt>あつ</rt></ruby>める", "zh": "收集、集中" },
+          { "ja": "<ruby>回収<rt>かいしゅう</rt></ruby>する", "zh": "回收、收回" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①トング集めてきて / ②トング回収しといて / ③トング集めお願い" }
+        ],
+        "tips": "營業中定時更換自助餐檯夾子時使用。"
+      }
+    },
+    {
+      "id": "vc_ct_9",
+      "ja": "① お<ruby>皿<rt>さら</rt></ruby>（<ruby>食器<rt>しょっき</rt></ruby>）<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>しといて。\n② <ruby>器<rt>うつわ</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまってきて。\n③ お<ruby>椀<rt>わん</rt></ruby>の<ruby>片付<rt>かたづ</rt></ruby>けお<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示9：請把碗放回該放的地方】餐具放回原位收好 / 去把碗放回固定收納處 / 碗的收拾歸位拜託囉",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>食器<rt>しょっき</rt></ruby>", "zh": "餐具、器皿" },
+          { "ja": "<ruby>定位置<rt>ていいち</rt></ruby>", "zh": "固定位置、原位" },
+          { "ja": "しまう", "zh": "收納、收好" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①食器元の場所に戻しといて / ②器、定位置にしまってきて / ③お椀の片付けお願い" }
+        ],
+        "tips": "洗滌區洗好的碗盤擦乾後，推回外場定點收好。"
+      }
+    },
+    {
+      "id": "vc_ct_10",
+      "ja": "① <ruby>氷<rt>こおり</rt></ruby><ruby>取<rt>と</rt></ruby>ってきて。\n② <ruby>氷<rt>こおり</rt></ruby><ruby>足<rt>た</rt></ruby>しといて。\n③ <ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。",
+      "zh": "【指示10：請去補充冰塊】去製冰機拿冰塊來 / 冰槽順便補點冰進去 / 冰塊補充拜託了",
+      "cat": "對話",
+      "imageUrl": "",
+      "note": "同事平級交辦 (3種說法)",
+      "grammar": {
+        "vocabs": [
+          { "ja": "<ruby>氷<rt>こおり</rt></ruby>", "zh": "冰塊" },
+          { "ja": "<ruby>取<rt>と</rt></ruby>る", "zh": "拿取、取得" },
+          { "ja": "<ruby>足<rt>た</rt></ruby>す", "zh": "添加、補充" }
+        ],
+        "points": [
+          { "title": "【3 種口吻】", "desc": "①氷取ってきて / ②氷足しといて / ③氷の補充お願い" }
+        ],
+        "tips": "飲料區或冷飲冰槽冰塊見底時，同事間最常講的補冰三部曲。"
+      }
     }
   ],
   "scenarios": [
@@ -3753,8 +4406,8 @@ function loadAppData() {
       return data;
     }
     const data = JSON.parse(raw);
-    // 嚴格校驗：若 tabs 不完整或 vocabSop 未包含最新真實班表名單/餐具分類/外國人標記，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
+    // 嚴格校驗：若 tabs 不完整或未包含最新同事平級指示/撤盤情境/最新班表名單，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined) || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.vocabSop.some(v => v.id === 'vc_bs_1')) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
@@ -5678,9 +6331,117 @@ function getLocalRoleplaySimulation(userText, scenario) {
     betterExpressionZh: '標準日語表達'
   };
 
-  // 1. 同事/同僚情境 (打招呼 / 互相協作 / 推車借過 / 互道辛苦)
+  // 1. 同事/同僚情境 (打招呼 / 互相協作 / 10大動作平級交辦 / 推車借過 / 互道辛苦)
   if (role.includes('同事') || role.includes('同僚') || role.includes('夥伴')) {
-    if (text.includes('おはよう') || text.includes('早') || text.includes('よろしく')) {
+    if (text.includes('ライター') || text.includes('打火機') || text.includes('點火')) {
+      jaText = 'はーい、ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いとくね！ありがとう！';
+      zhText = '好～打火機我幫你放回原位喔！謝謝！';
+      keywords = [{ ja: 'ライター', zh: '打火機/點火槍', cat: '工具' }, { ja: '<ruby>戻<rt>もど</rt></ruby>す', zh: '放回、歸位', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '同事間使用「ライター戻しお願い」或「置いといて」簡短俐落，完全符合日本現場默契！',
+        etiquetteFeedback: '火源工具用畢即時互相提醒歸位，安全意識滿分。',
+        betterExpression: 'ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いといて。',
+        betterExpressionZh: '打火機幫我先擺回原來那裡喔。'
+      };
+    } else if (text.includes('ラップ') || text.includes('保鮮膜') || text.includes('封起來')) {
+      jaText = 'オッケー！これ、ラップしとくね！<ruby>任<rt>まか</rt></ruby>せて！';
+      zhText = 'OK！這個我來包保鮮膜放著！交給我！';
+      keywords = [{ ja: 'ラップ', zh: '保鮮膜', cat: '工具' }, { ja: 'ラップする', zh: '包保鮮膜', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「これ、ラップしといて」是廚房食材保鮮最自然的平級口吻！',
+        etiquetteFeedback: '隨手封膜避免食材氧化乾燥，專業度極高。',
+        betterExpression: 'これ、ラップしといて。',
+        betterExpressionZh: '這幫我包個保鮮膜放著。'
+      };
+    } else if (text.includes('テーブル') || text.includes('拭') || text.includes('擦桌')) {
+      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>！あそこのテーブル<ruby>拭<rt>ふ</rt></ruby>いとくよ！';
+      zhText = '收到！那邊的桌子我來擦乾淨！';
+      keywords = [{ ja: 'テーブル', zh: '餐桌', cat: '工具' }, { ja: '<ruby>拭<rt>ふ</rt></ruby>く', zh: '擦拭', cat: '對話' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '「テーブル拭いといて」或「あそこのテーブルお願い」指示明確！',
+        etiquetteFeedback: '外場翻桌擦拭分工明確，迅速提高翻桌效率。',
+        betterExpression: 'テーブル<ruby>拭<rt>ふ</rt></ruby>いといて。',
+        betterExpressionZh: '順手把桌子擦一下放著。'
+      };
+    } else if (text.includes('ご飯') || text.includes('盛') || text.includes('よそう') || text.includes('添飯') || text.includes('おかわり')) {
+      jaText = 'すぐご<ruby>飯<rt>はん</rt></ruby>よそってくるね！ちょっと<ruby>待<rt>ま</rt></ruby>ってて！';
+      zhText = '我馬上盛一碗飯來！稍等一下喔！';
+      keywords = [{ ja: 'ご<ruby>飯<rt>はん</rt></ruby>', zh: '白飯', cat: '餐點' }, { ja: 'よそう', zh: '添飯、盛裝', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '「ご飯盛ってきて」「よそっといて」為道地餐飲用語，表達極為道地！',
+        etiquetteFeedback: '客人續飯時即時交辦支援，出餐流暢度滿分。',
+        betterExpression: 'ご<ruby>飯<rt>はん</rt></ruby>よそっといて。',
+        betterExpressionZh: '順便先盛一下飯放著。'
+      };
+    } else if (text.includes('インカム') || text.includes('消毒') || text.includes('對講機') || text.includes('耳麥')) {
+      jaText = 'オッケー！インカム<ruby>消毒<rt>しょうどく</rt></ruby>しとくね！';
+      zhText = 'OK！對講機我來酒精消毒一下！';
+      keywords = [{ ja: 'インカム', zh: '無線電對講機', cat: '工具' }, { ja: '<ruby>消毒<rt>しょうどく</rt></ruby>', zh: '消毒', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '「インカム消毒しといて」「インカムの掃除お願い」乾脆俐落！',
+        etiquetteFeedback: '交接班時注重設備衛生管理，展現良好職場習慣。',
+        betterExpression: 'インカム<ruby>消毒<rt>しょうどく</rt></ruby>しといて。',
+        betterExpressionZh: '對講機酒精消毒一下放著。'
+      };
+    } else if (text.includes('ゴミ') || text.includes('ポイ') || text.includes('処分') || text.includes('垃圾') || text.includes('丟')) {
+      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>！ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててくるね！';
+      zhText = '收到！垃圾我打包拿去丟！';
+      keywords = [{ ja: 'ゴミ', zh: '垃圾', cat: '工具' }, { ja: '<ruby>捨<rt>す</rt></ruby>てる', zh: '丟棄', cat: '對話' }, { ja: 'ポイする', zh: '隨手丟', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「ゴミまとめて捨ててきて」或「これポイしといて」日常感滿點！',
+        etiquetteFeedback: '收工倒垃圾交辦簡明扼要。',
+        betterExpression: 'ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。',
+        betterExpressionZh: '把垃圾打包集中，拿去丟掉。'
+      };
+    } else if (text.includes('トング') || text.includes('夾子') || text.includes('回収')) {
+      jaText = 'はい！トング<ruby>回収<rt>かいしゅう</rt></ruby>してくるね！';
+      zhText = '好！夾子我整批收過來！';
+      keywords = [{ ja: 'トング', zh: '食物夾', cat: '餐具' }, { ja: '<ruby>回収<rt>かいしゅう</rt></ruby>', zh: '回收', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '「トング集めてきて」「トング回収しといて」指令精準！',
+        etiquetteFeedback: '定期更換餐檯夾子符合飯店衛生標準。',
+        betterExpression: 'トング<ruby>回収<rt>かいしゅう</rt></ruby>しといて。',
+        betterExpressionZh: '夾子順便整批回收一下。'
+      };
+    } else if (text.includes('器') || text.includes('お椀') || text.includes('定位置') || text.includes('食器') || text.includes('皿') || text.includes('原位') || text.includes('歸位')) {
+      jaText = '<ruby>了解<rt>りょうかい</rt></ruby>！<ruby>食器<rt>しょっき</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまっとくね！';
+      zhText = '收到！餐具器皿我放回原位收好！';
+      keywords = [{ ja: '<ruby>定位置<rt>ていいち</rt></ruby>', zh: '固定收納處', cat: '工具' }, { ja: 'しまう', zh: '收好、收納', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '「定位置にしまってきて」表現極為地道，專業職場必備！',
+        etiquetteFeedback: '洗滌後餐具迅速歸位，保持廚房與外場動線順暢。',
+        betterExpression: '<ruby>器<rt>うつわ</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまってきて。',
+        betterExpressionZh: '去把碗盤放回固定收納處收好。'
+      };
+    } else if (text.includes('氷') || text.includes('冰塊') || text.includes('製冰')) {
+      jaText = 'すぐ<ruby>氷<rt>こおり</rt></ruby><ruby>取<rt>と</rt></ruby>ってくるね！<ruby>任<rt>まか</rt></ruby>せて！';
+      zhText = '我馬上拿冰塊來補！交給我！';
+      keywords = [{ ja: '<ruby>氷<rt>こおり</rt></ruby>', zh: '冰塊', cat: '工具' }, { ja: '<ruby>補充<rt>ほじゅう</rt></ruby>', zh: '補充', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '「氷取ってきて」「氷足しといて」日常簡潔有力！',
+        etiquetteFeedback: '飲料吧台冰塊見底即時補滿，維護客人飲用體驗。',
+        betterExpression: '<ruby>氷<rt>こおり</rt></ruby><ruby>足<rt>た</rt></ruby>しといて。',
+        betterExpressionZh: '冰槽順便補點冰塊進去放著。'
+      };
+    } else if (text.includes('おはよう') || text.includes('早') || text.includes('よろしく')) {
       jaText = 'おはようございます！<ruby>楊<rt>よう</rt></ruby>くん、<ruby>今日<rt>きょう</rt></ruby>もよろしくね！<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>頑張<rt>がんば</rt></ruby>ろう！';
       zhText = '早安！小楊，今天也麻煩你多指教囉！一起加油吧！';
       keywords = [{ ja: '<ruby>一緒<rt>いっしょ</rt></ruby>に', zh: '一起', cat: '對話' }, { ja: '<ruby>頑張<rt>がんば</rt></ruby>る', zh: '加油、努力', cat: '對話' }];
@@ -5796,9 +6557,69 @@ function getLocalRoleplaySimulation(userText, scenario) {
     }
   }
 
-  // 3. 顧客情境 (收桌撤盤 / 點水 / 酒水生啤 / 用餐交流)
+  // 3. 顧客情境 (外場撤盤 6 組自然應對 / 點水 / 酒水生啤 / 用餐交流)
   else if (role.includes('顧客') || role.includes('客')) {
-    if (text.includes('よろしく') || text.includes('初めまして') || text.includes('你好')) {
+    if (text.includes('お済み') || text.includes('おすみ') || text.includes('用餐完畢') || text.includes('吃完')) {
+      jaText = '<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。ごちそうさまでした！';
+      zhText = '沒問題，請收走吧。多謝款待！';
+      keywords = [{ ja: 'お<ruby>済<rt>す</rt></ruby>み', zh: '結束/完畢', cat: '對話' }, { ja: 'お<ruby>下<rt>さ</rt></ruby>げしますね', zh: '幫您收走喔', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '使用「こちらはお済みでしょうか？」確認盤中剩餘物，極度貼心周到！',
+        etiquetteFeedback: '避免客人未用畢遭誤收，應對滿分。',
+        betterExpression: 'こちらはお<ruby>済<rt>す</rt></ruby>みでしょうか？ありがとうございます。お<ruby>下<rt>さ</rt></ruby>げしますね。',
+        betterExpressionZh: '這個您已經用餐完畢了嗎？謝謝您，幫您收走喔。'
+      };
+    } else if (text.includes('空いた') || text.includes('あいた') || text.includes('空盤')) {
+      jaText = 'ごちそうさまでした！<ruby>美味<rt>おい</rt></ruby>しかったです！';
+      zhText = '多謝款待！非常美味！';
+      keywords = [{ ja: '<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>', zh: '空盤子', cat: '餐具' }, { ja: 'ごゆっくりどうぞ', zh: '請繼續慢用', cat: '對話' }];
+      evaluation = {
+        score: 98,
+        grammarGrade: '優秀',
+        grammarFeedback: '撤收明顯空盤時說「空いたお皿をお下げいたします」，俐落流暢！',
+        etiquetteFeedback: '客人說吃飽時及時回應「ありがとうございます！ごゆっくりどうぞ」。',
+        betterExpression: '<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたします。ありがとうございます！ごゆっくりどうぞ。',
+        betterExpressionZh: '幫您撤下空盤。謝謝您！請繼續慢用。'
+      };
+    } else if (text.includes('グラス') || text.includes('コップ') || text.includes('玻璃杯') || text.includes('水杯')) {
+      jaText = 'あ、まだ<ruby>飲<rt>の</rt></ruby>んでます。もうちょっと<ruby>後<rt>あと</rt></ruby>でお<ruby>願<rt>ねが</rt></ruby>いできますか？';
+      zhText = '啊，我還在喝。可以麻煩稍等一下再收嗎？';
+      keywords = [{ ja: 'グラス', zh: '玻璃杯', cat: '餐具' }, { ja: '<ruby>失礼<rt>しつれい</rt></ruby>しました', zh: '不好意思打擾了', cat: '對話' }];
+      evaluation = {
+        score: 96,
+        grammarGrade: '優秀',
+        grammarFeedback: '詢問「グラスをお下げしてもよろしいですか？」得體尊重。',
+        etiquetteFeedback: '客人表示還在喝時，立刻自然回答「あ、失礼しました！ごゆっくりどうぞ」並得體退下。',
+        betterExpression: 'あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。',
+        betterExpressionZh: '啊，不好意思！請慢慢享用。'
+      };
+    } else if (text.includes('片付') || text.includes('かたづ') || text.includes('そのままで') || text.includes('桌面') || text.includes('整理')) {
+      jaText = 'これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。こっちのお<ruby>皿<rt>さら</rt></ruby>は<ruby>下<rt>さ</rt></ruby>げてください。';
+      zhText = '這個請幫我先留著。這邊的盤子請收走。';
+      keywords = [{ ja: 'テーブルの<ruby>上<rt>うえ</rt></ruby>', zh: '桌面', cat: '工具' }, { ja: 'そのままで', zh: '保持原樣/先留著', cat: '對話' }];
+      evaluation = {
+        score: 97,
+        grammarGrade: '優秀',
+        grammarFeedback: '以「テーブルの上、お片付けしてもよろしいでしょうか？」主動服務，非常體貼！',
+        etiquetteFeedback: '尊重客人「そのままで」指定保留，只收多餘空盤。',
+        betterExpression: 'わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。',
+        betterExpressionZh: '好的，明白了。那這邊先幫您收喔。'
+      };
+    } else if (text.includes('後で') || text.includes('あとで') || text.includes('等一下') || text.includes('稍後')) {
+      jaText = 'あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？すみません！';
+      zhText = '啊，可以稍等一下再收嗎？不好意思！';
+      keywords = [{ ja: 'また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね', zh: '那我等一下再來喔', cat: '對話' }];
+      evaluation = {
+        score: 95,
+        grammarGrade: '優秀',
+        grammarFeedback: '客人委婉推遲時回答「失礼しました。また後で来ますね」，輕鬆自然不尷尬！',
+        etiquetteFeedback: '親切隨和，給客人最放鬆的用餐環境。',
+        betterExpression: '<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。',
+        betterExpressionZh: '不好意思，那我等一下再來喔。'
+      };
+    } else if (text.includes('よろしく') || text.includes('初めまして') || text.includes('你好')) {
       jaText = '<ruby>こちらこそ<rt>kochira koso</rt></ruby>、お<ruby>願<rt>ねが</rt></ruby>いします！美味しくいただいていますよ。';
       zhText = '我才要麻煩您呢！餐點非常美味喔。';
       keywords = [{ ja: '<ruby>美味<rt>おい</rt></ruby>しい', zh: '好吃的、美味的', cat: '餐點' }];
@@ -5811,16 +6632,16 @@ function getLocalRoleplaySimulation(userText, scenario) {
         betterExpressionZh: '一直承蒙關照，請您放鬆慢慢享受用餐時光。'
       };
     } else if (text.includes('お下げ') || text.includes('下げ') || text.includes('收盤') || text.includes('失礼')) {
-      jaText = 'あ、はい！お<ruby>願<rt>ねが</rt></ruby>いします。ごちそうさまでした！';
-      zhText = '啊，好的！麻煩您收走了。多謝款待！';
-      keywords = [{ ja: 'ごちそうさまでした', zh: '多謝款待（用餐完畢）', cat: '對話' }];
+      jaText = 'はい、お<ruby>願<rt>ねが</rt></ruby>いします。ありがとうございます！';
+      zhText = '好的，麻煩你了。謝謝！';
+      keywords = [{ ja: 'お<ruby>下<rt>さ</rt></ruby>げする', zh: '撤收餐盤（謙讓語）', cat: '對話' }, { ja: '<ruby>失礼<rt>しつれい</rt></ruby>します', zh: '不好意思打擾了', cat: '對話' }];
       evaluation = {
         score: 98,
         grammarGrade: '優秀',
-        grammarFeedback: '使用「お下げしてもよろしいでしょうか」為外場收盤頂級標準敬語，無任何文法瑕疵！',
-        etiquetteFeedback: '詢問得體優雅，展現溫泉旅館的高質感外場風範！',
-        betterExpression: '<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？',
-        betterExpressionZh: '不好意思打擾了，請問這個盤子可以幫您收走嗎？'
+        grammarFeedback: '使用「こちら、お下げしてもよろしいでしょうか？」為外場收盤頂級標準敬語！',
+        etiquetteFeedback: '標準 3 步驟循環應對（詢問 ➔ 同意 ➔ 致謝「ありがとうございます。失礼します」），水準極高！',
+        betterExpression: 'ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。',
+        betterExpressionZh: '謝謝，不好意思打擾了。'
       };
     } else if (text.includes('水') || text.includes('お冷') || text.includes('白湯') || text.includes('osau') || text.includes('溫水')) {
       jaText = 'ありがとうございます！お<ruby>水<rt>みず</rt></ruby>、いただきますね。';
@@ -6357,6 +7178,219 @@ const PRACTICE_SENTENCES_BANK = [
       { title: "【下班標準告退語】お先に失礼します", desc: "日本職場離場必說的核心禮儀。" }
     ],
     tips: "下班踏出休息室或廚房時，精神飽滿地向在場同仁致意。"
+  },
+
+  // 🍽️ 外場撤盤 6 組自然應對
+  {
+    cat: "外場撤盤",
+    ja: "こちら、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
+    zh: "這邊方便幫您收走嗎？（情境1：標準撤盤詢問）",
+    vocabs: [
+      { ja: "こちら", zh: "這邊、這個" },
+      { ja: "お<ruby>下<rt>さ</rt></ruby>げする", zh: "撤收餐盤" },
+      { ja: "よろしいでしょうか", zh: "可以嗎？方便嗎？" }
+    ],
+    points: [
+      { title: "【標準撤盤詢問】", desc: "客人答「はい、お願いします」後回覆「ありがとうございます。失礼します」。" }
+    ],
+    tips: "手指示意要收的盤子，語氣輕柔，雙手端盤。"
+  },
+  {
+    cat: "外場撤盤",
+    ja: "こちらはお<ruby>済<rt>す</rt></ruby>みでしょうか？",
+    zh: "這個您已經用餐完畢了嗎？（情境2：確認剩餘物）",
+    vocabs: [
+      { ja: "お<ruby>済<rt>す</rt></ruby>み", zh: "結束、完畢" },
+      { ja: "お<ruby>下<rt>さ</rt></ruby>げしますね", zh: "幫您收走喔" }
+    ],
+    points: [
+      { title: "【確認剩餘物】", desc: "客人答「大丈夫です、下げてください」後回覆「ありがとうございます。お下げしますね」。" }
+    ],
+    tips: "目光徵詢客人確認停筷後，再微笑動手收盤。"
+  },
+  {
+    cat: "外場撤盤",
+    ja: "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたします。",
+    zh: "幫您撤下空盤。（情境3：明顯空盤撤收）",
+    vocabs: [
+      { ja: "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>", zh: "空盤子" },
+      { ja: "ごちそうさまでした", zh: "多謝款待" }
+    ],
+    points: [
+      { title: "【明顯空盤撤收】", desc: "客人答「ごちそうさまでした」後回覆「ありがとうございます！ごゆっくりどうぞ」。" }
+    ],
+    tips: "客人若把空盤推到桌外側，順勢俐落撤收並致意。"
+  },
+  {
+    cat: "外場撤盤",
+    ja: "<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
+    zh: "不好意思，方便幫您收走杯子嗎？（情境4：撤玻璃杯）",
+    vocabs: [
+      { ja: "グラス", zh: "玻璃杯、飲料杯" },
+      { ja: "まだ<ruby>飲<rt>の</rt></ruby>んでます", zh: "我還在喝" }
+    ],
+    points: [
+      { title: "【撤玻璃杯與得體退下】", desc: "客人表示還在喝時，立刻致歉「あ、失礼しました！ごゆっくりどうぞ」並得體退開。" }
+    ],
+    tips: "絕不催促客人，得體致歉後繼續巡視其他桌。"
+  },
+  {
+    cat: "外場撤盤",
+    ja: "テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>片付<rt>かたづ</rt></ruby>けしてもよろしいでしょうか？",
+    zh: "方便幫您整理一下桌面嗎？（情境5：整理桌面空盤）",
+    vocabs: [
+      { ja: "お<ruby>片付<rt>かたづ</rt></ruby>けする", zh: "整理、收拾" },
+      { ja: "そのままで", zh: "保持原樣、先留著" }
+    ],
+    points: [
+      { title: "【整理桌面尊重保留】", desc: "客人答「これはそのままでお願いします」後回覆「わかりました。こちらは下げますね」。" }
+    ],
+    tips: "將桌面空間騰出，讓客人坐得更寬敞舒適。"
+  },
+  {
+    cat: "外場撤盤",
+    ja: "こちら、お<ruby>下<rt>さ</rt></ruby>げしますね。",
+    zh: "這邊幫您收一下喔。（情境6：隨和親切口吻）",
+    vocabs: [
+      { ja: "お<ruby>下<rt>さ</rt></ruby>げしますね", zh: "幫您收一下喔" },
+      { ja: "また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね", zh: "那我等一下再來喔" }
+    ],
+    points: [
+      { title: "【隨和親切口吻】", desc: "客人表示稍後再收時回覆「失礼しました。また後で来ますね」。" }
+    ],
+    tips: "親和力滿分，讓客人感受像在朋友家用餐般輕鬆自在。"
+  },
+
+  // 🤝 同事平級高頻指示 (10大動作日常說法)
+  {
+    cat: "同事指示",
+    ja: "ライター<ruby>戻<rt>もど</rt></ruby>してきて。（ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いといて / ライター<ruby>戻<rt>もど</rt></ruby>しお<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示1】請去放打火機（放回原位 / 擺回原來那裡 / 歸位拜託了）",
+    vocabs: [
+      { ja: "ライター", zh: "打火機" },
+      { ja: "<ruby>戻<rt>もど</rt></ruby>す", zh: "放回、歸位" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "戻してきて / 置いといて / ライター戻しお願い" }
+    ],
+    tips: "內場點火器用完時，平級同事最常用這三句互相提醒歸位。"
+  },
+  {
+    cat: "同事指示",
+    ja: "これ、ラップしといて。（これ、ラップかけてきて / これラップお<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示2】請用保鮮膜封起來（包個保鮮膜 / 封一下保鮮膜 / 保鮮膜拜託囉）",
+    vocabs: [
+      { ja: "ラップ", zh: "保鮮膜" },
+      { ja: "ラップする", zh: "包保鮮膜" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "ラップしといて / ラップかけてきて / これラップお願い" }
+    ],
+    tips: "備餐或打烊時多餘食材封膜保鮮必用金句。"
+  },
+  {
+    cat: "同事指示",
+    ja: "テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。（テーブル<ruby>拭<rt>ふ</rt></ruby>いといて / あそこのテーブルお<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示3】請去擦桌子（擦乾淨 / 順手擦一下 / 那桌交給你處理囉）",
+    vocabs: [
+      { ja: "テーブル", zh: "餐桌" },
+      { ja: "<ruby>拭<rt>ふ</rt></ruby>く", zh: "擦拭" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "テーブル拭いてきて / テーブル拭いといて / あそこのテーブルお願い" }
+    ],
+    tips: "客人離席清桌時，同事分工擦桌子最常用。"
+  },
+  {
+    cat: "同事指示",
+    ja: "ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>ってきて。（ご<ruby>飯<rt>はん</rt></ruby>よそっといて / ご<ruby>飯<rt>はん</rt></ruby>おかわりお<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示4】請去添飯（盛一碗飯來 / 先盛一下飯放著 / 客人續飯拜託了）",
+    vocabs: [
+      { ja: "ご<ruby>飯<rt>はん</rt></ruby>", zh: "米飯" },
+      { ja: "<ruby>盛<rt>も</rt></ruby>る / よそう", zh: "盛飯、添飯" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "ご飯盛ってきて / ご飯よそっといて / ご飯おかわりお願い" }
+    ],
+    tips: "朝食或客人在餐檯續飯時，互相支援盛飯用語。"
+  },
+  {
+    cat: "同事指示",
+    ja: "インカム<ruby>拭<rt>ふ</rt></ruby>いといて。（インカム<ruby>消毒<rt>しょうどく</rt></ruby>しといて / インカムの<ruby>掃除<rt>そうじ</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示5】請去擦拭對講機（擦一下耳麥 / 酒精消毒一下 / 清理拜託了）",
+    vocabs: [
+      { ja: "インカム", zh: "無線電對講機" },
+      { ja: "<ruby>消毒<rt>しょうどく</rt></ruby>", zh: "消毒" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "インカム拭いといて / インカム消毒しといて / インカムの掃除お願い" }
+    ],
+    tips: "下班交接或上班領用無線電時，酒精消毒耳麥的日常交辦。"
+  },
+  {
+    cat: "同事指示",
+    ja: "ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。（ゴミ<ruby>集<rt>あつ</rt></ruby>めて<ruby>捨<rt>す</rt></ruby>てといて / ゴミ<ruby>出<rt>だ</rt></ruby>し<ruby>行<rt>い</rt></ruby>ってきて）",
+    zh: "【指示6】請收集垃圾並丟掉（集中打包丟掉 / 收過來順手扔了 / 去倒個垃圾）",
+    vocabs: [
+      { ja: "ゴミ", zh: "垃圾" },
+      { ja: "<ruby>捨<rt>す</rt></ruby>てる", zh: "丟棄" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "ゴミまとめて捨ててきて / ゴミ集めて捨てといて / ゴミ出し行ってきて" }
+    ],
+    tips: "餐廳打烊或外場垃圾桶滿時，打包倒垃圾的俐落交辦。"
+  },
+  {
+    cat: "同事指示",
+    ja: "これ<ruby>捨<rt>す</rt></ruby>てといて。（これポイしといて / これ<ruby>処分<rt>しょぶん</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示7】請把這個丟掉（順手幫我丟掉 / 把這個扔了 / 這處理掉拜託了）",
+    vocabs: [
+      { ja: "これ", zh: "這個" },
+      { ja: "ポイする", zh: "扔掉、隨手丟棄" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "これ捨てといて / これポイしといて / これ処分お願い" }
+    ],
+    tips: "手上有廢棄包裝或用過的耗材時，順手交給同事幫忙扔。"
+  },
+  {
+    cat: "同事指示",
+    ja: "トング<ruby>集<rt>あつ</rt></ruby>めてきて。（トング<ruby>回収<rt>かいしゅう</rt></ruby>しといて / トング<ruby>集<rt>あつ</rt></ruby>めお<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示8】請收集夾子（收攏過來 / 整批回收一下 / 夾子收集拜託你囉）",
+    vocabs: [
+      { ja: "トング", zh: "夾子" },
+      { ja: "<ruby>回収<rt>かいしゅう</rt></ruby>", zh: "回收" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "トング集めてきて / トング回収しといて / トング集めお願い" }
+    ],
+    tips: "營業中定時更換自助餐檯夾子時使用。"
+  },
+  {
+    cat: "同事指示",
+    ja: "お<ruby>皿<rt>さら</rt></ruby>（<ruby>食器<rt>しょっき</rt></ruby>）<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>しといて。（<ruby>器<rt>うつわ</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまってきて / お<ruby>椀<rt>わん</rt></ruby>の<ruby>片付<rt>かたづ</rt></ruby>けお<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示9】請把碗放回該放的地方（餐具放回原位 / 碗放回固定收納處 / 碗收拾歸位拜託囉）",
+    vocabs: [
+      { ja: "<ruby>食器<rt>しょっき</rt></ruby> / <ruby>器<rt>うつわ</rt></ruby>", zh: "餐具、器皿" },
+      { ja: "<ruby>定位置<rt>ていいち</rt></ruby>", zh: "固定收納處" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "食器元の場所に戻しといて / 器、定位置にしまってきて / お椀の片付けお願い" }
+    ],
+    tips: "洗滌區洗好的碗盤擦乾後，推回外場定點收好。"
+  },
+  {
+    cat: "同事指示",
+    ja: "<ruby>氷<rt>こおり</rt></ruby><ruby>取<rt>と</rt></ruby>ってきて。（<ruby>氷<rt>こおり</rt></ruby><ruby>足<rt>た</rt></ruby>しといて / <ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い）",
+    zh: "【指示10】請去補充冰塊（去製冰機拿冰塊 / 冰槽補點冰進去 / 冰塊補充拜託了）",
+    vocabs: [
+      { ja: "<ruby>氷<rt>こおり</rt></ruby>", zh: "冰塊" },
+      { ja: "<ruby>補充<rt>ほじゅう</rt></ruby>", zh: "補充" }
+    ],
+    points: [
+      { title: "【3種說法】", desc: "氷取ってきて / 氷足しといて / 氷の補充お願い" }
+    ],
+    tips: "飲料區或冷飲冰槽冰塊見底時，同事間最常講的補冰三部曲。"
   }
 ];
 
