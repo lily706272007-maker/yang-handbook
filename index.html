@@ -1190,6 +1190,165 @@
   border-color: var(--primary);
 }
 
+/* ============================================================
+   📢 四國同步布達板專屬樣式 (4-in-1 Multilingual Broadcast)
+============================================================ */
+.broadcast-quad-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-top: 14px;
+}
+@media (max-width: 600px) {
+  .broadcast-quad-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.broadcast-lang-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  position: relative;
+}
+.broadcast-lang-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border-color: var(--primary);
+}
+
+.broadcast-lang-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+.broadcast-lang-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+}
+
+.broadcast-text-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.7;
+  word-break: break-word;
+  min-height: 54px;
+}
+.broadcast-text-main.ja-text {
+  font-family: var(--font-serif);
+  line-height: 2.1;
+  font-size: 1.25rem;
+}
+.broadcast-text-sub {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.broadcast-lang-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+
+/* 常用範本按鈕 */
+.template-chips-wrap {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  margin-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.template-chips-wrap::-webkit-scrollbar {
+  height: 4px;
+}
+.template-chips-wrap::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 4px;
+}
+.template-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.template-chip:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* 📱 大字亮屏全螢幕模式 */
+.bigscreen-quad-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  height: 100%;
+  padding: 10px;
+}
+@media (max-width: 650px) {
+  .bigscreen-quad-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+.bigscreen-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.bigscreen-card-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bigscreen-card-content {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.8;
+  color: var(--ink);
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 </style>
 </head>
 <body>
@@ -1211,6 +1370,7 @@
       <button class="top-nav-btn active" data-page="page-sop" onclick="switchNavPage('page-sop', this)"><span class="nav-icon">📋</span><span class="nav-label">實務SOP</span></button>
       <button class="top-nav-btn" data-page="page-vocab-sop" onclick="switchNavPage('page-vocab-sop', this)"><span class="nav-icon">📖</span><span class="nav-label">實戰單字庫</span></button>
       <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">情境對話</span></button>
+      <button class="top-nav-btn" data-page="page-broadcast" onclick="switchNavPage('page-broadcast', this)"><span class="nav-icon">📢</span><span class="nav-label">四國布達</span></button>
       <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
     </nav>
     <span id="offline-badge">📵 離線</span>
@@ -1304,7 +1464,70 @@
     </section>
 
     <!-- ==============================================================
-         分頁 6：設定 (100% 繁體中文)
+         分頁 4：現場四國同步布達板 (4-in-1 Multilingual Broadcast Board)
+         位置：情境對話與設定之間
+         功能：中文輸入一次，即時並排產出【日文、尼泊爾文、緬甸文、英文】
+    ============================================================== -->
+    <section class="page" id="page-broadcast">
+      <div class="page-sub">📢 一次輸入中文，同步翻譯成【日文・尼泊爾文・緬甸文・英文】並排展示向全場同仁布達</div>
+
+      <!-- 常用快捷職場範本 (點擊立即填入並生成 4 國語言) -->
+      <div class="section-label">
+        <div class="section-label-left">⚡ 常用職場布達快捷句（點擊立即翻譯）</div>
+        <span style="font-size:0.75rem; color:var(--muted);">支援離線 100% 即時翻譯</span>
+      </div>
+      <div class="template-chips-wrap" id="broadcast-templates-wrap">
+        <!-- 15 組快捷標籤由 JS 動態填入 -->
+      </div>
+
+      <!-- 輸入操作卡片 -->
+      <div class="card" style="padding:14px; margin-bottom:14px; background:var(--bg-card); border:1.5px solid var(--border); border-radius:16px;">
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:block;">
+            ✏️ 輸入想要布達的中文事項：
+          </label>
+          <textarea id="broadcast-zh-input" rows="3" class="form-control" style="width:100%; font-size:0.95rem; line-height:1.5; border-radius:12px; padding:10px 12px;" placeholder="例如：我做了一些料理請大家一起吃、這盤子很燙請小心、垃圾已滿請幫忙換袋子…"></textarea>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary" onclick="triggerBroadcastTranslation()" style="font-weight:800;">
+              🌐 立即同步翻譯
+            </button>
+            <button class="btn btn-secondary" id="btn-broadcast-mic" onclick="toggleBroadcastMic()" title="語音輸入">
+              🎤 語音輸入
+            </button>
+            <button class="btn btn-ghost" onclick="clearBroadcastInput()" title="清空">
+              🔄 清空
+            </button>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-ghost btn-sm" onclick="copyAllQuadBroadcast()" style="font-weight:700;">
+              📋 一鍵複製 4 國語言
+            </button>
+            <button class="btn btn-accent btn-sm" onclick="openBroadcastBigScreen()" style="font-weight:800;">
+              📱 大字亮屏全螢幕展示
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 狀態 / 提示訊息 -->
+      <div id="broadcast-status-banner" style="display:none; font-size:0.82rem; padding:8px 12px; border-radius:10px; margin-bottom:12px; text-align:center;"></div>
+
+      <!-- 四國語言並排卡片網格 (2x2 Grid, 手機單欄) -->
+      <div class="section-label">
+        <div class="section-label-left">📢 四國語言同步布達卡片</div>
+        <span style="font-size:0.75rem; color:var(--muted);" id="broadcast-engine-badge">⚡ 雙引擎：離線核心 ＋ Gemini AI</span>
+      </div>
+
+      <div class="broadcast-quad-grid" id="broadcast-cards-grid">
+        <!-- 4 國語言卡片由 JS 動態渲染 -->
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         分頁 5：設定 (100% 繁體中文)
     ============================================================== -->
     <section class="page" id="page-settings">
       <div class="page-sub">工作情境自訂、語音聲線調整與手帳資料備份還原</div>
@@ -2061,6 +2284,34 @@
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-scenario')">取消</button>
       <button class="btn btn-primary" onclick="submitScenarioForm()">儲存情境</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📱 現場四國大字亮屏展示彈窗 (Broadcast Big Screen Modal) -->
+<div class="modal-backdrop" id="modal-broadcast-bigscreen" style="align-items:center; padding:10px;">
+  <div class="modal-content" style="max-width:760px; width:100%; max-height:92vh; display:flex; flex-direction:column; padding:16px; border-radius:22px; background:var(--bg-app);">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
+      <div style="font-size:1.05rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:6px;">
+        <span>📱 現場四國大字展示板</span>
+        <span style="font-size:0.75rem; background:rgba(92,61,30,0.1); color:var(--primary); padding:2px 8px; border-radius:10px;">可直接出示給全體同仁</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-broadcast-bigscreen')">✕ 關閉</button>
+    </div>
+
+    <!-- 中文原句 -->
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:8px 12px; margin-bottom:10px; font-size:0.88rem; color:var(--muted);">
+      <span style="font-weight:700; color:var(--ink);">中文原意：</span><span id="bigscreen-zh-preview">我做了一些料理，歡迎大家一起吃！</span>
+    </div>
+
+    <!-- 大字並排網格 -->
+    <div class="bigscreen-quad-grid" id="bigscreen-quad-container" style="flex:1; overflow-y:auto;">
+      <!-- 4 國大字卡片由 JS 動態填入 -->
+    </div>
+
+    <div class="modal-footer" style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.78rem; color:var(--muted);">💡 提示：點擊卡片發音按鈕可播放日文或英文語音</span>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('modal-broadcast-bigscreen')">完成 / 關閉</button>
     </div>
   </div>
 </div>
@@ -3581,6 +3832,7 @@ function switchNavPage(targetPageId, triggerBtn) {
   if (targetPageId === 'page-vocab-sop') renderVocabPage('sop');
   if (targetPageId === 'page-vocab-conv') renderVocabPage('conv');
   if (targetPageId === 'page-roleplay') renderRoleplayPage();
+  if (targetPageId === 'page-broadcast') renderBroadcastPage();
   if (targetPageId === 'page-settings') renderSettingsPage();
   
   updateRaccoonVisibility();
@@ -7690,12 +7942,710 @@ function rephotoFromCard() {
 
 
 /* ==============================================================
+   15. 📢 現場四國同步布達板 (4-in-1 Multilingual Broadcast Board)
+   功能：中文輸入一次，即時並排產出【日文、尼泊爾文、緬甸文、英文】
+============================================================== */
+const QUAD_BROADCAST_TEMPLATES = [
+  {
+    id: 'tb_food_share',
+    icon: '🍱',
+    title: '分享料理',
+    zh: '我做了一些料理，歡迎大家一起吃！',
+    keywords: ['料理', '做', '吃', '點心', '煮', '食物', '一起吃', '大家吃', '請吃', '分享'],
+    ja: 'お料理を作ったので、ぜひ皆さんで召し上がってください！',
+    ja_romaji: 'O-ryōri o tsukutta node, zehi minasan de meshiagatte kudasai!',
+    ne: 'मैले केही खाना बनाएको छु, कृपया सबैजना मिलेर खानुहोस्!',
+    ne_romaji: 'Maile kehī khānā banāeko chhu, kripayā sabaijanā milera khānuhos!',
+    my: 'ကျွန်တော်/ကျွန်မ ဟင်းပွဲတချို့ ချက်ထားပါတယ်၊ အားလုံး အတူတူ သုံးဆောင်ကြပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Kyun-naw/Kyun-ma hin-pwe ta-cho chet-htar-par-te, arr-lone a-tu-tu thone-saung gya-par!',
+    en: 'I made some food, please feel free to help yourselves and enjoy!'
+  },
+  {
+    id: 'tb_hot_plate',
+    icon: '⚠️',
+    title: '燙手小心',
+    zh: '這盤子很燙，拿的時候請小心！',
+    keywords: ['燙', '熱', '小心', '盤子燙', '燙手', '高溫', '熱的', '注意', '拿'],
+    ja: 'このお皿は大変熱いので、持つ際はお気をつけください！',
+    ja_romaji: 'Kono o-sara wa taihen atsui node, motsu sai wa o-ki o tsukekudasai!',
+    ne: 'यो प्लेट धेरै तातो छ, कृपया समात्दा होसियार हुनुहोस्!',
+    ne_romaji: 'Yo pleṭ dherai tāto chha, kripayā samātdā hosiyār hunuhos!',
+    my: 'ဒီပန်းကန် အရမ်းပူပါတယ်၊ ကိုင်တဲ့အခါ သတိထားပါနော်!',
+    my_romaji: 'Di pan-kan a-yan pu-par-te, kaing-te a-khar tha-di htar-par naw!',
+    en: 'This plate is very hot, please be careful when handling it!'
+  },
+  {
+    id: 'tb_dry_dishes',
+    icon: '🍽️',
+    title: '擦乾盤子',
+    zh: '盤子已經洗好了，請幫忙擦乾！',
+    keywords: ['擦乾', '擦盤子', '洗好', '洗完了', '水份', '盤子擦', '擦拭', '擦乾淨'],
+    ja: 'お皿の洗浄が終わりましたので、拭き上げをお願いします！',
+    ja_romaji: 'O-sara no senjō ga owarimashita node, fukiage o onegaishimasu!',
+    ne: 'प्लेटहरू धोएर सकियो, कृपया पुछेर सुकाउन मद्दत गर्नुहोस्!',
+    ne_romaji: 'Pleṭharū dhoera sakiyo, kripayā puchhera sukāuna maddat garnuhos!',
+    my: 'ပန်းကန်တွေ ဆေးကြောပြီးပါပြီ၊ ရေခြောက်အောင် သုတ်ပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Pan-kan tway say-kyaw pee-par-bee, yay-chauk-aung thoke-pay-par!',
+    en: 'The plates are washed, please help dry them with a cloth!'
+  },
+  {
+    id: 'tb_trash_full',
+    icon: '🗑️',
+    title: '更換垃圾袋',
+    zh: '垃圾桶已經滿了，請幫忙更換垃圾袋！',
+    keywords: ['垃圾', '滿了', '換垃圾袋', '倒垃圾', '垃圾桶', '滿', '更換'],
+    ja: 'ゴミ箱がいっぱいなので、ゴミ袋の交換をお願いします！',
+    ja_romaji: 'Gomibako ga ippai na node, gomibukuro no kōkan o onegaishimasu!',
+    ne: 'फोहोरको डस्टबिन भरियो, कृपया फोहोरको झोला फेरिदिनुहोस्!',
+    ne_romaji: 'Phohorko ḍasṭabin bhariyo, kripayā phohorko jholā pheridinuhos!',
+    my: 'အမှိုက်ပုံး ပြည့်သွားပါပြီ၊ အမှိုက်အိတ် အသစ်လဲပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Ah-mhoik-pone pyayt-thwar-par-bee, ah-mhoik-ate a-thit le-pay-par!',
+    en: 'The trash can is full, please help replace the trash bag!'
+  },
+  {
+    id: 'tb_chicken_ready',
+    icon: '⏳',
+    title: '炸雞等3分',
+    zh: '南蠻炸雞快好了，大約再等 3 分鐘！',
+    keywords: ['炸雞', '南蠻', '快好了', '等3分鐘', '稍等', '幾分鐘', '好了', '3分鐘', '廚房'],
+    ja: 'チキン南蛮がもうすぐ揚がります。あと3分ほどお待ちください！',
+    ja_romaji: 'Chikin nanban ga mōsugu agarimasu. Ato san-pun hodo o-machi kudasai!',
+    ne: 'चिकन नानबान तयार हुन लाग्यो, कृपया लगभग ३ मिनेट पर्खनुहोस्!',
+    ne_romaji: 'Chikan nānbān tayār huna lāgyo, kripayā lagbhag 3 miṇeṭ parkhanuhos!',
+    my: 'ကြက်ကြော် မကြာခင်ရပါတော့မယ်၊ ၃ မိနစ်လောက် စောင့်ပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Kyet-kyaw ma-kyar-khin ya-par-tawt-me, 3 mi-nit lauk saung-pay-par!',
+    en: 'Chicken Nanban will be ready soon, please wait about 3 minutes!'
+  },
+  {
+    id: 'tb_soup_low',
+    icon: '🥣',
+    title: '味噌湯見底',
+    zh: '味噌湯快見底了，需要再煮一鍋！',
+    keywords: ['味噌湯', '湯', '沒了', '快沒了', '見底', '煮湯', '補湯', '追加'],
+    ja: 'お味噌汁が少なくなってきたので、追加の準備をお願いします！',
+    ja_romaji: 'O-misoshiru ga sukunaku natte kita node, tsuika no junbi o onegaishimasu!',
+    ne: 'मिसो सुप सकिन लाग्यो, कृपया थप तयार गरिदिनुहोस्!',
+    ne_romaji: 'Miso sup sakina lāgyo, kripayā thap tayār garidinuhos!',
+    my: 'မီဆိုဟင်းရည် ကုန်ခါနီးပါပြီ၊ ထပ်ချက်ပေးဖို့ လိုအပ်ပါတယ်ခင်ဗျာ/ရှင်!',
+    my_romaji: 'Miso hin-yay kone-khar-nee-par-bee, thap-chet-pay-foe lo-at-par-te!',
+    en: 'Miso soup is running low, we need to prepare another pot!'
+  },
+  {
+    id: 'tb_ice_replenish',
+    icon: '🧊',
+    title: '補製冰機冰塊',
+    zh: '冰塊快用完了，請幫忙補製冰機的冰塊！',
+    keywords: ['冰塊', '冰', '製冰機', '補冰', '沒冰塊', '少冰', '補充冰塊'],
+    ja: '氷が少なくなってきたので、製氷機から補充をお願いします！',
+    ja_romaji: 'Kōri ga sukunaku natte kita node, seihyōki kara hojū o onegaishimasu!',
+    ne: 'बरफ सकिन लाग्यो, कृपया आइस मेसिनबाट बरफ थपिदिनुहोस्!',
+    ne_romaji: 'Baraph sakina lāgyo, kripayā āis mesīnbāṭa baraph thapidinuhos!',
+    my: 'ရေခဲတွေ ကုန်ခါနီးပါပြီ၊ ရေခဲစက်ကနေ ဖြည့်ပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Yay-khe tway kone-khar-nee-par-bee, yay-khe-set ka-nay phyayt-pay-par!',
+    en: 'Ice is running low, please replenish ice from the ice machine!'
+  },
+  {
+    id: 'tb_roast_beef',
+    icon: '🥩',
+    title: '烤牛肉已補',
+    zh: '烤牛肉（Roast Beef）已經切好補上去了！',
+    keywords: ['烤牛肉', '牛肉', '切好', '補好', '補充了', 'roast beef', '補上', '切肉'],
+    ja: 'ローストビーフをスライスして補充完了しました！',
+    ja_romaji: 'Rōsuto bīfu o suraisu shite hojū kanryō shimashita!',
+    ne: 'रोस्ट बीफ काटेर नयाँ राखिसकियो!',
+    ne_romaji: 'Rosṭa bīph kāṭera nayāñ rākhisakiyo!',
+    my: 'အမဲသားကင် လှီးဖြတ်ပြီး အသစ်ပြန်ဖြည့်ထားပြီးပါပြီ!',
+    my_romaji: 'A-me-thar-kin hlee-phyat pee a-thit pyan-phyayt-htar pee-par-bee!',
+    en: 'Roast beef is sliced and replenished on the buffet counter!'
+  },
+  {
+    id: 'tb_team_help',
+    icon: '🤝',
+    title: '分工互助',
+    zh: '這個我來處理就好，你去幫忙另一邊！',
+    keywords: ['我來', '你去幫忙', '另一邊', '處理', '分工', '幫忙那邊', '交給我', '你去'],
+    ja: 'こちらは私がやりますので、あちらのサポートをお願いします！',
+    ja_romaji: 'Kochira wa watashi ga yarimasu node, achira no sapōto o onegaishimasu!',
+    ne: 'यो म हेर्छु, तपाईँ कृपया उतातिर मद्दत गरिदिनुहोस्!',
+    ne_romaji: 'Yo ma herchhu, tapāīñ kripayā utātira maddat garidinuhos!',
+    my: 'ဒီဘက်ကို ကျွန်တော်/မ လုပ်လိုက်ပါ့မယ်၊ ဟိုဘက်ကို သွားကူပေးပါနော်!',
+    my_romaji: 'Di-bet go kyun-naw/ma lote-lite-par-me, ho-bet go thwar-ku-pay-par naw!',
+    en: 'I will handle this part, please go help over on the other side!'
+  },
+  {
+    id: 'tb_wipe_counter',
+    icon: '🧹',
+    title: '擦拭餐檯',
+    zh: '自助餐台檯面有髒污，請幫忙擦拭乾淨！',
+    keywords: ['餐台', '檯面', '髒', '擦乾淨', '桌面', '擦桌子', '抹布', '髒污', '擦拭'],
+    ja: 'ビュッフェ台が汚れているので、台拭きをお願いします！',
+    ja_romaji: 'Byuffe-dai ga yogorete iru node, daifuki o onegaishimasu!',
+    ne: 'बुफे काउन्टर फोहोर भएको छ, कृपया पुछेर सफा गरिदिनुहोस्!',
+    ne_romaji: 'Buphe kāunṭar phohor bhaeko chha, kripayā puchhera saphā garidinuhos!',
+    my: 'ဘူဖေးစားပွဲခုံ ပေကျံနေပါတယ်၊ သန့်ရှင်းအောင် သုတ်ပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Bu-fay sar-pwe-khone pay-kyan-nay-par-te, thant-shin-aung thoke-pay-par!',
+    en: 'The buffet counter is dirty, please help wipe and clean it!'
+  },
+  {
+    id: 'tb_cutlery_filled',
+    icon: '📦',
+    title: '餐具已補充',
+    zh: '乾淨的餐具已經補到工作台抽屜了！',
+    keywords: ['餐具', '補好了', '抽屜', '筷子', '刀叉', '工作台', '補滿', '乾淨餐具'],
+    ja: '清潔なカトラリーをステーションの引き出しに補充しました！',
+    ja_romaji: 'Seiketsu na katorarī o sutēshon no hikidashi ni hojū shimashita!',
+    ne: 'सफा चम्चा-काँटा स्टेशनको घर्रामा थपिसकियो!',
+    ne_romaji: 'Saphā chamchā-kāñṭā sṭeśanko gharrāmā thapisakiyo!',
+    my: 'သန့်ရှင်းတဲ့ ဇွန်း/ခရင်း/တူတွေကို ကောင်တာအံဆွဲထဲ ဖြည့်ထားပြီးပါပြီ!',
+    my_romaji: 'Thant-shin-te zwun/kha-yin/tu tway go kounter an-swe-hte phyayt-htar pee-par-bee!',
+    en: 'Clean cutlery has been replenished in the service station drawers!'
+  },
+  {
+    id: 'tb_boss_looking',
+    icon: '🙋',
+    title: '主管找你',
+    zh: '主管在找你，請去前台/廚房一下！',
+    keywords: ['主管', '找你', '店長', '前台', '廚房找你', '叫你', '呼叫', '找人'],
+    ja: 'リーダーがお呼びですので、フロント/厨房へ行ってください！',
+    ja_romaji: 'Rīdā ga o-yobi desu node, furonto/chūbō e itte kudasai!',
+    ne: 'म्यानेजर/इन्चार्जले तपाईँलाई खोज्दै हुनुहुन्छ, कृपया फ्रन्ट/किचेनमा जानुहोस्!',
+    ne_romaji: 'Myānejar/In-chārjle tapāīñlāī khojdai hunuhunchha, kripayā phranṭ/kichenmā jānuhos!',
+    my: 'တာဝန်ခံ/ခေါင်းဆောင် ခေါ်နေပါတယ်၊ ဧည့်ကြို/မီးဖိုချောင်ဘက် သွားပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Tar-wun-khan/Khaung-saung khaw-nay-par-te, front/kitchen bet thwar-pay-par!',
+    en: 'The supervisor is looking for you, please head to the front desk or kitchen!'
+  },
+  {
+    id: 'tb_tea_water',
+    icon: '🍵',
+    title: '熱茶機補水',
+    zh: '熱茶機需要補充茶葉和熱水！',
+    keywords: ['熱茶', '茶機', '補水', '茶葉', '補茶', '給茶機', '熱水', '茶水'],
+    ja: '給茶機の茶葉とお湯の補充をお願いします！',
+    ja_romaji: 'Kyūchaki no chaba to o-yu no hojū o onegaishimasu!',
+    ne: 'चिया मेसिनमा चियापत्ती र तातो पानी थपिदिनुहोस्!',
+    ne_romaji: 'Chiyā mesīnmā chiyāpattī ra tāto pānī thapidinuhos!',
+    my: 'လက်ဖက်ရည်စက်မှာ လက်ဖက်ခြောက်နဲ့ ရေနွေး ဖြည့်ပေးပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Let-phet-yay-set hmar let-phet-chauk ne yay-nway phyayt-pay-par!',
+    en: 'The hot tea dispenser needs tea leaves and hot water replenished!'
+  },
+  {
+    id: 'tb_break_time',
+    icon: '⏰',
+    title: '輪流休息',
+    zh: '休息時間到了，請輪流去用餐！',
+    keywords: ['休息', '吃飯', '休息時間', '輪流', '用餐', '換班', '放飯', '去休息'],
+    ja: '休憩の時間になりましたので、交代で休憩・食事に入ってください！',
+    ja_romaji: 'Kyūkei no jikan ni narimashita node, kōtai de kyūkei・shokuji ni haitte kudasai!',
+    ne: 'ब्रेकको समय भयो, कृपया पालो गरेर खान/आराम गर्न जानुहोस्!',
+    ne_romaji: 'Brekko samaya bhayo, kripayā pālo garera khāna/ārām garna jānuhos!',
+    my: 'နားချိန်ရောက်ပါပြီ၊ အလှည့်ကျ ထမင်းစား/အနားယူ သွားကြပါခင်ဗျာ/ရှင်!',
+    my_romaji: 'Nar-chein yauk-par-bee, a-hlet-kya hta-min-sar/a-nar-yu thwar-gya-par!',
+    en: 'It is break time now, please take turns going for lunch/break!'
+  },
+  {
+    id: 'tb_otsukare',
+    icon: '✨',
+    title: '下班辛苦了',
+    zh: '今天辛苦了！收拾完畢就可以下班了！',
+    keywords: ['辛苦了', '下班', '收拾完', '結束', '收尾', '回家', '打卡', '辛苦'],
+    ja: '今日もお疲れ様でした！片付けが終わったら上がりましょう！',
+    ja_romaji: 'Kyō mo o-tsukaresama deshita! Katadzuke ga owattara agarimashō!',
+    ne: 'आजको कामको लागि धेरै धन्यवाद! सरसफाइ सकेपछि घर जान सक्नुहुन्छ!',
+    ne_romaji: 'Ājako kākmo lāgi dherai dhanyavād! Sarasaphāi sakepachhi ghar jāna saknuhunchha!',
+    my: 'ဒီနေ့အတွက် အားလုံး ပင်ပန်းသွားပါပြီ! သိမ်းဆည်းပြီးရင် အလုပ်ဆင်းလို့ရပါပြီခင်ဗျာ/ရှင်!',
+    my_romaji: 'Di-nay a-twet arr-lone pin-pan-thwar-par-bee! Theim-see pee-yin a-lote-sin loh ya-par-bee!',
+    en: 'Thank you for your hard work today! Once everything is cleared up, you may clock out!'
+  }
+];
+
+let currentBroadcastData = { ...QUAD_BROADCAST_TEMPLATES[0], isAi: false };
+let isBroadcastMicActive = false;
+let broadcastRecognition = null;
+
+function renderBroadcastPage() {
+  const chipsWrap = document.getElementById('broadcast-templates-wrap');
+  if (chipsWrap && chipsWrap.children.length === 0) {
+    chipsWrap.innerHTML = QUAD_BROADCAST_TEMPLATES.map((t, idx) => `
+      <button class="template-chip" onclick="applyBroadcastTemplate(${idx})">
+        ${t.icon} ${t.title}
+      </button>
+    `).join('');
+  }
+
+  const input = document.getElementById('broadcast-zh-input');
+  if (input && !input.value.trim()) {
+    input.value = currentBroadcastData.zh || QUAD_BROADCAST_TEMPLATES[0].zh;
+  }
+
+  renderQuadResults(currentBroadcastData);
+}
+
+function applyBroadcastTemplate(idx) {
+  const t = QUAD_BROADCAST_TEMPLATES[idx];
+  if (!t) return;
+  const input = document.getElementById('broadcast-zh-input');
+  if (input) input.value = t.zh;
+
+  currentBroadcastData = { ...t, isAi: false };
+  renderQuadResults(currentBroadcastData);
+  
+  const statusEl = document.getElementById('broadcast-status-banner');
+  if (statusEl) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'rgba(92,61,30,0.08)';
+    statusEl.style.color = 'var(--primary)';
+    statusEl.innerHTML = `⚡ 已套用離線職場範本：<strong>「${t.title}」</strong>`;
+  }
+  showToast(`已套用快捷範本：${t.title}`, 'success');
+}
+
+function clearBroadcastInput() {
+  const input = document.getElementById('broadcast-zh-input');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  const statusEl = document.getElementById('broadcast-status-banner');
+  if (statusEl) statusEl.style.display = 'none';
+  showToast('已清空輸入框', 'info');
+}
+
+async function triggerBroadcastTranslation() {
+  const input = document.getElementById('broadcast-zh-input');
+  const text = input ? input.value.trim() : '';
+  if (!text) {
+    showToast('請先輸入想要布達的中文事項！', 'error');
+    return;
+  }
+  await executeQuadTranslation(text);
+}
+
+async function executeQuadTranslation(zhText) {
+  const statusEl = document.getElementById('broadcast-status-banner');
+  
+  // 1. 精確匹配離線範本
+  const exactMatch = QUAD_BROADCAST_TEMPLATES.find(t => t.zh === zhText);
+  if (exactMatch) {
+    currentBroadcastData = { ...exactMatch, isAi: false };
+    renderQuadResults(currentBroadcastData);
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'rgba(92,61,30,0.08)';
+      statusEl.style.color = 'var(--primary)';
+      statusEl.innerHTML = `⚡ 離線 100% 精準匹配：<strong>${exactMatch.title}</strong>`;
+    }
+    showToast('離線布達翻譯完成！', 'success');
+    return;
+  }
+
+  // 2. 關鍵字模糊權重匹配離線範本
+  let bestTemplate = null;
+  let maxScore = 0;
+  QUAD_BROADCAST_TEMPLATES.forEach(t => {
+    let score = 0;
+    t.keywords.forEach(kw => {
+      if (zhText.includes(kw)) score += 2;
+    });
+    if (score > maxScore) {
+      maxScore = score;
+      bestTemplate = t;
+    }
+  });
+
+  // 3. 若有連網且有 Gemini 金鑰，優先調用 Gemini 生成高精度 4 國語言
+  const hasApiKey = (AppData && AppData.apiKey && AppData.apiKey.trim()) || HARDCODED_GEMINI_API_KEY;
+  if (navigator.onLine && hasApiKey) {
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'rgba(184,75,41,0.1)';
+      statusEl.style.color = 'var(--accent)';
+      statusEl.innerHTML = `🤖 正在使用 Gemini AI 多國語言引擎即時翻譯【日/尼/緬/英】…`;
+    }
+    
+    try {
+      const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、英文 English）的日本溫泉飯店外場翻譯專家。
+請將以下中文布達事項精確翻譯為 4 國語言，並提供發音拼音輔助。
+中文事項：「${zhText}」
+
+請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字）：
+{
+  "zh": "${zhText.replace(/"/g, '\\"')}",
+  "ja": "日文敬體翻譯（適合日本職場禮貌通報，例如：お料理を作ったので、ぜひ皆さんで召し上がってください！）",
+  "ja_romaji": "日文平假名或羅馬音",
+  "ne": "नेपाली (標準尼泊爾文天城體)",
+  "ne_romaji": "Nepali Romanized 羅馬拼音",
+  "my": "မြန်မာဘာသာ (標準緬甸文 Unicode)",
+  "my_romaji": "Burmese Romanized 羅馬拼音",
+  "en": "English standard translation"
+}`;
+
+      const aiRes = await callGeminiApiUnified(prompt);
+      if (aiRes && aiRes.ja && aiRes.en) {
+        currentBroadcastData = {
+          zh: zhText,
+          ja: aiRes.ja,
+          ja_romaji: aiRes.ja_romaji || '',
+          ne: aiRes.ne || (bestTemplate ? bestTemplate.ne : 'कृपया ध्यान दिनुहोस्!'),
+          ne_romaji: aiRes.ne_romaji || '',
+          my: aiRes.my || (bestTemplate ? bestTemplate.my : 'ကျေးဇူးပြု၍ သတိထားပေးပါခင်ဗျာ/ရှင်!'),
+          my_romaji: aiRes.my_romaji || '',
+          en: aiRes.en,
+          isAi: true
+        };
+        renderQuadResults(currentBroadcastData);
+        if (statusEl) {
+          statusEl.style.display = 'block';
+          statusEl.style.background = 'rgba(56,142,60,0.1)';
+          statusEl.style.color = '#2e7d32';
+          statusEl.innerHTML = `✨ Gemini AI 即時同步翻譯完成（4 國語言高精度生成）`;
+        }
+        showToast('四國語言翻譯完成！', 'success');
+        return;
+      }
+    } catch (e) {
+      console.warn('Gemini 翻譯失敗，無縫切換離線語意引擎：', e);
+    }
+  }
+
+  // 4. 離線或 AI 失敗時的 Fallback
+  if (bestTemplate && maxScore >= 2) {
+    currentBroadcastData = {
+      zh: zhText,
+      ja: bestTemplate.ja,
+      ja_romaji: bestTemplate.ja_romaji,
+      ne: bestTemplate.ne,
+      ne_romaji: bestTemplate.ne_romaji,
+      my: bestTemplate.my,
+      my_romaji: bestTemplate.my_romaji,
+      en: bestTemplate.en,
+      isAi: false
+    };
+    renderQuadResults(currentBroadcastData);
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'rgba(92,61,30,0.08)';
+      statusEl.style.color = 'var(--primary)';
+      statusEl.innerHTML = `⚡ 離線智慧對照：已匹配「${bestTemplate.title}」語意`;
+    }
+    showToast('已匹配離線高頻布達語意！', 'info');
+  } else {
+    // 預設職場禮貌萬用通報模板
+    currentBroadcastData = {
+      zh: zhText,
+      ja: `【ご連絡】${zhText}。ご確認・ご協力よろしくお願いいたします。`,
+      ja_romaji: `[Go-renraku] ${zhText}. Go-kakunin・go-kyōryoku yoroshiku onegaishimasu.`,
+      ne: `【जानकारी】 ${zhText}। कृपया सबैजनाले ध्यान दिनुहोस् र मद्दत गर्नुहोस्।`,
+      ne_romaji: `[Jānakārī] Kripayā sabaijanāle dhyāna dinuhos ra maddat garnuhos.`,
+      my: `【အသိပေးချက်】 ${zhText}။ အားလုံး ပူးပေါင်းကူညီပေးပါခင်ဗျာ/ရှင်။`,
+      my_romaji: `[A-thi-pay-gyet] Arr-lone pu-paung ku-nyi pay-par.`,
+      en: `[Announcement] ${zhText}. Thank you for your cooperation!`,
+      isAi: false
+    };
+    renderQuadResults(currentBroadcastData);
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'rgba(92,61,30,0.08)';
+      statusEl.style.color = 'var(--primary)';
+      statusEl.innerHTML = `🌐 已生成離線四國通用布達卡片`;
+    }
+    showToast('四國布達卡片已產出！', 'success');
+  }
+}
+
+function renderQuadResults(data) {
+  if (!data) return;
+  const grid = document.getElementById('broadcast-cards-grid');
+  if (!grid) return;
+
+  grid.innerHTML = `
+    <!-- 🇯🇵 日文 (日本語) -->
+    <div class="broadcast-lang-card" style="border-top:4px solid #b84b29;">
+      <div>
+        <div class="broadcast-lang-header">
+          <span class="broadcast-lang-badge" style="color:#b84b29;">
+            <span style="font-size:1.2rem;">🇯🇵</span> 日本語 (Japanese)
+          </span>
+          <span style="font-size:0.72rem; color:var(--muted);">職場禮貌敬語</span>
+        </div>
+        <div class="broadcast-text-main ja-text" onclick="speakBroadcast('${escapeJs(data.ja)}', 'ja')" title="點擊發音 🔊" style="cursor:pointer;">
+          ${data.ja} <span style="font-size:0.85rem; opacity:0.6;">🔊</span>
+        </div>
+        ${data.ja_romaji ? `<div class="broadcast-text-sub">🗣️ 拼音：${data.ja_romaji}</div>` : ''}
+      </div>
+      <div class="broadcast-lang-actions">
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ja)}', 'ja')">🔊 朗讀</button>
+        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('ja')">📋 複製</button>
+      </div>
+    </div>
+
+    <!-- 🇳🇵 尼泊爾文 (नेपाली) -->
+    <div class="broadcast-lang-card" style="border-top:4px solid #2e7d32;">
+      <div>
+        <div class="broadcast-lang-header">
+          <span class="broadcast-lang-badge" style="color:#2e7d32;">
+            <span style="font-size:1.2rem;">🇳🇵</span> नेपाली (Nepali)
+          </span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場夥伴母語</span>
+        </div>
+        <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
+          ${data.ne}
+        </div>
+        ${data.ne_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.ne_romaji}</div>` : ''}
+      </div>
+      <div class="broadcast-lang-actions">
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ne)}', 'ne')">🔊 朗讀</button>
+        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('ne')">📋 複製</button>
+      </div>
+    </div>
+
+    <!-- 🇲🇲 緬甸文 (မြန်မာဘာသာ) -->
+    <div class="broadcast-lang-card" style="border-top:4px solid #f57f17;">
+      <div>
+        <div class="broadcast-lang-header">
+          <span class="broadcast-lang-badge" style="color:#f57f17;">
+            <span style="font-size:1.2rem;">🇲🇲</span> မြန်မာဘာသာ (Burmese)
+          </span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場夥伴母語</span>
+        </div>
+        <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
+          ${data.my}
+        </div>
+        ${data.my_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.my_romaji}</div>` : ''}
+      </div>
+      <div class="broadcast-lang-actions">
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.my)}', 'my')">🔊 朗讀</button>
+        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('my')">📋 複製</button>
+      </div>
+    </div>
+
+    <!-- 🇬🇧 英文 (English) -->
+    <div class="broadcast-lang-card" style="border-top:4px solid #1976d2;">
+      <div>
+        <div class="broadcast-lang-header">
+          <span class="broadcast-lang-badge" style="color:#1976d2;">
+            <span style="font-size:1.2rem;">🇬🇧</span> English (英文)
+          </span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場國際通用</span>
+        </div>
+        <div class="broadcast-text-main" onclick="speakBroadcast('${escapeJs(data.en)}', 'en')" title="點擊發音 🔊" style="cursor:pointer;">
+          ${data.en} <span style="font-size:0.85rem; opacity:0.6;">🔊</span>
+        </div>
+        <div class="broadcast-text-sub">🗣️ Standard Workplace English</div>
+      </div>
+      <div class="broadcast-lang-actions">
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.en)}', 'en')">🔊 朗讀</button>
+        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('en')">📋 複製</button>
+      </div>
+    </div>
+  `;
+}
+
+function copySingleLang(langKey) {
+  if (!currentBroadcastData) return;
+  const map = {
+    ja: { name: '日文', text: currentBroadcastData.ja },
+    ne: { name: '尼泊爾文', text: currentBroadcastData.ne },
+    my: { name: '緬甸文', text: currentBroadcastData.my },
+    en: { name: '英文', text: currentBroadcastData.en }
+  };
+  const item = map[langKey];
+  if (!item || !item.text) return;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(item.text).then(() => {
+      showToast(`已複製${item.name}！`, 'success');
+    }).catch(() => {
+      showToast(`已選取${item.name}`, 'info');
+    });
+  } else {
+    showToast(`已複製${item.name}！`, 'success');
+  }
+}
+
+function copyAllQuadBroadcast() {
+  if (!currentBroadcastData) return;
+  const fullText = `【📢 現場四國同步布達 / Announcement】
+🇯🇵 日本語 (Japanese)：
+${currentBroadcastData.ja}
+
+🇳🇵 नेपाली (Nepali)：
+${currentBroadcastData.ne}
+
+🇲🇲 မြန်မာဘာသာ (Burmese)：
+${currentBroadcastData.my}
+
+🇬🇧 English (英文)：
+${currentBroadcastData.en}
+
+（中文原意：${currentBroadcastData.zh}）`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(fullText).then(() => {
+      showToast('已複製全部 4 國語言布達文字！', 'success');
+    }).catch(() => {
+      showToast('已生成 4 國布達文字', 'info');
+    });
+  } else {
+    showToast('已複製全部 4 國語言布達文字！', 'success');
+  }
+}
+
+function openBroadcastBigScreen() {
+  if (!currentBroadcastData) return;
+  const modal = document.getElementById('modal-broadcast-bigscreen');
+  const preview = document.getElementById('bigscreen-zh-preview');
+  const container = document.getElementById('bigscreen-quad-container');
+  if (!modal || !container) return;
+
+  if (preview) preview.textContent = currentBroadcastData.zh || '現場布達事項';
+
+  container.innerHTML = `
+    <!-- 🇯🇵 日文大字卡 -->
+    <div class="bigscreen-card" style="border-left:6px solid #b84b29;">
+      <div class="bigscreen-card-title">
+        <span>🇯🇵 日本語 (Japanese)</span>
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ja)}', 'ja')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
+      </div>
+      <div class="bigscreen-card-content" style="font-family:var(--font-serif); color:var(--primary);">
+        ${currentBroadcastData.ja}
+      </div>
+      ${currentBroadcastData.ja_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.ja_romaji}</div>` : ''}
+    </div>
+
+    <!-- 🇳🇵 尼泊爾文大字卡 -->
+    <div class="bigscreen-card" style="border-left:6px solid #2e7d32;">
+      <div class="bigscreen-card-title">
+        <span>🇳🇵 नेपाली (Nepali)</span>
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ne)}', 'ne')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
+      </div>
+      <div class="bigscreen-card-content" style="color:#1b5e20;">
+        ${currentBroadcastData.ne}
+      </div>
+      ${currentBroadcastData.ne_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.ne_romaji}</div>` : ''}
+    </div>
+
+    <!-- 🇲🇲 緬甸文大字卡 -->
+    <div class="bigscreen-card" style="border-left:6px solid #f57f17;">
+      <div class="bigscreen-card-title">
+        <span>🇲🇲 မြန်မာဘာသာ (Burmese)</span>
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.my)}', 'my')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
+      </div>
+      <div class="bigscreen-card-content" style="color:#e65100;">
+        ${currentBroadcastData.my}
+      </div>
+      ${currentBroadcastData.my_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.my_romaji}</div>` : ''}
+    </div>
+
+    <!-- 🇬🇧 英文大字卡 -->
+    <div class="bigscreen-card" style="border-left:6px solid #1976d2;">
+      <div class="bigscreen-card-title">
+        <span>🇬🇧 English (英文)</span>
+        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.en)}', 'en')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
+      </div>
+      <div class="bigscreen-card-content" style="color:#0d47a1;">
+        ${currentBroadcastData.en}
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('open');
+  modal.classList.add('show');
+}
+
+function closeBroadcastBigScreen() {
+  closeModal('modal-broadcast-bigscreen');
+}
+
+function speakBroadcast(text, lang) {
+  if (!('speechSynthesis' in window)) {
+    showToast('您的裝置不支援語音合成', 'error');
+    return;
+  }
+  if (!text) return;
+
+  if (lang === 'ja') {
+    speakJapanese(text);
+    return;
+  }
+
+  const utt = new SpeechSynthesisUtterance(text);
+  if (lang === 'en') {
+    utt.lang = 'en-US';
+    utt.rate = 0.95;
+  } else if (lang === 'ne') {
+    utt.lang = 'ne-NP';
+  } else if (lang === 'my') {
+    utt.lang = 'my-MM';
+  }
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
+  showToast('🔊 正在播放語音…');
+}
+
+function toggleBroadcastMic() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    showToast('您的瀏覽器不支援語音辨識，請直接文字輸入', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('btn-broadcast-mic');
+
+  if (isBroadcastMicActive && broadcastRecognition) {
+    broadcastRecognition.stop();
+    isBroadcastMicActive = false;
+    if (btn) btn.textContent = '🎤 語音輸入';
+    return;
+  }
+
+  try {
+    broadcastRecognition = new SpeechRec();
+    broadcastRecognition.lang = 'zh-TW';
+    broadcastRecognition.continuous = false;
+    broadcastRecognition.interimResults = false;
+
+    broadcastRecognition.onstart = () => {
+      isBroadcastMicActive = true;
+      if (btn) btn.textContent = '🔴 聆聽中…';
+      showToast('🎤 請說出想布達的中文事項…');
+    };
+
+    broadcastRecognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      const input = document.getElementById('broadcast-zh-input');
+      if (input) input.value = transcript;
+      showToast(`辨識成功：「${transcript}」`, 'success');
+      executeQuadTranslation(transcript);
+    };
+
+    broadcastRecognition.onerror = (e) => {
+      console.warn('語音辨識錯誤：', e);
+      showToast('語音辨識未偵測到清晰語音，請重試或文字輸入', 'info');
+      isBroadcastMicActive = false;
+      if (btn) btn.textContent = '🎤 語音輸入';
+    };
+
+    broadcastRecognition.onend = () => {
+      isBroadcastMicActive = false;
+      if (btn) btn.textContent = '🎤 語音輸入';
+    };
+
+    broadcastRecognition.start();
+  } catch (err) {
+    console.error('Mic error:', err);
+    showToast('啟動麥克風失敗', 'error');
+  }
+}
+
+/* ==============================================================
    11. 初始化
 ============================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   syncNetworkStatus();
   renderSopTabs();
   renderVocabPage('sop');
+  renderBroadcastPage();
   initFloatingRaccoon();
 
   if ('speechSynthesis' in window) {

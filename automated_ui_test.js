@@ -247,6 +247,28 @@ assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '
 assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
 assert(html.includes('photos/avatar_yang.png'), '包含小楊專屬 Q 版立繪圖檔參照 (avatar_yang.png)');
 
+// 測試 19: 現場四國同步布達板（日文・尼泊爾文・緬甸文・英文）功能測試
+console.log('\n【測試 19：現場四國同步布達板 (日/尼/緬/英 並排大字與語音)】');
+assert(html.includes('data-page="page-broadcast"'), '頂部導航列包含「📢 四國布達」按鈕');
+assert(html.includes('id="page-broadcast"'), '包含四國布達專屬頁面 (page-broadcast)');
+assert(html.includes('id="broadcast-zh-input"'), '包含中文布達事項輸入框 (broadcast-zh-input)');
+assert(html.includes('id="broadcast-cards-grid"'), '包含四國語言並排網格容器 (broadcast-cards-grid)');
+assert(html.includes('id="broadcast-templates-wrap"'), '包含常用職場快捷範本標籤列 (broadcast-templates-wrap)');
+assert(html.includes('id="modal-broadcast-bigscreen"'), '包含全螢幕大字亮屏展示彈窗 (modal-broadcast-bigscreen)');
+assert(html.includes('QUAD_BROADCAST_TEMPLATES'), '包含 15 組離線職場四國對照範本庫 (QUAD_BROADCAST_TEMPLATES)');
+assert(html.includes('executeQuadTranslation'), '包含四國同步翻譯執行函式 (executeQuadTranslation)');
+assert(html.includes('triggerBroadcastTranslation'), '包含手動點擊同步翻譯觸發函式 (triggerBroadcastTranslation)');
+assert(html.includes('applyBroadcastTemplate'), '包含快捷範本套用函式 (applyBroadcastTemplate)');
+assert(html.includes('copySingleLang'), '包含單一語言複製函式 (copySingleLang)');
+assert(html.includes('copyAllQuadBroadcast'), '包含一鍵複製全部 4 國語言布達函式 (copyAllQuadBroadcast)');
+assert(html.includes('openBroadcastBigScreen') && html.includes('closeBroadcastBigScreen'), '包含開啟/關閉大字亮屏全螢幕展示函式');
+assert(html.includes('speakBroadcast'), '包含多語系語音合成朗讀函式 (speakBroadcast)');
+assert(html.includes('toggleBroadcastMic'), '包含中文語音輸入辨識函式 (toggleBroadcastMic)');
+assert(html.includes('日本語') && html.includes('नेपाली') && html.includes('မြန်မာဘာသာ') && html.includes('English'), '完整涵蓋日文、尼泊爾文、緬甸文、英文四大語言');
+
+const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
+assert(swContent.includes('yang-pwa-v61'), 'Service Worker 快取版本已升級至 yang-pwa-v61');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -254,5 +276,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台與「你叫什麼名字？」Q 版形象圖鑑測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台、「你叫什麼名字？」Q 版形象圖鑑與「現場四國同步布達板」測試 100% 全部通過！');
 }
+
