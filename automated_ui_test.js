@@ -325,6 +325,7 @@ assert(html.includes('vi_egg') && html.includes('たまご') && html.includes('�
 assert(html.includes('vi_daikon') && html.includes('だいこん') && html.includes('白蘿蔔'), '包含原型根莖：白蘿蔔 (大根)');
 assert(html.includes('vi_ninjin') && html.includes('人参') && html.includes('紅蘿蔔') && !html.includes('"ja": "にんじん / <ruby>人参'), '包含原型根莖：紅蘿蔔 (人参・無冗贅平假名重複)');
 assert(html.includes('vi_renkon') && html.includes('れんこん') && html.includes('蓮藕'), '包含原型根莖：蓮藕 (蓮根)');
+assert(!html.includes('"id": "vi_renkon", "ja": "<ruby>蓮根<rt>れんこん</rt></ruby>", "zh": "蓮藕", "cat": "食材", "imageUrl": "./photos/IMG_0867.jpg"'), '蓮藕 (vi_renkon) 原型食材正確移除未拍攝之誤植照片');
 assert(html.includes('vi_gyuniku') && html.includes('ぎゅうにく') && html.includes('牛肉'), '包含原型肉類：牛肉 (牛肉・阿蘇赤牛)');
 assert(html.includes('vi_butaniku') && html.includes('ぶたにく') && html.includes('豬肉'), '包含原型肉類：豬肉 (豚肉・龍膽豬)');
 assert(html.includes('vi_toriniku') && html.includes('とりにく') && html.includes('雞肉'), '包含原型肉類：雞肉 (鶏肉・南蠻炸雞/唐揚)');

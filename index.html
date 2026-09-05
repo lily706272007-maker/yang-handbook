@@ -3756,7 +3756,7 @@ function createRealRunnerData() {
     { "id": "vi_egg", "ja": "<ruby>卵<rt>たまご</rt></ruby>", "zh": "雞蛋（生雞蛋）", "cat": "食材", "imageUrl": "", "note": "原型食材・厚蛋捲(だし巻き玉子)、溫泉蛋、美式炒蛋、茶碗蒸核心原料" },
     { "id": "vi_daikon", "ja": "<ruby>大根<rt>だいこん</rt></ruby>", "zh": "白蘿蔔", "cat": "食材", "imageUrl": "", "note": "原型根莖・大根泥(蘿蔔泥)、關東煮、味噌湯、日式醃蘿蔔" },
     { "id": "vi_ninjin", "ja": "<ruby>人参<rt>にんじん</rt></ruby>", "zh": "紅蘿蔔（胡蘿蔔）", "cat": "食材", "imageUrl": "./photos/IMG_0963.jpg", "note": "原型根莖・沙拉吧切絲、彩蔬煮、燉牛肉、高湯熬煮" },
-    { "id": "vi_renkon", "ja": "<ruby>蓮根<rt>れんこん</rt></ruby>", "zh": "蓮藕", "cat": "食材", "imageUrl": "./photos/IMG_0867.jpg", "note": "原型根莖・熊本名物辛子蓮藕、彩蔬煮、天婦羅" },
+    { "id": "vi_renkon", "ja": "<ruby>蓮根<rt>れんこん</rt></ruby>", "zh": "蓮藕", "cat": "食材", "imageUrl": "", "note": "原型根莖・熊本名物辛子蓮藕、彩蔬煮、天婦羅" },
     { "id": "vi_tamanegi", "ja": "<ruby>玉<rt>たま</rt></ruby>ねぎ", "zh": "洋蔥", "cat": "食材", "imageUrl": "", "note": "原型根莖・牛丼(朝牛)、牛肉咖哩、漢堡排、洋蔥沙拉醬" },
     { "id": "vi_naganegi", "ja": "<ruby>長<rt>なが</rt></ruby>ネギ", "zh": "日本大蔥（長蔥 / 白蔥）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・烤肉串、火鍋、拉麵蔥絲、煮魚去腥" },
     { "id": "vi_negi", "ja": "<ruby>小葱<rt>こねぎ</rt></ruby>", "zh": "青蔥（細蔥 / 蔥花）", "cat": "食材", "imageUrl": "", "note": "辛香蔬菜・生魚片佐料、拉麵蔥花、味噌湯" },
@@ -3833,7 +3833,7 @@ function createRealRunnerData() {
     { "id": "vi_shoga", "ja": "<ruby>生姜<rt>しょうが</rt></ruby>", "zh": "生薑（老薑 / 嫩薑）", "cat": "食材", "imageUrl": "./photos/IMG_0976.jpg", "note": "辛香食材・薑汁蒸淺蜊、生馬肉生薑泥、魚肉去腥" },
     { "id": "vi_ninniku", "ja": "<ruby>大蒜<rt>にんにく</rt></ruby>", "zh": "大蒜（大蒜瓣 / 蒜泥）", "cat": "食材", "imageUrl": "", "note": "辛香食材・生馬肉蒜泥佐料、拉麵蒜香油、炸雞醃料" },
     { "id": "vi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵（現磨生芥末 / 哇沙比）", "cat": "食材", "imageUrl": "./photos/IMG_0933.jpg", "note": "辛香食材・壽司台現磨山葵、生魚片蘸料" },
-    { "id": "vi_karashi", "ja": "<ruby>和辛子<rt>わがらし</rt></ruby>", "zh": "黃芥末（和辛子）", "cat": "食材", "imageUrl": "./photos/IMG_0867.jpg", "note": "辛香食材・辛子蓮藕餡料、肉燒賣沾醬(IMG_0967)" },
+    { "id": "vi_karashi", "ja": "<ruby>和辛子<rt>わがらし</rt></ruby>", "zh": "黃芥末（和辛子）", "cat": "食材", "imageUrl": "", "note": "辛香食材・辛子蓮藕餡料、肉燒賣沾醬(IMG_0967)" },
     { "id": "vi_lemon", "ja": "レモン", "zh": "檸檬", "cat": "食材", "imageUrl": "", "note": "新鮮水果・炸雞塊擠汁解膩、生馬肉擺盤佐料、調酒" },
     { "id": "vi_yuzu", "ja": "<ruby>柚子<rt>ゆず</rt></ruby>", "zh": "柚子（日本香柚）", "cat": "食材", "imageUrl": "./photos/IMG_0886.jpg", "note": "新鮮水果・柚子胡椒醬、漬物香氣、白岳柚子酒" },
     { "id": "vi_ooba", "ja": "<ruby>大葉<rt>おおば</rt></ruby>", "zh": "青紫蘇葉（大葉）", "cat": "食材", "imageUrl": "", "note": "新鮮香草・刺身生魚片鋪底殺菌提香、天婦羅炸大葉" },
@@ -4638,8 +4638,8 @@ function loadAppData() {
       return data;
     }
     const data = JSON.parse(raw);
-    // 嚴格校驗：若 tabs 不完整或未包含最新食材分類/同事平級指示/撤盤情境/最新班表名單/乾淨無斜線標音，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined) || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.vocabSop.some(v => v.id === 'vc_bs_1') || data.vocabSop.some(v => v.id === 'vi_ninjin' && v.ja.includes('/'))) {
+    // 嚴格校驗：若 tabs 不完整或未包含最新食材分類/同事平級指示/撤盤情境/最新班表名單/乾淨無斜線標音/蓮藕無誤植照片，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined) || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.vocabSop.some(v => v.id === 'vc_bs_1') || data.vocabSop.some(v => v.id === 'vi_ninjin' && v.ja.includes('/')) || data.vocabSop.some(v => v.id === 'vi_renkon' && v.imageUrl === './photos/IMG_0867.jpg')) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
