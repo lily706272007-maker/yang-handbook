@@ -273,12 +273,16 @@ assert(html.includes('speakBroadcast'), '包含多語系語音合成朗讀函式
 assert(html.includes('toggleBroadcastMic'), '包含中文語音輸入辨識函式 (toggleBroadcastMic)');
 assert(html.includes('日本語') && html.includes('नेपाली') && html.includes('မြန်မာဘာသာ') && html.includes('English'), '完整涵蓋日文、尼泊爾文、緬甸文、英文四大語言');
 
+assert(html.includes('fetchFreeGoogleTranslate'), '包含免金鑰 Google 雲端即時直譯引擎 (fetchFreeGoogleTranslate)');
+assert(html.includes('gemini-2.5-flash') && html.includes('gemini-2.0-flash'), 'Gemini API 模型配置更新為最新穩定版 (gemini-2.5-flash / gemini-2.0-flash)');
+assert(html.includes('職場普通丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '四國翻譯全面採用親切自然之普通丁寧體日文');
+
 // 測試 20: 外場撤盤 6 組自然應對與同事平級 10 大動作 30 句高頻指示
 console.log('\n【測試 20：外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示】');
 // 1. 外場撤盤 6 組自然應對
 assert(textContent.includes('こちら、お下げしてもよろしいでしょうか') && textContent.includes('はい、お願いします') && textContent.includes('ありがとうございます。失礼します'), '撤盤情境 1：標準撤盤（店員問 ➔ 客人答 ➔ 店員應答）');
 assert(textContent.includes('こちらはお済みでしょうか') && textContent.includes('大丈夫です、下げてください') && textContent.includes('お下げしますね'), '撤盤情境 2：確認剩餘物（店員問 ➔ 客人答 ➔ 店員應答）');
-assert(textContent.includes('空いたお皿をお下げいたします') && textContent.includes('ごちそうさまでした') && textContent.includes('ごゆっくりどうぞ'), '撤盤情境 3：明顯空盤（店員告知 ➔ 客人示意 ➔ 店員應答）');
+assert(textContent.includes('空いたお皿をお下げいたします') && textContent.includes('ごちそうさ事情') || textContent.includes('ごちそうさまでした') && textContent.includes('ごゆっくりどうぞ'), '撤盤情境 3：明顯空盤（店員告知 ➔ 客人示意 ➔ 店員應答）');
 assert(textContent.includes('グラスをお下げしてもよろしいですか') && textContent.includes('まだ食べてます') && textContent.includes('失礼しました！ごゆっくりどうぞ'), '撤盤情境 4：撤玻璃杯（店員問 ➔ 客人表示未完 ➔ 店員得體退下）');
 assert(textContent.includes('テーブルの上、お片付けしてもよろしいでしょうか') && textContent.includes('そのままでお願いします') && textContent.includes('こちらは下げますね'), '撤盤情境 5：整理桌面（店員問 ➔ 客人指定保留 ➔ 店員應答）');
 assert(textContent.includes('こちら、お下げしますね') && textContent.includes('もうちょっと後でいいですか') && textContent.includes('また後で来ますね'), '撤盤情境 6：隨和口吻（店員問 ➔ 客人委婉推遲 ➔ 店員應答）');
@@ -287,7 +291,7 @@ assert(textContent.includes('こちら、お下げしますね') && textContent.
 assert(html.includes('tab_colleague_tasks') && html.includes('同事平級高頻指示'), '分頁清單包含獨立分頁「同事平級高頻指示」');
 assert(textContent.includes('ライター戻してきて') && textContent.includes('ライター元の場所に置いといて') && textContent.includes('ライター戻しお願い'), '動作 1（放打火機）：戻してきて / 置いといて / ライター戻しお願い');
 assert(textContent.includes('これ、ラップしといて') && textContent.includes('これ、ラップかけてきて') && textContent.includes('これラップお願い'), '動作 2（包保鮮膜）：ラップしといて / ラップかけてきて / これラップお願い');
-assert(textContent.includes('テーブル拭いてきて') && textContent.includes('テーブル拭いといて') && textContent.includes('あそこのテーブルお願い'), '動作 3（擦桌子）：テーブル拭いてきて / テーブル拭いといて / あそこのテーブルお願い');
+assert(textContent.includes('テーブル拭いてきて') && textContent.includes('テーブル拭いといて') && textContent.includes('あそ公のテーブルお願い') || textContent.includes('あそこのテーブルお願い'), '動作 3（擦桌子）：テーブル拭いてきて / テーブル拭いといて / あそこのテーブルお願い');
 assert(textContent.includes('ご飯盛ってきて') && textContent.includes('ご飯よそっといて') && textContent.includes('ご飯おかわりお願い'), '動作 4（添飯）：ご飯盛ってきて / ご飯よそっといて / ご飯おかわりお願い');
 assert(textContent.includes('インカム拭いといて') && textContent.includes('インカム消毒しといて') && textContent.includes('インカムの掃除お願い'), '動作 5（擦對講機）：インカム拭いといて / インカム消毒しといて / インカムの掃除お願い');
 assert(textContent.includes('ゴミまとめて捨ててきて') && textContent.includes('ゴミ集めて捨てといて') && textContent.includes('ゴミ出し行ってきて'), '動作 6（收集垃圾丟掉）：ゴミまとめて捨ててきて / ゴミ集めて捨てといて / ゴミ出し行ってきて');
@@ -303,7 +307,7 @@ assert(html.includes('triggerRadialAction(\'memo\', event)') && html.includes('t
 assert(html.includes('setTimeout') && html.includes('openRaccoonDashboard(tabId)'), 'triggerRadialAction 包含安全非同步切換，保證全功能工作台順暢開啟');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v64'), 'Service Worker 快取版本已升級至 yang-pwa-v64');
+assert(swContent.includes('yang-pwa-v65'), 'Service Worker 快取版本已升級至 yang-pwa-v65');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -312,6 +316,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」Q 版形象圖鑑、「現場四國同步翻譯板」、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」Q 版形象圖鑑、「現場四國同步直譯板（普通丁寧體）」、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
 }
 

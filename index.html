@@ -2327,7 +2327,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v64';
+const STORAGE_KEY = 'yang_runner_handbook_v65';
 
 function createRealRunnerData() {
   return {
@@ -5956,7 +5956,20 @@ function showPetDialog(msg) {
 
 const HARDCODED_GEMINI_API_KEY = '';
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+
+async function fetchFreeGoogleTranslate(text, targetLang) {
+  if (!text || !text.trim()) return '';
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(text.trim())}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Google Translate HTTP ${res.status}`);
+  const data = await res.json();
+  if (Array.isArray(data) && Array.isArray(data[0])) {
+    const translated = data[0].map(item => item[0]).filter(Boolean).join('');
+    return translated.trim();
+  }
+  throw new Error('Google Translate 回應格式無效');
+}
 
 async function callGeminiApiUnified(promptText) {
   const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : HARDCODED_GEMINI_API_KEY;
@@ -8212,7 +8225,7 @@ async function executeSilentTranslate() {
   const zhText = input.value.trim();
   if (!zhText) return;
 
-  card.innerHTML = `<div style="color:var(--muted); font-size:0.88rem;">🦝 小浣熊正在快速轉譯為道地職場日語…</div>`;
+  card.innerHTML = `<div style="color:var(--muted); font-size:0.88rem;">🦝 小浣熊正在快速轉譯為自然丁寧體日語…</div>`;
 
   // 1. 檢查常用離線詞庫
   const offlineQuick = {
@@ -8229,9 +8242,9 @@ async function executeSilentTranslate() {
     return;
   }
 
-  // 2. 呼叫 Gemini AI (純繁中 + 標音日語)
+  // 2. 呼叫 Gemini AI (普通丁寧體 + 標音日語)
   if (AppData && AppData.apiKey && AppData.apiKey.trim()) {
-    const prompt = `請將以下中文轉換為日本溫泉旅館餐飲外場最道地、最簡短有禮貌的日語句子。
+    const prompt = `請將以下中文轉換為日本溫泉旅館工作現場最自然親切的普通丁寧體日語句子（〜です／〜ます，口吻親切，不要過度生硬客套）。
 中文：${zhText}
 
 必須遵守標音：
@@ -8250,15 +8263,32 @@ async function executeSilentTranslate() {
         return;
       }
     } catch (e) {
-      console.warn('Translate API error, fallback to basic template:', e);
+      console.warn('Translate API error, fallback to free translator:', e);
     }
   }
 
-  // 3. 基本回退
+  // 3. 呼叫免金鑰 Google 雲端即時直譯
+  if (navigator.onLine) {
+    try {
+      const gJa = await fetchFreeGoogleTranslate(zhText, 'ja');
+      if (gJa) {
+        renderTranslateCard(
+          escapeHtml(gJa),
+          zhText,
+          '即時雲端直譯日語（普通丁寧體）'
+        );
+        return;
+      }
+    } catch (ge) {
+      console.warn('Google translate fallback failed:', ge);
+    }
+  }
+
+  // 4. 基本回退
   renderTranslateCard(
-    `<ruby>失礼<rt>しつれい</rt></ruby>いたします。${escapeHtml(zhText)}`,
+    `${escapeHtml(zhText)}（請向同仁說明）`,
     zhText,
-    '請以禮貌語氣向客人或同仁說明。'
+    '離線模式提示'
   );
 }
 
@@ -9009,8 +9039,8 @@ const QUAD_BROADCAST_TEMPLATES = [
     title: '分享料理',
     zh: '我做了一些料理，歡迎大家一起吃！',
     keywords: ['料理', '做', '吃', '點心', '煮', '食物', '一起吃', '大家吃', '請吃', '分享'],
-    ja: 'お料理を作ったので、ぜひ皆さんで召し上がってください！',
-    ja_romaji: 'O-ryōri o tsukutta node, zehi minasan de meshiagatte kudasai!',
+    ja: '料理を作ったので、よかったら皆さんで食べてみてくださいね！',
+    ja_romaji: 'Ryōri o tsukutta node, yokattara minasan de tabete mite kudasai ne!',
     ne: 'मैले केही खाना बनाएको छु, कृपया सबैजना मिलेर खानुहोस्!',
     ne_romaji: 'Maile kehī khānā banāeko chhu, kripayā sabaijanā milera khānuhos!',
     my: 'ကျွန်တော်/ကျွန်မ ဟင်းပွဲတချို့ ချက်ထားပါတယ်၊ အားလုံး အတူတူ သုံးဆောင်ကြပါခင်ဗျာ/ရှင်!',
@@ -9271,7 +9301,7 @@ async function triggerBroadcastTranslation() {
 async function executeQuadTranslation(zhText) {
   const statusEl = document.getElementById('broadcast-status-banner');
   
-  // 1. 精確匹配離線範本
+  // 1. 若完全符合預設範本句（精確比對），直接套用預設範本
   const exactMatch = QUAD_BROADCAST_TEMPLATES.find(t => t.zh === zhText);
   if (exactMatch) {
     currentBroadcastData = { ...exactMatch, isAi: false };
@@ -9286,39 +9316,26 @@ async function executeQuadTranslation(zhText) {
     return;
   }
 
-  // 2. 關鍵字模糊權重匹配離線範本
-  let bestTemplate = null;
-  let maxScore = 0;
-  QUAD_BROADCAST_TEMPLATES.forEach(t => {
-    let score = 0;
-    t.keywords.forEach(kw => {
-      if (zhText.includes(kw)) score += 2;
-    });
-    if (score > maxScore) {
-      maxScore = score;
-      bestTemplate = t;
-    }
-  });
-
-  // 3. 若有連網且有 Gemini 金鑰，優先調用 Gemini 生成高精度 4 國語言
+  // 2. 第一優先：若有連網且有 Gemini 金鑰，調用 Gemini AI 進行精確直譯（日文指定普通丁寧體）
   const hasApiKey = (AppData && AppData.apiKey && AppData.apiKey.trim()) || HARDCODED_GEMINI_API_KEY;
   if (navigator.onLine && hasApiKey) {
     if (statusEl) {
       statusEl.style.display = 'block';
       statusEl.style.background = 'rgba(184,75,41,0.1)';
       statusEl.style.color = 'var(--accent)';
-      statusEl.innerHTML = `🤖 正在使用 Gemini AI 多國語言引擎即時翻譯【日/尼/緬/英】…`;
+      statusEl.innerHTML = `🤖 正在使用 Gemini AI 多國語言引擎即時直譯【日/尼/緬/英】…`;
     }
     
     try {
-      const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、英文 English）的日本溫泉飯店外場翻譯專家。
-請將以下中文事項精確翻譯為 4 國語言，並提供發音拼音輔助。
-中文事項：「${zhText}」
+      const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、英文 English）的翻譯專家。
+請將使用者輸入的中文內容「100% 忠實、精確直譯」為 4 國語言，並提供發音拼音輔助。
+【日文特別要求】：請使用親切自然的「普通丁寧體」（〜です／〜ます／〜てみてくださいね／〜よかったら食べてみてください等），適合日本職場同仁與各國夥伴之間的日常交流，請勿使用過於拘謹生硬的高級敬語/謙讓語（不要用「召し上がる」「お召し上がりください」等生疏客套話）。
+中文內容：「${zhText}」
 
 請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字）：
 {
   "zh": "${zhText.replace(/"/g, '\\"')}",
-  "ja": "日文敬體翻譯（適合日本職場禮貌通報，例如：お料理を作ったので、ぜひ皆さんで召し上がってください！）",
+  "ja": "日文普通丁寧體精確翻譯",
   "ja_romaji": "日文平假名或羅馬音",
   "ne": "नेपाली (標準尼泊爾文天城體)",
   "ne_romaji": "Nepali Romanized 羅馬拼音",
@@ -9333,9 +9350,9 @@ async function executeQuadTranslation(zhText) {
           zh: zhText,
           ja: aiRes.ja,
           ja_romaji: aiRes.ja_romaji || '',
-          ne: aiRes.ne || (bestTemplate ? bestTemplate.ne : 'कृपया ध्यान दिनुहोस्!'),
+          ne: aiRes.ne || '',
           ne_romaji: aiRes.ne_romaji || '',
-          my: aiRes.my || (bestTemplate ? bestTemplate.my : 'ကျေးဇူးပြု၍ သတိထားပေးပါခင်ဗျာ/ရှင်!'),
+          my: aiRes.my || '',
           my_romaji: aiRes.my_romaji || '',
           en: aiRes.en,
           isAi: true
@@ -9345,59 +9362,85 @@ async function executeQuadTranslation(zhText) {
           statusEl.style.display = 'block';
           statusEl.style.background = 'rgba(56,142,60,0.1)';
           statusEl.style.color = '#2e7d32';
-          statusEl.innerHTML = `✨ Gemini AI 即時同步翻譯完成（4 國語言高精度生成）`;
+          statusEl.innerHTML = `✨ Gemini AI 即時同步直譯完成（日文普通丁寧體・4 國語言生成）`;
         }
         showToast('四國語言翻譯完成！', 'success');
         return;
       }
     } catch (e) {
-      console.warn('Gemini 翻譯失敗，無縫切換離線語意引擎：', e);
+      console.warn('Gemini 翻譯失敗，無縫切換免金鑰雲端即時直譯：', e);
     }
   }
 
-  // 4. 離線或 AI 失敗時的 Fallback
-  if (bestTemplate && maxScore >= 2) {
-    currentBroadcastData = {
-      zh: zhText,
-      ja: bestTemplate.ja,
-      ja_romaji: bestTemplate.ja_romaji,
-      ne: bestTemplate.ne,
-      ne_romaji: bestTemplate.ne_romaji,
-      my: bestTemplate.my,
-      my_romaji: bestTemplate.my_romaji,
-      en: bestTemplate.en,
-      isAi: false
-    };
-    renderQuadResults(currentBroadcastData);
+  // 3. 第二優先：免金鑰 Google 雲端多國語言即時直譯引擎（有網路但無 Gemini 金鑰或 Gemini 異常時）
+  if (navigator.onLine) {
     if (statusEl) {
       statusEl.style.display = 'block';
-      statusEl.style.background = 'rgba(92,61,30,0.08)';
-      statusEl.style.color = 'var(--primary)';
-      statusEl.innerHTML = `⚡ 離線智慧對照：已匹配「${bestTemplate.title}」語意`;
+      statusEl.style.background = 'rgba(184,75,41,0.1)';
+      statusEl.style.color = 'var(--accent)';
+      statusEl.innerHTML = `🌐 正在使用雲端翻譯引擎即時直譯【日/尼/緬/英】…`;
     }
-    showToast('已匹配離線高頻語意！', 'info');
-  } else {
-    // 預設職場禮貌萬用通報模板
-    currentBroadcastData = {
-      zh: zhText,
-      ja: `【ご連絡】${zhText}。ご確認・ご協力よろしくお願いいたします。`,
-      ja_romaji: `[Go-renraku] ${zhText}. Go-kakunin・go-kyōryoku yoroshiku onegaishimasu.`,
-      ne: `【जानकारी】 ${zhText}। कृपया सबैजनाले ध्यान दिनुहोस् र मद्दत गर्नुहोस्।`,
-      ne_romaji: `[Jānakārī] Kripayā sabaijanāle dhyāna dinuhos ra maddat garnuhos.`,
-      my: `【အသိပေးချက်】 ${zhText}။ အားလုံး ပူးပေါင်းကူညီပေးပါခင်ဗျာ/ရှင်။`,
-      my_romaji: `[A-thi-pay-gyet] Arr-lone pu-paung ku-nyi pay-par.`,
-      en: `[Announcement] ${zhText}. Thank you for your cooperation!`,
-      isAi: false
-    };
-    renderQuadResults(currentBroadcastData);
-    if (statusEl) {
-      statusEl.style.display = 'block';
-      statusEl.style.background = 'rgba(92,61,30,0.08)';
-      statusEl.style.color = 'var(--primary)';
-      statusEl.innerHTML = `🌐 已生成離線四國通用翻譯卡片`;
+
+    try {
+      const [jaRes, neRes, myRes, enRes] = await Promise.allSettled([
+        fetchFreeGoogleTranslate(zhText, 'ja'),
+        fetchFreeGoogleTranslate(zhText, 'ne'),
+        fetchFreeGoogleTranslate(zhText, 'my'),
+        fetchFreeGoogleTranslate(zhText, 'en')
+      ]);
+
+      const jaText = jaRes.status === 'fulfilled' ? jaRes.value : '';
+      const neText = neRes.status === 'fulfilled' ? neRes.value : '';
+      const myText = myRes.status === 'fulfilled' ? myRes.value : '';
+      const enText = enRes.status === 'fulfilled' ? enRes.value : '';
+
+      if (jaText || enText) {
+        currentBroadcastData = {
+          zh: zhText,
+          ja: jaText || zhText,
+          ja_romaji: '',
+          ne: neText || 'कृपया अनुवाद हेर्नुहोस्',
+          ne_romaji: '',
+          my: myText || 'ဘာသာပြန်ချက်ကို ကြည့်ရှုပါ',
+          my_romaji: '',
+          en: enText || zhText,
+          isAi: true
+        };
+        renderQuadResults(currentBroadcastData);
+        if (statusEl) {
+          statusEl.style.display = 'block';
+          statusEl.style.background = 'rgba(56,142,60,0.1)';
+          statusEl.style.color = '#2e7d32';
+          statusEl.innerHTML = `✨ 雲端即時同步直譯完成（日・尼・緬・英 4 國語言直譯）`;
+        }
+        showToast('四國語言翻譯完成！', 'success');
+        return;
+      }
+    } catch (err) {
+      console.warn('Google 即時直譯失敗：', err);
     }
-    showToast('四國翻譯卡片已產出！', 'success');
   }
+
+  // 4. 離線狀態（完全無網路時之萬用直譯卡片）
+  currentBroadcastData = {
+    zh: zhText,
+    ja: `【連絡】${zhText}。よろしくお願いします。`,
+    ja_romaji: `[Renraku] ${zhText}. Yoroshiku onegaishimasu.`,
+    ne: `【जानकारी】 ${zhText}।`,
+    ne_romaji: `[Jānakārī] ${zhText}`,
+    my: `【အသိပေးချက်】 ${zhText}။`,
+    my_romaji: `[A-thi-pay-gyet] ${zhText}`,
+    en: `[Notice] ${zhText}`,
+    isAi: false
+  };
+  renderQuadResults(currentBroadcastData);
+  if (statusEl) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'rgba(92,61,30,0.08)';
+    statusEl.style.color = 'var(--primary)';
+    statusEl.innerHTML = `📡 離線模式：已產出四國對照展示卡（連網後可獲得高精度即時翻譯）`;
+  }
+  showToast('四國翻譯卡片已產出！', 'info');
 }
 
 function renderQuadResults(data) {
@@ -9413,7 +9456,7 @@ function renderQuadResults(data) {
           <span class="broadcast-lang-badge" style="color:#b84b29;">
             <span style="font-size:1.2rem;">🇯🇵</span> 日本語 (Japanese)
           </span>
-          <span style="font-size:0.72rem; color:var(--muted);">職場禮貌敬語</span>
+          <span style="font-size:0.72rem; color:var(--muted);">職場普通丁寧體</span>
         </div>
         <div class="broadcast-text-main ja-text">
           ${data.ja}
