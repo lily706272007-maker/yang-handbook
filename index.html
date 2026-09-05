@@ -1943,9 +1943,41 @@
       </div>
 
       <!-- 同仁資訊 -->
-      <div style="margin-bottom:14px;">
+      <div style="margin-bottom:10px;">
         <div style="font-size:1.15rem; font-weight:800; color:var(--ink);" id="who-result-name-display">伊藤（いとう）</div>
         <div style="font-size:0.8rem; color:var(--muted); margin-top:2px;" id="who-result-role-display">日本同仁</div>
+      </div>
+
+      <!-- 快速微調特徵 (防漏抓/自由調整) -->
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:12px; text-align:left;">
+        <div style="font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+          <span>✨ 特徵快速微調（若剛好沒抓準可直接點選）：</span>
+          <button class="btn btn-ghost btn-sm" onclick="rephotoWhoDirectly()" style="font-size:0.72rem; padding:1px 6px;">📷 重新取樣</button>
+        </div>
+        
+        <!-- 眼鏡 -->
+        <div style="display:flex; align-items:center; gap:4px; margin-bottom:6px; flex-wrap:wrap;">
+          <span style="font-size:0.72rem; color:var(--muted); min-width:40px;">眼鏡：</span>
+          <button class="btn btn-sm btn-ghost trait-pill-glasses active" id="trait-glasses-yes" onclick="setAvatarTrait('glasses', true)" style="font-size:0.75rem; padding:2px 8px;">👓 黑框眼鏡</button>
+          <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-no" onclick="setAvatarTrait('glasses', false)" style="font-size:0.75rem; padding:2px 8px;">👀 無眼鏡</button>
+        </div>
+
+        <!-- 髮型 -->
+        <div style="display:flex; align-items:center; gap:4px; margin-bottom:6px; flex-wrap:wrap;">
+          <span style="font-size:0.72rem; color:var(--muted); min-width:40px;">髮型：</span>
+          <button class="btn btn-sm btn-ghost trait-pill-hair active" id="trait-hair-afro_curly" onclick="setAvatarTrait('hair', 'afro_curly')" style="font-size:0.75rem; padding:2px 8px;">🌀 經典捲髮</button>
+          <button class="btn btn-sm btn-ghost trait-pill-hair" id="trait-hair-parted_short" onclick="setAvatarTrait('hair', 'parted_short')" style="font-size:0.75rem; padding:2px 8px;">✂️ 俐落短髮</button>
+          <button class="btn btn-sm btn-ghost trait-pill-hair" id="trait-hair-straight_bob" onclick="setAvatarTrait('hair', 'straight_bob')" style="font-size:0.75rem; padding:2px 8px;">💇 齊瀏海</button>
+          <button class="btn btn-sm btn-ghost trait-pill-hair" id="trait-hair-spiky_bangs" onclick="setAvatarTrait('hair', 'spiky_bangs')" style="font-size:0.75rem; padding:2px 8px;">⚡ 陽光短髮</button>
+          <button class="btn btn-sm btn-ghost trait-pill-hair" id="trait-hair-ponytail" onclick="setAvatarTrait('hair', 'ponytail')" style="font-size:0.75rem; padding:2px 8px;">🎀 馬尾</button>
+        </div>
+
+        <!-- 髮色 -->
+        <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
+          <span style="font-size:0.72rem; color:var(--muted); min-width:40px;">髮色：</span>
+          <button class="btn btn-sm btn-ghost trait-pill-color active" id="trait-color-black" onclick="setAvatarTrait('color', '#1f1e24')" style="font-size:0.75rem; padding:2px 8px;">⬛ 深黑</button>
+          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-brown" onclick="setAvatarTrait('color', '#3b2820')" style="font-size:0.75rem; padding:2px 8px;">🟫 深咖</button>
+        </div>
       </div>
 
       <!-- 操作按鈕 -->
@@ -7052,6 +7084,12 @@ let currentWhoState = {
   generatedAvatarUrl: ''
 };
 
+let currentWhoTraits = {
+  hair: 'afro_curly',
+  glasses: true,
+  color: '#1f1e24'
+};
+
 // 1. 開啟「你叫什麼名字？」照相館彈窗
 function openWhoAreYouModal() {
   const modal = document.getElementById('modal-who-are-you');
@@ -7094,9 +7132,9 @@ function populateWhoColleaguesList() {
   }).join('');
 }
 
-// 3. 靜默前置鏡頭背景極速特徵採樣 (0.3 秒無感取樣並關閉相機)
+// 3. 靜默前置鏡頭背景多時機動態採樣 (採樣多幀並挑選最佳品質)
 async function triggerSilentCameraCapture() {
-  if (currentWhoState.isCameraSampling || currentWhoState.capturedSample) return;
+  if (currentWhoState.isCameraSampling) return;
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
 
   try {
@@ -7117,22 +7155,47 @@ async function triggerSilentCameraCapture() {
     video.srcObject = stream;
     await video.play();
 
-    // 0.3 秒後抓取一幀靜態特徵
-    setTimeout(() => {
+    // 多時機連續取樣 3 幀，選取最佳清晰度與膚色對比幀
+    let samples = [];
+    const sampleInterval = setInterval(() => {
       try {
-        const ctx = canvas.getContext('2d');
-        canvas.width = 320;
-        canvas.height = 320;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 320;
+        tempCanvas.height = 320;
+        const ctx = tempCanvas.getContext('2d');
         ctx.drawImage(video, 0, 0, 320, 320);
-        currentWhoState.capturedSample = canvas;
-      } catch (e) {
-        console.warn('Canvas sampling error:', e);
-      } finally {
+
+        // 檢查影像像素品質
+        const imgData = ctx.getImageData(0, 0, 320, 320);
+        let lumSum = 0;
+        let skinPixels = 0;
+        for (let i = 0; i < imgData.data.length; i += 16) {
+          const r = imgData.data[i];
+          const g = imgData.data[i + 1];
+          const b = imgData.data[i + 2];
+          const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+          lumSum += lum;
+          if (r > 95 && g > 40 && b > 20 && r > g && r > b) {
+            skinPixels++;
+          }
+        }
+        const avgLum = lumSum / (imgData.data.length / 16);
+        const score = (avgLum > 30 && avgLum < 240 ? 50 : 0) + skinPixels;
+        samples.push({ canvas: tempCanvas, score: score });
+      } catch (e) {}
+
+      if (samples.length >= 3) {
+        clearInterval(sampleInterval);
+        samples.sort((a, b) => b.score - a.score);
+        if (samples.length > 0 && samples[0].score > 30) {
+          currentWhoState.capturedSample = samples[0].canvas;
+        }
         stream.getTracks().forEach(t => t.stop());
         video.srcObject = null;
         currentWhoState.isCameraSampling = false;
       }
-    }, 320);
+    }, 120);
+
   } catch (err) {
     console.warn('Silent camera access skipped or denied:', err);
     currentWhoState.isCameraSampling = false;
@@ -7203,7 +7266,7 @@ function selectExistingColleagueForAvatar(id) {
   processColleagueAvatarGeneration(item);
 }
 
-// 7. 啟動生成 Q 版立繪處理流程
+// 7. 啟動生成 Q 版立繪處理流程 (解析特徵並設定預設配件)
 function processColleagueAvatarGeneration(nameItem) {
   currentWhoState.selectedNameItem = nameItem;
 
@@ -7215,15 +7278,29 @@ function processColleagueAvatarGeneration(nameItem) {
   if (loadingScreen) loadingScreen.style.display = 'block';
   if (resultScreen) resultScreen.style.display = 'none';
 
-  // 模擬 650ms 運算動畫
+  // 預設特徵種子
+  const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
+  let hash = 0;
+  for (let i = 0; i < cleanName.length; i++) {
+    hash = (hash << 5) - hash + cleanName.charCodeAt(i);
+    hash |= 0;
+  }
+  const traitSeed = Math.abs(hash);
+
+  const hairStyles = ['afro_curly', 'parted_short', 'straight_bob', 'spiky_bangs', 'ponytail'];
+  currentWhoTraits.hair = (cleanName === '楊') ? 'afro_curly' : hairStyles[traitSeed % hairStyles.length];
+  currentWhoTraits.glasses = (cleanName === '楊') ? true : (traitSeed % 2 === 0);
+  currentWhoTraits.color = traitSeed % 2 === 0 ? '#1f1e24' : '#3b2820';
+
+  // 模擬 600ms 運算動畫
   setTimeout(() => {
-    const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample);
+    updateTraitPillsUI();
+    const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample, currentWhoTraits);
     currentWhoState.generatedAvatarUrl = avatarUrl;
 
     if (loadingScreen) loadingScreen.style.display = 'none';
     if (resultScreen) resultScreen.style.display = 'block';
 
-    const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
     const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
 
     const bubbleText = document.getElementById('who-result-bubble-text');
@@ -7235,17 +7312,13 @@ function processColleagueAvatarGeneration(nameItem) {
     if (avatarImg) avatarImg.src = avatarUrl;
     if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
     if (roleDisplay) roleDisplay.textContent = nameItem.note || '溫泉旅館夥伴';
-  }, 650);
+  }, 600);
 }
 
 // 8. 🎨 核心：生成【方形純透明背景】日系 Q 版角色立繪
-function generateTransparentChibiAvatar(nameItem, sampleCanvas) {
-  // 如果是小楊本人且預載了官方頭像，優先採用高解析實繪
+function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
-  if (cleanName === '楊' || (nameItem.kana && nameItem.kana === 'よう')) {
-    return './photos/avatar_yang.png';
-  }
-
+  
   // 建立 512x512 高解析 Canvas
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -7253,19 +7326,11 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, 512, 512); // 100% 純透明背景
 
-  // 種子隨機特性（依姓名雜湊）
-  let hash = 0;
-  for (let i = 0; i < cleanName.length; i++) {
-    hash = (hash << 5) - hash + cleanName.charCodeAt(i);
-    hash |= 0;
-  }
-  const traitSeed = Math.abs(hash);
-
-  const hairStyles = ['afro_curly', 'parted_short', 'spiky_bangs', 'straight_bob', 'wavy_medium', 'ponytail'];
-  const chosenHair = hairStyles[traitSeed % hairStyles.length];
-  const hasGlasses = (traitSeed % 2 === 0);
+  const traits = customTraits || currentWhoTraits;
+  const chosenHair = traits.hair || 'afro_curly';
+  const hasGlasses = !!traits.glasses;
+  const hairColor = traits.color || '#1f1e24';
   const skinTone = '#ffe6d5';
-  const hairColor = traitSeed % 3 === 0 ? '#1f1e24' : (traitSeed % 3 === 1 ? '#2c2523' : '#18181c');
 
   // ── 1. 繪製雙腳與皮鞋 (Black Shoes) ──
   ctx.fillStyle = '#111114';
@@ -7447,12 +7512,11 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas) {
     ctx.lineTo(370, 170);
     ctx.lineTo(256, 110);
     ctx.fill();
-  } else {
+  } else if (chosenHair === 'straight_bob') {
     // 齊瀏海 / 日系短髮
     ctx.beginPath();
     ctx.arc(256, 155, 112, 0.85 * Math.PI, 2.15 * Math.PI);
     ctx.fill();
-    // 瀏海
     ctx.beginPath();
     ctx.moveTo(148, 175);
     ctx.lineTo(190, 150);
@@ -7463,19 +7527,84 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas) {
     ctx.lineTo(350, 120);
     ctx.lineTo(160, 120);
     ctx.fill();
+  } else if (chosenHair === 'ponytail') {
+    // 馬尾
+    ctx.beginPath();
+    ctx.arc(256, 155, 112, 0.85 * Math.PI, 2.15 * Math.PI);
+    ctx.fill();
+    // 右後方高馬尾
+    ctx.beginPath();
+    ctx.ellipse(370, 120, 36, 60, 0.3 * Math.PI, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    // 陽光刺蝟/蓬鬆短髮
+    ctx.beginPath();
+    ctx.arc(256, 150, 116, 0.85 * Math.PI, 2.15 * Math.PI);
+    ctx.fill();
+    const spikes = [
+      [160, 140, 180, 80, 200, 120],
+      [210, 120, 235, 70, 256, 110],
+      [260, 110, 285, 70, 310, 120],
+      [315, 120, 340, 80, 360, 140]
+    ];
+    spikes.forEach(s => {
+      ctx.beginPath();
+      ctx.moveTo(s[0], s[1]);
+      ctx.lineTo(s[2], s[3]);
+      ctx.lineTo(s[4], s[5]);
+      ctx.fill();
+    });
   }
 
   return canvas.toDataURL('image/png');
 }
 
-// 9. 成果畫面點擊播放自我介紹 (100% 靜音保護，點擊才播放)
+// 9. 手動微調特徵 (即時重繪)
+function setAvatarTrait(traitType, val) {
+  currentWhoTraits[traitType] = val;
+  updateTraitPillsUI();
+
+  if (currentWhoState.selectedNameItem) {
+    const avatarUrl = generateTransparentChibiAvatar(currentWhoState.selectedNameItem, null, currentWhoTraits);
+    currentWhoState.generatedAvatarUrl = avatarUrl;
+    const avatarImg = document.getElementById('who-result-avatar-img');
+    if (avatarImg) avatarImg.src = avatarUrl;
+  }
+}
+
+function updateTraitPillsUI() {
+  // 眼鏡
+  document.querySelectorAll('.trait-pill-glasses').forEach(b => b.classList.remove('btn-primary'));
+  const gId = currentWhoTraits.glasses ? 'trait-glasses-yes' : 'trait-glasses-no';
+  document.getElementById(gId)?.classList.add('btn-primary');
+
+  // 髮型
+  document.querySelectorAll('.trait-pill-hair').forEach(b => b.classList.remove('btn-primary'));
+  document.getElementById('trait-hair-' + currentWhoTraits.hair)?.classList.add('btn-primary');
+
+  // 髮色
+  document.querySelectorAll('.trait-pill-color').forEach(b => b.classList.remove('btn-primary'));
+  const cId = currentWhoTraits.color === '#1f1e24' ? 'trait-color-black' : 'trait-color-brown';
+  document.getElementById(cId)?.classList.add('btn-primary');
+}
+
+// 10. 直接重新取樣
+async function rephotoWhoDirectly() {
+  currentWhoState.capturedSample = null;
+  await triggerSilentCameraCapture();
+  if (currentWhoState.selectedNameItem) {
+    processColleagueAvatarGeneration(currentWhoState.selectedNameItem);
+  }
+}
+
+// 11. 成果畫面點擊播放自我介紹 (100% 靜音保護，點擊才播放)
 function playWhoResultSpeech() {
   if (!currentWhoState.selectedNameItem) return;
   const cleanName = (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '');
   speakJapanese(`${cleanName}です。よろしくお願いします。`);
 }
 
-// 10. 確認儲存 Q 版人物形象至單字庫
+// 12. 確認儲存 Q 版人物形象至單字庫
 function confirmSaveWhoAvatar() {
   if (!currentWhoState.selectedNameItem || !currentWhoState.generatedAvatarUrl) return;
 
@@ -7500,7 +7629,7 @@ function confirmSaveWhoAvatar() {
   showToast(`🎉 已成功儲存 ${cleanName} 的專屬 Q 版形象！`, 'success');
 }
 
-// 11. 重設「你叫什麼名字？」畫面
+// 13. 重設「你叫什麼名字？」畫面
 function resetWhoModal() {
   const selectScreen = document.getElementById('who-screen-select');
   const loadingScreen = document.getElementById('who-screen-loading');
@@ -7518,7 +7647,7 @@ function resetWhoModal() {
   if (roleInput) roleInput.value = '';
 }
 
-// 12. 🎴 雙擊名字卡片跳出：Q 版個人立繪名牌彈窗
+// 14. 🎴 雙擊名字卡片跳出：Q 版個人立繪名牌彈窗
 let currentActiveCardItem = null;
 
 function openNameAvatarModal(vocabId) {

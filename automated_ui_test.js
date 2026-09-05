@@ -243,6 +243,7 @@ assert(html.includes('submitCustomColleagueName'), '包含外國人/新夥伴自
 assert(html.includes('generateTransparentChibiAvatar'), '包含方形純透明背景 Q 版角色立繪生成函式 (generateTransparentChibiAvatar)');
 assert(html.includes('openNameAvatarModal'), '包含雙擊開啟同仁 Q 版名牌彈窗函式 (openNameAvatarModal)');
 assert(html.includes('playNameCardSpeech') && html.includes('playWhoResultSpeech'), '包含日文自我介紹發音播放函式 (100% 靜音保護)');
+assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '包含特徵快速微調 (髮型/眼鏡/髮色) 與即時補拍函式');
 assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
 assert(html.includes('photos/avatar_yang.png'), '包含小楊專屬 Q 版立繪圖檔參照 (avatar_yang.png)');
 
