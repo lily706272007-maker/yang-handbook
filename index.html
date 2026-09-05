@@ -811,7 +811,7 @@
   .modal-backdrop {
     position: fixed; inset: 0;
     background: rgba(43,41,38,0.55); backdrop-filter: blur(4px);
-    z-index: 400; display: flex; align-items: flex-end; justify-content: center;
+    z-index: 10000; display: flex; align-items: flex-end; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity 0.22s ease;
   }
   .modal-backdrop.open { opacity: 1; pointer-events: auto; }
@@ -1095,7 +1095,7 @@
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 9999;
+  z-index: 10001;
   display: none;
   align-items: center;
   justify-content: center;
@@ -1117,6 +1117,7 @@
   height: 58px;
   border-radius: 50%;
   background: var(--primary);
+  border: 2px solid #fff;
   color: #fff;
   display: flex;
   align-items: center;
@@ -1127,16 +1128,28 @@
   cursor: pointer;
   z-index: 10;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
 }
 .radial-center-close:active {
   transform: scale(0.9);
 }
+
+/* 6 個輪盤按鈕圓形分佈 (使用 CSS 變數確保 active 放大時不位移) */
+.radial-item:nth-child(1) { --rx: 0px; --ry: -100px; transform: translate(0px, -100px); }
+.radial-item:nth-child(2) { --rx: 88px; --ry: -50px; transform: translate(88px, -50px); }
+.radial-item:nth-child(3) { --rx: 88px; --ry: 50px; transform: translate(88px, 50px); }
+.radial-item:nth-child(4) { --rx: 0px; --ry: 100px; transform: translate(0px, 100px); }
+.radial-item:nth-child(5) { --rx: -88px; --ry: 50px; transform: translate(-88px, 50px); }
+.radial-item:nth-child(6) { --rx: -88px; --ry: -50px; transform: translate(-88px, -50px); }
+
 .radial-item {
   position: absolute;
   width: 68px;
   height: 68px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   border: 1.5px solid var(--border);
   box-shadow: 0 4px 14px rgba(0,0,0,0.18);
   display: flex;
@@ -1144,11 +1157,19 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+  transform: translate(var(--rx, 0px), var(--ry, 0px)) scale(1);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s, box-shadow 0.15s;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+  z-index: 5;
+}
+.radial-item * {
+  pointer-events: none;
 }
 .radial-item:active, .radial-item.hovered {
-  transform: scale(1.22) !important;
+  transform: translate(var(--rx, 0px), var(--ry, 0px)) scale(1.18);
   background: #fff;
   border-color: var(--primary);
   box-shadow: 0 8px 24px rgba(92, 61, 30, 0.35);
@@ -1163,14 +1184,6 @@
   color: var(--ink);
   margin-top: 2px;
 }
-
-/* 6 個輪盤按鈕圓形分佈 */
-.radial-item:nth-child(1) { transform: translate(0px, -100px); }
-.radial-item:nth-child(2) { transform: translate(88px, -50px); }
-.radial-item:nth-child(3) { transform: translate(88px, 50px); }
-.radial-item:nth-child(4) { transform: translate(0px, 100px); }
-.radial-item:nth-child(5) { transform: translate(-88px, 50px); }
-.radial-item:nth-child(6) { transform: translate(-88px, -50px); }
 
 .r-tab-btn {
   background: var(--surface);
@@ -1873,31 +1886,31 @@
 <!-- 🍎 Apple 風格弧形輪盤快捷選單 (Radial Menu) -->
 <div id="raccoon-radial-overlay" class="raccoon-radial-overlay" onclick="closeRaccoonRadialMenu()">
   <div id="raccoon-radial-menu" class="raccoon-radial-menu" onclick="event.stopPropagation()">
-    <button class="radial-item" data-tab="memo" onclick="triggerRadialAction('memo')">
+    <button type="button" class="radial-item" data-tab="memo" onclick="triggerRadialAction('memo', event)">
       <span class="radial-icon">📝</span>
       <span class="radial-label">Memo筆記</span>
     </button>
-    <button class="radial-item" data-tab="timer" onclick="triggerRadialAction('timer')">
+    <button type="button" class="radial-item" data-tab="timer" onclick="triggerRadialAction('timer', event)">
       <span class="radial-icon">⏱️</span>
       <span class="radial-label">料理計時</span>
     </button>
-    <button class="radial-item" data-tab="fuzzy" onclick="triggerRadialAction('fuzzy')">
+    <button type="button" class="radial-item" data-tab="fuzzy" onclick="triggerRadialAction('fuzzy', event)">
       <span class="radial-icon">👂</span>
       <span class="radial-label">碎詞偷聽</span>
     </button>
-    <button class="radial-item" data-tab="practice" onclick="triggerRadialAction('practice')">
+    <button type="button" class="radial-item" data-tab="practice" onclick="triggerRadialAction('practice', event)">
       <span class="radial-icon">🎓</span>
       <span class="radial-label">300句庫</span>
     </button>
-    <button class="radial-item" data-tab="translate" onclick="triggerRadialAction('translate')">
+    <button type="button" class="radial-item" data-tab="translate" onclick="triggerRadialAction('translate', event)">
       <span class="radial-icon">💬</span>
       <span class="radial-label">靜音翻譯</span>
     </button>
-    <button class="radial-item" data-tab="map" onclick="triggerRadialAction('map')">
+    <button type="button" class="radial-item" data-tab="map" onclick="triggerRadialAction('map', event)">
       <span class="radial-icon">🗺️</span>
       <span class="radial-label">問路/抽考</span>
     </button>
-    <div class="radial-center-close" onclick="closeRaccoonRadialMenu()">✕</div>
+    <button type="button" class="radial-center-close" onclick="closeRaccoonRadialMenu()">✕</button>
   </div>
 </div>
 
@@ -2314,7 +2327,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v63';
+const STORAGE_KEY = 'yang_runner_handbook_v64';
 
 function createRealRunnerData() {
   return {
@@ -7694,9 +7707,15 @@ function closeRaccoonRadialMenu() {
   if (overlay) overlay.classList.remove('open');
 }
 
-function triggerRadialAction(tabId) {
+function triggerRadialAction(tabId, event) {
+  if (event) {
+    if (typeof event.stopPropagation === 'function') event.stopPropagation();
+    if (typeof event.preventDefault === 'function') event.preventDefault();
+  }
   closeRaccoonRadialMenu();
-  openRaccoonDashboard(tabId);
+  setTimeout(() => {
+    openRaccoonDashboard(tabId);
+  }, 40);
 }
 
 // 4. 🦝 小浣熊全功能工作台
@@ -7719,7 +7738,8 @@ function switchRaccoonTab(tabId) {
 
   if (tabId === 'memo') renderRaccoonMemoTab();
   if (tabId === 'practice') {
-    if (!document.getElementById('practice-card-display').innerHTML.trim()) {
+    const disp = document.getElementById('practice-card-display');
+    if (disp && !disp.innerHTML.trim()) {
       drawRandomPracticeSentence();
     }
   }

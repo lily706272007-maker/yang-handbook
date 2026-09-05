@@ -296,8 +296,14 @@ assert(textContent.includes('トング集めてきて') && textContent.includes(
 assert(textContent.includes('元の場所に戻しといて') && textContent.includes('定位置にしまってきて') && textContent.includes('お椀の片付けお願い'), '動作 9（碗放回原位）：元の場所に戻しといて / 定位置にしまってきて / お椀の片付けお願い');
 assert(textContent.includes('氷取ってきて') && textContent.includes('氷足しといて') && textContent.includes('氷の補充お願い'), '動作 10（補充冰塊）：氷取ってきて / 氷足しといて / 氷の補充お願い');
 
+// 測試 21: 小浣熊 Apple 輪盤選單點擊修復與彈窗層級
+console.log('\n【測試 21：小浣熊 Apple 輪盤選單點擊修復與彈窗層級】');
+assert(html.includes('--rx: 0px; --ry: -100px') && html.includes('--rx: 88px; --ry: -50px'), '輪盤選項採用 CSS 變數維持圓形座標，防止 active 狀態觸發位置突變');
+assert(html.includes('triggerRadialAction(\'memo\', event)') && html.includes('triggerRadialAction(\'timer\', event)'), '輪盤按鈕完整傳遞 event 並阻止事件冒泡 (stopPropagation)');
+assert(html.includes('setTimeout') && html.includes('openRaccoonDashboard(tabId)'), 'triggerRadialAction 包含安全非同步切換，保證全功能工作台順暢開啟');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v63'), 'Service Worker 快取版本已升級至 yang-pwa-v63');
+assert(swContent.includes('yang-pwa-v64'), 'Service Worker 快取版本已升級至 yang-pwa-v64');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -306,6 +312,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台、「你叫什麼名字？」Q 版形象圖鑑、「現場四國同步翻譯板」、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」Q 版形象圖鑑、「現場四國同步翻譯板」、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
 }
 
