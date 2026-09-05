@@ -59,39 +59,38 @@ assert(textContent.includes('すぐ取りに伺います'), '傳菜人員應答�
 assert(textContent.includes('〇〇がなくなりました'), '缺菜回報：〇〇がなくなりました');
 assert(textContent.includes('お通りします') || textContent.includes('失礼します'), '推車借過應對：お通りします');
 
-// 測試 4: 上司交代事項與收桌撤盤 SOP
-console.log('\n【測試 4：上司交代事項與收桌撤盤 SOP】');
+// 測試 4: 主管上級指示與收桌撤盤三大對話分區 (v78 全新重構)
+console.log('\n【測試 4：主管上級指示與收桌撤盤三大對話分區 (v78 全新重構)】');
 assert(textContent.includes('バッシング') && textContent.includes('お下げ'), '包含收桌術語：バッシング / お下げ');
-assert(textContent.includes('食事終了') || textContent.includes('お食事終了'), '包含用餐結束牌：食事終了カード');
-assert(textContent.includes('お下げしてもよろしいでしょうか'), '收桌詢問：お下げしてもよろしいでしょうか？');
-assert(textContent.includes('上段にお皿・お椀') && textContent.includes('中段に黒トレイ') && textContent.includes('下段に4マス仕切りプレート'), '推車收餐盤三層擺放規則：上段碗盤、中段黑餐盤、下段四格盤');
-assert(textContent.includes('お皿拭き') && textContent.includes('水分をしっかり拭き取り'), '擦盤子作業：お皿拭き');
-assert(textContent.includes('ドリンクコーナーの片付け'), '收拾飲料區域：ドリンクコーナーの片付け');
-assert(textContent.includes('掃除機をかける'), '使用吸塵器打掃地板：掃除機をかける');
+assert(textContent.includes('テーブルのバッシング行ってきて'), '主管指示 1：請去收桌子（bussing）');
+assert(textContent.includes('テーブル拭いてきて'), '主管指示 2：請去擦桌子');
+assert(textContent.includes('チャッカマン回収してきて'), '主管指示 3：請去收長柄打火機');
 
-// 收桌 6 種說法
-assert(textContent.includes('こちらのお皿、お下げしてもよろしいでしょうか'), '收桌①：標準萬用句');
-assert(textContent.includes('空いたお皿をお下げいたしますね'), '收桌②：空盤親切句');
-assert(textContent.includes('お食事はお済みでしょうか'), '收桌③：用餐完畢確認句');
-assert(textContent.includes('こちらのお椀、お下げしてもよろしいでしょうか'), '收桌④：專收湯碗小缽句');
-assert(textContent.includes('テーブルの上、お広くいたしますね'), '收桌⑤：騰出桌面空間句');
-assert(textContent.includes('まだ召し上がりますか'), '收桌⑥：確認還在吃與得體退下句');
+// 🗣️ 我要說的
+assert(textContent.includes('こちらのお皿、お下げしてもよろしいでしょうか'), '我要說的①：標準萬用句');
+assert(textContent.includes('空いたお皿をお下げいたしますね'), '我要說的②：空盤親切句');
+assert(textContent.includes('お食事はお済みでしょうか'), '我要說的③：用餐完畢確認句');
+assert(textContent.includes('テーブルの上、お広くいたしますね'), '我要說的④：騰出桌面空間句');
+assert(textContent.includes('こちらのお椀、お下げしてもよろしいでしょうか'), '我要說的⑤：專收湯碗小缽句');
+assert(textContent.includes('グラスをお下げしてもよろしいですか'), '我要說的⑥：收水杯玻璃杯句');
 
-// 表達感謝 6 種說法
-assert(textContent.includes('ありがとうございます！助かります'), '道謝①：現場靈魂萬用句');
-assert(textContent.includes('お皿をまとめていただき'), '道謝②：感謝客人疊盤句');
-assert(textContent.includes('ご協力ありがとうございます'), '道謝③：感謝協助配合句');
-assert(textContent.includes('お気遣いいただき'), '道謝④：感謝體貼照顧句');
-assert(textContent.includes('いつもありがとうございます！お疲れ様です'), '道謝⑤：對內場同事感謝句');
-assert(textContent.includes('大変助かりました'), '道謝⑥：強烈感謝幫大忙句');
+// 👂 對方可能說的
+assert(textContent.includes('はい、お願いします'), '對方可能說的①：爽快答應');
+assert(textContent.includes('大丈夫です、下げてください'), '對方可能說的②：沒問題請收');
+assert(textContent.includes('ごちそうさまでした'), '對方可能說的③：多謝款待我吃飽了');
+assert(textContent.includes('まだ食べてます'), '對方可能說的④：我還在吃/喝');
+assert(textContent.includes('これはそのままでお願いします'), '對方可能說的⑤：請幫我先留著');
+assert(textContent.includes('もうちょっと後でいいですか'), '對方可能說的⑥：可以稍後再收嗎');
 
-// 回應道謝 6 種說法
-assert(textContent.includes('とんでもないです！ごゆっくりどうぞ'), '回覆①：No.1最推薦首選句');
-assert(textContent.includes('こちらこそ、ありがとうございます'), '回覆②：雙向真誠感謝句');
-assert(textContent.includes('恐れ入ります！ごゆっくりお過ごしください'), '回覆③：對長輩尊客敬意句');
-assert(textContent.includes('喜んでいただけて嬉しいです'), '回覆④：客人稱讚開心句');
-assert(textContent.includes('いえいえ！お疲れ様です'), '回覆⑤：同事夥伴默契句');
-assert(textContent.includes('また何かありましたらお声がけください'), '回覆⑥：離桌隨時召喚句');
+// 💬 我要回答的
+assert(textContent.includes('ありがとうございます。失礼します') || textContent.includes('ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します'), '我要回答的①：標準致謝退下');
+assert(textContent.includes('ありがとうございます！ごゆっくりどうぞ'), '我要回答的②：客人吃飽熱情回應');
+assert(textContent.includes('あ、失礼しました！ごゆっくりどうぞ') || textContent.includes('あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ'), '我要回答的③：客人還在吃得體致歉');
+assert(textContent.includes('わかりました。こちらは下げますね') || textContent.includes('わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね'), '我要回答的④：指定保留應答');
+assert(textContent.includes('また後で来ますね') || textContent.includes('また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね'), '我要回答的⑤：推遲隨和應答');
+assert(textContent.includes('ありがとうございます！助かります') || textContent.includes('ありがとうございます！<ruby>助<rt>たす</rt></ruby>かります！'), '我要回答的⑥：現場靈魂感謝句');
+assert(textContent.includes('とんでもないです！ごゆっくりどうぞ'), '我要回答的⑦：No.1 最推薦首選句');
+assert(textContent.includes('こちらこそ、ありがとうございます'), '我要回答的⑧：雙向真誠感謝句');
 
 // 測試 5: 餐具與器具單字庫 (全新餐具大分類)
 console.log('\n【測試 5：餐具與器具單字庫】');
@@ -491,9 +490,21 @@ assert(html.includes('左逗號') && html.includes('右逗號'), '韓系逗號 (
 assert(html.includes('俐落髮際線') || html.includes('Hairline'), '陽光寸頭 (buzz_cut) 具備清晰俐落之髮際線與平頭輪廓');
 assert(html.includes('Angel Ring Hair Highlight') || html.includes('ellipse(256, 94, 66, 14'), '角色立繪頂部包含日系動漫「天使光環」立體光澤');
 
+// 測試 32: 收桌撤盤 SOP 全面重構・刪除舊推車規章・主管 3 句指示・對話清晰劃分 3 區・單句獨立發音 (v78)
+console.log('\n【測試 32：收桌撤盤 SOP 全面重構・主管 3 句指示・對話清晰劃分 3 區・單句獨立發音 (v78)】');
+assert(!html.includes('id": "bs_wagon_layers"') && !html.includes('id": "bs_finish_card"'), '已徹底刪除舊 5 條推車擺放規則與多餘 SOP');
+assert(html.includes('bs_chef_bussing') && html.includes('テーブルのバッシング'), '包含主管指示 1：請去收桌子 (bussing)');
+assert(html.includes('bs_chef_wipe_table') && html.includes('テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて'), '包含主管指示 2：請去擦桌子');
+assert(html.includes('bs_chef_chakaman') && html.includes('チャッカマン<ruby>回収<rt>かいしゅう</rt></ruby>してきて'), '包含主管指示 3：請去收長柄打火機');
+assert(html.includes('category": "my_speech"') && html.includes('bs_my_1') && html.includes('こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか'), '對話第 1 區「🗣️ 我要說的」包含萬用收盤詢問句');
+assert(html.includes('category": "other_speech"') && html.includes('bs_guest_1') && html.includes('はい、お<ruby>願<rt>ねが</rt></ruby>いします'), '對話第 2 區「👂 對方可能說的」包含客人爽快答應與各類回覆');
+assert(html.includes('category": "my_reply"') && html.includes('bs_reply_1') && html.includes('とんでもないです！ごゆっくりどうぞ'), '對話第 3 區「💬 我要回答的」包含首選應答與感謝金句');
+assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech') && html.includes('speaker-other-speech') && html.includes('speaker-my-reply'), 'CSS 包含主管指示與對話 3 區之專屬左側色條樣式');
+assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v77'), 'Service Worker 快取版本已升級至 yang-pwa-v77');
-assert(html.includes('yang_runner_handbook_v77'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v77');
+assert(swContent.includes('yang-pwa-v78'), 'Service Worker 快取版本已升級至 yang-pwa-v78');
+assert(html.includes('yang_runner_handbook_v78'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v78');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -502,7 +513,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、「隨機抽考」用聽的 🎧 / 用看的 👀 雙版本切換・自動朗讀・偷看提示・連擊計分 (v76)、「照相館純淨關閉頂欄・男女外場制服100%統一・100%露眉露眼絕不擋臉・男生6大高辨識度髮型・擬真動漫天使光環」 (v77) 測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、「隨機抽考」用聽的 🎧 / 用看的 👀 雙版本切換・自動朗讀・偷看提示・連擊計分 (v76)、「照相館純淨關閉頂欄・男女外場制服100%統一・100%露眉露眼絕不擋臉・男生6大高辨識度髮型・擬真動漫天使光環」 (v77)、「收桌撤盤 SOP 全面重構・刪除舊推車規章・主管 3 句指示・對話清晰劃分 3 區・單句獨立發音」 (v78) 測試 100% 全部通過！');
 }
 
 

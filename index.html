@@ -413,9 +413,13 @@
     cursor: pointer; transition: all 0.15s;
   }
   .dialog-bubble-item:hover { background: var(--surface); border-color: var(--border); }
-  .dialog-bubble-item.speaker-kitchen { border-left: 3px solid #C8843A; }
-  .dialog-bubble-item.speaker-me      { border-left: 3px solid var(--primary); }
-  .dialog-bubble-item.speaker-guest   { border-left: 3px solid var(--accent); }
+  .dialog-bubble-item.speaker-kitchen     { border-left: 3px solid #C8843A; }
+  .dialog-bubble-item.speaker-me          { border-left: 3px solid var(--primary); }
+  .dialog-bubble-item.speaker-guest       { border-left: 3px solid var(--accent); }
+  .dialog-bubble-item.speaker-supervisor  { border-left: 3px solid #8e1d2c; background: rgba(142,29,44,0.03); }
+  .dialog-bubble-item.speaker-my-speech   { border-left: 3px solid #2d6a4f; background: rgba(45,106,79,0.03); }
+  .dialog-bubble-item.speaker-other-speech { border-left: 3px solid #d97706; background: rgba(217,119,6,0.03); }
+  .dialog-bubble-item.speaker-my-reply    { border-left: 3px solid #2563eb; background: rgba(37,99,235,0.03); }
   .dialog-bubble-content { flex: 1; }
   .dialog-bubble-speaker {
     font-size: 0.68rem; font-weight: 700; color: var(--muted); margin-bottom: 2px; display: inline-block;
@@ -1699,6 +1703,7 @@
       <label>條目所屬區塊類型</label>
       <select id="item-type-field" onchange="handleItemTypeChange()">
         <option value="sop">第一區：SOP 工作指引（中文大字在頂，日文在下）</option>
+        <option value="supervisor">主管/上級指示（交辦指示）</option>
         <option value="dialog">第二區：對話應答（日文大字在頂帶標音，中文在下）</option>
       </select>
     </div>
@@ -2459,7 +2464,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v77';
+const STORAGE_KEY = 'yang_runner_handbook_v78';
 
 function createRealRunnerData() {
   return {
@@ -2824,222 +2829,70 @@ function createRealRunnerData() {
       "icon": "🧹",
       "items": [
         {
-          "id": "bs_finish_card",
-          "type": "sop",
-          "speaker": "",
-          "zh": "客人離席清桌：確認桌上牌子已翻至「食事終了（用餐結束）」，並回收該牌子。",
-          "ja": "<ruby>離席後<rt>りせきご</rt></ruby>のバッシング：テーブルの「お<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>」カードを<ruby>確認<rt>かくにん</rt></ruby>し、カードを<ruby>回収<rt>かいしゅう</rt></ruby>します。",
+          "id": "bs_chef_bussing",
+          "type": "supervisor",
+          "category": "supervisor",
+          "speaker": "👨‍🍳 主管/上級指示",
+          "zh": "【指示1】請去收桌子（bussing）",
+          "ja": "テーブルのバッシング<ruby>行<rt>い</rt></ruby>ってきて。（テーブル<ruby>片付<rt>かたづ</rt></ruby>けてきて）",
           "grammar": {
             "vocabs": [
-              { "ja": "<ruby>離席後<rt>りせきご</rt></ruby>", "zh": "客人離席後" },
-              { "ja": "<ruby>食事終了<rt>しょくじしゅうりょう</rt></ruby>", "zh": "用餐結束" },
-              { "ja": "<ruby>回収<rt>かいしゅう</rt></ruby>する", "zh": "回收、收回" }
+              { "ja": "バッシング", "zh": "收桌、撤盤清桌（Bussing）" },
+              { "ja": "<ruby>片付<rt>かたづ</rt></ruby>ける", "zh": "收拾整理" }
             ],
             "points": [
-              { "title": "【確認後回収】", "desc": "確認卡片翻面才開始大清桌，避免客人只是暫時去取餐。" }
+              { "title": "【〜行ってきて】", "desc": "去現場完成某動作後回來。" }
             ],
-            "tips": "確認卡片翻面才開始大清桌，避免誤收客人餐桌。"
+            "tips": "主管最常交代的外場清桌指令。"
           }
         },
         {
-          "id": "bs_wagon_layers",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【推車擺放規則】第一層碗盤、第二層黑色餐盤、第三層四格餐盤。",
-          "ja": "ワゴン<ruby>積載<rt>せきさい</rt></ruby>ルール：<ruby>上段<rt>じょうだん</rt></ruby>にお<ruby>皿<rt>さら</rt></ruby>・お<ruby>椀<rt>わん</rt></ruby>、<ruby>中段<rt>ちゅうだん</rt></ruby>に<ruby>黒<rt>くろ</rt></ruby>トレイ、<ruby>下段<rt>げだん</rt></ruby>に4マス<ruby>仕切<rt>しき</rt></ruby>りプレートを<ruby>分別<rt>ぶんべつ</rt></ruby>して<ruby>積<rt>つ</rt></ruby>みます。",
+          "id": "bs_chef_wipe_table",
+          "type": "supervisor",
+          "category": "supervisor",
+          "speaker": "👨‍🍳 主管/上級指示",
+          "zh": "【指示2】請去擦桌子",
+          "ja": "テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。（テーブル<ruby>拭<rt>ふ</rt></ruby>いといて）",
           "grammar": {
             "vocabs": [
-              { "ja": "<ruby>上段<rt>じょうだん</rt></ruby>", "zh": "第一層、頂層" },
-              { "ja": "<ruby>中段<rt>ちゅうだん</rt></ruby>", "zh": "第二層、中層" },
-              { "ja": "<ruby>下段<rt>げだん</rt></ruby>", "zh": "第三層、底層" }
+              { "ja": "テーブル", "zh": "餐桌" },
+              { "ja": "<ruby>拭<rt>ふ</rt></ruby>く", "zh": "擦拭" }
             ],
             "points": [
-              { "title": "【重物在下】", "desc": "四格盤最重放底層，保持推車重心平穩安全。" }
+              { "title": "【拭いてきて vs 拭いといて】", "desc": "前者指立刻去擦桌子；後者為「順便先擦好備著」。" }
             ],
-            "tips": "隨收隨整理，避免盤子疊過高傾倒。"
+            "tips": "客人離桌後立刻以專用抹布擦拭乾淨。"
           }
         },
         {
-          "id": "bs_wipe_dishes",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【擦盤子作業】用乾淨專用抹布將洗好的盤子、碗徹底擦乾水分歸位。",
-          "ja": "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き：キレイなダスターでお<ruby>皿<rt>さら</rt></ruby>とお<ruby>椀<rt>わん</rt></ruby>の<ruby>水分<rt>すいぶん</rt></ruby>をしっかり<ruby>拭<rt>ふ</rt></ruby>き<ruby>取<rt>と</rt></ruby>り、<ruby>所定<rt>しょてい</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。",
+          "id": "bs_chef_chakaman",
+          "type": "supervisor",
+          "category": "supervisor",
+          "speaker": "👨‍🍳 主管/上級指示",
+          "zh": "【指示3】請去收長柄打火機",
+          "ja": "チャッカマン<ruby>回収<rt>かいしゅう</rt></ruby>してきて。（チャッカマン<ruby>集<rt>あつ</rt></ruby>めてきて）",
           "grammar": {
             "vocabs": [
-              { "ja": "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き", "zh": "擦盤子" },
-              { "ja": "ダスター", "zh": "專用抹布（duster）" }
+              { "ja": "チャッカマン", "zh": "長柄點火槍、長嘴打火機" },
+              { "ja": "<ruby>回収<rt>かいしゅう</rt></ruby>する", "zh": "回收、收攏" }
             ],
             "points": [
-              { "title": "【しっかり拭き取る】", "desc": "徹底擦乾水分歸位。" }
+              { "title": "【チャッカマン】", "desc": "外場點燃酒精塊或小火鍋專用的長嘴點火槍。" }
             ],
-            "tips": "邊擦邊檢查是否有破損缺角。"
+            "tips": "點火完畢後巡視各桌將長嘴打火機收回備餐區。"
           }
         },
         {
-          "id": "bs_drink_cleanup",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【收拾飲料區域】清理機台集水槽、補充杯子與備品、擦拭檯面。",
-          "ja": "ドリンクコーナーの<ruby>片付<rt>かたづ</rt></ruby>け：サーバーのドリップトレイを<ruby>洗<rt>あら</rt></ruby>い、グラスの<ruby>補充<rt>ほじゅう</rt></ruby>とカウンターの<ruby>拭<rt>ふ</rt></ruby>き<ruby>掃除<rt>そうじ</rt></ruby>をします。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "ドリンクコーナー", "zh": "飲料區域" },
-              { "ja": "<ruby>片付<rt>かたづ</rt></ruby>け", "zh": "收拾整理" }
-            ],
-            "points": [
-              { "title": "【名詞＋の片付け】", "desc": "清理收拾工作。" }
-            ],
-            "tips": "定時清洗飲料機與生啤機下方集水槽。"
-          }
-        },
-        {
-          "id": "bs_vacuum",
-          "type": "sop",
-          "speaker": "",
-          "zh": "【使用吸塵器打掃地板】營業前後或離峰時徹底將用餐區地板吸乾淨。",
-          "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>をかける：テーブルの<ruby>下<rt>した</rt></ruby>や<ruby>通路<rt>つうろ</rt></ruby>の<ruby>床<rt>ゆか</rt></ruby>に<ruby>掃除機<rt>そうじき</rt></ruby>をかけてキレイにします。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>をかける", "zh": "用吸塵器吸地" }
-            ],
-            "points": [
-              { "title": "【慣用語 掃除機をかける】", "desc": "使用吸塵器清掃專用動詞為「かける」。" }
-            ],
-            "tips": "特別注意桌腳底下死角的飯粒與紙屑。"
-          }
-        },
-        {
-          "id": "bs_sc1_std",
+          "id": "bs_my_1",
           "type": "dialog",
-          "speaker": "外場撤盤・情境 1：標準撤盤 (自然應對流)",
-          "zh": "【店員詢問】「這邊方便幫您收走嗎？」(kochira, osage shite mo yoroshii deshō ka?)\n【客人回覆】「好的，麻煩你了。」(hai, onegai shimasu.)\n【店員應答】「謝謝，不好意思打擾了。」(arigatō gozaimasu. shitsurei shimasu.)",
-          "ja": "【店員】こちら、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？\n【客】はい、お<ruby>願<rt>ねが</rt></ruby>いします。\n【店員】ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "こちら", "zh": "這邊、這個（敬語代名詞）" },
-              { "ja": "お<ruby>下<rt>さ</rt></ruby>げする", "zh": "撤收餐盤（謙讓語）" },
-              { "ja": "よろしいでしょうか", "zh": "可以嗎？方便嗎？" },
-              { "ja": "お<ruby>願<rt>ねが</rt></ruby>いします", "zh": "麻煩你了、拜託了" },
-              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>します", "zh": "不好意思打擾了" }
-            ],
-            "points": [
-              { "title": "【標準撤盤 3 步驟自然應對流】", "desc": "①主動詢問 ➔ ②客人同意「はい、お願いします」 ➔ ③致謝「ありがとうございます。失礼します」並撤盤。" },
-              { "title": "【お下げしてもよろしいでしょうか】", "desc": "日本外場最普遍、親切且得體的標準詢問敬語。" }
-            ],
-            "tips": "手指示意要收的盤子，語氣輕柔，雙手端盤。"
-          }
-        },
-        {
-          "id": "bs_sc2_leftover",
-          "type": "dialog",
-          "speaker": "外場撤盤・情境 2：確認盤中剩餘物 (自然應對流)",
-          "zh": "【店員詢問】「這個您已經用餐完畢了嗎？」(kochira wa osumi deshō ka?)\n【客人回覆】「沒問題，請收走吧。」(daijōbu desu, sagete kudasai.)\n【店員應答】「謝謝您，幫您收走喔。」(arigatō gozaimasu. osage shimasu ne.)",
-          "ja": "【店員】こちらはお<ruby>済<rt>す</rt></ruby>みでしょうか？\n【客】<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。\n【店員】ありがとうございます。お<ruby>下<rt>さ</rt></ruby>げしますね。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "お<ruby>済<rt>す</rt></ruby>み", "zh": "結束、完畢（敬語）" },
-              { "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です", "zh": "沒問題、不用了" },
-              { "ja": "<ruby>下<rt>さ</rt></ruby>げてください", "zh": "請收走吧" },
-              { "ja": "お<ruby>下<rt>さ</rt></ruby>げしますね", "zh": "幫您收走喔（親切口吻）" }
-            ],
-            "points": [
-              { "title": "【確認剩餘物 お済みでしょうか】", "desc": "盤中還剩一點食物時，確認客人是否用餐完畢，避免誤收。" },
-              { "title": "【親切句尾 〜ね】", "desc": "お下げしますね 語調溫和親近，不給客人催促感。" }
-            ],
-            "tips": "目光徵詢客人確認停筷後，再微笑動手收盤。"
-          }
-        },
-        {
-          "id": "bs_sc3_empty",
-          "type": "dialog",
-          "speaker": "外場撤盤・情境 3：明顯空盤撤收 (自然應對流)",
-          "zh": "【店員告知】「幫您撤下空盤。」(aita osara o osage itashimasu.)\n【客人示意】「謝謝招待／我吃飽了。」(gochisōsama deshita.)\n【店員應答】「謝謝您！請繼續慢用。」(arigatō gozaimasu! goyukkuri dōzo.)",
-          "ja": "【店員】<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたします。\n【客】ごちそうさまでした。\n【店員】ありがとうございます！ごゆっくりどうぞ。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>", "zh": "空盤子" },
-              { "ja": "お<ruby>下<rt>さ</rt></ruby>げいたします", "zh": "幫您撤下（謙讓語）" },
-              { "ja": "ごちそうさまでした", "zh": "多謝款待、我吃飽了" },
-              { "ja": "ごゆっくりどうぞ", "zh": "請繼續慢用" }
-            ],
-            "points": [
-              { "title": "【明顯空盤主動告知】", "desc": "盤子已吃乾淨時直接說「空いたお皿をお下げいたします」。" },
-              { "title": "【回應客人ごちそうさま】", "desc": "客人說吃飽時，立刻熱情回應「ありがとうございます！ごゆっくりどうぞ」。" }
-            ],
-            "tips": "客人若把空盤推到桌外側，順勢俐落撤收並致意。"
-          }
-        },
-        {
-          "id": "bs_sc4_glass",
-          "type": "dialog",
-          "speaker": "外場撤盤・情境 4：撤收玻璃杯與空杯 (自然應對流)",
-          "zh": "【店員詢問】「不好意思，方便幫您收走杯子嗎？」(shitsurei itashimasu, gurasu o osage shite mo yoroshii desu ka?)\n【客人表示未完】「啊，我還在吃／喝。」(a, mada tabetemasu / nondemasu.)\n【店員應答】「啊，不好意思！請慢慢享用。」(a, shitsurei shimashita! goyukkuri dōzo.)",
-          "ja": "【店員】<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？\n【客】あ、まだ<ruby>食<rt>た</rt></ruby>べてます（<ruby>飲<rt>の</rt></ruby>んでます）。\n【店員】あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "グラス", "zh": "玻璃杯、飲料杯" },
-              { "ja": "まだ<ruby>食<rt>た</rt></ruby>べてます", "zh": "我還在吃" },
-              { "ja": "まだ<ruby>飲<rt>の</rt></ruby>んでます", "zh": "我還在喝" },
-              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました", "zh": "不好意思、失禮了（過去式致歉）" }
-            ],
-            "points": [
-              { "title": "【杯類撤收詢問】", "desc": "玻璃杯或咖啡杯見底時主動詢問「グラスをお下げしてもよろしいですか」。" },
-              { "title": "【客人未完時得體退下】", "desc": "客人表示還在享用時，立刻雙手收回，自然致歉「あ、失礼しました！ごゆっくりどうぞ」並微笑退開。" }
-            ],
-            "tips": "絕不催促客人，得體致歉後繼續巡視其他桌。"
-          }
-        },
-        {
-          "id": "bs_sc5_tidy",
-          "type": "dialog",
-          "speaker": "外場撤盤・情境 5：整理桌面空盤 (自然應對流)",
-          "zh": "【店員詢問】「方便幫您整理一下桌面嗎？」(tēburu no ue, okatazuke shite mo yoroshii deshō ka?)\n【客人指定保留】「這個請幫我先留著。」(kore wa sono mama de onegai shimasu.)\n【店員應答】「好的，那這邊先幫您收喔。」(wakarimashita. kochira wa sagemasu ne.)",
-          "ja": "【店員】テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>片付<rt>かたづ</rt></ruby>けしてもよろしいでしょうか？\n【客】これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。\n【店員】わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "テーブルの<ruby>上<rt>うえ</rt></ruby>", "zh": "桌面" },
-              { "ja": "お<ruby>片付<rt>かたづ</rt></ruby>けする", "zh": "整理、收拾（美化敬語）" },
-              { "ja": "そのままで", "zh": "保持原樣、先留著" },
-              { "ja": "わかりました", "zh": "好的、明白了" },
-              { "ja": "こちらは<ruby>下<rt>さ</rt></ruby>げますね", "zh": "那這邊先幫您收喔" }
-            ],
-            "points": [
-              { "title": "【整理桌面 お片付けしてもよろしいでしょうか】", "desc": "桌上碗盤較多時，以「整理桌面」的名義主動上前服務。" },
-              { "title": "【尊重客人指定保留】", "desc": "客人說「そのままで」時，只收走客人同意的空盤，保留客人想留的餐盤。" }
-            ],
-            "tips": "將桌面空間騰出，讓客人坐得更寬敞舒適。"
-          }
-        },
-        {
-          "id": "bs_sc6_casual",
-          "type": "dialog",
-          "speaker": "外場撤盤・情境 6：隨和親切口吻 (自然應對流)",
-          "zh": "【店員詢問】「這邊幫您收一下喔。」(kochira, osage shimasu ne.)\n【客人委婉推遲】「可以稍等一下再收嗎？」(a, mō chotto ato de ii desu ka?)\n【店員應答】「不好意思，那我等一下再來喔。」(shitsurei shimashita. mata ato de kimasu ne.)",
-          "ja": "【店員】こちら、お<ruby>下<rt>さ</rt></ruby>げしますね。\n【客】あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？\n【店員】<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "お<ruby>下<rt>さ</rt></ruby>げしますね", "zh": "幫您收一下喔" },
-              { "ja": "もうちょっと<ruby>後<rt>あと</rt></ruby>で", "zh": "稍等一下、再過一會兒" },
-              { "ja": "また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね", "zh": "那我等一下再來喔" }
-            ],
-            "points": [
-              { "title": "【隨和親切口吻 〜ますね】", "desc": "親切自然的外場互動風格。" },
-              { "title": "【委婉推遲應對 また後で来ますね】", "desc": "客人希望稍後再收時，輕快回應「失礼しました。また後で来ますね」，毫不尷尬。" }
-            ],
-            "tips": "親和力滿分，讓客人感受像在朋友家用餐般輕鬆自在。"
-          }
-        },
-        {
-          "id": "bs_ask_1",
-          "type": "dialog",
-          "speaker": "① 收桌詢問・最標準萬用句",
+          "category": "my_speech",
+          "speaker": "🗣️ 我要說的",
           "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？（現場最標準禮貌用語）",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
           "grammar": {
             "vocabs": [
-              { "ja": "失礼いたします", "zh": "不好意思打擾了" },
-              { "ja": "お下げしてもよろしいでしょうか", "zh": "可以為您收走嗎？（極禮貌）" }
+              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします", "zh": "不好意思打擾了" },
+              { "ja": "お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか", "zh": "可以為您收走嗎？（極禮貌）" }
             ],
             "points": [
               { "title": "【萬用標準句】", "desc": "看到桌上有空盤時，微笑上前詢問的最標準說法。" }
@@ -3048,15 +2901,16 @@ function createRealRunnerData() {
           }
         },
         {
-          "id": "bs_ask_2",
+          "id": "bs_my_2",
           "type": "dialog",
-          "speaker": "② 收桌詢問・輕快親切句",
+          "category": "my_speech",
+          "speaker": "🗣️ 我要說的",
           "zh": "為您收走空盤喔，不好意思打擾了。（客人已將空盤推至桌邊時）",
           "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたしますね。<ruby>失礼<rt>しつれい</rt></ruby>いたします。",
           "grammar": {
             "vocabs": [
               { "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>", "zh": "空出來的盤子" },
-              { "ja": "お下げいたします", "zh": "為您收下（謙讓語）" }
+              { "ja": "お<ruby>下<rt>さ</rt></ruby>げいたします", "zh": "為您收下（謙讓語）" }
             ],
             "points": [
               { "title": "【空いたお皿】", "desc": "已吃完的空盤。" }
@@ -3065,9 +2919,10 @@ function createRealRunnerData() {
           }
         },
         {
-          "id": "bs_ask_3",
+          "id": "bs_my_3",
           "type": "dialog",
-          "speaker": "③ 收桌詢問・用餐完畢確認句",
+          "category": "my_speech",
+          "speaker": "🗣️ 我要說的",
           "zh": "請問您用餐完畢了嗎？可以為您撤下餐盤嗎？（桌上還剩一點點時確認）",
           "ja": "お<ruby>食事<rt>しょくじ</rt></ruby>はお<ruby>済<rt>す</rt></ruby>みでしょうか？お<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
           "grammar": {
@@ -3081,25 +2936,10 @@ function createRealRunnerData() {
           }
         },
         {
-          "id": "bs_ask_4",
+          "id": "bs_my_4",
           "type": "dialog",
-          "speaker": "④ 收桌詢問・專收湯碗小缽句",
-          "zh": "請問這個湯碗/小缽可以為您收走嗎？（專門針對碗類詢問）",
-          "ja": "こちらのお<ruby>椀<rt>わん</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
-          "grammar": {
-            "vocabs": [
-              { "ja": "お<ruby>椀<rt>わん</rt></ruby>", "zh": "湯碗、味噌湯碗" }
-            ],
-            "points": [
-              { "title": "【精準品項替換】", "desc": "可將お椀換成「グラス（水杯）」或「小鉢（小碟子）」。" }
-            ],
-            "tips": "湯喝完後主動詢問收走，桌面更乾淨。"
-          }
-        },
-        {
-          "id": "bs_ask_5",
-          "type": "dialog",
-          "speaker": "⑤ 收桌詢問・騰出桌面空間句",
+          "category": "my_speech",
+          "speaker": "🗣️ 我要說的",
           "zh": "為您整理一下桌面騰出空間喔。為您收走盤子。（盤子疊很多時主動幫客人清出大桌面）",
           "ja": "テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>広<rt>ひろ</rt></ruby>くいたしますね。お<ruby>皿<rt>さら</rt></ruby>お<ruby>下<rt>さ</rt></ruby>げいたします。",
           "grammar": {
@@ -3113,127 +2953,254 @@ function createRealRunnerData() {
           }
         },
         {
-          "id": "bs_ask_6",
+          "id": "bs_my_5",
           "type": "dialog",
-          "speaker": "⑥ 收桌詢問・確認還在吃與得體退下句",
-          "zh": "您還要享用嗎？（如果客人說還在吃）➔ 不好意思打擾了！請您慢慢享用！",
-          "ja": "まだ<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がりますか？……<ruby>失礼<rt>しつれい</rt></ruby>いたしました！ごゆっくりどうぞ！",
+          "category": "my_speech",
+          "speaker": "🗣️ 我要說的",
+          "zh": "請問這個湯碗/小缽可以為您收走嗎？（專門針對碗類詢問）",
+          "ja": "こちらのお<ruby>椀<rt>わん</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
           "grammar": {
             "vocabs": [
-              { "ja": "<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がる", "zh": "吃、享用（食べる的尊敬語）" },
-              { "ja": "失礼いたしました", "zh": "失禮了、不好意思" },
-              { "ja": "ごゆっくりどうぞ", "zh": "請慢慢享用" }
+              { "ja": "お<ruby>椀<rt>わん</rt></ruby>", "zh": "湯碗、味噌湯碗" }
             ],
             "points": [
-              { "title": "【得體退下】", "desc": "若客人說「まだ食べてます」，立刻雙手收回，自然致歉退開。" }
+              { "title": "【精準品項替換】", "desc": "可將お椀換成「グラス（水杯）」或「小鉢（小碟子）」。" }
             ],
-            "tips": "絕不給客人壓力，微笑退開繼續巡視其他桌。"
+            "tips": "湯喝完後主動詢問收走，桌面更乾淨。"
           }
         },
         {
-          "id": "bs_thk_1",
+          "id": "bs_my_6",
           "type": "dialog",
-          "speaker": "① 主動表達感謝・現場靈魂萬用句",
-          "zh": "謝謝您！真是幫大忙了！（客人主動遞盤子或幫忙騰出空間時，最真誠接地氣）",
+          "category": "my_speech",
+          "speaker": "🗣️ 我要說的",
+          "zh": "不好意思打擾了，方便幫您收走杯子嗎？（玻璃杯或咖啡杯見底時）",
+          "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
+          "grammar": {
+            "vocabs": [
+              { "ja": "グラス", "zh": "玻璃杯、飲料杯" }
+            ],
+            "points": [
+              { "title": "【杯類撤收詢問】", "desc": "玻璃杯或咖啡杯見底時主動詢問。" }
+            ],
+            "tips": "巡桌時若飲料見底可微笑詢問。"
+          }
+        },
+        {
+          "id": "bs_guest_1",
+          "type": "dialog",
+          "category": "other_speech",
+          "speaker": "👂 對方可能說的",
+          "zh": "好的，麻煩你了。（客人爽快答應）",
+          "ja": "はい、お<ruby>願<rt>ねが</rt></ruby>いします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "お<ruby>願<rt>ねが</rt></ruby>いします", "zh": "麻煩你了、拜託了" }
+            ],
+            "points": [
+              { "title": "【同意撤盤標準回答】", "desc": "客人最普遍使用的肯定回覆。" }
+            ],
+            "tips": "聽到這句即可雙手收盤並道謝退下。"
+          }
+        },
+        {
+          "id": "bs_guest_2",
+          "type": "dialog",
+          "category": "other_speech",
+          "speaker": "👂 對方可能說的",
+          "zh": "沒問題，請收走吧。（客人主動示意）",
+          "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です", "zh": "沒問題、不用了" },
+              { "ja": "<ruby>下<rt>さ</rt></ruby>げてください", "zh": "請收走吧" }
+            ],
+            "points": [
+              { "title": "【大丈夫です】", "desc": "在此代表「沒關係，收走即可」。" }
+            ],
+            "tips": "客人若正在閒聊，這句常伴隨點頭手勢。"
+          }
+        },
+        {
+          "id": "bs_guest_3",
+          "type": "dialog",
+          "category": "other_speech",
+          "speaker": "👂 對方可能說的",
+          "zh": "多謝款待／我吃飽了。（客人用餐完畢離桌前）",
+          "ja": "ごちそうさまでした。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ごちそうさまでした", "zh": "多謝款待、我吃飽了" }
+            ],
+            "points": [
+              { "title": "【客人致謝時的回應】", "desc": "客人用完餐常說這句表達滿意。" }
+            ],
+            "tips": "立刻熱情回應「ありがとうございます！ごゆっくりどうぞ」。"
+          }
+        },
+        {
+          "id": "bs_guest_4",
+          "type": "dialog",
+          "category": "other_speech",
+          "speaker": "👂 對方可能說的",
+          "zh": "啊，我還在吃（還在喝）。（客人還想繼續享用）",
+          "ja": "あ、まだ<ruby>食<rt>た</rt></ruby>べてます（<ruby>飲<rt>の</rt></ruby>んでます）。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "まだ<ruby>食<rt>た</rt></ruby>べてます", "zh": "我還在吃" },
+              { "ja": "まだ<ruby>飲<rt>の</rt></ruby>んでます", "zh": "我還在喝" }
+            ],
+            "points": [
+              { "title": "【客人未完時得體退下】", "desc": "客人表示還在享用，立刻收手致歉退開。" }
+            ],
+            "tips": "微笑回應「あ、失礼しました！ごゆっくりどうぞ」。"
+          }
+        },
+        {
+          "id": "bs_guest_5",
+          "type": "dialog",
+          "category": "other_speech",
+          "speaker": "👂 對方可能說的",
+          "zh": "這個請幫我先留著。（客人指定特定盤子不要收）",
+          "ja": "これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "そのままで", "zh": "保持原樣、先留著" }
+            ],
+            "points": [
+              { "title": "【そのままでお願いします】", "desc": "保留該特定餐盤，只撤收客人同意的其他空盤。" }
+            ],
+            "tips": "回應「わかりました。こちらは下げますね」。"
+          }
+        },
+        {
+          "id": "bs_guest_6",
+          "type": "dialog",
+          "category": "other_speech",
+          "speaker": "👂 對方可能說的",
+          "zh": "可以稍等一下再收嗎？（客人希望等一下再收）",
+          "ja": "あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？",
+          "grammar": {
+            "vocabs": [
+              { "ja": "もうちょっと<ruby>後<rt>あと</rt></ruby>で", "zh": "稍等一下、再過一會兒" }
+            ],
+            "points": [
+              { "title": "【委婉推遲應對】", "desc": "客人目前不希望被打擾或想再坐一會兒。" }
+            ],
+            "tips": "親切回應「失礼しました。また後で来ますね」。"
+          }
+        },
+        {
+          "id": "bs_reply_1",
+          "type": "dialog",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "謝謝您，不好意思打擾了。（最標準撤盤禮貌退下句）",
+          "ja": "ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ありがとうございます", "zh": "謝謝您" },
+              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>します", "zh": "不好意思打擾了" }
+            ],
+            "points": [
+              { "title": "【標準撤盤致謝】", "desc": "撤下盤子時由衷致謝並欠身退下。" }
+            ],
+            "tips": "雙手端盤，微欠身致意。"
+          }
+        },
+        {
+          "id": "bs_reply_2",
+          "type": "dialog",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "謝謝您！請繼續慢用。（客人說ごちそうさま時）",
+          "ja": "ありがとうございます！ごゆっくりどうぞ。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "ごゆっくりどうぞ", "zh": "請繼續慢用、請放鬆慢用" }
+            ],
+            "points": [
+              { "title": "【熱情溫暖回應】", "desc": "客人說吃飽時，最舒暢親切的回應金句。" }
+            ],
+            "tips": "由衷微笑，給客人滿分體驗。"
+          }
+        },
+        {
+          "id": "bs_reply_3",
+          "type": "dialog",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "啊，不好意思！請慢慢享用。（客人說還在吃時）",
+          "ja": "あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました", "zh": "不好意思、失禮了" },
+              { "ja": "ごゆっくりどうぞ", "zh": "請慢慢享用" }
+            ],
+            "points": [
+              { "title": "【得體化解退下】", "desc": "自然收回雙手，毫無尷尬地退開。" }
+            ],
+            "tips": "絕不給客人催促壓力，微笑退開繼續巡視其他桌。"
+          }
+        },
+        {
+          "id": "bs_reply_4",
+          "type": "dialog",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "明白了，那這邊先幫您收喔。（客人指定特定盤子保留時）",
+          "ja": "わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "わかりました", "zh": "好的、明白了" },
+              { "ja": "こちらは<ruby>下<rt>さ</rt></ruby>げますね", "zh": "那這邊先幫您收喔" }
+            ],
+            "points": [
+              { "title": "【親切確認留收】", "desc": "只撤收確認的盤子，尊重客人意願。" }
+            ],
+            "tips": "語調溫和親近，不給客人催促感。"
+          }
+        },
+        {
+          "id": "bs_reply_5",
+          "type": "dialog",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "不好意思，那我等一下再來喔。（客人表示稍後再收時）",
+          "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。",
+          "grammar": {
+            "vocabs": [
+              { "ja": "また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね", "zh": "那我等一下再來喔" }
+            ],
+            "points": [
+              { "title": "【隨和自然化解】", "desc": "輕快回應，讓客人倍感輕鬆無拘束。" }
+            ],
+            "tips": "親和力滿分，讓客人感受像在朋友家用餐般輕鬆。"
+          }
+        },
+        {
+          "id": "bs_reply_6",
+          "type": "dialog",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "謝謝您！真是幫大忙了！（客人主動遞盤子或幫忙騰出空間時最真誠接地氣）",
           "ja": "ありがとうございます！<ruby>助<rt>たす</rt></ruby>かります！",
           "grammar": {
             "vocabs": [
               { "ja": "<ruby>助<rt>たす</rt></ruby>かります", "zh": "幫了大忙、太感謝了（日本人每天講幾十次的靈魂單字）" }
             ],
             "points": [
-              { "title": "【靈魂單字 助かります】", "desc": "客人或同事幫了一把時，說「助かります！」比單純說ありがとう更有親近感！" }
+              { "title": "【靈魂單字 助かります】", "desc": "客人幫了一把時說這句超親切！" }
             ],
             "tips": "脫口而出這句，客人會覺得你非常有禮貌且真誠。"
           }
         },
         {
-          "id": "bs_thk_2",
+          "id": "bs_reply_7",
           "type": "dialog",
-          "speaker": "② 主動表達感謝・感謝客人疊盤句",
-          "zh": "感謝您特地幫忙把盤子疊整齊！（客人主動幫忙把空盤疊好時）",
-          "ja": "お<ruby>皿<rt>さら</rt></ruby>をまとめていただき、ありがとうございます！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "まとめる", "zh": "收拾、整理、疊在一起" },
-              { "ja": "〜ていただく", "zh": "承蒙您為我做…" }
-            ],
-            "points": [
-              { "title": "【お皿をまとめていただき】", "desc": "專門感謝客人幫忙疊盤子的貼心動作。" }
-            ],
-            "tips": "雙手接過疊好的盤子，由衷表達感謝。"
-          }
-        },
-        {
-          "id": "bs_thk_3",
-          "type": "dialog",
-          "speaker": "③ 主動表達感謝・感謝協助配合句",
-          "zh": "感謝您的協助與配合！（客人主動移位、讓推車通過時）",
-          "ja": "ご<ruby>協力<rt>きょうりょく</rt></ruby>ありがとうございます！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "ご<ruby>協力<rt>きょうりょく</rt></ruby>", "zh": "合作、協力、配合" }
-            ],
-            "points": [
-              { "title": "【ご協力ありがとうございます】", "desc": "適用於客人配合移動身體或餐具時。" }
-            ],
-            "tips": "推車經過走道客人主動讓路時也可以說！"
-          }
-        },
-        {
-          "id": "bs_thk_4",
-          "type": "dialog",
-          "speaker": "④ 主動表達感謝・感謝體貼照顧句",
-          "zh": "謝謝您的體貼與關照！（客人對外場人員特別親切體諒時）",
-          "ja": "お<ruby>気遣<rt>きづか</rt></ruby>いいただき、ありがとうございます！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "お<ruby>気遣<rt>きづか</rt></ruby>い", "zh": "關心、用心、體貼" }
-            ],
-            "points": [
-              { "title": "【お気遣いいただき】", "desc": "感謝對方為自己著想的體貼心意。" }
-            ],
-            "tips": "客人關心你「忙しいね、頑張って」時最適合回這句！"
-          }
-        },
-        {
-          "id": "bs_thk_5",
-          "type": "dialog",
-          "speaker": "⑤ 主動表達感謝・對內場同事感謝句",
-          "zh": "一直以來太感謝你了！辛苦了！（向廚房師傅或協作夥伴表達感謝）",
-          "ja": "いつもありがとうございます！お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>です！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "いつも", "zh": "一直以來、總是" },
-              { "ja": "お疲れ様です", "zh": "辛苦了" }
-            ],
-            "points": [
-              { "title": "【夥伴信任金句】", "desc": "在廚房交接或互相支援後必講。" }
-            ],
-            "tips": "在內場多說這句，與日本同事關係會非常融洽。"
-          }
-        },
-        {
-          "id": "bs_thk_6",
-          "type": "dialog",
-          "speaker": "⑥ 主動表達感謝・強烈感謝幫大忙句",
-          "zh": "真的幫了個大忙！非常謝謝您！（主管或同事給予重大支援時）",
-          "ja": "<ruby>大変<rt>たいへん</rt></ruby><ruby>助<rt>たす</rt></ruby>かりました！<ruby>本当<rt>ほんとう</rt></ruby>にありがとうございます！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>大変<rt>たいへん</rt></ruby>", "zh": "非常、極其" },
-              { "ja": "<ruby>本当<rt>ほんとう</rt></ruby>に", "zh": "真的、由衷地" }
-            ],
-            "points": [
-              { "title": "【大変助かりました】", "desc": "比單純的助かります語氣更深一層的真誠致謝。" }
-            ],
-            "tips": "忙碌高峰期過後向幫忙清桌的同事道謝。"
-          }
-        },
-        {
-          "id": "bs_rep_1",
-          "type": "dialog",
-          "speaker": "① 回應道謝・🥇 No.1 現場最推薦首選句",
-          "zh": "哪裡的話！請您慢慢享用！（最自然、親切、毫無疏離感，絕不說生硬的どういたしまして！）",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
+          "zh": "哪裡的話！請您慢慢享用！（🥇 No.1 現場最推薦首選句，絕不說生硬的どういたしまして！）",
           "ja": "とんでもないです！ごゆっくりどうぞ！",
           "grammar": {
             "vocabs": [
@@ -3243,13 +3210,14 @@ function createRealRunnerData() {
             "points": [
               { "title": "【🥇 日本服務業 No.1 金句】", "desc": "比生硬疏離的「恐れ入ります」更親切，比傲慢的「どういたしまして」更得體！" }
             ],
-            "tips": "臉帶微笑說「とんでもないです！ごゆっくりどうぞ」，客人聽了心裡最舒服！"
+            "tips": "臉帶微笑說這句，客人聽了心裡最舒服！"
           }
         },
         {
-          "id": "bs_rep_2",
+          "id": "bs_reply_8",
           "type": "dialog",
-          "speaker": "② 回應道謝・🥈 雙向真誠感謝句",
+          "category": "my_reply",
+          "speaker": "💬 我要回答的",
           "zh": "我才要謝謝您！（客人主動遞盤子說謝謝時，最真誠的雙向感謝）",
           "ja": "こちらこそ、ありがとうございます！",
           "grammar": {
@@ -3257,77 +3225,9 @@ function createRealRunnerData() {
               { "ja": "こちらこそ", "zh": "我這邊才是、我才要…" }
             ],
             "points": [
-              { "title": "【雙向感謝 こちらこそ】", "desc": "客人幫忙遞盤子時，用「こちらこそ（我才要謝謝您）」最真誠又溫暖。" }
+              { "title": "【雙向感謝 こちらこそ】", "desc": "客人幫忙遞盤子時用最真誠又溫暖。" }
             ],
             "tips": "雙手接過盤子時看著客人點頭致謝。"
-          }
-        },
-        {
-          "id": "bs_rep_3",
-          "type": "dialog",
-          "speaker": "③ 回應道謝・對長輩尊客敬意句",
-          "zh": "您太客氣了！請您好好享受用餐時光！（對長輩或尊貴客人略帶敬意）",
-          "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります！ごゆっくりお<ruby>過<rt>す</rt></ruby>ごしください！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>ります", "zh": "您太客氣了、不敢當" },
-              { "ja": "お<ruby>過<rt>す</rt></ruby>ごしください", "zh": "請度過、請享受時光" }
-            ],
-            "points": [
-              { "title": "【典雅敬意用語】", "desc": "遇到特別注重禮儀的年長客人時使用。" }
-            ],
-            "tips": "微微欠身致意，展現溫泉旅館的高雅質感。"
-          }
-        },
-        {
-          "id": "bs_rep_4",
-          "type": "dialog",
-          "speaker": "④ 回應道謝・客人稱讚開心句",
-          "zh": "能讓您吃得開心/滿意真是太好了！（客人稱讚菜色或服務時）",
-          "ja": "<ruby>喜<rt>よろこ</rt></ruby>んでいただけて<ruby>嬉<rt>うれ</rt></ruby>しいです！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>喜<rt>よろこ</rt></ruby>ぶ", "zh": "感到高興、滿意、喜歡" },
-              { "ja": "<ruby>嬉<rt>うれ</rt></ruby>しい", "zh": "開心、欣慰" }
-            ],
-            "points": [
-              { "title": "【喜んでいただけて】", "desc": "能讓客人感到開心，自己也深感榮幸。" }
-            ],
-            "tips": "客人稱讚「料理が美味しかったよ」時最適合這樣回！"
-          }
-        },
-        {
-          "id": "bs_rep_5",
-          "type": "dialog",
-          "speaker": "⑤ 回應道謝・同事夥伴默契句",
-          "zh": "不會不會！辛苦了！（同事跟你說謝謝時的自然夥伴應答）",
-          "ja": "いえいえ！お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>です！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "いえいえ", "zh": "不會不會、哪裡哪裡" },
-              { "ja": "お疲れ様です", "zh": "辛苦了" }
-            ],
-            "points": [
-              { "title": "【同事間最自然應答】", "desc": "同事說謝謝時，回答「いえいえ！」元氣又親切。" }
-            ],
-            "tips": "在內場不用過度拘謹，一句「いえいえ！」夥伴默契滿分。"
-          }
-        },
-        {
-          "id": "bs_rep_6",
-          "type": "dialog",
-          "speaker": "⑥ 回應道謝・離桌隨時召喚句",
-          "zh": "哪裡的話！若還有任何需要，請隨時叫我喔！（收完盤子準備轉身離開時）",
-          "ja": "とんでもないです！また<ruby>何<rt>なに</rt></ruby>かありましたらお<ruby>声<rt>こえ</rt></ruby>がけください！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "何かありましたら", "zh": "若有什麼事/需求的話" },
-              { "ja": "お声がけください", "zh": "請隨時呼喚/吩咐我" }
-            ],
-            "points": [
-              { "title": "【圓滿離桌用語】", "desc": "收完空盤離開桌邊時留下的最後一句完美招呼。" }
-            ],
-            "tips": "點頭微笑後俐落推車離開，給客人滿分服務印象。"
           }
         }
       ],
@@ -3337,7 +3237,8 @@ function createRealRunnerData() {
         { "id": "vb_3", "ja": "4マス<ruby>仕切<rt>しき</rt></ruby>りプレート", "zh": "四格餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第三層（底層）堆疊" },
         { "id": "vb_3_shikiri", "ja": "<ruby>仕切<rt>しき</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>", "zh": "分隔餐盤", "cat": "餐具", "imageUrl": "", "note": "外場取餐分隔盤" },
         { "id": "vb_4", "ja": "<ruby>黒<rt>くろ</rt></ruby>トレイ", "zh": "黑色餐盤", "cat": "餐具", "imageUrl": "", "note": "上司交代：推車第二層堆疊" },
-        { "id": "vb_4_obon", "ja": "お<ruby>盆<rt>ぼん</rt></ruby>", "zh": "圓托盤", "cat": "餐具", "imageUrl": "", "note": "端送茶水托盤" }
+        { "id": "vb_4_obon", "ja": "お<ruby>盆<rt>ぼん</rt></ruby>", "zh": "圓托盤", "cat": "餐具", "imageUrl": "", "note": "端送茶水托盤" },
+        { "id": "vb_chakaman", "ja": "チャッカマン", "zh": "長柄打火機", "cat": "工具", "imageUrl": "", "note": "上司交代：長嘴點火槍回收" }
       ]
     },
     {
@@ -5037,7 +4938,7 @@ function handleItemTypeChange() {
   const typeField = document.getElementById('item-type-field');
   const speakerGroup = document.getElementById('item-speaker-group');
   if (!typeField || !speakerGroup) return;
-  speakerGroup.style.display = typeField.value === 'dialog' ? 'block' : 'none';
+  speakerGroup.style.display = (typeField.value === 'dialog' || typeField.value === 'supervisor') ? 'block' : 'none';
 }
 
 function openModalItem(mode, type = 'sop', itemId = null) {
@@ -5054,8 +4955,16 @@ function openModalItem(mode, type = 'sop', itemId = null) {
   handleItemTypeChange();
 
   if (mode === 'add') {
-    title.textContent = type === 'dialog' ? '新增實用對話' : '新增 SOP 工作指引';
-    speakerField.value = type === 'dialog' ? '傳菜人員(我)' : '';
+    if (type === 'supervisor') {
+      title.textContent = '新增主管/上級指示';
+      speakerField.value = '👨‍🍳 主管/上級指示';
+    } else if (type === 'dialog') {
+      title.textContent = '新增實用對話';
+      speakerField.value = '傳菜人員(我)';
+    } else {
+      title.textContent = '新增 SOP 工作指引';
+      speakerField.value = '';
+    }
     zhField.value = '';
     jaField.value = '';
     editIdField.value = '';
@@ -5097,23 +5006,28 @@ function submitItemForm() {
 
   if (!tab.items) tab.items = [];
 
+  const finalSpeaker = (type === 'dialog' || type === 'supervisor') ? (speaker || (type === 'supervisor' ? '👨‍🍳 主管/上級指示' : '傳菜人員(我)')) : '';
+
   if (editId) {
     const idx = tab.items.findIndex(i => i.id === editId);
     if (idx !== -1) {
       tab.items[idx].type = type;
-      tab.items[idx].speaker = type === 'dialog' ? speaker : '';
+      tab.items[idx].speaker = finalSpeaker;
       tab.items[idx].zh = zh;
       tab.items[idx].ja = ja;
+      if (type === 'supervisor') tab.items[idx].category = 'supervisor';
     }
     showToast('條目已成功更新！');
   } else {
-    tab.items.push({
+    const newItem = {
       id: uid(),
       type,
-      speaker: type === 'dialog' ? speaker : '',
+      speaker: finalSpeaker,
       zh,
       ja
-    });
+    };
+    if (type === 'supervisor') newItem.category = 'supervisor';
+    tab.items.push(newItem);
     showToast('條目已成功新增！');
   }
 
@@ -5376,22 +5290,56 @@ function renderSopContent() {
   }
 
   const items = tab.items || [];
-  const sopItems = items.filter(i => i.type === 'sop');
-  const dialogItems = items.filter(i => i.type === 'dialog');
+  const supervisorItems = items.filter(i => i.type === 'supervisor' || i.category === 'supervisor');
+  const standardSopItems = items.filter(i => i.type === 'sop' && i.type !== 'supervisor' && i.category !== 'supervisor');
+  const mySpeechItems = items.filter(i => i.category === 'my_speech');
+  const otherSpeechItems = items.filter(i => i.category === 'other_speech');
+  const myReplyItems = items.filter(i => i.category === 'my_reply');
+  const generalDialogItems = items.filter(i => i.type === 'dialog' && !i.category);
   const vocabs = tab.vocabs || [];
 
   let html = '';
 
-  // 1. SOP 流程步驟區塊 (高密度排版)
-  if (sopItems.length > 0) {
+  // 1. 主管或上級的指示區塊 (3 句必備交辦)
+  if (supervisorItems.length > 0) {
     html += `
       <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <div class="section-label-left">業務流程與 SOP 指示 (${sopItems.length} 項)</div>
+        <div class="section-label-left">👨‍🍳 主管/上級指示 (${supervisorItems.length} 項)</div>
+        <button class="btn btn-ghost btn-sm" onclick="openModalItem('add', 'supervisor')">＋ 新增</button>
+      </div>
+      <div style="margin-bottom:18px;">`;
+
+    supervisorItems.forEach((item, idx) => {
+      html += `
+        <div class="compact-sop-item" style="border-left: 3px solid #8e1d2c; background: rgba(142,29,44,0.03);" onclick="handleSopItemClick(event, '${item.id}', '${escapeJs(item.ja || item.zh)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
+          <div class="sop-step-badge" style="background:#8e1d2c; color:#fff;">${idx + 1}</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div style="flex:1;">
+                <div class="compact-sop-zh" style="color:#8e1d2c; font-weight:700;">${escapeHtml(item.zh)}</div>
+                <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
+                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
+                <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 2. 一般 SOP 流程步驟區塊
+  if (standardSopItems.length > 0) {
+    html += `
+      <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; ${supervisorItems.length > 0 ? 'margin-top:20px;' : ''}">
+        <div class="section-label-left">業務流程與 SOP 指示 (${standardSopItems.length} 項)</div>
         <button class="btn btn-ghost btn-sm" onclick="openModalItem('add', 'sop')">＋ 新增</button>
       </div>
       <div style="margin-bottom:18px;">`;
 
-    sopItems.forEach((item, idx) => {
+    standardSopItems.forEach((item, idx) => {
       html += `
         <div class="compact-sop-item" onclick="handleSopItemClick(event, '${item.id}', '${escapeJs(item.ja || item.zh)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
           <div class="sop-step-badge">${idx + 1}</div>
@@ -5402,7 +5350,7 @@ function renderSopContent() {
                 <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
-                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')"></button>
+                <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
                 <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
               </div>
             </div>
@@ -5412,27 +5360,30 @@ function renderSopContent() {
     html += `</div>`;
   }
 
-  // 2. 現場對話與應答 (獨立交替氣泡，單句發音)
-  if (dialogItems.length > 0) {
-    html += `
+  // 輔助函式：渲染對話分區卡片群組
+  function renderDialogBubbleSection(sectionTitle, sectionItems, sectionIcon, customClass = '') {
+    if (!sectionItems || sectionItems.length === 0) return '';
+    let secHtml = `
       <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; margin-top:20px;">
-        <div class="section-label-left">現場實用對話與通報 (${dialogItems.length} 組)</div>
+        <div class="section-label-left">${sectionIcon} ${sectionTitle} (${sectionItems.length} 句)</div>
         <button class="btn btn-ghost btn-sm" onclick="openModalItem('add', 'dialog')">＋ 新增</button>
       </div>
       <div class="dialog-bubble-row">`;
 
-    dialogItems.forEach(item => {
-      let speakerClass = 'speaker-me';
-      let speakerIcon = '🧑';
-      if (item.speaker && (item.speaker.includes('廚房') || item.speaker.includes('廚'))) {
-        speakerClass = 'speaker-kitchen';
-        speakerIcon = '👨‍🍳';
-      } else if (item.speaker && (item.speaker.includes('客') || item.speaker.includes('顧客'))) {
-        speakerClass = 'speaker-guest';
-        speakerIcon = '👤';
+    sectionItems.forEach(item => {
+      let speakerClass = customClass || 'speaker-me';
+      let speakerIcon = sectionIcon || '🧑';
+      if (!customClass) {
+        if (item.speaker && (item.speaker.includes('廚房') || item.speaker.includes('廚'))) {
+          speakerClass = 'speaker-kitchen';
+          speakerIcon = '👨‍🍳';
+        } else if (item.speaker && (item.speaker.includes('客') || item.speaker.includes('顧客') || item.speaker.includes('對方'))) {
+          speakerClass = 'speaker-guest';
+          speakerIcon = '👤';
+        }
       }
 
-      html += `
+      secHtml += `
         <div class="dialog-bubble-item ${speakerClass}" onclick="handleDialogItemClick(event, '${item.id}', '${escapeJs(item.ja)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
           <div class="dialog-bubble-content">
             <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(item.speaker || '對話')}</span>
@@ -5440,12 +5391,33 @@ function renderSopContent() {
             <div class="dialog-bubble-zh">${escapeHtml(item.zh)}</div>
           </div>
           <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
-            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')"></button>
+            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')">🔊</button>
             <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
           </div>
         </div>`;
     });
-    html += `</div>`;
+    secHtml += `</div>`;
+    return secHtml;
+  }
+
+  // 3. 🗣️ 我要說的
+  if (mySpeechItems.length > 0) {
+    html += renderDialogBubbleSection('我要說的', mySpeechItems, '🗣️', 'speaker-my-speech');
+  }
+
+  // 4. 👂 對方可能說的
+  if (otherSpeechItems.length > 0) {
+    html += renderDialogBubbleSection('對方可能說的', otherSpeechItems, '👂', 'speaker-other-speech');
+  }
+
+  // 5. 💬 我要回答的
+  if (myReplyItems.length > 0) {
+    html += renderDialogBubbleSection('我要回答的', myReplyItems, '💬', 'speaker-my-reply');
+  }
+
+  // 6. 一般現場實用對話 (無特別分區者)
+  if (generalDialogItems.length > 0) {
+    html += renderDialogBubbleSection('現場實用對話與通報', generalDialogItems, '🗣️');
   }
 
   // 3. 情境必背單字 (Word 表格網格 - 分組顯示)
