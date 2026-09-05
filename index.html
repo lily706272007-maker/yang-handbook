@@ -2179,6 +2179,36 @@
       </div>
     </div>
 
+    <!-- 步驟 1.5: 選擇性別 (男 / 女) 畫面 -->
+    <div id="who-screen-gender" style="display:none; text-align:center;">
+      <div class="who-raccoon-banner" style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:18px; text-align:left;">
+        <img src="./photos/raccoon_pet.png" style="width:48px; height:48px; object-fit:contain; flex-shrink:0;" />
+        <div style="flex:1;">
+          <div style="font-size:1.05rem; font-weight:800; color:var(--primary); font-family:var(--font-serif);" id="who-gender-title-text">
+            性別を選択してください
+          </div>
+          <div style="font-size:0.82rem; color:var(--muted); margin-top:2px;" id="who-gender-desc-text">
+            請問是男生還是女生呢？請點選下方選項：
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:18px;">
+        <button class="btn btn-outline" onclick="confirmWhoGender('female')" style="padding:20px 8px; border-radius:16px; border:2px solid #e91e63; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(233,30,99,0.04); cursor:pointer;">
+          <span style="font-size:2.6rem;">👧</span>
+          <span style="font-size:1.1rem; font-weight:800; color:#c2185b;">我是女生</span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場工作圍裙・頭頂包包頭/髮型</span>
+        </button>
+        <button class="btn btn-outline" onclick="confirmWhoGender('male')" style="padding:20px 8px; border-radius:16px; border:2px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(25,118,210,0.04); cursor:pointer;">
+          <span style="font-size:2.6rem;">👦</span>
+          <span style="font-size:1.1rem; font-weight:800; color:#1565c0;">我是男生</span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場西裝制服・領帶・俐落短髮</span>
+        </button>
+      </div>
+
+      <button class="btn btn-ghost btn-sm" onclick="backToNameSelect()">← 回上一步選擇姓名</button>
+    </div>
+
     <!-- 步驟 2: 生成中 Loading 畫面 -->
     <div id="who-screen-loading" style="display:none; padding:32px 10px;">
       <div style="font-size:2.5rem; animation:whoSpin 1.5s infinite linear; display:inline-block; margin-bottom:10px;">🎨</div>
@@ -2219,8 +2249,8 @@
         <!-- 1. 性別先決 -->
         <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">性別：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-male" onclick="setAvatarTrait('gender', 'male')" style="font-size:0.78rem; padding:3px 10px;">👦 男生</button>
           <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-female" onclick="setAvatarTrait('gender', 'female')" style="font-size:0.78rem; padding:3px 10px;">👧 女生</button>
+          <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-male" onclick="setAvatarTrait('gender', 'male')" style="font-size:0.78rem; padding:3px 10px;">👦 男生</button>
         </div>
 
         <!-- 2. 臉型 -->
@@ -2258,14 +2288,11 @@
           </div>
         </div>
 
-        <!-- 6. 髮色 -->
+        <!-- 6. 髮色 (符合職場規範：自然黑與深棕) -->
         <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">髮色：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-black" onclick="setAvatarTrait('color', '#1f1e24')" style="font-size:0.75rem; padding:2px 8px;">⬛ 自然黑</button>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-darkbrown" onclick="setAvatarTrait('color', '#3e2723')" style="font-size:0.75rem; padding:2px 8px;">🟫 深棕</button>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-chestnut" onclick="setAvatarTrait('color', '#795548')" style="font-size:0.75rem; padding:2px 8px;">🟤 淺栗</button>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-blonde" onclick="setAvatarTrait('color', '#c59b27')" style="font-size:0.75rem; padding:2px 8px;">🟨 金黃</button>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-gray" onclick="setAvatarTrait('color', '#546e7a')" style="font-size:0.75rem; padding:2px 8px;">🌫️ 灰黑</button>
+          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-black" onclick="setAvatarTrait('color', '#1a191f')" style="font-size:0.75rem; padding:2px 8px;">⬛ 自然黑</button>
+          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-darkbrown" onclick="setAvatarTrait('color', '#422b1d')" style="font-size:0.75rem; padding:2px 8px;">🟫 深棕色</button>
         </div>
 
         <!-- 7. 眼鏡 (5 大精準選項) -->
@@ -2278,11 +2305,12 @@
           <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-none" onclick="setAvatarTrait('glasses', 'none')" style="font-size:0.75rem; padding:2px 8px;">👀 無眼鏡</button>
         </div>
 
-        <!-- 8. 特殊辨識特徵 -->
+        <!-- 8. 特徵 (無特徵 / 嘴角痣 / 鬍渣) -->
         <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">特徵：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-beard" id="trait-beard-toggle" onclick="toggleAvatarFeature('beard')" style="font-size:0.75rem; padding:2px 8px;">🧔 鬍渣短鬍</button>
-          <button class="btn btn-sm btn-ghost trait-pill-beauty-mark" id="trait-beauty-mark-toggle" onclick="toggleAvatarFeature('beautyMark')" style="font-size:0.75rem; padding:2px 8px;">📍 嘴角痣</button>
+          <button class="btn btn-sm btn-ghost trait-pill-feature" id="trait-feature-none" onclick="setAvatarFeature('none')" style="font-size:0.75rem; padding:2px 8px;">✨ 無特徵</button>
+          <button class="btn btn-sm btn-ghost trait-pill-feature" id="trait-feature-beautyMark" onclick="setAvatarFeature('beautyMark')" style="font-size:0.75rem; padding:2px 8px;">📍 嘴角痣</button>
+          <button class="btn btn-sm btn-ghost trait-pill-feature" id="trait-feature-beard" onclick="setAvatarFeature('beard')" style="font-size:0.75rem; padding:2px 8px;">🧔 鬍渣短鬍</button>
         </div>
       </div>
 
@@ -2406,7 +2434,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v69';
+const STORAGE_KEY = 'yang_runner_handbook_v70';
 
 function createRealRunnerData() {
   return {
@@ -4010,7 +4038,7 @@ function createRealRunnerData() {
     { "id": "vn_entiha", "ja": "エンティハ", "kana": "えんてぃは", "zh": "恩蒂哈 (En Ti Ha)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン)", "isForeign": true },
     { "id": "vn_phongnhung", "ja": "フォン ニュン", "kana": "ふぉん にゅん", "zh": "馮蓉 (Phong Nhung)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン)", "isForeign": true },
     { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
-    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>英筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊英筑（小楊・本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "./photos/avatar_yang.png", "note": "派遣社員（打工度假/傳菜人員 Runner）", "isForeign": true },
+    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>英筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊英筑（小楊・本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "派遣社員（打工度假/傳菜人員 Runner）", "isForeign": true },
     { "id": "vn_ichiishi", "ja": "<ruby>市石<rt>いちいし</rt></ruby> みらの", "kana": "いちいし みらの", "zh": "市石 米拉諾", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
     { "id": "vn_nobetsu", "ja": "<ruby>野別<rt>のべつ</rt></ruby><ruby>充旗<rt>みつき</rt></ruby>", "kana": "のべつ みつき", "zh": "野別 充旗", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
     { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
@@ -9135,35 +9163,35 @@ function submitQuizAnswer(chosenIdx) {
 
 
 /* ==============================================================
-   9. 👤「你叫什麼名字？」同仁專屬 Q 版形象圖鑑模組 (v68 全新重構)
-   (男女分流・2.2頭身日系Q版・5大眼鏡・臉型/鼻子/膚色辨識・獨立圖鑑卡)
+   9. 👤「你叫什麼名字？」同仁專屬 Q 版形象圖鑑模組 (v70 全面精緻升級)
+   (男女主動提問・男女制服區分・頭頂大包包頭・純淨露眼空氣瀏海・日系美顏・5大眼鏡・獨立圖鑑卡)
 ============================================================== */
 
 const DEFAULT_COLLEAGUE_TRAITS = {
-  'vn_yang': { gender: 'male', face: 'round', nose: 'dot', skin: 'natural', hair: 'afro_curly', color: '#1f1e24', glasses: 'square_black', beard: false, beautyMark: false },
-  'vn_kajiki': { gender: 'male', face: 'square', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#546e7a', glasses: 'square_wire', beard: false, beautyMark: false },
-  'vn_sudo': { gender: 'male', face: 'oval', nose: 'sharp', skin: 'natural', hair: 'short_clean', color: '#1f1e24', glasses: 'round_wire', beard: false, beautyMark: false },
-  'vn_uchima': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bob_short', color: '#3e2723', glasses: 'none', beard: false, beautyMark: true },
-  'vn_biyo': { gender: 'male', face: 'pointed', nose: 'straight', skin: 'tanned', hair: 'wavy_short', color: '#1f1e24', glasses: 'none', beard: true, beautyMark: false },
-  'vn_sato': { gender: 'male', face: 'round', nose: 'wide', skin: 'natural', hair: 'short_clean', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_obata': { gender: 'male', face: 'oval', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#3e2723', glasses: 'square_black', beard: false, beautyMark: false },
-  'vn_koga': { gender: 'male', face: 'square', nose: 'wide', skin: 'natural', hair: 'buzz_cut', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_entiha': { gender: 'female', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_long', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_phongnhung': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'shoulder_straight', color: '#3e2723', glasses: 'round_wire', beard: false, beautyMark: false },
-  'vn_nagamori': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bun_hair', color: '#3e2723', glasses: 'none', beard: false, beautyMark: false },
-  'vn_ichiishi': { gender: 'female', face: 'oval', nose: 'dot', skin: 'fair', hair: 'low_ponytail', color: '#795548', glasses: 'none', beard: false, beautyMark: false },
-  'vn_nobetsu': { gender: 'male', face: 'pointed', nose: 'straight', skin: 'natural', hair: 'comma_part', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_morita': { gender: 'male', face: 'square', nose: 'wide', skin: 'natural', hair: 'short_clean', color: '#546e7a', glasses: 'none', beard: false, beautyMark: false },
-  'vn_morimoto': { gender: 'male', face: 'oval', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_bim': { gender: 'male', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_short', color: '#1f1e24', glasses: 'none', beard: true, beautyMark: false },
-  'vn_han': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'high_ponytail', color: '#1f1e24', glasses: 'square_wire', beard: false, beautyMark: false },
-  'vn_riku_iku': { gender: 'male', face: 'round', nose: 'dot', skin: 'fair', hair: 'comma_part', color: '#3e2723', glasses: 'round_black', beard: false, beautyMark: false },
-  'vn_tanaka_shoko': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bun_hair', color: '#1f1e24', glasses: 'round_wire', beard: false, beautyMark: false },
-  'vn_yamabe': { gender: 'male', face: 'oval', nose: 'sharp', skin: 'natural', hair: 'short_clean', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_pratima': { gender: 'female', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_long', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false },
-  'vn_ibaoyen': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'low_ponytail', color: '#3e2723', glasses: 'none', beard: false, beautyMark: false },
-  'vn_hongyen': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'shoulder_straight', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: true },
-  'vn_kawabata': { gender: 'male', face: 'square', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1f1e24', glasses: 'none', beard: false, beautyMark: false }
+  'vn_yang': { gender: 'female', face: 'round', nose: 'dot', skin: 'natural', hair: 'bun_hair', color: '#1a191f', glasses: 'square_black', beard: false, beautyMark: false },
+  'vn_kajiki': { gender: 'male', face: 'square', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1a191f', glasses: 'square_wire', beard: false, beautyMark: false },
+  'vn_sudo': { gender: 'male', face: 'oval', nose: 'sharp', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'round_wire', beard: false, beautyMark: false },
+  'vn_uchima': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bob_short', color: '#422b1d', glasses: 'none', beard: false, beautyMark: true },
+  'vn_biyo': { gender: 'male', face: 'pointed', nose: 'straight', skin: 'tanned', hair: 'wavy_short', color: '#1a191f', glasses: 'none', beard: true, beautyMark: false },
+  'vn_sato': { gender: 'male', face: 'round', nose: 'wide', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_obata': { gender: 'male', face: 'oval', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#422b1d', glasses: 'square_black', beard: false, beautyMark: false },
+  'vn_koga': { gender: 'male', face: 'square', nose: 'wide', skin: 'natural', hair: 'buzz_cut', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_entiha': { gender: 'female', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_long', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_phongnhung': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'shoulder_straight', color: '#422b1d', glasses: 'round_wire', beard: false, beautyMark: false },
+  'vn_nagamori': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', beard: false, beautyMark: false },
+  'vn_ichiishi': { gender: 'female', face: 'oval', nose: 'dot', skin: 'fair', hair: 'low_ponytail', color: '#422b1d', glasses: 'none', beard: false, beautyMark: false },
+  'vn_nobetsu': { gender: 'male', face: 'pointed', nose: 'straight', skin: 'natural', hair: 'comma_part', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_morita': { gender: 'male', face: 'square', nose: 'wide', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_morimoto': { gender: 'male', face: 'oval', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_bim': { gender: 'male', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_short', color: '#1a191f', glasses: 'none', beard: true, beautyMark: false },
+  'vn_han': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'high_ponytail', color: '#1a191f', glasses: 'square_wire', beard: false, beautyMark: false },
+  'vn_riku_iku': { gender: 'male', face: 'round', nose: 'dot', skin: 'fair', hair: 'comma_part', color: '#422b1d', glasses: 'round_black', beard: false, beautyMark: false },
+  'vn_tanaka_shoko': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bun_hair', color: '#1a191f', glasses: 'round_wire', beard: false, beautyMark: false },
+  'vn_yamabe': { gender: 'male', face: 'oval', nose: 'sharp', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_pratima': { gender: 'female', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_long', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
+  'vn_ibaoyen': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'low_ponytail', color: '#422b1d', glasses: 'none', beard: false, beautyMark: false },
+  'vn_hongyen': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', beard: false, beautyMark: true },
+  'vn_kawabata': { gender: 'male', face: 'square', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false }
 };
 
 const HAIR_STYLES_BY_GENDER = {
@@ -9177,8 +9205,8 @@ const HAIR_STYLES_BY_GENDER = {
   ],
   female: [
     { id: 'bun_hair', label: '🥟 外場包包頭' },
-    { id: 'low_ponytail', label: '🎀 乾淨低馬尾' },
     { id: 'high_ponytail', label: '🐎 活力高馬尾' },
+    { id: 'low_ponytail', label: '🎀 乾淨低馬尾' },
     { id: 'bob_short', label: '💇 日系鮑伯' },
     { id: 'wavy_long', label: '🌸 波浪長髮' },
     { id: 'shoulder_straight', label: '✨ 及肩直髮' }
@@ -9193,12 +9221,12 @@ let currentWhoState = {
 };
 
 let currentWhoTraits = {
-  gender: 'male',
+  gender: 'female',
   face: 'round',
   nose: 'dot',
   skin: 'natural',
-  hair: 'short_clean',
-  color: '#1f1e24',
+  hair: 'bun_hair',
+  color: '#1a191f',
   glasses: 'none',
   beard: false,
   beautyMark: false
@@ -9331,7 +9359,7 @@ function toggleCustomNameInput() {
   }
 }
 
-// 5. 提交自訂外國人/新夥伴名字
+// 5. 提交自訂外國人/新夥伴名字 (進入性別選擇步驟)
 function submitCustomColleagueName() {
   const nameInput = document.getElementById('input-who-custom-name');
   const kanaInput = document.getElementById('input-who-custom-kana');
@@ -9364,52 +9392,91 @@ function submitCustomColleagueName() {
     isForeign: !hasKanji
   };
 
-  processColleagueAvatarGeneration(newItem);
+  promptGenderStep(newItem);
 }
 
-// 6. 點選既有同仁名字
+// 6. 點選既有同仁名字 (進入性別選擇步驟)
 function selectExistingColleagueForAvatar(id) {
   triggerSilentCameraCapture();
   let item = (AppData.vocabSop || []).find(v => v.id === id);
   if (!item) item = createRealRunnerData().vocabSop.find(v => v.id === id);
   if (!item) return;
 
-  processColleagueAvatarGeneration(item);
+  promptGenderStep(item);
 }
 
-// 7. 啟動生成 Q 版立繪處理流程 (載入同仁特徵或預設特徵)
-function processColleagueAvatarGeneration(nameItem) {
+// 6.5. 步驟 1.5: 提示選擇性別 (不預設男女、主動提問)
+function promptGenderStep(nameItem) {
   currentWhoState.selectedNameItem = nameItem;
 
   const selectScreen = document.getElementById('who-screen-select');
+  const genderScreen = document.getElementById('who-screen-gender');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
   if (selectScreen) selectScreen.style.display = 'none';
+  if (genderScreen) genderScreen.style.display = 'block';
+  if (loadingScreen) loadingScreen.style.display = 'none';
+  if (resultScreen) resultScreen.style.display = 'none';
+
+  const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
+  const titleEl = document.getElementById('who-gender-title-text');
+  const descEl = document.getElementById('who-gender-desc-text');
+  if (titleEl) titleEl.textContent = `性別を選択してください`;
+  if (descEl) descEl.textContent = `請問【${cleanName}】是男生還是女生呢？請點選下方選項：`;
+}
+
+// 返回姓名選擇畫面
+function backToNameSelect() {
+  const selectScreen = document.getElementById('who-screen-select');
+  const genderScreen = document.getElementById('who-screen-gender');
+  if (genderScreen) genderScreen.style.display = 'none';
+  if (selectScreen) selectScreen.style.display = 'block';
+}
+
+// 7. 使用者確認性別後，啟動生成 Q 版立繪
+function confirmWhoGender(selectedGender) {
+  const nameItem = currentWhoState.selectedNameItem;
+  if (!nameItem) return;
+
+  const genderScreen = document.getElementById('who-screen-gender');
+  const loadingScreen = document.getElementById('who-screen-loading');
+  const resultScreen = document.getElementById('who-screen-result');
+
+  if (genderScreen) genderScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'block';
   if (resultScreen) resultScreen.style.display = 'none';
 
-  // 取得特徵 (優先讀取自訂儲存特徵，次之預設特徵，最後為智慧推論)
+  // 取得特徵 (以選擇性別為最高依據)
   let traits = null;
   if (nameItem.traits) {
-    traits = { ...nameItem.traits };
+    traits = { ...nameItem.traits, gender: selectedGender };
   } else if (DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) {
-    traits = { ...DEFAULT_COLLEAGUE_TRAITS[nameItem.id] };
+    traits = { ...DEFAULT_COLLEAGUE_TRAITS[nameItem.id], gender: selectedGender };
   } else {
-    // 智慧推論性別與髮型
-    const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
-    const isFemale = /(?:美|香|子|實|燕|瑪|蓉|涵|愛|蘭|琴|花|女|み|な|こ)/.test(cleanName);
     traits = {
-      gender: isFemale ? 'female' : 'male',
+      gender: selectedGender,
       face: 'round',
       nose: 'dot',
-      skin: isFemale ? 'fair' : 'natural',
-      hair: isFemale ? 'bun_hair' : 'short_clean',
-      color: '#1f1e24',
+      skin: selectedGender === 'female' ? 'fair' : 'natural',
+      hair: selectedGender === 'female' ? 'bun_hair' : 'short_clean',
+      color: '#1a191f',
       glasses: 'none',
       beard: false,
       beautyMark: false
     };
+  }
+
+  // 確保髮型符合所選性別
+  if (selectedGender === 'female') {
+    if (!HAIR_STYLES_BY_GENDER.female.some(h => h.id === traits.hair)) {
+      traits.hair = 'bun_hair';
+    }
+    traits.beard = false;
+  } else {
+    if (!HAIR_STYLES_BY_GENDER.male.some(h => h.id === traits.hair)) {
+      traits.hair = 'short_clean';
+    }
   }
 
   currentWhoTraits = { ...traits };
@@ -9437,7 +9504,7 @@ function processColleagueAvatarGeneration(nameItem) {
   }, 400);
 }
 
-// 8. 🎨 核心：生成【2.2 頭身正統日系 Q 版黃金比例・方形純透明背景】角色立繪
+// 8. 🎨 核心：生成【2.2 頭身正統日系動漫 Q 版・方形純透明背景】角色立繪
 function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
   
@@ -9448,156 +9515,325 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   ctx.clearRect(0, 0, 512, 512); // 100% 純透明背景
 
   const traits = customTraits || currentWhoTraits;
-  const gender = traits.gender || 'male';
+  const gender = traits.gender || 'female';
   const faceShape = traits.face || 'round';
   const noseShape = traits.nose || 'dot';
   const skinType = traits.skin || 'natural';
   const hairStyle = traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
-  const hairColor = traits.color || '#1f1e24';
+  const hairColor = (traits.color === '#422b1d') ? '#422b1d' : '#1a191f';
   const glasses = traits.glasses || 'none';
   const hasBeard = !!traits.beard;
   const hasBeautyMark = !!traits.beautyMark;
 
   // 膚色調色盤
-  let skinTone = '#f7d8be';
-  let skinShadow = '#e2b596';
-  let blushColor = 'rgba(240, 110, 110, 0.4)';
+  let skinTone = '#fce4d6';
+  let skinShadow = '#eec3b0';
+  let blushColor = 'rgba(240, 110, 110, 0.40)';
 
   if (skinType === 'fair') {
     skinTone = '#fff1e8';
     skinShadow = '#f3ccbb';
     blushColor = 'rgba(255, 120, 130, 0.45)';
   } else if (skinType === 'tanned') {
-    skinTone = '#dfab84';
-    skinShadow = '#c28b63';
-    blushColor = 'rgba(200, 90, 80, 0.35)';
+    skinTone = '#e8bfa0';
+    skinShadow = '#c99c7b';
+    blushColor = 'rgba(210, 100, 90, 0.35)';
   }
 
-  // ── [圖層 1: 後髮 (Back Hair)] ──
+  // ── [圖層 1: 後髮層 (Back Hair)] ──
   ctx.fillStyle = hairColor;
   if (gender === 'female') {
     if (hairStyle === 'bun_hair') {
-      // 日系高盤髮包包頭
+      // 🥟 外場包包頭：在頭頂正中央上方加一個立體大包包
       ctx.beginPath();
-      ctx.arc(256, 75, 42, 0, Math.PI * 2);
+      ctx.ellipse(256, 54, 48, 44, 0, 0, Math.PI * 2);
       ctx.fill();
-      // 髮飾紅繩
-      ctx.fillStyle = '#b71c1c';
-      ctx.fillRect(236, 95, 40, 6);
+      // 包包頭紋理細節
+      ctx.strokeStyle = hairColor === '#1a191f' ? '#2e2c38' : '#5c3a28';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(256, 54, 30, 0.2 * Math.PI, 1.4 * Math.PI);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(256, 54, 16, 0.8 * Math.PI, 1.9 * Math.PI);
+      ctx.stroke();
+      // 外場深紅髮圈與金珍珠
+      ctx.fillStyle = '#8e1d2c';
+      ctx.beginPath();
+      ctx.roundRect(228, 86, 56, 12, 6);
+      ctx.fill();
+      ctx.fillStyle = '#ffd700';
+      ctx.beginPath();
+      ctx.arc(256, 92, 4.5, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = hairColor;
     } else if (hairStyle === 'high_ponytail') {
-      // 活力高馬尾
+      // 🐎 活力高馬尾
       ctx.beginPath();
-      ctx.ellipse(365, 110, 36, 68, 0.35 * Math.PI, 0, Math.PI * 2);
+      ctx.moveTo(310, 90);
+      ctx.bezierCurveTo(390, 80, 420, 180, 380, 250);
+      ctx.bezierCurveTo(395, 190, 360, 120, 310, 115);
       ctx.fill();
+      ctx.fillStyle = '#8e1d2c';
+      ctx.beginPath();
+      ctx.roundRect(300, 95, 16, 14, 4);
+      ctx.fill();
+      ctx.fillStyle = hairColor;
     } else if (hairStyle === 'low_ponytail') {
-      // 俐落低馬尾
+      // 🎀 乾淨低馬尾
       ctx.beginPath();
-      ctx.ellipse(350, 240, 28, 55, 0.15 * Math.PI, 0, Math.PI * 2);
+      ctx.moveTo(270, 230);
+      ctx.bezierCurveTo(330, 250, 360, 300, 330, 350);
+      ctx.bezierCurveTo(320, 310, 290, 270, 250, 245);
       ctx.fill();
-    } else if (hairStyle === 'wavy_long') {
-      // 溫柔波浪長髮 (雙側垂肩)
+      ctx.fillStyle = '#8e1d2c';
       ctx.beginPath();
-      ctx.ellipse(155, 250, 32, 85, -0.1 * Math.PI, 0, Math.PI * 2);
-      ctx.ellipse(357, 250, 32, 85, 0.1 * Math.PI, 0, Math.PI * 2);
+      ctx.roundRect(260, 232, 14, 10, 3);
+      ctx.fill();
+      ctx.fillStyle = hairColor;
+    } else if (hairStyle === 'wavy_long') {
+      // 🌸 溫柔波浪長髮 (雙側自然垂肩，絕非雙馬尾)
+      ctx.beginPath();
+      ctx.roundRect(144, 130, 224, 210, [80, 80, 40, 40]);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(150, 170);
+      ctx.bezierCurveTo(120, 220, 160, 270, 136, 340);
+      ctx.bezierCurveTo(166, 320, 180, 260, 176, 210);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(362, 170);
+      ctx.bezierCurveTo(392, 220, 352, 270, 376, 340);
+      ctx.bezierCurveTo(346, 320, 332, 260, 336, 210);
       ctx.fill();
     } else if (hairStyle === 'shoulder_straight') {
-      // 齊肩直髮
+      // ✨ 及肩直髮 (順滑垂肩)
       ctx.beginPath();
-      ctx.roundRect(140, 170, 35, 95, [10, 0, 15, 10]);
-      ctx.roundRect(337, 170, 35, 95, [0, 10, 10, 15]);
+      ctx.roundRect(146, 140, 220, 170, [60, 60, 20, 20]);
       ctx.fill();
+      ctx.beginPath();
+      ctx.roundRect(140, 170, 34, 130, [10, 0, 12, 12]);
+      ctx.roundRect(338, 170, 34, 130, [0, 10, 12, 12]);
+      ctx.fill();
+    } else if (hairStyle === 'bob_short') {
+      // 💇 日系鮑伯短髮底座
+      ctx.beginPath();
+      ctx.ellipse(256, 175, 118, 106, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else {
+    // 男性髮型底座
+    if (hairStyle === 'afro_curly') {
+      const curls = [
+        { x: 256, y: 64, r: 52 }, { x: 198, y: 74, r: 50 }, { x: 314, y: 74, r: 50 },
+        { x: 148, y: 106, r: 48 }, { x: 364, y: 106, r: 48 }, { x: 118, y: 154, r: 46 },
+        { x: 394, y: 154, r: 46 }, { x: 114, y: 206, r: 42 }, { x: 398, y: 206, r: 42 }
+      ];
+      curls.forEach(c => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
     }
   }
 
-  // ── [圖層 2: Q 版可愛小短腿與鞋子 (2.2 頭身比)] ──
-  // 皮鞋 (圓頭皮鞋)
+  // ── [圖層 2: Q 版可愛小短腿與鞋子 (2.2 頭身黃金比例)] ──
+  // 皮鞋
   ctx.fillStyle = '#111114';
   ctx.beginPath();
-  ctx.ellipse(230, 432, 20, 13, 0, 0, Math.PI * 2);
+  ctx.ellipse(228, 432, 19, 12, 0, 0, Math.PI * 2);
+  ctx.ellipse(284, 432, 19, 12, 0, 0, Math.PI * 2);
   ctx.fill();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
   ctx.beginPath();
-  ctx.ellipse(282, 432, 20, 13, 0, 0, Math.PI * 2);
+  ctx.ellipse(226, 430, 8, 4, 0, 0, Math.PI * 2);
+  ctx.ellipse(282, 430, 8, 4, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // 西裝長褲 (深黑灰，長度適中絕不長腿)
-  ctx.fillStyle = '#1c1c22';
-  // 左褲管
-  ctx.beginPath();
-  ctx.roundRect(212, 350, 36, 75, 4);
-  ctx.fill();
-  // 右褲管
-  ctx.beginPath();
-  ctx.roundRect(264, 350, 36, 75, 4);
-  ctx.fill();
-
-  // ── [圖層 3: 軀幹與外場制服 (Torso & Uniform)] ──
-  ctx.fillStyle = '#24283b'; // 深海軍藍西裝制服
-  ctx.beginPath();
-  ctx.roundRect(192, 268, 128, 86, [10, 10, 4, 4]);
-  ctx.fill();
-
-  // 皮帶與銀扣
-  ctx.fillStyle = '#111114';
-  ctx.fillRect(192, 344, 128, 12);
-  ctx.fillStyle = '#cfd3d8';
-  ctx.fillRect(246, 342, 20, 15);
-
+  // 長褲
   if (gender === 'female') {
-    // 女性外場領口紅色蝴蝶結 / 領巾
+    ctx.fillStyle = '#15161b';
+    ctx.beginPath();
+    ctx.roundRect(212, 352, 34, 73, 4);
+    ctx.roundRect(266, 352, 34, 73, 4);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = '#181a24';
+    ctx.beginPath();
+    ctx.roundRect(210, 350, 36, 75, 4);
+    ctx.roundRect(266, 350, 36, 75, 4);
+    ctx.fill();
+  }
+
+  // ── [圖層 3: 軀幹與外場制服 (男女外場制服全面區分)] ──
+  if (gender === 'female') {
+    // 👧 女性外場制服：工作圍裙 + 白色襯衫 + 紅色蝴蝶結領結
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(200, 266, 112, 86, [8, 8, 4, 4]);
+    ctx.fill();
+
+    ctx.fillStyle = '#1e2438';
+    ctx.beginPath();
+    ctx.roundRect(194, 280, 124, 74, [6, 6, 4, 4]);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.roundRect(208, 266, 16, 28, 3);
+    ctx.roundRect(288, 266, 16, 28, 3);
+    ctx.fill();
+
+    // 圍裙口袋
+    ctx.fillStyle = '#181d2e';
+    ctx.beginPath();
+    ctx.roundRect(228, 312, 56, 32, 4);
+    ctx.fill();
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillRect(228, 312, 56, 3);
+
+    // 襯衫白色領口
+    ctx.fillStyle = '#f8fafc';
+    ctx.beginPath();
+    ctx.moveTo(240, 266);
+    ctx.lineTo(256, 280);
+    ctx.lineTo(272, 266);
+    ctx.fill();
+
+    // 優雅紅色蝴蝶結領結
     ctx.fillStyle = '#8e1d2c';
     ctx.beginPath();
     ctx.moveTo(256, 274);
-    ctx.lineTo(242, 288);
-    ctx.lineTo(270, 288);
+    ctx.lineTo(238, 266);
+    ctx.lineTo(238, 282);
     ctx.closePath();
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(256, 275, 4, 0, Math.PI * 2);
+    ctx.moveTo(256, 274);
+    ctx.lineTo(274, 266);
+    ctx.lineTo(274, 282);
+    ctx.closePath();
+    ctx.fill();
+    // 蝴蝶結垂帶
+    ctx.beginPath();
+    ctx.moveTo(252, 276);
+    ctx.lineTo(245, 292);
+    ctx.lineTo(254, 288);
+    ctx.lineTo(256, 276);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(260, 276);
+    ctx.lineTo(267, 292);
+    ctx.lineTo(258, 288);
+    ctx.lineTo(256, 276);
+    ctx.fill();
+    // 金色中心結
+    ctx.fillStyle = '#ffd700';
+    ctx.beginPath();
+    ctx.arc(256, 274, 4.5, 0, Math.PI * 2);
     ctx.fill();
   } else {
-    // 男性外場襯衫領口與扣子
-    ctx.fillStyle = '#1a1c29';
+    // 👦 男性外場制服：深藍西裝外套 + 襯衫 + 領帶 + 皮帶銀扣
+    ctx.fillStyle = '#1e2336';
     ctx.beginPath();
-    ctx.moveTo(238, 268);
-    ctx.lineTo(256, 292);
-    ctx.lineTo(274, 268);
+    ctx.roundRect(192, 268, 128, 86, [10, 10, 4, 4]);
     ctx.fill();
+
+    // 襯衫白色領口
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(234, 268);
+    ctx.lineTo(256, 310);
+    ctx.lineTo(278, 268);
+    ctx.closePath();
+    ctx.fill();
+
+    // 西裝領口
+    ctx.fillStyle = '#161a29';
+    ctx.beginPath();
+    ctx.moveTo(230, 268);
+    ctx.lineTo(242, 310);
+    ctx.lineTo(228, 310);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(282, 268);
+    ctx.lineTo(270, 310);
+    ctx.lineTo(284, 310);
+    ctx.closePath();
+    ctx.fill();
+
+    // 領帶
+    ctx.fillStyle = '#7f1d1d';
+    ctx.beginPath();
+    ctx.moveTo(252, 274);
+    ctx.lineTo(260, 274);
+    ctx.lineTo(262, 328);
+    ctx.lineTo(256, 336);
+    ctx.lineTo(250, 328);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#991b1b';
+    ctx.beginPath();
+    ctx.moveTo(251, 270);
+    ctx.lineTo(261, 270);
+    ctx.lineTo(259, 278);
+    ctx.lineTo(253, 278);
+    ctx.closePath();
+    ctx.fill();
+
+    // 皮帶與銀扣
+    ctx.fillStyle = '#111114';
+    ctx.fillRect(192, 344, 128, 12);
+    ctx.fillStyle = '#cfd3d8';
+    ctx.fillRect(246, 342, 20, 15);
+    ctx.fillStyle = '#111114';
+    ctx.fillRect(250, 346, 12, 7);
+
+    // 外套銀扣
     ctx.fillStyle = '#dcdde1';
-    [302, 318, 334].forEach(y => {
+    [320, 334].forEach(y => {
       ctx.beginPath();
-      ctx.arc(256, y, 2.5, 0, Math.PI * 2);
+      ctx.arc(245, y, 2.5, 0, Math.PI * 2);
       ctx.fill();
     });
   }
 
   // ── [圖層 4: 手臂與小圓手] ──
-  // 左手
-  ctx.fillStyle = '#24283b';
+  const armFill = gender === 'female' ? '#1e2438' : '#1e2336';
+  // 左手臂
+  ctx.fillStyle = armFill;
   ctx.beginPath();
-  ctx.roundRect(176, 274, 20, 66, 8);
+  ctx.roundRect(174, 274, 22, 66, 8);
   ctx.fill();
+  if (gender === 'female') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(174, 334, 22, 5);
+  }
   ctx.fillStyle = skinTone;
   ctx.beginPath();
-  ctx.arc(186, 344, 10, 0, Math.PI * 2);
+  ctx.arc(185, 344, 10, 0, Math.PI * 2);
   ctx.fill();
 
-  // 右手
-  ctx.fillStyle = '#24283b';
+  // 右手臂
+  ctx.fillStyle = armFill;
   ctx.beginPath();
-  ctx.roundRect(316, 274, 20, 66, 8);
+  ctx.roundRect(316, 274, 22, 66, 8);
   ctx.fill();
+  if (gender === 'female') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(316, 334, 22, 5);
+  }
   ctx.fillStyle = skinTone;
   ctx.beginPath();
-  ctx.arc(326, 344, 10, 0, Math.PI * 2);
+  ctx.arc(327, 344, 10, 0, Math.PI * 2);
   ctx.fill();
 
   // ── [圖層 5: 頸部與頭部 (Head & Face)] ──
   // 頸部
   ctx.fillStyle = skinShadow;
-  ctx.fillRect(242, 252, 28, 20);
+  ctx.fillRect(242, 248, 28, 22);
 
-  // 臉蛋繪製 (依臉型輪廓繪製)
+  // 臉蛋繪製
   ctx.fillStyle = skinTone;
   if (faceShape === 'square') {
     ctx.beginPath();
@@ -9605,7 +9841,7 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
     ctx.fill();
   } else if (faceShape === 'oval') {
     ctx.beginPath();
-    ctx.ellipse(256, 175, 96, 96, 0, 0, Math.PI * 2);
+    ctx.ellipse(256, 174, 96, 96, 0, 0, Math.PI * 2);
     ctx.fill();
   } else if (faceShape === 'pointed') {
     ctx.beginPath();
@@ -9621,7 +9857,7 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   } else {
     // 經典圓潤 Q 版臉
     ctx.beginPath();
-    ctx.ellipse(256, 175, 104, 90, 0, 0, Math.PI * 2);
+    ctx.ellipse(256, 174, 104, 90, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -9630,98 +9866,121 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   ctx.arc(150, 185, 18, 0, Math.PI * 2);
   ctx.arc(362, 185, 18, 0, Math.PI * 2);
   ctx.fill();
+  ctx.fillStyle = skinShadow;
+  ctx.beginPath();
+  ctx.arc(152, 185, 10, 0, Math.PI * 2);
+  ctx.arc(360, 185, 10, 0, Math.PI * 2);
+  ctx.fill();
 
-  // 腮紅
+  // 粉嫩腮紅
   ctx.fillStyle = blushColor;
   ctx.beginPath();
   ctx.ellipse(195, 205, 16, 9, 0, 0, Math.PI * 2);
   ctx.ellipse(317, 205, 16, 9, 0, 0, Math.PI * 2);
   ctx.fill();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+  ctx.beginPath();
+  ctx.arc(190, 203, 2.5, 0, Math.PI * 2);
+  ctx.arc(322, 203, 2.5, 0, Math.PI * 2);
+  ctx.fill();
 
-  // ── [圖層 6: 眉毛與眼睛 (大眼睛・高光露出・不被瀏海遮擋)] ──
-  // 眉毛 (y: 144~152，置於額頭下緣)
+  // ── [圖層 6: 眉毛與大眼睛 (眉眼完全露出・雙重高光・絕不擋眼)] ──
+  // 眉毛 (高置於 y: 138~144)
   ctx.strokeStyle = hairColor;
   ctx.lineWidth = gender === 'female' ? 3 : 4.5;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.arc(208, 150, 15, 1.15 * Math.PI, 1.85 * Math.PI);
+  ctx.arc(206, 142, 16, 1.15 * Math.PI, 1.85 * Math.PI);
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(304, 150, 15, 1.15 * Math.PI, 1.85 * Math.PI);
+  ctx.arc(306, 142, 16, 1.15 * Math.PI, 1.85 * Math.PI);
   ctx.stroke();
 
-  // 大眼睛底色
-  ctx.fillStyle = '#231815';
+  // 大眼睛 (y: 172)
+  ctx.fillStyle = '#1c1514';
   ctx.beginPath();
-  ctx.ellipse(208, 175, 16, 22, 0, 0, Math.PI * 2);
-  ctx.ellipse(304, 175, 16, 22, 0, 0, Math.PI * 2);
+  ctx.ellipse(206, 172, 16, 22, 0, 0, Math.PI * 2);
+  ctx.ellipse(306, 172, 16, 22, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // 雙重水汪汪眼神高光
+  // 眼睛下緣動漫微光
+  ctx.fillStyle = '#3e2723';
+  ctx.beginPath();
+  ctx.arc(206, 180, 12, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.arc(306, 180, 12, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.fill();
+
+  // 雙重星芒高光
   ctx.fillStyle = '#ffffff';
   // 主高光
   ctx.beginPath();
-  ctx.arc(202, 166, 6.5, 0, Math.PI * 2);
-  ctx.arc(298, 166, 6.5, 0, Math.PI * 2);
+  ctx.arc(200, 163, 6.5, 0, Math.PI * 2);
+  ctx.arc(300, 163, 6.5, 0, Math.PI * 2);
   ctx.fill();
   // 次高光
   ctx.beginPath();
-  ctx.arc(213, 184, 3.5, 0, Math.PI * 2);
-  ctx.arc(309, 184, 3.5, 0, Math.PI * 2);
+  ctx.arc(211, 181, 3.5, 0, Math.PI * 2);
+  ctx.arc(311, 181, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+  // 迷你星芒光點
+  ctx.beginPath();
+  ctx.arc(203, 186, 2, 0, Math.PI * 2);
+  ctx.arc(303, 186, 2, 0, Math.PI * 2);
   ctx.fill();
 
-  // 女性睫毛
+  // 女性上翹雙睫毛
   if (gender === 'female') {
-    ctx.strokeStyle = '#231815';
+    ctx.strokeStyle = '#1c1514';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(222, 160);
-    ctx.lineTo(228, 156);
-    ctx.moveTo(318, 160);
-    ctx.lineTo(324, 156);
+    ctx.moveTo(220, 158);
+    ctx.lineTo(228, 152);
+    ctx.moveTo(222, 166);
+    ctx.lineTo(229, 163);
+    ctx.moveTo(292, 158);
+    ctx.lineTo(284, 152);
+    ctx.moveTo(290, 166);
+    ctx.lineTo(283, 163);
     ctx.stroke();
   }
 
-  // ── [圖層 7: 鼻子 (4 款鼻子特徵)] ──
+  // ── [圖層 7: 鼻子 (4 款特徵)] ──
   ctx.strokeStyle = '#a67253';
   ctx.fillStyle = '#a67253';
   if (noseShape === 'straight') {
-    // 挺拔高鼻
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(255, 172);
-    ctx.lineTo(255, 198);
-    ctx.lineTo(259, 198);
+    ctx.lineTo(255, 196);
+    ctx.lineTo(259, 196);
     ctx.stroke();
   } else if (noseShape === 'wide') {
-    // 寬厚肉鼻
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.arc(256, 198, 6, 0.1 * Math.PI, 0.9 * Math.PI);
+    ctx.arc(256, 196, 6, 0.1 * Math.PI, 0.9 * Math.PI);
     ctx.stroke();
   } else if (noseShape === 'sharp') {
-    // 俐落挺鼻
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(253, 176);
-    ctx.lineTo(258, 196);
-    ctx.lineTo(252, 198);
+    ctx.moveTo(253, 174);
+    ctx.lineTo(258, 194);
+    ctx.lineTo(252, 196);
     ctx.stroke();
   } else {
     // 小圓點鼻
     ctx.beginPath();
-    ctx.arc(256, 196, 2.5, 0, Math.PI * 2);
+    ctx.arc(256, 194, 2.5, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // ── [圖層 8: 嘴型] ──
+  // ── [圖層 8: 嘴巴] ──
   ctx.strokeStyle = '#6d2e24';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.arc(256, 222, 12, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.arc(256, 218, 12, 0.1 * Math.PI, 0.9 * Math.PI);
   ctx.stroke();
 
-  // ── [圖層 9: 特殊特徵 (鬍渣 / 嘴角痣)] ──
+  // ── [圖層 9: 特徵 (鬍渣 / 嘴角痣)] ──
   if (hasBeard) {
     ctx.fillStyle = 'rgba(40, 30, 30, 0.35)';
     ctx.beginPath();
@@ -9731,148 +9990,139 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   if (hasBeautyMark) {
     ctx.fillStyle = '#2b1b17';
     ctx.beginPath();
-    ctx.arc(274, 230, 2.2, 0, Math.PI * 2);
+    ctx.arc(274, 228, 2.4, 0, Math.PI * 2);
     ctx.fill();
   }
 
   // ── [圖層 10: 眼鏡 (5 種精準選項)] ──
   if (glasses === 'round_black') {
     ctx.strokeStyle = '#111114';
-    ctx.lineWidth = 5.5;
+    ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.ellipse(208, 175, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(206, 172, 33, 29, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.ellipse(304, 175, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(306, 172, 33, 29, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(241, 175);
-    ctx.lineTo(271, 175);
+    ctx.moveTo(239, 172);
+    ctx.lineTo(273, 172);
     ctx.stroke();
   } else if (glasses === 'square_black') {
     ctx.strokeStyle = '#111114';
-    ctx.lineWidth = 5.5;
+    ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.roundRect(174, 148, 68, 54, 8);
+    ctx.roundRect(172, 146, 68, 52, 8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.roundRect(270, 148, 68, 54, 8);
+    ctx.roundRect(272, 146, 68, 52, 8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(242, 172);
-    ctx.lineTo(270, 172);
+    ctx.moveTo(240, 170);
+    ctx.lineTo(272, 170);
     ctx.stroke();
   } else if (glasses === 'round_wire') {
-    ctx.strokeStyle = '#9e7d3b'; // 金屬細金框
+    ctx.strokeStyle = '#9e7d3b';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.ellipse(208, 175, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(206, 172, 33, 29, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.ellipse(304, 175, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(306, 172, 33, 29, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(241, 175);
-    ctx.lineTo(271, 175);
+    ctx.moveTo(239, 172);
+    ctx.lineTo(273, 172);
     ctx.stroke();
   } else if (glasses === 'square_wire') {
-    ctx.strokeStyle = '#546e7a'; // 深銀灰細方框
+    ctx.strokeStyle = '#546e7a';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.roundRect(174, 148, 68, 54, 8);
+    ctx.roundRect(172, 146, 68, 52, 8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.roundRect(270, 148, 68, 54, 8);
+    ctx.roundRect(272, 146, 68, 52, 8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(242, 172);
-    ctx.lineTo(270, 172);
+    ctx.moveTo(240, 170);
+    ctx.lineTo(272, 170);
     ctx.stroke();
   }
 
-  // ── [圖層 11: 前髮與髮型 (Bangs & Front Hair，眉眼完全露出品味)] ──
+  // ── [圖層 11: 前髮與露額空氣瀏海 (下緣停在 y: 105~122，100% 露眉露眼)] ──
   ctx.fillStyle = hairColor;
   if (gender === 'female') {
     if (hairStyle === 'bob_short') {
-      // 日系鮑伯短髮 (兩側微內彎，前額開闊)
       ctx.beginPath();
-      ctx.arc(256, 142, 114, 0.82 * Math.PI, 2.18 * Math.PI);
+      ctx.arc(256, 136, 114, 0.82 * Math.PI, 2.18 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(144, 175);
-      ctx.quadraticCurveTo(200, 110, 256, 126);
-      ctx.quadraticCurveTo(312, 110, 368, 175);
-      ctx.lineTo(365, 120);
-      ctx.lineTo(147, 120);
+      ctx.moveTo(144, 170);
+      ctx.quadraticCurveTo(200, 105, 256, 120);
+      ctx.quadraticCurveTo(312, 105, 368, 170);
+      ctx.lineTo(365, 110);
+      ctx.lineTo(147, 110);
       ctx.fill();
     } else {
-      // 乾淨外場前額瀏海 (包包頭/馬尾/長髮等)
+      // 乾淨優雅外場空氣瀏海 (包包頭/馬尾/波浪長髮/及肩直髮)
       ctx.beginPath();
-      ctx.arc(256, 140, 112, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.arc(256, 136, 112, 0.85 * Math.PI, 2.15 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(148, 160);
-      ctx.quadraticCurveTo(210, 120, 256, 130);
-      ctx.quadraticCurveTo(300, 120, 364, 160);
-      ctx.lineTo(350, 115);
-      ctx.lineTo(160, 115);
+      ctx.moveTo(148, 155);
+      ctx.quadraticCurveTo(205, 108, 256, 122);
+      ctx.quadraticCurveTo(307, 108, 364, 155);
+      ctx.lineTo(350, 105);
+      ctx.lineTo(160, 105);
       ctx.fill();
     }
   } else {
-    // 男性髮型
+    // 男性前髮髮型
     if (hairStyle === 'afro_curly') {
-      // 標誌性經典捲髮 (向外蓬鬆，前額眉眼完全露出來)
-      const curls = [
-        { x: 256, y: 70, r: 52 }, { x: 200, y: 80, r: 50 }, { x: 312, y: 80, r: 50 },
-        { x: 154, y: 110, r: 48 }, { x: 358, y: 110, r: 48 }, { x: 124, y: 160, r: 46 },
-        { x: 388, y: 160, r: 46 }, { x: 118, y: 210, r: 42 }, { x: 394, y: 210, r: 42 },
-        { x: 190, y: 120, r: 38 }, { x: 256, y: 115, r: 40 }, { x: 322, y: 120, r: 38 }
+      const frontCurls = [
+        { x: 190, y: 110, r: 36 }, { x: 256, y: 105, r: 38 }, { x: 322, y: 110, r: 36 }
       ];
-      curls.forEach(c => {
+      frontCurls.forEach(c => {
         ctx.beginPath();
         ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
         ctx.fill();
       });
     } else if (hairStyle === 'side_part') {
-      // 經典側分 (三七分短髮)
       ctx.beginPath();
-      ctx.arc(256, 140, 114, 0.88 * Math.PI, 2.12 * Math.PI);
+      ctx.arc(256, 136, 114, 0.88 * Math.PI, 2.12 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(144, 155);
-      ctx.quadraticCurveTo(200, 100, 285, 132);
-      ctx.lineTo(368, 155);
-      ctx.lineTo(350, 105);
-      ctx.lineTo(160, 105);
+      ctx.moveTo(144, 150);
+      ctx.quadraticCurveTo(200, 95, 285, 126);
+      ctx.lineTo(368, 150);
+      ctx.lineTo(350, 100);
+      ctx.lineTo(160, 100);
       ctx.fill();
     } else if (hairStyle === 'comma_part') {
-      // 韓系逗號瀏海
       ctx.beginPath();
-      ctx.arc(256, 140, 114, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.arc(256, 136, 114, 0.85 * Math.PI, 2.15 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(146, 155);
-      ctx.quadraticCurveTo(210, 110, 240, 134);
-      ctx.quadraticCurveTo(256, 120, 272, 134);
-      ctx.quadraticCurveTo(310, 110, 366, 155);
-      ctx.lineTo(350, 105);
-      ctx.lineTo(160, 105);
+      ctx.moveTo(146, 150);
+      ctx.quadraticCurveTo(210, 105, 240, 128);
+      ctx.quadraticCurveTo(256, 115, 272, 128);
+      ctx.quadraticCurveTo(310, 105, 366, 150);
+      ctx.lineTo(350, 100);
+      ctx.lineTo(160, 100);
       ctx.fill();
     } else if (hairStyle === 'buzz_cut') {
-      // 陽光寸頭平頭
       ctx.beginPath();
-      ctx.arc(256, 150, 106, 0.95 * Math.PI, 2.05 * Math.PI);
+      ctx.arc(256, 146, 106, 0.95 * Math.PI, 2.05 * Math.PI);
       ctx.fill();
     } else if (hairStyle === 'wavy_short') {
-      // 微捲短髮
       ctx.beginPath();
-      ctx.arc(256, 142, 115, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.arc(256, 138, 115, 0.85 * Math.PI, 2.15 * Math.PI);
       ctx.fill();
       const waveSpikes = [
-        [155, 135, 175, 80, 200, 118],
-        [205, 118, 230, 72, 256, 110],
-        [258, 110, 285, 72, 310, 118],
-        [312, 118, 338, 80, 358, 135]
+        [155, 130, 175, 75, 200, 112],
+        [205, 112, 230, 68, 256, 105],
+        [258, 105, 285, 68, 310, 112],
+        [312, 112, 338, 75, 358, 130]
       ];
       waveSpikes.forEach(s => {
         ctx.beginPath();
@@ -9884,14 +10134,14 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
     } else {
       // 俐落短髮 (short_clean)
       ctx.beginPath();
-      ctx.arc(256, 142, 114, 0.88 * Math.PI, 2.12 * Math.PI);
+      ctx.arc(256, 138, 114, 0.88 * Math.PI, 2.12 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(146, 155);
-      ctx.quadraticCurveTo(200, 115, 256, 126);
-      ctx.quadraticCurveTo(312, 115, 366, 155);
-      ctx.lineTo(350, 110);
-      ctx.lineTo(160, 110);
+      ctx.moveTo(146, 150);
+      ctx.quadraticCurveTo(200, 110, 256, 120);
+      ctx.quadraticCurveTo(312, 110, 366, 150);
+      ctx.lineTo(350, 105);
+      ctx.lineTo(160, 105);
       ctx.fill();
     }
   }
@@ -9903,12 +10153,17 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
 function setAvatarTrait(traitType, val) {
   currentWhoTraits[traitType] = val;
 
-  // 若切換性別，自動設定對應髮型
+  // 若切換性別，自動設定對應預設髮型與清空鬍鬚
   if (traitType === 'gender') {
-    if (val === 'female' && !HAIR_STYLES_BY_GENDER.female.some(h => h.id === currentWhoTraits.hair)) {
-      currentWhoTraits.hair = 'bun_hair';
-    } else if (val === 'male' && !HAIR_STYLES_BY_GENDER.male.some(h => h.id === currentWhoTraits.hair)) {
-      currentWhoTraits.hair = 'short_clean';
+    if (val === 'female') {
+      if (!HAIR_STYLES_BY_GENDER.female.some(h => h.id === currentWhoTraits.hair)) {
+        currentWhoTraits.hair = 'bun_hair';
+      }
+      currentWhoTraits.beard = false;
+    } else if (val === 'male') {
+      if (!HAIR_STYLES_BY_GENDER.male.some(h => h.id === currentWhoTraits.hair)) {
+        currentWhoTraits.hair = 'short_clean';
+      }
     }
   }
 
@@ -9922,8 +10177,18 @@ function setAvatarTrait(traitType, val) {
   }
 }
 
-function toggleAvatarFeature(featName) {
-  currentWhoTraits[featName] = !currentWhoTraits[featName];
+// 切換特徵 (無特徵 / 嘴角痣 / 鬍渣短鬍)
+function setAvatarFeature(featName) {
+  if (featName === 'none') {
+    currentWhoTraits.beard = false;
+    currentWhoTraits.beautyMark = false;
+  } else if (featName === 'beautyMark') {
+    currentWhoTraits.beautyMark = true;
+    currentWhoTraits.beard = false;
+  } else if (featName === 'beard') {
+    currentWhoTraits.beard = true;
+    currentWhoTraits.beautyMark = false;
+  }
   updateTraitPillsUI();
 
   if (currentWhoState.selectedNameItem) {
@@ -9954,7 +10219,7 @@ function updateTraitPillsUI() {
   // 5. 髮型選項 (動態依性別渲染)
   const hairContainer = document.getElementById('who-hair-options-container');
   if (hairContainer) {
-    const styles = HAIR_STYLES_BY_GENDER[currentWhoTraits.gender] || HAIR_STYLES_BY_GENDER.male;
+    const styles = HAIR_STYLES_BY_GENDER[currentWhoTraits.gender] || HAIR_STYLES_BY_GENDER.female;
     hairContainer.innerHTML = styles.map(h => `
       <button class="btn btn-sm ${currentWhoTraits.hair === h.id ? 'btn-primary' : 'btn-ghost'}" onclick="setAvatarTrait('hair', '${h.id}')" style="font-size:0.75rem; padding:2px 8px;">
         ${h.label}
@@ -9962,28 +10227,26 @@ function updateTraitPillsUI() {
     `).join('');
   }
 
-  // 6. 髮色
+  // 6. 髮色 (自然黑 / 深棕色)
   document.querySelectorAll('.trait-pill-color').forEach(b => b.classList.remove('btn-primary'));
-  if (currentWhoTraits.color === '#1f1e24') document.getElementById('trait-color-black')?.classList.add('btn-primary');
-  else if (currentWhoTraits.color === '#3e2723') document.getElementById('trait-color-darkbrown')?.classList.add('btn-primary');
-  else if (currentWhoTraits.color === '#795548') document.getElementById('trait-color-chestnut')?.classList.add('btn-primary');
-  else if (currentWhoTraits.color === '#c59b27') document.getElementById('trait-color-blonde')?.classList.add('btn-primary');
-  else if (currentWhoTraits.color === '#546e7a') document.getElementById('trait-color-gray')?.classList.add('btn-primary');
+  if (currentWhoTraits.color === '#422b1d') {
+    document.getElementById('trait-color-darkbrown')?.classList.add('btn-primary');
+  } else {
+    document.getElementById('trait-color-black')?.classList.add('btn-primary');
+  }
 
-  // 7. 眼鏡 (5 種)
+  // 7. 眼鏡 (5 種精準選項)
   document.querySelectorAll('.trait-pill-glasses').forEach(b => b.classList.remove('btn-primary'));
   document.getElementById('trait-glasses-' + currentWhoTraits.glasses)?.classList.add('btn-primary');
 
-  // 8. 特徵 (鬍渣/痣)
-  const beardBtn = document.getElementById('trait-beard-toggle');
-  if (beardBtn) {
-    if (currentWhoTraits.beard) beardBtn.classList.add('btn-primary');
-    else beardBtn.classList.remove('btn-primary');
-  }
-  const markBtn = document.getElementById('trait-beauty-mark-toggle');
-  if (markBtn) {
-    if (currentWhoTraits.beautyMark) markBtn.classList.add('btn-primary');
-    else markBtn.classList.remove('btn-primary');
+  // 8. 特徵 (無特徵 / 嘴角痣 / 鬍渣短鬍)
+  document.querySelectorAll('.trait-pill-feature').forEach(b => b.classList.remove('btn-primary'));
+  if (currentWhoTraits.beard) {
+    document.getElementById('trait-feature-beard')?.classList.add('btn-primary');
+  } else if (currentWhoTraits.beautyMark) {
+    document.getElementById('trait-feature-beautyMark')?.classList.add('btn-primary');
+  } else {
+    document.getElementById('trait-feature-none')?.classList.add('btn-primary');
   }
 }
 
@@ -9992,7 +10255,7 @@ async function rephotoWhoDirectly() {
   currentWhoState.capturedSample = null;
   await triggerSilentCameraCapture();
   if (currentWhoState.selectedNameItem) {
-    processColleagueAvatarGeneration(currentWhoState.selectedNameItem);
+    promptGenderStep(currentWhoState.selectedNameItem);
   }
 }
 
@@ -10031,10 +10294,12 @@ function confirmSaveWhoAvatar() {
 // 13. 重設「你叫什麼名字？」畫面
 function resetWhoModal() {
   const selectScreen = document.getElementById('who-screen-select');
+  const genderScreen = document.getElementById('who-screen-gender');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
   if (selectScreen) selectScreen.style.display = 'block';
+  if (genderScreen) genderScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'none';
   if (resultScreen) resultScreen.style.display = 'none';
 
@@ -10064,16 +10329,17 @@ function openNameAvatarModal(vocabId) {
   const jaTitle = document.getElementById('name-card-ja-title');
   const zhTitle = document.getElementById('name-card-zh-title');
 
-  // 若尚未有 avatarUrl 或為非小楊但誤設小楊圖，自動生成該同仁專屬立繪
+  // 若尚未有 avatarUrl 或為舊版 static photo，自動生成該同仁專屬立繪
   let finalAvatarUrl = item.avatarUrl;
-  if (!finalAvatarUrl || (item.id !== 'vn_yang' && finalAvatarUrl === './photos/avatar_yang.png')) {
+  if (!finalAvatarUrl || finalAvatarUrl === './photos/avatar_yang.png') {
+    const isFemale = /(?:美|香|子|實|燕|瑪|蓉|涵|愛|蘭|琴|花|女|み|な|こ|楊)/.test(cleanName);
     const colleagueTraits = item.traits || DEFAULT_COLLEAGUE_TRAITS[item.id] || {
-      gender: /(?:美|香|子|實|燕|瑪|蓉|涵|愛|蘭|琴|花|女|み|な|こ)/.test(cleanName) ? 'female' : 'male',
+      gender: isFemale ? 'female' : 'male',
       face: 'round',
       nose: 'dot',
-      skin: 'natural',
-      hair: 'short_clean',
-      color: '#1f1e24',
+      skin: isFemale ? 'fair' : 'natural',
+      hair: isFemale ? 'bun_hair' : 'short_clean',
+      color: '#1a191f',
       glasses: 'none',
       beard: false,
       beautyMark: false

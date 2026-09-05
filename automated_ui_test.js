@@ -361,9 +361,22 @@ assert(testExtractSpokenJapanese('<ruby>人参<rt>にんじん</rt></ruby>') ===
 assert(testExtractSpokenJapanese('<ruby>大根<rt>だいこん</rt></ruby>') === 'だいこん', '大根提取朗讀文本為「だいこん」');
 assert(testExtractSpokenJapanese('<ruby>小葱<rt>こねぎ</rt></ruby>') === 'こねぎ', '小葱提取朗讀文本為「こねぎ」');
 
+// 測試 24: 「你叫什麼名字？」v70 性別提問流程、男女制服區分、頭頂大包包頭與純淨露眼瀏海
+console.log('\n【測試 24：「你叫什麼名字？」v70 性別提問流程・男女制服區分・頭頂大包包頭・純淨露眼 (v70)】');
+assert(html.includes('id="who-screen-gender"'), 'HTML 包含性別選擇步驟畫面 (who-screen-gender)');
+assert(html.includes('confirmWhoGender(\'female\')') && html.includes('confirmWhoGender(\'male\')'), '包含女生與男生性別確認按鈕');
+assert(html.includes('promptGenderStep'), 'JS 包含主動提示性別選擇函式 promptGenderStep');
+assert(html.includes('backToNameSelect'), 'JS 包含返回姓名選擇函式 backToNameSelect');
+assert(html.includes('vn_yang') && html.includes("gender: 'female'") && html.includes("hair: 'bun_hair'"), '小楊 (vn_yang) 預設性別為 female，預設髮型為外場包包頭 (bun_hair)');
+assert(html.includes('trait-color-black') && html.includes('trait-color-darkbrown'), '微調工房髮色包含自然黑與深棕色');
+assert(html.includes('trait-feature-none') && html.includes('trait-feature-beautyMark') && html.includes('trait-feature-beard'), '微調工房包含無特徵、嘴角痣、鬍渣短鬍 3 大選項');
+assert(html.includes('setAvatarFeature'), 'JS 包含特徵切換函式 setAvatarFeature');
+assert(html.includes('ellipse(256, 54, 48, 44'), '外場包包頭 (bun_hair) 在頭頂中央 (y:54) 繪製立體大圓丸子');
+assert(html.includes('8e1d2c') && html.includes('ffd700'), '女生制服包含優雅深紅蝴蝶結領結與金色繩結/珍珠飾品');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v69'), 'Service Worker 快取版本已升級至 yang-pwa-v69');
-assert(html.includes('yang_runner_handbook_v69'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v69');
+assert(swContent.includes('yang-pwa-v70'), 'Service Worker 快取版本已升級至 yang-pwa-v70');
+assert(html.includes('yang_runner_handbook_v70'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v70');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -372,6 +385,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」5大層級Q版捏臉圖鑑、「現場四國同步直譯板（普通丁寧體）」、全新「🥦 食材」原型食物與調料庫、單字庫標準Ruby純淨標音（無重複朗讀）、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
 }
 
