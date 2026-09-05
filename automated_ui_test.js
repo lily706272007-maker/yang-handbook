@@ -161,11 +161,18 @@ assert(html.includes('openModalItem'), '包含開啟條目編輯函式 (openModa
 assert(html.includes('submitItemForm'), '包含儲存條目函式 (submitItemForm)');
 assert(html.includes('deleteSopItem'), '包含刪除條目函式 (deleteSopItem)');
 
-// 測試 10: 名字五十音與特殊發音提取
-console.log('\n【測試 10：名字五十音與特殊發音提取】');
+// 測試 10: 名字五十音與特殊發音提取 (依據真實出勤班表)
+console.log('\n【測試 10：名字五十音與特殊發音提取 (真實出勤班表)】');
+assert(textContent.includes('加治木') && html.includes('かじき'), '同仁名：加治木 (かじき・支配人)');
 assert(textContent.includes('市石') && html.includes('いちいし'), '同仁名：市石 (いちいし)');
-assert(textContent.includes('松本') && html.includes('まつもと'), '同仁名：松本 (まつもと)');
-assert(textContent.includes('楊') && html.includes('よう'), '同仁名：楊 (よう)');
+assert(textContent.includes('長森') && html.includes('ながもり'), '同仁名：長森 愛実 (ながもり まなみ)');
+assert(textContent.includes('野別') && html.includes('のべつ'), '同仁名：野別 充旗 (のべつ みつき)');
+assert(textContent.includes('森田') && html.includes('もりた'), '同仁名：森田 亨 (もりた とおる)');
+assert(textContent.includes('森本') && html.includes('もりもと'), '同仁名：森本 健太郎 (もりもと けんたろう)');
+assert(textContent.includes('川畑') && html.includes('かわばた'), '同仁名：川畑 (かわばた)');
+assert(textContent.includes('楊') && html.includes('よう'), '同仁名：楊英筑 (よう えいちく・本人)');
+assert(html.includes('ビム') && html.includes('ハン') && html.includes('エンティハ') && html.includes('プラティマ'), '包含外籍同仁與實習生 (ビム/ハン/エンティハ/プラティマ/イバオイェン/ホンイェン)');
+assert(html.includes('支配人') && html.includes('正社員') && html.includes('派遣社員') && html.includes('インターン') && html.includes('朝配') && html.includes('夜配') && html.includes('洗い場') && html.includes('タイミー'), '職稱完整涵蓋班表所有職務與班別 (支配人/正社員/派遣/實習生/朝配/夜配/洗滌/Timee)');
 
 // 測試 11: 語音聲線切換、試聽與自選語速功能
 console.log('\n【測試 11：語音聲線切換與試聽功能】');
@@ -267,7 +274,7 @@ assert(html.includes('toggleBroadcastMic'), '包含中文語音輸入辨識函�
 assert(html.includes('日本語') && html.includes('नेपाली') && html.includes('မြန်မာဘာသာ') && html.includes('English'), '完整涵蓋日文、尼泊爾文、緬甸文、英文四大語言');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v61'), 'Service Worker 快取版本已升級至 yang-pwa-v61');
+assert(swContent.includes('yang-pwa-v62'), 'Service Worker 快取版本已升級至 yang-pwa-v62');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);

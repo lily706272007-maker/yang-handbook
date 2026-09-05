@@ -2323,7 +2323,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v60';
+const STORAGE_KEY = 'yang_runner_handbook_v62';
 
 function createRealRunnerData() {
   return {
@@ -3457,39 +3457,51 @@ function createRealRunnerData() {
     { "id": "vt_14", "ja": "マドラー", "zh": "攪拌棒", "cat": "工具", "imageUrl": "./photos/IMG_0884.jpg", "note": "調酒攪拌用" },
     { "id": "vt_15", "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>", "zh": "吸塵器", "cat": "工具", "imageUrl": "", "note": "上司交代：打掃地板用" },
 
-    // ── 👤 名字類 ──
-    { "id": "vn_1", "ja": "<ruby>市石<rt>いちいし</rt></ruby>", "kana": "いちいし", "zh": "市石", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_2", "ja": "<ruby>松本<rt>まつもと</rt></ruby>", "kana": "まつもと", "zh": "松本", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_3", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_4", "ja": "<ruby>田中<rt>たなか</rt></ruby>", "kana": "たなか", "zh": "田中", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_5", "ja": "<ruby>高橋<rt>たかはし</rt></ruby>", "kana": "たかはし", "zh": "高橋", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_6", "ja": "<ruby>中村<rt>なかむら</rt></ruby>", "kana": "なかむら", "zh": "中村", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_7", "ja": "<ruby>小林<rt>こばやし</rt></ruby>", "kana": "こばやし", "zh": "小林", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_8", "ja": "<ruby>山本<rt>やまもと</rt></ruby>", "kana": "やまもと", "zh": "山本", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_9", "ja": "<ruby>渡辺<rt>わたなべ</rt></ruby>", "kana": "わたなべ", "zh": "渡邊", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_10", "ja": "<ruby>伊藤<rt>いとう</rt></ruby>", "kana": "いとう", "zh": "伊藤", "cat": "名字", "imageUrl": "", "note": "日本同仁", "isForeign": false },
-    { "id": "vn_11", "ja": "<ruby>楊<rt>よう</rt></ruby>", "kana": "よう", "zh": "楊", "cat": "名字", "imageUrl": "", "avatarUrl": "./photos/avatar_yang.png", "note": "外國籍同仁（本人）", "isForeign": true },
-    { "id": "vn_12", "ja": "<ruby>陳<rt>ちん</rt></ruby>", "kana": "ちん", "zh": "陳", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_13", "ja": "<ruby>林<rt>りん</rt></ruby>", "kana": "りん", "zh": "林", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_14", "ja": "<ruby>黃<rt>こう</rt></ruby>", "kana": "こう", "zh": "黃", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_15", "ja": "<ruby>張<rt>ちょう</rt></ruby>", "kana": "ちょう", "zh": "張", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_16", "ja": "<ruby>王<rt>おう</rt></ruby>", "kana": "おう", "zh": "王", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_17", "ja": "<ruby>李<rt>り</rt></ruby>", "kana": "り", "zh": "李", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_18", "ja": "<ruby>劉<rt>りゅう</rt></ruby>", "kana": "りゅう", "zh": "劉", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_19", "ja": "<ruby>グエン<rt>guen</rt></ruby>", "kana": "ぐえん", "zh": "阮 (Nguyen)", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
-    { "id": "vn_20", "ja": "<ruby>トラン<rt>toran</rt></ruby>", "kana": "とらん", "zh": "陳 (Tran)", "cat": "名字", "imageUrl": "", "note": "外國籍同仁", "isForeign": true },
+    // ── 👤 名字類 (依據旅館現場實際出勤班表完整建置) ──
+    { "id": "vn_kajiki", "ja": "<ruby>加治木<rt>かじき</rt></ruby>", "kana": "かじき", "zh": "加治木（支配人）", "cat": "名字", "imageUrl": "", "note": "旅館支配人（經理/營運主管）", "isForeign": false },
+    { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "note": "正社員 / 前台主管", "isForeign": false },
+    { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "note": "正社員 / 前台同仁", "isForeign": false },
+    { "id": "vn_biyo", "ja": "ビヨー", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "note": "外籍同仁 / 外場", "isForeign": true },
+    { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "note": "正社員 / 外場同仁", "isForeign": false },
+    { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "note": "正社員 / 旅館同仁", "isForeign": false },
+    { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "note": "正社員 / 旅館同仁", "isForeign": false },
+    { "id": "vn_entiha", "ja": "エンティハ", "kana": "えんてぃは", "zh": "恩蒂哈 (En Ti Ha)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン)", "isForeign": true },
+    { "id": "vn_phongnhung", "ja": "フォン ニュン", "kana": "ふぉん にゅん", "zh": "馮蓉 (Phong Nhung)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン)", "isForeign": true },
+    { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
+    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>英筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊英筑（小楊・本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "./photos/avatar_yang.png", "note": "派遣社員（打工度假/傳菜人員 Runner）", "isForeign": true },
+    { "id": "vn_ichiishi", "ja": "<ruby>市石<rt>いちいし</rt></ruby> みらの", "kana": "いちいし みらの", "zh": "市石 米拉諾", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
+    { "id": "vn_nobetsu", "ja": "<ruby>野別<rt>のべつ</rt></ruby><ruby>充旗<rt>みつき</rt></ruby>", "kana": "のべつ みつき", "zh": "野別 充旗", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
+    { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
+    { "id": "vn_morimoto", "ja": "<ruby>森本<rt>もりもと</rt></ruby><ruby>健太郎<rt>けんたろう</rt></ruby>", "kana": "もりもと けんたろう", "zh": "森本 健太郎", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
+    { "id": "vn_bim", "ja": "ビム", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "note": "正社員（尼泊爾夥伴）", "isForeign": true },
+    { "id": "vn_han", "ja": "ハン", "kana": "はん", "zh": "韓 / 涵 (Han)", "cat": "名字", "imageUrl": "", "note": "正社員（外籍同仁）", "isForeign": true },
+    { "id": "vn_riku_iku", "ja": "リク イク", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": true },
+    { "id": "vn_tanaka_shoko", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>祥子<rt>しょうこ</rt></ruby>", "kana": "たなか しょうこ", "zh": "田中 祥子", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
+    { "id": "vn_yamabe", "ja": "<ruby>山邊<rt>やまべ</rt></ruby><ruby>陸<rt>りく</rt></ruby>", "kana": "やまべ りく", "zh": "山邊 陸", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
+    { "id": "vn_pratima", "ja": "プラティマ", "kana": "ぷらてぃま", "zh": "普拉蒂瑪 (Pratima)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン / 尼泊爾實習生)", "isForeign": true },
+    { "id": "vn_ibaoyen", "ja": "イバオイェン", "kana": "いばおいぇん", "zh": "伊寶燕 (Ibaoyen)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン / 越南實習生)", "isForeign": true },
+    { "id": "vn_hongyen", "ja": "ホンイェン", "kana": "ほんいぇん", "zh": "紅燕 (Hong Yen)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン / 越南實習生)", "isForeign": true },
+    { "id": "vn_kawabata", "ja": "<ruby>川畑<rt>かわばた</rt></ruby>", "kana": "かわばた", "zh": "川畑", "cat": "名字", "imageUrl": "", "note": "正社員 / 外場負責人", "isForeign": false },
 
-    // ── 💼 職稱類 ──
-    { "id": "vs_1", "ja": "<ruby>料理長<rt>りょうりちょう</rt></ruby>", "zh": "主廚 / 料理長", "cat": "職稱", "imageUrl": "", "note": "廚房最高負責人" },
-    { "id": "vs_2", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "zh": "經理 / 總經理", "cat": "職稱", "imageUrl": "", "note": "旅館營運主管" },
-    { "id": "vs_3", "ja": "<ruby>女将<rt>おかみ</rt></ruby>", "zh": "老闆娘 / 女將", "cat": "職稱", "imageUrl": "", "note": "旅館靈魂人物" },
-    { "id": "vs_4", "ja": "リーダー", "zh": "組長 / 領班", "cat": "職稱", "imageUrl": "", "note": "現場值班主管" },
-    { "id": "vs_5", "ja": "<ruby>先輩<rt>せんぱい</rt></ruby>", "zh": "前輩", "cat": "職稱", "imageUrl": "", "note": "資深同仁" },
-    { "id": "vs_6", "ja": "ランナー", "zh": "傳菜人員", "cat": "職稱", "imageUrl": "", "note": "負責廚房與外場間菜餚運送（本人職務）" },
-    { "id": "vs_7", "ja": "ホールスタッフ", "zh": "外場服務人員", "cat": "職稱", "imageUrl": "", "note": "接待客人與點餐收桌" },
-    { "id": "vs_8", "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>スタッフ", "zh": "廚房同仁 / 內場人員", "cat": "職稱", "imageUrl": "", "note": "烹飪與備菜人員" },
-    { "id": "vs_9", "ja": "<ruby>清掃<rt>せいそう</rt></ruby>スタッフ", "zh": "清潔人員", "cat": "職稱", "imageUrl": "", "note": "環境與洗碗清潔" },
-    { "id": "vs_10", "ja": "フロント", "zh": "櫃檯接待人員", "cat": "職稱", "imageUrl": "", "note": "大廳辦理入住與退房" },
+    // ── 💼 職稱與班表類 (依據班表雇用形態與館內職務編制) ──
+    { "id": "vs_shihainin", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "kana": "しはいにん", "zh": "經理 / 總經理 (支配人)", "cat": "職稱", "imageUrl": "", "note": "旅館營運與管理最高主管 (如：加治木 支配人)" },
+    { "id": "vs_seishain", "ja": "<ruby>正社員<rt>せいしゃいん</rt></ruby>", "kana": "せいしゃいん", "zh": "正職同仁 / 正社員", "cat": "職稱", "imageUrl": "", "note": "旅館正式員工 (如：川畑、ビム、ハン、須藤等)" },
+    { "id": "vs_hakenshain", "ja": "<ruby>派遣社員<rt>はけんしゃいん</rt></ruby>", "kana": "はけんしゃいん", "zh": "派遣同仁 / 打工夥伴", "cat": "職稱", "imageUrl": "", "note": "外場派遣與打工夥伴 (如：小楊、長森、市石、森田等)" },
+    { "id": "vs_intern", "ja": "インターン", "kana": "いんたーん", "zh": "海外實習生 (Intern)", "cat": "職稱", "imageUrl": "", "note": "大學及專門學校實習生 (如：プラティマ、エンティハ等)" },
+    { "id": "vs_runner", "ja": "ランナー", "kana": "らんなー", "zh": "傳菜人員 (Runner)", "cat": "職稱", "imageUrl": "", "note": "負責廚房與外場間菜餚運送（小楊本人職務）" },
+    { "id": "vs_leader", "ja": "リーダー", "kana": "りーだー", "zh": "組長 / 現場領班", "cat": "職稱", "imageUrl": "", "note": "餐廳現場值班負責人" },
+    { "id": "vs_asapai", "ja": "<ruby>朝配<rt>あさは配</rt></ruby>", "kana": "あさは配", "zh": "朝食配膳人員 (朝配)", "cat": "職稱", "imageUrl": "", "note": "早餐時段配膳、傳菜與餐台備置人員" },
+    { "id": "vs_yoruhai", "ja": "<ruby>夜配<rt>よるはい</rt></ruby>", "kana": "よるはい", "zh": "夕食配膳人員 (夜配)", "cat": "職稱", "imageUrl": "", "note": "晚餐時段配膳、出菜與傳菜補菜人員" },
+    { "id": "vs_bekkan_shukuchoku", "ja": "<ruby>別館宿直<rt>べっかんしゅくちょく</rt></ruby>", "kana": "べっかんしゅくちょく", "zh": "別館大夜值班人員 (宿直)", "cat": "職稱", "imageUrl": "", "note": "旅館別館夜間留守與值勤同仁" },
+    { "id": "vs_araiba", "ja": "<ruby>洗<rt>あら</rt></ruby>い<ruby>場<rt>ば</rt></ruby>", "kana": "あらいば", "zh": "洗碗區洗滌人員 (洗い場)", "cat": "職稱", "imageUrl": "", "note": "負責餐具、托盤清洗與烘乾回收" },
+    { "id": "vs_seisou", "ja": "<ruby>清掃<rt>せいそう</rt></ruby>", "kana": "せいそう", "zh": "環境清掃 / 房務人員", "cat": "職稱", "imageUrl": "", "note": "負責餐廳與館內環境清潔維護" },
+    { "id": "vs_timee", "ja": "タイミー", "kana": "たいみー", "zh": "Timee 短期兼職同仁", "cat": "職稱", "imageUrl": "", "note": "經由 Timee App 媒合之當日短期兼職人員" },
+    { "id": "vs_ryoricho", "ja": "<ruby>料理長<rt>りょうりちょう</rt></ruby>", "kana": "りょうりちょう", "zh": "主廚 / 料理長", "cat": "職稱", "imageUrl": "", "note": "廚房料理最高負責人" },
+    { "id": "vs_okami", "ja": "<ruby>女将<rt>おかみ</rt></ruby>", "kana": "おかみ", "zh": "老闆娘 / 女將", "cat": "職稱", "imageUrl": "", "note": "溫泉旅館女主人與靈魂人物" },
+    { "id": "vs_hallstaff", "ja": "ホールスタッフ", "kana": "ほーるすたっふ", "zh": "外場服務同仁", "cat": "職稱", "imageUrl": "", "note": "餐廳外場接待、點餐、引導與收桌" },
+    { "id": "vs_chubostaff", "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>スタッフ", "kana": "ちゅうぼうすたっふ", "zh": "廚房同仁 / 內場師傅", "cat": "職稱", "imageUrl": "", "note": "廚房烹調、出餐通報與食材準備" },
+    { "id": "vs_front", "ja": "フロント", "kana": "ふろんと", "zh": "櫃檯接待同仁", "cat": "職稱", "imageUrl": "", "note": "大廳入住登記、退房結帳與諮詢" },
+    { "id": "vs_senpai", "ja": "<ruby>先輩<rt>せんぱい</rt></ruby>", "kana": "せんぱい", "zh": "前輩", "cat": "職稱", "imageUrl": "", "note": "資深同仁、指導者" },
 
     // ── 💬 對話類 ──
     {
@@ -3750,8 +3762,8 @@ function loadAppData() {
       return data;
     }
     const data = JSON.parse(raw);
-    // 嚴格校驗：若 tabs 不完整或 vocabSop 未包含最新壽司漢字標音/餐具分類/外國人標記，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
+    // 嚴格校驗：若 tabs 不完整或 vocabSop 未包含最新真實班表名單/餐具分類/外國人標記，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined)) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
