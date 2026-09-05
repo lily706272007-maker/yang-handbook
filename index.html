@@ -1742,11 +1742,14 @@
     <div class="form-group">
       <label>五大分類標籤</label>
       <select id="vocab-cat-field">
-        <option value="菜餚類">🍱 菜餚類（壽司、生魚片、天婦羅、和牛、炸雞、拉麵等）</option>
-        <option value="酒水飲品類">🥤 酒水飲品類（高湯、拉麵湯頭、飲品等）</option>
-        <option value="名字類">👤 名字類（廚房人員、傳菜人員、主管等姓名稱呼）</option>
-        <option value="工具類">🧹 工具類（推車、布巾、無線電、抹布、托盤、冰箱、保溫庫等）</option>
-        <option value="聊天類">💬 聊天類（日常應答、了解です、追加確認等）</option>
+        <option value="食材">🥦 食材（蔬菜、根莖、肉類、海鮮、蛋、調味料等原型食材）</option>
+        <option value="餐點">🍱 餐點（壽司、生魚片、天婦羅、和牛、炸雞、拉麵等）</option>
+        <option value="酒水">🥤 酒水（名酒、茶飲、無酒精飲品、水等）</option>
+        <option value="餐具">🍽️ 餐具（餐盤、碗、筷子、夾子、杯子等）</option>
+        <option value="工具">🧹 工具（推車、布巾、無線電、抹布、托盤、冰箱等）</option>
+        <option value="名字">👤 名字（廚房人員、傳菜人員、主管等姓名稱呼）</option>
+        <option value="職稱">💼 職稱（支配人、正社員、派遣、料理長等）</option>
+        <option value="對話">💬 對話（日常應答、了解です、追加確認等）</option>
       </select>
     </div>
     <div class="form-group">
@@ -2327,7 +2330,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v65';
+const STORAGE_KEY = 'yang_runner_handbook_v66';
 
 function createRealRunnerData() {
   return {
@@ -3642,6 +3645,118 @@ function createRealRunnerData() {
     }
   ],
   "vocabSop": [
+    // ── 🥦 原型食材與調味料類 (採購・菜市場買菜・原型食物與烹飪調料 100% 配對館內菜色) ──
+    // 🥦 原型蔬菜與根莖類
+    { "id": "vi_broccoli", "ja": "ブロッコリー", "zh": "綠花椰菜（青花菜）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・沙拉吧、溫野菜、培根炒青花菜必備食材" },
+    { "id": "vi_cauliflower", "ja": "カリフラワー", "zh": "白花椰菜（花菜）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・溫野菜、彩蔬煮配菜" },
+    { "id": "vi_egg", "ja": "<ruby>卵<rt>たまご</rt></ruby>", "zh": "雞蛋（生雞蛋）", "cat": "食材", "imageUrl": "", "note": "原型食材・厚蛋捲(だし巻き玉子)、溫泉蛋、美式炒蛋、茶碗蒸核心原料" },
+    { "id": "vi_daikon", "ja": "<ruby>大根<rt>だいこん</rt></ruby>", "zh": "白蘿蔔", "cat": "食材", "imageUrl": "", "note": "原型根莖・大根泥(蘿蔔泥)、關東煮、味噌湯、日式醃蘿蔔" },
+    { "id": "vi_ninjin", "ja": "にんじん / <ruby>人参<rt>にんじん</rt></ruby>", "zh": "紅蘿蔔（胡蘿蔔）", "cat": "食材", "imageUrl": "./photos/IMG_0963.jpg", "note": "原型根莖・沙拉吧切絲、彩蔬煮、燉牛肉、高湯熬煮" },
+    { "id": "vi_renkon", "ja": "<ruby>蓮根<rt>れんこん</rt></ruby>", "zh": "蓮藕", "cat": "食材", "imageUrl": "./photos/IMG_0867.jpg", "note": "原型根莖・熊本名物辛子蓮藕、彩蔬煮、天婦羅" },
+    { "id": "vi_tamanegi", "ja": "<ruby>玉<rt>たま</rt></ruby>ねぎ", "zh": "洋蔥", "cat": "食材", "imageUrl": "", "note": "原型根莖・牛丼(朝牛)、牛肉咖哩、漢堡排、洋蔥沙拉醬" },
+    { "id": "vi_naganegi", "ja": "<ruby>長<rt>なが</rt></ruby>ネギ", "zh": "日本大蔥（長蔥 / 白蔥）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・烤肉串、火鍋、拉麵蔥絲、煮魚去腥" },
+    { "id": "vi_negi", "ja": "ネギ / <ruby>小葱<rt>こねぎ</rt></ruby>", "zh": "青蔥（細蔥 / 蔥花）", "cat": "食材", "imageUrl": "", "note": "辛香蔬菜・生魚片佐料、拉麵蔥花、味噌湯" },
+    { "id": "vi_kyabetsu", "ja": "キャベツ", "zh": "高麗菜（甘藍菜）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・炸物配高麗菜絲、涮涮鍋、熱炒" },
+    { "id": "vi_murasaki_kyabetsu", "ja": "<ruby>紫<rt>むらさき</rt></ruby>キャベツ", "zh": "紫甘藍（紫高麗菜）", "cat": "食材", "imageUrl": "./photos/IMG_0959.jpg", "note": "原型蔬菜・沙拉吧深紫色甘藍切絲" },
+    { "id": "vi_minitomato", "ja": "ミニトマト", "zh": "小番茄（聖女番茄）", "cat": "食材", "imageUrl": "./photos/IMG_0960.jpg", "note": "原型蔬果・沙拉吧鮮紅多汁小番茄" },
+    { "id": "vi_tomato", "ja": "トマト", "zh": "大番茄", "cat": "食材", "imageUrl": "", "note": "原型蔬果・冷盤番茄切片、義式料理" },
+    { "id": "vi_kyuri", "ja": "<ruby>胡瓜<rt>きゅうり</rt></ruby>", "zh": "小黃瓜", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・沙拉吧小黃瓜片、淺漬小黃瓜、壽司細卷" },
+    { "id": "vi_retasu", "ja": "レタス", "zh": "美生菜（結球萵苣）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・沙拉吧底菜、冷盤生菜" },
+    { "id": "vi_babyleaf", "ja": "ベビーリーフ", "zh": "嫩葉生菜（綜合幼葉）", "cat": "食材", "imageUrl": "./photos/IMG_0961.jpg", "note": "原型蔬菜・歐式沙拉吧綜合嫩葉" },
+    { "id": "vi_toumyou", "ja": "<ruby>豆苗<rt>とうみょう</rt></ruby>", "zh": "豆苗", "cat": "食材", "imageUrl": "./photos/IMG_0964.jpg", "note": "原型蔬菜・翠綠豆苗，沙拉吧與熱炒清炒" },
+    { "id": "vi_hourensou", "ja": "ほうれん<ruby>草<rt>そう</rt></ruby>", "zh": "菠菜", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・朝食胡麻拌菠菜、涼拌菠菜浸出汁、味噌湯" },
+    { "id": "vi_chingensai", "ja": "<ruby>青梗菜<rt>チンゲンサイ</rt></ruby>", "zh": "青江菜", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・涼拌青江菜、中華熱炒" },
+    { "id": "vi_mizuna", "ja": "<ruby>水菜<rt>みずな</rt></ruby>", "zh": "水菜（日本水菜）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・龍膽豬涮涮鍋、和風生菜沙拉" },
+    { "id": "vi_hakusai", "ja": "<ruby>白菜<rt>はくさい</rt></ruby>", "zh": "大白菜", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・冬季火鍋鍋物、白菜漬物、日式煮物" },
+    { "id": "vi_nasu", "ja": "<ruby>茄子<rt>なす</rt></ruby>", "zh": "茄子", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・赤牛鐵板時蔬配菜、麻婆茄子、田樂烤茄子" },
+    { "id": "vi_papurika", "ja": "パプリカ", "zh": "彩椒（甜椒）", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・赤牛鐵板配菜、彩蔬甘辛煮（紅/黃甜椒）" },
+    { "id": "vi_pi-man", "ja": "ピーマン", "zh": "青椒", "cat": "食材", "imageUrl": "", "note": "原型蔬菜・天婦羅炸青椒、日式青椒肉絲" },
+    { "id": "vi_ingen", "ja": "いんげん / <ruby>隠元豆<rt>いんげんまめ</rt></ruby>", "zh": "四季豆（敏豆）", "cat": "食材", "imageUrl": "./photos/IMG_0945.jpg", "note": "原型豆菜・油豆腐煮四季豆、彩蔬煮配菜" },
+    { "id": "vi_jagaimo", "ja": "じゃがいも", "zh": "馬鈴薯（洋芋）", "cat": "食材", "imageUrl": "", "note": "原型根莖・牛肉咖哩、馬鈴薯燉肉(肉じゃが)、洋芋沙拉" },
+    { "id": "vi_satsumaimo", "ja": "さつまいも", "zh": "地瓜（番薯）", "cat": "食材", "imageUrl": "", "note": "原型根莖・地瓜天婦羅、日式甘露煮" },
+    { "id": "vi_satoimo", "ja": "<ruby>里芋<rt>さといも</rt></ruby>", "zh": "里芋（小芋頭）", "cat": "食材", "imageUrl": "", "note": "原型根莖・筑前煮、日式鄉土煮物" },
+    { "id": "vi_kikuimo", "ja": "<ruby>菊芋<rt>きくいも</rt></ruby>", "zh": "菊芋", "cat": "食材", "imageUrl": "./photos/IMG_0955.jpg", "note": "原型根莖・沙拉吧金黃菊芋薄片脆片" },
+    { "id": "vi_gobou", "ja": "<ruby>牛蒡<rt>ごぼう</rt></ruby>", "zh": "牛蒡", "cat": "食材", "imageUrl": "", "note": "原型根莖・金平牛蒡、豬肉蔬菜湯(豚汁)" },
+    { "id": "vi_takenoko", "ja": "<ruby>筍<rt>たけのこ</rt></ruby>", "zh": "竹筍（筍子）", "cat": "食材", "imageUrl": "", "note": "原型根莖・筑前煮、拉麵筍乾原料(メンマ)" },
+    { "id": "vi_kabocha", "ja": "<ruby>南瓜<rt>かぼちゃ</rt></ruby>", "zh": "南瓜", "cat": "食材", "imageUrl": "", "note": "原型瓜類・南瓜甘露煮、南瓜天婦羅" },
+    { "id": "vi_takana", "ja": "<ruby>高菜<rt>たかな</rt></ruby>", "zh": "高菜（芥菜）", "cat": "食材", "imageUrl": "./photos/IMG_0947.jpg", "note": "原型蔬菜・熊本阿蘇特產高菜，製作高菜炒飯與漬物" },
+    { "id": "vi_sweetcorn", "ja": "とうもろこし / スイートコーン", "zh": "甜玉米（玉米粒）", "cat": "食材", "imageUrl": "./photos/IMG_0958.jpg", "note": "原型食材・沙拉吧鮮黃甜玉米粒、天婦羅玉米餅" },
+    { "id": "vi_konnyaku", "ja": "こんにゃく", "zh": "蒟蒻（黑/白蒟蒻塊）", "cat": "食材", "imageUrl": "", "note": "原型食材・筑前煮、彩蔬煮(IMG_0840)、關東煮" },
+
+    // 🍄 菇蕈類
+    { "id": "vi_shiitake", "ja": "<ruby>椎茸<rt>しいたけ</rt></ruby>", "zh": "生香菇 / 乾香菇", "cat": "食材", "imageUrl": "", "note": "原型菇類・筑前煮、茶碗蒸、天婦羅、高湯提鮮" },
+    { "id": "vi_enoki", "ja": "えのき<ruby>茸<rt>たけ</rt></ruby>", "zh": "金針菇", "cat": "食材", "imageUrl": "./photos/IMG_0946.jpg", "note": "原型菇類・朝食胡麻拌金針菇、火鍋鍋物" },
+    { "id": "vi_shimeji", "ja": "しめじ", "zh": "鴻喜菇", "cat": "食材", "imageUrl": "", "note": "原型菇類・和風義大利麵、時蔬炒菇、日式炊飯" },
+    { "id": "vi_eringi", "ja": "エリンギ", "zh": "杏鮑菇", "cat": "食材", "imageUrl": "", "note": "原型菇類・鐵板奶油香煎、燒烤時蔬" },
+    { "id": "vi_maitake", "ja": "<ruby>舞茸<rt>まいたけ</rt></ruby>", "zh": "舞菇", "cat": "食材", "imageUrl": "", "note": "原型菇類・舞菇天婦羅、舞菇炊飯" },
+
+    // 🥩 肉類與家禽
+    { "id": "vi_gyuniku", "ja": "<ruby>牛肉<rt>ぎゅうにく</rt></ruby>", "zh": "牛肉（和牛肉片/牛肉塊）", "cat": "食材", "imageUrl": "./photos/akaushi.jpg", "note": "原型肉類・阿蘇赤牛厚切片、牛丼(朝牛)、牛肉咖哩" },
+    { "id": "vi_butaniku", "ja": "<ruby>豚肉<rt>ぶたにく</rt></ruby>", "zh": "豬肉（豬五花/梅花肉片）", "cat": "食材", "imageUrl": "./photos/IMG_0952.jpg", "note": "原型肉類・熊本龍膽豬涮涮鍋、豬肉蔬菜捲(IMG_0966)、拉麵叉燒" },
+    { "id": "vi_toriniku", "ja": "<ruby>鶏肉<rt>とりにく</rt></ruby>", "zh": "雞肉（雞腿肉/雞胸肉）", "cat": "食材", "imageUrl": "./photos/IMG_0724.jpg", "note": "原型肉類・南蠻炸雞、日式唐揚炸雞塊、筑前煮" },
+    { "id": "vi_baniku", "ja": "<ruby>馬肉<rt>ばにく</rt></ruby>", "zh": "馬肉（生鮮馬肉）", "cat": "食材", "imageUrl": "./photos/basashi.jpg", "note": "原型肉類・熊本頂級生馬肉刺身(馬刺し)" },
+    { "id": "vi_hikiniku", "ja": "ひき<ruby>肉<rt>にく</rt></ruby>", "zh": "絞肉（牛豬混合絞肉/豬絞肉）", "cat": "食材", "imageUrl": "./photos/IMG_0967.jpg", "note": "肉類原料・麻婆豆腐、肉燒賣、日式漢堡排" },
+    { "id": "vi_bacon", "ja": "ベーコン", "zh": "培根（培根肉片）", "cat": "食材", "imageUrl": "", "note": "加工肉品・培根炒青花菜、朝食西式早餐" },
+    { "id": "vi_wiener_raw", "ja": "ウインナー / ソーセージ", "zh": "維也納香腸（德式香腸）", "cat": "食材", "imageUrl": "", "note": "加工肉品・朝食水煮香腸、煎香腸" },
+
+    // 🐟 海鮮魚介類
+    { "id": "vi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "鮮蝦（生蝦 / 草蝦 / 蝦仁）", "cat": "食材", "imageUrl": "./photos/IMG_0874.jpg", "note": "原型海鮮・炸蝦排(IMG_0975)、烤蝦、海老握壽司" },
+    { "id": "vi_salmon", "ja": "サーモン / <ruby>鮭<rt>さけ</rt></ruby>", "zh": "鮭魚（生鮭魚排 / 鮭魚肉）", "cat": "食材", "imageUrl": "./photos/IMG_0871.jpg", "note": "原型海鮮・生鮭魚握壽司、自製醋漬鮭魚(IMG_0944)、鹽烤鮭魚" },
+    { "id": "vi_maguro", "ja": "まぐろ / <ruby>本鮪<rt>ほんまぐろ</rt></ruby>", "zh": "鮪魚（黑鮪魚生魚肉）", "cat": "食材", "imageUrl": "./photos/IMG_0870.jpg", "note": "原型海鮮・本鮪握壽司、鮪魚生魚片" },
+    { "id": "vi_tai", "ja": "<ruby>鯛<rt>たい</rt></ruby> / <ruby>真鯛<rt>まだい</rt></ruby>", "zh": "鯛魚（真鯛魚片）", "cat": "食材", "imageUrl": "", "note": "原型海鮮・鯛魚生魚片、真鯛茶泡飯、鹽烤真鯛" },
+    { "id": "vi_katsuo", "ja": "<ruby>鰹<rt>かつお</rt></ruby>", "zh": "鰹魚", "cat": "食材", "imageUrl": "./photos/IMG_0835 2.jpg", "note": "原型海鮮・鰹魚半敲燒刺身(たたき)、柴魚高湯原料" },
+    { "id": "vi_aji", "ja": "<ruby>鰺<rt>あじ</rt></ruby>", "zh": "竹莢魚（巴攏）", "cat": "食材", "imageUrl": "./photos/IMG_0974.jpg", "note": "原型海鮮・甘酢南蠻漬竹莢魚、竹莢魚壽司" },
+    { "id": "vi_saba", "ja": "<ruby>鯖<rt>さば</rt></ruby>", "zh": "鯖魚（青花魚）", "cat": "食材", "imageUrl": "", "note": "原型海鮮・朝食炭烤鯖魚、味噌煮鯖魚" },
+    { "id": "vi_ika", "ja": "<ruby>烏賊<rt>いか</rt></ruby>", "zh": "烏賊（花枝 / 魷魚）", "cat": "食材", "imageUrl": "./photos/IMG_0872.jpg", "note": "原型海鮮・烏賊握壽司、烏賊拌納豆" },
+    { "id": "vi_asari", "ja": "<ruby>浅利<rt>あさり</rt></ruby>", "zh": "淺蜊（蛤蜊 / 文蛤）", "cat": "食材", "imageUrl": "./photos/IMG_0950.jpg", "note": "原型海鮮・淺蜊味噌湯、清酒生薑蒸蛤蜊(IMG_0976)" },
+    { "id": "vi_unagi", "ja": "<ruby>鰻<rt>うなぎ</rt></ruby>", "zh": "鰻魚", "cat": "食材", "imageUrl": "./photos/IMG_0875.jpg", "note": "原型海鮮・蒲燒鰻魚握壽司、鰻魚飯" },
+    { "id": "vi_mentaiko_raw", "ja": "<ruby>明太子<rt>めんたいこ</rt></ruby> / たらこ", "zh": "明太子（醃鱈魚子）", "cat": "食材", "imageUrl": "", "note": "水產食材・朝食名物明太子、明太子義大利麵" },
+
+    // 🌾 大豆、米麥穀物與基礎粉類
+    { "id": "vi_tofu", "ja": "<ruby>豆腐<rt>どうふ</rt></ruby>（<ruby>木綿<rt>もめん</rt></ruby>/<ruby>絹<rt>きぬ</rt></ruby>）", "zh": "豆腐（木棉豆腐 / 嫩豆腐）", "cat": "食材", "imageUrl": "", "note": "大豆製品・竹簍冷豆腐、麻婆豆腐、味噌湯" },
+    { "id": "vi_aburaage", "ja": "<ruby>油揚<rt>あぶらあ</rt></ruby>げ", "zh": "油豆腐皮（日式炸豆皮）", "cat": "食材", "imageUrl": "", "note": "大豆製品・味噌湯配料、烏龍麵豆皮、雁擬煮(IMG_0945)" },
+    { "id": "vi_natto", "ja": "<ruby>納豆<rt>なっとう</rt></ruby>", "zh": "納豆", "cat": "食材", "imageUrl": "", "note": "大豆製品・朝食納豆、烏賊納豆小菜" },
+    { "id": "vi_kome", "ja": "<ruby>米<rt>こめ</rt></ruby> / <ruby>白米<rt>はくまい</rt></ruby>", "zh": "白米（生米 / 日本米）", "cat": "食材", "imageUrl": "", "note": "主食原料・壽司醋飯、白飯、日式白粥(お粥)" },
+    { "id": "vi_komugiko", "ja": "<ruby>小麦粉<rt>こむぎこ</rt></ruby> / <ruby>薄力粉<rt>はくりきこ</rt></ruby>", "zh": "麵粉（低筋小麥粉）", "cat": "食材", "imageUrl": "", "note": "粉類原料・天婦羅麵衣、炸蝦排裹粉、烘焙蛋糕" },
+    { "id": "vi_katakuriko", "ja": "<ruby>片栗粉<rt>かたくりこ</rt></ruby>", "zh": "片栗粉（太白粉 / 馬鈴薯澱粉）", "cat": "食材", "imageUrl": "", "note": "粉類原料・唐揚炸雞裹粉、麻婆豆腐芡汁勾芡、甘辛煮" },
+    { "id": "vi_panko", "ja": "パン<ruby>粉<rt>こ</rt></ruby>", "zh": "麵包粉", "cat": "食材", "imageUrl": "", "note": "粉類原料・炸蝦排香煎(IMG_0975)、日式炸豬排酥脆麵衣" },
+    { "id": "vi_konbu", "ja": "<ruby>昆布<rt>こんぶ</rt></ruby>", "zh": "乾昆布（海帶）", "cat": "食材", "imageUrl": "", "note": "乾貨食材・熬煮日式出汁高湯核心靈魂食材" },
+    { "id": "vi_katsuobushi", "ja": "<ruby>鰹節<rt>かつおぶし</rt></ruby>", "zh": "柴魚片（鰹魚節）", "cat": "食材", "imageUrl": "", "note": "乾貨食材・高湯熬煮、涼拌豆腐與時蔬撒料" },
+    { "id": "vi_nori", "ja": "<ruby>海苔<rt>のり</rt></ruby>", "zh": "海苔（壽司烤海苔片）", "cat": "食材", "imageUrl": "", "note": "乾貨食材・壽司卷、手卷壽司、拉麵配料" },
+    { "id": "vi_goma", "ja": "<ruby>胡麻<rt>ごま</rt></ruby>（<ruby>白<rt>しろ</rt></ruby>/<ruby>黒<rt>くろ</rt></ruby>）", "zh": "芝麻（白芝麻 / 黑芝麻）", "cat": "食材", "imageUrl": "./photos/IMG_0721.jpg", "note": "乾貨調味・胡麻豆腐、涼拌金針菇胡麻(IMG_0946)" },
+
+    // 🌿 辛香料、佐料與柑橘香草
+    { "id": "vi_shoga", "ja": "<ruby>生姜<rt>しょうが</rt></ruby>", "zh": "生薑（老薑 / 嫩薑）", "cat": "食材", "imageUrl": "./photos/IMG_0976.jpg", "note": "辛香食材・薑汁蒸淺蜊、生馬肉生薑泥、魚肉去腥" },
+    { "id": "vi_ninniku", "ja": "にんにく / <ruby>大蒜<rt>にんにく</rt></ruby>", "zh": "大蒜（大蒜瓣 / 蒜泥）", "cat": "食材", "imageUrl": "", "note": "辛香食材・生馬肉蒜泥佐料、拉麵蒜香油、炸雞醃料" },
+    { "id": "vi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵（現磨生芥末 / 哇沙比）", "cat": "食材", "imageUrl": "./photos/IMG_0933.jpg", "note": "辛香食材・壽司台現磨山葵、生魚片蘸料" },
+    { "id": "vi_karashi", "ja": "<ruby>辛子<rt>からし</rt></ruby> / <ruby>和辛子<rt>わがらし</rt></ruby>", "zh": "黃芥末（和辛子）", "cat": "食材", "imageUrl": "./photos/IMG_0867.jpg", "note": "辛香食材・辛子蓮藕餡料、肉燒賣沾醬(IMG_0967)" },
+    { "id": "vi_lemon", "ja": "レモン", "zh": "檸檬", "cat": "食材", "imageUrl": "", "note": "新鮮水果・炸雞塊擠汁解膩、生馬肉擺盤佐料、調酒" },
+    { "id": "vi_yuzu", "ja": "<ruby>柚子<rt>ゆず</rt></ruby>", "zh": "柚子（日本香柚）", "cat": "食材", "imageUrl": "./photos/IMG_0886.jpg", "note": "新鮮水果・柚子胡椒醬、漬物香氣、白岳柚子酒" },
+    { "id": "vi_ooba", "ja": "<ruby>大葉<rt>おおば</rt></ruby> / <ruby>紫蘇<rt>しそ</rt></ruby>", "zh": "青紫蘇葉（大葉）", "cat": "食材", "imageUrl": "", "note": "新鮮香草・刺身生魚片鋪底殺菌提香、天婦羅炸大葉" },
+
+    // 🧂 市場採購必買 調味料、油脂與料理醬汁
+    { "id": "vi_shoyu", "ja": "<ruby>醤油<rt>しょうゆ</rt></ruby>", "zh": "醬油（濃口醬油）", "cat": "食材", "imageUrl": "./photos/IMG_0877.jpg", "note": "核心調味・壽司刺身蘸醬、廚房各式燉煮、紅燒基礎" },
+    { "id": "vi_usukuchi", "ja": "<ruby>薄口醤油<rt>うすくちしょうゆ</rt></ruby>", "zh": "淡口醬油（薄口醬油）", "cat": "食材", "imageUrl": "", "note": "核心調味・日式煮物、高湯、茶碗蒸專用（保持食材原本清澈色澤）" },
+    { "id": "vi_mirin", "ja": "みりん / <ruby>本<rt>ほん</rt></ruby>みりん", "zh": "味醂（日式甜糯米料酒）", "cat": "食材", "imageUrl": "", "note": "核心調味・照燒醬、牛丼、厚蛋捲、甘辛彩蔬煮(IMG_0840)" },
+    { "id": "vi_ryorishu", "ja": "<ruby>料理酒<rt>りょうりしゅ</rt></ruby> / <ruby>清酒<rt>せいしゅ</rt></ruby>", "zh": "料理酒（烹飪米酒）", "cat": "食材", "imageUrl": "./photos/IMG_0976.jpg", "note": "核心調味・清酒蒸蛤蜊、肉類魚類去腥增香" },
+    { "id": "vi_satou", "ja": "<ruby>砂糖<rt>さとう</rt></ruby> / <ruby>上白糖<rt>じょうはくとう</rt></ruby>", "zh": "砂糖（日式上白糖 / 白糖）", "cat": "食材", "imageUrl": "", "note": "核心調味・壽司醋調配、厚蛋捲、甜辛煮、甜點烘焙" },
+    { "id": "vi_shio", "ja": "<ruby>塩<rt>しお</rt></ruby> / <ruby>粗塩<rt>あらじお</rt></ruby>", "zh": "食鹽（精鹽 / 粗海鹽）", "cat": "食材", "imageUrl": "", "note": "核心調味・食材脫水、烤魚抹鹽、各道菜品基本調味" },
+    { "id": "vi_su", "ja": "<ruby>酢<rt>す</rt></ruby> / <ruby>米酢<rt>こめず</rt></ruby>", "zh": "釀造醋（壽司米醋 / 穀物醋）", "cat": "食材", "imageUrl": "./photos/IMG_0944.jpg", "note": "核心調味・南蠻漬魚甘醋(IMG_0974)、壽司醋飯、自製醃漬物" },
+    { "id": "vi_miso", "ja": "<ruby>味噌<rt>みそ</rt></ruby>", "zh": "味噌（日式黃豆味噌 / 赤味噌）", "cat": "食材", "imageUrl": "./photos/IMG_0950.jpg", "note": "核心調味・淺蜊味噌湯、豬肉味噌湯、味噌煮魚" },
+    { "id": "vi_dashi_moto", "ja": "<ruby>出汁<rt>だし</rt></ruby> / だしの<ruby>素<rt>もと</rt></ruby>", "zh": "日式出汁高湯粉（鰹魚昆布高湯精）", "cat": "食材", "imageUrl": "./photos/IMG_0973.jpg", "note": "核心調味・高湯厚煎蛋捲、煮物、烏龍麵湯底之靈魂" },
+    { "id": "vi_sarada_yu", "ja": "サラダ<ruby>油<rt>あぶら</rt></ruby>", "zh": "沙拉油（食用植物油）", "cat": "食材", "imageUrl": "", "note": "烹調油脂・炸天婦羅、唐揚炸雞(IMG_0723)、日常煎炒" },
+    { "id": "vi_goma_abura", "ja": "ごま<ruby>油<rt>あぶら</rt></ruby>", "zh": "芝麻香油（胡麻油）", "cat": "食材", "imageUrl": "", "note": "烹調油脂・涼拌時蔬、麻婆豆腐(IMG_0726)、拉麵風味提香" },
+    { "id": "vi_olive_oil", "ja": "オリーブオイル", "zh": "橄欖油", "cat": "食材", "imageUrl": "", "note": "烹調油脂・歐式生菜沙拉吧油醋醬、義大利麵" },
+    { "id": "vi_butter", "ja": "バター", "zh": "奶油（無鹽奶油 / 發酵奶油）", "cat": "食材", "imageUrl": "", "note": "烹調油脂・時蔬香煎奶油、西式早餐吐司配料" },
+    { "id": "vi_mayonnaise", "ja": "マヨネーズ", "zh": "美乃滋（日式美乃滋）", "cat": "食材", "imageUrl": "./photos/IMG_0724.jpg", "note": "調味醬料・南蠻炸雞專用塔塔醬基底、沙拉吧" },
+    { "id": "vi_ketchup", "ja": "ケチャップ", "zh": "番茄醬", "cat": "食材", "imageUrl": "", "note": "調味醬料・洋食蛋包飯、美式炸物沾醬" },
+    { "id": "vi_ponzu", "ja": "ポン<ruby>酢<rt>ず</rt></ruby>", "zh": "柑橘醋（椪醋）", "cat": "食材", "imageUrl": "./photos/IMG_0952.jpg", "note": "沾醬醬汁・熊本龍膽豬涮涮鍋佐醬、鰹魚刺身佐醬" },
+    { "id": "vi_worcester_sauce", "ja": "ウスターソース / <ruby>中濃<rt>ちゅうのう</rt></ruby>ソース", "zh": "伍斯特醬 / 日式炸豬排沾醬（中濃醬）", "cat": "食材", "imageUrl": "", "note": "沾醬醬汁・炸蝦排、可樂餅、炸豬排專用淋醬" },
+    { "id": "vi_rayu", "ja": "ラー<ruby>油<rt>ゆ</rt></ruby>", "zh": "辣油", "cat": "食材", "imageUrl": "", "note": "辛辣調料・麻婆豆腐、豚骨拉麵辛香調味" },
+    { "id": "vi_toubanjan", "ja": "<ruby>豆板醤<rt>トウバンジャン</rt></ruby>", "zh": "豆瓣醬（辣豆瓣醬）", "cat": "食材", "imageUrl": "./photos/IMG_0726.jpg", "note": "中華調料・麻婆豆腐核心辛香調味" },
+    { "id": "vi_koshou", "ja": "<ruby>胡椒<rt>こしょう</rt></ruby> / ブラックペッパー", "zh": "胡椒粉（黑胡椒 / 白胡椒）", "cat": "食材", "imageUrl": "", "note": "辛香調料・肉類去腥醃漬、熱炒調味" },
+    { "id": "vi_shichimi", "ja": "<ruby>七味唐辛子<rt>しちみとうがらし</rt></ruby>", "zh": "七味唐辛子（七味粉）", "cat": "食材", "imageUrl": "", "note": "日式辛香・牛丼(朝牛)、豚骨拉麵、蕎麥麵撒料" },
+
     // ── 🍽️ 餐具與醬料調味類 (現場器皿・調料瓶・實拍照配對) ──
             { "id": "vt_fork", "ja": "<ruby>フォーク<rt>fo-ku</rt></ruby>", "zh": "叉子", "cat": "餐具", "imageUrl": "", "note": "西餐與甜點用叉子" },
         { "id": "vt_soy_dish", "ja": "<ruby>醤油皿<rt>しょうゆざら</rt></ruby>", "zh": "醬油小碟", "cat": "餐具", "imageUrl": "./photos/IMG_0877.jpg", "note": "壽司台旁盛裝醬油專用小碟" },
@@ -4419,8 +4534,8 @@ function loadAppData() {
       return data;
     }
     const data = JSON.parse(raw);
-    // 嚴格校驗：若 tabs 不完整或未包含最新同事平級指示/撤盤情境/最新班表名單，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined) || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.vocabSop.some(v => v.id === 'vc_bs_1')) {
+    // 嚴格校驗：若 tabs 不完整或未包含最新食材分類/同事平級指示/撤盤情境/最新班表名單，強制以最新完整資料庫無痛覆蓋
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined) || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.vocabSop.some(v => v.id === 'vc_bs_1')) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
@@ -5214,12 +5329,14 @@ function renderSopContent() {
   const sushiVocabs     = allVocabs.filter(v => v.cat === '餐點' && sushiIds.includes(v.id));
   const dessertVocabs   = allVocabs.filter(v => v.cat === '餐點' && dessertIds.includes(v.id));
   const foodVocabs      = allVocabs.filter(v => v.cat === '餐點' && !sushiIds.includes(v.id) && !dessertIds.includes(v.id));
+  const ingredientVocabs= allVocabs.filter(v => v.cat === '食材');
   const tablewareVocabs = allVocabs.filter(v => v.cat === '餐具');
   const drinkVocabs     = allVocabs.filter(v => v.cat === '酒水');
 
   // 決定本頁要在速查中額外加入的分組
   const extraGroups = [];
   if (tabId === 'tab_runner_all' || tabId === 'tab_order_sop') {
+    extraGroups.push({ title: '🥦 原型食材與調味料', items: ingredientVocabs });
     extraGroups.push({ title: '🍽️ 現場餐具', items: tablewareVocabs });
     extraGroups.push({ title: '🍱 餐點', items: foodVocabs });
     extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
@@ -5319,9 +5436,9 @@ function renderVocabPage(type) {
     ? [...AppData.vocabSop] 
     : [...createRealRunnerData().vocabSop];
 
-  // Tab 順序：名字 → 職稱 → 工具 → 餐點 → 酒水 → 對話
-  const cats = ['全部', '餐具', '工具', '餐點', '酒水', '名字', '職稱', '對話'];
-  const catIcons = { '全部': '🔍', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
+  // Tab 順序：食材 → 餐點 → 酒水 → 餐具 → 工具 → 名字 → 職稱 → 對話
+  const cats = ['全部', '食材', '餐點', '酒水', '餐具', '工具', '名字', '職稱', '對話'];
+  const catIcons = { '全部': '🔍', '食材': '🥦', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
 
   filterBar.innerHTML = '';
   cats.forEach(cat => {
@@ -5397,10 +5514,10 @@ function renderVocabPage(type) {
     return;
   }
 
-  // ── 2. 「全部」：按分類分組，各組有 title，順序：名字→職稱→工具→餐點→酒水→對話
+  // ── 2. 「全部」：按分類分組，各組有 title，順序：食材→餐點→酒水→餐具→工具→名字→職稱→對話
   if (currentFilter === '全部') {
-    const groupOrder = ['餐具', '工具', '餐點', '酒水', '名字', '職稱', '對話'];
-    const groupIcons = { '全部': '🔍', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
+    const groupOrder = ['食材', '餐點', '酒水', '餐具', '工具', '名字', '職稱', '對話'];
+    const groupIcons = { '全部': '🔍', '食材': '🥦', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
     let allHtml = '';
 
     groupOrder.forEach(cat => {
