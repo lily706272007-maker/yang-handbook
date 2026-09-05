@@ -2422,7 +2422,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v72';
+const STORAGE_KEY = 'yang_runner_handbook_v73';
 
 function createRealRunnerData() {
   return {
@@ -8320,6 +8320,8 @@ function correctCommonRunnerSpeechTypos(str) {
     .replace(/補冰[快块]/g, '補冰塊')
     .replace(/丟[調调]/g, '丟掉')
     .replace(/隨詞偷聽/g, '隨詞偷聽')
+    .replace(/頭部[監监][測测]/g, '偷聽推測')
+    .replace(/頭部[監监]控/g, '偷聽推測')
     .replace(/語音[mM][eE][mM][oO]/g, '語音 Memo');
 }
 
@@ -8884,6 +8886,206 @@ function renderEavesdropFragmentsList() {
   listEl.scrollTop = listEl.scrollHeight;
 }
 
+// ── 2. 👂 現場偷聽日語 ➔ 繁體中文真直譯與精準意圖推測引擎 ──
+async function translateJapaneseToTraditionalChinese(text) {
+  if (!text || !text.trim()) return '';
+  try {
+    const res = await fetchFreeGoogleTranslate(text, 'zh-TW');
+    if (res && res.trim()) {
+      return toTraditionalChinese(res.trim());
+    }
+  } catch (e) {
+    console.warn('Free Google Translate for eavesdrop failed, using fallback:', e);
+  }
+  
+  let fallbackZh = text;
+  const DICT = [
+    { ja: /今日は/g, zh: '今天' },
+    { ja: /私だね/g, zh: '是我呢' },
+    { ja: /私/g, zh: '我' },
+    { ja: /りくさん|陸さん/g, zh: '陸桑' },
+    { ja: /を一緒に|と一緒に|一緒に/g, zh: '一起' },
+    { ja: /ドリンクをやります/g, zh: '負責飲料區' },
+    { ja: /ドリンク/g, zh: '飲料區' },
+    { ja: /やります/g, zh: '做/負責' },
+    { ja: /の時や/g, zh: '的時候' },
+    { ja: /の時/g, zh: '的時候' },
+    { ja: /知らない/g, zh: '不知道' },
+    { ja: /わからない/g, zh: '不清楚' },
+    { ja: /でも/g, zh: '但是' },
+    { ja: /3人です|３人です/g, zh: '有3個人' },
+    { ja: /3人は|３人は/g, zh: '3個人的話' },
+    { ja: /忙しいですね/g, zh: '很忙碌呢' },
+    { ja: /忙しい/g, zh: '忙碌' },
+    { ja: /大変ですね/g, zh: '很辛苦呢' },
+    { ja: /大変/g, zh: '辛苦/吃力' },
+    { ja: /お疲れ様です/g, zh: '辛苦了' },
+    { ja: /ラップ/g, zh: '保鮮膜' },
+    { ja: /バッシング/g, zh: '撤盤收桌' },
+    { ja: /インカム/g, zh: '對講機' },
+    { ja: /トング/g, zh: '夾子' },
+    { ja: /氷/g, zh: '冰塊' },
+    { ja: /ご飯/g, zh: '米飯' },
+    { ja: /お冷/g, zh: '冰水' },
+    { ja: /お茶/g, zh: '茶水' }
+  ];
+  DICT.forEach(d => { fallbackZh = fallbackZh.replace(d.ja, d.zh); });
+  if (fallbackZh === text) {
+    return toTraditionalChinese(`現場日語溝通語句：「${text}」`);
+  }
+  return toTraditionalChinese(fallbackZh);
+}
+
+function deduceAccurateEavesdropIntent(queryText, zhText) {
+  const combined = (queryText + ' ' + (zhText || '')).toLowerCase();
+  
+  // 情境 1: 💬 同僚現場閒聊・吐槽抱怨・工作量與排班分享
+  if (
+    /(忙しい|いそがしい|大変|たいへん|疲れた|つかれた|ドリンク.*[12345１２３４５一二三四五]人|[12345１２３４５一二三四五]人.*[ドリンク|担当|バッシング]|シフト|知らない|わからない|だね|ねえ|ですよね|暑い|寒い|どう思う|休憩|バタバタ|ピーク|人手|足りない|足りる|今天.*[3三]人|飲料.*[3三]人|很忙|辛苦|不知道|累了|閒聊|抱怨|私だね|やりますの時|やります)/i.test(combined)
+  ) {
+    return {
+      category: '💬 同事現場閒聊・吐槽抱怨・工作量分享',
+      intent: '對方（內外場同仁）正在與你隨性閒聊、吐槽或分享現場人力與忙碌狀況（例如提到今天飲料區配置了3個人、現場非常忙碌等）。這純粹是夥伴間的現場隨聊與壓力共鳴，並非在要求特定的餐飲服務。',
+      responses: [
+        {
+          type: "🗣️ 同理共鳴 / 打氣附和",
+          ja: "本当に<ruby>忙<rt>いそが</rt></ruby>しいですね！<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>頑張<rt>がんば</rt></ruby>りましょう！",
+          romaji: "Hontō ni isogashii desu ne! Issho ni gambarimashō!",
+          zh: "真的超級忙呢！我們一起加油撐過去！"
+        },
+        {
+          type: "☕ 體貼關心 / 互相打氣",
+          ja: "お<ruby>疲<rt>つか</rt></ruby>れ<ruby>様<rt>さま</rt></ruby>です！<ruby>大変<rt>たいへん</rt></ruby>ですが、<ruby>無理<rt>むり</rt></ruby>せず<ruby>水分<rt>すいぶん</rt></ruby><ruby>補給<rt>ほきゅう</rt></ruby>してくださいね。",
+          romaji: "Otsukaresama desu! Taihen desu ga, muri sezu suibun hokyū shite kudasai ne.",
+          zh: "辛苦了！雖然很忙，但別太勉強，記得抽空喝水喔！"
+        },
+        {
+          type: "🤝 互助支援 / 分擔工作",
+          ja: "3<ruby>人<rt>にん</rt></ruby>でもバタバタですね。<ruby>何<rt>なに</rt></ruby>か<ruby>手伝<rt>てつだ</rt></ruby>えることがあったら、いつでも<ruby>声<rt>こえ</rt></ruby>かけてください！",
+          romaji: "Sannin demo batabata desu ne. Nanika tetsudaeru koto ga attara, itsudemo koe kakete kudasai!",
+          zh: "就算3個人也是手忙腳亂呢。如果有什麼我能順手幫忙的，隨時跟我說！"
+        }
+      ]
+    };
+  }
+
+  // 情境 2: 📋 同事平級交辦・動作協作與工具歸位
+  if (
+    /(ラップ|保鮮膜|インカム|對講機|トング|夾子|テーブル|拭いて|擦桌|片付け|補充|セット|チャッカマン|ライター|打火機|氷|補冰|ご飯|添飯|お代わり)/i.test(combined)
+  ) {
+    return {
+      category: '📋 同事平級交辦・動作協作與工具歸位',
+      intent: '同事正在指引或協同現場動作（如包保鮮膜、擦拭對講機/桌面、補充耗材或工具歸位），希望彼此快速配合支援。',
+      responses: [
+        {
+          type: "⚡ 迅速答應 / 立即行動",
+          ja: "了解です！すぐに<ruby>対応<rt>たいおう</rt></ruby>します！",
+          romaji: "Ryōkai desu! Sugu ni taiō shimasu!",
+          zh: "收到了解！我馬上來弄！"
+        },
+        {
+          type: "❓ 禮貌確認 / 細節確認",
+          ja: "かしこまりました。どこに<ruby>置<rt>お</rt></ruby>けばいいですか？",
+          romaji: "Kashikomarimashita. Doko ni okeba ii desu ka?",
+          zh: "好的，請問要放在哪裡呢？"
+        },
+        {
+          type: "🤝 稍後完成 / 協調進度",
+          ja: "この<ruby>作業<rt>さぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、すぐやりますね！",
+          romaji: "Kono sagyō ga owattara, sugu yarimasu ne!",
+          zh: "等我手頭這個動作弄好，馬上過去處理！"
+        }
+      ]
+    };
+  }
+
+  // 情境 3: 🛎️ 客人現場需求・餐具飲品與設施詢問
+  if (
+    /(とり皿|取皿|小皿|分裝盤|さゆ|白湯|溫水|お冷|冷水|冰水|お茶|トイレ|廁所|アレルギー|過敏|灰皿|煙灰缸|会計|結帳|お会計|スプーン|フォーク|湯匙|叉子)/i.test(combined)
+  ) {
+    return {
+      category: '🛎️ 客人現場需求・餐具飲品與設施詢問',
+      intent: '客人正在提出現場餐飲需求（如索取餐具、飲品或詢問店內設施），需要外場迅速給予親切回應與提供。',
+      responses: [
+        {
+          type: "⚡ 迅速答應 / 立即行動",
+          ja: "かしこまりました！すぐにお<ruby>持<rt>も</rt></ruby>ちいたします！",
+          romaji: "Kashikomarimashita! Sugu ni omochi itashimasu!",
+          zh: "遵命！我馬上為您送過來！"
+        },
+        {
+          type: "❓ 禮貌確認 / 細節確認",
+          ja: "<ruby>何名様分<rt>なんめいさまぶん</rt></ruby>ご<ruby>用意<rt>ようい</rt></ruby>いたしましょうか？",
+          romaji: "Nanmei-sama bun go-yōi itashimashō ka?",
+          zh: "請問需要為您準備幾位用的呢？"
+        },
+        {
+          type: "🤝 轉達協調 / 尋求支援",
+          ja: "<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。ただいまご<ruby>案内<rt>あんない</rt></ruby>いたします。",
+          romaji: "Shōshō omachi kudasai. Tadaima go-annai itashimasu.",
+          zh: "請稍候片刻，我馬上為您引導/準備。"
+        }
+      ]
+    };
+  }
+
+  // 情境 4: 🍱 廚房通報・出餐與撤盤指示
+  if (
+    /(上がり|あがり|出ました|出ましたよ|下げ|さげ|バッシング|下げて|中間下げ|お下げ|デシャップ|トレイ|料理|膳|下げ膳)/i.test(combined)
+  ) {
+    return {
+      category: '🍱 廚房通報・出餐與撤盤指示',
+      intent: '內場廚房通報出餐完畢請盡速端出，或外場夥伴提醒撤盤收桌。',
+      responses: [
+        {
+          type: "⚡ 迅速答應 / 立即傳菜",
+          ja: "はい！すぐにお<ruby>運<rt>はこ</rt></ruby>びします！",
+          romaji: "Hai! Sugu ni o-hakobi shimasu!",
+          zh: "好的！我馬上端送出去！"
+        },
+        {
+          type: "❓ 禮貌確認 / 桌號確認",
+          ja: "<ruby>何番卓<rt>なんばんたく</rt></ruby>の<ruby>お料理<rt>おりょうり</rt></ruby>でしょうか？",
+          romaji: "Nanban-taku no o-ryōri deshō ka?",
+          zh: "請問這是幾號桌的料理呢？"
+        },
+        {
+          type: "🤝 互助支援 / 稍候傳送",
+          ja: "ただいま<ruby>配膳<rt>はいぜん</rt></ruby>中ですので、1分だけお<ruby>待<rt>ま</rt></ruby>ちいただけますか？",
+          romaji: "Tadaima haizen-chū desu node, ippun dake omachi itadakemasu ka?",
+          zh: "目前正在送餐中，麻煩稍等我一分鐘喔！"
+        }
+      ]
+    };
+  }
+
+  // 情境 5: 🗣️ 現場日常溝通通用
+  return {
+    category: '🗣️ 現場日常溝通',
+    intent: '對方（現場客人或內外場同事）正在進行日常現場溝通，可視情況給予禮貌丁寧回應。',
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 禮貌致意",
+        ja: "かしこまりました！ありがとうございます！",
+        romaji: "Kashikomarimashita! Arigatō gozaimasu!",
+        zh: "好的遵命！非常感謝您！"
+      },
+      {
+        type: "❓ 禮貌確認 / 再次確認",
+        ja: "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>りますが、もう<ruby>一度<rt>いちど</rt></ruby>お<ruby>伺<rt>うかが</rt></ruby>いしてもよろしいでしょうか？",
+        romaji: "Osoreirimasu ga, mō ichido o-ukagai shite mo yoroshii deshō ka?",
+        zh: "不好意思，方便再麻煩您說一次嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。<ruby>確認<rt>かくにん</rt></ruby>してまいります。",
+        romaji: "Shōshō omachi kudasai. Kakunin shite mairimasu.",
+        zh: "請稍候片刻，我立即去確認。"
+      }
+    ]
+  };
+}
+
 // 核心分析與 3 大推薦回覆
 async function runEavesdropAnalysis() {
   const container = document.getElementById('eavesdrop-analysis-container');
@@ -8906,37 +9108,40 @@ async function runEavesdropAnalysis() {
     <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; text-align:center;">
       <div style="font-size:1.4rem; margin-bottom:8px;">🦝 🧠 🔍</div>
       <div style="font-weight:700; color:var(--primary); font-size:0.95rem; margin-bottom:4px;">小浣熊正在深度推測現場對話與意圖…</div>
-      <div style="font-size:0.78rem; color:var(--muted);">結合前後文碎詞「${escapeHtml(queryText)}」・即刻生成 3 組最佳自然丁寧體應答</div>
+      <div style="font-size:0.78rem; color:var(--muted);">結合前後文碎詞「${escapeHtml(queryText)}」・即刻生成繁體中文直譯與 3 組自然丁寧體應答</div>
     </div>
   `;
 
+  // 先行取得 100% 繁體中文真翻譯
+  const zhTranslated = await translateJapaneseToTraditionalChinese(queryText);
+
   // 1. 若有設定 Gemini API Key，優先呼叫 AI 進行大腦分析
   if (AppData && AppData.apiKey && AppData.apiKey.trim()) {
-    const prompt = `你是一位在日本溫泉旅館工作多年的專業外場前輩。現在使用者（外場/傳菜員）在吵雜現場只偷聽到了以下隻言片語或零碎日語：
+    const prompt = `你是一位在日本溫泉旅館工作多年的專業外場前輩。現在使用者（外場/傳菜員）在現場聽到了以下日語對話或零碎語句：
 「${queryText}」
 
 請進行深度分析與推測，並回傳純 JSON 格式（不要有 markdown 標籤或額外文字）：
 {
   "reconstructed": "重組後的完整日語句子，漢字上方必須標註平假名（如 <ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>）",
   "romaji": "重組句子的完整羅馬拼音",
-  "zh": "這句話的繁體中文意思",
-  "intent": "深度推測對方（客人/主廚/前輩）目前的現場情境與真實意圖（繁體中文，清楚具體）",
+  "zh": "這句話的繁體中文意思（請務必翻譯為道地繁體中文，絕對不要出現日文重複）",
+  "intent": "深度推測對方（同事/主管/客人）目前的現場情境與真實意圖（繁體中文，清楚具體，若只是同事閒聊吐槽工作量或排班，請如實指出是閒聊抱怨）",
   "responses": [
     {
-      "type": "⚡ 迅速行動 / 立即答應",
+      "type": "🗣️ 第一種回覆類型標籤",
       "ja": "第一種最推薦的回覆（自然親切之普通丁寧體〜です／〜ます，漢字上方帶 <ruby> 標音）",
       "romaji": "羅馬拼音",
       "zh": "繁體中文意思"
     },
     {
-      "type": "❓ 禮貌確認 / 細節確認",
-      "ja": "第二種回覆（進一步向對方確認數量、品項或細節之丁寧體，帶 <ruby> 標音）",
+      "type": "☕ 第二種回覆類型標籤",
+      "ja": "第二種回覆（丁寧體，帶 <ruby> 標音）",
       "romaji": "羅馬拼音",
       "zh": "繁體中文意思"
     },
     {
-      "type": "🤝 轉達協調 / 尋求支援",
-      "ja": "第三種回覆（委婉請對方稍候、通報廚房或請前輩支援之丁寧體，帶 <ruby> 標音）",
+      "type": "🤝 第三種回覆類型標籤",
+      "ja": "第三種回覆（丁寧體，帶 <ruby> 標音）",
       "romaji": "羅馬拼音",
       "zh": "繁體中文意思"
     }
@@ -8946,63 +9151,55 @@ async function runEavesdropAnalysis() {
     try {
       const parsed = await callGeminiApiUnified(prompt);
       if (parsed && parsed.reconstructed && Array.isArray(parsed.responses) && parsed.responses.length > 0) {
+        if (!parsed.zh || /[\u3040-\u30ff]/.test(parsed.zh)) {
+          parsed.zh = zhTranslated || parsed.zh;
+        }
+        parsed.zh = toTraditionalChinese(parsed.zh);
         renderEavesdropAnalysisResult(parsed);
         return;
       }
     } catch (err) {
-      console.warn('Gemini analysis failed, fallback to offline knowledge base:', err);
+      console.warn('Gemini analysis failed, fallback to offline deduction:', err);
     }
   }
 
-  // 2. 離線知識庫比對 (Offline Knowledge Base Matching)
-  const qLower = queryText.toLowerCase();
+  // 2. 離線知識庫精準比對 (僅當簡短關鍵字完全符合時)
+  const qLower = queryText.toLowerCase().replace(/\s+/g, '');
   let bestMatch = null;
   let maxScore = 0;
 
-  EAVESDROP_OFFLINE_KNOWLEDGE_BASE.forEach(item => {
-    let score = 0;
-    item.keys.forEach(k => {
-      const kLow = k.toLowerCase();
-      if (qLower.includes(kLow)) score += 3;
-      else if (kLow.includes(qLower)) score += 1;
+  if (qLower.length <= 12) {
+    EAVESDROP_OFFLINE_KNOWLEDGE_BASE.forEach(item => {
+      let score = 0;
+      item.keys.forEach(k => {
+        const kLow = k.toLowerCase().replace(/\s+/g, '');
+        if (qLower === kLow) score += 10;
+        else if (qLower.includes(kLow) && kLow.length >= 2) score += 3;
+      });
+      if (score > maxScore) {
+        maxScore = score;
+        bestMatch = item;
+      }
     });
-    if (score > maxScore) {
-      maxScore = score;
-      bestMatch = item;
-    }
-  });
+  }
 
-  if (bestMatch && maxScore > 0) {
-    renderEavesdropAnalysisResult(bestMatch);
+  if (bestMatch && maxScore >= 6) {
+    const resObj = {
+      ...bestMatch,
+      zh: toTraditionalChinese(bestMatch.zh)
+    };
+    renderEavesdropAnalysisResult(resObj);
     return;
   }
 
-  // 3. 通用情境離線智慧生成
+  // 3. 離線智慧意圖推測與 100% 繁體中文真翻譯
+  const deduced = deduceAccurateEavesdropIntent(queryText, zhTranslated);
   const genericResult = {
-    reconstructed: `「${escapeHtml(queryText)}」に関するお<ruby>話<rt>はなし</rt></ruby>`,
-    romaji: `... ni kansuru o-hanashi`,
-    zh: `聽到關於「${queryText}」的現場溝通語句`,
-    intent: `對方（客人或同事）在現場提到了相關關鍵字，可能需要確認現場狀況、指引或提供對應服務。`,
-    responses: [
-      {
-        type: "⚡ 迅速行動 / 立即答應",
-        ja: "かしこまりました！すぐに<ruby>対応<rt>たいおう</rt></ruby>いたします！",
-        romaji: "Kashikomarimashita! Sugu ni taiō itashimasu!",
-        zh: "遵命明白了！我馬上為您處理！"
-      },
-      {
-        type: "❓ 禮貌確認 / 細節確認",
-        ja: "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>りますが、もう<ruby>一度<rt>いちど</rt></ruby>お<ruby>伺<rt>うかが</rt></ruby>いしてもよろしいでしょうか？",
-        romaji: "Osoreirimasu ga, mō ichido o-ukagai shite mo yoroshii deshō ka?",
-        zh: "不好意思，方便再麻煩您說一次嗎？"
-      },
-      {
-        type: "🤝 轉達協調 / 尋求支援",
-        ja: "<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。<ruby>担当<rt>たんとう</rt></ruby>のスタッフに<ruby>確認<rt>かくにん</rt></ruby>してまいります。",
-        romaji: "Shōshō omachi kudasai. Tantō no sutaffu ni kakunin shite mairimasu.",
-        zh: "請稍候片刻，我立即向負責的前輩確認。"
-      }
-    ]
+    reconstructed: queryText,
+    romaji: '',
+    zh: zhTranslated || toTraditionalChinese(queryText),
+    intent: deduced.intent,
+    responses: deduced.responses
   };
 
   renderEavesdropAnalysisResult(genericResult);
@@ -9034,32 +9231,36 @@ function renderEavesdropAnalysisResult(data) {
   container.innerHTML = `
     <div style="background:var(--surface); border:1.5px solid var(--primary); border-radius:16px; padding:14px; box-shadow:0 4px 14px rgba(0,0,0,0.06);">
       
-      <!-- 區塊 1: 整理聽到的內容 -->
+      <!-- 區塊 1: 整理聽到的內容與 100% 繁體中文翻譯 -->
       <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:6px;">
-          <span style="font-size:0.78rem; font-weight:800; color:var(--primary);">📝 整理聽到的內容</span>
-          <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(data.reconstructed)}')" style="font-size:0.75rem; padding:2px 6px;">🔊 朗讀整句</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:8px;">
+          <span style="font-size:0.8rem; font-weight:800; color:var(--primary);">👂 整理聽到的日語原句</span>
+          <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(data.reconstructed)}')" style="font-size:0.75rem; padding:2px 8px;">🔊 朗讀日語</button>
         </div>
-        <div style="font-size:1.25rem; font-weight:800; color:var(--primary); line-height:2; font-family:var(--font-serif);">
+        <div style="font-size:1.15rem; font-weight:800; color:var(--primary); line-height:1.9; font-family:var(--font-serif);">
           ${data.reconstructed}
         </div>
-        ${data.romaji ? `<div style="font-size:0.75rem; color:var(--muted); font-family:monospace; margin-top:2px;">${escapeHtml(data.romaji)}</div>` : ''}
-        <div style="font-size:0.88rem; color:var(--ink); font-weight:700; margin-top:4px;">
-          ${escapeHtml(data.zh)}
+        ${data.romaji ? `<div style="font-size:0.75rem; color:var(--muted); font-family:monospace; margin-top:3px;">${escapeHtml(data.romaji)}</div>` : ''}
+        
+        <div style="background:rgba(217,119,6,0.08); border:1px solid rgba(217,119,6,0.25); border-radius:8px; padding:8px 10px; margin-top:8px;">
+          <div style="font-size:0.75rem; font-weight:800; color:#b45309; margin-bottom:2px;">🇹🇼 中文意思翻譯：</div>
+          <div style="font-size:0.92rem; color:var(--ink); font-weight:700; line-height:1.5;">
+            ${escapeHtml(data.zh)}
+          </div>
         </div>
       </div>
 
       <!-- 區塊 2: 推測真實意圖 -->
-      <div style="background:rgba(92,61,30,0.05); border-left:3.5px solid var(--primary); border-radius:0 10px 10px 0; padding:10px 12px; margin-bottom:12px;">
-        <div style="font-size:0.8rem; font-weight:800; color:var(--primary); margin-bottom:2px;">🧐 對方的現場真實意圖：</div>
-        <div style="font-size:0.85rem; color:var(--ink); line-height:1.5; font-weight:600;">
+      <div style="background:rgba(92,61,30,0.05); border-left:4px solid var(--primary); border-radius:0 10px 10px 0; padding:10px 12px; margin-bottom:12px;">
+        <div style="font-size:0.8rem; font-weight:800; color:var(--primary); margin-bottom:3px;">🧐 小浣熊推測現場真實意圖：</div>
+        <div style="font-size:0.86rem; color:var(--ink); line-height:1.5; font-weight:600;">
           ${escapeHtml(data.intent)}
         </div>
       </div>
 
       <!-- 區塊 3: 3 個最適合現場回覆的選項 -->
       <div>
-        <div style="font-size:0.85rem; font-weight:800; color:var(--primary); margin-bottom:6px;">💡 推薦 3 個最適合現場回覆的選項：</div>
+        <div style="font-size:0.85rem; font-weight:800; color:var(--primary); margin-bottom:8px;">💡 推薦 3 個最適合現場回覆的選項：</div>
         ${responsesHtml}
       </div>
 

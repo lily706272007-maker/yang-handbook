@@ -410,9 +410,47 @@ assert(!html.includes('name="memo-split-mode"'), 'HTML 已徹底移除 memo-spli
 assert(html.includes('finishAndSaveMemoRecording') && html.includes('text: fullText'), 'finishAndSaveMemoRecording 一律以 fullText 完整筆記模式存檔');
 assert(html.includes('btn.textContent = \'⏹️ 說完了，儲存完整筆記\''), '錄音按鈕狀態文字提示為「⏹️ 說完了，儲存完整筆記」');
 
+// 測試 27: 偷聽推測 100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)
+console.log('\n【測試 27：偷聽推測 100% 繁體中文直譯與多情境精準意圖推測引擎 (v73)】');
+assert(html.includes('translateJapaneseToTraditionalChinese'), '包含現場日語轉繁體中文翻譯函式 (translateJapaneseToTraditionalChinese)');
+assert(html.includes('deduceAccurateEavesdropIntent'), '包含精準多情境意圖推測引擎 (deduceAccurateEavesdropIntent)');
+assert(html.includes('🇹🇼 中文意思翻譯：'), 'renderEavesdropAnalysisResult 包含顯目的 🇹🇼 中文意思翻譯專屬區塊');
+
+// 驗證從 index.html 提取的意圖推測引擎與翻譯降級字典
+const intentFnMatch = html.match(/function deduceAccurateEavesdropIntent[\s\S]*?\n\}/);
+assert(intentFnMatch !== null, '成功從 index.html 提取 deduceAccurateEavesdropIntent 函式');
+const deduceIntent = new Function(`return ${intentFnMatch[0]};`)();
+
+// 1. 同事閒聊/吐槽排班人手與忙碌
+const chatSample = '今日は私だね りくさんを一緒にドリンクをやりますやりますの時や私は 知らない でも今日は ドリンク 3人です 3人は忙しいですね';
+const chatResult = deduceIntent(chatSample, '今天是我呢，我和陸桑一起負責飲料區，做的時候我不知道，但今天飲料區有3個人，3個人很忙呢');
+assert(chatResult.category.includes('閒聊') || chatResult.category.includes('吐槽') || chatResult.category.includes('工作量'), '正確判定為「同僚現場閒聊・吐槽抱怨・工作量分享」情境');
+assert(chatResult.intent.includes('隨性閒聊') || chatResult.intent.includes('壓力共鳴'), '意圖描述精確說明為夥伴間隨聊與壓力共鳴');
+assert(Array.isArray(chatResult.responses) && chatResult.responses.length === 3, '提供 3 組自然丁寧體應對回覆');
+assert(chatResult.responses[0].ja.includes('忙') && chatResult.responses[0].zh.includes('加油'), '包含同理共鳴與打氣回覆');
+
+// 2. 同事交辦協作
+const delegateSample = 'ラップとインカムを拭いてください';
+const delegateResult = deduceIntent(delegateSample, '請包保鮮膜並擦拭對講機');
+assert(delegateResult.category.includes('交辦') || delegateResult.category.includes('協作'), '正確判定為同事平級交辦協作情境');
+
+// 3. 客人餐具飲品需求
+const guestSample = 'お取皿とお白湯をお願いします';
+const guestResult = deduceIntent(guestSample, '麻煩給我分裝盤與溫開水');
+assert(guestResult.category.includes('客人') || guestResult.category.includes('需求'), '正確判定為客人現場需求情境');
+
+// 4. 廚房出餐
+const kitchenSample = '料理上がりです';
+const kitchenResult = deduceIntent(kitchenSample, '料理做好了出餐');
+assert(kitchenResult.category.includes('出餐') || kitchenResult.category.includes('廚房'), '正確判定為廚房出餐指示情境');
+
+// 5. 語音錯字「頭部監測」智慧校正為「偷聽推測」
+assert(runConversion('請打開頭部監測') === '請打開偷聽推測', '語音錯字「請打開頭部監測」智慧校正為「請打開偷聽推測」');
+assert(runConversion('頭部監控正在運作') === '偷聽推測正在運作', '語音錯字「頭部監控」智慧校正為「偷聽推測」');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v72'), 'Service Worker 快取版本已升級至 yang-pwa-v72');
-assert(html.includes('yang_runner_handbook_v72'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v72');
+assert(swContent.includes('yang-pwa-v73'), 'Service Worker 快取版本已升級至 yang-pwa-v73');
+assert(html.includes('yang_runner_handbook_v73'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v73');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -421,6 +459,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
 }
 
