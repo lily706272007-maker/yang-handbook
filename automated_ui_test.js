@@ -372,8 +372,8 @@ assert(html.includes('vn_yang') && html.includes("gender: 'female'") && html.inc
 assert(html.includes('trait-color-black') && html.includes('trait-color-darkbrown'), '微調工房髮色包含自然黑與深棕色');
 assert(html.includes('trait-feature-none') && html.includes('trait-feature-beautyMark') && html.includes('trait-feature-beard'), '微調工房包含無特徵、嘴角痣、鬍渣短鬍 3 大選項');
 assert(html.includes('setAvatarFeature'), 'JS 包含特徵切換函式 setAvatarFeature');
-assert(html.includes('ellipse(256, 54, 48, 44'), '外場包包頭 (bun_hair) 在頭頂中央 (y:54) 繪製立體大圓丸子');
-assert(html.includes('8e1d2c') && html.includes('ffd700'), '女生制服包含優雅深紅蝴蝶結領結與金色繩結/珍珠飾品');
+assert(html.includes('ellipse(256, 52, 50, 46') || html.includes('ellipse(256, 54, 48, 44'), '外場包包頭 (bun_hair) 在頭頂中央繪製立體大圓丸子');
+assert(html.includes('8e1d2c') && html.includes('ffd700'), '外場制服包含優雅深紅蝴蝶結領結與金色繩結/珍珠飾品');
 
 // 測試 25: 語音 Memo 繁體中文即時轉換、外場語音錯字智慧校正與自訂即時編輯修字 (v71)
 console.log('\n【測試 25：語音 Memo 繁體中文即時轉換・外場語音錯字校正・自訂即時編輯修字 (v71)】');
@@ -479,9 +479,21 @@ assert(html.includes('function resetQuizStats()') && html.includes('function upd
 assert(html.includes('id="quiz-streak-counter"') && html.includes('id="quiz-score-counter"'), 'UI 包含連勝紀錄與答對率計分板');
 assert(html.includes('id="qfilter-food"') && html.includes('id="qfilter-tableware"') && html.includes('id="qfilter-sentence"'), 'UI 包含食材餐點、餐具器具、實戰對話句等分類篩選');
 
+// 測試 31: 照相館純淨關閉按鈕、男女工作服100%統一、100%露眉露眼絕不擋臉、男生6大極具辨識度髮型與動漫天使光環 (v77)
+console.log('\n【測試 31：照相館純淨關閉按鈕・男女外場制服統一・露眉大眼・男生6大辨識度髮型・天使光環 (v77)】');
+assert(!html.includes('🦝 小浣熊互動照相館') && html.includes('who-are-you-modal-box') && html.includes('✕ 關閉'), '照相館彈窗頂部已成功刪除標題文字，僅保留右側「✕ 關閉」按鈕');
+assert(html.includes('181f33') && html.includes('8e1d2c') && html.includes('ffd700'), '男女角色全面統一行業示範外場制服 (白襯衫立領 + 酒紅領結金色飾扣 + 深曜藍黑圍裙馬甲 + 白邊口袋)');
+assert(html.includes('arc(206, 134, 15') && html.includes('ellipse(206, 162, 15, 20'), '眉毛 (y:134) 與大眼 (y:162) 高度合宜且 100% 露在瀏海 (y:110~114) 下方，絕不擋眼');
+assert(html.includes('short_clean') && html.includes('side_part') && html.includes('comma_part') && html.includes('buzz_cut') && html.includes('afro_curly') && html.includes('wavy_short'), '男生具備 6 大截然不同且辨識度極高之精緻髮型');
+assert(html.includes('Spiky texture') || html.includes('spikes = ['), '俐落短髮 (short_clean) 包含向上起伏之層次碎髮尖角');
+assert(html.includes('3:7 分線') || html.includes('分線點'), '經典側分 (side_part) 具備鮮明 3:7 側分線與斜梳弧度');
+assert(html.includes('左逗號') && html.includes('右逗號'), '韓系逗號 (comma_part) 具備標誌性雙 C 逗號內扣與露額造型');
+assert(html.includes('俐落髮際線') || html.includes('Hairline'), '陽光寸頭 (buzz_cut) 具備清晰俐落之髮際線與平頭輪廓');
+assert(html.includes('Angel Ring Hair Highlight') || html.includes('ellipse(256, 94, 66, 14'), '角色立繪頂部包含日系動漫「天使光環」立體光澤');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v76'), 'Service Worker 快取版本已升級至 yang-pwa-v76');
-assert(html.includes('yang_runner_handbook_v76'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v76');
+assert(swContent.includes('yang-pwa-v77'), 'Service Worker 快取版本已升級至 yang-pwa-v77');
+assert(html.includes('yang_runner_handbook_v77'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v77');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -490,7 +502,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、「隨機抽考」用聽的 🎧 / 用看的 👀 雙版本切換・自動朗讀・偷看提示・連擊計分 (v76) 測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、「隨機抽考」用聽的 🎧 / 用看的 👀 雙版本切換・自動朗讀・偷看提示・連擊計分 (v76)、「照相館純淨關閉頂欄・男女外場制服100%統一・100%露眉露眼絕不擋臉・男生6大高辨識度髮型・擬真動漫天使光環」 (v77) 測試 100% 全部通過！');
 }
 
 

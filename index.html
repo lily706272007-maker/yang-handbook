@@ -2149,14 +2149,8 @@
   <div class="modal-content who-are-you-modal-box" style="max-width:520px; padding:18px; border-radius:22px; text-align:center;">
     <div class="modal-drag-handle"></div>
     
-    <!-- 頂部標題列 -->
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <img src="./photos/raccoon_pet.png" style="width:32px; height:32px; object-fit:contain;" />
-        <div style="font-size:1.05rem; font-weight:800; color:var(--primary); text-align:left;">
-          🦝 小浣熊互動照相館
-        </div>
-      </div>
+    <!-- 頂部列：僅保留關閉按鈕 -->
+    <div style="display:flex; justify-content:flex-end; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:12px;">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-who-are-you')">✕ 關閉</button>
     </div>
 
@@ -2465,7 +2459,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v76';
+const STORAGE_KEY = 'yang_runner_handbook_v77';
 
 function createRealRunnerData() {
   return {
@@ -10542,7 +10536,7 @@ function confirmWhoGender(selectedGender) {
   }, 400);
 }
 
-// 8. 🎨 核心：生成【2.2 頭身正統日系動漫 Q 版・方形純透明背景】角色立繪
+// 8. 🎨 核心：生成【精緻動漫 Q 版立繪・男女一致外場制服・超高辨識度髮型・100% 露眉露眼】角色立繪
 function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
   
@@ -10559,630 +10553,667 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   const skinType = traits.skin || 'natural';
   const hairStyle = traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
   const hairColor = (traits.color === '#422b1d') ? '#422b1d' : '#1a191f';
+  const hairHighlight = hairColor === '#422b1d' ? 'rgba(255, 210, 180, 0.28)' : 'rgba(210, 220, 255, 0.25)';
   const glasses = traits.glasses || 'none';
   const hasBeard = !!traits.beard;
   const hasBeautyMark = !!traits.beautyMark;
 
-  // 膚色調色盤
-  let skinTone = '#fce4d6';
-  let skinShadow = '#eec3b0';
-  let blushColor = 'rgba(240, 110, 110, 0.40)';
+  // 膚色調色盤 (精緻日系動漫漸層膚色)
+  let skinTone = '#fce2d2';
+  let skinShadow = '#eebca5';
+  let blushColor = 'rgba(242, 115, 115, 0.42)';
 
   if (skinType === 'fair') {
     skinTone = '#fff1e8';
-    skinShadow = '#f3ccbb';
+    skinShadow = '#f2ccbb';
     blushColor = 'rgba(255, 120, 130, 0.45)';
   } else if (skinType === 'tanned') {
-    skinTone = '#e8bfa0';
-    skinShadow = '#c99c7b';
-    blushColor = 'rgba(210, 100, 90, 0.35)';
+    skinTone = '#e5b897';
+    skinShadow = '#c69573';
+    blushColor = 'rgba(215, 95, 85, 0.38)';
   }
 
   // ── [圖層 1: 後髮層 (Back Hair)] ──
   ctx.fillStyle = hairColor;
   if (gender === 'female') {
     if (hairStyle === 'bun_hair') {
-      // 🥟 外場包包頭：在頭頂正中央上方加一個立體大包包
+      // 🥟 外場包包頭：在頭頂正中央上方加一個立體大圓包包頭
       ctx.beginPath();
-      ctx.ellipse(256, 54, 48, 44, 0, 0, Math.PI * 2);
+      ctx.ellipse(256, 52, 50, 46, 0, 0, Math.PI * 2);
       ctx.fill();
-      // 包包頭紋理細節
+      // 包包頭陰影與髮絲旋律紋理
       ctx.strokeStyle = hairColor === '#1a191f' ? '#2e2c38' : '#5c3a28';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(256, 54, 30, 0.2 * Math.PI, 1.4 * Math.PI);
+      ctx.arc(256, 52, 32, 0.2 * Math.PI, 1.35 * Math.PI);
       ctx.stroke();
       ctx.beginPath();
-      ctx.arc(256, 54, 16, 0.8 * Math.PI, 1.9 * Math.PI);
+      ctx.arc(256, 52, 18, 0.7 * Math.PI, 1.85 * Math.PI);
       ctx.stroke();
       // 外場深紅髮圈與金珍珠
       ctx.fillStyle = '#8e1d2c';
       ctx.beginPath();
-      ctx.roundRect(228, 86, 56, 12, 6);
+      ctx.roundRect(226, 84, 60, 14, 7);
       ctx.fill();
       ctx.fillStyle = '#ffd700';
       ctx.beginPath();
-      ctx.arc(256, 92, 4.5, 0, Math.PI * 2);
+      ctx.arc(256, 91, 5, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = hairColor;
     } else if (hairStyle === 'high_ponytail') {
-      // 🐎 活力高馬尾
+      // 🐎 活力高馬尾 (往右上方高聳飄揚)
       ctx.beginPath();
-      ctx.moveTo(310, 90);
-      ctx.bezierCurveTo(390, 80, 420, 180, 380, 250);
-      ctx.bezierCurveTo(395, 190, 360, 120, 310, 115);
+      ctx.moveTo(300, 80);
+      ctx.bezierCurveTo(400, 60, 435, 170, 390, 260);
+      ctx.bezierCurveTo(410, 180, 370, 110, 305, 108);
       ctx.fill();
       ctx.fillStyle = '#8e1d2c';
       ctx.beginPath();
-      ctx.roundRect(300, 95, 16, 14, 4);
+      ctx.roundRect(292, 85, 18, 16, 5);
       ctx.fill();
       ctx.fillStyle = hairColor;
     } else if (hairStyle === 'low_ponytail') {
       // 🎀 乾淨低馬尾
       ctx.beginPath();
-      ctx.moveTo(270, 230);
-      ctx.bezierCurveTo(330, 250, 360, 300, 330, 350);
-      ctx.bezierCurveTo(320, 310, 290, 270, 250, 245);
+      ctx.moveTo(270, 210);
+      ctx.bezierCurveTo(340, 230, 370, 290, 340, 350);
+      ctx.bezierCurveTo(325, 300, 295, 260, 250, 235);
       ctx.fill();
       ctx.fillStyle = '#8e1d2c';
       ctx.beginPath();
-      ctx.roundRect(260, 232, 14, 10, 3);
+      ctx.roundRect(260, 215, 16, 12, 4);
       ctx.fill();
       ctx.fillStyle = hairColor;
     } else if (hairStyle === 'wavy_long') {
-      // 🌸 溫柔波浪長髮 (雙側自然垂肩，絕非雙馬尾)
+      // 🌸 浪漫波浪長髮 (雙側自然垂落於肩上)
       ctx.beginPath();
-      ctx.roundRect(144, 130, 224, 210, [80, 80, 40, 40]);
+      ctx.roundRect(144, 115, 224, 230, [75, 75, 40, 40]);
       ctx.fill();
+      // 左側大波浪
       ctx.beginPath();
-      ctx.moveTo(150, 170);
-      ctx.bezierCurveTo(120, 220, 160, 270, 136, 340);
-      ctx.bezierCurveTo(166, 320, 180, 260, 176, 210);
+      ctx.moveTo(148, 150);
+      ctx.bezierCurveTo(115, 200, 160, 260, 134, 340);
+      ctx.bezierCurveTo(166, 315, 182, 250, 176, 195);
       ctx.fill();
+      // 右側大波浪
       ctx.beginPath();
-      ctx.moveTo(362, 170);
-      ctx.bezierCurveTo(392, 220, 352, 270, 376, 340);
-      ctx.bezierCurveTo(346, 320, 332, 260, 336, 210);
+      ctx.moveTo(364, 150);
+      ctx.bezierCurveTo(397, 200, 352, 260, 378, 340);
+      ctx.bezierCurveTo(346, 315, 330, 250, 336, 195);
       ctx.fill();
     } else if (hairStyle === 'shoulder_straight') {
-      // ✨ 及肩直髮 (順滑垂肩)
+      // ✨ 及肩直髮 (順滑垂落肩際)
       ctx.beginPath();
-      ctx.roundRect(146, 140, 220, 170, [60, 60, 20, 20]);
+      ctx.roundRect(144, 115, 224, 225, [75, 75, 30, 30]);
       ctx.fill();
+      // 兩側垂肩髮片
       ctx.beginPath();
-      ctx.roundRect(140, 170, 34, 130, [10, 0, 12, 12]);
-      ctx.roundRect(338, 170, 34, 130, [0, 10, 12, 12]);
+      ctx.roundRect(138, 155, 36, 155, [10, 0, 16, 16]);
+      ctx.roundRect(338, 155, 36, 155, [0, 10, 16, 16]);
       ctx.fill();
     } else if (hairStyle === 'bob_short') {
       // 💇 日系鮑伯短髮底座
       ctx.beginPath();
-      ctx.ellipse(256, 175, 118, 106, 0, 0, Math.PI * 2);
+      ctx.ellipse(256, 165, 118, 108, 0, 0, Math.PI * 2);
       ctx.fill();
     }
   } else {
-    // 男性髮型底座
+    // 男性後髮與側髮輪廓
     if (hairStyle === 'afro_curly') {
       const curls = [
-        { x: 256, y: 64, r: 52 }, { x: 198, y: 74, r: 50 }, { x: 314, y: 74, r: 50 },
-        { x: 148, y: 106, r: 48 }, { x: 364, y: 106, r: 48 }, { x: 118, y: 154, r: 46 },
-        { x: 394, y: 154, r: 46 }, { x: 114, y: 206, r: 42 }, { x: 398, y: 206, r: 42 }
+        { x: 256, y: 55, r: 52 }, { x: 195, y: 65, r: 50 }, { x: 317, y: 65, r: 50 },
+        { x: 142, y: 98, r: 48 }, { x: 370, y: 98, r: 48 }, { x: 114, y: 148, r: 46 },
+        { x: 398, y: 148, r: 46 }, { x: 112, y: 200, r: 40 }, { x: 400, y: 200, r: 40 }
       ];
       curls.forEach(c => {
         ctx.beginPath();
         ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
         ctx.fill();
       });
+    } else if (hairStyle === 'wavy_short') {
+      ctx.beginPath();
+      ctx.ellipse(256, 155, 114, 102, 0, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (hairStyle === 'side_part' || hairStyle === 'comma_part' || hairStyle === 'short_clean') {
+      ctx.beginPath();
+      ctx.ellipse(256, 155, 110, 98, 0, 0, Math.PI * 2);
+      ctx.fill();
     }
   }
 
-  // ── [圖層 2: Q 版可愛小短腿與鞋子 (2.2 頭身黃金比例)] ──
-  // 皮鞋
-  ctx.fillStyle = '#111114';
+  // ── [圖層 2: Q 版和諧 2.0 頭身小短腿與黑皮鞋 (男女完全一致)] ──
+  // 筆挺黑色工作長褲
+  ctx.fillStyle = '#14161f';
   ctx.beginPath();
-  ctx.ellipse(228, 432, 19, 12, 0, 0, Math.PI * 2);
-  ctx.ellipse(284, 432, 19, 12, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-  ctx.beginPath();
-  ctx.ellipse(226, 430, 8, 4, 0, 0, Math.PI * 2);
-  ctx.ellipse(282, 430, 8, 4, 0, 0, Math.PI * 2);
+  ctx.roundRect(216, 335, 32, 54, 4);
+  ctx.roundRect(264, 335, 32, 54, 4);
   ctx.fill();
 
-  // 長褲
-  if (gender === 'female') {
-    ctx.fillStyle = '#15161b';
-    ctx.beginPath();
-    ctx.roundRect(212, 352, 34, 73, 4);
-    ctx.roundRect(266, 352, 34, 73, 4);
-    ctx.fill();
-  } else {
-    ctx.fillStyle = '#181a24';
-    ctx.beginPath();
-    ctx.roundRect(210, 350, 36, 75, 4);
-    ctx.roundRect(266, 350, 36, 75, 4);
-    ctx.fill();
-  }
+  // 黑色工作皮鞋
+  ctx.fillStyle = '#0e0f14';
+  ctx.beginPath();
+  ctx.ellipse(230, 396, 19, 11, 0, 0, Math.PI * 2);
+  ctx.ellipse(282, 396, 19, 11, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // 皮鞋亮面高光
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.beginPath();
+  ctx.ellipse(228, 394, 7, 3.5, 0, 0, Math.PI * 2);
+  ctx.ellipse(280, 394, 7, 3.5, 0, 0, Math.PI * 2);
+  ctx.fill();
 
-  // ── [圖層 3: 軀幹與外場制服 (男女外場制服全面區分)] ──
-  if (gender === 'female') {
-    // 👧 女性外場制服：工作圍裙 + 白色襯衫 + 紅色蝴蝶結領結
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.roundRect(200, 266, 112, 86, [8, 8, 4, 4]);
-    ctx.fill();
+  // ── [圖層 3: 軀幹與外場標準工作服 (男女完全一致・示範圖片規格)] ──
+  // 1. 純白立領襯衫底色
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.roundRect(202, 240, 108, 98, [8, 8, 4, 4]);
+  ctx.fill();
 
-    ctx.fillStyle = '#1e2438';
-    ctx.beginPath();
-    ctx.roundRect(194, 280, 124, 74, [6, 6, 4, 4]);
-    ctx.fill();
+  // 2. 深曜藍黑工作圍裙馬甲主體
+  ctx.fillStyle = '#181f33';
+  ctx.beginPath();
+  ctx.roundRect(194, 256, 124, 82, [6, 6, 4, 4]);
+  ctx.fill();
 
-    ctx.beginPath();
-    ctx.roundRect(208, 266, 16, 28, 3);
-    ctx.roundRect(288, 266, 16, 28, 3);
-    ctx.fill();
+  // 雙肩背帶
+  ctx.beginPath();
+  ctx.roundRect(206, 242, 16, 26, 3);
+  ctx.roundRect(290, 242, 16, 26, 3);
+  ctx.fill();
 
-    // 圍裙口袋
-    ctx.fillStyle = '#181d2e';
-    ctx.beginPath();
-    ctx.roundRect(228, 312, 56, 32, 4);
-    ctx.fill();
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillRect(228, 312, 56, 3);
+  // 圍裙正面口袋與精緻白邊
+  ctx.fillStyle = '#121728';
+  ctx.beginPath();
+  ctx.roundRect(224, 290, 64, 34, 4);
+  ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(224, 290, 64, 2.5);
 
-    // 襯衫白色領口
-    ctx.fillStyle = '#f8fafc';
-    ctx.beginPath();
-    ctx.moveTo(240, 266);
-    ctx.lineTo(256, 280);
-    ctx.lineTo(272, 266);
-    ctx.fill();
+  // 3. 襯衫領口三角折領
+  ctx.fillStyle = '#f8fafc';
+  ctx.beginPath();
+  ctx.moveTo(234, 240);
+  ctx.lineTo(256, 258);
+  ctx.lineTo(278, 240);
+  ctx.closePath();
+  ctx.fill();
 
-    // 優雅紅色蝴蝶結領結
-    ctx.fillStyle = '#8e1d2c';
-    ctx.beginPath();
-    ctx.moveTo(256, 274);
-    ctx.lineTo(238, 266);
-    ctx.lineTo(238, 282);
-    ctx.closePath();
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(256, 274);
-    ctx.lineTo(274, 266);
-    ctx.lineTo(274, 282);
-    ctx.closePath();
-    ctx.fill();
-    // 蝴蝶結垂帶
-    ctx.beginPath();
-    ctx.moveTo(252, 276);
-    ctx.lineTo(245, 292);
-    ctx.lineTo(254, 288);
-    ctx.lineTo(256, 276);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(260, 276);
-    ctx.lineTo(267, 292);
-    ctx.lineTo(258, 288);
-    ctx.lineTo(256, 276);
-    ctx.fill();
-    // 金色中心結
-    ctx.fillStyle = '#ffd700';
-    ctx.beginPath();
-    ctx.arc(256, 274, 4.5, 0, Math.PI * 2);
-    ctx.fill();
-  } else {
-    // 👦 男性外場制服：深藍西裝外套 + 襯衫 + 領帶 + 皮帶銀扣
-    ctx.fillStyle = '#1e2336';
-    ctx.beginPath();
-    ctx.roundRect(192, 268, 128, 86, [10, 10, 4, 4]);
-    ctx.fill();
+  // 4. 外場酒紅領結 / 領帶 + 金色飾扣
+  ctx.fillStyle = '#8e1d2c';
+  ctx.beginPath();
+  ctx.moveTo(256, 250);
+  ctx.lineTo(238, 242);
+  ctx.lineTo(238, 258);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(256, 250);
+  ctx.lineTo(274, 242);
+  ctx.lineTo(274, 258);
+  ctx.closePath();
+  ctx.fill();
+  // 領結垂帶
+  ctx.beginPath();
+  ctx.moveTo(252, 252);
+  ctx.lineTo(245, 268);
+  ctx.lineTo(254, 264);
+  ctx.lineTo(256, 252);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(260, 252);
+  ctx.lineTo(267, 268);
+  ctx.lineTo(258, 264);
+  ctx.lineTo(256, 252);
+  ctx.fill();
+  // 金色中央飾結
+  ctx.fillStyle = '#ffd700';
+  ctx.beginPath();
+  ctx.arc(256, 250, 4.5, 0, Math.PI * 2);
+  ctx.fill();
 
-    // 襯衫白色領口
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.moveTo(234, 268);
-    ctx.lineTo(256, 310);
-    ctx.lineTo(278, 268);
-    ctx.closePath();
-    ctx.fill();
-
-    // 西裝領口
-    ctx.fillStyle = '#161a29';
-    ctx.beginPath();
-    ctx.moveTo(230, 268);
-    ctx.lineTo(242, 310);
-    ctx.lineTo(228, 310);
-    ctx.closePath();
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(282, 268);
-    ctx.lineTo(270, 310);
-    ctx.lineTo(284, 310);
-    ctx.closePath();
-    ctx.fill();
-
-    // 領帶
-    ctx.fillStyle = '#7f1d1d';
-    ctx.beginPath();
-    ctx.moveTo(252, 274);
-    ctx.lineTo(260, 274);
-    ctx.lineTo(262, 328);
-    ctx.lineTo(256, 336);
-    ctx.lineTo(250, 328);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = '#991b1b';
-    ctx.beginPath();
-    ctx.moveTo(251, 270);
-    ctx.lineTo(261, 270);
-    ctx.lineTo(259, 278);
-    ctx.lineTo(253, 278);
-    ctx.closePath();
-    ctx.fill();
-
-    // 皮帶與銀扣
-    ctx.fillStyle = '#111114';
-    ctx.fillRect(192, 344, 128, 12);
-    ctx.fillStyle = '#cfd3d8';
-    ctx.fillRect(246, 342, 20, 15);
-    ctx.fillStyle = '#111114';
-    ctx.fillRect(250, 346, 12, 7);
-
-    // 外套銀扣
-    ctx.fillStyle = '#dcdde1';
-    [320, 334].forEach(y => {
-      ctx.beginPath();
-      ctx.arc(245, y, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-
-  // ── [圖層 4: 手臂與小圓手] ──
-  const armFill = gender === 'female' ? '#1e2438' : '#1e2336';
+  // ── [圖層 4: 手臂與小圓手 (帶白襯衫袖口)] ──
   // 左手臂
-  ctx.fillStyle = armFill;
+  ctx.fillStyle = '#181f33';
   ctx.beginPath();
-  ctx.roundRect(174, 274, 22, 66, 8);
+  ctx.roundRect(174, 252, 22, 64, 8);
   ctx.fill();
-  if (gender === 'female') {
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(174, 334, 22, 5);
-  }
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(174, 308, 22, 5);
   ctx.fillStyle = skinTone;
   ctx.beginPath();
-  ctx.arc(185, 344, 10, 0, Math.PI * 2);
+  ctx.arc(185, 318, 9.5, 0, Math.PI * 2);
   ctx.fill();
 
   // 右手臂
-  ctx.fillStyle = armFill;
+  ctx.fillStyle = '#181f33';
   ctx.beginPath();
-  ctx.roundRect(316, 274, 22, 66, 8);
+  ctx.roundRect(316, 252, 22, 64, 8);
   ctx.fill();
-  if (gender === 'female') {
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(316, 334, 22, 5);
-  }
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(316, 308, 22, 5);
   ctx.fillStyle = skinTone;
   ctx.beginPath();
-  ctx.arc(327, 344, 10, 0, Math.PI * 2);
+  ctx.arc(327, 318, 9.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // ── [圖層 5: 頸部與頭部 (Head & Face)] ──
+  // ── [圖層 5: 頸部與立體動漫臉龐 (Head & Face)] ──
   // 頸部
   ctx.fillStyle = skinShadow;
-  ctx.fillRect(242, 248, 28, 22);
+  ctx.fillRect(243, 226, 26, 20);
 
   // 臉蛋繪製
   ctx.fillStyle = skinTone;
   if (faceShape === 'square') {
     ctx.beginPath();
-    ctx.roundRect(154, 85, 204, 178, [80, 80, 24, 24]);
+    ctx.roundRect(154, 75, 204, 168, [75, 75, 22, 22]);
     ctx.fill();
   } else if (faceShape === 'oval') {
     ctx.beginPath();
-    ctx.ellipse(256, 174, 96, 96, 0, 0, Math.PI * 2);
+    ctx.ellipse(256, 158, 96, 92, 0, 0, Math.PI * 2);
     ctx.fill();
   } else if (faceShape === 'pointed') {
     ctx.beginPath();
-    ctx.moveTo(160, 150);
-    ctx.bezierCurveTo(154, 80, 358, 80, 352, 150);
-    ctx.bezierCurveTo(350, 230, 290, 268, 256, 270);
-    ctx.bezierCurveTo(222, 268, 162, 230, 160, 150);
-    ctx.fill();
-  } else if (faceShape === 'chubby') {
-    ctx.beginPath();
-    ctx.ellipse(256, 178, 108, 90, 0, 0, Math.PI * 2);
+    ctx.moveTo(160, 135);
+    ctx.bezierCurveTo(154, 70, 358, 70, 352, 135);
+    ctx.bezierCurveTo(350, 210, 290, 248, 256, 250);
+    ctx.bezierCurveTo(222, 248, 162, 210, 160, 135);
     ctx.fill();
   } else {
-    // 經典圓潤 Q 版臉
+    // 經典精緻日系動漫臉 (圓潤雙頰・微收下巴)
     ctx.beginPath();
-    ctx.ellipse(256, 174, 104, 90, 0, 0, Math.PI * 2);
+    ctx.ellipse(256, 158, 102, 88, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // 雙耳
+  // 雙耳與立體耳廓
+  ctx.fillStyle = skinTone;
   ctx.beginPath();
-  ctx.arc(150, 185, 18, 0, Math.PI * 2);
-  ctx.arc(362, 185, 18, 0, Math.PI * 2);
+  ctx.arc(150, 168, 16, 0, Math.PI * 2);
+  ctx.arc(362, 168, 16, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = skinShadow;
   ctx.beginPath();
-  ctx.arc(152, 185, 10, 0, Math.PI * 2);
-  ctx.arc(360, 185, 10, 0, Math.PI * 2);
+  ctx.arc(152, 168, 8.5, 0, Math.PI * 2);
+  ctx.arc(360, 168, 8.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // 粉嫩腮紅
+  // 粉嫩雙層動漫腮紅
   ctx.fillStyle = blushColor;
   ctx.beginPath();
-  ctx.ellipse(195, 205, 16, 9, 0, 0, Math.PI * 2);
-  ctx.ellipse(317, 205, 16, 9, 0, 0, Math.PI * 2);
+  ctx.ellipse(194, 188, 15, 8.5, 0, 0, Math.PI * 2);
+  ctx.ellipse(318, 188, 15, 8.5, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
   ctx.beginPath();
-  ctx.arc(190, 203, 2.5, 0, Math.PI * 2);
-  ctx.arc(322, 203, 2.5, 0, Math.PI * 2);
+  ctx.arc(189, 186, 2.5, 0, Math.PI * 2);
+  ctx.arc(323, 186, 2.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // ── [圖層 6: 眉毛與大眼睛 (眉眼完全露出・雙重高光・絕不擋眼)] ──
-  // 眉毛 (高置於 y: 138~144)
+  // ── [圖層 6: 眉毛與靈動大眼 (眉眼 100% 露在瀏海下方・立體漸層虹膜・雙重星芒高光)] ──
+  // 眉毛 (高置於 y: 132~138，高於眼睛且絕不被瀏海遮擋)
   ctx.strokeStyle = hairColor;
-  ctx.lineWidth = gender === 'female' ? 3 : 4.5;
+  ctx.lineWidth = gender === 'female' ? 2.8 : 3.8;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.arc(206, 142, 16, 1.15 * Math.PI, 1.85 * Math.PI);
+  ctx.arc(206, 134, 15, 1.15 * Math.PI, 1.85 * Math.PI);
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(306, 142, 16, 1.15 * Math.PI, 1.85 * Math.PI);
+  ctx.arc(306, 134, 15, 1.15 * Math.PI, 1.85 * Math.PI);
   ctx.stroke();
 
-  // 大眼睛 (y: 172)
-  ctx.fillStyle = '#1c1514';
+  // 雙眼皮線
+  ctx.strokeStyle = 'rgba(60, 35, 25, 0.35)';
+  ctx.lineWidth = 1.6;
   ctx.beginPath();
-  ctx.ellipse(206, 172, 16, 22, 0, 0, Math.PI * 2);
-  ctx.ellipse(306, 172, 16, 22, 0, 0, Math.PI * 2);
+  ctx.arc(206, 148, 15, 1.2 * Math.PI, 1.8 * Math.PI);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(306, 148, 15, 1.2 * Math.PI, 1.8 * Math.PI);
+  ctx.stroke();
+
+  // 大眼眼球 (y: 162)
+  // 1. 深色眼眶主體
+  ctx.fillStyle = '#1a1622';
+  ctx.beginPath();
+  ctx.ellipse(206, 162, 15, 20, 0, 0, Math.PI * 2);
+  ctx.ellipse(306, 162, 15, 20, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // 眼睛下緣動漫微光
-  ctx.fillStyle = '#3e2723';
+  // 2. 虹膜下緣漸層反光
+  ctx.fillStyle = '#5d4037';
   ctx.beginPath();
-  ctx.arc(206, 180, 12, 0.1 * Math.PI, 0.9 * Math.PI);
-  ctx.arc(306, 180, 12, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.arc(206, 168, 11, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.arc(306, 168, 11, 0.1 * Math.PI, 0.9 * Math.PI);
   ctx.fill();
 
-  // 雙重星芒高光
+  // 3. 虹膜底部透亮弧線
+  ctx.fillStyle = '#a1887f';
+  ctx.beginPath();
+  ctx.arc(206, 172, 8, 0.2 * Math.PI, 0.8 * Math.PI);
+  ctx.arc(306, 172, 8, 0.2 * Math.PI, 0.8 * Math.PI);
+  ctx.fill();
+
+  // 4. 動漫多重靈動高光
   ctx.fillStyle = '#ffffff';
-  // 主高光
+  // 主高光 (左上方大圓)
   ctx.beginPath();
-  ctx.arc(200, 163, 6.5, 0, Math.PI * 2);
-  ctx.arc(300, 163, 6.5, 0, Math.PI * 2);
+  ctx.arc(201, 154, 5.5, 0, Math.PI * 2);
+  ctx.arc(301, 154, 5.5, 0, Math.PI * 2);
   ctx.fill();
-  // 次高光
+  // 次高光 (右下方小圓)
   ctx.beginPath();
-  ctx.arc(211, 181, 3.5, 0, Math.PI * 2);
-  ctx.arc(311, 181, 3.5, 0, Math.PI * 2);
+  ctx.arc(210, 169, 3, 0, Math.PI * 2);
+  ctx.arc(310, 169, 3, 0, Math.PI * 2);
   ctx.fill();
-  // 迷你星芒光點
+  // 底部星芒微光
   ctx.beginPath();
-  ctx.arc(203, 186, 2, 0, Math.PI * 2);
-  ctx.arc(303, 186, 2, 0, Math.PI * 2);
+  ctx.arc(204, 174, 1.8, 0, Math.PI * 2);
+  ctx.arc(304, 174, 1.8, 0, Math.PI * 2);
   ctx.fill();
 
-  // 女性上翹雙睫毛
+  // 女性上翹精緻雙睫毛
   if (gender === 'female') {
-    ctx.strokeStyle = '#1c1514';
-    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#1a1622';
+    ctx.lineWidth = 2.4;
     ctx.beginPath();
-    ctx.moveTo(220, 158);
-    ctx.lineTo(228, 152);
-    ctx.moveTo(222, 166);
-    ctx.lineTo(229, 163);
-    ctx.moveTo(292, 158);
-    ctx.lineTo(284, 152);
-    ctx.moveTo(290, 166);
-    ctx.lineTo(283, 163);
+    ctx.moveTo(219, 149);
+    ctx.lineTo(226, 144);
+    ctx.moveTo(221, 156);
+    ctx.lineTo(227, 153);
+    ctx.moveTo(293, 149);
+    ctx.lineTo(286, 144);
+    ctx.moveTo(291, 156);
+    ctx.lineTo(285, 153);
     ctx.stroke();
   }
 
-  // ── [圖層 7: 鼻子 (4 款特徵)] ──
+  // ── [圖層 7: 立體鼻子] ──
   ctx.strokeStyle = '#a67253';
   ctx.fillStyle = '#a67253';
   if (noseShape === 'straight') {
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.2;
     ctx.beginPath();
-    ctx.moveTo(255, 172);
-    ctx.lineTo(255, 196);
-    ctx.lineTo(259, 196);
+    ctx.moveTo(255, 160);
+    ctx.lineTo(255, 180);
+    ctx.lineTo(259, 180);
     ctx.stroke();
   } else if (noseShape === 'wide') {
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.2;
     ctx.beginPath();
-    ctx.arc(256, 196, 6, 0.1 * Math.PI, 0.9 * Math.PI);
+    ctx.arc(256, 180, 5, 0.1 * Math.PI, 0.9 * Math.PI);
     ctx.stroke();
   } else if (noseShape === 'sharp') {
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.2;
     ctx.beginPath();
-    ctx.moveTo(253, 174);
-    ctx.lineTo(258, 194);
-    ctx.lineTo(252, 196);
+    ctx.moveTo(253, 162);
+    ctx.lineTo(258, 178);
+    ctx.lineTo(252, 180);
     ctx.stroke();
   } else {
-    // 小圓點鼻
+    // 經典小圓點萌鼻
     ctx.beginPath();
-    ctx.arc(256, 194, 2.5, 0, Math.PI * 2);
+    ctx.arc(256, 179, 2.2, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // ── [圖層 8: 嘴巴] ──
+  // ── [圖層 8: 自然微笑嘴唇] ──
   ctx.strokeStyle = '#6d2e24';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 2.8;
   ctx.beginPath();
-  ctx.arc(256, 218, 12, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.arc(256, 202, 11, 0.1 * Math.PI, 0.9 * Math.PI);
   ctx.stroke();
 
-  // ── [圖層 9: 特徵 (鬍渣 / 嘴角痣)] ──
+  // ── [圖層 9: 特徵 (精緻短鬚 / 嘴角痣)] ──
   if (hasBeard) {
-    ctx.fillStyle = 'rgba(40, 30, 30, 0.35)';
-    ctx.beginPath();
-    ctx.arc(256, 240, 22, 0, Math.PI);
-    ctx.fill();
+    ctx.fillStyle = hairColor === '#422b1d' ? 'rgba(66, 43, 29, 0.55)' : 'rgba(30, 30, 35, 0.55)';
+    // 唇下與下巴精緻點狀鬍渣
+    const beardDots = [
+      [256, 218], [251, 222], [261, 222], [247, 226], [256, 226], [265, 226],
+      [243, 230], [250, 230], [256, 230], [262, 230], [269, 230]
+    ];
+    beardDots.forEach(([bx, by]) => {
+      ctx.beginPath();
+      ctx.arc(bx, by, 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
   if (hasBeautyMark) {
     ctx.fillStyle = '#2b1b17';
     ctx.beginPath();
-    ctx.arc(274, 228, 2.4, 0, Math.PI * 2);
+    ctx.arc(273, 210, 2.3, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // ── [圖層 10: 眼鏡 (5 種精準選項)] ──
+  // ── [圖層 10: 5 款精緻眼鏡] ──
   if (glasses === 'round_black') {
     ctx.strokeStyle = '#111114';
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 4.2;
     ctx.beginPath();
-    ctx.ellipse(206, 172, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(206, 162, 30, 26, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.ellipse(306, 172, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(306, 162, 30, 26, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(239, 172);
-    ctx.lineTo(273, 172);
+    ctx.moveTo(236, 162);
+    ctx.lineTo(276, 162);
     ctx.stroke();
   } else if (glasses === 'square_black') {
     ctx.strokeStyle = '#111114';
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 4.2;
     ctx.beginPath();
-    ctx.roundRect(172, 146, 68, 52, 8);
+    ctx.roundRect(175, 138, 62, 46, 7);
     ctx.stroke();
     ctx.beginPath();
-    ctx.roundRect(272, 146, 68, 52, 8);
+    ctx.roundRect(275, 138, 62, 46, 7);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(240, 170);
-    ctx.lineTo(272, 170);
+    ctx.moveTo(237, 160);
+    ctx.lineTo(275, 160);
     ctx.stroke();
   } else if (glasses === 'round_wire') {
-    ctx.strokeStyle = '#9e7d3b';
-    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#a6823c';
+    ctx.lineWidth = 2.4;
     ctx.beginPath();
-    ctx.ellipse(206, 172, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(206, 162, 30, 26, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.ellipse(306, 172, 33, 29, 0, 0, Math.PI * 2);
+    ctx.ellipse(306, 162, 30, 26, 0, 0, Math.PI * 2);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(239, 172);
-    ctx.lineTo(273, 172);
+    ctx.moveTo(236, 162);
+    ctx.lineTo(276, 162);
     ctx.stroke();
   } else if (glasses === 'square_wire') {
     ctx.strokeStyle = '#546e7a';
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.4;
     ctx.beginPath();
-    ctx.roundRect(172, 146, 68, 52, 8);
+    ctx.roundRect(175, 138, 62, 46, 7);
     ctx.stroke();
     ctx.beginPath();
-    ctx.roundRect(272, 146, 68, 52, 8);
+    ctx.roundRect(275, 138, 62, 46, 7);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(240, 170);
-    ctx.lineTo(272, 170);
+    ctx.moveTo(237, 160);
+    ctx.lineTo(275, 160);
     ctx.stroke();
   }
 
-  // ── [圖層 11: 前髮與露額空氣瀏海 (下緣停在 y: 105~122，100% 露眉露眼)] ──
+  // ── [圖層 11: 革命性前髮與超高辨識度造型 (下緣最高停在 y: 110~122，100% 露眉露眼！)] ──
   ctx.fillStyle = hairColor;
   if (gender === 'female') {
     if (hairStyle === 'bob_short') {
+      // 💇 日系鮑伯短髮：圓潤內扣短髮，兩側自然包臉，瀏海輕盈露額
       ctx.beginPath();
-      ctx.arc(256, 136, 114, 0.82 * Math.PI, 2.18 * Math.PI);
+      ctx.arc(256, 126, 112, 0.82 * Math.PI, 2.18 * Math.PI);
       ctx.fill();
+      // 空氣八字瀏海 (下緣在 y: 112，完全露出雙眉與大眼)
       ctx.beginPath();
-      ctx.moveTo(144, 170);
-      ctx.quadraticCurveTo(200, 105, 256, 120);
-      ctx.quadraticCurveTo(312, 105, 368, 170);
-      ctx.lineTo(365, 110);
-      ctx.lineTo(147, 110);
+      ctx.moveTo(144, 155);
+      ctx.quadraticCurveTo(200, 95, 256, 114);
+      ctx.quadraticCurveTo(312, 95, 368, 155);
+      ctx.lineTo(365, 95);
+      ctx.lineTo(147, 95);
       ctx.fill();
     } else {
-      // 乾淨優雅外場空氣瀏海 (包包頭/馬尾/波浪長髮/及肩直髮)
+      // 🥟 外場包包頭 / 🐎 高馬尾 / 🎀 低馬尾 / 🌸 波浪長髮 / ✨ 及肩直髮
+      // 頂部圓弧輪廓
       ctx.beginPath();
-      ctx.arc(256, 136, 112, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.arc(256, 126, 110, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.fill();
+      // 輕盈空氣八字瀏海 (最高停在 y: 112，100% 露眉露眼！)
+      ctx.beginPath();
+      ctx.moveTo(148, 142);
+      ctx.quadraticCurveTo(205, 98, 256, 112);
+      ctx.quadraticCurveTo(307, 98, 364, 142);
+      ctx.lineTo(350, 92);
+      ctx.lineTo(160, 92);
+      ctx.fill();
+      // 兩側修容小鬢角髮絲 (自然垂在耳前)
+      ctx.beginPath();
+      ctx.moveTo(150, 140);
+      ctx.quadraticCurveTo(140, 170, 146, 195);
+      ctx.quadraticCurveTo(154, 170, 156, 145);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(148, 155);
-      ctx.quadraticCurveTo(205, 108, 256, 122);
-      ctx.quadraticCurveTo(307, 108, 364, 155);
-      ctx.lineTo(350, 105);
-      ctx.lineTo(160, 105);
+      ctx.moveTo(362, 140);
+      ctx.quadraticCurveTo(372, 170, 366, 195);
+      ctx.quadraticCurveTo(358, 170, 356, 145);
       ctx.fill();
     }
   } else {
-    // 男性前髮髮型
-    if (hairStyle === 'afro_curly') {
-      const frontCurls = [
-        { x: 190, y: 110, r: 36 }, { x: 256, y: 105, r: 38 }, { x: 322, y: 110, r: 36 }
+    // 👦 男性 6 大極具辨識度髮型：
+    if (hairStyle === 'short_clean') {
+      // ✂️ 1. 俐落短髮：向上層次碎髮束 + 兩側俐落鬢角 + 露額碎瀏海
+      ctx.beginPath();
+      ctx.arc(256, 128, 110, 0.88 * Math.PI, 2.12 * Math.PI);
+      ctx.fill();
+      // 頂部層次碎髮尖角 (Spiky texture)
+      const spikes = [
+        [160, 115, 175, 62, 195, 98],
+        [195, 98, 220, 50, 245, 92],
+        [245, 92, 270, 48, 295, 92],
+        [295, 92, 320, 55, 345, 102],
+        [345, 102, 360, 72, 372, 120]
       ];
-      frontCurls.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-    } else if (hairStyle === 'side_part') {
-      ctx.beginPath();
-      ctx.arc(256, 136, 114, 0.88 * Math.PI, 2.12 * Math.PI);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(144, 150);
-      ctx.quadraticCurveTo(200, 95, 285, 126);
-      ctx.lineTo(368, 150);
-      ctx.lineTo(350, 100);
-      ctx.lineTo(160, 100);
-      ctx.fill();
-    } else if (hairStyle === 'comma_part') {
-      ctx.beginPath();
-      ctx.arc(256, 136, 114, 0.85 * Math.PI, 2.15 * Math.PI);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(146, 150);
-      ctx.quadraticCurveTo(210, 105, 240, 128);
-      ctx.quadraticCurveTo(256, 115, 272, 128);
-      ctx.quadraticCurveTo(310, 105, 366, 150);
-      ctx.lineTo(350, 100);
-      ctx.lineTo(160, 100);
-      ctx.fill();
-    } else if (hairStyle === 'buzz_cut') {
-      ctx.beginPath();
-      ctx.arc(256, 146, 106, 0.95 * Math.PI, 2.05 * Math.PI);
-      ctx.fill();
-    } else if (hairStyle === 'wavy_short') {
-      ctx.beginPath();
-      ctx.arc(256, 138, 115, 0.85 * Math.PI, 2.15 * Math.PI);
-      ctx.fill();
-      const waveSpikes = [
-        [155, 130, 175, 75, 200, 112],
-        [205, 112, 230, 68, 256, 105],
-        [258, 105, 285, 68, 310, 112],
-        [312, 112, 338, 75, 358, 130]
-      ];
-      waveSpikes.forEach(s => {
+      spikes.forEach(s => {
         ctx.beginPath();
         ctx.moveTo(s[0], s[1]);
         ctx.lineTo(s[2], s[3]);
         ctx.lineTo(s[4], s[5]);
         ctx.fill();
       });
-    } else {
-      // 俐落短髮 (short_clean)
+      // 前額清爽露額碎瀏海 (下緣高置於 y: 110)
       ctx.beginPath();
-      ctx.arc(256, 138, 114, 0.88 * Math.PI, 2.12 * Math.PI);
+      ctx.moveTo(148, 140);
+      ctx.quadraticCurveTo(200, 102, 256, 110);
+      ctx.quadraticCurveTo(312, 102, 364, 140);
+      ctx.lineTo(352, 92);
+      ctx.lineTo(160, 92);
       ctx.fill();
+
+    } else if (hairStyle === 'side_part') {
+      // 👔 2. 經典側分：鮮明 3:7 側分線 + 俐落斜梳 + 紳士鬢角
       ctx.beginPath();
-      ctx.moveTo(146, 150);
-      ctx.quadraticCurveTo(200, 110, 256, 120);
-      ctx.quadraticCurveTo(312, 110, 366, 150);
-      ctx.lineTo(350, 105);
-      ctx.lineTo(160, 105);
+      ctx.arc(256, 126, 112, 0.88 * Math.PI, 2.12 * Math.PI);
+      ctx.fill();
+      // 3:7 分線蓬鬆髮流 (在 x:215 處有分線深凹，順梳至右側)
+      ctx.beginPath();
+      ctx.moveTo(146, 142);
+      ctx.lineTo(152, 90);
+      ctx.lineTo(215, 82); // 分線點
+      ctx.quadraticCurveTo(280, 75, 368, 115);
+      ctx.lineTo(366, 142);
+      ctx.quadraticCurveTo(310, 108, 215, 112); // 分線下緣
+      ctx.quadraticCurveTo(175, 102, 146, 142);
+      ctx.fill();
+
+    } else if (hairStyle === 'comma_part') {
+      // 🌟 3. 韓系逗號：標誌性雙 C 逗號內彎瀏海 + 額頭正中露空
+      ctx.beginPath();
+      ctx.arc(256, 126, 112, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.fill();
+      // 左逗號 (C型內扣)
+      ctx.beginPath();
+      ctx.moveTo(146, 140);
+      ctx.quadraticCurveTo(190, 85, 235, 118);
+      ctx.quadraticCurveTo(210, 124, 185, 112);
+      ctx.lineTo(146, 140);
+      ctx.fill();
+      // 右逗號 (反向C型內扣)
+      ctx.beginPath();
+      ctx.moveTo(366, 140);
+      ctx.quadraticCurveTo(322, 85, 277, 118);
+      ctx.quadraticCurveTo(302, 124, 327, 112);
+      ctx.lineTo(366, 140);
+      ctx.fill();
+
+    } else if (hairStyle === 'buzz_cut') {
+      // ⚡ 4. 陽光寸頭：緊貼頭型漸層平頭 + 清晰髮際線
+      ctx.beginPath();
+      ctx.arc(256, 138, 104, 0.95 * Math.PI, 2.05 * Math.PI);
+      ctx.fill();
+      // 俐落髮際線 (Hairline)
+      ctx.beginPath();
+      ctx.moveTo(160, 132);
+      ctx.lineTo(185, 108);
+      ctx.lineTo(327, 108);
+      ctx.lineTo(352, 132);
+      ctx.lineTo(342, 88);
+      ctx.lineTo(170, 88);
+      ctx.fill();
+
+    } else if (hairStyle === 'afro_curly') {
+      // 🌀 5. 蓬鬆捲髮：多重螺旋雲朵捲束
+      const frontCurls = [
+        { x: 180, y: 98, r: 34 }, { x: 230, y: 92, r: 36 },
+        { x: 282, y: 92, r: 36 }, { x: 332, y: 98, r: 34 }
+      ];
+      frontCurls.forEach(c => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else if (hairStyle === 'wavy_short') {
+      // 🌊 6. 微捲短髮：波浪微翹髮尾 + 日系紋理燙
+      ctx.beginPath();
+      ctx.arc(256, 126, 112, 0.85 * Math.PI, 2.15 * Math.PI);
+      ctx.fill();
+      // 微捲髮束波浪起伏
+      const waves = [
+        [150, 125, 172, 70, 198, 105],
+        [198, 105, 226, 60, 256, 96],
+        [256, 96, 286, 60, 314, 105],
+        [314, 105, 340, 70, 362, 125]
+      ];
+      waves.forEach(w => {
+        ctx.beginPath();
+        ctx.moveTo(w[0], w[1]);
+        ctx.quadraticCurveTo(w[2], w[3], w[4], w[5]);
+        ctx.fill();
+      });
+      // 露額微捲前髮 (下緣在 y: 110)
+      ctx.beginPath();
+      ctx.moveTo(148, 138);
+      ctx.quadraticCurveTo(200, 98, 256, 110);
+      ctx.quadraticCurveTo(312, 98, 364, 138);
+      ctx.lineTo(352, 90);
+      ctx.lineTo(160, 90);
       ctx.fill();
     }
   }
+
+  // ── [圖層 12: 動漫天使光環 (Angel Ring Hair Highlight)] ──
+  ctx.fillStyle = hairHighlight;
+  ctx.beginPath();
+  ctx.ellipse(256, 94, 66, 14, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+  ctx.beginPath();
+  ctx.ellipse(236, 92, 18, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(276, 92, 18, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
 
   return canvas.toDataURL('image/png');
 }
