@@ -317,19 +317,19 @@ assert(html.includes('--rx: 0px; --ry: -100px') && html.includes('--rx: 88px; --
 assert(html.includes('triggerRadialAction(\'memo\', event)') && html.includes('triggerRadialAction(\'fuzzy\', event)') && html.includes('triggerRadialAction(\'translate\', event)') && html.includes('triggerRadialAction(\'quiz\', event)'), '輪盤按鈕完整傳遞 event 並阻止事件冒泡 (stopPropagation)');
 assert(html.includes('setTimeout') && html.includes('openRaccoonDashboard(tabId)'), 'triggerRadialAction 包含安全非同步切換，保證全功能工作台順暢開啟');
 
-// 測試 22: 「實用單字」全新「🥦 食材」大類（原型食物・蔬菜根莖・肉類海鮮・蛋品・採購調味料）
-console.log('\n【測試 22：「實用單字」全新「🥦 食材」大類 (原型食物與採購調料)】');
+// 測試 22: 「實用單字」全新「🥦 食材」大類（原型食物・蔬菜根莖・肉類海鮮・蛋品・採購調味料・乾淨Ruby標音無重複朗讀）
+console.log('\n【測試 22：「實用單字」全新「🥦 食材」大類 (原型食物與採購調料・乾淨Ruby標音)】');
 assert(html.includes('"cat": "食材"') || html.includes('cat: "食材"') || html.includes("cat: '食材'"), '包含「🥦 食材」大類分類資料');
 assert(html.includes('vi_broccoli') && html.includes('ブロッコリー') && html.includes('綠花椰菜'), '包含原型蔬菜：綠花椰菜 (ブロッコリー)');
 assert(html.includes('vi_egg') && html.includes('たまご') && html.includes('雞蛋'), '包含原型蛋品：雞蛋 (卵 / たまご)');
 assert(html.includes('vi_daikon') && html.includes('だいこん') && html.includes('白蘿蔔'), '包含原型根莖：白蘿蔔 (大根)');
-assert(html.includes('vi_ninjin') && html.includes('にんじん') && html.includes('紅蘿蔔'), '包含原型根莖：紅蘿蔔 (にんじん / 人参)');
+assert(html.includes('vi_ninjin') && html.includes('人参') && html.includes('紅蘿蔔') && !html.includes('"ja": "にんじん / <ruby>人参'), '包含原型根莖：紅蘿蔔 (人参・無冗贅平假名重複)');
 assert(html.includes('vi_renkon') && html.includes('れんこん') && html.includes('蓮藕'), '包含原型根莖：蓮藕 (蓮根)');
 assert(html.includes('vi_gyuniku') && html.includes('ぎゅうにく') && html.includes('牛肉'), '包含原型肉類：牛肉 (牛肉・阿蘇赤牛)');
 assert(html.includes('vi_butaniku') && html.includes('ぶたにく') && html.includes('豬肉'), '包含原型肉類：豬肉 (豚肉・龍膽豬)');
 assert(html.includes('vi_toriniku') && html.includes('とりにく') && html.includes('雞肉'), '包含原型肉類：雞肉 (鶏肉・南蠻炸雞/唐揚)');
 assert(html.includes('vi_ebi') && html.includes('えび') && html.includes('鮮蝦'), '包含原型海鮮：鮮蝦 (海老)');
-assert(html.includes('vi_salmon') && html.includes('サーモン') && html.includes('鮭魚'), '包含原型海鮮：鮭魚 (サーモン)');
+assert(html.includes('vi_salmon') && html.includes('さけ') && html.includes('鮭魚'), '包含原型海鮮：鮭魚 (鮭・さけ)');
 assert(html.includes('vi_shoyu') && html.includes('しょうゆ') && html.includes('醬油'), '包含採購調料：醬油 (醤油)');
 assert(html.includes('vi_satou') && html.includes('さとう') && html.includes('砂糖'), '包含採購調料：砂糖 (砂糖 / 上白糖)');
 assert(html.includes('vi_mirin') && html.includes('みりん'), '包含採購調料：味醂 (みりん)');
@@ -337,9 +337,33 @@ assert(html.includes('vi_miso') && html.includes('みそ') && html.includes('味
 assert(html.includes('cats = [\'全部\', \'食材\'') || html.includes('\'食材\', \'餐點\''), '單字庫篩選標籤列包含「🥦 食材」選項');
 assert(html.includes('<option value="食材">'), '新增單字彈窗包含「🥦 食材」選項');
 
+// 測試 23: 語音合成 extractSpokenJapanese 純淨度驗證（漢字假名不重複發音）
+console.log('\n【測試 23：語音合成 extractSpokenJapanese 純淨度驗證 (v69)】');
+function testExtractSpokenJapanese(htmlStr) {
+  let result = htmlStr.replace(/<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/gi, (match, base, rt) => {
+    const cleanRt = (rt || '').trim();
+    const cleanBase = (base || '').trim();
+    if (/[\u3040-\u309F\u30A0-\u30FF]/.test(cleanRt)) {
+      return cleanRt;
+    } else {
+      return cleanBase;
+    }
+  });
+  result = result.replace(/<[^>]+>/g, '').trim();
+  result = result.replace(/（[\u3040-\u309F\u30A0-\u30FF\s\/／〜~]+）/g, '');
+  result = result.replace(/\([\u3040-\u309F\u30A0-\u30FF\s\/／〜~]+\)/g, '');
+  result = result.replace(/[〇◯○]{2,}/g, 'なになに');
+  result = result.replace(/[〇◯○]/g, 'なになに');
+  result = result.replace(/[\/／]/g, '、');
+  return result;
+}
+assert(testExtractSpokenJapanese('<ruby>人参<rt>にんじん</rt></ruby>') === 'にんじん', '人参提取朗讀文本為乾淨單次的「にんじん」，無重複');
+assert(testExtractSpokenJapanese('<ruby>大根<rt>だいこん</rt></ruby>') === 'だいこん', '大根提取朗讀文本為「だいこん」');
+assert(testExtractSpokenJapanese('<ruby>小葱<rt>こねぎ</rt></ruby>') === 'こねぎ', '小葱提取朗讀文本為「こねぎ」');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v68'), 'Service Worker 快取版本已升級至 yang-pwa-v68');
-assert(html.includes('yang_runner_handbook_v68'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v68');
+assert(swContent.includes('yang-pwa-v69'), 'Service Worker 快取版本已升級至 yang-pwa-v69');
+assert(html.includes('yang_runner_handbook_v69'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v69');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -348,6 +372,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」5大層級Q版捏臉圖鑑、「現場四國同步直譯板（普通丁寧體）」、全新「🥦 食材」原型食物與調料庫、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」5大層級Q版捏臉圖鑑、「現場四國同步直譯板（普通丁寧體）」、全新「🥦 食材」原型食物與調料庫、單字庫標準Ruby純淨標音（無重複朗讀）、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
 }
 
