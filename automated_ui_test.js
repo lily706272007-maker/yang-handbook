@@ -375,9 +375,36 @@ assert(html.includes('setAvatarFeature'), 'JS 包含特徵切換函式 setAvatar
 assert(html.includes('ellipse(256, 54, 48, 44'), '外場包包頭 (bun_hair) 在頭頂中央 (y:54) 繪製立體大圓丸子');
 assert(html.includes('8e1d2c') && html.includes('ffd700'), '女生制服包含優雅深紅蝴蝶結領結與金色繩結/珍珠飾品');
 
+// 測試 25: 語音 Memo 繁體中文即時轉換、外場語音錯字智慧校正與自訂即時編輯修字 (v71)
+console.log('\n【測試 25：語音 Memo 繁體中文即時轉換・外場語音錯字校正・自訂即時編輯修字 (v71)】');
+assert(html.includes('toTraditionalChinese') && html.includes('S2T_MAP'), '包含簡繁字元字典 (S2T_MAP) 與繁體中文轉換核心函式 (toTraditionalChinese)');
+assert(html.includes('correctCommonRunnerSpeechTypos'), '包含常見外場語音同音錯字智慧校正函式 (correctCommonRunnerSpeechTypos)');
+
+// 驗證 S2T_MAP 簡繁對照
+const S2T_REGEX = /const S2T_MAP = \{([\s\S]*?)\};/;
+const mapMatch = html.match(S2T_REGEX);
+assert(mapMatch && mapMatch[1].includes("'说': '說'") && mapMatch[1].includes("'话': '話'") && mapMatch[1].includes("'机': '機'"), 'S2T_MAP 包含說、話、機等高頻簡繁對映');
+
+// 驗證直接從 index.html 提取的 toTraditionalChinese 與 correctCommonRunnerSpeechTypos
+const s2tFnMatch = html.match(/const S2T_MAP = \{[\s\S]*?\};\s*function toTraditionalChinese[\s\S]*?function correctCommonRunnerSpeechTypos[\s\S]*?\n\}/);
+assert(s2tFnMatch !== null, '成功從 index.html 提取繁簡轉換與外場錯字校正函式');
+const runConversion = new Function(`${s2tFnMatch[0]}; return toTraditionalChinese;`)();
+
+assert(runConversion('今天有人跟我说去插队讲机') === '今天有人跟我說去擦對講機', '簡體「今天有人跟我说去插队讲机」成功轉為繁體並校正為「今天有人跟我說去擦對講機」');
+assert(runConversion('请帮我查桌子和包保险膜') === '請幫我擦桌子和包保鮮膜', '簡體「请帮我查桌子和包保险膜」成功轉為繁體並校正為「請幫我擦桌子和包保鮮膜」');
+assert(runConversion('我觉得') === '我覺得', '簡體「我觉得」成功轉為繁體「我覺得」');
+assert(runConversion('把所有的长嘴的打火机收回来') === '把所有的長嘴打火機收回來', '「長嘴的打火機」智慧校正為「長嘴打火機」');
+
+// 驗證自訂編輯修字相關介面與狀態函式
+assert(html.includes('editingMemoId') && html.includes('saveMemoEdit') && html.includes('cancelMemoEdit'), '包含 memo 原地多行編輯器狀態變數與儲存/取消函式');
+assert(html.includes('memo-edit-input-') && html.includes('<textarea'), 'renderRaccoonMemoTab 在編輯狀態下動態渲染舒適之 Textarea 輸入框');
+assert(html.includes('convertAllMemosToTraditional'), '包含「✨ 全轉繁體」一鍵清洗所有備忘函式');
+assert(html.includes('copySingleMemo'), '包含單則備忘「📋 複製單則」按鈕與函式');
+assert(html.includes('editMemoItem'), '備忘卡片文字與按鈕支援點擊即刻進入原地編輯修字模式');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v70'), 'Service Worker 快取版本已升級至 yang-pwa-v70');
-assert(html.includes('yang_runner_handbook_v70'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v70');
+assert(swContent.includes('yang-pwa-v71'), 'Service Worker 快取版本已升級至 yang-pwa-v71');
+assert(html.includes('yang_runner_handbook_v71'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v71');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -386,6 +413,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字 (v71)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
 }
 

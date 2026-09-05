@@ -1991,11 +1991,12 @@
           </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
           <span style="font-weight:700; font-size:0.85rem; color:var(--ink);" id="memo-count-label">📋 現場備忘清單 (0 則)</span>
-          <div style="display:flex; gap:6px;">
-            <button class="btn btn-primary btn-sm" style="font-weight:800;" onclick="copyAllMemosToClipboard()">📋 一鍵複製給工程師</button>
-            <button class="btn btn-ghost btn-sm" onclick="clearCheckedMemos()">清空已完成</button>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" style="font-size:0.75rem; padding:2px 8px; color:var(--primary); background:#eef4ff; border-radius:6px;" onclick="convertAllMemosToTraditional()" title="將所有備忘轉為繁體中文並自動校正外場語音錯字">✨ 全轉繁體</button>
+            <button class="btn btn-primary btn-sm" style="font-weight:800; font-size:0.78rem;" onclick="copyAllMemosToClipboard()">📋 一鍵複製給工程師</button>
+            <button class="btn btn-ghost btn-sm" style="font-size:0.75rem;" onclick="clearCheckedMemos()">清空已完成</button>
           </div>
         </div>
 
@@ -2434,7 +2435,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v70';
+const STORAGE_KEY = 'yang_runner_handbook_v71';
 
 function createRealRunnerData() {
   return {
@@ -8214,7 +8215,127 @@ function switchRaccoonTab(tabId) {
   if (targetTab === 'quiz') startRaccoonQuickQuiz();
 }
 
-// ── 1. 📝 語音 Memo 筆記本實作 ──
+// ── 1. 📝 語音 Memo 繁體轉換、外場同音錯字校正與筆記本實作 ──
+const S2T_MAP = {
+  '说': '說', '话': '話', '请': '請', '问': '問', '让': '讓', '给': '給', '帮': '幫', '么': '麼',
+  '什': '什', '样': '樣', '这': '這', '个': '個', '们': '們', '来': '來', '后': '後', '还': '還',
+  '没': '沒', '觉': '覺', '得': '得', '边': '邊', '点': '點', '现': '現', '场': '場', '讲': '講',
+  '机': '機', '对': '對', '队': '隊', '会': '會', '错': '錯', '头': '頭', '发': '發', '纸': '紙', '张': '張',
+  '条': '條', '记': '記', '录': '錄', '办': '辦', '备': '備', '忘': '忘', '单': '單', '师': '師',
+  '盘': '盤', '锅': '鍋', '碗': '碗', '筷': '筷', '杯': '杯', '擦': '擦', '拭': '拭', '净': '淨',
+  '洁': '潔', '扫': '掃', '选': '選', '择': '擇', '题': '題', '试': '試', '验': '驗', '专': '專',
+  '属': '屬', '结': '結', '果': '果', '动': '動', '态': '態', '传': '傳', '菜': '菜', '厅': '廳',
+  '馆': '館', '饭': '飯', '饮': '飲', '料': '料', '酒': '酒', '水': '水', '冰': '冰', '热': '熱',
+  '汤': '湯', '鱼': '魚', '肉': '肉', '蛋': '蛋', '虾': '蝦', '鲑': '鮭', '鲔': '鮪', '鸡': '雞',
+  '猪': '豬', '牛': '牛', '姜': '薑', '蒜': '蒜', '葱': '蔥', '酱': '醬', '油': '油', '醋': '醋',
+  '盐': '鹽', '糖': '糖', '鲜': '鮮', '甜': '甜', '辣': '辣', '酸': '酸', '苦': '苦', '咸': '鹹',
+  '烧': '燒', '烤': '烤', '炸': '炸', '煮': '煮', '蒸': '蒸', '炒': '炒', '煎': '煎', '炖': '燉',
+  '焖': '燜', '厨': '廚', '房': '房', '柜': '櫃', '台': '檯', '门': '門', '窗': '窗', '帘': '簾',
+  '间': '間', '舍': '舍', '床': '床', '席': '席', '铺': '鋪', '垫': '墊', '巾': '巾', '布': '布',
+  '抹': '抹', '洗': '洗', '刷': '刷', '冲': '衝', '泡': '泡', '壶': '壺', '瓶': '瓶', '罐': '罐',
+  '盒': '盒', '袋': '袋', '包': '包', '裹': '裹', '膜': '膜', '绳': '繩', '扣': '扣', '夹': '夾',
+  '钳': '鉗', '刀': '刀', '叉': '叉', '勺': '勺', '匙': '匙', '盆': '盆', '桶': '桶', '篓': '簍',
+  '箱': '箱', '车': '車', '架': '架', '梯': '梯', '锁': '鎖', '牌': '牌', '标': '標', '签': '簽',
+  '笔': '筆', '本': '本', '册': '冊', '簿': '簿', '账': '帳', '据': '據', '票': '票', '券': '券',
+  '卡': '卡', '证': '證', '照': '照', '码': '碼', '号': '號', '位': '位', '置': '置', '处': '處',
+  '所': '所', '区': '區', '域': '域', '段': '段', '楼': '樓', '层': '層', '室': '室', '堂': '堂',
+  '廊': '廊', '道': '道', '路': '路', '街': '街', '巷': '巷', '弄': '弄', '桥': '橋', '关': '關',
+  '闸': '閘', '阶': '階', '步': '步', '电': '電', '网': '網', '络': '絡', '线': '線', '缆': '纜',
+  '丝': '絲', '带': '帶', '环': '環', '链': '鏈', '钩': '鉤', '钉': '釘', '针': '針', '缝': '縫',
+  '补': '補', '修': '修', '理': '理', '改': '改', '换': '換', '变': '變', '移': '移', '转': '轉',
+  '运': '運', '输': '輸', '送': '送', '达': '達', '到': '到', '归': '歸', '收': '收', '领': '領',
+  '取': '取', '放': '放', '存': '存', '储': '儲', '藏': '藏', '保': '保', '管': '管', '护': '護',
+  '卫': '衛', '防': '防', '避': '避', '免': '免', '禁': '禁', '止': '止', '许': '許', '可': '可',
+  '允': '允', '诺': '諾', '应': '應', '答': '答', '回': '回', '复': '復', '报': '報', '告': '告',
+  '诉': '訴', '谈': '談', '论': '論', '议': '議', '聚': '聚', '散': '散', '分': '分', '合': '合',
+  '束': '束', '始': '始', '开': '開', '闭': '閉', '启': '啟', '停': '停', '顿': '頓', '歇': '歇',
+  '休': '休', '息': '息', '假': '假', '期': '期', '班': '班', '岗': '崗', '职': '職', '责': '責',
+  '任': '任', '务': '務', '劳': '勞', '作': '作', '役': '役', '雇': '僱', '聘': '聘', '佣': '傭',
+  '工': '工', '资': '資', '薪': '薪', '酬': '酬', '赏': '賞', '罚': '罰', '奖': '獎', '金': '金',
+  '费': '費', '钱': '錢', '币': '幣', '汇': '匯', '率': '率', '价': '價', '格': '格', '额': '額',
+  '数': '數', '量': '量', '重': '重', '衡': '衡', '称': '稱', '规': '規', '模': '模', '准': '準',
+  '范': '範', '式': '式', '种': '種', '类': '類', '级': '級', '等': '等', '次': '次', '序': '序',
+  '列': '列', '排': '排', '名': '名', '呼': '呼', '唤': '喚', '赞': '讚', '评': '評', '审': '審',
+  '查': '查', '检': '檢', '测': '測', '考': '考', '练': '練', '习': '習', '学': '學', '读': '讀',
+  '写': '寫', '诵': '誦', '译': '譯', '翻': '翻', '释': '釋', '解': '解', '析': '析', '懂': '懂',
+  '明': '明', '白': '白', '悟': '悟', '知': '知', '晓': '曉', '识': '識', '认': '認', '感': '感',
+  '想': '想', '思': '思', '虑': '慮', '顾': '顧', '念': '念', '怀': '懷', '忧': '憂', '愁': '愁',
+  '伤': '傷', '痛': '痛', '苦': '苦', '乐': '樂', '喜': '喜', '欢': '歡', '爱': '愛', '恶': '惡',
+  '恨': '恨', '怒': '怒', '怨': '怨', '悔': '悔', '怕': '怕', '惧': '懼', '恐': '恐', '慌': '慌',
+  '忙': '忙', '急': '急', '乱': '亂', '宁': '寧', '静': '靜', '默': '默', '安': '安', '全': '全',
+  '稳': '穩', '定': '定', '确': '確', '实': '實', '真': '真', '假': '假', '虚': '虛', '伪': '偽',
+  '劣': '劣', '优': '優', '良': '良', '善': '善', '美': '美', '丑': '醜', '脏': '髒', '污': '污',
+  '浊': '濁', '纯': '純', '杂': '雜', '简': '簡', '繁': '繁', '难': '難', '易': '易', '险': '險',
+  '顺': '順', '利': '利', '害': '害', '益': '益', '弊': '弊', '损': '損', '失': '失', '胜': '勝',
+  '负': '負', '赢': '贏', '强': '強', '弱': '弱', '败': '敗', '兴': '興', '衰': '衰', '荣': '榮',
+  '辱': '辱', '贵': '貴', '贱': '賤', '贫': '貧', '富': '富', '丰': '豐', '乏': '乏', '缺': '缺',
+  '足': '足', '满': '滿', '空': '空', '充': '充', '广': '廣', '狭': '狹', '阔': '闊', '窄': '窄',
+  '深': '深', '浅': '淺', '高': '高', '低': '低', '长': '長', '短': '短', '粗': '粗', '细': '細',
+  '厚': '厚', '薄': '薄', '紧': '緊', '松': '鬆', '快': '快', '慢': '慢', '早': '早', '迟': '遲',
+  '晚': '晚', '超': '超', '延': '延', '误': '誤', '差': '差', '非': '非', '偏': '偏', '斜': '斜',
+  '直': '直', '曲': '曲', '弯': '彎', '平': '平', '凹': '凹', '凸': '凸', '尖': '尖', '钝': '鈍',
+  '锐': '銳', '滑': '滑', '涩': '澀', '糙': '糙', '润': '潤', '湿': '濕', '燥': '燥', '干': '乾',
+  '冷': '冷', '凉': '涼', '暖': '暖', '温': '溫', '烫': '燙', '冻': '凍', '融': '融', '化': '化',
+  '凝': '凝', '沸': '沸', '腾': '騰', '燃': '燃', '灭': '滅', '熄': '熄', '亮': '亮', '暗': '暗',
+  '昏': '昏', '阴': '陰', '阳': '陽', '光': '光', '影': '影', '响': '響', '声': '聲', '音': '音',
+  '调': '調', '歌': '歌', '唱': '唱', '喊': '喊', '嗅': '嗅', '尝': '嘗', '触': '觸', '摸': '摸',
+  '么': '麼', '谁': '誰', '哪': '哪', '里': '裡', '这': '這', '那': '那', '与': '與', '及': '及',
+  '并': '並', '且': '且', '或': '或', '者': '者', '但': '但', '因': '因', '为': '為', '所': '所',
+  '以': '以', '如': '如', '果': '果', '就': '就', '则': '則', '便': '便', '才': '才', '又': '又',
+  '也': '也', '都': '都', '总': '總', '共': '共', '统': '統', '齐': '齊', '均': '均', '皆': '皆',
+  '时': '時', '间': '間', '候': '候', '钟': '鐘', '点': '點', '分': '分', '秒': '秒', '年': '年',
+  '月': '月', '日': '日', '天': '天', '周': '週', '季': '季', '节': '節', '岁': '歲', '龄': '齡',
+  '头': '頭', '脸': '臉', '眼': '眼', '睛': '睛', '耳': '耳', '朵': '朵', '鼻': '鼻', '嘴': '嘴',
+  '唇': '唇', '齿': '齒', '舌': '舌', '喉': '喉', '咙': '嚨', '颈': '頸', '项': '項', '肩': '肩',
+  '臂': '臂', '肘': '肘', '腕': '腕', '手': '手', '掌': '掌', '指': '指', '甲': '甲', '胸': '胸',
+  '背': '背', '腰': '腰', '腹': '腹', '肚': '肚', '脐': '臍', '膝': '膝', '腿': '腿', '脚': '腳',
+  '趾': '趾', '踵': '踵', '骨': '骨', '肉': '肉', '筋': '筋', '脉': '脈', '血': '血', '皮': '皮',
+  '毛': '毛', '发': '髮', '须': '鬚', '体': '體', '身': '身', '躯': '軀', '脏': '臟', '腑': '腑',
+  '让': '讓', '认': '認', '为': '為', '办': '辦', '法': '法', '听': '聽', '见': '見', '看': '看',
+  '观': '觀', '查': '查', '验': '驗', '试': '試', '题': '題', '问': '問', '题': '題', '答': '答',
+  '案': '案', '内': '內', '外': '外', '进': '進', '出': '出', '入': '入', '回': '回', '归': '歸',
+  '边': '邊', '旁': '旁', '侧': '側', '左': '左', '右': '右', '前': '前', '后': '後', '上': '上',
+  '下': '下', '中': '中', '间': '間', '里': '裡', '外': '外', '东': '東', '西': '西', '南': '南',
+  '北': '北', '顶': '頂', '底': '底', '端': '端', '角': '角', '面': '面', '向': '向', '背': '背'
+};
+
+function toTraditionalChinese(str) {
+  if (!str) return '';
+  let res = '';
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    res += S2T_MAP[char] || char;
+  }
+  return correctCommonRunnerSpeechTypos(res);
+}
+
+function correctCommonRunnerSpeechTypos(str) {
+  if (!str) return '';
+  return str
+    .replace(/插[隊對队对]講[機机]/g, '擦對講機')
+    .replace(/插[隊對队对]機/g, '擦對講機')
+    .replace(/插[隊對队对]机/g, '擦對講機')
+    .replace(/插對講機/g, '擦對講機')
+    .replace(/插隊講機/g, '擦對講機')
+    .replace(/差對講機/g, '擦對講機')
+    .replace(/插[隊對队对]/g, '擦對')
+    .replace(/[查差插]桌子/g, '擦桌子')
+    .replace(/[查差插]盤子/g, '擦盤子')
+    .replace(/[查差插]碗/g, '擦碗')
+    .replace(/包保[險险]膜/g, '包保鮮膜')
+    .replace(/包保鮮膜/g, '包保鮮膜')
+    .replace(/保[險险]膜/g, '保鮮膜')
+    .replace(/長嘴的打火機/g, '長嘴打火機')
+    .replace(/[田添]反/g, '添飯')
+    .replace(/田飯/g, '添飯')
+    .replace(/收甲子/g, '收夾子')
+    .replace(/放回元位/g, '放回原位')
+    .replace(/補冰[快块]/g, '補冰塊')
+    .replace(/丟[調调]/g, '丟掉')
+    .replace(/隨詞偷聽/g, '隨詞偷聽')
+    .replace(/語音[mM][eE][mM][oO]/g, '語音 Memo');
+}
+
 let memoStreamState = {
   isRecording: false,
   recognition: null,
@@ -8223,10 +8344,20 @@ let memoStreamState = {
   shouldKeepListening: false
 };
 
+let editingMemoId = null;
+
 function getRaccoonMemos() {
   try {
     const raw = localStorage.getItem(RACCOON_MEMO_STORAGE);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed.map(m => ({
+          ...m,
+          text: toTraditionalChinese(m.text || '')
+        }));
+      }
+    }
   } catch (e) {}
   return [];
 }
@@ -8252,28 +8383,48 @@ function renderRaccoonMemoTab() {
     return;
   }
 
-  listEl.innerHTML = memos.map((m, idx) => `
-    <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px; display:flex; align-items:flex-start; justify-content:space-between; gap:8px;">
-      <div style="display:flex; align-items:flex-start; gap:10px; flex:1;">
-        <input type="checkbox" ${m.checked ? 'checked' : ''} onchange="toggleCheckMemo('${m.id}')" style="width:19px; height:19px; margin-top:2px; cursor:pointer;" />
-        <div style="flex:1;">
-          <div id="memo-text-${m.id}" style="font-size:0.9rem; color:var(--ink); font-weight:600; line-height:1.45; white-space:pre-wrap; ${m.checked ? 'text-decoration:line-through; opacity:0.6;' : ''}">${escapeHtml(m.text)}</div>
-          <div style="font-size:0.72rem; color:var(--muted); margin-top:4px; display:flex; gap:8px; align-items:center;">
-            <span>🕒 ${m.time || ''}</span>
-            <button class="btn btn-ghost btn-sm" style="font-size:0.72rem; padding:1px 5px; color:var(--primary);" onclick="editMemoItem('${m.id}')">✏️ 編輯</button>
+  listEl.innerHTML = memos.map((m, idx) => {
+    const isEditing = (editingMemoId === m.id);
+    if (isEditing) {
+      return `
+        <div style="background:#fff; border:2px solid var(--primary); border-radius:12px; padding:12px; box-shadow:0 3px 10px rgba(0,0,0,0.08);">
+          <div style="font-size:0.75rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+            <span>✏️ 編輯修字（支援隨意游標修改錯字）：</span>
+            <span style="font-size:0.7rem; color:var(--muted);">可按 Ctrl/Cmd+Enter 快速儲存</span>
+          </div>
+          <textarea id="memo-edit-input-${m.id}" class="form-control" style="width:100%; min-height:85px; font-size:0.92rem; line-height:1.45; border:1px solid var(--border); border-radius:8px; padding:8px; font-family:inherit; resize:vertical;" onkeydown="if((event.ctrlKey || event.metaKey) && event.key==='Enter') saveMemoEdit('${m.id}')">${escapeHtml(m.text)}</textarea>
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="cancelMemoEdit()" style="font-size:0.8rem; padding:4px 10px;">✕ 取消</button>
+            <button class="btn btn-primary btn-sm" onclick="saveMemoEdit('${m.id}')" style="font-size:0.8rem; padding:4px 14px; font-weight:800;">💾 確定儲存</button>
           </div>
         </div>
+      `;
+    }
+    return `
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px; display:flex; align-items:flex-start; justify-content:space-between; gap:8px;">
+        <div style="display:flex; align-items:flex-start; gap:10px; flex:1;">
+          <input type="checkbox" ${m.checked ? 'checked' : ''} onchange="toggleCheckMemo('${m.id}')" style="width:19px; height:19px; margin-top:2px; cursor:pointer;" />
+          <div style="flex:1;">
+            <div id="memo-text-${m.id}" onclick="editMemoItem('${m.id}')" title="點擊直接原地編輯錯字" style="font-size:0.9rem; color:var(--ink); font-weight:600; line-height:1.45; white-space:pre-wrap; cursor:pointer; ${m.checked ? 'text-decoration:line-through; opacity:0.6;' : ''}">${escapeHtml(m.text)}</div>
+            <div style="font-size:0.72rem; color:var(--muted); margin-top:5px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span>🕒 ${m.time || ''}</span>
+              <button class="btn btn-ghost btn-sm" style="font-size:0.72rem; padding:1px 6px; color:var(--primary); background:#eef4ff; border-radius:4px;" onclick="editMemoItem('${m.id}')">✏️ 編輯修字</button>
+              <button class="btn btn-ghost btn-sm" style="font-size:0.72rem; padding:1px 6px; color:var(--muted);" onclick="copySingleMemo('${m.id}')">📋 複製單則</button>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="color:var(--accent); font-size:0.85rem; padding:2px 6px;" onclick="deleteMemo('${m.id}')" title="刪除此項">✕</button>
       </div>
-      <button class="btn btn-ghost btn-sm" style="color:var(--accent); font-size:0.85rem; padding:2px 6px;" onclick="deleteMemo('${m.id}')">✕</button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function addRaccoonMemoManual() {
   const input = document.getElementById('input-memo-text');
   if (!input) return;
-  const text = input.value.trim();
-  if (!text) return;
+  const rawText = input.value.trim();
+  if (!rawText) return;
+  const text = toTraditionalChinese(rawText);
   input.value = '';
 
   const memos = getRaccoonMemos();
@@ -8292,7 +8443,7 @@ function addRaccoonMemoManual() {
 // 🧠 智慧語音條列拆分函式（支援長語音轉待辦 Checklist）
 function parseSpeechToMemoItems(rawText) {
   if (!rawText) return [];
-  const clean = rawText.trim();
+  const clean = toTraditionalChinese(rawText.trim());
   if (!clean) return [];
 
   // 若文本本身較短（小於 15 字且無明顯列舉詞），直接作為單一項目
@@ -8368,9 +8519,9 @@ function startMemoContinuousRecording() {
       for (let i = e.resultIndex; i < e.results.length; ++i) {
         const transcript = e.results[i][0].transcript;
         if (e.results[i].isFinal) {
-          memoStreamState.finalTranscript += transcript + ' ';
+          memoStreamState.finalTranscript += toTraditionalChinese(transcript) + ' ';
         } else {
-          interim += transcript;
+          interim += toTraditionalChinese(transcript);
         }
       }
       memoStreamState.interimTranscript = interim;
@@ -8415,8 +8566,8 @@ function finishAndSaveMemoRecording() {
     memoStreamState.recognition = null;
   }
 
-  // 取得完整語音文字
-  const fullText = (memoStreamState.finalTranscript + ' ' + memoStreamState.interimTranscript).trim();
+  // 取得完整語音文字並全轉繁體
+  const fullText = toTraditionalChinese((memoStreamState.finalTranscript + ' ' + memoStreamState.interimTranscript).trim());
   resetMemoRecordingUI();
 
   if (!fullText) {
@@ -8435,7 +8586,7 @@ function finishAndSaveMemoRecording() {
     items.forEach((itemText, idx) => {
       memos.unshift({
         id: 'memo_' + (Date.now() + idx) + '_' + Math.floor(Math.random()*1000),
-        text: itemText,
+        text: toTraditionalChinese(itemText),
         time: timeStr,
         checked: false
       });
@@ -8490,16 +8641,77 @@ function resetMemoRecordingUI() {
 }
 
 function editMemoItem(id) {
+  editingMemoId = id;
+  renderRaccoonMemoTab();
+  setTimeout(() => {
+    const ta = document.getElementById(`memo-edit-input-${id}`);
+    if (ta) {
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+    }
+  }, 50);
+}
+
+function saveMemoEdit(id) {
+  const ta = document.getElementById(`memo-edit-input-${id}`);
+  if (!ta) return;
+  const newText = toTraditionalChinese(ta.value.trim());
+  if (!newText) {
+    showToast('備忘內容不能為空喔！', 'error');
+    return;
+  }
+  const memos = getRaccoonMemos();
+  const item = memos.find(m => m.id === id);
+  if (item) {
+    item.text = newText;
+    saveRaccoonMemos(memos);
+    editingMemoId = null;
+    renderRaccoonMemoTab();
+    showToast('✅ 備忘錯字已成功修正！', 'success');
+  }
+}
+
+function cancelMemoEdit() {
+  editingMemoId = null;
+  renderRaccoonMemoTab();
+}
+
+function copySingleMemo(id) {
   const memos = getRaccoonMemos();
   const item = memos.find(m => m.id === id);
   if (!item) return;
+  const copyText = item.text;
+  navigator.clipboard.writeText(copyText).then(() => {
+    showToast('📋 已複製此則備忘內容！', 'success');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = copyText;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('📋 已複製此則備忘內容！', 'success');
+  });
+}
 
-  const newText = prompt('✏️ 編輯備忘內容：', item.text);
-  if (newText !== null && newText.trim()) {
-    item.text = newText.trim();
-    saveRaccoonMemos(memos);
-    showToast('備忘已更新！');
+function convertAllMemosToTraditional() {
+  const memos = getRaccoonMemos();
+  if (memos.length === 0) {
+    showToast('目前沒有任何備忘項目喔！', 'info');
+    return;
   }
+  let convertedCount = 0;
+  memos.forEach(m => {
+    const old = m.text;
+    const trad = toTraditionalChinese(m.text);
+    if (old !== trad) {
+      m.text = trad;
+      convertedCount++;
+    }
+  });
+  saveRaccoonMemos(memos);
+  renderRaccoonMemoTab();
+  showToast(`✨ 全數備忘已完成繁體轉換與錯字校正！(更新了 ${convertedCount} 則)`, 'success');
 }
 
 function toggleCheckMemo(id) {
@@ -8535,7 +8747,7 @@ function copyAllMemosToClipboard() {
   const uncheckCount = memos.filter(m => !m.checked).length;
   const checkCount = memos.filter(m => m.checked).length;
   const dateHeader = `### 📝 小楊的外場現場備忘錄 (${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()})\n> 總計 ${memos.length} 則備忘（待處理 ${uncheckCount} 則，已完成 ${checkCount} 則）\n\n`;
-  const lines = memos.map((m, idx) => `- [${m.checked ? 'x' : ' '}] ${idx + 1}. ${m.text} (${m.time})`);
+  const lines = memos.map((m, idx) => `- [${m.checked ? 'x' : ' '}] ${idx + 1}. ${toTraditionalChinese(m.text)} (${m.time})`);
   const fullText = dateHeader + lines.join('\n');
 
   navigator.clipboard.writeText(fullText).then(() => {
@@ -11044,7 +11256,7 @@ function toggleBroadcastMic() {
     };
 
     broadcastRecognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      const transcript = toTraditionalChinese(event.results[0][0].transcript);
       const input = document.getElementById('broadcast-zh-input');
       if (input) input.value = transcript;
       showToast(`辨識成功：「${transcript}」`, 'success');
