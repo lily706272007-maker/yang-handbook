@@ -458,9 +458,17 @@ assert(html.includes('clearTranslateInput'), '包含中翻日文字一鍵清空�
 assert(html.includes('translateVoiceState'), '包含中翻日語音辨識狀態管理物件 (translateVoiceState)');
 assert(html.includes("recognition.lang = 'zh-TW'"), '中翻日語音輸入設定為臺灣/繁體中文辨識 (zh-TW)');
 
+// 測試 29: 300 句庫平行三句展示、獨立發音、依序連讀與外場文法實戰解析 (v75)
+console.log('\n【測試 29：300 句庫平行三句展示・獨立發音・依序連讀與實戰文法重點 (v75)】');
+assert(html.includes('function speakMultipleJapanese(textArray)'), '包含多句依序朗讀核心函式 (speakMultipleJapanese)');
+assert(html.includes('function speakCurrentPracticeAll()'), '包含 300 句庫多句依序朗讀控制函式 (speakCurrentPracticeAll)');
+assert(html.includes('variants: [') && html.includes('① 標準口語') && html.includes('② 縮約隨和') && html.includes('③ 簡短拜託'), 'PRACTICE_SENTENCES_BANK 包含平行 3 句 variants 資料結構');
+assert(html.includes('朗讀此句') && html.includes('朗讀全部 3 句'), 'UI 同時提供單句「🔊 朗讀此句」與整組「🔊 朗讀全部 3 句」');
+assert(html.includes('【名詞＋に戻す】') && html.includes('【〜といて（〜ておいて縮約）】') && html.includes('【名詞＋お願い】'), '文法重點全面升級為實用外場文法與口吻解析，不再重複列出三種說法');
+
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v74'), 'Service Worker 快取版本已升級至 yang-pwa-v74');
-assert(html.includes('yang_runner_handbook_v74'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v74');
+assert(swContent.includes('yang-pwa-v75'), 'Service Worker 快取版本已升級至 yang-pwa-v75');
+assert(html.includes('yang_runner_handbook_v75'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v75');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -469,6 +477,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流與精緻動漫立繪（頭頂大包包頭・男女外場制服區分・露眉大眼高光・自然黑/深棕・無特徵/痣/鬍）、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音（無重複朗讀）、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、外場撤盤 6 組自然應對與同事平級指示測試 100% 全部通過！');
 }
 

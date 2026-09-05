@@ -2435,7 +2435,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v74';
+const STORAGE_KEY = 'yang_runner_handbook_v75';
 
 function createRealRunnerData() {
   return {
@@ -6061,6 +6061,34 @@ function speakJapanese(text) {
   window.speechSynthesis.speak(utt);
 }
 
+function speakMultipleJapanese(textArray) {
+  if (!('speechSynthesis' in window)) {
+    showToast('您的瀏覽器不支援語音合成功能', 'error');
+    return;
+  }
+  if (!Array.isArray(textArray) || textArray.length === 0) return;
+
+  window.speechSynthesis.cancel();
+
+  const pref = getSavedVoiceSettings();
+  const allVoices = window.speechSynthesis.getVoices();
+  const selectedVoice = (pref.voiceURI || pref.voiceName) 
+    ? allVoices.find(v => (pref.voiceURI && v.voiceURI === pref.voiceURI) || (pref.voiceName && v.name === pref.voiceName))
+    : null;
+
+  textArray.forEach((text) => {
+    const spokenText = extractSpokenJapanese(text);
+    if (!spokenText) return;
+
+    const utt = new SpeechSynthesisUtterance(spokenText);
+    utt.lang = 'ja-JP';
+    utt.rate = pref.rate || 0.92;
+    if (selectedVoice) utt.voice = selectedVoice;
+
+    window.speechSynthesis.speak(utt);
+  });
+}
+
 /* ==============================================================
    7. 核心功能 A：電子小寵物「即時 AI 自動規劃」
 ============================================================== */
@@ -7508,131 +7536,226 @@ const PRACTICE_SENTENCES_BANK = [
   // 🤝 同事平級高頻指示 (10大動作日常說法)
   {
     cat: "同事指示",
-    ja: "ライター<ruby>戻<rt>もど</rt></ruby>してきて。（ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いといて / ライター<ruby>戻<rt>もど</rt></ruby>しお<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示1】請去放打火機",
+    variants: [
+      { label: "① 標準口語", ja: "ライター<ruby>戻<rt>もど</rt></ruby>してきて。", zh: "去把打火機放回原位" },
+      { label: "② 縮約隨和", ja: "ライター<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いといて。", zh: "打火機先擺回原來那裡放著" },
+      { label: "③ 簡短拜託", ja: "ライター<ruby>戻<rt>もど</rt></ruby>しお<ruby>願<rt>ねが</rt></ruby>い。", zh: "打火機歸位拜託了" }
+    ],
+    ja: "ライター<ruby>戻<rt>もど</rt></ruby>してきて。",
     zh: "【指示1】請去放打火機（放回原位 / 擺回原來那裡 / 歸位拜託了）",
     vocabs: [
-      { ja: "ライター", zh: "打火機" },
-      { ja: "<ruby>戻<rt>もど</rt></ruby>す", zh: "放回、歸位" }
+      { ja: "ライター", zh: "打火機、點火槍" },
+      { ja: "<ruby>戻<rt>もど</rt></ruby>す", zh: "放回、歸位" },
+      { ja: "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", zh: "原本的位置" }
     ],
     points: [
-      { title: "【3種說法】", desc: "戻してきて / 置いといて / ライター戻しお願い" }
+      { title: "【名詞＋に戻す】", desc: "表示放回特定指定位置或原處。" },
+      { title: "【〜といて（〜ておいて縮約）】", desc: "日常口語縮約型，表示「先放置/順便擺好備著」，平級同事間使用極親切自然。" },
+      { title: "【名詞＋お願い】", desc: "繁忙現場省略助詞與動詞的最精簡交辦句型。" }
     ],
     tips: "內場點火器用完時，平級同事最常用這三句互相提醒歸位。"
   },
   {
     cat: "同事指示",
-    ja: "これ、ラップしといて。（これ、ラップかけてきて / これラップお<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示2】請用保鮮膜封起來",
+    variants: [
+      { label: "① 縮約隨和", ja: "これ、ラップしといて。", zh: "這幫我包個保鮮膜放著" },
+      { label: "② 標準口語", ja: "これ、ラップかけてきて。", zh: "去幫這個封一下保鮮膜" },
+      { label: "③ 簡短拜託", ja: "これラップお<ruby>願<rt>ねが</rt></ruby>い。", zh: "這包保鮮膜拜託囉" }
+    ],
+    ja: "これ、ラップしといて。",
     zh: "【指示2】請用保鮮膜封起來（包個保鮮膜 / 封一下保鮮膜 / 保鮮膜拜託囉）",
     vocabs: [
-      { ja: "ラップ", zh: "保鮮膜" },
-      { ja: "ラップする", zh: "包保鮮膜" }
+      { ja: "ラップ", zh: "保鮮膜 (plastic wrap)" },
+      { ja: "ラップする", zh: "包保鮮膜" },
+      { ja: "かける", zh: "覆蓋、封上" }
     ],
     points: [
-      { title: "【3種說法】", desc: "ラップしといて / ラップかけてきて / これラップお願い" }
+      { title: "【ラップする vs ラップをかける】", desc: "「ラップする」是將保鮮膜作為動詞使用；「ラップをかける」是標準動賓搭配，意思皆為覆蓋保鮮膜。" },
+      { title: "【〜てきて（去執行後回來）】", desc: "指示對方前往料理檯執行完動作後回到原崗位。" },
+      { title: "【これ＋名詞＋お願い】", desc: "直指物品並交代任務的超高頻現場簡約口吻。" }
     ],
     tips: "備餐或打烊時多餘食材封膜保鮮必用金句。"
   },
   {
     cat: "同事指示",
-    ja: "テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。（テーブル<ruby>拭<rt>ふ</rt></ruby>いといて / あそこのテーブルお<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示3】請去擦桌子",
+    variants: [
+      { label: "① 標準口語", ja: "テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。", zh: "去把桌子擦乾淨" },
+      { label: "② 縮約隨和", ja: "テーブル<ruby>拭<rt>ふ</rt></ruby>いといて。", zh: "順手把桌子擦一下放著" },
+      { label: "③ 簡短拜託", ja: "あそこのテーブルお<ruby>願<rt>ねが</rt></ruby>い。", zh: "那桌交給你處理囉" }
+    ],
+    ja: "テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。",
     zh: "【指示3】請去擦桌子（擦乾淨 / 順手擦一下 / 那桌交給你處理囉）",
     vocabs: [
-      { ja: "テーブル", zh: "餐桌" },
-      { ja: "<ruby>拭<rt>ふ</rt></ruby>く", zh: "擦拭" }
+      { ja: "テーブル", zh: "餐桌、桌面" },
+      { ja: "<ruby>拭<rt>ふ</rt></ruby>く", zh: "擦拭、擦乾淨" },
+      { ja: "あそこ", zh: "那邊、遠處" }
     ],
     points: [
-      { title: "【3種說法】", desc: "テーブル拭いてきて / テーブル拭いといて / あそこのテーブルお願い" }
+      { title: "【拭く（ふく）的音便變化】", desc: "第一類動詞「拭く」連用形發生「い音便」成為「拭いて / 拭いといて」。" },
+      { title: "【指示詞 あそこの＋名詞】", desc: "指定外場遠處特定桌位或區域時的精準指引。" },
+      { title: "【〜といて（順便預先完成）】", desc: "同事間分工撤桌時，交代順手整理以備下一組客人入座。" }
     ],
     tips: "客人離席清桌時，同事分工擦桌子最常用。"
   },
   {
     cat: "同事指示",
-    ja: "ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>ってきて。（ご<ruby>飯<rt>はん</rt></ruby>よそっといて / ご<ruby>飯<rt>はん</rt></ruby>おかわりお<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示4】請去添飯",
+    variants: [
+      { label: "① 標準口語", ja: "ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>ってきて。", zh: "去盛一碗飯來" },
+      { label: "② 縮約隨和", ja: "ご<ruby>飯<rt>はん</rt></ruby>よそっといて。", zh: "順便先盛一下飯放著" },
+      { label: "③ 簡短拜託", ja: "ご<ruby>飯<rt>はん</rt></ruby>おかわりお<ruby>願<rt>ねが</rt></ruby>い。", zh: "客人續飯拜託了" }
+    ],
+    ja: "ご<ruby>飯<rt>はん</rt></ruby><ruby>盛<rt>も</rt></ruby>ってきて。",
     zh: "【指示4】請去添飯（盛一碗飯來 / 先盛一下飯放著 / 客人續飯拜託了）",
     vocabs: [
-      { ja: "ご<ruby>飯<rt>はん</rt></ruby>", zh: "米飯" },
-      { ja: "<ruby>盛<rt>も</rt></ruby>る / よそう", zh: "盛飯、添飯" }
+      { ja: "ご<ruby>飯<rt>はん</rt></ruby>", zh: "米飯、白飯" },
+      { ja: "<ruby>盛<rt>も</rt></ruby>る", zh: "盛飯、裝碗" },
+      { ja: "よそう", zh: "添飯、盛裝（飯/湯）" },
+      { ja: "おかわり", zh: "續碗、再來一碗" }
     ],
     points: [
-      { title: "【3種說法】", desc: "ご飯盛ってきて / ご飯よそっといて / ご飯おかわりお願い" }
+      { title: "【盛る（もる）vs よそう】", desc: "「盛る」側重把食物堆高裝盤；「よそう」專指盛飯、盛湯入碗的溫和動作。" },
+      { title: "【おかわり（お＋代わり）】", desc: "客人續碗白飯或飲品的禮貌通用詞。" },
+      { title: "【よそっといて（よそっておいて縮約）】", desc: "五段動詞「よそう」促音便縮約為「よそっといて」。" }
     ],
     tips: "朝食或客人在餐檯續飯時，互相支援盛飯用語。"
   },
   {
     cat: "同事指示",
-    ja: "インカム<ruby>拭<rt>ふ</rt></ruby>いといて。（インカム<ruby>消毒<rt>しょうどく</rt></ruby>しといて / インカムの<ruby>掃除<rt>そうじ</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示5】請去擦拭對講機",
+    variants: [
+      { label: "① 縮約隨和", ja: "インカム<ruby>拭<rt>ふ</rt></ruby>いといて。", zh: "順手擦一下對講機耳麥" },
+      { label: "② 動作指定", ja: "インカム<ruby>消毒<rt>しょうどく</rt></ruby>しといて。", zh: "對講機酒精消毒一下" },
+      { label: "③ 簡短拜託", ja: "インカムの<ruby>掃除<rt>そうじ</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。", zh: "對講機清理拜託了" }
+    ],
+    ja: "インカム<ruby>拭<rt>ふ</rt></ruby>いといて。",
     zh: "【指示5】請去擦拭對講機（擦一下耳麥 / 酒精消毒一下 / 清理拜託了）",
     vocabs: [
-      { ja: "インカム", zh: "無線電對講機" },
-      { ja: "<ruby>消毒<rt>しょうどく</rt></ruby>", zh: "消毒" }
+      { ja: "インカム", zh: "無線電對講機、耳麥 (Intercom)" },
+      { ja: "<ruby>消毒<rt>しょうどく</rt></ruby>する", zh: "酒精消毒" },
+      { ja: "<ruby>掃除<rt>そうじ</rt></ruby>", zh: "打掃、清潔" }
     ],
     points: [
-      { title: "【3種說法】", desc: "インカム拭いといて / インカム消毒しといて / インカムの掃除お願い" }
+      { title: "【名詞＋しといて】", desc: "「消毒する」動詞變為「消毒しておいて」後縮約成「消毒しといて」。" },
+      { title: "【インカム（外來語）】", desc: "日本服務業與旅館業必備的對講機代稱。" },
+      { title: "【名詞の掃除＋お願い】", desc: "將任務對象具體化＋拜託的標準職場表達。" }
     ],
     tips: "下班交接或上班領用無線電時，酒精消毒耳麥的日常交辦。"
   },
   {
     cat: "同事指示",
-    ja: "ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。（ゴミ<ruby>集<rt>あつ</rt></ruby>めて<ruby>捨<rt>す</rt></ruby>てといて / ゴミ<ruby>出<rt>だ</rt></ruby>し<ruby>行<rt>い</rt></ruby>ってきて）",
+    title: "【指示6】請收集垃圾並丟掉",
+    variants: [
+      { label: "① 標準口語", ja: "ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。", zh: "把垃圾打包集中，拿去丟掉" },
+      { label: "② 縮約隨和", ja: "ゴミ<ruby>集<rt>あつ</rt></ruby>めて<ruby>捨<rt>す</rt></ruby>てといて。", zh: "把垃圾收過來順手扔了" },
+      { label: "③ 簡短拜託", ja: "ゴミ<ruby>出<rt>だ</rt></ruby>し<ruby>行<rt>い</rt></ruby>ってきて。", zh: "去倒個垃圾" }
+    ],
+    ja: "ゴミまとめて<ruby>捨<rt>す</rt></ruby>ててきて。",
     zh: "【指示6】請收集垃圾並丟掉（集中打包丟掉 / 收過來順手扔了 / 去倒個垃圾）",
     vocabs: [
       { ja: "ゴミ", zh: "垃圾" },
-      { ja: "<ruby>捨<rt>す</rt></ruby>てる", zh: "丟棄" }
+      { ja: "まとめる", zh: "集中、打包整合" },
+      { ja: "<ruby>集<rt>あつ</rt></ruby>める", zh: "聚集、收集" },
+      { ja: "<ruby>捨<rt>す</rt></ruby>てる", zh: "丟棄、扔掉" },
+      { ja: "ゴミ<ruby>出<rt>だ</rt></ruby>し", zh: "倒垃圾" }
     ],
     points: [
-      { title: "【3種說法】", desc: "ゴミまとめて捨ててきて / ゴミ集めて捨てといて / ゴミ出し行ってきて" }
+      { title: "【動詞て形＋動詞（動作先後順序）】", desc: "「まとめて捨ててきて」表示先打包集中，再去丟掉並返回。" },
+      { title: "【ゴミ出し（名詞化任務）】", desc: "日本職場表示「倒垃圾、運送垃圾到收集場」的固定詞彙。" },
+      { title: "【〜行ってきて（去一趟回來）】", desc: "指示對方走一趟指定地點再返回工作區域。" }
     ],
     tips: "餐廳打烊或外場垃圾桶滿時，打包倒垃圾的俐落交辦。"
   },
   {
     cat: "同事指示",
-    ja: "これ<ruby>捨<rt>す</rt></ruby>てといて。（これポイしといて / これ<ruby>処分<rt>しょぶん</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示7】請把這個丟掉",
+    variants: [
+      { label: "① 縮約隨和", ja: "これ<ruby>捨<rt>す</rt></ruby>てといて。", zh: "這個順手幫我丟掉" },
+      { label: "② 俏皮隨性", ja: "これポイしといて。", zh: "把這個扔了" },
+      { label: "③ 俐落指示", ja: "これ<ruby>処分<rt>しょぶん</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。", zh: "這處理掉拜託了" }
+    ],
+    ja: "これ<ruby>捨<rt>す</rt></ruby>てといて。",
     zh: "【指示7】請把這個丟掉（順手幫我丟掉 / 把這個扔了 / 這處理掉拜託了）",
     vocabs: [
       { ja: "これ", zh: "這個" },
-      { ja: "ポイする", zh: "扔掉、隨手丟棄" }
+      { ja: "ポイする", zh: "扔掉、隨手丟棄" },
+      { ja: "<ruby>処分<rt>しょぶん</rt></ruby>", zh: "處置、報廢丟棄" }
     ],
     points: [
-      { title: "【3種說法】", desc: "これ捨てといて / これポイしといて / これ処分お願い" }
+      { title: "【ポイする（擬態語動詞化）】", desc: "來自隨手丟進垃圾桶的聲音擬態詞「ポイ」，同事熟絡間極常用的輕鬆口吻。" },
+      { title: "【処分（しょぶん）】", desc: "稍微正式一點的用語，指報廢耗材或不可再用的殘料廢棄。" },
+      { title: "【これ＋動詞縮約】", desc: "手拿廢棄物直接交代同事順手扔掉的自然表達。" }
     ],
     tips: "手上有廢棄包裝或用過的耗材時，順手交給同事幫忙扔。"
   },
   {
     cat: "同事指示",
-    ja: "トング<ruby>集<rt>あつ</rt></ruby>めてきて。（トング<ruby>回収<rt>かいしゅう</rt></ruby>しといて / トング<ruby>集<rt>あつ</rt></ruby>めお<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示8】請收集夾子",
+    variants: [
+      { label: "① 標準口語", ja: "トング<ruby>集<rt>あつ</rt></ruby>めてきて。", zh: "去把夾子收攏過來" },
+      { label: "② 縮約隨和", ja: "トング<ruby>回収<rt>かいしゅう</rt></ruby>しといて。", zh: "夾子順便整批回收一下" },
+      { label: "③ 簡短拜託", ja: "トング<ruby>集<rt>あつ</rt></ruby>めお<ruby>願<rt>ねが</rt></ruby>い。", zh: "夾子收集拜託你囉" }
+    ],
+    ja: "トング<ruby>集<rt>あつ</rt></ruby>めてきて。",
     zh: "【指示8】請收集夾子（收攏過來 / 整批回收一下 / 夾子收集拜託你囉）",
     vocabs: [
-      { ja: "トング", zh: "夾子" },
-      { ja: "<ruby>回収<rt>かいしゅう</rt></ruby>", zh: "回收" }
+      { ja: "トング", zh: "食物夾、料理夾 (Tongs)" },
+      { ja: "<ruby>集<rt>あつ</rt></ruby>める", zh: "收集、集中" },
+      { ja: "<ruby>回収<rt>かいしゅう</rt></ruby>する", zh: "回收、撤回洗滌" }
     ],
     points: [
-      { title: "【3種說法】", desc: "トング集めてきて / トング回収しといて / トング集めお願い" }
+      { title: "【集める（あつめる）vs 回収する】", desc: "「集める」側重從各餐檯集中；「回収する」側重將用過的夾子整批撤回洗滌區更換。" },
+      { title: "【動詞連用形名詞化（集め）】", desc: "將「集める」去ます變成名詞「集め」，直接接「お願い」溝通超俐落。" },
+      { title: "【〜てきて（巡視後返回）】", desc: "指示對方巡視各餐檯收集後端回備餐區。" }
     ],
-    tips: "營業中定時更換自助餐檯夾子時使用。"
+    tips: "營業中定時更換自助餐檯夾子時使用，同事間最常聽到的三種指令。"
   },
   {
     cat: "同事指示",
-    ja: "お<ruby>皿<rt>さら</rt></ruby>（<ruby>食器<rt>しょっき</rt></ruby>）<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>しといて。（<ruby>器<rt>うつわ</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまってきて / お<ruby>椀<rt>わん</rt></ruby>の<ruby>片付<rt>かたづ</rt></ruby>けお<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示9】請把碗盤放回該放的地方",
+    variants: [
+      { label: "① 縮約隨和", ja: "お<ruby>皿<rt>さら</rt></ruby><ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>しといて。", zh: "餐具放回原位收好" },
+      { label: "② 標準口語", ja: "<ruby>器<rt>うつわ</rt></ruby>、<ruby>定位置<rt>ていいち</rt></ruby>にしまってきて。", zh: "去把器皿放回固定收納處" },
+      { label: "③ 簡短拜託", ja: "お<ruby>椀<rt>わん</rt></ruby>の<ruby>片付<rt>かたづ</rt></ruby>けお<ruby>願<rt>ねが</rt></ruby>い。", zh: "碗的收拾歸位拜託囉" }
+    ],
+    ja: "お<ruby>皿<rt>さら</rt></ruby>元の場所に戻しといて。",
     zh: "【指示9】請把碗放回該放的地方（餐具放回原位 / 碗放回固定收納處 / 碗收拾歸位拜託囉）",
     vocabs: [
       { ja: "<ruby>食器<rt>しょっき</rt></ruby> / <ruby>器<rt>うつわ</rt></ruby>", zh: "餐具、器皿" },
-      { ja: "<ruby>定位置<rt>ていいち</rt></ruby>", zh: "固定收納處" }
+      { ja: "<ruby>定位置<rt>ていいち</rt></ruby>", zh: "固定收納位置" },
+      { ja: "しまう", zh: "收納、收進櫃子" },
+      { ja: "<ruby>片付<rt>かたづ</rt></ruby>け", zh: "整理、歸位" }
     ],
     points: [
-      { title: "【3種說法】", desc: "食器元の場所に戻しといて / 器、定位置にしまってきて / お椀の片付けお願い" }
+      { title: "【器（うつわ）/ 食器 / お椀】", desc: "日本料理對各式餐具器皿的精確稱呼，器皿各歸其位。" },
+      { title: "【しまう（收納入庫）vs 戻す（歸位）】", desc: "「しまう」指放入櫃子或抽屜中收好；「戻す」指歸回原點。" },
+      { title: "【定位置（ていいち）】", desc: "外場與廚房餐具固定擺放位置的專用詞。" }
     ],
     tips: "洗滌區洗好的碗盤擦乾後，推回外場定點收好。"
   },
   {
     cat: "同事指示",
-    ja: "<ruby>氷<rt>こおり</rt></ruby><ruby>取<rt>と</rt></ruby>ってきて。（<ruby>氷<rt>こおり</rt></ruby><ruby>足<rt>た</rt></ruby>しといて / <ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い）",
+    title: "【指示10】請去補充冰塊",
+    variants: [
+      { label: "① 標準口語", ja: "<ruby>氷<rt>こおり</rt></ruby><ruby>取<rt>と</rt></ruby>ってきて。", zh: "去製冰機拿冰塊過來" },
+      { label: "② 縮約隨和", ja: "<ruby>氷<rt>こおり</rt></ruby><ruby>足<rt>た</rt></ruby>しといて。", zh: "冰槽順便補點冰進去" },
+      { label: "③ 簡短拜託", ja: "<ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>い。", zh: "冰塊補充拜託了" }
+    ],
+    ja: "<ruby>氷<rt>こおり</rt></ruby>取ってきて。",
     zh: "【指示10】請去補充冰塊（去製冰機拿冰塊 / 冰槽補點冰進去 / 冰塊補充拜託了）",
     vocabs: [
       { ja: "<ruby>氷<rt>こおり</rt></ruby>", zh: "冰塊" },
-      { ja: "<ruby>補充<rt>ほじゅう</rt></ruby>", zh: "補充" }
+      { ja: "<ruby>取<rt>と</rt></ruby>る", zh: "拿取" },
+      { ja: "<ruby>足<rt>た</rt></ruby>す", zh: "添補、補充（液體/冰塊）" },
+      { ja: "<ruby>補充<rt>ほじゅう</rt></ruby>", zh: "補充作業" }
     ],
     points: [
-      { title: "【3種說法】", desc: "氷取ってきて / 氷足しといて / 氷の補充お願い" }
+      { title: "【足す（たす）動詞用法】", desc: "指在現有不足的量上「再添加、加進去」，如冰槽補冰、湯汁加高湯。" },
+      { title: "【取ってくる（拿了帶過來）】", desc: "指示對方前往製冰機盛裝冰塊並帶回飲料區。" },
+      { title: "【名詞の補充＋お願い】", desc: "耗材或備品即將用盡時的俐落交辦。" }
     ],
     tips: "飲料區或冷飲冰槽冰塊見底時，同事間最常講的補冰三部曲。"
   }
@@ -9556,6 +9679,8 @@ function filterPracticeCategory(cat) {
   drawRandomPracticeSentence();
 }
 
+let currentPracticeItem = null;
+
 function drawRandomPracticeSentence() {
   const card = document.getElementById('practice-card-display');
   if (!card) return;
@@ -9567,26 +9692,66 @@ function drawRandomPracticeSentence() {
 
   if (pool.length === 0) pool = PRACTICE_SENTENCES_BANK;
   const item = pool[Math.floor(Math.random() * pool.length)];
+  currentPracticeItem = item;
+
+  const hasVariants = Array.isArray(item.variants) && item.variants.length > 0;
+
+  let sentencesHtml = '';
+  if (hasVariants) {
+    sentencesHtml = `
+      <div style="font-size:0.95rem; font-weight:800; color:var(--primary); margin-bottom:8px;">
+        📌 ${escapeHtml(item.title || item.zh.split('（')[0])}
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+        ${item.variants.map((v, idx) => `
+          <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:10px 12px; transition:all 0.15s ease;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-size:0.75rem; font-weight:800; background:rgba(92,61,30,0.08); color:var(--primary); padding:2px 8px; border-radius:6px;">
+                ${escapeHtml(v.label || `說法 ${idx + 1}`)}
+              </span>
+              <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(v.ja)}')" style="font-size:0.78rem; padding:2px 8px;">
+                🔊 朗讀此句
+              </button>
+            </div>
+            <div style="font-size:1.25rem; font-weight:800; color:var(--primary); line-height:2; font-family:var(--font-serif); cursor:pointer;" onclick="speakJapanese('${escapeJs(v.ja)}')">
+              ${v.ja}
+            </div>
+            <div style="font-size:0.88rem; color:var(--ink); font-weight:700; margin-top:2px;">
+              💡 ${escapeHtml(v.zh)}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else {
+    sentencesHtml = `
+      <div style="font-size:1.3rem; font-weight:800; color:var(--primary); line-height:2.2; font-family:var(--font-serif); cursor:pointer; margin-bottom:4px;" onclick="speakJapanese('${escapeJs(item.ja)}')">
+        ${item.ja} <span style="font-size:0.85rem;">🔊</span>
+      </div>
+      <div style="font-size:0.95rem; color:var(--ink); font-weight:700; margin-bottom:12px;">
+        ${escapeHtml(item.zh)}
+      </div>
+    `;
+  }
 
   card.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:8px;">
-      <span style="background:var(--primary); color:#fff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:10px;">🏷️ ${item.cat}</span>
-      <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(item.ja)}')" style="font-size:0.8rem;">🔊 朗讀整句</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:10px;">
+      <span style="background:var(--primary); color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:10px;">🏷️ ${item.cat}</span>
+      <button class="btn btn-ghost btn-sm" onclick="speakCurrentPracticeAll()" style="font-size:0.8rem; font-weight:800;">
+        🔊 ${hasVariants ? '朗讀全部 3 句' : '朗讀整句'}
+      </button>
     </div>
 
-    <div style="font-size:1.25rem; font-weight:700; color:var(--primary); line-height:2.2; font-family:var(--font-serif); cursor:pointer;" onclick="speakJapanese('${escapeJs(item.ja)}')">
-      ${item.ja} <span style="font-size:0.8rem;">🔊</span>
-    </div>
-    <div style="font-size:0.95rem; color:var(--ink); font-weight:700; margin-top:4px; margin-bottom:12px;">${escapeHtml(item.zh)}</div>
+    ${sentencesHtml}
 
     <!-- 單字拆解 -->
     <div style="margin-bottom:10px;">
-      <div style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:4px;">📚 關鍵單字：</div>
+      <div style="font-size:0.82rem; font-weight:800; color:var(--primary); margin-bottom:4px;">📚 關鍵單字：</div>
       <div style="display:flex; flex-direction:column; gap:4px;">
         ${(item.vocabs || []).map(v => `
-          <div style="background:var(--surface); border-radius:6px; padding:4px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; cursor:pointer;" onclick="speakJapanese('${escapeJs(v.ja)}')">
+          <div style="background:var(--surface); border-radius:6px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem; cursor:pointer;" onclick="speakJapanese('${escapeJs(v.ja)}')">
             <span style="font-weight:700; color:var(--primary);">${v.ja}</span>
-            <span style="color:var(--muted); font-size:0.78rem;">${escapeHtml(v.zh)} 🔊</span>
+            <span style="color:var(--muted); font-size:0.8rem;">${escapeHtml(v.zh)} 🔊</span>
           </div>
         `).join('')}
       </div>
@@ -9594,20 +9759,32 @@ function drawRandomPracticeSentence() {
 
     <!-- 文法解析 -->
     <div style="margin-bottom:10px;">
-      <div style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:4px;">💡 文法重點：</div>
-      ${(item.points || []).map(p => `
-        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:6px 8px; font-size:0.8rem; line-height:1.5;">
-          <div style="font-weight:700; color:var(--accent);">${escapeHtml(p.title)}</div>
-          <div>${escapeHtml(p.desc)}</div>
-        </div>
-      `).join('')}
+      <div style="font-size:0.82rem; font-weight:800; color:var(--primary); margin-bottom:4px;">💡 文法重點：</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        ${(item.points || []).map(p => `
+          <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:0.82rem; line-height:1.5;">
+            <div style="font-weight:800; color:var(--accent);">${escapeHtml(p.title)}</div>
+            <div style="color:var(--ink);">${escapeHtml(p.desc)}</div>
+          </div>
+        `).join('')}
+      </div>
     </div>
 
     <!-- 職場叮嚀 -->
-    <div style="background:rgba(92,61,30,0.06); border-left:3px solid var(--primary); border-radius:0 6px 6px 0; padding:6px 8px; font-size:0.8rem; line-height:1.5; color:var(--ink);">
+    <div style="background:rgba(92,61,30,0.06); border-left:3.5px solid var(--primary); border-radius:0 8px 8px 0; padding:8px 10px; font-size:0.82rem; line-height:1.5; color:var(--ink);">
       <strong>📌 實戰背景：</strong>${escapeHtml(item.tips || '日本餐飲現場高頻必背應對句。')}
     </div>
   `;
+}
+
+function speakCurrentPracticeAll() {
+  if (!currentPracticeItem) return;
+  if (Array.isArray(currentPracticeItem.variants) && currentPracticeItem.variants.length > 0) {
+    const list = currentPracticeItem.variants.map(v => v.ja);
+    speakMultipleJapanese(list);
+  } else if (currentPracticeItem.ja) {
+    speakJapanese(currentPracticeItem.ja);
+  }
 }
 
 // ── 5. 🗺️ 優彩館內設施問路指引實作 ──
