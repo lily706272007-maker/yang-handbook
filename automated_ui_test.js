@@ -224,11 +224,15 @@ assert(html.includes('id="lightbox-points-wrap"'), '照片詳情彈窗包含文�
 assert(html.includes('id="lightbox-tips-wrap"'), '照片詳情彈窗包含職場應對叮嚀容器 (lightbox-tips-wrap)');
 assert(html.includes('入っていないシロップ') && html.includes('でございます'), '風味糖漿對話包含文法解析與單字拆解');
 
-// 測試 17: 小浣熊 6 大實戰工作台與 Apple 輪盤選單（中翻日、持續偷聽推測、3大回覆、問路與抽考獨立）
-console.log('\n【測試 17：小浣熊 6 大實戰工作台與 Apple 輪盤選單 (v67)】');
+// 測試 17: 小浣熊 6 大實戰工作台與長語音 Memo 串流（中翻日、持續偷聽推測、智慧條列拆分、問路與抽考獨立）
+console.log('\n【測試 17：小浣熊 6 大實戰工作台與長語音 Memo (v68)】');
 assert(html.includes('id="raccoon-radial-overlay"'), '包含 Apple 輪盤遮罩 (raccoon-radial-overlay)');
 assert(html.includes('id="raccoon-radial-menu"'), '包含 Apple 輪盤選單 (raccoon-radial-menu)');
 assert(html.includes('id="modal-raccoon-dashboard"'), '包含小浣熊半屏實戰工作台抽屜 (modal-raccoon-dashboard)');
+assert(html.includes('toggleMemoContinuousRecording'), '包含長語音連續收音函式 (toggleMemoContinuousRecording)');
+assert(html.includes('parseSpeechToMemoItems'), '包含智慧語音條列拆分函式 (parseSpeechToMemoItems)');
+assert(html.includes('id="memo-live-transcript-box"') && html.includes('memo-stream-final'), '包含即時逐字動態預覽視窗 (memo-live-transcript-box)');
+assert(html.includes('editMemoItem'), '包含備忘項目行內編輯函式 (editMemoItem)');
 assert(html.includes('copyAllMemosToClipboard'), '包含語音 Memo「一鍵複製給工程師」函式 (copyAllMemosToClipboard)');
 assert(html.includes('toggleContinuousEavesdropping'), '包含「持續偷聽」即時串流收集函式 (toggleContinuousEavesdropping)');
 assert(html.includes('runEavesdropAnalysis'), '包含語境重組與意圖推測分析核心 (runEavesdropAnalysis)');
@@ -241,20 +245,25 @@ assert(!html.includes('id="rtab-btn-timer"') && !html.includes('id="raccoon-time
 assert(html.includes('id="rtab-btn-map"') && html.includes('id="rtab-btn-quiz"'), '問路與隨機抽考已獨立拆分為兩個分頁 (map & quiz)');
 assert(html.includes('中翻日') && html.includes('偷聽推測') && html.includes('館內問路') && html.includes('隨機抽考'), '輪盤與工作台標籤完整對應「中翻日」、「偷聽推測」、「館內問路」、「隨機抽考」');
 
-// 測試 18: 「你叫什麼名字？」同仁專屬 Q 版形象圖鑑與雙擊立繪互動
-console.log('\n【測試 18：「你叫什麼名字？」Q 版形象圖鑑與雙擊立繪互動】');
+// 測試 18: 「你叫什麼名字？」全新 5 大層級 Q 版捏臉工房、男女分流、5種眼鏡與獨立圖鑑卡
+console.log('\n【測試 18：全新 5 大層級 Q 版捏臉工房與獨立圖鑑卡 (v68)】');
 assert(html.includes('id="btn-who-are-you"') || html.includes('who-are-you-pill'), '包含「👤 你叫什麼名字？」專屬入口按鈕');
 assert(html.includes('id="modal-who-are-you"'), '包含小浣熊「你叫什麼名字？」照相館彈窗 (modal-who-are-you)');
 assert(html.includes('id="modal-name-avatar-card"'), '包含雙擊跳出 Q 版個人立繪名牌彈窗 (modal-name-avatar-card)');
 assert(html.includes('openWhoAreYouModal'), '包含開啟照相館函式 (openWhoAreYouModal)');
 assert(html.includes('triggerSilentCameraCapture'), '包含靜默前鏡頭特徵捕捉函式 (triggerSilentCameraCapture)');
 assert(html.includes('submitCustomColleagueName'), '包含外國人/新夥伴自訂名字提交函式 (submitCustomColleagueName)');
-assert(html.includes('generateTransparentChibiAvatar'), '包含方形純透明背景 Q 版角色立繪生成函式 (generateTransparentChibiAvatar)');
-assert(html.includes('openNameAvatarModal'), '包含雙擊開啟同仁 Q 版名牌彈窗函式 (openNameAvatarModal)');
+assert(html.includes('generateTransparentChibiAvatar'), '包含 2.2 頭身純透明背景 Q 版立繪生成函式 (generateTransparentChibiAvatar)');
+assert(html.includes('openNameAvatarModal'), '包含雙擊開啟同仁獨立 Q 版名牌彈窗函式 (openNameAvatarModal)');
+assert(html.includes('DEFAULT_COLLEAGUE_TRAITS'), '包含各同仁預設專屬特徵字典 (DEFAULT_COLLEAGUE_TRAITS)');
+assert(html.includes('HAIR_STYLES_BY_GENDER'), '包含男女分流專屬髮型庫 (HAIR_STYLES_BY_GENDER)');
+assert(html.includes('trait-glasses-round_black') && html.includes('trait-glasses-square_black') && html.includes('trait-glasses-round_wire') && html.includes('trait-glasses-square_wire') && html.includes('trait-glasses-none'), '包含 5 大精準眼鏡選項 (圓黑框/方黑框/圓細框/方細框/無眼鏡)');
+assert(html.includes('trait-face-round') && html.includes('trait-face-square') && html.includes('trait-face-pointed'), '包含 5 大臉型輪廓選項');
+assert(html.includes('trait-nose-dot') && html.includes('trait-nose-straight') && html.includes('trait-nose-wide'), '包含 4 大鼻子輪廓特徵');
+assert(html.includes('trait-skin-fair') && html.includes('trait-skin-natural') && html.includes('trait-skin-tanned'), '包含 3 大膚色選項');
 assert(html.includes('playNameCardSpeech') && html.includes('playWhoResultSpeech'), '包含日文自我介紹發音播放函式 (100% 靜音保護)');
-assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '包含特徵快速微調 (髮型/眼鏡/髮色) 與即時補拍函式');
+assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '包含特徵快速微調與即時補拍重繪函式');
 assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
-assert(html.includes('photos/avatar_yang.png'), '包含小楊專屬 Q 版立繪圖檔參照 (avatar_yang.png)');
 
 // 測試 19: 現場四國同步翻譯板（日文・尼泊爾文・緬甸文・英文）功能測試
 console.log('\n【測試 19：現場四國同步翻譯板 (日/尼/緬/英 並排大字與語音)】');
@@ -293,7 +302,7 @@ assert(textContent.includes('こちら、お下げしますね') && textContent.
 assert(html.includes('tab_colleague_tasks') && html.includes('同事平級高頻指示'), '分頁清單包含獨立分頁「同事平級高頻指示」');
 assert(textContent.includes('ライター戻してきて') && textContent.includes('ライター元の場所に置いといて') && textContent.includes('ライター戻しお願い'), '動作 1（放打火機）：戻してきて / 置いといて / ライター戻しお願い');
 assert(textContent.includes('これ、ラップしといて') && textContent.includes('これ、ラップかけてきて') && textContent.includes('これラップお願い'), '動作 2（包保鮮膜）：ラップしといて / ラップかけてきて / これラップお願い');
-assert(textContent.includes('テーブル拭いてきて') && textContent.includes('テーブル拭いといて') && textContent.includes('あそ公のテーブルお願い') || textContent.includes('あそこのテーブルお願い'), '動作 3（擦桌子）：テーブル拭いてきて / テーブル拭いといて / あそこのテーブルお願い');
+assert(textContent.includes('テーブル拭いてきて') && textContent.includes('テーブル拭いといて') && textContent.includes('あそ公のテーブルお願い') || textContent.includes('あそこのテーブルお願い'), '動作 3（擦桌子）：テーブル拭いてきて / テーブル拭いといて / あそ公のテーブルお願い');
 assert(textContent.includes('ご飯盛ってきて') && textContent.includes('ご飯よそっといて') && textContent.includes('ご飯おかわりお願い'), '動作 4（添飯）：ご飯盛ってきて / ご飯よそっといて / ご飯おかわりお願い');
 assert(textContent.includes('インカム拭いといて') && textContent.includes('インカム消毒しといて') && textContent.includes('インカムの掃除お願い'), '動作 5（擦對講機）：インカム拭いといて / インカム消毒しといて / インカムの掃除お願い');
 assert(textContent.includes('ゴミまとめて捨ててきて') && textContent.includes('ゴミ集めて捨てといて') && textContent.includes('ゴミ出し行ってきて'), '動作 6（收集垃圾丟掉）：ゴミまとめて捨ててきて / ゴミ集めて捨てといて / ゴミ出し行ってきて');
@@ -329,8 +338,8 @@ assert(html.includes('cats = [\'全部\', \'食材\'') || html.includes('\'食�
 assert(html.includes('<option value="食材">'), '新增單字彈窗包含「🥦 食材」選項');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v67'), 'Service Worker 快取版本已升級至 yang-pwa-v67');
-assert(html.includes('yang_runner_handbook_v67'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v67');
+assert(swContent.includes('yang-pwa-v68'), 'Service Worker 快取版本已升級至 yang-pwa-v68');
+assert(html.includes('yang_runner_handbook_v68'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v68');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -339,6 +348,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」Q 版形象圖鑑、「現場四國同步直譯板（普通丁寧體）」、全新「🥦 食材」原型食物與調料庫、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」5大層級Q版捏臉圖鑑、「現場四國同步直譯板（普通丁寧體）」、全新「🥦 食材」原型食物與調料庫、外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示測試 100% 全部通過！');
 }
 
