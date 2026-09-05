@@ -1191,7 +1191,7 @@
 }
 
 /* ============================================================
-   📢 四國同步布達板專屬樣式 (4-in-1 Multilingual Broadcast)
+   🌐 四國同步翻譯板專屬樣式 (4-in-1 Multilingual Translation)
 ============================================================ */
 .broadcast-quad-grid {
   display: grid;
@@ -1370,7 +1370,7 @@
       <button class="top-nav-btn active" data-page="page-sop" onclick="switchNavPage('page-sop', this)"><span class="nav-icon">📋</span><span class="nav-label">實務SOP</span></button>
       <button class="top-nav-btn" data-page="page-vocab-sop" onclick="switchNavPage('page-vocab-sop', this)"><span class="nav-icon">📖</span><span class="nav-label">實戰單字庫</span></button>
       <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">情境對話</span></button>
-      <button class="top-nav-btn" data-page="page-broadcast" onclick="switchNavPage('page-broadcast', this)"><span class="nav-icon">📢</span><span class="nav-label">四國布達</span></button>
+      <button class="top-nav-btn" data-page="page-broadcast" onclick="switchNavPage('page-broadcast', this)"><span class="nav-icon">🌐</span><span class="nav-label">四國翻譯</span></button>
       <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
     </nav>
     <span id="offline-badge">📵 離線</span>
@@ -1464,27 +1464,18 @@
     </section>
 
     <!-- ==============================================================
-         分頁 4：現場四國同步布達板 (4-in-1 Multilingual Broadcast Board)
+         分頁 4：現場四國同步翻譯板 (4-in-1 Multilingual Translation Board)
          位置：情境對話與設定之間
          功能：中文輸入一次，即時並排產出【日文、尼泊爾文、緬甸文、英文】
     ============================================================== -->
     <section class="page" id="page-broadcast">
-      <div class="page-sub">📢 一次輸入中文，同步翻譯成【日文・尼泊爾文・緬甸文・英文】並排展示向全場同仁布達</div>
-
-      <!-- 常用快捷職場範本 (點擊立即填入並生成 4 國語言) -->
-      <div class="section-label">
-        <div class="section-label-left">⚡ 常用職場布達快捷句（點擊立即翻譯）</div>
-        <span style="font-size:0.75rem; color:var(--muted);">支援離線 100% 即時翻譯</span>
-      </div>
-      <div class="template-chips-wrap" id="broadcast-templates-wrap">
-        <!-- 15 組快捷標籤由 JS 動態填入 -->
-      </div>
+      <div class="page-sub">🌐 一次輸入中文，同步翻譯成【日文・尼泊爾文・緬甸文・英文】並排展示溝通</div>
 
       <!-- 輸入操作卡片 -->
       <div class="card" style="padding:14px; margin-bottom:14px; background:var(--bg-card); border:1.5px solid var(--border); border-radius:16px;">
         <div style="margin-bottom:10px;">
           <label style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:block;">
-            ✏️ 輸入想要布達的中文事項：
+            ✏️ 輸入想要翻譯的中文事項：
           </label>
           <textarea id="broadcast-zh-input" rows="3" class="form-control" style="width:100%; font-size:0.95rem; line-height:1.5; border-radius:12px; padding:10px 12px;" placeholder="例如：我做了一些料理請大家一起吃、這盤子很燙請小心、垃圾已滿請幫忙換袋子…"></textarea>
         </div>
@@ -1517,7 +1508,7 @@
 
       <!-- 四國語言並排卡片網格 (2x2 Grid, 手機單欄) -->
       <div class="section-label">
-        <div class="section-label-left">📢 四國語言同步布達卡片</div>
+        <div class="section-label-left">🌐 四國語言同步翻譯卡片</div>
         <span style="font-size:0.75rem; color:var(--muted);" id="broadcast-engine-badge">⚡ 雙引擎：離線核心 ＋ Gemini AI</span>
       </div>
 
@@ -2293,7 +2284,7 @@
   <div class="modal-content" style="max-width:760px; width:100%; max-height:92vh; display:flex; flex-direction:column; padding:16px; border-radius:22px; background:var(--bg-app);">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
       <div style="font-size:1.05rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:6px;">
-        <span>📱 現場四國大字展示板</span>
+        <span>📱 現場四國大字翻譯板</span>
         <span style="font-size:0.75rem; background:rgba(92,61,30,0.1); color:var(--primary); padding:2px 8px; border-radius:10px;">可直接出示給全體同仁</span>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-broadcast-bigscreen')">✕ 關閉</button>
@@ -7954,7 +7945,7 @@ function rephotoFromCard() {
 
 
 /* ==============================================================
-   15. 📢 現場四國同步布達板 (4-in-1 Multilingual Broadcast Board)
+   15. 🌐 現場四國同步翻譯板 (4-in-1 Multilingual Translation Board)
    功能：中文輸入一次，即時並排產出【日文、尼泊爾文、緬甸文、英文】
 ============================================================== */
 const QUAD_BROADCAST_TEMPLATES = [
@@ -8175,15 +8166,6 @@ let isBroadcastMicActive = false;
 let broadcastRecognition = null;
 
 function renderBroadcastPage() {
-  const chipsWrap = document.getElementById('broadcast-templates-wrap');
-  if (chipsWrap && chipsWrap.children.length === 0) {
-    chipsWrap.innerHTML = QUAD_BROADCAST_TEMPLATES.map((t, idx) => `
-      <button class="template-chip" onclick="applyBroadcastTemplate(${idx})">
-        ${t.icon} ${t.title}
-      </button>
-    `).join('');
-  }
-
   const input = document.getElementById('broadcast-zh-input');
   if (input && !input.value.trim()) {
     input.value = currentBroadcastData.zh || QUAD_BROADCAST_TEMPLATES[0].zh;
@@ -8226,7 +8208,7 @@ async function triggerBroadcastTranslation() {
   const input = document.getElementById('broadcast-zh-input');
   const text = input ? input.value.trim() : '';
   if (!text) {
-    showToast('請先輸入想要布達的中文事項！', 'error');
+    showToast('請先輸入想要翻譯的中文事項！', 'error');
     return;
   }
   await executeQuadTranslation(text);
@@ -8246,7 +8228,7 @@ async function executeQuadTranslation(zhText) {
       statusEl.style.color = 'var(--primary)';
       statusEl.innerHTML = `⚡ 離線 100% 精準匹配：<strong>${exactMatch.title}</strong>`;
     }
-    showToast('離線布達翻譯完成！', 'success');
+    showToast('離線翻譯完成！', 'success');
     return;
   }
 
@@ -8276,7 +8258,7 @@ async function executeQuadTranslation(zhText) {
     
     try {
       const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、英文 English）的日本溫泉飯店外場翻譯專家。
-請將以下中文布達事項精確翻譯為 4 國語言，並提供發音拼音輔助。
+請將以下中文事項精確翻譯為 4 國語言，並提供發音拼音輔助。
 中文事項：「${zhText}」
 
 請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字）：
@@ -8339,7 +8321,7 @@ async function executeQuadTranslation(zhText) {
       statusEl.style.color = 'var(--primary)';
       statusEl.innerHTML = `⚡ 離線智慧對照：已匹配「${bestTemplate.title}」語意`;
     }
-    showToast('已匹配離線高頻布達語意！', 'info');
+    showToast('已匹配離線高頻語意！', 'info');
   } else {
     // 預設職場禮貌萬用通報模板
     currentBroadcastData = {
@@ -8358,9 +8340,9 @@ async function executeQuadTranslation(zhText) {
       statusEl.style.display = 'block';
       statusEl.style.background = 'rgba(92,61,30,0.08)';
       statusEl.style.color = 'var(--primary)';
-      statusEl.innerHTML = `🌐 已生成離線四國通用布達卡片`;
+      statusEl.innerHTML = `🌐 已生成離線四國通用翻譯卡片`;
     }
-    showToast('四國布達卡片已產出！', 'success');
+    showToast('四國翻譯卡片已產出！', 'success');
   }
 }
 
@@ -8379,8 +8361,8 @@ function renderQuadResults(data) {
           </span>
           <span style="font-size:0.72rem; color:var(--muted);">職場禮貌敬語</span>
         </div>
-        <div class="broadcast-text-main ja-text" onclick="speakBroadcast('${escapeJs(data.ja)}', 'ja')" title="點擊發音 🔊" style="cursor:pointer;">
-          ${data.ja} <span style="font-size:0.85rem; opacity:0.6;">🔊</span>
+        <div class="broadcast-text-main ja-text">
+          ${data.ja}
         </div>
         ${data.ja_romaji ? `<div class="broadcast-text-sub">🗣️ 拼音：${data.ja_romaji}</div>` : ''}
       </div>
@@ -8405,7 +8387,6 @@ function renderQuadResults(data) {
         ${data.ne_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.ne_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ne)}', 'ne')">🔊 朗讀</button>
         <button class="btn btn-ghost btn-sm" onclick="copySingleLang('ne')">📋 複製</button>
       </div>
     </div>
@@ -8425,7 +8406,6 @@ function renderQuadResults(data) {
         ${data.my_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.my_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.my)}', 'my')">🔊 朗讀</button>
         <button class="btn btn-ghost btn-sm" onclick="copySingleLang('my')">📋 複製</button>
       </div>
     </div>
@@ -8439,8 +8419,8 @@ function renderQuadResults(data) {
           </span>
           <span style="font-size:0.72rem; color:var(--muted);">外場國際通用</span>
         </div>
-        <div class="broadcast-text-main" onclick="speakBroadcast('${escapeJs(data.en)}', 'en')" title="點擊發音 🔊" style="cursor:pointer;">
-          ${data.en} <span style="font-size:0.85rem; opacity:0.6;">🔊</span>
+        <div class="broadcast-text-main">
+          ${data.en}
         </div>
         <div class="broadcast-text-sub">🗣️ Standard Workplace English</div>
       </div>
@@ -8476,7 +8456,7 @@ function copySingleLang(langKey) {
 
 function copyAllQuadBroadcast() {
   if (!currentBroadcastData) return;
-  const fullText = `【📢 現場四國同步布達 / Announcement】
+  const fullText = `【🌐 現場四國同步翻譯 / Multilingual Translation】
 🇯🇵 日本語 (Japanese)：
 ${currentBroadcastData.ja}
 
@@ -8493,12 +8473,12 @@ ${currentBroadcastData.en}
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(fullText).then(() => {
-      showToast('已複製全部 4 國語言布達文字！', 'success');
+      showToast('已複製全部 4 國語言翻譯文字！', 'success');
     }).catch(() => {
-      showToast('已生成 4 國布達文字', 'info');
+      showToast('已生成 4 國翻譯文字', 'info');
     });
   } else {
-    showToast('已複製全部 4 國語言布達文字！', 'success');
+    showToast('已複製全部 4 國語言翻譯文字！', 'success');
   }
 }
 
@@ -8509,7 +8489,7 @@ function openBroadcastBigScreen() {
   const container = document.getElementById('bigscreen-quad-container');
   if (!modal || !container) return;
 
-  if (preview) preview.textContent = currentBroadcastData.zh || '現場布達事項';
+  if (preview) preview.textContent = currentBroadcastData.zh || '現場翻譯事項';
 
   container.innerHTML = `
     <!-- 🇯🇵 日文大字卡 -->
@@ -8528,7 +8508,6 @@ function openBroadcastBigScreen() {
     <div class="bigscreen-card" style="border-left:6px solid #2e7d32;">
       <div class="bigscreen-card-title">
         <span>🇳🇵 नेपाली (Nepali)</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ne)}', 'ne')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
       </div>
       <div class="bigscreen-card-content" style="color:#1b5e20;">
         ${currentBroadcastData.ne}
@@ -8540,7 +8519,6 @@ function openBroadcastBigScreen() {
     <div class="bigscreen-card" style="border-left:6px solid #f57f17;">
       <div class="bigscreen-card-title">
         <span>🇲🇲 မြန်မာဘာသာ (Burmese)</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.my)}', 'my')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
       </div>
       <div class="bigscreen-card-content" style="color:#e65100;">
         ${currentBroadcastData.my}
@@ -8620,7 +8598,7 @@ function toggleBroadcastMic() {
     broadcastRecognition.onstart = () => {
       isBroadcastMicActive = true;
       if (btn) btn.textContent = '🔴 聆聽中…';
-      showToast('🎤 請說出想布達的中文事項…');
+      showToast('🎤 請說出想翻譯的中文事項…');
     };
 
     broadcastRecognition.onresult = (event) => {

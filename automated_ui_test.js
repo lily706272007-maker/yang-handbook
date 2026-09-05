@@ -254,20 +254,20 @@ assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '
 assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
 assert(html.includes('photos/avatar_yang.png'), '包含小楊專屬 Q 版立繪圖檔參照 (avatar_yang.png)');
 
-// 測試 19: 現場四國同步布達板（日文・尼泊爾文・緬甸文・英文）功能測試
-console.log('\n【測試 19：現場四國同步布達板 (日/尼/緬/英 並排大字與語音)】');
-assert(html.includes('data-page="page-broadcast"'), '頂部導航列包含「📢 四國布達」按鈕');
-assert(html.includes('id="page-broadcast"'), '包含四國布達專屬頁面 (page-broadcast)');
-assert(html.includes('id="broadcast-zh-input"'), '包含中文布達事項輸入框 (broadcast-zh-input)');
+// 測試 19: 現場四國同步翻譯板（日文・尼泊爾文・緬甸文・英文）功能測試
+console.log('\n【測試 19：現場四國同步翻譯板 (日/尼/緬/英 並排大字與語音)】');
+assert(html.includes('data-page="page-broadcast"') && html.includes('四國翻譯'), '頂部導航列包含「🌐 四國翻譯」按鈕');
+assert(html.includes('id="page-broadcast"'), '包含四國翻譯專屬頁面 (page-broadcast)');
+assert(html.includes('id="broadcast-zh-input"'), '包含中文翻譯事項輸入框 (broadcast-zh-input)');
 assert(html.includes('id="broadcast-cards-grid"'), '包含四國語言並排網格容器 (broadcast-cards-grid)');
-assert(html.includes('id="broadcast-templates-wrap"'), '包含常用職場快捷範本標籤列 (broadcast-templates-wrap)');
-assert(html.includes('id="modal-broadcast-bigscreen"'), '包含全螢幕大字亮屏展示彈窗 (modal-broadcast-bigscreen)');
+assert(!html.includes('id="broadcast-templates-wrap"'), '已移除常用職場快捷範本標籤列 (broadcast-templates-wrap)');
+assert(html.includes('id="modal-broadcast-bigscreen"') && html.includes('現場四國大字翻譯板'), '包含全螢幕大字亮屏展示彈窗 (modal-broadcast-bigscreen / 現場四國大字翻譯板)');
 assert(html.includes('QUAD_BROADCAST_TEMPLATES'), '包含 15 組離線職場四國對照範本庫 (QUAD_BROADCAST_TEMPLATES)');
 assert(html.includes('executeQuadTranslation'), '包含四國同步翻譯執行函式 (executeQuadTranslation)');
 assert(html.includes('triggerBroadcastTranslation'), '包含手動點擊同步翻譯觸發函式 (triggerBroadcastTranslation)');
 assert(html.includes('applyBroadcastTemplate'), '包含快捷範本套用函式 (applyBroadcastTemplate)');
 assert(html.includes('copySingleLang'), '包含單一語言複製函式 (copySingleLang)');
-assert(html.includes('copyAllQuadBroadcast'), '包含一鍵複製全部 4 國語言布達函式 (copyAllQuadBroadcast)');
+assert(html.includes('copyAllQuadBroadcast'), '包含一鍵複製全部 4 國語言翻譯函式 (copyAllQuadBroadcast)');
 assert(html.includes('openBroadcastBigScreen') && html.includes('closeBroadcastBigScreen'), '包含開啟/關閉大字亮屏全螢幕展示函式');
 assert(html.includes('speakBroadcast'), '包含多語系語音合成朗讀函式 (speakBroadcast)');
 assert(html.includes('toggleBroadcastMic'), '包含中文語音輸入辨識函式 (toggleBroadcastMic)');
@@ -283,6 +283,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台、「你叫什麼名字？」Q 版形象圖鑑與「現場四國同步布達板」測試 100% 全部通過！');
+  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台、「你叫什麼名字？」Q 版形象圖鑑與「現場四國同步翻譯板」測試 100% 全部通過！');
 }
 
