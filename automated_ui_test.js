@@ -224,20 +224,22 @@ assert(html.includes('id="lightbox-points-wrap"'), '照片詳情彈窗包含文�
 assert(html.includes('id="lightbox-tips-wrap"'), '照片詳情彈窗包含職場應對叮嚀容器 (lightbox-tips-wrap)');
 assert(html.includes('入っていないシロップ') && html.includes('でございます'), '風味糖漿對話包含文法解析與單字拆解');
 
-// 測試 17: 小浣熊 6 大實戰工作台與 Apple 輪盤選單
-console.log('\n【測試 17：小浣熊 6 大實戰工作台與 Apple 輪盤選單】');
+// 測試 17: 小浣熊 6 大實戰工作台與 Apple 輪盤選單（中翻日、持續偷聽推測、3大回覆、問路與抽考獨立）
+console.log('\n【測試 17：小浣熊 6 大實戰工作台與 Apple 輪盤選單 (v67)】');
 assert(html.includes('id="raccoon-radial-overlay"'), '包含 Apple 輪盤遮罩 (raccoon-radial-overlay)');
 assert(html.includes('id="raccoon-radial-menu"'), '包含 Apple 輪盤選單 (raccoon-radial-menu)');
-assert(html.includes('id="raccoon-timer-badge"'), '包含小浣熊頭頂計時徽章 (raccoon-timer-badge)');
 assert(html.includes('id="modal-raccoon-dashboard"'), '包含小浣熊半屏實戰工作台抽屜 (modal-raccoon-dashboard)');
 assert(html.includes('copyAllMemosToClipboard'), '包含語音 Memo「一鍵複製給工程師」函式 (copyAllMemosToClipboard)');
-assert(html.includes('setRaccoonTimerPreset'), '包含料理與出餐多段計時器預設函式 (setRaccoonTimerPreset)');
-assert(html.includes('runFuzzyGuess'), '包含抗雜音・碎詞模糊猜測引擎函式 (runFuzzyGuess)');
+assert(html.includes('toggleContinuousEavesdropping'), '包含「持續偷聽」即時串流收集函式 (toggleContinuousEavesdropping)');
+assert(html.includes('runEavesdropAnalysis'), '包含語境重組與意圖推測分析核心 (runEavesdropAnalysis)');
+assert(html.includes('EAVESDROP_OFFLINE_KNOWLEDGE_BASE'), '內建現場離線語意推測庫與 3 大推薦回覆 (EAVESDROP_OFFLINE_KNOWLEDGE_BASE)');
 assert(html.includes('drawRandomPracticeSentence'), '包含 300 句現場實戰句庫隨抽隨學函式 (drawRandomPracticeSentence)');
-assert(html.includes('executeSilentTranslate'), '包含「我想說這句話」靜音大字轉日文函式 (executeSilentTranslate)');
+assert(html.includes('executeSilentTranslate'), '包含「中翻日」普通丁寧體轉換函式 (executeSilentTranslate)');
 assert(html.includes('renderYusaiLandmarks'), '包含優彩館內地標指引函式 (renderYusaiLandmarks)');
-assert(html.includes('startRaccoonQuickQuiz'), '包含 3 題單字情境快問快答函式 (startRaccoonQuickQuiz)');
-assert(html.includes('PRACTICE_SENTENCES_BANK') && html.includes('FUZZY_KITCHEN_GUESS_DICT'), '內建 300 句現場實戰句庫與 40+ 碎詞模糊資料庫');
+assert(html.includes('startRaccoonQuickQuiz'), '包含隨機快問快答抽考函式 (startRaccoonQuickQuiz)');
+assert(!html.includes('id="rtab-btn-timer"') && !html.includes('id="raccoon-timer-badge"'), '已成功移除料理計時功能 (timer)');
+assert(html.includes('id="rtab-btn-map"') && html.includes('id="rtab-btn-quiz"'), '問路與隨機抽考已獨立拆分為兩個分頁 (map & quiz)');
+assert(html.includes('中翻日') && html.includes('偷聽推測') && html.includes('館內問路') && html.includes('隨機抽考'), '輪盤與工作台標籤完整對應「中翻日」、「偷聽推測」、「館內問路」、「隨機抽考」');
 
 // 測試 18: 「你叫什麼名字？」同仁專屬 Q 版形象圖鑑與雙擊立繪互動
 console.log('\n【測試 18：「你叫什麼名字？」Q 版形象圖鑑與雙擊立繪互動】');
@@ -303,7 +305,7 @@ assert(textContent.includes('氷取ってきて') && textContent.includes('氷�
 // 測試 21: 小浣熊 Apple 輪盤選單點擊修復與彈窗層級
 console.log('\n【測試 21：小浣熊 Apple 輪盤選單點擊修復與彈窗層級】');
 assert(html.includes('--rx: 0px; --ry: -100px') && html.includes('--rx: 88px; --ry: -50px'), '輪盤選項採用 CSS 變數維持圓形座標，防止 active 狀態觸發位置突變');
-assert(html.includes('triggerRadialAction(\'memo\', event)') && html.includes('triggerRadialAction(\'timer\', event)'), '輪盤按鈕完整傳遞 event 並阻止事件冒泡 (stopPropagation)');
+assert(html.includes('triggerRadialAction(\'memo\', event)') && html.includes('triggerRadialAction(\'fuzzy\', event)') && html.includes('triggerRadialAction(\'translate\', event)') && html.includes('triggerRadialAction(\'quiz\', event)'), '輪盤按鈕完整傳遞 event 並阻止事件冒泡 (stopPropagation)');
 assert(html.includes('setTimeout') && html.includes('openRaccoonDashboard(tabId)'), 'triggerRadialAction 包含安全非同步切換，保證全功能工作台順暢開啟');
 
 // 測試 22: 「實用單字」全新「🥦 食材」大類（原型食物・蔬菜根莖・肉類海鮮・蛋品・採購調味料）
@@ -327,7 +329,8 @@ assert(html.includes('cats = [\'全部\', \'食材\'') || html.includes('\'食�
 assert(html.includes('<option value="食材">'), '新增單字彈窗包含「🥦 食材」選項');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v66'), 'Service Worker 快取版本已升級至 yang-pwa-v66');
+assert(swContent.includes('yang-pwa-v67'), 'Service Worker 快取版本已升級至 yang-pwa-v67');
+assert(html.includes('yang_runner_handbook_v67'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v67');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);

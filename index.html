@@ -1881,7 +1881,6 @@
   <div class="raccoon-pulse-ring" id="raccoon-pulse-ring"></div>
   <div class="raccoon-avatar-wrap" id="raccoon-avatar-btn">
     <img src="./photos/raccoon_pet.png" alt="小浣熊" class="raccoon-pet-img" id="raccoon-pet-img" draggable="false" />
-    <div id="raccoon-timer-badge" class="raccoon-timer-badge" style="display:none;">⏱️ 00:00</div>
   </div>
   <div class="raccoon-status-bubble" id="raccoon-status-bubble"></div>
 </div>
@@ -1893,25 +1892,25 @@
       <span class="radial-icon">📝</span>
       <span class="radial-label">Memo筆記</span>
     </button>
-    <button type="button" class="radial-item" data-tab="timer" onclick="triggerRadialAction('timer', event)">
-      <span class="radial-icon">⏱️</span>
-      <span class="radial-label">料理計時</span>
-    </button>
     <button type="button" class="radial-item" data-tab="fuzzy" onclick="triggerRadialAction('fuzzy', event)">
       <span class="radial-icon">👂</span>
-      <span class="radial-label">碎詞偷聽</span>
+      <span class="radial-label">偷聽推測</span>
+    </button>
+    <button type="button" class="radial-item" data-tab="translate" onclick="triggerRadialAction('translate', event)">
+      <span class="radial-icon">💬</span>
+      <span class="radial-label">中翻日</span>
     </button>
     <button type="button" class="radial-item" data-tab="practice" onclick="triggerRadialAction('practice', event)">
       <span class="radial-icon">🎓</span>
       <span class="radial-label">300句庫</span>
     </button>
-    <button type="button" class="radial-item" data-tab="translate" onclick="triggerRadialAction('translate', event)">
-      <span class="radial-icon">💬</span>
-      <span class="radial-label">靜音翻譯</span>
-    </button>
     <button type="button" class="radial-item" data-tab="map" onclick="triggerRadialAction('map', event)">
       <span class="radial-icon">🗺️</span>
-      <span class="radial-label">問路/抽考</span>
+      <span class="radial-label">館內問路</span>
+    </button>
+    <button type="button" class="radial-item" data-tab="quiz" onclick="triggerRadialAction('quiz', event)">
+      <span class="radial-icon">🎮</span>
+      <span class="radial-label">隨機抽考</span>
     </button>
     <button type="button" class="radial-center-close" onclick="closeRaccoonRadialMenu()">✕</button>
   </div>
@@ -1928,7 +1927,7 @@
         <img src="./photos/raccoon_pet.png" style="width:36px; height:36px; object-fit:contain;" />
         <div>
           <div style="font-size:1.05rem; font-weight:800; color:var(--primary);">🦝 小浣熊實戰工作台</div>
-          <div style="font-size:0.72rem; color:var(--muted);">現場備忘・料理計時・偷聽推測・300實戰句庫</div>
+          <div style="font-size:0.72rem; color:var(--muted);">現場備忘・偷聽推測・中翻日・300實戰句庫・館內問路・隨機抽考</div>
         </div>
       </div>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-raccoon-dashboard')">✕ 關閉</button>
@@ -1937,11 +1936,11 @@
     <!-- 6 大功能分頁籤 -->
     <div class="raccoon-tab-nav" style="display:flex; gap:4px; overflow-x:auto; padding-bottom:6px; margin-bottom:10px; border-bottom:1px solid var(--border);">
       <button class="r-tab-btn active" id="rtab-btn-memo" onclick="switchRaccoonTab('memo')">📝 語音Memo</button>
-      <button class="r-tab-btn" id="rtab-btn-timer" onclick="switchRaccoonTab('timer')">⏱️ 料理計時</button>
-      <button class="r-tab-btn" id="rtab-btn-fuzzy" onclick="switchRaccoonTab('fuzzy')">👂 碎詞偷聽</button>
+      <button class="r-tab-btn" id="rtab-btn-fuzzy" onclick="switchRaccoonTab('fuzzy')">👂 偷聽推測</button>
+      <button class="r-tab-btn" id="rtab-btn-translate" onclick="switchRaccoonTab('translate')">💬 中翻日</button>
       <button class="r-tab-btn" id="rtab-btn-practice" onclick="switchRaccoonTab('practice')">🎓 300句庫</button>
-      <button class="r-tab-btn" id="rtab-btn-translate" onclick="switchRaccoonTab('translate')">💬 靜音翻譯</button>
-      <button class="r-tab-btn" id="rtab-btn-map" onclick="switchRaccoonTab('map')">🗺️ 問路/抽考</button>
+      <button class="r-tab-btn" id="rtab-btn-map" onclick="switchRaccoonTab('map')">🗺️ 館內問路</button>
+      <button class="r-tab-btn" id="rtab-btn-quiz" onclick="switchRaccoonTab('quiz')">🎮 隨機抽考</button>
     </div>
 
     <!-- 內容容器 -->
@@ -1971,53 +1970,70 @@
         </div>
       </div>
 
-      <!-- 2. ⏱️ 料理與出餐多段計時器 -->
-      <div id="rtab-content-timer" class="rtab-pane" style="display:none;">
-        <div style="text-align:center; padding:10px 0;">
-          <div id="timer-big-display" style="font-size:3.2rem; font-weight:800; color:var(--primary); font-family:monospace; letter-spacing:2px; margin-bottom:6px;">00:00</div>
-          <div id="timer-status-label" style="font-size:0.88rem; color:var(--muted); margin-bottom:14px;">隨時為你的料理或出餐精準倒數</div>
-          
-          <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(3, '熱水/燙菜')">⏱️ 3分鐘</button>
-            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(5, '出餐提醒')">⏱️ 5分鐘</button>
-            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(10, '燉煮/備料')">⏱️ 10分鐘</button>
-            <button class="btn btn-ghost btn-sm" onclick="setRaccoonTimerPreset(15, '大廚備餐')">⏱️ 15分鐘</button>
+      <!-- 2. 👂 抗雜音・持續偷聽推測機 -->
+      <div id="rtab-content-fuzzy" class="rtab-pane" style="display:none;">
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-weight:700; color:var(--primary); font-size:0.85rem;">👂 持續偷聽現場日語・捕捉隻言片語：</div>
+            <button class="btn btn-ghost btn-sm" style="font-size:0.75rem; color:var(--accent);" onclick="clearEavesdropFragments()">🗑️ 清空記錄</button>
           </div>
 
-          <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:16px;">
-            <input type="number" id="input-custom-minutes" class="form-control form-control-sm" placeholder="自訂分鐘" style="width:100px; text-align:center;" min="1" max="180" />
-            <input type="text" id="input-custom-timer-label" class="form-control form-control-sm" placeholder="料理名稱 (如: 煮拉麵)" style="width:140px;" />
-            <button class="btn btn-primary btn-sm" onclick="startCustomRaccoonTimer()">開始計時</button>
+          <!-- 語音控制與手動新增列 -->
+          <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <button class="btn btn-primary btn-sm" id="btn-fuzzy-mic" onclick="toggleContinuousEavesdropping()" style="flex-shrink:0; font-weight:800;">🎙️ 開始持續偷聽</button>
+            <input type="text" id="input-fuzzy-manual" class="form-control form-control-sm" placeholder="手動加入聽到的碎詞（如: とりざら / 3名）…" onkeydown="if(event.key==='Enter') addManualEavesdropFragment()" />
+            <button class="btn btn-ghost btn-sm" onclick="addManualEavesdropFragment()">＋加入</button>
           </div>
 
-          <div style="display:flex; justify-content:center; gap:10px;">
-            <button class="btn btn-ghost btn-sm" id="btn-timer-pause" onclick="togglePauseRaccoonTimer()" style="display:none;">⏸️ 暫停</button>
-            <button class="btn btn-ghost btn-sm" id="btn-timer-reset" onclick="resetRaccoonTimer()" style="display:none; color:var(--accent);">⏹️ 重設</button>
+          <!-- 常見現場高頻碎片熱鍵 (點擊直接加入) -->
+          <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+            <span style="font-size:0.72rem; color:var(--muted);">常見碎片快捷加入：</span>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('とりざら')">とりざら(分裝盤)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('さゆ')">さゆ(溫水)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('ふき')">ふき(擦盤)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('さしかえ')">さしかえ(換菜)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('インカム')">インカム(通報)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('アレルギー')">アレルギー(過敏)</button>
+            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border); cursor:pointer;" onclick="quickAddEavesdropFragment('お下げ')">お下げ(撤盤)</button>
           </div>
+        </div>
+
+        <!-- 隻言片語時間流收集卡 -->
+        <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-weight:700; font-size:0.82rem; color:var(--ink);" id="eavesdrop-count-label">📝 已捕捉到的隻言片語 (0 條)</span>
+            <span style="font-size:0.72rem; color:var(--muted);">持續聆聽累積中…</span>
+          </div>
+          <div id="eavesdrop-fragments-list" style="display:flex; flex-direction:column; gap:4px; max-height:120px; overflow-y:auto; padding:2px;">
+            <!-- 動態渲染收集到的碎片 -->
+          </div>
+        </div>
+
+        <!-- 核心推測觸發按鈕 -->
+        <div style="margin-bottom:12px;">
+          <button class="btn btn-primary" id="btn-run-eavesdrop-analysis" onclick="runEavesdropAnalysis()" style="width:100%; font-weight:800; padding:10px; font-size:0.95rem; box-shadow:0 3px 10px rgba(92,61,30,0.2);">
+            🧠 分析對話與推測意圖（重組對話＋推薦3個最佳應答）
+          </button>
+        </div>
+
+        <!-- 分析與推薦回覆結果容器 -->
+        <div id="eavesdrop-analysis-container">
+          <!-- 初始提示或分析結果卡片 -->
         </div>
       </div>
 
-      <!-- 3. 👂 抗雜音・碎詞模糊猜測機 -->
-      <div id="rtab-content-fuzzy" class="rtab-pane" style="display:none;">
+      <!-- 3. 💬 中翻日（中文字句轉現場日語） -->
+      <div id="rtab-content-translate" class="rtab-pane" style="display:none;">
         <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
-          <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:6px;">👂 聽到碎片音？輸入或說出你聽到的 1~2 個字：</div>
+          <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:4px;">💬 輸入中文，立即轉換道地職場日語（普通丁寧體）：</div>
           <div style="display:flex; gap:6px;">
-            <button class="btn btn-primary btn-sm" id="btn-fuzzy-mic" onclick="toggleFuzzyListening()" style="flex-shrink:0;">🎙️ 持續偷聽</button>
-            <input type="text" id="input-fuzzy-query" class="form-control form-control-sm" placeholder="如: ふき / とりざら / さゆ / さしかえ / つめ" oninput="runFuzzyGuess(this.value)" />
-            <button class="btn btn-ghost btn-sm" onclick="runFuzzyGuess(document.getElementById('input-fuzzy-query').value)">猜測</button>
-          </div>
-          <div style="display:flex; gap:4px; margin-top:6px; flex-wrap:wrap;">
-            <span style="font-size:0.75rem; color:var(--muted);">常見碎片熱鍵：</span>
-            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('ふき')">ふき(擦盤)</button>
-            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('とりざら')">とりざら(小盤)</button>
-            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('さゆ')">さゆ(溫水)</button>
-            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('さしかえ')">さしかえ(換菜)</button>
-            <button class="btn-sm" style="font-size:0.72rem; padding:1px 6px; border-radius:6px; background:#fff; border:1px solid var(--border);" onclick="runFuzzyGuess('インカム')">インカム(通報)</button>
+            <input type="text" id="input-translate-zh" class="form-control form-control-sm" placeholder="如: 這個有點燙請小心 / 垃圾滿了我去倒 / 請給我三位用的分裝盤…" onkeydown="if(event.key==='Enter') executeSilentTranslate()" />
+            <button class="btn btn-primary btn-sm" onclick="executeSilentTranslate()">轉日語</button>
           </div>
         </div>
 
-        <div id="fuzzy-results-container" style="display:flex; flex-direction:column; gap:8px;">
-          <!-- 模糊猜測命中卡片 -->
+        <div id="translate-result-card" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; min-height:120px; display:flex; flex-direction:column; justify-content:center;">
+          <div style="font-size:0.88rem; color:var(--muted);">在上方輸入中文後點擊「轉日語」，將以普通丁寧體與大字標音呈現。</div>
         </div>
       </div>
 
@@ -2038,43 +2054,24 @@
         </div>
       </div>
 
-      <!-- 5. 💬 我想說這句話（中文轉日文・預設 100% 靜音文字顯示） -->
-      <div id="rtab-content-translate" class="rtab-pane" style="display:none;">
-        <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;">
-          <div style="font-weight:700; color:var(--primary); font-size:0.85rem; margin-bottom:4px;">💬 輸入中文，立即轉換道地職場日語（🔇 預設靜音）：</div>
-          <div style="display:flex; gap:6px;">
-            <input type="text" id="input-translate-zh" class="form-control form-control-sm" placeholder="如: 這個有點燙請小心 / 垃圾滿了我去倒…" onkeydown="if(event.key==='Enter') executeSilentTranslate()" />
-            <button class="btn btn-primary btn-sm" onclick="executeSilentTranslate()">轉日語</button>
-          </div>
+      <!-- 5. 🗺️ 優彩館內設施問路指引 -->
+      <div id="rtab-content-map" class="rtab-pane" style="display:none;">
+        <div style="background:rgba(92,61,30,0.06); border-radius:8px; padding:8px 10px; font-size:0.78rem; color:var(--ink); margin-bottom:10px;">
+          💡 <strong>優彩館內指引</strong>：點擊即可查看日語指引句（提供平面圖後可隨時 100% 精準客製化！）。
         </div>
-
-        <div id="translate-result-card" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; min-height:120px; display:flex; flex-direction:column; justify-content:center;">
-          <div style="font-size:0.88rem; color:var(--muted);">在上方輸入中文後點擊「轉日語」，將以大字清晰呈現，防現場突發聲音尷尬。</div>
+        <div id="yusai-landmarks-list" style="display:flex; flex-direction:column; gap:6px;">
+          <!-- 優彩館內設施卡片 -->
         </div>
       </div>
 
-      <!-- 6. 🗺️ 優彩設施問路指引 ＆ 🎮 快問快答 -->
-      <div id="rtab-content-map" class="rtab-pane" style="display:none;">
-        <div style="display:flex; gap:6px; margin-bottom:10px;">
-          <button class="btn btn-primary btn-sm" id="btn-sub-map" onclick="switchMapSubTab('map')" style="flex:1;">🗺️ 館內設施問路</button>
-          <button class="btn btn-ghost btn-sm" id="btn-sub-quiz" onclick="switchMapSubTab('quiz')" style="flex:1;">🎮 3題快問快答</button>
+      <!-- 6. 🎮 隨機抽考（快問快答遊戲） -->
+      <div id="rtab-content-quiz" class="rtab-pane" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:700; font-size:0.85rem; color:var(--primary);">🎮 隨機快問快答抽考</span>
+          <button class="btn btn-primary btn-sm" onclick="startRaccoonQuickQuiz()">🎲 換一題</button>
         </div>
-
-        <!-- 子分頁 A: 問路指引 -->
-        <div id="subtab-map-content">
-          <div style="background:rgba(92,61,30,0.06); border-radius:8px; padding:8px 10px; font-size:0.78rem; color:var(--ink); margin-bottom:10px;">
-            💡 <strong>優彩館內指引</strong>：點擊即可查看日語指引句（提供平面圖後可隨時 100% 精準客製化！）。
-          </div>
-          <div id="yusai-landmarks-list" style="display:flex; flex-direction:column; gap:6px;">
-            <!-- 優彩館內設施卡片 -->
-          </div>
-        </div>
-
-        <!-- 子分頁 B: 快問快答 -->
-        <div id="subtab-quiz-content" style="display:none;">
-          <div id="quiz-game-container" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px;">
-            <!-- 快問快答題目 -->
-          </div>
+        <div id="quiz-game-container" style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px;">
+          <!-- 快問快答題目 -->
         </div>
       </div>
 
@@ -2330,7 +2327,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v66';
+const STORAGE_KEY = 'yang_runner_handbook_v67';
 
 function createRealRunnerData() {
   return {
@@ -7111,18 +7108,14 @@ let raccoonState = {
   lastTapTime: 0,
   singleTapTimer: null,
   memoRecognition: null,
-  isMemoRecording: false,
-  fuzzyRecognition: null,
-  isFuzzyListening: false
+  isMemoRecording: false
 };
 
-// ── ⏱️ 料理計時器狀態 ──
-let raccoonTimer = {
-  totalSeconds: 0,
-  remainingSeconds: 0,
-  intervalId: null,
-  isRunning: false,
-  label: ''
+// ── 👂 持續偷聽與語意推測狀態 ──
+let eavesdropState = {
+  isListening: false,
+  recognition: null,
+  fragments: [] // { id, text, time }
 };
 
 // ── 📚 300 句現場實戰句庫 ──
@@ -7537,81 +7530,316 @@ const PRACTICE_SENTENCES_BANK = [
   }
 ];
 
-// ── 👂 碎詞模糊猜測字典 ──
-const FUZZY_KITCHEN_GUESS_DICT = [
+// ── 👂 持續偷聽與語意推測・現場離線知識庫 (含 3 大推薦自然丁寧體回覆) ──
+const EAVESDROP_OFFLINE_KNOWLEDGE_BASE = [
   {
-    keys: ["ふき", "おさらふき", "さらふき", "fuki", "皿拭き", "擦盤"],
-    ja: "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き（おさらふき）",
-    zh: "擦盤子作業",
-    intent: "主管或前輩要你去出餐口或洗滌區，將洗好烘乾的餐盤徹底擦乾水分並分層擺好。",
-    actionJa: "はい！すぐお<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>きやります！",
-    actionZh: "好的！我馬上進行擦盤子作業！"
+    keys: ["とりざら", "とり皿", "torizara", "取皿", "小盤", "分裝盤", "皿", "小皿"],
+    reconstructed: "お<ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いできますでしょうか？",
+    romaji: "O-torizara o onegai dekimasu deshō ka?",
+    zh: "可以麻煩給我分裝小盤子嗎？",
+    intent: "客人需要額外的小分裝盤，或是餐檯上的分裝碟見底需要補充。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "かしこまりました！すぐにお<ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>をお<ruby>持<rt>も</rt></ruby>ちいたします！",
+        romaji: "Kashikomarimashita! Sugu ni o-torizara o omochi itashimasu!",
+        zh: "遵命！我馬上為您送分裝盤過來！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "お<ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>は<ruby>何名様分<rt>なんめいさまぶん</rt></ruby>お<ruby>持<rt>も</rt></ruby>ちいたしましょうか？",
+        romaji: "O-torizara wa nanmei-sama bun omochi itashimashō ka?",
+        zh: "請問分裝盤需要幫您送幾位用的呢？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "ただいま<ruby>新<rt>あたら</rt></ruby>しいお<ruby>皿<rt>さら</rt></ruby>をご<ruby>用意<rt>ようい</rt></ruby>しておりますので、<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。",
+        romaji: "Tadaima atarashii o-sara o go-yōi shite orimasu node, shōshō omachi kudasai.",
+        zh: "目前正在為您準備新餐盤，請稍候片刻。"
+      }
+    ]
   },
   {
-    keys: ["とりざら", "とり皿", "torizara", "取皿", "小盤", "分裝盤"],
-    ja: "<ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt> / <ruby>取皿<rt>とりざら</rt></ruby>",
-    zh: "分裝小盤子（客人要分享食物用的小盤）",
-    intent: "客人需要額外的小分裝盤，或是餐檯上的分裝小碟子不夠了需要補充。",
-    actionJa: "かしこまりました！すぐにお<ruby>持<rt>も</rt></ruby>ちいたします！",
-    actionZh: "遵命！我馬上為您送過來！"
+    keys: ["さゆ", "おさゆ", "osau", "sayu", "お白湯", "白湯", "溫水", "ぬるま湯"],
+    reconstructed: "お<ruby>白湯<rt>さゆ</rt></ruby>（ぬるめのお<ruby>湯<rt>ゆ</rt></ruby>）をいただけますでしょうか？",
+    romaji: "O-sayu (nurume no o-yu) o itadakemasu deshō ka?",
+    zh: "可以給我一杯溫開水（白湯）嗎？",
+    intent: "客人（長輩、孕婦或吃藥客人）不喝冰水，想要一杯溫熱適中的溫開水。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "かしこまりました。すぐにお<ruby>白湯<rt>さゆ</rt></ruby>をご<ruby>用意<rt>ようい</rt></ruby>いたします。",
+        romaji: "Kashikomarimashita. Sugu ni o-sayu o go-yōi itashimasu.",
+        zh: "遵命明白了，我馬上為您準備溫開水。"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "お<ruby>白湯<rt>さゆ</rt></ruby>の<ruby>温度<rt>おんど</rt></ruby>はこちらでよろしいでしょうか？",
+        romaji: "O-sayu no ondo wa kochira de yoroshii deshō ka?",
+        zh: "溫開水的溫度這樣可以嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "お<ruby>白湯<rt>さゆ</rt></ruby>はドリンクコーナーでもお<ruby>入<rt>い</rt></ruby>れいただけます。ご<ruby>案内<rt>あんない</rt></ruby>いたしますね。",
+        romaji: "O-sayu wa dorinku kōnā demo o-ire itadakemasu. Go-annai itashimasu ne.",
+        zh: "溫開水在飲料吧台也可以裝取，我帶您過去。"
+      }
+    ]
   },
   {
-    keys: ["さゆ", "おさゆ", "osau", "sayu", "お白湯", "白湯", "溫水"],
-    ja: "お<ruby>白湯<rt>さゆ</rt></ruby>（おさゆ）",
-    zh: "溫開水（煮沸後降溫的常溫/溫水）",
-    intent: "客人（尤其長輩或身體不適者）不要冰水（お冷），想要一杯溫開水。",
-    actionJa: "お<ruby>待<rt>ま</rt></ruby>たせいたしました。お<ruby>白湯<rt>さゆ</rt></ruby>でございます。",
-    actionZh: "讓您久等了，這是為您準備的溫開水。"
+    keys: ["おひや", "ひや", "ohiya", "お冷", "冰水", "冷水", "水", "お水"],
+    reconstructed: "お<ruby>冷<rt>ひ</rt></ruby>や（お<ruby>水<rt>みず</rt></ruby>）をお<ruby>願<rt>ねが</rt></ruby>いできますか？",
+    romaji: "O-hiya (o-mizu) o onegai dekimasu ka?",
+    zh: "請給我冰開水。",
+    intent: "客人需要冰開水，或詢問冰水裝取地點。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "かしこまりました！お<ruby>冷<rt>ひ</rt></ruby>やをお<ruby>持<rt>も</rt></ruby>ちいたします！",
+        romaji: "Kashikomarimashita! O-hiya o omochi itashimasu!",
+        zh: "好的！我馬上為您送上冰開水！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "お<ruby>冷<rt>ひ</rt></ruby>やはピッチャーでお<ruby>持<rt>も</rt></ruby>ちいたしましょうか？",
+        romaji: "O-hiya wa pitchā de omochi itashimashō ka?",
+        zh: "請問需要用整壺冰水為您送過來嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "お<ruby>冷<rt>ひ</rt></ruby>やはドリンクコーナーにございます。ご<ruby>自由<rt>じゆう</rt></ruby>にお<ruby>取<rt>と</rt></ruby>りいただけます。",
+        romaji: "O-hiya wa dorinku kōnā ni gozaimasu. Go-jiyū ni o-tori itadakemasu.",
+        zh: "冰水在飲料區為您準備，歡迎自由裝取。"
+      }
+    ]
   },
   {
-    keys: ["さしかえ", "さし", "sashikae", "差し替え", "換菜", "補菜"],
-    ja: "<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>料理<rt>りょうり</rt></ruby>",
-    zh: "更換餐盤 / 補新菜餚",
-    intent: "餐檯上的料理見底或變冷了，廚房端出熱騰騰的新一盤，需要把舊盤撤回、放上新盤。",
-    actionJa: "はい！<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>持<rt>も</rt></ruby>っていきます！",
-    actionZh: "好的！我馬上把更換的菜餚端過去！"
+    keys: ["ふき", "おさらふき", "さらふき", "fuki", "皿拭き", "擦盤", "ふいて"],
+    reconstructed: "お<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>きをお<ruby>願<rt>ねが</rt></ruby>いできますか？",
+    romaji: "O-sara fuki o onegai dekimasu ka?",
+    zh: "請幫忙把洗好的餐盤擦乾歸位。",
+    intent: "主管或前輩交代將出餐口烘洗好的餐盤徹底擦乾水分並分層疊放。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "はい！すぐにお<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>きを<ruby>始<rt>はじ</rt></ruby>めます！",
+        romaji: "Hai! Sugu ni o-sara fuki o hajimemasu!",
+        zh: "好的！我馬上開始擦餐盤！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "こちらの<ruby>仕切<rt>しき</rt></ruby>りプレートから<ruby>拭<rt>ふ</rt></ruby>けばよろしいでしょうか？",
+        romaji: "Kochira no shikiri purēto kara fukeba yoroshii deshō ka?",
+        zh: "請問從這批四格餐盤先擦可以嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "ただいまの<ruby>運搬<rt>うんぱん</rt></ruby>が<ruby>終<rt>お</rt></ruby>わり<ruby>次第<rt>しだい</rt></ruby>、すぐに<ruby>伺<rt>うかが</rt></ruby>います！",
+        romaji: "Tadaima no unpan ga owari shidai, sugu ni ukagaimasu!",
+        zh: "目前手上的傳菜一結束，我馬上過去擦盤！"
+      }
+    ]
   },
   {
-    keys: ["おあいそ", "かいけい", "oaiso", "kaikei", "会計", "お愛想", "結帳"],
-    ja: "お<ruby>会計<rt>かいけい</rt> / お<ruby>愛想<rt>あいそ</rt></ruby>",
-    zh: "結帳 / 買單",
-    intent: "客人用餐完畢想確認結帳或離場手續。",
-    actionJa: "お<ruby>会計<rt>かいけい</rt></ruby>はフロント（レジ）にて<ruby>承<rt>うけたまわ</rt></ruby>ります。",
-    actionZh: "結帳手續請至櫃檯辦理。"
+    keys: ["さしかえ", "さし", "sashikae", "差し替え", "換菜", "補菜", "差替"],
+    reconstructed: "<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>えの<ruby>料理<rt>りょうり</rt></ruby>ができましたよ。",
+    romaji: "Sashikae no ryōri ga dekimashita yo.",
+    zh: "更換補充的新菜餚做好了喔。",
+    intent: "自助餐檯的菜餚見底或冷卻，內場出新菜盤，需換上新盤並撤回舊盤。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "はい！<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>えをすぐにセットしてまいります！",
+        romaji: "Hai! Sashikae o sugu ni setto shite mairimasu!",
+        zh: "好的！我馬上把新菜換上餐檯！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "こちらの<ruby>大皿<rt>おおざら</rt></ruby>を<ruby>先<rt>さき</rt></ruby>に<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>えますか？",
+        romaji: "Kochira no ōzara o saki ni sashikaemasu ka?",
+        zh: "請問先換這個大盤的料理嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "インカムでホールスタッフに<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>完了<rt>かんりょう</rt></ruby>を<ruby>伝<rt>つた</rt></ruby>えます！",
+        romaji: "Inkamu de hōru sutaffu ni sashikae kanryō o tsutaemasu!",
+        zh: "我立即用無線電通知外場更換完成！"
+      }
+    ]
+  },
+  {
+    keys: ["ばっしんぐ", "さげ", "bashingu", "バッシング", "お下げ", "收桌", "下げる", "下げて"],
+    reconstructed: "こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもらえますか？",
+    romaji: "Kochira no o-sara, osage shite moraemasu ka?",
+    zh: "這個盤子可以幫我收走嗎？",
+    intent: "客人用餐完畢想撤走空盤騰出桌面空間，或要求收拾空桌。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>してお<ruby>下<rt>さ</rt></ruby>げいたしますね。",
+        romaji: "Arigatō gozaimasu. Shitsurei shite osage itashimasu ne.",
+        zh: "謝謝您，不好意思打擾為您收走盤子。"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "こちらもお<ruby>済<rt>す</rt></ruby>みでしょうか？お<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
+        romaji: "Kochira mo osumi deshō ka? Osage shite mo yoroshii desu ka?",
+        zh: "這個也已經用餐完畢了嗎？方便幫您收走嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "テーブルの<ruby>上<rt>うえ</rt></ruby>をお<ruby>広<rt>ひろ</rt></ruby>くいたしますね。ごゆっくりどうぞ。",
+        romaji: "Tēburu no ue o ohiroku itashimasu ne. Go-yukkuri dōzo.",
+        zh: "幫您把桌面空間騰開，請您慢用。"
+      }
+    ]
+  },
+  {
+    keys: ["アレルギー", "えび", "かに", "たまご", "そば", "小麦", "過敏", "アレルゲン"],
+    reconstructed: "この<ruby>料理<rt>りょうり</rt></ruby>にアレルギー<ruby>物質<rt>ぶっしつ</rt></ruby>は<ruby>入<rt>はい</rt></ruby>っていますか？",
+    romaji: "Kono ryōri ni arerugī busshitsu wa haitte imasu ka?",
+    zh: "這道料理有包含過敏原食材嗎？",
+    intent: "客人有特定食物過敏，需確認料理成分與安全確認。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "かしこまりました。すぐに<ruby>厨房<rt>ちゅうぼう</rt></ruby>のアレルギー<ruby>表<rt>ひょう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>してまいります！",
+        romaji: "Kashikomarimashita. Sugu ni chūbō no arerugī-hyō o kakunin shite mairimasu!",
+        zh: "遵命，我馬上到廚房確認過敏原對照表！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "どのアレルギーをお<ruby>持<rt>も</rt></ruby>ちでしょうか？<ruby>正確<rt>せいかく</rt></ruby>に<ruby>確認<rt>かくにん</rt></ruby>いたします。",
+        romaji: "Dono arerugī o omochi deshō ka? Seikaku ni kakunin itashimasu.",
+        zh: "請問是對哪一種食材過敏呢？我為您精確確認。"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "<ruby>安全<rt>あんぜん</rt></ruby>のため、<ruby>責任者<rt>せきにんしゃ</rt></ruby>（チーフ）よりご<ruby>説明<rt>せつめい</rt></ruby>させていただきますね。",
+        romaji: "Anzen no tame, sekininsha yori go-setsumei sasete itadakimasu ne.",
+        zh: "為了您的用餐安全，我請現場主管親自為您詳細說明。"
+      }
+    ]
+  },
+  {
+    keys: ["インカム", "いんかむ", "inkamu", "無線電", "對講機", "通報"],
+    reconstructed: "インカムで<ruby>通報<rt>つうほう</rt></ruby>してください。",
+    romaji: "Inkamu de tsūhō shite kudasai.",
+    zh: "請用無線電對講機通報。",
+    intent: "同事或主管要求用無線電通報缺菜、料理送達或呼叫支援。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "はい！インカムでただいま<ruby>通報<rt>つうほう</rt></ruby>いたします！",
+        romaji: "Hai! Inkamu de tadaima tsūhō itashimasu!",
+        zh: "好的！我現在就用無線電通報！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "インカムのチャンネルは１<ruby>番<rt>ばん</rt></ruby>でよろしいでしょうか？",
+        romaji: "Inkamu no channeru wa ichiban de yoroshii deshō ka?",
+        zh: "請問無線電頻道是使用 1 號頻道嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "<ruby>了解<rt>りょうかい</rt></ruby>です！外場のスタッフ<ruby>全員<rt>ぜんいん</rt></ruby>に<ruby>共有<rt>きょうゆう</rt></ruby>します！",
+        romaji: "Ryōkai desu! Sotoba no sutaffu zen'in ni kyōyū shimasu!",
+        zh: "了解！我向外場全體同仁同步廣播！"
+      }
+    ]
+  },
+  {
+    keys: ["おあいそ", "かいけい", "oaiso", "kaikei", "会計", "お愛想", "結帳", "レジ", "チェック"],
+    reconstructed: "お<ruby>会計<rt>かいけい</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。",
+    romaji: "O-kaikei o onegai shimasu.",
+    zh: "麻煩請買單結帳。",
+    intent: "客人用餐完畢想確認結帳流程或櫃檯位置。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "お<ruby>会計<rt>かいけい</rt></ruby>でございますね。フロントへご<ruby>案内<rt>あんない</rt></ruby>いたします。",
+        romaji: "O-kaikei de gozaimasu ne. Furonto e go-annai itashimasu.",
+        zh: "要結帳是嗎，我帶您前往櫃檯。"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "お<ruby>部屋<rt>へや</rt></ruby><ruby>付<rt>つ</rt></ruby>けにされますか？それともこちらでお<ruby>支払<rt>しはら</rt></ruby>いでしょうか？",
+        romaji: "O-heya-zuke ni saremasu ka? Soretomo kochira de o-shiharai deshō ka?",
+        zh: "請問是要記在房帳上，還是現場結清呢？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "<ruby>伝票<rt>でんぴょう</rt></ruby>をお<ruby>持<rt>も</rt></ruby>ちになって、レジカウンターへお<ruby>越<rt>こ</rt></ruby>しください。",
+        romaji: "Denpyō o omochi ni natte, reji kauntā e okoshi kudasai.",
+        zh: "請帶著帳單明細前往收銀櫃檯辦理。"
+      }
+    ]
+  },
+  {
+    keys: ["ごはん", "ご飯", "おかわり", "大盛り", "白米", "米", "gohan", "okawari"],
+    reconstructed: "ご飯のおかわりをいただけますか？",
+    romaji: "Gohan no o-kawari o itadakemasu ka?",
+    zh: "可以再幫我續一碗飯嗎？",
+    intent: "客人想再添白飯，或詢問添飯區位置。",
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "かしこまりました！ご飯をお<ruby>盛<rt>も</rt></ruby>りしてまいります！",
+        romaji: "Kashikomarimashita! Gohan o omori shite mairimasu!",
+        zh: "好的！我馬上為您盛飯送過來！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "ご飯の<ruby>量<rt>りょう</rt></ruby>は<ruby>普通<rt>ふつう</rt></ruby>でよろしいですか？<ruby>大盛<rt>おおも</rt></ruby>りもできますよ。",
+        romaji: "Gohan no ryō wa futsū de yoroshii desu ka? Ōmori mo dekimasu yo.",
+        zh: "請問飯量普通可以嗎？也可以幫您添大碗喔。"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "ご飯コーナーはあちらの<ruby>左奥<rt>ひだりおく</rt></ruby>にもございます。ご<ruby>案内<rt>あんない</rt></ruby>しますね。",
+        romaji: "Gohan kōnā wa achira no hidari oku ni mo gozaimasu. Go-annai shimasu ne.",
+        zh: "白飯區在左前方走到底也有，我帶您過去。"
+      }
+    ]
   },
   {
     keys: ["つめ", "ようじ", "tsumayouji", "爪楊枝", "牙籤"],
-    ja: "<ruby>爪楊枝<rt>つまようじ</rt></ruby>",
-    zh: "牙籤",
+    reconstructed: "<ruby>爪楊枝<rt>つまようじ</rt></ruby>をいただけますか？",
+    romaji: "Tsumayōji o itadakemasu ka?",
+    zh: "可以給我牙籤嗎？",
     intent: "客人想索取牙籤，通常放置在收銀檯或調味料區。",
-    actionJa: "こちらに<ruby>爪楊枝<rt>つまようじ</rt></ruby>がございます。どうぞ！",
-    actionZh: "這裡有牙籤，請用！"
-  },
-  {
-    keys: ["おひや", "ひや", "ohiya", "お冷", "冰水"],
-    ja: "お<ruby>冷<rt>ひ</rt></ruby>や（おひや）",
-    zh: "冰開水（日本餐廳標準用水）",
-    intent: "客人需要冰水，或是詢問冰水在哪裡裝取。",
-    actionJa: "お<ruby>冷<rt>ひ</rt></ruby>やはドリンクコーナーにございます。",
-    actionZh: "冰水在飲料吧台區提供。"
-  },
-  {
-    keys: ["ばっしんぐ", "さげ", "bashingu", "バッシング", "お下げ", "收桌"],
-    ja: "バッシング / お<ruby>下<rt>さ</rt></ruby>げ",
-    zh: "收桌 / 撤收餐盤",
-    intent: "客人離席或是桌上空盤過多，需要推車前往整理桌面。",
-    actionJa: "<ruby>失礼<rt>しつれい</rt></ruby>いたします。お<ruby>皿<rt>さら</rt></ruby>お<ruby>下<rt>さ</rt></ruby>げします。",
-    actionZh: "不好意思打擾了，我為您收拾餐盤。"
-  },
-  {
-    keys: ["インカム", "いんかむ", "inkamu", "無線電", "對講機"],
-    ja: "<ruby>インカム<rt>inkamu</rt></ruby>",
-    zh: "無線電耳機對講機",
-    intent: "要求你檢查無線電是否開機、通報缺菜或呼叫主管支援。",
-    actionJa: "インカムで<ruby>通報<rt>つうほう</rt></ruby>いたします！",
-    actionZh: "我立即用無線電通報！"
+    responses: [
+      {
+        type: "⚡ 迅速答應 / 立即行動",
+        ja: "こちらに<ruby>爪楊枝<rt>つまようじ</rt></ruby>がございます。どうぞ！",
+        romaji: "Kochira ni tsumayōji ga gozaimasu. Dōzo!",
+        zh: "這裡有牙籤，請用！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "お<ruby>席<rt>せき</rt></ruby>までお<ruby>持<rt>も</rt></ruby>ちいたしましょうか？",
+        romaji: "O-seki made omochi itashimashō ka?",
+        zh: "需要幫您直接送至座位上嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "レジの<ruby>横<rt>よこ</rt></ruby>にもご<ruby>用意<rt>ようい</rt></ruby>しております。",
+        romaji: "Reji no yoko ni mo go-yōi shite orimasu.",
+        zh: "收銀檯旁邊也有放置牙籤喔。"
+      }
+    ]
   }
 ];
+
+// 向後相容別名
+const FUZZY_KITCHEN_GUESS_DICT = EAVESDROP_OFFLINE_KNOWLEDGE_BASE.map(item => ({
+  keys: item.keys,
+  ja: item.reconstructed,
+  zh: item.zh,
+  intent: item.intent,
+  actionJa: item.responses[0].ja,
+  actionZh: item.responses[0].zh
+}));
 
 // ── 🗺️ 優彩館內設施 ──
 const YUSAI_LANDMARKS = [
@@ -7861,19 +8089,22 @@ function switchRaccoonTab(tabId) {
   document.querySelectorAll('.r-tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.rtab-pane').forEach(pane => pane.style.display = 'none');
 
-  const btn = document.getElementById('rtab-btn-' + tabId);
-  const pane = document.getElementById('rtab-content-' + tabId);
+  const targetTab = tabId || 'memo';
+  const btn = document.getElementById('rtab-btn-' + targetTab);
+  const pane = document.getElementById('rtab-content-' + targetTab);
   if (btn) btn.classList.add('active');
   if (pane) pane.style.display = 'block';
 
-  if (tabId === 'memo') renderRaccoonMemoTab();
-  if (tabId === 'practice') {
+  if (targetTab === 'memo') renderRaccoonMemoTab();
+  if (targetTab === 'fuzzy') renderEavesdropFragmentsList();
+  if (targetTab === 'practice') {
     const disp = document.getElementById('practice-card-display');
     if (disp && !disp.innerHTML.trim()) {
       drawRandomPracticeSentence();
     }
   }
-  if (tabId === 'map') renderYusaiLandmarks();
+  if (targetTab === 'map') renderYusaiLandmarks();
+  if (targetTab === 'quiz') startRaccoonQuickQuiz();
 }
 
 // ── 1. 📝 語音 Memo 筆記本實作 ──
@@ -8027,7 +8258,6 @@ function copyAllMemosToClipboard() {
   navigator.clipboard.writeText(fullText).then(() => {
     showToast('🎉 備忘錄已成功複製！請直接貼到對話視窗給我！', 'success');
   }).catch(() => {
-    // 備用方案
     const ta = document.createElement('textarea');
     ta.value = fullText;
     document.body.appendChild(ta);
@@ -8038,228 +8268,465 @@ function copyAllMemosToClipboard() {
   });
 }
 
-// ── 2. ⏱️ 料理與出餐多段計時器實作 ──
-function formatTimerDisplay(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-}
-
-function updateTimerUI() {
-  const display = document.getElementById('timer-big-display');
-  const statusLabel = document.getElementById('timer-status-label');
-  const badge = document.getElementById('raccoon-timer-badge');
-  const pauseBtn = document.getElementById('btn-timer-pause');
-  const resetBtn = document.getElementById('btn-timer-reset');
-
-  if (display) display.textContent = formatTimerDisplay(raccoonTimer.remainingSeconds);
-  
-  if (raccoonTimer.isRunning || raccoonTimer.remainingSeconds > 0) {
-    if (statusLabel) statusLabel.textContent = raccoonTimer.label ? (`🔥 進行中：${raccoonTimer.label}`) : '⏱️ 計時倒數中…';
-    if (badge) {
-      badge.style.display = 'block';
-      badge.textContent = '⏱️ ' + formatTimerDisplay(raccoonTimer.remainingSeconds);
-    }
-    if (pauseBtn) {
-      pauseBtn.style.display = 'inline-block';
-      pauseBtn.textContent = raccoonTimer.isRunning ? '⏸️ 暫停' : '▶️ 繼續';
-    }
-    if (resetBtn) resetBtn.style.display = 'inline-block';
-  } else {
-    if (statusLabel) statusLabel.textContent = '隨時為你的料理或出餐精準倒數';
-    if (badge) badge.style.display = 'none';
-    if (pauseBtn) pauseBtn.style.display = 'none';
-    if (resetBtn) resetBtn.style.display = 'none';
-  }
-}
-
-function setRaccoonTimerPreset(minutes, label) {
-  startRaccoonTimerSeconds(minutes * 60, label);
-}
-
-function startCustomRaccoonTimer() {
-  const minInput = document.getElementById('input-custom-minutes');
-  const labelInput = document.getElementById('input-custom-timer-label');
-  const mins = minInput ? parseInt(minInput.value, 10) : 0;
-  const label = labelInput ? labelInput.value.trim() : '料理計時';
-  if (!mins || mins <= 0) {
-    showToast('請輸入有效的分鐘數', 'error');
-    return;
-  }
-  startRaccoonTimerSeconds(mins * 60, label);
-}
-
-function startRaccoonTimerSeconds(totalSec, label) {
-  if (raccoonTimer.intervalId) clearInterval(raccoonTimer.intervalId);
-  raccoonTimer.totalSeconds = totalSec;
-  raccoonTimer.remainingSeconds = totalSec;
-  raccoonTimer.label = label || '料理倒數';
-  raccoonTimer.isRunning = true;
-
-  updateTimerUI();
-  showToast(`⏱️ 已啟動 ${Math.floor(totalSec/60)} 分鐘計時：${raccoonTimer.label}`, 'success');
-
-  raccoonTimer.intervalId = setInterval(() => {
-    if (!raccoonTimer.isRunning) return;
-    raccoonTimer.remainingSeconds--;
-    updateTimerUI();
-
-    if (raccoonTimer.remainingSeconds <= 0) {
-      clearInterval(raccoonTimer.intervalId);
-      raccoonTimer.intervalId = null;
-      raccoonTimer.isRunning = false;
-      updateTimerUI();
-      onRaccoonTimerFinished();
-    }
-  }, 1000);
-}
-
-function togglePauseRaccoonTimer() {
-  if (raccoonTimer.remainingSeconds <= 0) return;
-  raccoonTimer.isRunning = !raccoonTimer.isRunning;
-  updateTimerUI();
-}
-
-function resetRaccoonTimer() {
-  if (raccoonTimer.intervalId) clearInterval(raccoonTimer.intervalId);
-  raccoonTimer.intervalId = null;
-  raccoonTimer.isRunning = false;
-  raccoonTimer.totalSeconds = 0;
-  raccoonTimer.remainingSeconds = 0;
-  raccoonTimer.label = '';
-  updateTimerUI();
-  showToast('計時器已重設');
-}
-
-function onRaccoonTimerFinished() {
-  if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 600]);
-  showToast(`🔔 叮！${raccoonTimer.label || '料理'} 時間到囉！請盡速確認！`, 'success');
-  speakJapanese('時間になりました。確認してください。');
-}
-
-// ── 3. 👂 抗雜音・碎詞模糊猜測機實作 ──
-function runFuzzyGuess(query) {
-  const container = document.getElementById('fuzzy-results-container');
-  if (!container) return;
-  const q = (query || '').trim().toLowerCase();
-
-  if (!q) {
-    container.innerHTML = `<div style="text-align:center; padding:18px 10px; color:var(--muted); font-size:0.83rem;">
-      在上方輸入你聽到的碎片音（例如: ふき / とりざら / さゆ），小浣熊會立刻推測真實意思與應對動作！
-    </div>`;
-    return;
-  }
-
-  // 1. 從預設常見碎片字典比對
-  let matched = FUZZY_KITCHEN_GUESS_DICT.filter(item => {
-    return item.keys.some(k => k.toLowerCase().includes(q) || q.includes(k.toLowerCase())) ||
-           item.ja.includes(q) || item.zh.includes(q);
-  });
-
-  // 2. 從 vocabSop 動態比對
-  if (AppData && AppData.vocabSop) {
-    const vocabMatches = AppData.vocabSop.filter(v => {
-      const cleanJa = (v.ja || '').replace(/<[^>]+>/g, '').toLowerCase();
-      const kana = (v.kana || '').toLowerCase();
-      const zh = (v.zh || '').toLowerCase();
-      return cleanJa.includes(q) || kana.includes(q) || zh.includes(q);
-    });
-
-    vocabMatches.forEach(v => {
-      if (!matched.some(m => m.ja.includes(v.zh) || v.ja.includes(m.zh))) {
-        matched.push({
-          ja: v.ja,
-          zh: v.zh,
-          intent: `可能與手帳中的「${v.cat || '實戰單字'}」相關，請留意周遭是否有相關需求。`,
-          actionJa: v.ja,
-          actionZh: `確認「${v.zh}」`
-        });
-      }
-    });
-  }
-
-  if (matched.length === 0) {
-    container.innerHTML = `<div style="background:var(--surface); border:1px dashed var(--border); border-radius:10px; padding:12px; font-size:0.85rem; color:var(--muted); text-align:center;">
-      未能直接命中常見碎詞「${escapeHtml(q)}」<br>
-      💡 提示：可嘗試輸入平假名（如 さゆ、ふき）或羅馬拼音（osau）。
-    </div>`;
-    return;
-  }
-
-  container.innerHTML = matched.slice(0, 4).map(item => `
-    <div style="background:#fff; border:1.5px solid var(--primary); border-radius:12px; padding:12px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:8px;">
-        <div>
-          <div style="font-size:1.1rem; font-weight:800; color:var(--primary); font-family:var(--font-serif); cursor:pointer;" onclick="speakJapanese('${escapeJs(item.ja)}')">${item.ja} 🔊</div>
-          <div style="font-size:0.88rem; color:var(--ink); font-weight:700;">${escapeHtml(item.zh)}</div>
-        </div>
-        <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); font-weight:700; padding:2px 8px; border-radius:10px;">🎯 猜測命中</span>
-      </div>
-      
-      <div style="font-size:0.82rem; line-height:1.6; color:var(--ink);">
-        <div style="margin-bottom:4px;">🧐 <strong>對方的真實意圖：</strong>${escapeHtml(item.intent || '現場日常應對需求')}</div>
-        <div style="background:var(--surface); border-radius:8px; padding:6px 8px; margin-top:6px;">
-          <div style="color:var(--primary); font-weight:700; font-size:0.8rem;">💡 你現在該做或該回：</div>
-          <div style="font-size:0.88rem; color:var(--ink); font-weight:600; cursor:pointer;" onclick="speakJapanese('${escapeJs(item.actionJa)}')">${item.actionJa} 🔊</div>
-          <div style="font-size:0.78rem; color:var(--muted);">${escapeHtml(item.actionZh || '')}</div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function toggleFuzzyListening() {
+// ── 2. 👂 抗雜音・持續偷聽推測機實作 ──
+function toggleContinuousEavesdropping() {
   const btn = document.getElementById('btn-fuzzy-mic');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
-    showToast('瀏覽器不支援語音辨識', 'error');
+    showToast('瀏覽器不支援語音辨識，請使用手動輸入', 'error');
     return;
   }
 
-  if (raccoonState.fuzzyRecognition) {
-    raccoonState.fuzzyRecognition.stop();
-    raccoonState.fuzzyRecognition = null;
-    if (btn) btn.textContent = '🎙️ 持續偷聽';
+  if (eavesdropState.isListening && eavesdropState.recognition) {
+    eavesdropState.isListening = false;
+    try {
+      eavesdropState.recognition.stop();
+    } catch(e) {}
+    eavesdropState.recognition = null;
+    if (btn) {
+      btn.textContent = '🎙️ 開始持續偷聽';
+      btn.classList.remove('btn-danger');
+      btn.classList.add('btn-primary');
+    }
+    showToast('已停止偷聽');
     return;
   }
 
   try {
     const r = new SR();
     r.lang = 'ja-JP';
-    r.interimResults = true;
+    r.interimResults = false;
     r.continuous = true;
 
-    if (btn) btn.textContent = '🔴 偷聽中…(點擊停止)';
-
     r.onresult = (e) => {
-      let transcript = '';
       for (let i = e.resultIndex; i < e.results.length; ++i) {
-        transcript += e.results[i][0].transcript;
-      }
-      const input = document.getElementById('input-fuzzy-query');
-      if (input && transcript) {
-        input.value = transcript;
-        runFuzzyGuess(transcript);
+        if (e.results[i].isFinal) {
+          const transcript = (e.results[i][0].transcript || '').trim();
+          if (transcript) {
+            pushEavesdropFragment(transcript);
+          }
+        }
       }
     };
 
-    r.onerror = () => {
-      if (btn) btn.textContent = '🎙️ 持續偷聽';
-      raccoonState.fuzzyRecognition = null;
+    r.onerror = (e) => {
+      console.warn('Eavesdrop mic error:', e);
     };
 
     r.onend = () => {
-      if (btn) btn.textContent = '🎙️ 持續偷聽';
-      raccoonState.fuzzyRecognition = null;
+      // 若處於持續偷聽狀態但連線中斷，自動重啟以保持長效聆聽
+      if (eavesdropState.isListening) {
+        try {
+          r.start();
+        } catch (err) {
+          console.warn('Eavesdrop restart error:', err);
+        }
+      } else {
+        if (btn) {
+          btn.textContent = '🎙️ 開始持續偷聽';
+          btn.classList.remove('btn-danger');
+          btn.classList.add('btn-primary');
+        }
+      }
     };
 
     r.start();
-    raccoonState.fuzzyRecognition = r;
-    showToast('👂 小浣熊正在背景聆聽日語碎片音…');
+    eavesdropState.isListening = true;
+    eavesdropState.recognition = r;
+    if (btn) {
+      btn.textContent = '🔴 偷聽中…(點擊停止)';
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-danger');
+    }
+    showToast('👂 小浣熊已啟動背景持續偷聽，隨時捕捉隻言片語…', 'success');
   } catch (err) {
-    console.error('Fuzzy mic error:', err);
-    if (btn) btn.textContent = '🎙️ 持續偷聽';
+    console.error('Continuous eavesdrop start error:', err);
+    showToast('無法啟動麥克風錄音，請檢查權限', 'error');
+    if (btn) btn.textContent = '🎙️ 開始持續偷聽';
   }
+}
+
+function pushEavesdropFragment(text) {
+  const clean = (text || '').trim();
+  if (!clean) return;
+  const d = new Date();
+  const timeStr = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + ':' + String(d.getSeconds()).padStart(2, '0');
+  eavesdropState.fragments.push({
+    id: 'frag_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    text: clean,
+    time: timeStr
+  });
+  renderEavesdropFragmentsList();
+}
+
+function addManualEavesdropFragment() {
+  const input = document.getElementById('input-fuzzy-manual');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  pushEavesdropFragment(text);
+  showToast(`已加入片段「${text}」`);
+}
+
+function quickAddEavesdropFragment(text) {
+  pushEavesdropFragment(text);
+  showToast(`已快捷加入「${text}」`);
+}
+
+function deleteEavesdropFragment(id) {
+  eavesdropState.fragments = eavesdropState.fragments.filter(f => f.id !== id);
+  renderEavesdropFragmentsList();
+}
+
+function clearEavesdropFragments() {
+  eavesdropState.fragments = [];
+  renderEavesdropFragmentsList();
+  const container = document.getElementById('eavesdrop-analysis-container');
+  if (container) container.innerHTML = '';
+  showToast('已清空所有偷聽到的片段記錄');
+}
+
+function renderEavesdropFragmentsList() {
+  const listEl = document.getElementById('eavesdrop-fragments-list');
+  const countLabel = document.getElementById('eavesdrop-count-label');
+  if (!listEl) return;
+
+  const frags = eavesdropState.fragments;
+  if (countLabel) countLabel.textContent = `📝 已捕捉到的隻言片語 (${frags.length} 條)`;
+
+  if (frags.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding:12px 6px; color:var(--muted); font-size:0.8rem;">
+      🦝 尚未捕捉到片段。<br>
+      點擊上方「開始持續偷聽」或點選快捷關鍵字，小浣熊將持續記錄！
+    </div>`;
+    return;
+  }
+
+  listEl.innerHTML = frags.map((f, idx) => `
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 8px; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem;">
+      <div style="display:flex; align-items:center; gap:6px; flex:1; overflow:hidden;">
+        <span style="font-weight:700; color:var(--primary); font-size:0.75rem;">#${idx + 1}</span>
+        <span style="font-weight:600; color:var(--ink); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${escapeHtml(f.text)}</span>
+        <span style="font-size:0.7rem; color:var(--muted); margin-left:auto; flex-shrink:0;">${f.time}</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="color:var(--accent); font-size:0.75rem; padding:1px 4px; margin-left:6px;" onclick="deleteEavesdropFragment('${f.id}')">✕</button>
+    </div>
+  `).join('');
+
+  listEl.scrollTop = listEl.scrollHeight;
+}
+
+// 核心分析與 3 大推薦回覆
+async function runEavesdropAnalysis() {
+  const container = document.getElementById('eavesdrop-analysis-container');
+  if (!container) return;
+
+  let queryText = eavesdropState.fragments.map(f => f.text).join(' ').trim();
+  const manualInput = document.getElementById('input-fuzzy-manual');
+  if (!queryText && manualInput && manualInput.value.trim()) {
+    queryText = manualInput.value.trim();
+    pushEavesdropFragment(queryText);
+    manualInput.value = '';
+  }
+
+  if (!queryText) {
+    showToast('請先開啟偷聽錄音或加入聽到的日語碎詞喔！', 'error');
+    return;
+  }
+
+  container.innerHTML = `
+    <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; text-align:center;">
+      <div style="font-size:1.4rem; margin-bottom:8px;">🦝 🧠 🔍</div>
+      <div style="font-weight:700; color:var(--primary); font-size:0.95rem; margin-bottom:4px;">小浣熊正在深度推測現場對話與意圖…</div>
+      <div style="font-size:0.78rem; color:var(--muted);">結合前後文碎詞「${escapeHtml(queryText)}」・即刻生成 3 組最佳自然丁寧體應答</div>
+    </div>
+  `;
+
+  // 1. 若有設定 Gemini API Key，優先呼叫 AI 進行大腦分析
+  if (AppData && AppData.apiKey && AppData.apiKey.trim()) {
+    const prompt = `你是一位在日本溫泉旅館工作多年的專業外場前輩。現在使用者（外場/傳菜員）在吵雜現場只偷聽到了以下隻言片語或零碎日語：
+「${queryText}」
+
+請進行深度分析與推測，並回傳純 JSON 格式（不要有 markdown 標籤或額外文字）：
+{
+  "reconstructed": "重組後的完整日語句子，漢字上方必須標註平假名（如 <ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>）",
+  "romaji": "重組句子的完整羅馬拼音",
+  "zh": "這句話的繁體中文意思",
+  "intent": "深度推測對方（客人/主廚/前輩）目前的現場情境與真實意圖（繁體中文，清楚具體）",
+  "responses": [
+    {
+      "type": "⚡ 迅速行動 / 立即答應",
+      "ja": "第一種最推薦的回覆（自然親切之普通丁寧體〜です／〜ます，漢字上方帶 <ruby> 標音）",
+      "romaji": "羅馬拼音",
+      "zh": "繁體中文意思"
+    },
+    {
+      "type": "❓ 禮貌確認 / 細節確認",
+      "ja": "第二種回覆（進一步向對方確認數量、品項或細節之丁寧體，帶 <ruby> 標音）",
+      "romaji": "羅馬拼音",
+      "zh": "繁體中文意思"
+    },
+    {
+      "type": "🤝 轉達協調 / 尋求支援",
+      "ja": "第三種回覆（委婉請對方稍候、通報廚房或請前輩支援之丁寧體，帶 <ruby> 標音）",
+      "romaji": "羅馬拼音",
+      "zh": "繁體中文意思"
+    }
+  ]
+}`;
+
+    try {
+      const parsed = await callGeminiApiUnified(prompt);
+      if (parsed && parsed.reconstructed && Array.isArray(parsed.responses) && parsed.responses.length > 0) {
+        renderEavesdropAnalysisResult(parsed);
+        return;
+      }
+    } catch (err) {
+      console.warn('Gemini analysis failed, fallback to offline knowledge base:', err);
+    }
+  }
+
+  // 2. 離線知識庫比對 (Offline Knowledge Base Matching)
+  const qLower = queryText.toLowerCase();
+  let bestMatch = null;
+  let maxScore = 0;
+
+  EAVESDROP_OFFLINE_KNOWLEDGE_BASE.forEach(item => {
+    let score = 0;
+    item.keys.forEach(k => {
+      const kLow = k.toLowerCase();
+      if (qLower.includes(kLow)) score += 3;
+      else if (kLow.includes(qLower)) score += 1;
+    });
+    if (score > maxScore) {
+      maxScore = score;
+      bestMatch = item;
+    }
+  });
+
+  if (bestMatch && maxScore > 0) {
+    renderEavesdropAnalysisResult(bestMatch);
+    return;
+  }
+
+  // 3. 通用情境離線智慧生成
+  const genericResult = {
+    reconstructed: `「${escapeHtml(queryText)}」に関するお<ruby>話<rt>はなし</rt></ruby>`,
+    romaji: `... ni kansuru o-hanashi`,
+    zh: `聽到關於「${queryText}」的現場溝通語句`,
+    intent: `對方（客人或同事）在現場提到了相關關鍵字，可能需要確認現場狀況、指引或提供對應服務。`,
+    responses: [
+      {
+        type: "⚡ 迅速行動 / 立即答應",
+        ja: "かしこまりました！すぐに<ruby>対応<rt>たいおう</rt></ruby>いたします！",
+        romaji: "Kashikomarimashita! Sugu ni taiō itashimasu!",
+        zh: "遵命明白了！我馬上為您處理！"
+      },
+      {
+        type: "❓ 禮貌確認 / 細節確認",
+        ja: "<ruby>恐<rt>おそ</rt></ruby>れ<ruby>入<rt>い</rt></ruby>りますが、もう<ruby>一度<rt>いちど</rt></ruby>お<ruby>伺<rt>うかが</rt></ruby>いしてもよろしいでしょうか？",
+        romaji: "Osoreirimasu ga, mō ichido o-ukagai shite mo yoroshii deshō ka?",
+        zh: "不好意思，方便再麻煩您說一次嗎？"
+      },
+      {
+        type: "🤝 轉達協調 / 尋求支援",
+        ja: "<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。<ruby>担当<rt>たんとう</rt></ruby>のスタッフに<ruby>確認<rt>かくにん</rt></ruby>してまいります。",
+        romaji: "Shōshō omachi kudasai. Tantō no sutaffu ni kakunin shite mairimasu.",
+        zh: "請稍候片刻，我立即向負責的前輩確認。"
+      }
+    ]
+  };
+
+  renderEavesdropAnalysisResult(genericResult);
+}
+
+function renderEavesdropAnalysisResult(data) {
+  const container = document.getElementById('eavesdrop-analysis-container');
+  if (!container) return;
+
+  const responsesHtml = (data.responses || []).map((r, idx) => `
+    <div style="background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:12px; margin-bottom:8px; box-shadow:0 2px 6px rgba(0,0,0,0.03); transition:all 0.15s ease;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span style="font-size:0.75rem; font-weight:800; background:rgba(92,61,30,0.08); color:var(--primary); padding:2px 8px; border-radius:8px;">${escapeHtml(r.type || `推薦選項 ${idx+1}`)}</span>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(r.ja)}')" style="font-size:0.78rem; padding:2px 6px;">🔊 朗讀</button>
+          <button class="btn btn-primary btn-sm" onclick="copyEavesdropResponse(this, '${escapeJs(r.ja)}', '${escapeJs(r.romaji || '')}', '${escapeJs(r.zh || '')}')" style="font-size:0.78rem; padding:2px 8px;">📋 複製</button>
+        </div>
+      </div>
+      <div style="font-size:1.15rem; font-weight:800; color:var(--primary); line-height:2; font-family:var(--font-serif); cursor:pointer;" onclick="speakJapanese('${escapeJs(r.ja)}')">
+        ${r.ja}
+      </div>
+      ${r.romaji ? `<div style="font-size:0.75rem; color:var(--muted); font-family:monospace; margin-top:2px;">${escapeHtml(r.romaji)}</div>` : ''}
+      <div style="font-size:0.85rem; color:var(--ink); font-weight:700; margin-top:4px;">
+        💡 ${escapeHtml(r.zh)}
+      </div>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div style="background:var(--surface); border:1.5px solid var(--primary); border-radius:16px; padding:14px; box-shadow:0 4px 14px rgba(0,0,0,0.06);">
+      
+      <!-- 區塊 1: 整理聽到的內容 -->
+      <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:6px; margin-bottom:6px;">
+          <span style="font-size:0.78rem; font-weight:800; color:var(--primary);">📝 整理聽到的內容</span>
+          <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(data.reconstructed)}')" style="font-size:0.75rem; padding:2px 6px;">🔊 朗讀整句</button>
+        </div>
+        <div style="font-size:1.25rem; font-weight:800; color:var(--primary); line-height:2; font-family:var(--font-serif);">
+          ${data.reconstructed}
+        </div>
+        ${data.romaji ? `<div style="font-size:0.75rem; color:var(--muted); font-family:monospace; margin-top:2px;">${escapeHtml(data.romaji)}</div>` : ''}
+        <div style="font-size:0.88rem; color:var(--ink); font-weight:700; margin-top:4px;">
+          ${escapeHtml(data.zh)}
+        </div>
+      </div>
+
+      <!-- 區塊 2: 推測真實意圖 -->
+      <div style="background:rgba(92,61,30,0.05); border-left:3.5px solid var(--primary); border-radius:0 10px 10px 0; padding:10px 12px; margin-bottom:12px;">
+        <div style="font-size:0.8rem; font-weight:800; color:var(--primary); margin-bottom:2px;">🧐 對方的現場真實意圖：</div>
+        <div style="font-size:0.85rem; color:var(--ink); line-height:1.5; font-weight:600;">
+          ${escapeHtml(data.intent)}
+        </div>
+      </div>
+
+      <!-- 區塊 3: 3 個最適合現場回覆的選項 -->
+      <div>
+        <div style="font-size:0.85rem; font-weight:800; color:var(--primary); margin-bottom:6px;">💡 推薦 3 個最適合現場回覆的選項：</div>
+        ${responsesHtml}
+      </div>
+
+    </div>
+  `;
+}
+
+function copyEavesdropResponse(btn, jaHtml, romaji, zh) {
+  const plainJa = jaHtml.replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<[^>]*>/g, '');
+  const textToCopy = `${plainJa}\n${romaji ? `(${romaji})\n` : ''}${zh}`;
+  
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✅ 已複製';
+      setTimeout(() => { btn.textContent = orig; }, 1200);
+    }
+    showToast('已複製回覆句！', 'success');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = textToCopy;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✅ 已複製';
+      setTimeout(() => { btn.textContent = orig; }, 1200);
+    }
+    showToast('已複製回覆句！', 'success');
+  });
+}
+
+// ── 3. 💬 中翻日（中文字句轉道地現場日語）實作 ──
+async function executeSilentTranslate() {
+  const input = document.getElementById('input-translate-zh');
+  const card = document.getElementById('translate-result-card');
+  if (!input || !card) return;
+  const zhText = input.value.trim();
+  if (!zhText) return;
+
+  card.innerHTML = `<div style="color:var(--muted); font-size:0.88rem;">🦝 小浣熊正在快速轉譯為自然丁寧體日語…</div>`;
+
+  // 1. 檢查常用離線詞庫
+  const offlineQuick = {
+    "這個有點燙請小心": { ja: "こちらは<ruby>大変<rt>たいへん</rt></ruby><ruby>熱<rt>あつ</rt></ruby>くなっておりますので、お<ruby>気<rt>き</rt></ruby>をつけてお<ruby>持<rt>も</rt></ruby>ちください。", romaji: "Kochira wa taihen atsuku natte orimasu node, o-ki o tsukete omochi kudasai.", zh: "這道料理非常燙，拿取時請務必小心。" },
+    "垃圾滿了我去倒": { ja: "<ruby>ゴミ<rt>ごみ</rt></ruby>が<ruby>一杯<rt>いっぱい</rt></ruby>になりましたので、<ruby>捨<rt>す</rt></ruby>てに<ruby>行<rt>い</rt></ruby>ってまいります。", romaji: "Gomi ga ippai ni narimashita node, sute ni itte mairimasu.", zh: "垃圾滿了，我現在拿去倒掉。" },
+    "熱水在飲料區": { ja: "お<ruby>湯<rt>ゆ</rt></ruby>はドリンクコーナーにございます。", romaji: "O-yu wa dorinku kōnā ni gozaimasu.", zh: "熱水在飲料區為您準備。" },
+    "我馬上為您處理": { ja: "かしこまりました！すぐに<ruby>対応<rt>たいおう</rt></ruby>いたします！", romaji: "Kashikomarimashita! Sugu ni taiō itashimasu!", zh: "遵命明白了！我馬上為您處理！" },
+    "我現在推車要過去": { ja: "お<ruby>通<rt>とお</rt></ruby>りします！<ruby>台車<rt>だいしゃ</rt></ruby><ruby>通<rt>とお</rt></ruby>りまーす！", romaji: "O-tōri shimasu! Daisha tōrimāsu!", zh: "借過一下！推車要通過囉！" },
+    "請給我三位用的分裝盤": { ja: "３<ruby>名様分<rt>めいさまぶん</rt></ruby>のお<ruby>取<rt>と</rt></ruby>り<ruby>皿<rt>ざら</rt></ruby>をお<ruby>持<rt>も</rt></ruby>ちいたします。", romaji: "San-mei-sama bun no o-torizara o omochi itashimasu.", zh: "為您送上三位用的分裝盤。" }
+  };
+
+  if (offlineQuick[zhText]) {
+    const res = offlineQuick[zhText];
+    renderTranslateCard(res.ja, res.zh, '', res.romaji);
+    return;
+  }
+
+  // 2. 呼叫 Gemini AI (普通丁寧體 + 標音日語)
+  if (AppData && AppData.apiKey && AppData.apiKey.trim()) {
+    const prompt = `請將以下中文轉換為日本溫泉旅館工作現場最自然親切的普通丁寧體日語句子（〜です／〜ます，口吻親切，不要過度生硬客套）。
+中文：${zhText}
+
+必須遵守標音：
+漢字上方標註平假名（如 <ruby>料理<rt>りょうり</rt></ruby>）。
+回傳 JSON 格式（純 JSON）：
+{
+  "ja": "<ruby>日語<rt>標音</rt></ruby>",
+  "romaji": "romaji",
+  "zh": "中文語意解釋",
+  "note": "簡短職場背景提示"
+}`;
+
+    try {
+      const parsed = await callGeminiApiUnified(prompt);
+      if (parsed && parsed.ja) {
+        renderTranslateCard(parsed.ja, parsed.zh || zhText, parsed.note, parsed.romaji);
+        return;
+      }
+    } catch (e) {
+      console.warn('Translate API error, fallback to free translator:', e);
+    }
+  }
+
+  // 3. 呼叫免金鑰 Google 雲端即時直譯
+  if (navigator.onLine) {
+    try {
+      const gJa = await fetchFreeGoogleTranslate(zhText, 'ja');
+      if (gJa) {
+        renderTranslateCard(
+          escapeHtml(gJa),
+          zhText,
+          '即時雲端直譯日語（普通丁寧體）'
+        );
+        return;
+      }
+    } catch (ge) {
+      console.warn('Google translate fallback failed:', ge);
+    }
+  }
+
+  // 4. 基本回退
+  renderTranslateCard(
+    `${escapeHtml(zhText)}（請向同仁說明）`,
+    zhText,
+    '離線模式提示'
+  );
+}
+
+function renderTranslateCard(jaHtml, zhText, note, romaji) {
+  const card = document.getElementById('translate-result-card');
+  if (!card) return;
+
+  card.innerHTML = `
+    <div style="background:var(--surface); border:1.5px solid var(--primary); border-radius:12px; padding:16px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); font-weight:700; padding:2px 8px; border-radius:10px;">💬 中翻日（普通丁寧體）</span>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(jaHtml)}')" style="font-size:0.8rem;">🔊 朗讀</button>
+          <button class="btn btn-primary btn-sm" onclick="copyEavesdropResponse(this, '${escapeJs(jaHtml)}', '${escapeJs(romaji || '')}', '${escapeJs(zhText)}')" style="font-size:0.8rem;">📋 複製</button>
+        </div>
+      </div>
+      <div style="font-size:1.4rem; font-weight:800; color:var(--primary); line-height:2.2; font-family:var(--font-serif); margin-bottom:4px; cursor:pointer;" onclick="speakJapanese('${escapeJs(jaHtml)}')">
+        ${jaHtml}
+      </div>
+      ${romaji ? `<div style="font-size:0.8rem; color:var(--muted); font-family:monospace; margin-bottom:6px;">${escapeHtml(romaji)}</div>` : ''}
+      <div style="font-size:0.95rem; color:var(--ink); font-weight:700; border-top:1px dashed var(--border); padding-top:6px;">
+        ${escapeHtml(zhText)}
+      </div>
+      ${note ? `<div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">💡 ${escapeHtml(note)}</div>` : ''}
+    </div>
+  `;
 }
 
 // ── 4. 🎓 300 句現場實戰句庫實作 ──
@@ -8334,124 +8801,7 @@ function drawRandomPracticeSentence() {
   `;
 }
 
-// ── 5. 💬 中文轉日文（靜音大字顯示）實作 ──
-async function executeSilentTranslate() {
-  const input = document.getElementById('input-translate-zh');
-  const card = document.getElementById('translate-result-card');
-  if (!input || !card) return;
-  const zhText = input.value.trim();
-  if (!zhText) return;
-
-  card.innerHTML = `<div style="color:var(--muted); font-size:0.88rem;">🦝 小浣熊正在快速轉譯為自然丁寧體日語…</div>`;
-
-  // 1. 檢查常用離線詞庫
-  const offlineQuick = {
-    "這個有點燙請小心": { ja: "こちらは<ruby>大変<rt>たいへん</rt></ruby><ruby>熱<rt>あつ</rt></ruby>くなっておりますので、お<ruby>気<rt>き</rt></ruby>をつけてお<ruby>持<rt>も</rt></ruby>ちください。", zh: "這道料理非常燙，拿取時請務必小心。" },
-    "垃圾滿了我去倒": { ja: "<ruby>ゴミ<rt>gomi</rt></ruby>が<ruby>一杯<rt>いっぱい</rt></ruby>になりましたので、<ruby>捨<rt>す</rt></ruby>てに<ruby>行<rt>い</rt></ruby>ってまいります。", zh: "垃圾滿了，我現在拿去倒掉。" },
-    "熱水在飲料區": { ja: "お<ruby>湯<rt>ゆ</rt></ruby>はドリンクコーナーにございます。", zh: "熱水在飲料區為您準備。" },
-    "我馬上為您處理": { ja: "かしこまりました！すぐに<ruby>対応<rt>たいおう</rt></ruby>いたします！", zh: "遵命明白了！我馬上為您處理！" },
-    "我現在推車要過去": { ja: "お<ruby>通<rt>とお</rt></ruby>りします！<ruby>台車<rt>だいしゃ</rt></ruby><ruby>通<rt>とお</rt></ruby>りまーす！", zh: "借過一下！推車要通過囉！" }
-  };
-
-  if (offlineQuick[zhText]) {
-    const res = offlineQuick[zhText];
-    renderTranslateCard(res.ja, res.zh);
-    return;
-  }
-
-  // 2. 呼叫 Gemini AI (普通丁寧體 + 標音日語)
-  if (AppData && AppData.apiKey && AppData.apiKey.trim()) {
-    const prompt = `請將以下中文轉換為日本溫泉旅館工作現場最自然親切的普通丁寧體日語句子（〜です／〜ます，口吻親切，不要過度生硬客套）。
-中文：${zhText}
-
-必須遵守標音：
-漢字上方標註平假名（如 <ruby>料理<rt>りょうり</rt></ruby>）。
-回傳 JSON 格式（純 JSON）：
-{
-  "ja": "<ruby>日語<rt>標音</rt></ruby>",
-  "zh": "中文語意解釋",
-  "note": "簡短職場背景提示"
-}`;
-
-    try {
-      const parsed = await callGeminiApiUnified(prompt);
-      if (parsed && parsed.ja) {
-        renderTranslateCard(parsed.ja, parsed.zh || zhText, parsed.note);
-        return;
-      }
-    } catch (e) {
-      console.warn('Translate API error, fallback to free translator:', e);
-    }
-  }
-
-  // 3. 呼叫免金鑰 Google 雲端即時直譯
-  if (navigator.onLine) {
-    try {
-      const gJa = await fetchFreeGoogleTranslate(zhText, 'ja');
-      if (gJa) {
-        renderTranslateCard(
-          escapeHtml(gJa),
-          zhText,
-          '即時雲端直譯日語（普通丁寧體）'
-        );
-        return;
-      }
-    } catch (ge) {
-      console.warn('Google translate fallback failed:', ge);
-    }
-  }
-
-  // 4. 基本回退
-  renderTranslateCard(
-    `${escapeHtml(zhText)}（請向同仁說明）`,
-    zhText,
-    '離線模式提示'
-  );
-}
-
-function renderTranslateCard(jaHtml, zhText, note) {
-  const card = document.getElementById('translate-result-card');
-  if (!card) return;
-
-  card.innerHTML = `
-    <div style="background:var(--surface); border:1.5px solid var(--primary); border-radius:12px; padding:16px; text-align:left;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-size:0.75rem; background:var(--accent-bg); color:var(--primary); font-weight:700; padding:2px 8px; border-radius:10px;">🔇 靜音大字顯示</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakJapanese('${escapeJs(jaHtml)}')" style="font-size:0.8rem;">🔊 點此朗讀</button>
-      </div>
-      <div style="font-size:1.4rem; font-weight:800; color:var(--primary); line-height:2.2; font-family:var(--font-serif); margin-bottom:8px;">
-        ${jaHtml}
-      </div>
-      <div style="font-size:0.95rem; color:var(--ink); font-weight:700; border-top:1px dashed var(--border); padding-top:6px;">
-        ${escapeHtml(zhText)}
-      </div>
-      ${note ? `<div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">💡 ${escapeHtml(note)}</div>` : ''}
-    </div>
-  `;
-}
-
-// ── 6. 🗺️ 優彩設施問路 ＆ 🎮 快問快答實作 ──
-function switchMapSubTab(sub) {
-  const bMap = document.getElementById('btn-sub-map');
-  const bQuiz = document.getElementById('btn-sub-quiz');
-  const cMap = document.getElementById('subtab-map-content');
-  const cQuiz = document.getElementById('subtab-quiz-content');
-
-  if (sub === 'map') {
-    bMap?.classList.replace('btn-ghost', 'btn-primary');
-    bQuiz?.classList.replace('btn-primary', 'btn-ghost');
-    if (cMap) cMap.style.display = 'block';
-    if (cQuiz) cQuiz.style.display = 'none';
-    renderYusaiLandmarks();
-  } else {
-    bQuiz?.classList.replace('btn-ghost', 'btn-primary');
-    bMap?.classList.replace('btn-primary', 'btn-ghost');
-    if (cQuiz) cQuiz.style.display = 'block';
-    if (cMap) cMap.style.display = 'none';
-    startRaccoonQuickQuiz();
-  }
-}
-
+// ── 5. 🗺️ 優彩館內設施問路指引實作 ──
 function renderYusaiLandmarks() {
   const list = document.getElementById('yusai-landmarks-list');
   if (!list) return;
@@ -8468,13 +8818,14 @@ function renderYusaiLandmarks() {
   `).join('');
 }
 
+// ── 6. 🎮 隨機抽考（快問快答遊戲）實作 ──
 let activeQuiz = null;
 
 function startRaccoonQuickQuiz() {
   const container = document.getElementById('quiz-game-container');
   if (!container || !AppData || !AppData.vocabSop) return;
 
-  const vocabs = AppData.vocabSop.filter(v => v.cat === '餐點' || v.cat === '餐具' || v.cat === '對話');
+  const vocabs = AppData.vocabSop.filter(v => v.cat === '餐點' || v.cat === '餐具' || v.cat === '食材' || v.cat === '對話');
   if (vocabs.length < 4) return;
 
   // 隨機抽 1 題
