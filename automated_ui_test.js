@@ -160,17 +160,17 @@ assert(html.includes('openModalItem'), '包含開啟條目編輯函式 (openModa
 assert(html.includes('submitItemForm'), '包含儲存條目函式 (submitItemForm)');
 assert(html.includes('deleteSopItem'), '包含刪除條目函式 (deleteSopItem)');
 
-// 測試 10: 名字五十音與特殊發音提取 (依據真實出勤班表)
-console.log('\n【測試 10：名字五十音與特殊發音提取 (真實出勤班表)】');
-assert(textContent.includes('加治木') && html.includes('かじき'), '同仁名：加治木 (かじき・支配人)');
-assert(textContent.includes('市石') && html.includes('いちいし'), '同仁名：市石 (いちいし)');
+// 測試 10: 名字五十音與特殊發音提取 (依據最新真實出勤班表 v82)
+console.log('\n【測試 10：名字五十音與特殊發音提取 (最新真實出勤班表 v82)】');
+assert(textContent.includes('加治木') && html.includes('かじき'), '同仁名：加治木 (かじき)');
+assert(textContent.includes('須藤') && html.includes('すどう'), '同仁名：須藤 (すどう)');
 assert(textContent.includes('長森') && html.includes('ながもり'), '同仁名：長森 愛実 (ながもり まなみ)');
-assert(textContent.includes('野別') && html.includes('のべつ'), '同仁名：野別 充旗 (のべつ みつき)');
+assert(textContent.includes('山本') && html.includes('やまもと'), '同仁名：山本 香野 (やまもと かの)');
 assert(textContent.includes('森田') && html.includes('もりた'), '同仁名：森田 亨 (もりた とおる)');
 assert(textContent.includes('森本') && html.includes('もりもと'), '同仁名：森本 健太郎 (もりもと けんたろう)');
 assert(textContent.includes('川畑') && html.includes('かわばた'), '同仁名：川畑 (かわばた)');
-assert(textContent.includes('楊') && html.includes('よう'), '同仁名：楊英筑 (よう えいちく・本人)');
-assert(html.includes('ビム') && html.includes('ハン') && html.includes('エンティハ') && html.includes('プラティマ'), '包含外籍同仁與實習生 (ビム/ハン/エンティハ/プラティマ/イバオイェン/ホンイェン)');
+assert(textContent.includes('楊詠筑') && html.includes('よう えいちく'), '同仁名：楊詠筑 (よう えいちく・本人)');
+assert(html.includes('ビム') && html.includes('ハン') && html.includes('ウメシュ') && html.includes('リュウ'), '包含外籍與新同仁 (ビム/ハン/ウメシュ/リュウ)');
 assert(html.includes('支配人') && html.includes('正社員') && html.includes('派遣社員') && html.includes('インターン') && html.includes('朝配') && html.includes('夜配') && html.includes('洗い場') && html.includes('タイミー'), '職稱完整涵蓋班表所有職務與班別 (支配人/正社員/派遣/實習生/朝配/夜配/洗滌/Timee)');
 
 // 測試 11: 語音聲線切換、試聽與自選語速功能
@@ -272,9 +272,9 @@ assert(html.includes('id="broadcast-zh-input"'), '包含中文翻譯事項輸入
 assert(html.includes('id="broadcast-cards-grid"'), '包含四國語言並排網格容器 (broadcast-cards-grid)');
 assert(!html.includes('id="broadcast-templates-wrap"'), '已移除常用職場快捷範本標籤列 (broadcast-templates-wrap)');
 assert(html.includes('id="modal-broadcast-bigscreen"') && html.includes('現場四國大字翻譯板'), '包含全螢幕大字亮屏展示彈窗 (modal-broadcast-bigscreen / 現場四國大字翻譯板)');
-assert(html.includes('QUAD_BROADCAST_TEMPLATES'), '包含 15 組離線職場四國對照範本庫 (QUAD_BROADCAST_TEMPLATES)');
-assert(html.includes('executeQuadTranslation'), '包含四國同步翻譯執行函式 (executeQuadTranslation)');
-assert(html.includes('triggerBroadcastTranslation'), '包含手動點擊同步翻譯觸發函式 (triggerBroadcastTranslation)');
+assert(html.includes('promptNationalityStep') && html.includes('id="who-screen-gender"'), '包含性別選擇畫面，且選完性別後觸發 promptNationalityStep (v79 新增國籍步驟)');
+assert(!html.includes('trait-feature-beautyMark') && !html.includes('trait-feature-beard'), 'v79 微調工房已移除嘴角痣與鬍渣短鬍特徵選項');
+assert(!html.includes('setAvatarFeature'), 'v79 已移除舊的特徵切換函式 setAvatarFeature');
 assert(html.includes('applyBroadcastTemplate'), '包含快捷範本套用函式 (applyBroadcastTemplate)');
 assert(html.includes('copySingleLang'), '包含單一語言複製函式 (copySingleLang)');
 assert(html.includes('copyAllQuadBroadcast'), '包含一鍵複製全部 4 國語言翻譯函式 (copyAllQuadBroadcast)');
@@ -364,15 +364,15 @@ assert(testExtractSpokenJapanese('<ruby>小葱<rt>こねぎ</rt></ruby>') === '�
 // 測試 24: 「你叫什麼名字？」v70 性別提問流程、男女制服區分、頭頂大包包頭與純淨露眼瀏海
 console.log('\n【測試 24：「你叫什麼名字？」v70 性別提問流程・男女制服區分・頭頂大包包頭・純淨露眼 (v70)】');
 assert(html.includes('id="who-screen-gender"'), 'HTML 包含性別選擇步驟畫面 (who-screen-gender)');
-assert(html.includes('confirmWhoGender(\'female\')') && html.includes('confirmWhoGender(\'male\')'), '包含女生與男生性別確認按鈕');
+assert(html.includes('promptNationalityStep') && html.includes('id="who-screen-gender"'), 'v79: 選完性別後觸發 promptNationalityStep 進入選國籍步驟');
 assert(html.includes('promptGenderStep'), 'JS 包含主動提示性別選擇函式 promptGenderStep');
 assert(html.includes('backToNameSelect'), 'JS 包含返回姓名選擇函式 backToNameSelect');
 assert(html.includes('vn_yang') && html.includes("gender: 'female'") && html.includes("hair: 'bun_hair'"), '小楊 (vn_yang) 預設性別為 female，預設髮型為外場包包頭 (bun_hair)');
 assert(html.includes('trait-color-black') && html.includes('trait-color-darkbrown'), '微調工房髮色包含自然黑與深棕色');
-assert(html.includes('trait-feature-none') && html.includes('trait-feature-beautyMark') && html.includes('trait-feature-beard'), '微調工房包含無特徵、嘴角痣、鬍渣短鬍 3 大選項');
-assert(html.includes('setAvatarFeature'), 'JS 包含特徵切換函式 setAvatarFeature');
-assert(html.includes('ellipse(256, 52, 50, 46') || html.includes('ellipse(256, 54, 48, 44'), '外場包包頭 (bun_hair) 在頭頂中央繪製立體大圓丸子');
-assert(html.includes('8e1d2c') && html.includes('ffd700'), '外場制服包含優雅深紅蝴蝶結領結與金色繩結/珍珠飾品');
+assert(!html.includes('trait-feature-beautyMark') && !html.includes('trait-feature-beard'), 'v79 微調工房已移除嘴角痣與鬍渣短鬍特徵選項');
+assert(!html.includes('setAvatarFeature'), 'v79 已移除舊的特徵切換函式 setAvatarFeature');
+assert(html.includes('bun_hair') && (html.includes('HY-95, 48, 44') || html.includes('ellipse(256, 52, 50, 46')), '外場包包頭 (bun_hair) 在頭頂中央繪製立體大圓丸子');
+assert(html.includes('SHIRT_COLOR') || html.includes('2a2f7a'), '外場制服為男女100%統一深色襯衫長褲制服');
 
 // 測試 25: 語音 Memo 繁體中文即時轉換、外場語音錯字智慧校正與自訂即時編輯修字 (v71)
 console.log('\n【測試 25：語音 Memo 繁體中文即時轉換・外場語音錯字校正・自訂即時編輯修字 (v71)】');
@@ -478,17 +478,16 @@ assert(html.includes('function resetQuizStats()') && html.includes('function upd
 assert(html.includes('id="quiz-streak-counter"') && html.includes('id="quiz-score-counter"'), 'UI 包含連勝紀錄與答對率計分板');
 assert(html.includes('id="qfilter-food"') && html.includes('id="qfilter-tableware"') && html.includes('id="qfilter-sentence"'), 'UI 包含食材餐點、餐具器具、實戰對話句等分類篩選');
 
-// 測試 31: 照相館純淨關閉按鈕、男女工作服100%統一、100%露眉露眼絕不擋臉、男生6大極具辨識度髮型與動漫天使光環 (v77)
-console.log('\n【測試 31：照相館純淨關閉按鈕・男女外場制服統一・露眉大眼・男生6大辨識度髮型・天使光環 (v77)】');
+// 測試 31: 照相館純淨關閉按鈕、男女工作服100%統一、100%露眉露眼絕不擋臉、男生後髮型與髮絲立體光澤 (v82)
+console.log('\n【測試 31：照相館純淨關閉按鈕・男女外場制服統一・露眉大眼・男生髮型・髮絲立體光澤 (v82)】');
 assert(!html.includes('🦝 小浣熊互動照相館') && html.includes('who-are-you-modal-box') && html.includes('✕ 關閉'), '照相館彈窗頂部已成功刪除標題文字，僅保留右側「✕ 關閉」按鈕');
-assert(html.includes('181f33') && html.includes('8e1d2c') && html.includes('ffd700'), '男女角色全面統一行業示範外場制服 (白襯衫立領 + 酒紅領結金色飾扣 + 深曜藍黑圍裙馬甲 + 白邊口袋)');
-assert(html.includes('arc(206, 134, 15') && html.includes('ellipse(206, 162, 15, 20'), '眉毛 (y:134) 與大眼 (y:162) 高度合宜且 100% 露在瀏海 (y:110~114) 下方，絕不擋眼');
-assert(html.includes('short_clean') && html.includes('side_part') && html.includes('comma_part') && html.includes('buzz_cut') && html.includes('afro_curly') && html.includes('wavy_short'), '男生具備 6 大截然不同且辨識度極高之精緻髮型');
-assert(html.includes('Spiky texture') || html.includes('spikes = ['), '俐落短髮 (short_clean) 包含向上起伏之層次碎髮尖角');
-assert(html.includes('3:7 分線') || html.includes('分線點'), '經典側分 (side_part) 具備鮮明 3:7 側分線與斜梳弧度');
-assert(html.includes('左逗號') && html.includes('右逗號'), '韓系逗號 (comma_part) 具備標誌性雙 C 逗號內扣與露額造型');
-assert(html.includes('俐落髮際線') || html.includes('Hairline'), '陽光寸頭 (buzz_cut) 具備清晰俐落之髮際線與平頭輪廓');
-assert(html.includes('Angel Ring Hair Highlight') || html.includes('ellipse(256, 94, 66, 14'), '角色立繪頂部包含日系動漫「天使光環」立體光澤');
+assert(html.includes('1c2038') || html.includes('placket') || html.includes('深色長袖'), '男女角色全面統一外場制服 (深色長袖深藍制服)');
+assert(html.includes('browY = eyeY - 34') && html.includes('bangBottom = browY - 2'), '眉毛與大眼高度合宜且 100% 露在瀏海 (bangBottom = browY - 2) 下方，絕不擋眼');
+assert(html.includes('short_clean') && html.includes('side_part') && html.includes('buzz_cut') && html.includes('undercut_fade'), '男生後方髮型包含俐落短髮、經典側分、陽光寸頭、漸層短側背等');
+assert(html.includes('short_clean'), '俐落短髮 (short_clean) 設定正確');
+assert(html.includes('side_part'), '經典側分 (side_part) 具備側分造型');
+assert(html.includes('buzz_cut'), '陽光寸頭 (buzz_cut) 輪廓正確');
+assert(html.includes('Hair Highlight') || html.includes('hairHighlight'), '角色立繪頂部包含髮絲立體光澤高光');
 
 // 測試 32: 收桌撤盤 SOP 全面重構・刪除舊推車規章・主管 3 句指示・對話清晰劃分 3 區・單句獨立發音 (v78)
 console.log('\n【測試 32：收桌撤盤 SOP 全面重構・主管 3 句指示・對話清晰劃分 3 區・單句獨立發音 (v78)】');
@@ -503,8 +502,71 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v78'), 'Service Worker 快取版本已升級至 yang-pwa-v78');
-assert(html.includes('yang_runner_handbook_v78'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v78');
+assert(swContent.includes('yang-pwa-v83'), 'Service Worker 快取版本已升級至 yang-pwa-v83');
+assert(html.includes('yang_runner_handbook_v83'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v83');
+
+// 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
+console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
+assert(html.includes('who-screen-nationality') && html.includes('promptNationalityStep'), '包含選國籍步驟 (who-screen-nationality) 與 promptNationalityStep()');
+assert(html.includes('confirmWhoNationality') && html.includes('submitCustomNationality'), '包含確認國籍函式 confirmWhoNationality 與自訂輸入 submitCustomNationality');
+assert(html.includes('日本 🇯🇵') && html.includes('尼泊爾 🇳🇵') && html.includes('越南 🇻🇳') && html.includes('緬甸 🇲🇲') && html.includes('台灣 🇹🇼') && html.includes('中國 🇨🇳'), '國籍選項包含日本/尼泊爾/越南/緬甸/台灣/中國六個國旗選項');
+assert(html.includes('BANG_STYLES_BY_GENDER') && html.includes('BACK_HAIR_STYLES_BY_GENDER'), '包含男生女生各 10 款瀏海與 10 款後方髮型配置');
+assert(html.includes('who-bang-options-container') && html.includes('who-backhair-options-container'), '微調工房獨立劃分瀏海 (who-bang-options-container) 與後髮 (who-backhair-options-container)');
+assert(!html.includes('"beard"') && !html.includes('"beautyMark"'), '特徵欄位 beard / beautyMark 已從 DEFAULT_COLLEAGUE_TRAITS 移除');
+assert(html.includes('楊詠筑') && !html.includes('楊英筑'), '本人姓名已更正為楊詠筑（移除舊的楊英筑）');
+assert(html.includes('加治木') && !html.includes('加治木（支配人）'), '加治木名字卡已移除「支配人」標籤');
+assert(html.includes('startInlineNameEdit') && html.includes('name-cell-zh'), '名字卡具備中文標籤行內編輯功能 (startInlineNameEdit + name-cell-zh)');
+
+// 測試 34: 最新班表名單同步 (23位現職，7位離職清除，6位新加入，職稱徹底分離) (v82)
+console.log('\n【測試 34：最新班表名單同步 (23位在職，移除離職同仁，職位徹底分離) (v82)】');
+const retiredIds = ['vn_entiha', 'vn_phongnhung', 'vn_ichiishi', 'vn_nobetsu', 'vn_pratima', 'vn_ibaoyen', 'vn_hongyen'];
+retiredIds.forEach(id => {
+  assert(!html.includes(`id: "${id}"`) && !html.includes(`"${id}"`), `已徹底刪除離職員工 ${id}`);
+});
+const activeIds = [
+  'vn_kajiki', 'vn_sudo', 'vn_uchima', 'vn_biyo', 'vn_sato', 'vn_obata',
+  'vn_koga', 'vn_nagamori', 'vn_yang', 'vn_yamamoto_kano', 'vn_ryu_shiei',
+  'vn_morita', 'vn_morimoto', 'vn_tanaka_yuka', 'vn_taniguchi_rie', 'vn_bim',
+  'vn_han', 'vn_umesh', 'vn_riku_iku', 'vn_tanaka_shoko', 'vn_yamabe',
+  'vn_nagai_miyuki', 'vn_kawabata'
+];
+activeIds.forEach(id => {
+  assert(html.includes(id), `在職同仁 ${id} 存在於名冊中`);
+});
+assert(activeIds.length === 23, '最新在職同仁精確統計為 23 位');
+
+// 測試 35: 朝夕食 7 大食物 SOP 分頁結構與時間節點規範 (v83)
+console.log('\n【測試 35：朝夕食 7 大食物 SOP 分頁結構・時間節點・交接規範 (v83)】');
+assert(html.includes('tab_breakfast_sop') && html.includes('朝食崗位手冊'), '包含朝食獨立分頁 (tab_breakfast_sop)');
+assert(html.includes('tab_dinner_sop') && html.includes('夕食崗位手冊'), '包含夕食獨立分頁 (tab_dinner_sop)');
+assert(html.includes('tab_order_sop') && html.includes('對講機叫菜'), '包含對講機叫菜獨立分頁 (tab_order_sop)');
+assert(html.includes('tab_akaushi_basashi') && html.includes('赤牛・馬刺し'), '包含赤牛・馬刺し獨立分頁 (tab_akaushi_basashi)');
+assert(html.includes('tab_bashing_sop') && html.includes('收桌撤盤與感謝應對'), '保留收桌撤盤獨立分頁 (tab_bashing_sop)');
+assert(html.includes('tab_colleague_tasks') && html.includes('同事平級高頻指示'), '保留同事平級交辦獨立分頁 (tab_colleague_tasks)');
+assert(html.includes('tab_safety_notice') && html.includes('現場安全與店內通達'), '包含現場安全與支配人通達獨立分頁 (tab_safety_notice)');
+
+// 朝食關鍵節點
+assert(textContent.includes('7:30オープン') && textContent.includes('残数は〇〇名です'), '朝食包含 7:30 開門與人數殘數回報');
+assert(textContent.includes('残数10名切ったら') && textContent.includes('テーブル拭きを開始'), '朝受付殘數10人以下離櫃擦桌');
+assert(textContent.includes('8:00引継ぎ') && textContent.includes('ハムエッグは注文済みです'), '朝いろり 8:00 交接收桌撤盤並通報已點料理');
+assert(textContent.includes('ハムエッグを半分で追加'), '8:30 以後荷包蛋叫半份 (半分)');
+assert(textContent.includes('残数30名以下') && textContent.includes('10個で注文'), '殘數30人以下鯖魚與甜不辣改叫10個各1列');
+assert(textContent.includes('赤い番重') && textContent.includes('味噌汁の運搬'), '味噌汁運送強制攜帶台車、布、紅色方盒 (赤い番重)');
+assert(textContent.includes('牛丼の差し替え'), '牛丼換新盆強制放入紅色方盒');
+
+// 夕食關鍵節點
+assert(textContent.includes('17:00') && textContent.includes('A3用紙2枚印刷'), '夕食 17:00 列印 A3 用紙 2 張並核對席位');
+assert(textContent.includes('17:30 更新と朝食準備') || textContent.includes('翌朝の部屋番号順用紙'), '夕食 17:30 截止確認與填寫翌日朝食台帳 (含別館)');
+assert(textContent.includes('洗い場の皿拭きに入ります'), '客人全數抵達後受付人員進洗碗區擦盤');
+assert(textContent.includes('18:30 鯛の刺身入れ替え') && textContent.includes('19:00 鯛の刺身入れ替え'), '夜ランナー於 18:30 與 19:00 兩次替換新鮮鯛魚生魚片');
+assert(textContent.includes('裏の予備寿司は19:00までにすべて表へ') && textContent.includes('廃棄防止'), '壽司庫存於 19:00 前全部出到外場餐檯防報廢');
+assert(textContent.includes('19:30の引継ぎ') && textContent.includes('寿司の注文業務をドリンク担当へ'), '19:30 壽司跑菜交接給飲料擔當點單，自己轉去擦桌');
+assert(textContent.includes('今から刻んで注文します'), '壽司少量點單模式切換口吻：今から刻んで注文します');
+
+// 赤牛馬刺與通達
+assert(textContent.includes('Reserve') && (textContent.includes('赤牛・馬刺し用テーブル') || textContent.includes('専用テーブル準備')), '赤牛馬刺桌放置 Reserve 牌且由赤牛擔當準備');
+assert(textContent.includes('ソフトクリームと綿菓子'), '同步準備霜淇淋機與棉花糖機');
+assert(textContent.includes('詐欺メールに注意') && textContent.includes('前田洋'), '包含支配人防範冒名釣魚郵件通達');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -513,7 +575,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有真實傳菜、酒水、收桌、餐具、文法解析、聲線切換、小浣熊 6 大工作台點擊修復、「你叫什麼名字？」v70 男女提問分流、「現場四國同步直譯板」、全新「🥦 食材」原型食物庫、單字庫標準Ruby純淨標音、語音 Memo 繁體中文即時轉換・外場同音錯字校正・原地即時編輯修字、長語音一律完整筆記純淨簡約介面 (v72)、「偷聽推測」100% 繁體中文真翻譯與同僚閒聊/吐槽排班精準意圖判斷 (v73)、「中翻日」語音輸入與即時丁寧體直譯 (v74)、「300句庫」平行三句卡片・獨立朗讀・依序全部播放・實戰文法重點解析 (v75)、「隨機抽考」用聽的 🎧 / 用看的 👀 雙版本切換・自動朗讀・偷看提示・連擊計分 (v76)、「照相館純淨關閉頂欄・男女外場制服100%統一・100%露眉露眼絕不擋臉・男生6大高辨識度髮型・擬真動漫天使光環」 (v77)、「收桌撤盤 SOP 全面重構・刪除舊推車規章・主管 3 句指示・對話清晰劃分 3 區・單句獨立發音」 (v78) 測試 100% 全部通過！');
+  console.log('🎉 所有測試通過！(v83) 朝夕食 7 大食物 SOP 分頁・時間節點・交接規範・紅色方盒防傾倒・鯛魚刺身定時更替・赤牛馬刺・同事交辦全部就位！');
 }
 
 

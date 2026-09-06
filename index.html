@@ -2176,7 +2176,7 @@
 
       <!-- 既有同仁名單網格 -->
       <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-align:left; margin-bottom:6px;">
-        👥 現有同仁名單（點選即刻為你建立個人 Q 版立繪）：
+        👥 現有同仁名單
       </div>
       <div id="who-colleagues-list" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; max-height:190px; overflow-y:auto; padding:2px; margin-bottom:12px;">
         <!-- 動態填入名字按鈕 -->
@@ -2224,19 +2224,73 @@
       </div>
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:18px;">
-        <button class="btn btn-outline" onclick="confirmWhoGender('female')" style="padding:20px 8px; border-radius:16px; border:2px solid #e91e63; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(233,30,99,0.04); cursor:pointer;">
+        <button class="btn btn-outline" onclick="promptNationalityStep('female')" style="padding:20px 8px; border-radius:16px; border:2px solid #e91e63; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(233,30,99,0.04); cursor:pointer;">
           <span style="font-size:2.6rem;">👧</span>
           <span style="font-size:1.1rem; font-weight:800; color:#c2185b;">我是女生</span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場工作圍裙・頭頂包包頭/髮型</span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場工作襯衫・日系髮型</span>
         </button>
-        <button class="btn btn-outline" onclick="confirmWhoGender('male')" style="padding:20px 8px; border-radius:16px; border:2px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(25,118,210,0.04); cursor:pointer;">
+        <button class="btn btn-outline" onclick="promptNationalityStep('male')" style="padding:20px 8px; border-radius:16px; border:2px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(25,118,210,0.04); cursor:pointer;">
           <span style="font-size:2.6rem;">👦</span>
           <span style="font-size:1.1rem; font-weight:800; color:#1565c0;">我是男生</span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場西裝制服・領帶・俐落短髮</span>
+          <span style="font-size:0.72rem; color:var(--muted);">外場工作襯衫・俐落短髮</span>
         </button>
       </div>
 
       <button class="btn btn-ghost btn-sm" onclick="backToNameSelect()">← 回上一步選擇姓名</button>
+    </div>
+
+    <!-- 步驟 1.8: 選擇國籍畫面 -->
+    <div id="who-screen-nationality" style="display:none; text-align:center;">
+      <div class="who-raccoon-banner" style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:14px; text-align:left;">
+        <img src="./photos/raccoon_pet.png" style="width:48px; height:48px; object-fit:contain; flex-shrink:0;" />
+        <div style="flex:1;">
+          <div style="font-size:1.05rem; font-weight:800; color:var(--primary); font-family:var(--font-serif);" id="who-nationality-title-text">
+            国籍を選択してください
+          </div>
+          <div style="font-size:0.82rem; color:var(--muted); margin-top:2px;" id="who-nationality-desc-text">
+            請問來自哪裡呢？請選擇國籍：
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 大常見國籍卡片 -->
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:14px;">
+        <button class="btn btn-outline" onclick="confirmWhoNationality('日本 🇯🇵')" style="padding:14px 6px; border-radius:12px; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#fff; cursor:pointer;">
+          <span style="font-size:1.8rem;">🇯🇵</span>
+          <span style="font-size:0.92rem; font-weight:800; color:var(--ink);">日本</span>
+        </button>
+        <button class="btn btn-outline" onclick="confirmWhoNationality('尼泊爾 🇳🇵')" style="padding:14px 6px; border-radius:12px; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#fff; cursor:pointer;">
+          <span style="font-size:1.8rem;">🇳🇵</span>
+          <span style="font-size:0.92rem; font-weight:800; color:var(--ink);">尼泊爾</span>
+        </button>
+        <button class="btn btn-outline" onclick="confirmWhoNationality('越南 🇻🇳')" style="padding:14px 6px; border-radius:12px; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#fff; cursor:pointer;">
+          <span style="font-size:1.8rem;">🇻🇳</span>
+          <span style="font-size:0.92rem; font-weight:800; color:var(--ink);">越南</span>
+        </button>
+        <button class="btn btn-outline" onclick="confirmWhoNationality('緬甸 🇲🇲')" style="padding:14px 6px; border-radius:12px; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#fff; cursor:pointer;">
+          <span style="font-size:1.8rem;">🇲🇲</span>
+          <span style="font-size:0.92rem; font-weight:800; color:var(--ink);">緬甸</span>
+        </button>
+        <button class="btn btn-outline" onclick="confirmWhoNationality('台灣 🇹🇼')" style="padding:14px 6px; border-radius:12px; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#fff; cursor:pointer;">
+          <span style="font-size:1.8rem;">🇹🇼</span>
+          <span style="font-size:0.92rem; font-weight:800; color:var(--ink);">台灣</span>
+        </button>
+        <button class="btn btn-outline" onclick="confirmWhoNationality('中國 🇨🇳')" style="padding:14px 6px; border-radius:12px; border:1.5px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; background:#fff; cursor:pointer;">
+          <span style="font-size:1.8rem;">🇨🇳</span>
+          <span style="font-size:0.92rem; font-weight:800; color:var(--ink);">中國</span>
+        </button>
+      </div>
+
+      <!-- 自行輸入其他國籍 -->
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin-bottom:14px; text-align:left;">
+        <label style="font-size:0.78rem; font-weight:700; color:var(--ink); display:block; margin-bottom:4px;">🌐 以上都沒有？自行輸入國籍：</label>
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="input-who-custom-nationality" class="form-control form-control-sm" placeholder="例如：印尼、菲律賓、香港、韓國..." style="flex:1;" />
+          <button class="btn btn-primary btn-sm" onclick="submitCustomNationality()" style="font-weight:700; white-space:nowrap;">確定國籍</button>
+        </div>
+      </div>
+
+      <button class="btn btn-ghost btn-sm" onclick="backToGenderSelect()">← 回上一步選擇性別</button>
     </div>
 
     <!-- 步驟 2: 生成中 Loading 畫面 -->
@@ -2310,11 +2364,19 @@
           <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-tanned" onclick="setAvatarTrait('skin', 'tanned')" style="font-size:0.75rem; padding:2px 8px;">🟤 健康深色</button>
         </div>
 
-        <!-- 5. 髮型 (依性別動態渲染) -->
+        <!-- 5. 瀏海 (依性別動態渲染 10 款日系瀏海) -->
         <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">髮型：</span>
-          <div id="who-hair-options-container" style="display:flex; gap:4px; flex-wrap:wrap;">
-            <!-- 動態填入髮型按鈕 -->
+          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">瀏海：</span>
+          <div id="who-bang-options-container" style="display:flex; gap:4px; flex-wrap:wrap;">
+            <!-- 動態填入瀏海按鈕 -->
+          </div>
+        </div>
+
+        <!-- 6. 後髮 (依性別動態渲染 10 款日系後髮) -->
+        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">後髮：</span>
+          <div id="who-backhair-options-container" style="display:flex; gap:4px; flex-wrap:wrap;">
+            <!-- 動態填入後髮按鈕 -->
           </div>
         </div>
 
@@ -2333,14 +2395,6 @@
           <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-round_wire" onclick="setAvatarTrait('glasses', 'round_wire')" style="font-size:0.75rem; padding:2px 8px;">👓 圓形細框</button>
           <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-square_wire" onclick="setAvatarTrait('glasses', 'square_wire')" style="font-size:0.75rem; padding:2px 8px;">👓 方形細框</button>
           <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-none" onclick="setAvatarTrait('glasses', 'none')" style="font-size:0.75rem; padding:2px 8px;">👀 無眼鏡</button>
-        </div>
-
-        <!-- 8. 特徵 (無特徵 / 嘴角痣 / 鬍渣) -->
-        <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">特徵：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-feature" id="trait-feature-none" onclick="setAvatarFeature('none')" style="font-size:0.75rem; padding:2px 8px;">✨ 無特徵</button>
-          <button class="btn btn-sm btn-ghost trait-pill-feature" id="trait-feature-beautyMark" onclick="setAvatarFeature('beautyMark')" style="font-size:0.75rem; padding:2px 8px;">📍 嘴角痣</button>
-          <button class="btn btn-sm btn-ghost trait-pill-feature" id="trait-feature-beard" onclick="setAvatarFeature('beard')" style="font-size:0.75rem; padding:2px 8px;">🧔 鬍渣短鬍</button>
         </div>
       </div>
 
@@ -2464,366 +2518,1528 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v78';
+const STORAGE_KEY = 'yang_runner_handbook_v83';
 
 function createRealRunnerData() {
   return {
   "tabs": [
-    {
-      "id": "tab_runner_all",
-      "name": "傳菜全手冊 (ランナー)",
-      "icon": "🍱",
-      "items": [
-        {
-          "id": "rn_1",
-          "type": "sop",
-          "speaker": "",
-          "zh": "1. 【記住菜名】首先，請務必先記住餐廳所有料理的名稱與外觀。",
-          "ja": "まず<ruby>料理<rt>りょうり</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "まず", "zh": "首先、第一步" },
-              { "ja": "<ruby>料理<rt>りょうり</rt></ruby>", "zh": "料理、菜餚" },
-              { "ja": "<ruby>名前<rt>なまえ</rt></ruby>", "zh": "名稱、名字" },
-              { "ja": "<ruby>覚<rt>おぼ</rt></ruby>える", "zh": "記住、牢記" }
-            ],
-            "points": [
-              { "title": "【副詞 まず】", "desc": "首先、第一要務。表示流程的第一步。" },
-              { "title": "【他動詞 覚えます】", "desc": "名前を覚えます（記住名字）。" }
-            ],
-            "tips": "熟悉每道菜的日文發音，廚房叫菜時才能第一時間反應。"
-          }
-        },
-        {
-          "id": "rn_2",
-          "type": "sop",
-          "speaker": "",
-          "zh": "2. 【出菜通知】料理完成後廚房會通報「〇〇做好了」，回答「收到」後前往取餐。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「〇〇できました」と<ruby>言<rt>い</rt></ruby>われるので「<ruby>了解<rt>りょうかい</rt></ruby>です / はい、すぐ<ruby>伺<rt>うかが</rt></ruby>います」と<ruby>返事<rt>へんじ</rt></ruby>をして<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "できました", "zh": "做好了、完成了" },
-              { "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です", "zh": "收到、明白" },
-              { "ja": "<ruby>伺<rt>うかが</rt></ruby>います", "zh": "馬上過去（謙讓語）" },
-              { "ja": "<ruby>返事<rt>へんじ</rt></ruby>", "zh": "回應、答覆" }
-            ],
-            "points": [
-              { "title": "【〜たら (假定/完成條件)】", "desc": "料理ができたら（料理做好之後）。" },
-              { "title": "【〜てから (動作順序)】", "desc": "返事をしてから（先回應之後再…）。" }
-            ],
-            "tips": "廚房喊出菜時，務必先元氣回應再推車出發。"
-          }
-        },
-        {
-          "id": "rn_3",
-          "type": "sop",
-          "speaker": "",
-          "zh": "3. 【攜帶布巾】前往廚房取餐時，一定要隨身帶著乾淨布巾（蓋在料理上衛生防塵）。",
-          "ja": "<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>く<ruby>時<rt>とき</rt></ruby>は、<ruby>布<rt>ぬの</rt></ruby>を<ruby>必<rt>かなら</rt></ruby>ず<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>布<rt>ぬの</rt></ruby>", "zh": "布巾、專用蓋菜布" },
-              { "ja": "<ruby>必<rt>かなら</rt></ruby>ず", "zh": "務必、一定" },
-              { "ja": "<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>く", "zh": "帶去、隨身攜帶" }
-            ],
-            "points": [
-              { "title": "【副詞 必ず】", "desc": "強調工作上的絕對規範，不可遺漏。" },
-              { "title": "【動詞辞書形＋時は】", "desc": "取りに行く時は（去取餐的時候）。" }
-            ],
-            "tips": "出發取餐前檢查推車上是否有乾淨布巾。"
-          }
-        },
-        {
-          "id": "rn_4",
-          "type": "sop",
-          "speaker": "",
-          "zh": "4. 【隨手關門】離開餐廳入口前往廚房時，請隨手將大門關上（維持空調與衛生）。",
-          "ja": "レストランの<ruby>入<rt>い</rt></ruby>り<ruby>口<rt>ぐち</rt></ruby>を<ruby>出<rt>で</rt></ruby>る<ruby>時<rt>とき</rt></ruby>は、<ruby>扉<rt>とびら</rt></ruby>を<ruby>閉<rt>し</rt></ruby>めて<ruby>行<rt>い</rt></ruby>きます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>入<rt>い</rt></ruby>り<ruby>口<rt>ぐち</rt></ruby>", "zh": "入口、門口" },
-              { "ja": "<ruby>扉<rt>とびら</rt></ruby>", "zh": "大門、門扉" },
-              { "ja": "<ruby>閉<rt>し</rt></ruby>める", "zh": "關閉（他動詞）" }
-            ],
-            "points": [
-              { "title": "【受詞助詞 を＋出る】", "desc": "入り口を出る（走出入口）。" },
-              { "title": "【て形＋行く (連動動作)】", "desc": "扉を閉めて行く（把門關好再走過去）。" }
-            ],
-            "tips": "維持用餐區冷暖氣與防止異味/蟲害進入餐廳。"
-          }
-        },
-        {
-          "id": "rn_5",
-          "type": "sop",
-          "speaker": "",
-          "zh": "5. 【核對上車】到達廚房後，請確認料理的名稱與內容，再放上餐車運回餐廳。",
-          "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>に<ruby>来<rt>き</rt></ruby>たら<ruby>料理<rt>りょうり</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>して<ruby>台車<rt>だいしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>せ、レストランに<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>ます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>確認<rt>かくにん</rt></ruby>する", "zh": "確認、核對" },
-              { "ja": "<ruby>台車<rt>だいしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>せる", "zh": "放上推車/餐車" },
-              { "ja": "<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>く</rt></ruby>る", "zh": "運送過來、拿過來" }
-            ],
-            "points": [
-              { "title": "【連續動作 て形連接】", "desc": "確認して…乗せ…持って来ます（確認後放上車並運過來）。" }
-            ],
-            "tips": "核對盤上料理是否正確，蓋好布巾後再推車出發。"
-          }
-        },
-        {
-          "id": "rn_6",
-          "type": "sop",
-          "speaker": "",
-          "zh": "6. 【斜坡安全SOP】餐廳入口有斜坡！經過時請稍微抬起餐車保持水平，防止料理滑落！",
-          "ja": "レストランの<ruby>入<rt>い</rt></ruby>り<ruby>口<rt>ぐち</rt></ruby>は<ruby>坂<rt>さか</rt></ruby>になっているので、<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>少<rt>すこ</rt></ruby>し<ruby>持<rt>も</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げて<ruby>水平<rt>すいへい</rt></ruby>にします。<ruby>水平<rt>すいへい</rt></ruby>にしないと<ruby>台車<rt>だいしゃ</rt></ruby>から<ruby>料理<rt>りょうり</rt></ruby>が<ruby>滑<rt>すべ</rt></ruby>り<ruby>落<rt>お</rt></ruby>ちる<ruby>可能性<rt>かのうせい</rt></ruby>があるので<ruby>注意<rt>ちゅうい</rt></ruby>してください。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>坂<rt>さか</rt></ruby>", "zh": "斜坡、坡道" },
-              { "ja": "<ruby>持<rt>も</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げる", "zh": "抬起、提起" },
-              { "ja": "<ruby>水平<rt>すいへい</rt></ruby>", "zh": "水平、平衡" },
-              { "ja": "<ruby>滑<rt>すべ</rt></ruby>り<ruby>落<rt>お</rt></ruby>ちる", "zh": "滑落、跌落" },
-              { "ja": "<ruby>可能性<rt>かのうせい</rt></ruby>", "zh": "可能性" }
-            ],
-            "points": [
-              { "title": "【〜になっている (狀態描述)】", "desc": "坂になっている（呈現斜坡狀態）。" },
-              { "title": "【〜ないと (否定假定)】", "desc": "水平にしないと（如果沒有保持水平的話…）。" },
-              { "title": "【複合動詞 滑り落ちる】", "desc": "滑る（滑動）＋落ちる（掉落）。" }
-            ],
-            "tips": "過斜坡時雙手穩握推車手把微提，減速慢行，避免湯汁濺出或盤子滑動！"
-          }
-        },
-        {
-          "id": "rn_7",
-          "type": "sop",
-          "speaker": "",
-          "zh": "7. 【無線電通報】料理送到餐廳後，請使用無線電通報送來的料理名稱（例：チキン南蛮持って来ました）。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>たら、<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>た<ruby>料理<rt>りょうり</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>をインカムで<ruby>伝<rt>つた</rt></ruby>えます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "インカム", "zh": "無線電對講機" },
-              { "ja": "<ruby>伝<rt>つた</rt></ruby>える", "zh": "通報、傳達" }
-            ],
-            "points": [
-              { "title": "【道具助詞 で】", "desc": "インカムで伝えます（用無線電傳達）。" }
-            ],
-            "tips": "範例：「チキン南蛮持って来ました / 届きました」。音量清晰沉穩。"
-          }
-        },
-        {
-          "id": "rn_8",
-          "type": "sop",
-          "speaker": "",
-          "zh": "8. 【分類指定位置】生鮮品放冰箱、熱菜放外場廚房作業區、熱湯鍋物放保溫庫。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>は<ruby>規定<rt>きてい</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>きます：<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>・<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>しは<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>、チキン<ruby>南蛮<rt>なんばん</rt></ruby>などの<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>料理<rt>りょうり</rt></ruby>はレストラン<ruby>内<rt>ない</rt></ruby>の<ruby>厨房<rt>ちゅうぼう</rt></ruby>スペース、<ruby>鍋<rt>なべ</rt></ruby>やスープは<ruby>保温庫<rt>ほおんこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>規定<rt>きてい</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "規定的位置" },
-              { "ja": "<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え<ruby>料理<rt>りょうり</rt></ruby>", "zh": "更換餐盤/補菜的料理" },
-              { "ja": "厨房スペース", "zh": "餐廳外場的廚房作業區" }
-            ],
-            "points": [
-              { "title": "【名詞＋に置く/入れる】", "desc": "規定の場所に置く（放置於指定位置）。" }
-            ],
-            "tips": "①生魚片/赤牛/馬刺 ➔ 冷藏庫；②熱菜補盤 ➔ 外場廚房作業區；③鍋物/熱湯 ➔ 保溫庫。"
-          }
-        },
-        {
-          "id": "rn_9",
-          "type": "sop",
-          "speaker": "",
-          "zh": "9. 【推車歸位】傳菜搬運結束後，務必將推車推回原本的位置（元の場所に戻す）。",
-          "ja": "<ruby>運<rt>はこ</rt></ruby>び<ruby>終<rt>お</rt></ruby>わったら、<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>運<rt>はこ</rt></ruby>び<ruby>終<rt>お</rt></ruby>わる", "zh": "搬運完畢、傳菜結束" },
-              { "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原來的位置" },
-              { "ja": "<ruby>戻<rt>もど</rt></ruby>す", "zh": "放回、歸位" }
-            ],
-            "points": [
-              { "title": "【動詞連用形＋終わる】", "desc": "運び終わったら（搬運完畢後）。" }
-            ],
-            "tips": "保持通道暢通，不隨意停放於走道。"
-          }
-        },
-        {
-          "id": "rn_10",
-          "type": "sop",
-          "speaker": "",
-          "zh": "10. 【缺菜通報】巡視發現料理即將用盡時，立即透過無線電通知廚房補菜。",
-          "ja": "<ruby>料理<rt>りょうり</rt></ruby>がない<ruby>時<rt>とき</rt></ruby>は、インカムで<ruby>厨房<rt>ちゅうぼう</rt></ruby>に「〇〇がありません / なくなりました」と<ruby>連絡<rt>れんらく</rt></ruby>します。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "なくなる", "zh": "用光、沒了" },
-              { "ja": "<ruby>連絡<rt>れんらく</rt></ruby>する", "zh": "聯絡、通報" }
-            ],
-            "points": [
-              { "title": "【對象助詞 に＋連絡する】", "desc": "厨房に連絡します（向廚房聯絡）。" }
-            ],
-            "tips": "餐檯剩 1/3 時即可提前預警，確保出菜不中斷。"
-          }
-        },
-        {
-          "id": "rn_d1_kit",
-          "type": "dialog",
-          "speaker": "廚房 (通知出菜)",
-          "zh": "〇〇做好了，請來拿！",
-          "ja": "〇〇できました！<ruby>取<rt>と</rt></ruby>りに<ruby>来<rt>き</rt></ruby>てください！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "できました", "zh": "做好了" },
-              { "ja": "取りに来る", "zh": "來拿" }
-            ],
-            "points": [
-              { "title": "【動詞て形＋ください】", "desc": "取りに来てください（請過來拿）。" }
-            ],
-            "tips": "廚房大聲通知時，迅速回應確認。"
-          }
-        },
-        {
-          "id": "rn_d1_me",
-          "type": "dialog",
-          "speaker": "傳菜(我) (確認領取)",
-          "zh": "收到！好的！我馬上過去拿！",
-          "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です！はい、すぐ<ruby>取<rt>と</rt></ruby>りに<ruby>伺<rt>うかが</rt></ruby>います！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です", "zh": "收到、明白" },
-              { "ja": "<ruby>伺<rt>うかが</rt></ruby>う", "zh": "前往、拜訪（謙讓語）" }
-            ],
-            "points": [
-              { "title": "【謙讓語 伺います】", "desc": "用伺います代替行きます，展現極佳的職場敬意。" }
-            ],
-            "tips": "回答時保持精神與元氣。"
-          }
-        },
-        {
-          "id": "rn_d2_me",
-          "type": "dialog",
-          "speaker": "傳菜(我) (無線電通報送達)",
-          "zh": "這裡是楊。〇〇料理已經送達。（例：チキン南蛮持って来ました）",
-          "ja": "<ruby>楊<rt>よう</rt></ruby>ですが、〇〇<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>ました / <ruby>届<rt>とど</rt></ruby>きました。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "〜ですが", "zh": "我是〜（自報姓名開頭）" },
-              { "ja": "持って来ました", "zh": "送過來了、拿來了" }
-            ],
-            "points": [
-              { "title": "【自報家門 〜ですが】", "desc": "無線電開頭先報名字，讓大家知道發話者。" }
-            ],
-            "tips": "發話前先按下按鈕 0.5 秒後再開口，避免開頭字被吃掉。"
-          }
-        },
-        {
-          "id": "rn_d3_me",
-          "type": "dialog",
-          "speaker": "傳菜(我) (無線電通報缺菜)",
-          "zh": "廚房同仁請注意，〇〇已經沒有了，麻煩請補充。",
-          "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇がなくなりましたので、お<ruby>願<rt>ねが</rt></ruby>いします。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "〜の<ruby>方<rt>かた</rt></ruby>へ", "zh": "給負責〜的同仁" },
-              { "ja": "なくなる", "zh": "用盡、沒了" },
-              { "ja": "お願いします", "zh": "拜託了、麻煩您" }
-            ],
-            "points": [
-              { "title": "【動詞連用形＋なくなりました】", "desc": "なくなりました（已經用光了）。" }
-            ],
-            "tips": "禮貌而迅速地通知廚房補菜。"
-          }
-        },
-        {
-          "id": "rn_d4_me",
-          "type": "dialog",
-          "speaker": "傳菜(我) (推車借過應對)",
-          "zh": "不好意思，借過一下！（推餐車提醒周遭同仁與客人）",
-          "ja": "お<ruby>通<rt>とお</rt></ruby>りします！/ <ruby>失礼<rt>しつれい</rt></ruby>します！",
-          "grammar": {
-            "vocabs": [
-              { "ja": "お<ruby>通<rt>とお</rt></ruby>りします", "zh": "我要通過了、借過（謙讓語）" },
-              { "ja": "<ruby>失礼<rt>しつれい</rt></ruby>します", "zh": "失禮了、不好意思" }
-            ],
-            "points": [
-              { "title": "【お＋動詞連用形＋します】", "desc": "お通りします（我要通過了）。" }
-            ],
-            "tips": "轉角處推車請先減速並說「お通りします」。"
-          }
+  {
+    "id": "tab_breakfast_sop",
+    "name": "朝食崗位手冊 (朝食)",
+    "icon": "☀️",
+    "items": [
+      {
+        "id": "bs_common_rule",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝食共通・對講機與叫菜原則】全員佩戴對講機，本人負責之料理本人親自叫菜。冷藏/溫藏庫有備品優先使用，無備品才向廚房點單。交接時務必傳達已點料理名與數量，嚴禁重複點單。用罄前即時補齊！",
+        "ja": "【<ruby>朝食<rt>ちょうしょく</rt></ruby><ruby>共通<rt>きょうつう</rt></ruby>】インカムを<ruby>着用<rt>ちゃくよう</rt></ruby>し、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>担当<rt>たんとう</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>は<ruby>本人<rt>ほんにん</rt></ruby>が<ruby>注文<rt>ちゅうもん</rt></ruby>します。<ruby>予備<rt>よび</rt></ruby>がある<ruby>場合<rt>ばあい</rt></ruby>は<ruby>予備<rt>よび</rt></ruby>を<ruby>先<rt>さき</rt></ruby>に<ruby>使<rt>つか</rt></ruby>い、<ruby>重複<rt>じゅうふく</rt></ruby><ruby>注文<rt>ちゅうもん</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぎます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "インカム",
+              "zh": "對講機、耳麥"
+            },
+            {
+              "ja": "<ruby>予備<rt>よび</rt></ruby>",
+              "zh": "備品、庫存備用料理"
+            },
+            {
+              "ja": "<ruby>重複<rt>じゅうふく</rt></ruby>",
+              "zh": "重複"
+            },
+            {
+              "ja": "<ruby>引継<rt>ひきつ</rt></ruby>ぎ",
+              "zh": "交接、換班交接"
+            }
+          ],
+          "points": [
+            {
+              "title": "【本人が注文】",
+              "desc": "誰負責該區域，就由誰開口呼叫對講機，避免權責不清。"
+            },
+            {
+              "title": "【予備を先に使う】",
+              "desc": "備品先進先出，不可直接向廚房叫新菜而讓備品放壞。"
+            }
+          ],
+          "tips": "換班或交接給其他同仁時，務必第一時間口頭交代：『〇〇は注文済みです』。"
         }
-      ],
-      "vocabs": [
-        { "id": "v_sop_1_daisha", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby>", "zh": "推車（搬運推車）", "cat": "工具", "imageUrl": "", "note": "傳菜用台車" },
-        { "id": "v_sop_1_wagon", "ja": "<ruby>ワゴン<rt>wagon</rt></ruby>", "zh": "餐車（三層餐車）", "cat": "工具", "imageUrl": "", "note": "送餐與收餐具餐車" },
-        { "id": "v_sop_2_nuno", "ja": "<ruby>布<rt>ぬの</rt></ruby>", "zh": "布巾（蓋料理的布）", "cat": "工具", "imageUrl": "", "note": "取餐必帶布巾" },
-        { "id": "v_sop_2_kurosu", "ja": "<ruby>クロス<rt>kurosu</rt></ruby>", "zh": "擦拭布（抹布）", "cat": "工具", "imageUrl": "", "note": "工作檯擦拭專用布" },
-        { "id": "v_sop_3", "ja": "<ruby>インカム<rt>inkamu</rt></ruby>", "zh": "無線電對講機", "cat": "工具", "imageUrl": "", "note": "通報送達與缺菜" },
-        { "id": "v_sop_4", "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>", "zh": "冰箱", "cat": "工具", "imageUrl": "", "note": "放生魚片、赤牛、馬刺" },
-        { "id": "v_sop_5", "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>", "zh": "保溫庫", "cat": "工具", "imageUrl": "", "note": "放熱湯、火鍋" },
-        { "id": "v_sop_6", "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>", "zh": "原位（原本的位置）", "cat": "工具", "imageUrl": "", "note": "餐車用完歸位" }
-      ]
-    },
-    {
-      "id": "tab_order_sop",
-      "name": "點菜與端菜應對 (注文)",
-      "icon": "📝",
-      "items": [
-        {
-          "id": "ord_1",
-          "type": "dialog",
-          "speaker": "點單/傳菜(我)",
-          "zh": "給負責點單的同仁：麻煩請準備〇〇。（向廚房/點單人員叫菜）",
-          "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "ご<ruby>注文<rt>ちゅうもん</rt></ruby>", "zh": "點單、點菜（敬語）" },
-              { "ja": "の<ruby>方<rt>かた</rt></ruby>へ", "zh": "給負責〜的同仁" },
-              { "ja": "お願いします", "zh": "拜託了、請準備" }
-            ],
-            "points": [
-              { "title": "【接頭語 ご＋漢語 (美化語/敬語)】", "desc": "ご注文（顧客點單）。" },
-              { "title": "【名詞＋をお願いします】", "desc": "〇〇をお願いします（麻煩請準備〇〇）。" }
-            ],
-            "tips": "廚房備菜忙碌時，以這句話開頭最專業且易聽清。"
-          }
-        },
-        {
-          "id": "ord_2",
-          "type": "dialog",
-          "speaker": "端菜人員(我)",
-          "zh": "讓您久等了（端菜出去給等待中的客人）。",
-          "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "お待ちいただく", "zh": "承蒙等候（待つ的尊敬語）" }
-            ],
-            "points": [
-              { "title": "【お＋動詞連用形＋いただく】", "desc": "等待客人端菜時專用，比「お待たせしました」更加優雅客氣。" }
-            ],
-            "tips": "送上料理給客人時微鞠躬並說這句話。"
-          }
-        },
-        {
-          "id": "ord_3",
-          "type": "dialog",
-          "speaker": "撤菜人員(我)",
-          "zh": "我把〇〇撤下去（送回廚房補充）。",
-          "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>下<rt>さ</rt></ruby>げる", "zh": "撤下、撤走（料理或盤子）" }
-            ],
-            "points": [
-              { "title": "【受詞助詞 を＋下げる】", "desc": "〇〇を下げる（將〇〇撤回廚房）。" }
-            ],
-            "tips": "從自助餐檯撤走空盤時向旁邊同仁告知。"
-          }
+      },
+      {
+        "id": "bs_reception_open",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝受付・07:30 開門準備】7:30 開門前點亮接待處電燈，開啟餐廳背景音樂。7:30 準備就緒後準時開門迎賓。",
+        "ja": "【<ruby>朝<rt>あさ</rt></ruby><ruby>受付<rt>うけつけ</rt></ruby>】7:30オープン<ruby>前<rt>まえ</rt></ruby>に<ruby>受付<rt>うけつけ</rt></ruby>の<ruby>電気<rt>でんき</rt></ruby>をつけ、レストラン<ruby>内<rt>ない</rt></ruby>の<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>流<rt>なが</rt></ruby>します。7:30にレストランをオープンします。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>電気<rt>でんき</rt></ruby>をつける",
+              "zh": "開燈、點亮電燈"
+            },
+            {
+              "ja": "<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>流<rt>なが</rt></ruby>す",
+              "zh": "播放音樂"
+            }
+          ],
+          "points": [
+            {
+              "title": "【準備ができたら】",
+              "desc": "準備完成後，7:30準時向客人致意並開門引導。"
+            }
+          ],
+          "tips": "檢查動線順暢，確保開門時客人能依序平順入座。"
         }
-      ],
-      "vocabs": [
-        { "id": "vo_1", "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ", "zh": "給負責點單的同仁", "cat": "對話", "imageUrl": "", "note": "叫菜開頭用語" },
-        { "id": "vo_2", "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました", "zh": "讓您久等了", "cat": "對話", "imageUrl": "", "note": "端菜給等候客人" },
-        { "id": "vo_3", "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます", "zh": "我把〇〇撤下去補菜", "cat": "對話", "imageUrl": "", "note": "撤盤補菜通報" }
-      ]
-    },
-    {
+      },
+      {
+        "id": "bs_reception_first_report",
+        "type": "dialog",
+        "speaker": "朝受付(我)",
+        "zh": "【朝受付・首波人數通報】引導排隊客人入座。首批排隊客人全員入店且排隊人潮一度告一段落時，以對講機通報入店人數與剩餘人數。",
+        "ja": "『〇〇<ruby>名<rt>めい</rt></ruby><ruby>入<rt>はい</rt></ruby>られました。<ruby>残数<rt>ざんすう</rt></ruby>は〇〇<ruby>名<rt>めい</rt></ruby>です』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>入<rt>はい</rt></ruby>られました",
+              "zh": "入店了、進來了（敬語）"
+            },
+            {
+              "ja": "<ruby>残数<rt>ざんすう</rt></ruby>",
+              "zh": "剩餘未到人數"
+            }
+          ],
+          "points": [
+            {
+              "title": "【最初の報告】",
+              "desc": "只有第一次隊伍中斷時要同時通報『入店人數＋剩餘人數』。"
+            }
+          ],
+          "tips": "讓外場與廚房第一時間掌握首波人潮已就定位。"
+        }
+      },
+      {
+        "id": "bs_reception_remaining_report",
+        "type": "dialog",
+        "speaker": "朝受付(我)",
+        "zh": "【朝受付・後續殘數通報】首波通報後，後續僅通報剩餘人數，原則上每減少約 20 人通報一次。剩約 15 人時，配合人數減少更細緻通報。",
+        "ja": "『<ruby>残数<rt>ざんすう</rt></ruby>〇〇<ruby>名<rt>めい</rt></ruby>です』（<ruby>約<rt>やく</rt></ruby>20<ruby>名<rt>めい</rt></ruby>ごとに<ruby>報告<rt>ほうこく</rt></ruby>。15<ruby>名<rt>めい</rt></ruby><ruby>程度<rt>ていど</rt></ruby>になったら<ruby>細<rt>こま</rt></ruby>かく<ruby>報告<rt>ほうこく</rt></ruby>）",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>目安<rt>めやす</rt></ruby>",
+              "zh": "基準、參考標準"
+            },
+            {
+              "ja": "<ruby>細<rt>こま</rt></ruby>かく",
+              "zh": "細緻地、頻繁地"
+            }
+          ],
+          "points": [
+            {
+              "title": "【約20名ごと】",
+              "desc": "後續不需報入店人數，僅報殘數即可，避免對講機頻道擁擠。"
+            }
+          ],
+          "tips": "剩餘15人時，廚房需要精算菜量，因此通報頻率要提高。"
+        }
+      },
+      {
+        "id": "bs_reception_bashing",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝受付・殘數 10 人離櫃擦桌】客人剩餘人數跌破 10 人時，離開接待櫃檯開始進行餐桌擦拭清潔（テーブル拭き）。一邊擦桌一邊留意是否有後續客人，若有新客人立即回櫃檯接待。",
+        "ja": "【<ruby>残数<rt>ざんすう</rt></ruby>10<ruby>名<rt>めい</rt></ruby><ruby>切<rt>き</rt></ruby>ったら】<ruby>受付<rt>うけつけ</rt></ruby>を<ruby>離<rt>はな</rt></ruby>れてテーブル<ruby>拭<rt>ふ</rt></ruby>きを<ruby>開始<rt>かいし</rt></ruby>します。<ruby>来客<rt>らいきゃく</rt></ruby>があれば<ruby>受付<rt>うけつけ</rt></ruby>へ<ruby>戻<rt>もど</rt></ruby>って<ruby>対応<rt>たいおう</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>離<rt>はな</rt></ruby>れる",
+              "zh": "離開"
+            },
+            {
+              "ja": "テーブル<ruby>拭<rt>ふ</rt></ruby>き",
+              "zh": "擦桌子"
+            },
+            {
+              "ja": "<ruby>戻<rt>もど</rt></ruby>る",
+              "zh": "返回、回到原處"
+            }
+          ],
+          "points": [
+            {
+              "title": "【残数10名切ったら】",
+              "desc": "殘數剩下個位數時，主動轉入支援外場整理清潔。"
+            }
+          ],
+          "tips": "擦桌時視野仍要朝向門口，隨時注意是否有晚到的客人走進來。"
+        }
+      },
+      {
+        "id": "bs_irori_start",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝いろり・營業開始擺盤】鯖魚（鯖）與炸魚餅（さつま揚げ）在爐台保溫區各整齊擺放 2 列。荷包蛋（ハムエッグ）製作耗時較長，務必在用罄前早點向廚房點單！",
+        "ja": "【<ruby>朝<rt>あさ</rt></ruby>いろり・<ruby>営業<rt>えいぎょう</rt></ruby><ruby>開始<rt>かいし</rt></ruby>】<ruby>鯖<rt>さば</rt></ruby>とさつま<ruby>揚<rt>あ</rt></ruby>げはそれぞれ2<ruby>列<rt>れつ</rt></ruby>ずつ<ruby>並<rt>なら</rt></ruby>べます。ハムエッグは<ruby>早<rt>はや</rt></ruby>めに<ruby>注文<rt>ちゅうもん</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>鯖<rt>さば</rt></ruby>",
+              "zh": "鯖魚"
+            },
+            {
+              "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ",
+              "zh": "炸魚餅、甜不辣"
+            },
+            {
+              "ja": "ハムエッグ",
+              "zh": "火腿荷包蛋"
+            },
+            {
+              "ja": "2<ruby>列<rt>れつ</rt></ruby>ずつ",
+              "zh": "各排兩列"
+            }
+          ],
+          "points": [
+            {
+              "title": "【早めに注文】",
+              "desc": "荷包蛋需要現煎煎烤時間，千萬不能等到完全空盤才叫菜。"
+            }
+          ],
+          "tips": "開餐前檢查保溫爐火候與夾子是否就位。"
+        }
+      },
+      {
+        "id": "bs_irori_handover",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝いろり・08:00 交接收桌】8:00 一到，いろり擔當者立刻轉去進行收桌撤盤（バッシング）。由朝ドリンク擔當接手いろり，交接時務必清楚傳達已點菜品與數量。",
+        "ja": "【8:00<ruby>引継<rt>ひきつ</rt></ruby>ぎ】いろり<ruby>担当<rt>たんとう</rt></ruby>はバッシングへ。<ruby>引継<rt>ひきつ</rt></ruby>ぎ<ruby>例<rt>れい</rt></ruby>：『ハムエッグは<ruby>注文<rt>ちゅうもん</rt></ruby><ruby>済<rt>ず</rt></ruby>みです』『<ruby>鯖<rt>さば</rt></ruby>を10<ruby>個<rt>こ</rt></ruby><ruby>注文<rt>ちゅうもん</rt></ruby>しています』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>引継<rt>ひきつ</rt></ruby>ぎ",
+              "zh": "交接"
+            },
+            {
+              "ja": "<ruby>注文<rt>ちゅうもん</rt></ruby><ruby>済<rt>ず</rt></ruby>み",
+              "zh": "已下單完畢"
+            }
+          ],
+          "points": [
+            {
+              "title": "【8:00の役割交代】",
+              "desc": "いろり人員轉撤盤，ドリンク人員兼顧いろり。"
+            }
+          ],
+          "tips": "一定要把『已經向廚房叫了什麼、叫了幾個』交代給接手的同事，防止重複做菜浪費！"
+        }
+      },
+      {
+        "id": "bs_irori_half_egg",
+        "type": "dialog",
+        "speaker": "朝ドリンク/いろり(我)",
+        "zh": "【朝いろり・08:30 後荷包蛋減半】8:30 以後，荷包蛋改以「通常份量的一半（半分）」點單，避免剩菜。",
+        "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、ハムエッグを<ruby>半分<rt>はんぶん</rt></ruby>で<ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>半分<rt>はんぶん</rt></ruby>で",
+              "zh": "以一半的量"
+            },
+            {
+              "ja": "<ruby>追加<rt>ついか</rt></ruby>",
+              "zh": "追加、補菜"
+            }
+          ],
+          "points": [
+            {
+              "title": "【8:30以降の調整】",
+              "desc": "後半場人潮減少，出菜量自動減半。"
+            }
+          ],
+          "tips": "清楚說出『半分で追加お願いします』，廚房便會煎半份。"
+        }
+      },
+      {
+        "id": "bs_irori_reduced_fish",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝いろり・鯖與炸魚餅減量】8:30 以後或客人剩餘人數 30 人以下時，鯖魚與炸魚餅改為每次點 10 個，餐檯上各僅擺 1 列。",
+        "ja": "【8:30<ruby>以降<rt>いこう</rt></ruby> / <ruby>残数<rt>ざんすう</rt></ruby>30<ruby>名<rt>めい</rt></ruby><ruby>以下<rt>いか</rt></ruby>】<ruby>鯖<rt>さば</rt></ruby>・さつま<ruby>揚<rt>あ</rt></ruby>げはそれぞれ10<ruby>個<rt>こ</rt></ruby>で<ruby>注文<rt>ちゅうもん</rt></ruby>し、1<ruby>列<rt>れつ</rt></ruby>ずつ<ruby>並<rt>なら</rt></ruby>べます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "10<ruby>個<rt>こ</rt></ruby>で",
+              "zh": "每次10個"
+            },
+            {
+              "ja": "1<ruby>列<rt>れつ</rt></ruby>ずつ",
+              "zh": "各一列"
+            }
+          ],
+          "points": [
+            {
+              "title": "【残数30名以下の鉄則】",
+              "desc": "從原先的2列縮減為1列，避免魚肉乾硬。"
+            }
+          ],
+          "tips": "隨時對照對講機通報的殘數，一低於30人立刻調整陳列。"
+        }
+      },
+      {
+        "id": "bs_drink_work",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ドリンク・平時業務】定時巡視沙拉/甜點、飲料、麵包、置物櫃備品。麵包不可斷貨，早些補充。",
+        "ja": "【<ruby>朝<rt>あさ</rt></ruby>ドリンク】サラダ・デザート、ドリンク、パン、ロッカー<ruby>類<rt>るい</rt></ruby>を<ruby>定期的<rt>ていきてき</rt></ruby>に<ruby>確認<rt>かくにん</rt></ruby>し、パンを切らさないよう<ruby>補充<rt>ほじゅう</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "パンを<ruby>切<rt>き</rt></ruby>らさない",
+              "zh": "不讓麵包斷貨、維持供應"
+            },
+            {
+              "ja": "<ruby>早<rt>はや</rt></ruby>めに",
+              "zh": "儘早、提前"
+            }
+          ],
+          "points": [
+            {
+              "title": "【担当場所の巡回】",
+              "desc": "飲料機糖漿、咖啡豆、茶包及杯具隨時檢視補足。"
+            }
+          ],
+          "tips": "早晨客人麵包消耗快速，必須提早進庫房拿取補充。"
+        }
+      },
+      {
+        "id": "bs_drink_takeover",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ドリンク・08:00 接手いろり】8:00 起接手朝いろり工作，同時巡視飲料與いろり兩區。8:00 後的鯖魚、炸魚餅、荷包蛋由飲料擔當負責點單！",
+        "ja": "【8:00<ruby>以降<rt>いこう</rt></ruby>】ドリンクと同時にいろりの<ruby>仕事<rt>しごと</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>ぎ、<ruby>鯖<rt>さば</rt></ruby>・さつま<ruby>揚<rt>あ</rt></ruby>げ・ハムエッグを<ruby>注文<rt>ちゅうもん</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>ぐ",
+              "zh": "承接、接管"
+            },
+            {
+              "ja": "<ruby>両方<rt>りょうほう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>",
+              "zh": "確認雙方區域"
+            }
+          ],
+          "points": [
+            {
+              "title": "【8:00からの兼任】",
+              "desc": "ドリンク擔當站位需在飲料吧與いろり之間定時巡看。"
+            }
+          ],
+          "tips": "接手時記得看一眼いろり保溫台上的現存份量。"
+        }
+      },
+      {
+        "id": "bs_runner_notify",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ランナー・出菜通知與取餐】料理完成後廚房會通報「〇〇できました」，回答「了解です / はい、すぐ伺います」後前往取餐。",
+        "ja": "<ruby>料理<rt>りょうり</rt></ruby>ができたら、<ruby>厨房<rt>ちゅうぼう</rt></ruby>から「〇〇できました」と<ruby>言<rt>い</rt></ruby>われるので「<ruby>了解<rt>りょうかい</rt></ruby>です / はい、すぐ<ruby>伺<rt>うかが</rt></ruby>います」と<ruby>返事<rt>へんじ</rt></ruby>をして<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "できました",
+              "zh": "做好了、完成了"
+            },
+            {
+              "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です",
+              "zh": "收到、明白"
+            },
+            {
+              "ja": "<ruby>伺<rt>うかが</rt></ruby>う",
+              "zh": "前往、拜訪（行く的謙讓語）"
+            }
+          ],
+          "points": [
+            {
+              "title": "【謙譲語 伺います】",
+              "desc": "すぐ伺います（馬上過去）。"
+            }
+          ],
+          "tips": "廚房叫菜時第一時間以對講機回應。"
+        }
+      },
+      {
+        "id": "bs_runner_cart_cloth",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ランナー・台車與布巾鐵則】料理を取りに行くときは、布を必ず持って行きます。料理が1つの場合でも、必ず台車を持って行きます（目隠しと補充遅れ防止）。",
+        "ja": "<ruby>料理<rt>りょうり</rt></ruby>を<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>くときは、<ruby>布<rt>ぬの</rt></ruby>を<ruby>必<rt>かなら</rt></ruby>ず<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。<ruby>料理<rt>りょうり</rt></ruby>が1つの<ruby>場合<rt>ばあい</rt></ruby>でも、<ruby>必<rt>かなら</rt></ruby>ず<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>台車<rt>だいしゃ</rt></ruby>",
+              "zh": "推車"
+            },
+            {
+              "ja": "<ruby>布<rt>ぬの</rt></ruby>",
+              "zh": "布巾、遮布"
+            },
+            {
+              "ja": "<ruby>二度手間<rt>にどでま</rt></ruby>",
+              "zh": "白跑一趟、二次折返麻煩"
+            }
+          ],
+          "points": [
+            {
+              "title": "【1つでも台車】",
+              "desc": "即使只拿一小盤，也嚴禁徒手端走，一律推車帶布。"
+            }
+          ],
+          "tips": "布巾能避免推車穿過走道時，客人眼睛直接看見剛出爐的菜盤。"
+        }
+      },
+      {
+        "id": "bs_runner_miso",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ランナー・味噌汁專用 SOP】CB 叫味噌汁時，必須攜帶「台車・布・紅色方盒（赤い番重）」去廚房。味噌汁絕不能直接放台車上，經過地面高低差容易打翻，必須放進紅色方盒！",
+        "ja": "【<ruby>味噌汁<rt>みそしる</rt></ruby>の<ruby>運搬<rt>うんぱん</rt></ruby>】『<ruby>台車<rt>だいしゃ</rt></ruby>・<ruby>布<rt>ぬの</rt></ruby>・<ruby>赤<rt>あか</rt></ruby>い<ruby>番重<rt>ばんじゅう</rt></ruby>』を<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。<ruby>段差<rt>だんさ</rt></ruby>でこぼれるのを<ruby>防<rt>ふせ</rt></ruby>ぐため、<ruby>必<rt>かなら</rt></ruby>ず<ruby>赤<rt>あか</rt></ruby>い<ruby>番重<rt>ばんじゅう</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>運<rt>はこ</rt></ruby>びます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>赤<rt>あか</rt></ruby>い<ruby>番重<rt>ばんじゅう</rt></ruby>",
+              "zh": "紅色塑膠淺箱/方盒 (Banju)"
+            },
+            {
+              "ja": "<ruby>段差<rt>だんさ</rt></ruby>",
+              "zh": "地面高低差、門檻階梯"
+            },
+            {
+              "ja": "こぼれる",
+              "zh": "傾倒、潑灑出來"
+            }
+          ],
+          "points": [
+            {
+              "title": "【味噌汁の三種の神器】",
+              "desc": "台車・布・赤い番重。缺一不可！"
+            }
+          ],
+          "tips": "紅色方盒具備防滑防傾倒凹槽，能將熱湯安全鎖在盒內推運。"
+        }
+      },
+      {
+        "id": "bs_runner_gyudon",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ランナー・牛丼替換專用 SOP】CB 叫牛丼時，備妥紅色方盒，將外場料理台上的舊牛丼盆放入紅色方盒，用台車推至廚房替換全新牛丼，再安全運回外場。",
+        "ja": "【<ruby>牛丼<rt>ぎゅうどん</rt></ruby>の<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え】<ruby>赤<rt>あか</rt></ruby>い<ruby>番重<rt>ばんじゅう</rt></ruby>に<ruby>料理台<rt>りょうりだい</rt></ruby>の<ruby>牛丼<rt>ぎゅうどん</rt></ruby>を<ruby>入<rt>い</rt></ruby>れて<ruby>厨房<rt>ちゅうぼう</rt></ruby>へ<ruby>運<rt>はこ</rt></ruby>び、<ruby>新<rt>あたら</rt></ruby>しい<ruby>牛丼<rt>ぎゅうどん</rt></ruby>と<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>えてもらいます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>牛丼<rt>ぎゅうどん</rt></ruby>",
+              "zh": "牛丼（牛肉蓋飯配料）"
+            },
+            {
+              "ja": "<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>える",
+              "zh": "舊盆換新盆、替換"
+            }
+          ],
+          "points": [
+            {
+              "title": "【旧盆を入れて運ぶ】",
+              "desc": "先將餐檯上剩餘不多的舊牛丼整盆裝入番重推去廚房，交換滿盆熱牛丼。"
+            }
+          ],
+          "tips": "牛丼湯汁多且重，必須推穩台車並覆蓋布巾。"
+        }
+      },
+      {
+        "id": "bs_runner_delivered",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝ランナー・送達通報與推車歸位】送到餐廳使用無線電通報料理送達「〇〇、持って来ました」。料理送達後，台車を元の場所に戻します。",
+        "ja": "【<ruby>料理<rt>りょうり</rt></ruby><ruby>送達<rt>そうたつ</rt></ruby>】インカムで「〇〇、<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>ました」と<ruby>伝<rt>つた</rt></ruby>えます。<ruby>料理<rt>りょうり</rt></ruby>が<ruby>届<rt>とど</rt></ruby>いたら、<ruby>台車<rt>だいしゃ</rt></ruby>を<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>ました",
+              "zh": "送過來了、拿過來了"
+            },
+            {
+              "ja": "<ruby>元<rt>もと</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>",
+              "zh": "原本的位置"
+            },
+            {
+              "ja": "<ruby>戻<rt>もど</rt></ruby>す",
+              "zh": "歸位、放回原位"
+            }
+          ],
+          "points": [
+            {
+              "title": "【台車を元の場所に戻します】",
+              "desc": "推車用完立即歸位，不可阻擋走道通道。"
+            }
+          ],
+          "tips": "推車停妥於指定泊車區，維護外場整齊美觀。"
+        }
+      },
+      {
+        "id": "bs_cb_assist",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【朝食・CB 補助】料理台料理用罄前，先確認冷熱庫備品補充；ランナー送來新菜時迅速撤下舊盤替換新盤；落摔注意・避開客人隨時補充各區盤子。",
+        "ja": "【CB<ruby>補助<rt>ほじょ</rt></ruby>】<ruby>料理<rt>りょうり</rt></ruby>の<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え、<ruby>予備<rt>よび</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>の<ruby>確認<rt>かくにん</rt></ruby>・<ruby>補充<rt>ほじゅう</rt></ruby>、お<ruby>皿<rt>さら</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>います。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>差<rt>さ</rt></ruby>し<ruby>替<rt>か</rt></ruby>え",
+              "zh": "撤換、舊盤換新盤"
+            },
+            {
+              "ja": "お<ruby>皿<rt>さら</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>",
+              "zh": "補充餐盤"
+            }
+          ],
+          "points": [
+            {
+              "title": "【皿の安全補充】",
+              "desc": "不阻礙客人動線，雙手拿穩避免碰撞聲響。"
+            }
+          ],
+          "tips": "餐檯盤子剩餘三分之一時即需提前推車補充。"
+        }
+      }
+    ],
+    "vocabs": [
+      {
+        "id": "v_bf_1",
+        "ja": "<ruby>鯖<rt>さば</rt></ruby>",
+        "zh": "鯖魚（爐台主菜）",
+        "cat": "食材",
+        "imageUrl": "",
+        "note": "早餐いろり擔當"
+      },
+      {
+        "id": "v_bf_2",
+        "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ",
+        "zh": "炸魚餅/甜不辣",
+        "cat": "食材",
+        "imageUrl": "",
+        "note": "早餐いろり擔當"
+      },
+      {
+        "id": "v_bf_3",
+        "ja": "ハムエッグ",
+        "zh": "火腿荷包蛋",
+        "cat": "餐點",
+        "imageUrl": "",
+        "note": "製作耗時早點叫"
+      },
+      {
+        "id": "v_bf_4",
+        "ja": "<ruby>番重<rt>ばんじゅう</rt></ruby>",
+        "zh": "紅色方盒（搬運箱）",
+        "cat": "工具",
+        "imageUrl": "",
+        "note": "裝味噌汁牛丼防傾倒"
+      }
+    ]
+  },
+  {
+    "id": "tab_dinner_sop",
+    "name": "夕食崗位手冊 (夕食)",
+    "icon": "🌙",
+    "items": [
+      {
+        "id": "ds_common_rule",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夕食共通・對講機與叫菜原則】全員佩戴對講機，本人負責之料理本人叫菜。冷藏庫與溫藏庫備品優先使用，刺身放入冰箱（冷蔵庫）、鍋物熱食放入保溫庫（保温庫に入れます）。換班交接確實，嚴禁重複點單，用罄前即時補齊！",
+        "ja": "【<ruby>夕食<rt>ゆうしょく</rt></ruby><ruby>共通<rt>きょうつう</rt></ruby>】インカムを<ruby>着用<rt>ちゃくよう</rt></ruby>し、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>担当<rt>たんとう</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>は<ruby>本人<rt>ほんにん</rt></ruby>が<ruby>注文<rt>ちゅうもん</rt></ruby>。<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>と<ruby>温蔵庫<rt>おんぞうこ</rt></ruby>に<ruby>予備<rt>よび</rt></ruby>があるか<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>刺身<rt>さしみ</rt></ruby>は<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>へ、<ruby>鍋物<rt>なべもの</rt></ruby>・<ruby>温<rt>あたた</rt></ruby>かい<ruby>料理<rt>りょうり</rt></ruby>は<ruby>保温庫<rt>ほおんこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>",
+              "zh": "冷藏庫、冰箱"
+            },
+            {
+              "ja": "<ruby>保温庫<rt>ほおんこ</rt></ruby>",
+              "zh": "保溫庫"
+            },
+            {
+              "ja": "<ruby>刺身<rt>さしみ</rt></ruby>",
+              "zh": "生魚片"
+            }
+          ],
+          "points": [
+            {
+              "title": "【刺身は冷蔵庫、鍋物は保温庫】",
+              "desc": "生熟冷熱分流存放，維持食材最高鮮度與衛生。"
+            }
+          ],
+          "tips": "出菜前先看一眼冰箱是否有備料。"
+        }
+      },
+      {
+        "id": "ds_reception_1700",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜受付・17:00 席位核對與交單】用餐用紙依時間早到晚列印 A3 尺寸 2 張帶至餐廳，核對組數與桌數。核對赤牛・馬刺し單並交給赤牛擔當。17:30 前完成一般桌位準備。",
+        "ja": "【17:00 <ruby>夜<rt>よる</rt></ruby><ruby>受付<rt>うけつけ</rt></ruby>】A3<ruby>用紙<rt>ようし</rt></ruby>2<ruby>枚<rt>まい</rt></ruby><ruby>印刷<rt>いんさつ</rt></ruby>。<ruby>席数<rt>せきすう</rt></ruby>を<ruby>突<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>わせ、<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>しの<ruby>注文<rt>ちゅうもん</rt></ruby>を<ruby>担当者<rt>たんとうしゃ</rt></ruby>へ<ruby>渡<rt>わた</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>突<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>わせる",
+              "zh": "核對、對照"
+            },
+            {
+              "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>",
+              "zh": "熊本赤牛"
+            },
+            {
+              "ja": "<ruby>馬刺<rt>ばさ</rt></ruby>し",
+              "zh": "生馬肉片"
+            }
+          ],
+          "points": [
+            {
+              "title": "【17:30までに準備】",
+              "desc": "一般桌位於17:30前完成，赤牛馬刺桌則由赤牛擔當負責準備。"
+            }
+          ],
+          "tips": "check-in 時常有組別臨時增減，務必與電腦系統精確核實。"
+        }
+      },
+      {
+        "id": "ds_reception_1730",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜受付・17:30 截止與次日朝食準備】赤牛馬刺受理截止後，列印更新表 2 張確認追加。列印次日朝食「依房號排序之名單 1 張」，並至櫃檯公布欄將別館含餐名單帶回餐廳，填寫次日朝食台帳人數。",
+        "ja": "【17:30 <ruby>更新<rt>こうしん</rt></ruby>と<ruby>朝食<rt>ちょうしょく</rt></ruby><ruby>準備<rt>じゅんび</rt></ruby>】<ruby>更新<rt>こうしん</rt></ruby><ruby>表<rt>ひょう</rt></ruby>を<ruby>印刷<rt>いんさつ</rt></ruby>。<ruby>翌朝<rt>よくあさ</rt></ruby>の<ruby>部屋番号順<rt>へやばんごうじゅん</rt></ruby><ruby>用紙<rt>ようし</rt></ruby>と<ruby>別館<rt>べっかん</rt></ruby><ruby>用紙<rt>ようし</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>し、<ruby>台帳<rt>だいちょう</rt></ruby>に<ruby>記入<rt>きにゅう</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>部屋番号順<rt>へやばんごうじゅん</rt></ruby>",
+              "zh": "按房號順序"
+            },
+            {
+              "ja": "<ruby>別館<rt>べっかん</rt></ruby>",
+              "zh": "別館"
+            },
+            {
+              "ja": "<ruby>台帳<rt>だいちょう</rt></ruby>",
+              "zh": "登記簿、台帳"
+            }
+          ],
+          "points": [
+            {
+              "title": "【別館のお客様】",
+              "desc": "別館含餐客人的名單在櫃檯看板上，需一併計入明日朝食人數。"
+            }
+          ],
+          "tips": "若無赤牛馬刺更新，列印1張即可。"
+        }
+      },
+      {
+        "id": "ds_reception_dish_wash",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜受付・全員抵達後進洗碗區】客人全員入店接待結束後，夜受付人員進洗碗區（洗い場）協助「擦盤子（皿拭き）」，與夜いろり人員互相協調分擔皿拭き與皿運び。",
+        "ja": "【お<ruby>客様<rt>きゃくさま</rt></ruby><ruby>到着<rt>とうちゃく</rt></ruby><ruby>後<rt>ご</rt></ruby>】<ruby>受付<rt>うけつけ</rt></ruby><ruby>終了<rt>しゅうりょう</rt></ruby><ruby>後<rt>ご</rt></ruby>、<ruby>洗<rt>あら</rt></ruby>い<ruby>場<rt>ば</rt></ruby>の<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>きに<ruby>入<rt>はい</rt></ruby>ります。いろり<ruby>担当<rt>たんとう</rt></ruby>と<ruby>分担<rt>ぶんたん</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>洗<rt>あら</rt></ruby>い<ruby>場<rt>ば</rt></ruby>",
+              "zh": "洗碗區、洗滌場"
+            },
+            {
+              "ja": "<ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き",
+              "zh": "擦乾洗好的盤子"
+            }
+          ],
+          "points": [
+            {
+              "title": "【受付の後半任務】",
+              "desc": "外場無新客後立即進內場支援洗碗盤，提升洗滌周轉效率。"
+            }
+          ],
+          "tips": "進入洗碗區時先與いろり同事打聲招呼分工。"
+        }
+      },
+      {
+        "id": "ds_irori_plating",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜いろり・少量擺盤防冷卻】料理每日不同，以對講機向廚房點單。切勿一次擺太多，採少量多次出菜，避免熱菜冷卻變硬影響口感。",
+        "ja": "【<ruby>夜<rt>よる</rt></ruby>いろり】<ruby>一度<rt>いちど</rt></ruby>にたくさん<ruby>並<rt>なら</rt></ruby>べず、<ruby>少量<rt>しょうりょう</rt></ruby>ずつ<ruby>並<rt>なら</rt></ruby>べます（<ruby>料理<rt>りょうり</rt></ruby>が<ruby>冷<rt>さ</rt></ruby>めるのを<ruby>防<rt>ふせ</rt></ruby>ぐため）。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>少量<rt>しょうりょう</rt></ruby>ずつ",
+              "zh": "少量地、每次少許"
+            },
+            {
+              "ja": "<ruby>冷<rt>さ</rt></ruby>める",
+              "zh": "變冷、冷掉"
+            }
+          ],
+          "points": [
+            {
+              "title": "【出汁過ぎ防止】",
+              "desc": "燒烤爐台食物冷掉會失去香氣，隨人流微量補菜是核心技巧。"
+            }
+          ],
+          "tips": "隨時觀察現場剩餘盤數，算準下一批客人動向。"
+        }
+      },
+      {
+        "id": "ds_irori_routine",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜いろり・洗碗區穿梭循環】客人全員到齊後，分擔洗碗區擦盤子與搬盤子。擦完搬至定位後立即返回いろり檢查。『看菜 ➔ 擦盤 ➔ 搬盤 ➔ 巡菜』不斷循環，途中絕不可讓いろり斷菜！",
+        "ja": "【いろりのルーティン】『いろり<ruby>確認<rt>かくにん</rt></ruby> ➔ <ruby>皿<rt>さら</rt></ruby><ruby>拭<rt>ふ</rt></ruby>き ➔ <ruby>皿<rt>さら</rt></ruby><ruby>運<rt>はこ</rt></ruby>び ➔ いろりへ<ruby>戻<rt>もど</rt></ruby>って<ruby>再確認<rt>さいかくにん</rt></ruby>』の<ruby>流<rt>なが</rt></ruby>れを<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>切<rt>き</rt></ruby>らさない",
+              "zh": "不讓菜餚斷供"
+            },
+            {
+              "ja": "<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>す",
+              "zh": "反覆進行、循環作業"
+            }
+          ],
+          "points": [
+            {
+              "title": "【こまめに戻る】",
+              "desc": "擦盤子途中也要每隔幾分鐘就探頭確認いろり爐台，絕不能讓爐台空了！"
+            }
+          ],
+          "tips": "盤子堆滿一疊就推走定位，順道走回いろり看菜況。"
+        }
+      },
+      {
+        "id": "ds_sushi_runner_work",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜寿司ランナー・19:30 前取餐補充】確認壽司餐檯剩量向廚房追加；無論份量多少，一律使用「台車與布巾」前往廚房領取壽司並迅速補充。",
+        "ja": "【19:30までの<ruby>夜<rt>よる</rt></ruby><ruby>寿司<rt>すし</rt></ruby>ランナー】<ruby>必<rt>かなら</rt></ruby>ず<ruby>台車<rt>だいしゃ</rt></ruby>と<ruby>布<rt>ぬの</rt></ruby>を<ruby>使用<rt>しよう</rt></ruby>して<ruby>厨房<rt>ちゅうぼう</rt></ruby>から<ruby>寿司<rt>すし</rt></ruby>を<ruby>運<rt>はこ</rt></ruby>びます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>寿司<rt>すし</rt></ruby>コーナー",
+              "zh": "壽司吧台餐檯"
+            },
+            {
+              "ja": "<ruby>補充<rt>ほじゅう</rt></ruby>",
+              "zh": "補充"
+            }
+          ],
+          "points": [
+            {
+              "title": "【台車と布の鉄則】",
+              "desc": "即使只拿一盤壽司也嚴禁手捧，必須推車蓋布防塵防直視。"
+            }
+          ],
+          "tips": "推車過轉角注意放慢，防止握壽司位移變形。"
+        }
+      },
+      {
+        "id": "ds_sushi_runner_no_waste",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜寿司ランナー・19:00 前備品出清（防報廢鐵則）】後方庫房備用的壽司，在 19:00 前必須全部出到外場餐檯！留在庫房會直接報廢，切勿過度點單。19:00 入場客人少於 30 人時，改少量個數點單。",
+        "ja": "【19:00までの<ruby>鉄則<rt>てっそく</rt></ruby>】<ruby>裏<rt>うら</rt></ruby>の<ruby>予備<rt>よび</rt></ruby><ruby>寿司<rt>すし</rt></ruby>は19:00までにすべて<ruby>表<rt>おもて</rt></ruby>へ<ruby>出<rt>だ</rt></ruby>します（<ruby>廃棄<rt>はいき</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>）。19:00<ruby>入場<rt>にゅうじょう</rt></ruby>30<ruby>名<rt>めい</rt></ruby><ruby>以下<rt>いか</rt></ruby>は<ruby>個数<rt>こすう</rt></ruby>で<ruby>注文<rt>ちゅうもん</rt></ruby>。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>裏<rt>うら</rt></ruby>",
+              "zh": "內場、後方庫房"
+            },
+            {
+              "ja": "<ruby>表<rt>おもて</rt></ruby>",
+              "zh": "外場、前台餐檯"
+            },
+            {
+              "ja": "<ruby>廃棄<rt>はいき</rt></ruby>",
+              "zh": "報廢、丟棄"
+            }
+          ],
+          "points": [
+            {
+              "title": "【生ものの廃棄防止】",
+              "desc": "壽司是生鮮食材不可隔夜，19:00後嚴禁在後台留存任何備品！"
+            }
+          ],
+          "tips": "19:00前就把庫房剩餘壽司盤全數推到檯面上供客人取用。"
+        }
+      },
+      {
+        "id": "ds_sushi_runner_handover",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜寿司ランナー・19:30 角色大交接】19:30 一到，將壽司點單交接給夜ドリンク擔當（告知現存種類數量與待做清單）。交接後，壽司ランナー脫離壽司崗位，轉去支援擦桌收盤（テーブル拭き）！",
+        "ja": "【19:30の<ruby>引継<rt>ひきつ</rt></ruby>ぎ】<ruby>寿司<rt>すし</rt></ruby>の<ruby>注文<rt>ちゅうもん</rt></ruby><ruby>業務<rt>ぎょうむ</rt></ruby>をドリンク<ruby>担当<rt>たんとう</rt></ruby>へ<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>ぎ、<ruby>自身<rt>じしん</rt></ruby>はテーブル<ruby>拭<rt>ふ</rt></ruby>き・バッシングへ<ruby>移行<rt>いこう</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>ぐ",
+              "zh": "交接"
+            },
+            {
+              "ja": "<ruby>移行<rt>いこう</rt></ruby>",
+              "zh": "轉移、轉換崗位"
+            }
+          ],
+          "points": [
+            {
+              "title": "【19:30重大換班】",
+              "desc": "原壽司跑菜者不再負責壽司，改去擦桌收盤支援外場。"
+            }
+          ],
+          "tips": "交接時務必核對廚房是否還有正在切的壽司。"
+        }
+      },
+      {
+        "id": "ds_drink_beer_machine",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜ドリンク・自動生啤酒機操作】放上杯子，按一次黃色按鈕，機器自動注入啤酒與綿密泡沫。",
+        "ja": "自動ビールサーバー：グラスをセットし、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、自動でビールと<ruby>泡<rt>あわ</rt></ruby>が<ruby>注<rt>そそ</rt></ruby>がれます（自動で<ruby>注<rt>そそ</rt></ruby>がれます）。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "グラス",
+              "zh": "玻璃杯"
+            },
+            {
+              "ja": "セットする",
+              "zh": "放置、安裝"
+            },
+            {
+              "ja": "<ruby>黄色<rt>きいろ</rt></ruby>い",
+              "zh": "黃色的"
+            },
+            {
+              "ja": "<ruby>泡<rt>あわ</rt></ruby>",
+              "zh": "泡沫"
+            },
+            {
+              "ja": "<ruby>注<rt>そそ</rt></ruby>がれる",
+              "zh": "被注入（注ぐ的被動態）"
+            }
+          ],
+          "points": [
+            {
+              "title": "【動詞辞書形＋と (恆常必然結果)】",
+              "desc": "ボタンを押すと、自動で注がれる（一按按鈕就會自動注入）。"
+            }
+          ],
+          "tips": "指導客人時只要說「黄色いボタンを１回押すだけです」。"
+        }
+      },
+      {
+        "id": "ds_drink_dispenser",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜ドリンク・水與碳酸氣泡水】冰開水與碳酸氣泡水皆由飲料機台按鈕取用（店內一律稱「炭酸」）。",
+        "ja": "お<ruby>水<rt>みず</rt></ruby>と<ruby>炭酸<rt>たんさん</rt></ruby>はドリンクサーバーのボタンでご<ruby>利用<rt>りよう</rt></ruby>いただけます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>",
+              "zh": "碳酸水、氣泡水"
+            },
+            {
+              "ja": "ドリンクサーバー",
+              "zh": "飲料機台"
+            }
+          ],
+          "points": [
+            {
+              "title": "【ご利用いただけます】",
+              "desc": "利用できます的最高級敬語表現。"
+            }
+          ],
+          "tips": "客人詢問氣泡水時引導至此機台。"
+        }
+      },
+      {
+        "id": "ds_drink_sushi_order",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜ドリンク・19:30 接手壽司點單】19:30 起接手壽司點單業務，持續確認壽司殘量並向廚房點單直到 20:00 Last Order。注意：飲料擔當只負責點單，不去廚房端壽司（由夜ランナー去端）！",
+        "ja": "【19:30<ruby>以降<rt>いこう</rt></ruby>】ドリンク<ruby>担当<rt>たんとう</rt></ruby>が<ruby>寿司<rt>すし</rt></ruby>の<ruby>注文<rt>ちゅうもん</rt></ruby>（20:00ラストオーダーまで）、ランナーが<ruby>寿司<rt>すし</rt></ruby>の<ruby>運搬<rt>うんぱん</rt></ruby>を<ruby>担当<rt>たんとう</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "ラストオーダー",
+              "zh": "最後點餐 (Last Order)"
+            },
+            {
+              "ja": "<ruby>運搬<rt>うんぱん</rt></ruby>",
+              "zh": "搬運、端菜"
+            }
+          ],
+          "points": [
+            {
+              "title": "【分工不混淆】",
+              "desc": "飲料擔當只負責通報點單，絕不能跑去廚房拿壽司！"
+            }
+          ],
+          "tips": "20:00 一到立刻向廚房通報壽司點單截止。"
+        }
+      },
+      {
+        "id": "ds_drink_kizami",
+        "type": "dialog",
+        "speaker": "夜ドリンク(我)",
+        "zh": "【夜ドリンク・壽司少量刻み注文話術】庫房無備品且客人變少時，切換為零碎細切點單。切換的第一回必須通報：『厨房の方、今から刻んで注文します。マグロ15個、追加お願いします』；第 2 回起不再講「刻んで」，直接報品名個數。",
+        "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、<ruby>今<rt>いま</rt></ruby>から<ruby>刻<rt>きざ</rt></ruby>んで<ruby>注文<rt>ちゅうもん</rt></ruby>します。マグロ15<ruby>個<rt>こ</rt></ruby>、<ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>刻<rt>きざ</rt></ruby>んで<ruby>注文<rt>ちゅうもん</rt></ruby>",
+              "zh": "分批微量/細切零星點單"
+            },
+            {
+              "ja": "マグロ",
+              "zh": "鮪魚生魚片壽司"
+            }
+          ],
+          "points": [
+            {
+              "title": "【最初の1回だけ】",
+              "desc": "只有第一次切換零星點單時要說『今から刻んで注文します』。"
+            },
+            {
+              "title": "【2回目以降】",
+              "desc": "後續直接說：『厨房の方、マグロ10個、追加お願いします』。"
+            }
+          ],
+          "tips": "廚房聽到這句話就知道進入收尾少量出菜模式。"
+        }
+      },
+      {
+        "id": "ds_runner_madai_1830",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜ランナー・18:30 鯛魚生魚片第一次替換】18:30 自廚房取得新鮮的鯛魚生魚片，將 18:00 起擺在外場的生魚片收下撤回廚房，換上新切魚片。",
+        "ja": "【18:30 <ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby><ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>え】18:30の<ruby>新<rt>あたら</rt></ruby>しい<ruby>刺身<rt>さしみ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきて、18:00からの<ruby>皿<rt>さら</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げて<ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>えます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>",
+              "zh": "鯛魚生魚片"
+            },
+            {
+              "ja": "<ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>え",
+              "zh": "替換、換新"
+            }
+          ],
+          "points": [
+            {
+              "title": "【定時替換保持鮮度】",
+              "desc": "鯛魚生魚片在常溫檯面不能擺放過久，18:30精準更換。"
+            }
+          ],
+          "tips": "撤下來的舊生魚片盤送回廚房回收。"
+        }
+      },
+      {
+        "id": "ds_runner_madai_1900",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜ランナー・19:00 鯛魚生魚片第二次替換】19:00 自廚房取得新鮮鯛魚生魚片，將 18:30 擺放的生魚片收下撤回廚房，換上新切魚片。",
+        "ja": "【19:00 <ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby><ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>え】19:00の<ruby>新<rt>あたら</rt></ruby>しい<ruby>刺身<rt>さしみ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきて、18:30からの<ruby>皿<rt>さら</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げて<ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>えます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>下<rt>さ</rt></ruby>げる",
+              "zh": "撤下、撤走"
+            },
+            {
+              "ja": "<ruby>新<rt>あたら</rt></ruby>しい",
+              "zh": "新鮮的、嶄新的"
+            }
+          ],
+          "points": [
+            {
+              "title": "【第2次替換】",
+              "desc": "19:00進行第二次鮮度更替。"
+            }
+          ],
+          "tips": "端新魚片去外場前，確認外場檯面乾淨整潔。"
+        }
+      },
+      {
+        "id": "ds_runner_sushi_carry",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夜ランナー・19:30 接手壽司運送】19:30 以後，廚房做好的壽司由夜ランナー負責推車前往廚房取餐並運送至外場壽司餐檯。",
+        "ja": "【19:30<ruby>以降<rt>いこう</rt></ruby>の<ruby>寿司<rt>すし</rt></ruby><ruby>運搬<rt>うんぱん</rt></ruby>】<ruby>出来上<rt>できあ</rt></ruby>がった<ruby>寿司<rt>すし</rt></ruby>は<ruby>夜<rt>よる</rt></ruby>ランナーが<ruby>厨房<rt>ちゅうぼう</rt></ruby>へ<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>き、<ruby>寿司<rt>すし</rt></ruby>コーナーへ<ruby>運<rt>はこ</rt></ruby>びます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>出来上<rt>できあ</rt></ruby>がった",
+              "zh": "剛做好的"
+            },
+            {
+              "ja": "<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>く",
+              "zh": "前往領取"
+            }
+          ],
+          "points": [
+            {
+              "title": "【運搬任務轉移】",
+              "desc": "19:30後點單歸飲料擔當，領取端送全歸夜ランナー。"
+            }
+          ],
+          "tips": "對講機聽到廚房說『壽司做好了』，夜ランナー推車前往。"
+        }
+      },
+      {
+        "id": "ds_cb_assist_madai",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【夕食・CB 補助與鯛魚生魚片備品】外場鯛魚生魚片剩餘少於半盤時，先檢查冷藏庫備品補充；若無備品即時向 CB 點單者通報；各餐檯盤子不足即刻補齊。",
+        "ja": "【CB<ruby>補助<rt>ほじょ</rt></ruby>・<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>】<ruby>皿<rt>さら</rt></ruby>の<ruby>半分<rt>はんぶん</rt></ruby><ruby>程度<rt>ていど</rt></ruby>になったら<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>の<ruby>予備<rt>よび</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>し<ruby>並<rt>なら</rt></ruby>べます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>半分<rt>はんぶん</rt></ruby><ruby>程度<rt>ていど</rt></ruby>",
+              "zh": "剩約一半程度"
+            },
+            {
+              "ja": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>",
+              "zh": "冷藏庫、冰箱"
+            }
+          ],
+          "points": [
+            {
+              "title": "【予備があれば並べる】",
+              "desc": "冰箱有現成備品就直接補上餐檯，不浪費廚房人力。"
+            }
+          ],
+          "tips": "冰箱無備品時，立刻向CB點單者喊話追加。"
+        }
+      }
+    ],
+    "vocabs": [
+      {
+        "id": "v_dn_1",
+        "ja": "<ruby>鯛<rt>たい</rt></ruby>の<ruby>刺身<rt>さしみ</rt></ruby>",
+        "zh": "鯛魚生魚片",
+        "cat": "餐點",
+        "imageUrl": "",
+        "note": "18:30與19:00兩段換新"
+      },
+      {
+        "id": "v_dn_2",
+        "ja": "<ruby>刻<rt>きざ</rt></ruby>んで<ruby>注文<rt>ちゅうもん</rt></ruby>",
+        "zh": "細切零星叫菜",
+        "cat": "對話",
+        "imageUrl": "",
+        "note": "19:30後壽司收尾點單"
+      },
+      {
+        "id": "v_dn_3",
+        "ja": "<ruby>洗<rt>あら</rt></ruby>い<ruby>場<rt>ば</rt></ruby>",
+        "zh": "洗碗區 (洗滌場)",
+        "cat": "工具",
+        "imageUrl": "",
+        "note": "到齊後受付いろり支援"
+      },
+      {
+        "id": "v_dn_4",
+        "ja": "<ruby>台帳<rt>だいちょう</rt></ruby>",
+        "zh": "台帳（人數登記簿）",
+        "cat": "工具",
+        "imageUrl": "",
+        "note": "17:30記入次日朝食人數"
+      }
+    ]
+  },
+  {
+    "id": "tab_order_sop",
+    "name": "對講機叫菜 (CB注文・共通)",
+    "icon": "📻",
+    "items": [
+      {
+        "id": "oc_rule_clear",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【叫菜通用鐵則】對講機聲音清晰、語速平穩；叫菜前務必先巡視冷藏庫/溫藏庫備品；換班交接清楚；嚴禁重複點單。",
+        "ja": "【CB<ruby>注文<rt>ちゅうもん</rt></ruby>の<ruby>鉄則<rt>てっそく</rt></ruby>】<ruby>料理名<rt>りょうりめい</rt></ruby>・<ruby>量<rt>りょう</rt></ruby>・<ruby>個数<rt>こすう</rt></ruby>を、ゆっくり、はっきり<ruby>伝<rt>つた</rt></ruby>えてください。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "ゆっくり",
+              "zh": "沉穩地、慢慢地"
+            },
+            {
+              "ja": "はっきり",
+              "zh": "清楚地、明確地"
+            }
+          ],
+          "points": [
+            {
+              "title": "【インカム通報の基本】",
+              "desc": "廚房環境吵雜，急躁說話容易被抽油煙機聲音蓋過。"
+            }
+          ],
+          "tips": "按下對講機按鈕後停頓0.5秒再開始說話，第一個字才不會被切斷。"
+        }
+      },
+      {
+        "id": "oc_phrase_normal",
+        "type": "dialog",
+        "speaker": "CB點單(我)",
+        "zh": "【話術 1・通常量追加】向廚房叫正常份量的菜品。",
+        "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、〇〇（<ruby>料理名<rt>りょうりめい</rt></ruby>）の<ruby>追加<rt>ついか</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>",
+              "zh": "廚房的同仁（敬稱）"
+            },
+            {
+              "ja": "<ruby>追加<rt>ついか</rt></ruby>",
+              "zh": "追加、加菜"
+            }
+          ],
+          "points": [
+            {
+              "title": "【標準叫菜句】",
+              "desc": "廚房の方、チキン南蛮の追加をお願いします。"
+            }
+          ],
+          "tips": "最萬用標準的廚房叫菜句。"
+        }
+      },
+      {
+        "id": "oc_phrase_half",
+        "type": "dialog",
+        "speaker": "CB點單(我)",
+        "zh": "【話術 2・少份量/半量追加】客人變少時，避免出太多料理冷掉浪費。",
+        "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、〇〇を<ruby>半分<rt>はんぶん</rt></ruby>で（<ruby>少<rt>すく</rt></ruby>なめで）<ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>半分<rt>はんぶん</rt></ruby>で",
+              "zh": "以一半的份量"
+            },
+            {
+              "ja": "<ruby>少<rt>すく</rt></ruby>なめで",
+              "zh": "以少一點的份量"
+            }
+          ],
+          "points": [
+            {
+              "title": "【半分・少なめ】",
+              "desc": "客流量減緩時的主動控管口吻。"
+            }
+          ],
+          "tips": "能有效防止打烊前的剩食浪費。"
+        }
+      },
+      {
+        "id": "oc_phrase_count",
+        "type": "dialog",
+        "speaker": "CB點單(我)",
+        "zh": "【話術 3・精確個數追加】小缽或需指定個數的料理。",
+        "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、〇〇を〇<ruby>個<rt>こ</rt></ruby><ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』（<ruby>例<rt>れい</rt></ruby>：<ruby>小鉢<rt>こばち</rt></ruby>を10<ruby>個<rt>こ</rt></ruby>）",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>小鉢<rt>こばち</rt></ruby>",
+              "zh": "小缽、小碟菜"
+            },
+            {
+              "ja": "〇<ruby>個<rt>こ</rt></ruby>",
+              "zh": "〇個"
+            }
+          ],
+          "points": [
+            {
+              "title": "【個数指定】",
+              "desc": "小鉢を10個追加お願いします。"
+            }
+          ],
+          "tips": "個數要唸得響亮清楚。"
+        }
+      },
+      {
+        "id": "oc_phrase_kizami",
+        "type": "dialog",
+        "speaker": "CB點單/夜ドリンク(我)",
+        "zh": "【話術 4・壽司細切刻み注文】首次切換說『今から刻んで注文します』，之後只報品名＋個數。",
+        "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、<ruby>今<rt>いま</rt></ruby>から<ruby>刻<rt>きざ</rt></ruby>んで<ruby>注文<rt>ちゅうもん</rt></ruby>します。マグロ15<ruby>個<rt>こ</rt></ruby>、<ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>今<rt>いま</rt></ruby>から",
+              "zh": "現在開始、從現在起"
+            },
+            {
+              "ja": "<ruby>刻<rt>きざ</rt></ruby>んで",
+              "zh": "零星細切地"
+            }
+          ],
+          "points": [
+            {
+              "title": "【模式切換信號】",
+              "desc": "廚房師傅聽到這句便停止預做，只依點單即時出盤。"
+            }
+          ],
+          "tips": "第2次起直接報：『厨房の方、マグロ10個追加お願いします』。"
+        }
+      },
+      {
+        "id": "ord_kitchen_call",
+        "type": "dialog",
+        "speaker": "廚房(通報)",
+        "zh": "【廚房出餐通知】「請來取〇〇」（廚房叫傳菜人員取餐）。",
+        "ja": "『〇〇、<ruby>取<rt>と</rt></ruby>りに<ruby>来<rt>き</rt></ruby>てください』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>取<rt>と</rt></ruby>りに<ruby>来<rt>く</rt></ruby>る",
+              "zh": "前來領取"
+            }
+          ],
+          "points": [
+            {
+              "title": "【〜てください】",
+              "desc": "廚房通知取餐的最典型說法。"
+            }
+          ],
+          "tips": "聽見後立即回答『了解です！すぐ伺います』。"
+        }
+      },
+      {
+        "id": "ord_runner_ack",
+        "type": "dialog",
+        "speaker": "傳菜人員(我)",
+        "zh": "【傳菜人員應答】收到！馬上過去拿。",
+        "ja": "『<ruby>了解<rt>りょうかい</rt></ruby>です！すぐ<ruby>取<rt>と</rt></ruby>りに<ruby>伺<rt>うかが</rt></ruby>います』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>了解<rt>りょうかい</rt></ruby>です",
+              "zh": "收到、明白"
+            },
+            {
+              "ja": "<ruby>伺<rt>うかが</rt></ruby>う",
+              "zh": "前往、拜訪（行く的謙讓語）"
+            }
+          ],
+          "points": [
+            {
+              "title": "【了解です / すぐ伺います】",
+              "desc": "日本服務業必備謙讓語。"
+            }
+          ],
+          "tips": "回答響亮有力，讓廚房安心。"
+        }
+      },
+      {
+        "id": "ord_out_of_dish",
+        "type": "dialog",
+        "speaker": "外場/傳菜(我)",
+        "zh": "【缺菜回報】〇〇已經沒有了（餐檯見底時向廚房通報）。",
+        "ja": "『〇〇がなくなりました』",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "なくなる",
+              "zh": "沒有了、用完了"
+            }
+          ],
+          "points": [
+            {
+              "title": "【がなくなりました】",
+              "desc": "即時回報用罄狀態。"
+            }
+          ],
+          "tips": "最好在完全見底前就提早回報。"
+        }
+      },
+      {
+        "id": "ord_1",
+        "type": "dialog",
+        "speaker": "點單/傳菜(我)",
+        "zh": "給負責點單的同仁：麻煩請準備〇〇。（向廚房/點單人員叫菜）",
+        "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ、〇〇をお<ruby>願<rt>ねが</rt></ruby>いします。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "ご<ruby>注文<rt>ちゅうもん</rt></ruby>",
+              "zh": "點單、點菜（敬語）"
+            },
+            {
+              "ja": "の<ruby>方<rt>かた</rt></ruby>へ",
+              "zh": "給負責〜的同仁"
+            },
+            {
+              "ja": "お願いします",
+              "zh": "拜託了、請準備"
+            }
+          ],
+          "points": [
+            {
+              "title": "【接頭語 ご＋漢語 (美化語/敬語)】",
+              "desc": "ご注文（顧客點單）。"
+            },
+            {
+              "title": "【名詞＋をお願いします】",
+              "desc": "〇〇をお願いします（麻煩請準備〇〇）。"
+            }
+          ],
+          "tips": "廚房備菜忙碌時，以這句話開頭最專業且易聽清。"
+        }
+      },
+      {
+        "id": "ord_2",
+        "type": "dialog",
+        "speaker": "端菜人員(我)",
+        "zh": "讓您久等了（端菜出去給等待中的客人）。",
+        "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "お待ちいただく",
+              "zh": "承蒙等候（待つ的尊敬語）"
+            }
+          ],
+          "points": [
+            {
+              "title": "【お＋動詞連用形＋いただく】",
+              "desc": "等待客人端菜時專用，比「お待たせしました」更加優雅客氣。"
+            }
+          ],
+          "tips": "送上料理給客人時微鞠躬並說這句話。"
+        }
+      },
+      {
+        "id": "ord_3",
+        "type": "dialog",
+        "speaker": "撤菜人員(我)",
+        "zh": "我把〇〇撤下去（送回廚房補充）。",
+        "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>下<rt>さ</rt></ruby>げる",
+              "zh": "撤下、撤走（料理或盤子）"
+            }
+          ],
+          "points": [
+            {
+              "title": "【受詞助詞 を＋下げる】",
+              "desc": "〇〇を下げる（將〇〇撤回廚房）。"
+            }
+          ],
+          "tips": "從自助餐檯撤走空盤時向旁邊同仁告知。"
+        }
+      },
+      {
+        "id": "ord_pass_through",
+        "type": "dialog",
+        "speaker": "傳菜人員(我)",
+        "zh": "推車借過應對：不好意思，請借過一下。",
+        "ja": "お<ruby>通<rt>とお</rt></ruby>りします / <ruby>失礼<rt>しつれい</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "お<ruby>通<rt>とお</rt></ruby>りします",
+              "zh": "借過一下、我要經過"
+            }
+          ],
+          "points": [
+            {
+              "title": "【推車過道必備】",
+              "desc": "推車經過客人身後時禮貌提醒。"
+            }
+          ],
+          "tips": "聲音溫和清楚，避免嚇到客人。"
+        }
+      }
+    ],
+    "vocabs": [
+      {
+        "id": "vo_1",
+        "ja": "<ruby>ご注文<rt>ごちゅうもん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>へ",
+        "zh": "給負責點單的同仁",
+        "cat": "對話",
+        "imageUrl": "",
+        "note": "叫菜開頭用語"
+      },
+      {
+        "id": "vo_2",
+        "ja": "お<ruby>待<rt>ま</rt></ruby>ちいただきました",
+        "zh": "讓您久等了",
+        "cat": "對話",
+        "imageUrl": "",
+        "note": "端菜給等候客人"
+      },
+      {
+        "id": "vo_3",
+        "ja": "〇〇を<ruby>下<rt>さ</rt></ruby>げます",
+        "zh": "我把〇〇撤下去補菜",
+        "cat": "對話",
+        "imageUrl": "",
+        "note": "撤盤補菜通報"
+      }
+    ]
+  },
+  {
+    "id": "tab_akaushi_basashi",
+    "name": "赤牛・馬刺し (夕食限定)",
+    "icon": "🥩",
+    "items": [
+      {
+        "id": "ab_1700_receive",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【17:00 受理點單與核對】自夜受付擔當處領取人數表與赤牛・馬刺し點單內容，逐一核對房號、人數、赤牛與馬刺し份數。",
+        "ja": "【17:00】<ruby>夜<rt>よる</rt></ruby><ruby>受付<rt>うけつけ</rt></ruby>から<ruby>人数表<rt>にんずうひょう</rt></ruby>と<ruby>注文内容<rt>ちゅうもんないよう</rt></ruby>を<ruby>受<rt>う</rt></ruby>け<ruby>取<rt>と</rt></ruby>り、<ruby>部屋番号<rt>へやばんごう</rt></ruby>・<ruby>人数<rt>にんずう</rt></ruby>・<ruby>赤牛<rt>あかうし</rt></ruby>と<ruby>馬刺<rt>ばさ</rt></ruby>しの<ruby>注文数<rt>ちゅうもんすう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>人数表<rt>にんずうひょう</rt></ruby>",
+              "zh": "人數表"
+            },
+            {
+              "ja": "<ruby>注文数<rt>ちゅうもんすう</rt></ruby>",
+              "zh": "點單份數"
+            }
+          ],
+          "points": [
+            {
+              "title": "【正確確認】",
+              "desc": "赤牛與馬刺し是高單價特選單點料理，份數務必核實。"
+            }
+          ],
+          "tips": "對照房號與人數，不可漏算。"
+        }
+      },
+      {
+        "id": "ab_1700_table",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【17:00 餐桌準備與 Reserve 牌】為點購赤牛馬刺的客人準備專屬餐桌，桌上放置『Reserve』與房號牌（注意：赤牛馬刺桌由赤牛擔當準備，非受付準備！）。依第 2 張單據內容備齊赤牛與馬刺し。",
+        "ja": "【<ruby>専用<rt>せんよう</rt></ruby>テーブル<ruby>準備<rt>じゅんび</rt></ruby>】<ruby>対象<rt>たいしょう</rt></ruby>テーブルに『Reserve』と<ruby>部屋番号<rt>へやばんごう</rt></ruby>を<ruby>置<rt>お</rt></ruby>き、2<ruby>枚目<rt>まいめ</rt></ruby>の<ruby>用紙<rt>ようし</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わせて<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>しを<ruby>準備<rt>じゅんび</rt></ruby>します。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "Reserve",
+              "zh": "預約席牌"
+            },
+            {
+              "ja": "<ruby>対象<rt>たいしょう</rt></ruby>",
+              "zh": "對象、對應的"
+            }
+          ],
+          "points": [
+            {
+              "title": "【担当変更に注意】",
+              "desc": "赤牛馬刺專用桌由赤牛擔當自己擺設，不可誤以為是櫃檯準備！"
+            }
+          ],
+          "tips": "擺好Reserve牌與房號牌後，檢查座位乾淨度。"
+        }
+      },
+      {
+        "id": "ab_1700_ice_cotton",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【同時進行・霜淇淋與棉花糖機】準備赤牛馬刺之同時，同步完成霜淇淋機（ソフトクリーム）與棉花糖機（綿菓子）之運作準備。",
+        "ja": "【<ruby>同時<rt>どうじ</rt></ruby><ruby>準備<rt>じゅんび</rt></ruby>】<ruby>赤牛<rt>あかうし</rt></ruby>・<ruby>馬刺<rt>ばさ</rt></ruby>しを<ruby>準備<rt>じゅんび</rt></ruby>しながら、ソフトクリームと<ruby>綿菓子<rt>わたがし</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>も<ruby>行<rt>おこな</rt></ruby>います。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "ソフトクリーム",
+              "zh": "霜淇淋"
+            },
+            {
+              "ja": "<ruby>綿菓子<rt>わたがし</rt></ruby>",
+              "zh": "棉花糖機"
+            }
+          ],
+          "points": [
+            {
+              "title": "【並行業務】",
+              "desc": "備肉的空檔同步完成甜點機台清潔與開機填充。"
+            }
+          ],
+          "tips": "確認棉花糖竹籤與霜淇淋餅乾甜筒備足。"
+        }
+      },
+      {
+        "id": "ab_1730_update",
+        "type": "sop",
+        "speaker": "",
+        "zh": "【17:30 截止確認與支援】17:30 赤牛馬刺受理截止後，向夜受付領取更新表。若有追加則補足料理與餐桌；若無追加則準備結束，主動協助其他同仁準備。",
+        "ja": "【17:30 <ruby>更新<rt>こうしん</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>】<ruby>追加<rt>ついか</rt></ruby>がなければ<ruby>準備<rt>じゅんび</rt></ruby><ruby>終了<rt>しゅうりょう</rt></ruby>。まだ<ruby>終<rt>お</rt></ruby>わっていない<ruby>他<rt>ほか</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>います。",
+        "grammar": {
+          "vocabs": [
+            {
+              "ja": "<ruby>手伝<rt>てつだ</rt></ruby>う",
+              "zh": "幫忙、協助"
+            },
+            {
+              "ja": "<ruby>更新<rt>こうしん</rt></ruby><ruby>表<rt>ひょう</rt></ruby>",
+              "zh": "更新後的名單表"
+            }
+          ],
+          "points": [
+            {
+              "title": "【相互サポート】",
+              "desc": "自己的準備提早完成時，積極協助其他區域擺桌。"
+            }
+          ],
+          "tips": "詢問外場或廚房同仁：『何か手伝えることはありますか？』。"
+        }
+      }
+    ],
+    "vocabs": [
+      {
+        "id": "v_ab_1",
+        "ja": "<ruby>赤牛<rt>あかうし</rt></ruby>",
+        "zh": "熊本赤牛",
+        "cat": "食材",
+        "imageUrl": "./photos/akaushi.jpg",
+        "note": "高級牛排單點"
+      },
+      {
+        "id": "v_ab_2",
+        "ja": "<ruby>馬刺<rt>ばさ</rt></ruby>し",
+        "zh": "生馬肉刺身",
+        "cat": "食材",
+        "imageUrl": "./photos/basashi.jpg",
+        "note": "熊本鄉土特產"
+      },
+      {
+        "id": "v_ab_3",
+        "ja": "ソフトクリーム",
+        "zh": "霜淇淋機",
+        "cat": "餐點",
+        "imageUrl": "",
+        "note": "17:00同步備妥"
+      },
+      {
+        "id": "v_ab_4",
+        "ja": "<ruby>綿菓子<rt>わたがし</rt></ruby>",
+        "zh": "棉花糖機",
+        "cat": "餐點",
+        "imageUrl": "",
+        "note": "17:00同步備妥"
+      }
+    ]
+  },
+{
       "id": "tab_bashing_sop",
       "name": "收桌撤盤與感謝應對 (バッシング)",
       "icon": "🧹",
@@ -3241,213 +4457,9 @@ function createRealRunnerData() {
         { "id": "vb_chakaman", "ja": "チャッカマン", "zh": "長柄打火機", "cat": "工具", "imageUrl": "", "note": "上司交代：長嘴點火槍回收" }
       ]
     },
-    {
-      "id": "tab_drink_sop",
-      "name": "酒水服務與機台 (ドリンク)",
-      "icon": "🥤",
-      "items": [
-        {
-          "id": "dk_1",
-          "type": "sop",
-          "speaker": "",
-          "zh": "1. 自動生啤酒機：放上杯子，按一次黃色按鈕，機器自動注入啤酒與綿密泡沫。",
-          "ja": "自動ビールサーバー：グラスをセットし、<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、自動でビールと<ruby>泡<rt>あわ</rt></ruby>が<ruby>注<rt>そそ</rt></ruby>がれます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "グラス", "zh": "玻璃杯" },
-              { "ja": "セットする", "zh": "放置、安裝" },
-              { "ja": "<ruby>黄色<rt>きいろ</rt></ruby>い", "zh": "黃色的" },
-              { "ja": "<ruby>泡<rt>あわ</rt></ruby>", "zh": "泡沫" },
-              { "ja": "<ruby>注<rt>そそ</rt></ruby>がれる", "zh": "被注入（注ぐ的被動態）" }
-            ],
-            "points": [
-              { "title": "【動詞辞書形＋と (恆常必然結果)】", "desc": "ボタンを押すと、自動で注がれる（一按按鈕就會自動注入）。" }
-            ],
-            "tips": "指導客人時只要說「黄色いボタンを１回押すだけです」。"
-          }
-        },
-        {
-          "id": "dk_2",
-          "type": "sop",
-          "speaker": "",
-          "zh": "2. 飲料機：冰開水與碳酸氣泡水皆由飲料機台按鈕取用（店內一律稱「炭酸」）。",
-          "ja": "お<ruby>水<rt>みず</rt></ruby>と<ruby>炭酸<rt>たんさん</rt></ruby>はドリンクサーバーのボタンでご<ruby>利用<rt>りよう</rt></ruby>いただけます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸水、氣泡水（店內一律稱炭酸水）" },
-              { "ja": "ご利用いただく", "zh": "利用、使用（利用する的尊敬語）" }
-            ],
-            "points": [
-              { "title": "【ご＋名詞＋いただく (尊他)】", "desc": "ご利用いただけます（您可以利用）。" }
-            ],
-            "tips": "客人詢問氣泡水或碳酸水時，回答「炭酸（たんさん）はこちらです」。"
-          }
-        },
-        {
-          "id": "dk_3",
-          "type": "sop",
-          "speaker": "",
-          "zh": "3. 無酒精飲品：MONIN 糖漿與 ALL-FREE 均為 0.00% 無酒精，可安心飲用。",
-          "ja": "モナンシロップとオールフリーはアルコール０％（ノンアルコール）でございます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "モナンシロップ", "zh": "MONIN 風味糖漿" },
-              { "ja": "オールフリー", "zh": "SUNTORY ALL-FREE 無酒精啤酒" },
-              { "ja": "でございます", "zh": "是（です的極致敬體）" }
-            ],
-            "points": [
-              { "title": "【でございます (鄭重語)】", "desc": "比「です」更加莊重大方。" }
-            ],
-            "tips": "駕車或不喝酒的客人可主動推薦。"
-          }
-        },
-        {
-          "id": "dk_4",
-          "type": "sop",
-          "speaker": "",
-          "zh": "4. 分酒機：提供紅酒、白酒與阿蘇名酒「靈山」純米酒。",
-          "ja": "ワインサーバーでは、<ruby>赤<rt>あか</rt></ruby>・<ruby>白<rt>しろ</rt></ruby>ワインと<ruby>阿蘇<rt>あそ</rt></ruby>の<ruby>地酒<rt>じざけ</rt></ruby>「れいざん<ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>」をご<ruby>用意<rt>ようい</rt></ruby>しています。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>地酒<rt>じざけ</rt></ruby>", "zh": "當地名酒、在地日本酒" },
-              { "ja": "<ruby>純米酒<rt>じゅんまいしゅ</rt></ruby>", "zh": "純米酒（高品質清酒）" },
-              { "ja": "ご<ruby>用意<rt>ようい</rt></ruby>", "zh": "準備、備妥" }
-            ],
-            "points": [
-              { "title": "【ご＋名詞＋しています (謙讓敬體)】", "desc": "ご用意しています（我們為您準備了…）。" }
-            ],
-            "tips": "分酒機下方備有專用酒杯與酒嘴。"
-          }
-        },
-        {
-          "id": "dk_d1_guest",
-          "type": "dialog",
-          "speaker": "顧客 (詢問糖漿)",
-          "zh": "請問這是什麼東西？",
-          "ja": "これ、<ruby>何<rt>なん</rt></ruby>ですか？",
-          "grammar": {
-            "vocabs": [{ "ja": "<ruby>何<rt>なに</rt></ruby>", "zh": "什麼" }],
-            "points": [{ "title": "【疑問句 〜ですか】", "desc": "これ、何ですか？（這個是什麼呢？）。" }],
-            "tips": "客人指著彩色糖漿瓶時的常見提問。"
-          }
-        },
-        {
-          "id": "dk_d1_me",
-          "type": "dialog",
-          "speaker": "傳菜(我)",
-          "zh": "這是無酒精的風味糖漿。",
-          "ja": "こちらはアルコールの<ruby>入<rt>はい</rt></ruby>っていない<ruby>シロップ<rt>siroppu</rt></ruby>でございます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>入<rt>はい</rt></ruby>っていない", "zh": "沒有含、沒有加入" }
-            ],
-            "points": [
-              { "title": "【動詞ない形＋名詞 (修飾名詞)】", "desc": "入っていないシロップ（沒含酒精的糖漿）。" }
-            ],
-            "tips": "可補充說明可加入碳酸水（炭酸水で割ってどうぞ）。"
-          }
-        },
-        {
-          "id": "dk_d2_guest",
-          "type": "dialog",
-          "speaker": "顧客 (詢問啤酒)",
-          "zh": "這款啤酒有含酒精嗎？",
-          "ja": "このビールはアルコール<ruby>入<rt>はい</rt></ruby>ってますか？",
-          "grammar": {
-            "vocabs": [{ "ja": "入ってますか", "zh": "有放/有含嗎？" }],
-            "points": [{ "title": "【動詞て形＋ますか】", "desc": "入っていますか的口語簡稱。" }],
-            "tips": "開車的客人常問這句。"
-          }
-        },
-        {
-          "id": "dk_d2_me",
-          "type": "dialog",
-          "speaker": "傳菜(我)",
-          "zh": "這是無酒精啤酒（0.00%），請安心飲用。",
-          "ja": "こちらはノンアルコールビール（０．００％）でございます。<ruby>安心<rt>あんしん</rt></ruby>してご<ruby>利用<rt>りよう</rt></ruby>ください。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "ノンアルコール", "zh": "無酒精（non-alcohol）" },
-              { "ja": "<ruby>安心<rt>あんしん</rt></ruby>して", "zh": "放心地、安心地" }
-            ],
-            "points": [
-              { "title": "【ご＋動詞連用形＋ください (敬體請求)】", "desc": "ご利用ください（請使用/請享用）。" }
-            ],
-            "tips": "指著瓶身上的 0.00% 標誌向客人說明。"
-          }
-        },
-        {
-          "id": "dk_d3_guest",
-          "type": "dialog",
-          "speaker": "顧客 (詢問碳酸/水)",
-          "zh": "不好意思，請問碳酸／水在哪裡？",
-          "ja": "すみません、<ruby>炭酸<rt>たんさん</rt></ruby>／お<ruby>水<rt>みず</rt></ruby>はどこですか？",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸、氣泡水" },
-              { "ja": "どこですか", "zh": "在哪裡呢？" }
-            ],
-            "points": [{ "title": "【場所疑問詞 どこ】", "desc": "〜はどこですか（〜在哪裡？）。" }],
-            "tips": "帶客人走到飲料機前。"
-          }
-        },
-        {
-          "id": "dk_d3_me",
-          "type": "dialog",
-          "speaker": "傳菜(我)",
-          "zh": "碳酸與開水都在這臺機器裡面。",
-          "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>とお<ruby>水<rt>みず</rt></ruby>はこちらのサーバーの<ruby>中<rt>なか</rt></ruby>にございます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "ございます", "zh": "有、在（あります的鄭重語）" }
-            ],
-            "points": [
-              { "title": "【存在動詞 ございます】", "desc": "〜の中にございます（在〜的裡面）。" }
-            ],
-            "tips": "用手掌引導指向機器按鈕。"
-          }
-        },
-        {
-          "id": "dk_d4_guest",
-          "type": "dialog",
-          "speaker": "顧客 (詢問生啤機)",
-          "zh": "這個生啤酒機要怎麼使用呢？",
-          "ja": "このビールサーバーはどうやって<ruby>使<rt>つか</rt></ruby>いますか？",
-          "grammar": {
-            "vocabs": [
-              { "ja": "どうやって", "zh": "如何、怎麼做" },
-              { "ja": "<ruby>使<rt>つか</rt></ruby>います", "zh": "使用" }
-            ],
-            "points": [{ "title": "【方法疑問詞 どうやって】", "desc": "詢問操作流程。" }],
-            "tips": "第一次使用自動生啤機的客人常會好奇提問。"
-          }
-        },
-        {
-          "id": "dk_d4_me",
-          "type": "dialog",
-          "speaker": "傳菜(我)",
-          "zh": "請放上玻璃杯，按一次這個黃色按鈕，機器會自動注酒完成。",
-          "ja": "グラスをセットして、こちらの<ruby>黄色<rt>きいろ</rt></ruby>いボタンを１<ruby>回<rt>かい</rt></ruby><ruby>押<rt>お</rt></ruby>すと、<ruby>自動<rt>じどう</rt></ruby>で<ruby>注<rt>そそ</rt></ruby>がれます。",
-          "grammar": {
-            "vocabs": [
-              { "ja": "<ruby>1回<rt>いっかい</rt></ruby>", "zh": "一次" },
-              { "ja": "<ruby>自動<rt>じどう</rt></ruby>で", "zh": "自動地" }
-            ],
-            "points": [
-              { "title": "【動詞て形連用 (順序動作)】", "desc": "セットして、〜押すと（放上後，一按…）。" }
-            ],
-            "tips": "可以親自示範一次給客人看。"
-          }
-        }
-      ],
-      "vocabs": [
-        { "id": "v_dk_1", "ja": "<ruby>黄色<rt>きいろ</rt></ruby>いボタン", "zh": "黃色按鈕", "cat": "工具", "imageUrl": "", "note": "生啤酒機操作按鈕" },
-        { "id": "v_dk_2", "ja": "ノンアルコール<ruby>シロップ<rt>siroppu</rt></ruby>", "zh": "無酒精糖漿", "cat": "酒水", "imageUrl": "./photos/IMG_0884.jpg", "note": "MONIN 各式果汁糖漿" },
-        { "id": "v_dk_3", "ja": "ノンアルコールビール", "zh": "無酒精啤酒 (All-Free)", "cat": "酒水", "imageUrl": "./photos/IMG_0890.jpg", "note": "SUNTORY ALL-FREE 瓶裝" },
-        { "id": "v_dk_4", "ja": "<ruby>炭酸<rt>たんさん</rt></ruby>", "zh": "碳酸 / 氣泡水", "cat": "酒水", "imageUrl": "", "note": "飲料機內（店內稱炭酸）" }
-      ]
-    },
-    {
+    {,
+{,
+{
       "id": "tab_colleague_tasks",
       "name": "同事平級高頻指示 (指示)",
       "icon": "🤝",
@@ -3672,7 +4684,115 @@ function createRealRunnerData() {
         { "id": "v_ct_9", "ja": "<ruby>定位置<rt>ていいち</rt></ruby>", "zh": "固定收納處 (原位)", "cat": "工具", "imageUrl": "", "note": "同事交辦：碗盤歸位收好" },
         { "id": "v_ct_10", "ja": "<ruby>氷<rt>こおり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>", "zh": "補充冰塊", "cat": "工具", "imageUrl": "", "note": "同事交辦：製冰機拿冰塊" }
       ]
+    },
+{,
+{
+  "id": "tab_safety_notice",
+  "name": "現場安全與店內通達",
+  "icon": "🔒",
+  "items": [
+    {
+      "id": "sn_phishing",
+      "type": "sop",
+      "speaker": "",
+      "zh": "【支配人通達・防範冒名釣魚郵件】近期有偽冒代表前田洋或新日本飯店/瀨之本觀光飯店之詐騙郵件，標題常帶「緊急」「重要」「帳號停止」引誘點擊。全體同仁切勿隨意點擊不明連結或輸入個人資料，收到可疑郵件立即回報並刪除。",
+      "ja": "【<ruby>支配人<rt>しはいにん</rt></ruby><ruby>通達<rt>つうたつ</rt></ruby>】<ruby>代表<rt>だいひょう</rt></ruby><ruby>前田<rt>まえだ</rt></ruby><ruby>洋<rt>ひろし</rt></ruby>などを<ruby>装<rt>よそお</rt></ruby>った<ruby>詐欺<rt>さぎ</rt></ruby>メールに<ruby>注意<rt>ちゅうい</rt></ruby>！「<ruby>緊急<rt>きんきゅう</rt></ruby>」「<ruby>重要<rt>じゅうよう</rt></ruby>」などのリンクを<ruby>安易<rt>あんい</rt></ruby>にクリックせず、<ruby>個人情報<rt>こじんじょうほう</rt></ruby>を<ruby>入力<rt>にゅうりょく</rt></ruby>しないでください。",
+      "grammar": {
+        "vocabs": [
+          {
+            "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>",
+            "zh": "飯店總經理、經理"
+          },
+          {
+            "ja": "<ruby>詐欺<rt>さぎ</rt></ruby>メール",
+            "zh": "釣魚/詐騙郵件"
+          },
+          {
+            "ja": "<ruby>個人情報<rt>こじんじょうほう</rt></ruby>",
+            "zh": "個人資訊、個資"
+          }
+        ],
+        "points": [
+          {
+            "title": "【安易にクリックしない】",
+            "desc": "不輕易點擊郵件內的任何超連結。"
+          }
+        ],
+        "tips": "若在公司電腦或手機收到，立刻告知支配人或主管處理。"
+      }
+    },
+    {
+      "id": "sn_banju_safety",
+      "type": "sop",
+      "speaker": "",
+      "zh": "【高溫防傾倒・紅色方盒赤い番重】運送味噌汁與替換整盆牛丼時，務必放入紅色方盒（赤い番重）後置於台車搬運，嚴防地面高低差造成打翻燙傷。",
+      "ja": "【<ruby>安全<rt>あんぜん</rt></ruby><ruby>運搬<rt>うんぱん</rt></ruby>】<ruby>味噌汁<rt>みそしる</rt></ruby>や<ruby>牛丼<rt>ぎゅうどん</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ず<ruby>赤<rt>あか</rt></ruby>い<ruby>番重<rt>ばんじゅう</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>台車<rt>だいしゃ</rt></ruby>で<ruby>運<rt>はこ</rt></ruby>び、<ruby>段差<rt>だんさ</rt></ruby>によるこぼれや<ruby>火傷<rt>やけど</rt></ruby>を<ruby>防<rt>ふせ</rt></ruby>ぎます。",
+      "grammar": {
+        "vocabs": [
+          {
+            "ja": "<ruby>赤<rt>あか</rt></ruby>い<ruby>番重<rt>ばんじゅう</rt></ruby>",
+            "zh": "紅色方盒 (防傾倒淺箱)"
+          },
+          {
+            "ja": "<ruby>火傷<rt>やけど</rt></ruby>",
+            "zh": "燙傷"
+          }
+        ],
+        "points": [
+          {
+            "title": "【熱湯のこぼれ防止】",
+            "desc": "推車經過走廊伸縮縫或門檻時顛簸極易燙傷，紅色方盒是強制保護裝備。"
+          }
+        ],
+        "tips": "進出廚房自動門減速慢行。"
+      }
+    },
+    {
+      "id": "sn_cart_cloth",
+      "type": "sop",
+      "speaker": "",
+      "zh": "【搬運安全・推車與布巾鐵則】任何料理端送一律使用台車並以布巾遮蓋，即使只有 1 盤也推台車，維護用餐禮儀並防二次折返。",
+      "ja": "【<ruby>台車<rt>だいしゃ</rt></ruby>と<ruby>布<rt>ぬの</rt></ruby>】お<ruby>客様<rt>きゃくさま</rt></ruby>とすれ<ruby>違<rt>ちが</rt></ruby>う<ruby>際<rt>さい</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>が<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>見<rt>み</rt></ruby>えないよう<ruby>布<rt>ぬの</rt></ruby>をかけ、<ruby>必<rt>かなら</rt></ruby>ず<ruby>台車<rt>だいしゃ</rt></ruby>で<ruby>運<rt>はこ</rt></ruby>びます。",
+      "grammar": {
+        "vocabs": [
+          {
+            "ja": "すれ<ruby>違<rt>ちが</rt></ruby>う",
+            "zh": "擦肩而過、相逢錯車"
+          },
+          {
+            "ja": "<ruby>目隠<rt>めかく</rt></ruby>し",
+            "zh": "遮掩、遮蔽視線"
+          }
+        ],
+        "points": [
+          {
+            "title": "【衛生と品位】",
+            "desc": "布巾遮蔽熱菜香氣與外觀，避免客人直視運菜車。"
+          }
+        ],
+        "tips": "隨身常備乾淨布巾於台車下層。"
+      }
     }
+  ],
+  "vocabs": [
+    {
+      "id": "v_sn_1",
+      "ja": "<ruby>番重<rt>ばんじゅう</rt></ruby>",
+      "zh": "紅色搬運箱",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "熱湯防傾倒必備"
+    },
+    {
+      "id": "v_sn_2",
+      "ja": "<ruby>詐欺<rt>さぎ</rt></ruby>メール",
+      "zh": "釣魚/詐騙郵件",
+      "cat": "工具",
+      "imageUrl": "",
+      "note": "支配人通達"
+    }
+  ]
+}
   ],
   "vocabSop": [
     // ── 🥦 原型食材與調味料類 (採購・菜市場買菜・原型食物與烹飪調料 100% 配對館內菜色) ──
@@ -3953,31 +5073,30 @@ function createRealRunnerData() {
     { "id": "vt_14", "ja": "マドラー", "zh": "攪拌棒", "cat": "工具", "imageUrl": "./photos/IMG_0884.jpg", "note": "調酒攪拌用" },
     { "id": "vt_15", "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>", "zh": "吸塵器", "cat": "工具", "imageUrl": "", "note": "上司交代：打掃地板用" },
 
-    // ── 👤 名字類 (依據旅館現場實際出勤班表完整建置) ──
-    { "id": "vn_kajiki", "ja": "<ruby>加治木<rt>かじき</rt></ruby>", "kana": "かじき", "zh": "加治木（支配人）", "cat": "名字", "imageUrl": "", "note": "旅館支配人（經理/營運主管）", "isForeign": false },
-    { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "note": "正社員 / 前台主管", "isForeign": false },
-    { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "note": "正社員 / 前台同仁", "isForeign": false },
-    { "id": "vn_biyo", "ja": "ビヨー", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "note": "外籍同仁 / 外場", "isForeign": true },
-    { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "note": "正社員 / 外場同仁", "isForeign": false },
-    { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "note": "正社員 / 旅館同仁", "isForeign": false },
-    { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "note": "正社員 / 旅館同仁", "isForeign": false },
-    { "id": "vn_entiha", "ja": "エンティハ", "kana": "えんてぃは", "zh": "恩蒂哈 (En Ti Ha)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン)", "isForeign": true },
-    { "id": "vn_phongnhung", "ja": "フォン ニュン", "kana": "ふぉん にゅん", "zh": "馮蓉 (Phong Nhung)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン)", "isForeign": true },
-    { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
-    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>英筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊英筑（小楊・本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "派遣社員（打工度假/傳菜人員 Runner）", "isForeign": true },
-    { "id": "vn_ichiishi", "ja": "<ruby>市石<rt>いちいし</rt></ruby> みらの", "kana": "いちいし みらの", "zh": "市石 米拉諾", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
-    { "id": "vn_nobetsu", "ja": "<ruby>野別<rt>のべつ</rt></ruby><ruby>充旗<rt>みつき</rt></ruby>", "kana": "のべつ みつき", "zh": "野別 充旗", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
-    { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
-    { "id": "vn_morimoto", "ja": "<ruby>森本<rt>もりもと</rt></ruby><ruby>健太郎<rt>けんたろう</rt></ruby>", "kana": "もりもと けんたろう", "zh": "森本 健太郎", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 夥伴同仁", "isForeign": false },
-    { "id": "vn_bim", "ja": "ビム", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "note": "正社員（尼泊爾夥伴）", "isForeign": true },
-    { "id": "vn_han", "ja": "ハン", "kana": "はん", "zh": "韓 / 涵 (Han)", "cat": "名字", "imageUrl": "", "note": "正社員（外籍同仁）", "isForeign": true },
-    { "id": "vn_riku_iku", "ja": "リク イク", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": true },
-    { "id": "vn_tanaka_shoko", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>祥子<rt>しょうこ</rt></ruby>", "kana": "たなか しょうこ", "zh": "田中 祥子", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
-    { "id": "vn_yamabe", "ja": "<ruby>山邊<rt>やまべ</rt></ruby><ruby>陸<rt>りく</rt></ruby>", "kana": "やまべ りく", "zh": "山邊 陸", "cat": "名字", "imageUrl": "", "note": "派遣社員 / 外場夥伴", "isForeign": false },
-    { "id": "vn_pratima", "ja": "プラティマ", "kana": "ぷらてぃま", "zh": "普拉蒂瑪 (Pratima)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン / 尼泊爾實習生)", "isForeign": true },
-    { "id": "vn_ibaoyen", "ja": "イバオイェン", "kana": "いばおいぇん", "zh": "伊寶燕 (Ibaoyen)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン / 越南實習生)", "isForeign": true },
-    { "id": "vn_hongyen", "ja": "ホンイェン", "kana": "ほんいぇん", "zh": "紅燕 (Hong Yen)", "cat": "名字", "imageUrl": "", "note": "實習生 (インターン / 越南實習生)", "isForeign": true },
-    { "id": "vn_kawabata", "ja": "<ruby>川畑<rt>かわばた</rt></ruby>", "kana": "かわばた", "zh": "川畑", "cat": "名字", "imageUrl": "", "note": "正社員 / 外場負責人", "isForeign": false },
+    // ── 👤 名字類 (依據最新班表重新統整：名字與職位分開，已離職者全數移除) ──
+    { "id": "vn_kajiki", "ja": "<ruby>加治木<rt>かじき</rt></ruby>", "kana": "かじき", "zh": "加治木", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_biyo", "ja": "ビヨー", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "note": "", "isForeign": true },
+    { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑（本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "./photos/avatar_yang.png", "note": "", "isForeign": true },
+    { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_ryu_shiei", "ja": "リュウ シエイ", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "note": "", "isForeign": true },
+    { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_morimoto", "ja": "<ruby>森本<rt>もりもと</rt></ruby><ruby>健太郎<rt>けんたろう</rt></ruby>", "kana": "もりもと けんたろう", "zh": "森本 健太郎", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_tanaka_yuka", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>裕香<rt>ゆか</rt></ruby>", "kana": "たなか ゆか", "zh": "田中 裕香", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_taniguchi_rie", "ja": "<ruby>谷口<rt>たにぐち</rt></ruby> <ruby>理恵<rt>りえ</rt></ruby>", "kana": "たにぐち りえ", "zh": "谷口 理惠", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_bim", "ja": "ビム", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "note": "", "isForeign": true },
+    { "id": "vn_han", "ja": "ハン", "kana": "はん", "zh": "涵 / 韓 (Han)", "cat": "名字", "imageUrl": "", "note": "", "isForeign": true },
+    { "id": "vn_umesh", "ja": "ウメシュ", "kana": "うめしゅ", "zh": "烏梅什 (Umesh)", "cat": "名字", "imageUrl": "", "note": "", "isForeign": true },
+    { "id": "vn_riku_iku", "ja": "リク イク", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "note": "", "isForeign": true },
+    { "id": "vn_tanaka_shoko", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>祥子<rt>しょうこ</rt></ruby>", "kana": "たなか しょうこ", "zh": "田中 祥子", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_yamabe", "ja": "<ruby>山邊<rt>やまべ</rt></ruby><ruby>陸<rt>りく</rt></ruby>", "kana": "やまべ りく", "zh": "山邊 陸", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_nagai_miyuki", "ja": "<ruby>長井<rt>ながい</rt></ruby> <ruby>美幸<rt>みゆき</rt></ruby>", "kana": "ながい みゆき", "zh": "長井 美幸", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
+    { "id": "vn_kawabata", "ja": "<ruby>川畑<rt>かわばた</rt></ruby>", "kana": "かわばた", "zh": "川畑", "cat": "名字", "imageUrl": "", "note": "", "isForeign": false },
 
     // ── 💼 職稱與班表類 (依據班表雇用形態與館內職務編制) ──
     { "id": "vs_shihainin", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "kana": "しはいにん", "zh": "經理 / 總經理 (支配人)", "cat": "職稱", "imageUrl": "", "note": "旅館營運與管理最高主管 (如：加治木 支配人)" },
@@ -4551,7 +5670,7 @@ function createRealRunnerData() {
   "chatHistory": [],
   "apiKey": "AQ.Ab8RN6L3Hhx9D6UDpw6E9gs3sml2ivnvd9bZdOfkC-rXvRF_5w",
   "activeScenarioId": "sc_colleague",
-  "currentTabId": "tab_runner_all"
+  "currentTabId": "tab_breakfast_sop"
 };
 }
 
@@ -4565,7 +5684,7 @@ function loadAppData() {
     }
     const data = JSON.parse(raw);
     // 嚴格校驗：若 tabs 不完整或未包含最新食材分類/同事平級指示/撤盤情境/最新班表名單/乾淨無斜線標音/蓮藕無誤植照片，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.vocabSop.some(v => v.isForeign !== undefined) || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.vocabSop.some(v => v.id === 'vc_bs_1') || data.vocabSop.some(v => v.id === 'vi_ninjin' && v.ja.includes('/')) || data.vocabSop.some(v => v.id === 'vi_renkon' && v.imageUrl === './photos/IMG_0867.jpg')) {
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.tabs.some(t => t.id === 'tab_breakfast_sop') || !data.tabs.some(t => t.id === 'tab_dinner_sop') || !data.tabs.some(t => t.id === 'tab_akaushi_basashi') || !data.vocabSop.some(v => v.id === 'vn_yamamoto_kano') || data.vocabSop.some(v => v.id === 'vn_entiha')) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
@@ -4950,7 +6069,7 @@ function openModalItem(mode, type = 'sop', itemId = null) {
   const tabIdField = document.getElementById('item-tab-id-field');
   const editIdField = document.getElementById('item-edit-id-field');
 
-  tabIdField.value = AppData.currentTabId || 'tab_runner_all';
+  tabIdField.value = AppData.currentTabId || 'tab_breakfast_sop';
   typeField.value = type;
   handleItemTypeChange();
 
@@ -5436,19 +6555,26 @@ function renderSopContent() {
 
   // 決定本頁要在速查中額外加入的分組
   const extraGroups = [];
-  if (tabId === 'tab_runner_all' || tabId === 'tab_order_sop') {
+  if (tabId === 'tab_breakfast_sop') {
     extraGroups.push({ title: '🥦 原型食材與調味料', items: ingredientVocabs });
     extraGroups.push({ title: '🍽️ 現場餐具', items: tablewareVocabs });
     extraGroups.push({ title: '🍱 餐點', items: foodVocabs });
+  } else if (tabId === 'tab_dinner_sop') {
     extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
-    extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
+    extraGroups.push({ title: '🍱 餐點', items: foodVocabs });
+    extraGroups.push({ title: '🍽️ 現場餐具', items: tablewareVocabs });
+    extraGroups.push({ title: '🥤 酒水飲品', items: drinkVocabs });
+  } else if (tabId === 'tab_order_sop') {
+    extraGroups.push({ title: '🍱 餐點', items: foodVocabs });
+    extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
+    extraGroups.push({ title: '🥦 原型食材與調味料', items: ingredientVocabs });
+  } else if (tabId === 'tab_akaushi_basashi') {
+    extraGroups.push({ title: '🍱 赤牛・馬刺し相關餐點', items: foodVocabs.filter(v => v.zh.includes('赤牛') || v.zh.includes('馬刺') || v.ja.includes('赤牛') || v.ja.includes('馬刺')) });
+    extraGroups.push({ title: '🍽️ 現場餐具', items: tablewareVocabs });
   } else if (tabId === 'tab_bashing_sop') {
     extraGroups.push({ title: '🍽️ 現場餐具與器皿', items: tablewareVocabs });
-  } else if (tabId === 'tab_drink_sop') {
-    extraGroups.push({ title: '🥤 酒水飲品', items: drinkVocabs });
-    extraGroups.push({ title: '🍽️ 現場杯具與器具', items: tablewareVocabs });
-    extraGroups.push({ title: '🍣 壽司類', items: sushiVocabs });
-    extraGroups.push({ title: '🍮 點心類', items: dessertVocabs });
+  } else if (tabId === 'tab_safety_notice') {
+    extraGroups.push({ title: '🧰 現場工具', items: tablewareVocabs });
   }
 
   const hasVocab = vocabs.length > 0 || extraGroups.some(g => g.items.length > 0);
@@ -5672,7 +6798,9 @@ function renderVocabPage(type) {
                    title="點一下發音・連點兩下查看 Q 版立繪名牌">
                 ${hasAv ? `<img src="${v.avatarUrl}" class="name-cell-avatar-img" alt="${escapeHtml(v.zh || '')}" />` : ''}
                 <div class="cell-ja">${v.ja}</div>
+                <div class="cell-zh name-cell-zh" style="font-size:0.72rem; color:var(--muted); font-weight:600; margin-top:1px; line-height:1.3;">${escapeHtml(v.zh || '')}</div>
                 <div class="cell-actions" onclick="event.stopPropagation()">
+                  <button class="cell-btn-mini" title="編輯中文名稱" onclick="startInlineNameEdit('${v.id}', event)">✏️</button>
                   <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
                 </div>
               </div>`;
@@ -5712,7 +6840,9 @@ function renderVocabPage(type) {
              title="點一下發音・連點兩下查看 Q 版立繪名牌">
           ${hasAv ? `<img src="${v.avatarUrl}" class="name-cell-avatar-img" alt="${escapeHtml(v.zh || '')}" />` : ''}
           <div class="cell-ja">${v.ja}</div>
+          <div class="cell-zh name-cell-zh" style="font-size:0.72rem; color:var(--muted); font-weight:600; margin-top:1px; line-height:1.3;">${escapeHtml(v.zh || '')}</div>
           <div class="cell-actions" onclick="event.stopPropagation()">
+            <button class="cell-btn-mini" title="編輯中文名稱" onclick="startInlineNameEdit('${v.id}', event)">✏️</button>
             <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
           </div>
         </div>`;
@@ -5743,6 +6873,21 @@ function toggleGlobalVocabImg(vocabId, type) {
   else globalOpenImageIds.add(vocabId);
   renderVocabPage(type);
 }
+
+// ── 名字卡中文標籤行內編輯 ──
+function startInlineNameEdit(vocabId, evt) {
+  if (evt) evt.stopPropagation();
+  const item = (AppData.vocabSop || []).find(v => v.id === vocabId);
+  if (!item) return;
+  const currentZh = item.zh || '';
+  const newZh = prompt('請輸入中文名稱：', currentZh);
+  if (newZh === null) return; // cancelled
+  item.zh = newZh.trim() || currentZh;
+  saveData();
+  renderVocabPage('sop');
+  showToast('✅ 中文名稱已更新');
+}
+
 
 function openModalVocab(targetType, mode, vocabId = null) {
   const title = document.getElementById('modal-vocab-title');
@@ -10167,54 +11312,94 @@ function submitQuizAnswer(chosenIdx) {
 
 
 /* ==============================================================
-   9. 👤「你叫什麼名字？」同仁專屬 Q 版形象圖鑑模組 (v70 全面精緻升級)
-   (男女主動提問・男女制服區分・頭頂大包包頭・純淨露眼空氣瀏海・日系美顏・5大眼鏡・獨立圖鑑卡)
+   9. 👤「你叫什麼名字？」同仁專屬 Q 版形象圖鑑模組 (v79 全面精緻升級)
+   (男女主動提問・選國籍步驟・男女制服100%統一・男女各10款日系髮型・100%露眉露眼・無多餘特徵・未設定不套假頭像)
 ============================================================== */
 
 const DEFAULT_COLLEAGUE_TRAITS = {
-  'vn_yang': { gender: 'female', face: 'round', nose: 'dot', skin: 'natural', hair: 'bun_hair', color: '#1a191f', glasses: 'square_black', beard: false, beautyMark: false },
-  'vn_kajiki': { gender: 'male', face: 'square', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1a191f', glasses: 'square_wire', beard: false, beautyMark: false },
-  'vn_sudo': { gender: 'male', face: 'oval', nose: 'sharp', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'round_wire', beard: false, beautyMark: false },
-  'vn_uchima': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bob_short', color: '#422b1d', glasses: 'none', beard: false, beautyMark: true },
-  'vn_biyo': { gender: 'male', face: 'pointed', nose: 'straight', skin: 'tanned', hair: 'wavy_short', color: '#1a191f', glasses: 'none', beard: true, beautyMark: false },
-  'vn_sato': { gender: 'male', face: 'round', nose: 'wide', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_obata': { gender: 'male', face: 'oval', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#422b1d', glasses: 'square_black', beard: false, beautyMark: false },
-  'vn_koga': { gender: 'male', face: 'square', nose: 'wide', skin: 'natural', hair: 'buzz_cut', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_entiha': { gender: 'female', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_long', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_phongnhung': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'shoulder_straight', color: '#422b1d', glasses: 'round_wire', beard: false, beautyMark: false },
-  'vn_nagamori': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', beard: false, beautyMark: false },
-  'vn_ichiishi': { gender: 'female', face: 'oval', nose: 'dot', skin: 'fair', hair: 'low_ponytail', color: '#422b1d', glasses: 'none', beard: false, beautyMark: false },
-  'vn_nobetsu': { gender: 'male', face: 'pointed', nose: 'straight', skin: 'natural', hair: 'comma_part', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_morita': { gender: 'male', face: 'square', nose: 'wide', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_morimoto': { gender: 'male', face: 'oval', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_bim': { gender: 'male', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_short', color: '#1a191f', glasses: 'none', beard: true, beautyMark: false },
-  'vn_han': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'high_ponytail', color: '#1a191f', glasses: 'square_wire', beard: false, beautyMark: false },
-  'vn_riku_iku': { gender: 'male', face: 'round', nose: 'dot', skin: 'fair', hair: 'comma_part', color: '#422b1d', glasses: 'round_black', beard: false, beautyMark: false },
-  'vn_tanaka_shoko': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'bun_hair', color: '#1a191f', glasses: 'round_wire', beard: false, beautyMark: false },
-  'vn_yamabe': { gender: 'male', face: 'oval', nose: 'sharp', skin: 'natural', hair: 'short_clean', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_pratima': { gender: 'female', face: 'oval', nose: 'straight', skin: 'tanned', hair: 'wavy_long', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false },
-  'vn_ibaoyen': { gender: 'female', face: 'round', nose: 'dot', skin: 'fair', hair: 'low_ponytail', color: '#422b1d', glasses: 'none', beard: false, beautyMark: false },
-  'vn_hongyen': { gender: 'female', face: 'pointed', nose: 'dot', skin: 'fair', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', beard: false, beautyMark: true },
-  'vn_kawabata': { gender: 'male', face: 'square', nose: 'straight', skin: 'natural', hair: 'side_part', color: '#1a191f', glasses: 'none', beard: false, beautyMark: false }
+  'vn_yang': { gender: 'female', nationality: '台灣 🇹🇼', face: 'round', nose: 'dot', skin: 'natural', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'square_black' },
+  'vn_kajiki': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'square_wire' },
+  'vn_sudo': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'sharp', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'round_wire' },
+  'vn_uchima': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'bob_short', color: '#422b1d', glasses: 'none' },
+  'vn_biyo': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'pointed', nose: 'straight', skin: 'tanned', bang: 'bang_wavy', backHair: 'messy_curl', hair: 'wavy_short', color: '#1a191f', glasses: 'none' },
+  'vn_sato': { gender: 'male', nationality: '日本 🇯🇵', face: 'round', nose: 'wide', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none' },
+  'vn_obata': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#422b1d', glasses: 'square_black' },
+  'vn_koga': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_none', backHair: 'buzz_cut', hair: 'buzz_cut', color: '#1a191f', glasses: 'none' },
+  'vn_nagamori': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_side_fringe', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none' },
+  'vn_yamamoto_kano': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none' },
+  'vn_ryu_shiei': { gender: 'male', nationality: '中國 🇨🇳', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none' },
+  'vn_morita': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none' },
+  'vn_morimoto': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'none' },
+  'vn_tanaka_yuka': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none' },
+  'vn_taniguchi_rie': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_right_slant', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none' },
+  'vn_bim': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'oval', nose: 'straight', skin: 'tanned', bang: 'bang_wavy', backHair: 'messy_curl', hair: 'wavy_short', color: '#1a191f', glasses: 'none' },
+  'vn_han': { gender: 'female', nationality: '越南 🇻🇳', face: 'pointed', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'high_ponytail', hair: 'high_ponytail', color: '#1a191f', glasses: 'square_wire' },
+  'vn_umesh': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'oval', nose: 'straight', skin: 'tanned', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none' },
+  'vn_riku_iku': { gender: 'male', nationality: '中國 🇨🇳', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'short_clean', hair: 'short_clean', color: '#422b1d', glasses: 'round_black' },
+  'vn_tanaka_shoko': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'round_wire' },
+  'vn_yamabe': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'sharp', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none' },
+  'vn_nagai_miyuki': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_side_fringe', backHair: 'low_ponytail', hair: 'low_ponytail', color: '#422b1d', glasses: 'none' },
+  'vn_kawabata': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'none' }
 };
 
-const HAIR_STYLES_BY_GENDER = {
+const BANG_STYLES_BY_GENDER = {
+  male: [
+    { id: 'bang_straight', label: '✂️ 直瀏海' },
+    { id: 'bang_left_slant', label: '↙️ 左斜瀏海' },
+    { id: 'bang_right_slant', label: '↘️ 右斜瀏海' },
+    { id: 'bang_side_fringe', label: '💁‍♂️ 有鬢角' },
+    { id: 'bang_none', label: '🚫 無瀏海' },
+    { id: 'bang_medium', label: '✂️ 中等長度' },
+    { id: 'bang_short', label: '✂️ 超短俐落' },
+    { id: 'bang_wavy', label: '🌊 紋理微捲' },
+    { id: 'bang_layered', label: '📚 層次碎髮' },
+    { id: 'bang_textured', label: '🪨 蓬鬆質感' }
+  ],
+  female: [
+    { id: 'bang_straight', label: '✂️ 直瀏海' },
+    { id: 'bang_left_slant', label: '↙️ 左斜瀏海' },
+    { id: 'bang_right_slant', label: '↘️ 右斜瀏海' },
+    { id: 'bang_side_fringe', label: '💁‍♀️ 有鬢角' },
+    { id: 'bang_none', label: '🚫 無瀏海' },
+    { id: 'bang_medium', label: '✂️ 中等長度' },
+    { id: 'bang_short', label: '✂️ 眉上短瀏海' },
+    { id: 'bang_wavy', label: '🌊 浪漫微捲' },
+    { id: 'bang_layered', label: '📚 輕盈碎髮' },
+    { id: 'bang_long', label: '🧚‍♀️ 氣質長瀏海' }
+  ]
+};
+
+const BACK_HAIR_STYLES_BY_GENDER = {
   male: [
     { id: 'short_clean', label: '✂️ 俐落短髮' },
     { id: 'side_part', label: '👔 經典側分' },
-    { id: 'comma_part', label: '🌟 中分逗號' },
-    { id: 'buzz_cut', label: '⚡ 陽光寸頭' },
-    { id: 'afro_curly', label: '🌀 蓬鬆捲髮' },
-    { id: 'wavy_short', label: '🌊 微捲短髮' }
+    { id: 'high_ponytail', label: '🐴 潮流高馬尾' },
+    { id: 'low_ponytail', label: '🏞️ 日系低馬尾' },
+    { id: 'wavy_long', label: '🌊 藝術微捲長髮' },
+    { id: 'shoulder_straight', label: '🧥 及肩清爽直髮' },
+    { id: 'messy_curl', label: '🤪 隨性蓬鬆捲' },
+    { id: 'bob_cut', label: '👩‍🦱 短波波' },
+    { id: 'undercut_fade', label: '⚡ 漸層短側背' },
+    { id: 'buzz_cut', label: '⚙️ 陽光寸頭' }
   ],
   female: [
     { id: 'bun_hair', label: '🥟 外場包包頭' },
+    { id: 'low_bun', label: '🥟 氣質低包包' },
     { id: 'high_ponytail', label: '🐎 活力高馬尾' },
-    { id: 'low_ponytail', label: '🎀 乾淨低馬尾' },
-    { id: 'bob_short', label: '💇 日系鮑伯' },
-    { id: 'wavy_long', label: '🌸 波浪長髮' },
-    { id: 'shoulder_straight', label: '✨ 及肩直髮' }
+    { id: 'low_ponytail', label: '🎀 溫柔低馬尾' },
+    { id: 'shoulder_bob', label: '💇 日系波波頭' },
+    { id: 'long_straight', label: '✨ 氣質長直髮' },
+    { id: 'wavy_long', label: '🌸 浪漫大波浪' },
+    { id: 'pixie_cut', label: '🍃 清新精靈短髮' },
+    { id: 'layered_hair', label: '📚 輕盈層次髮' },
+    { id: 'half_up_half_down', label: '👑 半扎公主頭' }
   ]
+};
+
+// 為了向下相容既有邏輯
+const HAIR_STYLES_BY_GENDER = {
+  male: BACK_HAIR_STYLES_BY_GENDER.male,
+  female: BACK_HAIR_STYLES_BY_GENDER.female
 };
 
 let currentWhoState = {
@@ -10226,14 +11411,15 @@ let currentWhoState = {
 
 let currentWhoTraits = {
   gender: 'female',
+  nationality: '日本 🇯🇵',
   face: 'round',
   nose: 'dot',
   skin: 'natural',
+  bang: 'bang_straight',
+  backHair: 'bun_hair',
   hair: 'bun_hair',
   color: '#1a191f',
-  glasses: 'none',
-  beard: false,
-  beautyMark: false
+  glasses: 'none'
 };
 
 // 1. 開啟「你叫什麼名字？」照相館彈窗
@@ -10267,12 +11453,11 @@ function populateWhoColleaguesList() {
   }
 
   listEl.innerHTML = names.map(v => {
-    const cleanName = (v.zh || v.ja || '').replace(/<[^>]+>/g, '');
     const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
     return `
       <button class="btn btn-ghost btn-sm" onclick="selectExistingColleagueForAvatar('${v.id}')" style="font-weight:700; font-size:0.85rem; padding:6px 4px; border:1px solid var(--border); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:#fff;">
         ${hasAv ? `<img src="${v.avatarUrl}" style="width:30px; height:30px; object-fit:contain;" />` : `<span style="font-size:1.1rem;">👤</span>`}
-        <span>${escapeHtml(cleanName)}</span>
+        <span style="font-family:var(--font-serif); line-height:1.6;">${v.ja || escapeHtml(v.kana || v.zh || '')}</span>
       </button>
     `;
   }).join('');
@@ -10415,11 +11600,13 @@ function promptGenderStep(nameItem) {
 
   const selectScreen = document.getElementById('who-screen-select');
   const genderScreen = document.getElementById('who-screen-gender');
+  const nationalityScreen = document.getElementById('who-screen-nationality');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
   if (selectScreen) selectScreen.style.display = 'none';
   if (genderScreen) genderScreen.style.display = 'block';
+  if (nationalityScreen) nationalityScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'none';
   if (resultScreen) resultScreen.style.display = 'none';
 
@@ -10430,55 +11617,102 @@ function promptGenderStep(nameItem) {
   if (descEl) descEl.textContent = `請問【${cleanName}】是男生還是女生呢？請點選下方選項：`;
 }
 
+// 6.8. 步驟 1.8: 選擇國籍 (日本、尼泊爾、越南、緬甸、台灣、中國 或 自訂輸入)
+function promptNationalityStep(selectedGender) {
+  currentWhoTraits.gender = selectedGender;
+
+  const genderScreen = document.getElementById('who-screen-gender');
+  const nationalityScreen = document.getElementById('who-screen-nationality');
+  if (genderScreen) genderScreen.style.display = 'none';
+  if (nationalityScreen) nationalityScreen.style.display = 'block';
+
+  const nameItem = currentWhoState.selectedNameItem;
+  const cleanName = nameItem ? (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '') : '夥伴';
+  const descEl = document.getElementById('who-nationality-desc-text');
+  if (descEl) descEl.textContent = `請問【${cleanName}】來自哪裡呢？請選擇國籍：`;
+}
+
 // 返回姓名選擇畫面
 function backToNameSelect() {
   const selectScreen = document.getElementById('who-screen-select');
   const genderScreen = document.getElementById('who-screen-gender');
+  const nationalityScreen = document.getElementById('who-screen-nationality');
   if (genderScreen) genderScreen.style.display = 'none';
+  if (nationalityScreen) nationalityScreen.style.display = 'none';
   if (selectScreen) selectScreen.style.display = 'block';
 }
 
-// 7. 使用者確認性別後，啟動生成 Q 版立繪
-function confirmWhoGender(selectedGender) {
+// 返回性別選擇畫面
+function backToGenderSelect() {
+  const genderScreen = document.getElementById('who-screen-gender');
+  const nationalityScreen = document.getElementById('who-screen-nationality');
+  if (nationalityScreen) nationalityScreen.style.display = 'none';
+  if (genderScreen) genderScreen.style.display = 'block';
+}
+
+// 自行輸入國籍提交
+function submitCustomNationality() {
+  const input = document.getElementById('input-who-custom-nationality');
+  const customNat = input ? input.value.trim() : '';
+  if (!customNat) {
+    showToast('請輸入國籍名稱喔！', 'error');
+    return;
+  }
+  confirmWhoNationality(customNat);
+}
+
+// 7. 使用者確認國籍後，啟動生成 Q 版立繪
+function confirmWhoNationality(selectedNationality) {
   const nameItem = currentWhoState.selectedNameItem;
   if (!nameItem) return;
 
-  const genderScreen = document.getElementById('who-screen-gender');
+  const selectedGender = currentWhoTraits.gender || 'female';
+  currentWhoTraits.nationality = selectedNationality || '日本 🇯🇵';
+
+  const nationalityScreen = document.getElementById('who-screen-nationality');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
-  if (genderScreen) genderScreen.style.display = 'none';
+  if (nationalityScreen) nationalityScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'block';
   if (resultScreen) resultScreen.style.display = 'none';
 
   // 取得特徵 (以選擇性別為最高依據)
   let traits = null;
   if (nameItem.traits) {
-    traits = { ...nameItem.traits, gender: selectedGender };
+    traits = { ...nameItem.traits, gender: selectedGender, nationality: selectedNationality };
   } else if (DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) {
-    traits = { ...DEFAULT_COLLEAGUE_TRAITS[nameItem.id], gender: selectedGender };
+    traits = { ...DEFAULT_COLLEAGUE_TRAITS[nameItem.id], gender: selectedGender, nationality: selectedNationality };
   } else {
     traits = {
       gender: selectedGender,
+      nationality: selectedNationality,
       face: 'round',
       nose: 'dot',
       skin: selectedGender === 'female' ? 'fair' : 'natural',
+      bang: selectedGender === 'female' ? 'bang_straight' : 'bang_left_slant',
+      backHair: selectedGender === 'female' ? 'bun_hair' : 'short_clean',
       hair: selectedGender === 'female' ? 'bun_hair' : 'short_clean',
       color: '#1a191f',
-      glasses: 'none',
-      beard: false,
-      beautyMark: false
+      glasses: 'none'
     };
   }
 
   // 確保髮型符合所選性別
   if (selectedGender === 'female') {
-    if (!HAIR_STYLES_BY_GENDER.female.some(h => h.id === traits.hair)) {
+    if (!BANG_STYLES_BY_GENDER.female.some(b => b.id === traits.bang)) {
+      traits.bang = 'bang_straight';
+    }
+    if (!BACK_HAIR_STYLES_BY_GENDER.female.some(h => h.id === traits.backHair)) {
+      traits.backHair = 'bun_hair';
       traits.hair = 'bun_hair';
     }
-    traits.beard = false;
   } else {
-    if (!HAIR_STYLES_BY_GENDER.male.some(h => h.id === traits.hair)) {
+    if (!BANG_STYLES_BY_GENDER.male.some(b => b.id === traits.bang)) {
+      traits.bang = 'bang_left_slant';
+    }
+    if (!BACK_HAIR_STYLES_BY_GENDER.male.some(h => h.id === traits.backHair)) {
+      traits.backHair = 'short_clean';
       traits.hair = 'short_clean';
     }
   }
@@ -10504,732 +11738,669 @@ function confirmWhoGender(selectedGender) {
     if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
     if (avatarImg) avatarImg.src = avatarUrl;
     if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
-    if (roleDisplay) roleDisplay.textContent = nameItem.note || '溫泉旅館夥伴';
+    if (roleDisplay) roleDisplay.textContent = `${currentWhoTraits.nationality}・${nameItem.note || '溫泉旅館夥伴'}`;
   }, 400);
 }
 
-// 8. 🎨 核心：生成【精緻動漫 Q 版立繪・男女一致外場制服・超高辨識度髮型・100% 露眉露眼】角色立繪
+// 8. 🎨 核心：生成【精緻動漫 Q 版立繪・男女100%統一外場長袖襯衫制服・男女各10款日系髮型・100% 露眉露眼】角色立繪
 function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
-  const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
-  
   const canvas = document.createElement('canvas');
   canvas.width = 512;
-  canvas.height = 512;
+  canvas.height = 640;
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, 512, 512); // 100% 純透明背景
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const traits = customTraits || currentWhoTraits;
   const gender = traits.gender || 'female';
-  const faceShape = traits.face || 'round';
-  const noseShape = traits.nose || 'dot';
   const skinType = traits.skin || 'natural';
-  const hairStyle = traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
-  const hairColor = (traits.color === '#422b1d') ? '#422b1d' : '#1a191f';
-  const hairHighlight = hairColor === '#422b1d' ? 'rgba(255, 210, 180, 0.28)' : 'rgba(210, 220, 255, 0.25)';
+  const bangStyle = traits.bang || (gender === 'female' ? 'bang_straight' : 'bang_left_slant');
+  const backHairStyle = traits.backHair || traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
+  const hairStyle = backHairStyle;
+  const hairColor = (traits.color === '#422b1d') ? '#5a3520' : '#1a191f';
+  const hairHighlight = hairColor === '#5a3520' ? 'rgba(200,150,100,0.3)' : 'rgba(180,190,220,0.28)';
   const glasses = traits.glasses || 'none';
-  const hasBeard = !!traits.beard;
-  const hasBeautyMark = !!traits.beautyMark;
 
-  // 膚色調色盤 (精緻日系動漫漸層膚色)
-  let skinTone = '#fce2d2';
-  let skinShadow = '#eebca5';
-  let blushColor = 'rgba(242, 115, 115, 0.42)';
+  // ── 膚色 ──
+  let skinFill = '#fce4d2';
+  let skinShade = '#ecbfa5';
+  let blush = 'rgba(240,110,110,0.42)';
+  if (skinType === 'fair') { skinFill = '#fff2ea'; skinShade = '#f0ccbc'; blush = 'rgba(255,120,130,0.45)'; }
+  if (skinType === 'tanned') { skinFill = '#e8bb96'; skinShade = '#c89572'; blush = 'rgba(210,90,80,0.38)'; }
 
-  if (skinType === 'fair') {
-    skinTone = '#fff1e8';
-    skinShadow = '#f2ccbb';
-    blushColor = 'rgba(255, 120, 130, 0.45)';
-  } else if (skinType === 'tanned') {
-    skinTone = '#e5b897';
-    skinShadow = '#c69573';
-    blushColor = 'rgba(215, 95, 85, 0.38)';
+  // ── Helper: 粗黑輪廓描邊 ──
+  function outline(fn, lw = 3.5, color = '#111') {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    fn(); ctx.stroke(); ctx.restore();
+  }
+  function fillOutline(fn, fillStyle, lw = 3.5, color = '#111') {
+    ctx.save();
+    ctx.fillStyle = fillStyle; fn(); ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    fn(); ctx.stroke();
+    ctx.restore();
   }
 
-  // ── [圖層 1: 後髮層 (Back Hair)] ──
+  // ═══════════════════════════════════════
+  //  Layout constants (chibi full-body)
+  //  Head center: (256, 190), head rx:110 ry:100
+  //  Body: y 280~420
+  //  Legs: y 420~540
+  //  Shoes: y 540~560
+  // ═══════════════════════════════════════
+  const HX = 256, HY = 190, HRX = 108, HRY = 98;
+  const SHIRT_COLOR = '#2a2f7a';
+  const SHIRT_DARK  = '#1d2160';
+  const PANTS_COLOR = '#191919';
+  const BELT_COLOR  = '#0d0d0d';
+  const SHOE_COLOR  = '#111';
+
+  // ───────────────────────────────────────
+  //  [1] 後髮 (Back Hair Layer — behind face)
+  // ───────────────────────────────────────
   ctx.fillStyle = hairColor;
+
   if (gender === 'female') {
-    if (hairStyle === 'bun_hair') {
-      // 🥟 外場包包頭：在頭頂正中央上方加一個立體大圓包包頭
-      ctx.beginPath();
-      ctx.ellipse(256, 52, 50, 46, 0, 0, Math.PI * 2);
-      ctx.fill();
-      // 包包頭陰影與髮絲旋律紋理
-      ctx.strokeStyle = hairColor === '#1a191f' ? '#2e2c38' : '#5c3a28';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(256, 52, 32, 0.2 * Math.PI, 1.35 * Math.PI);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(256, 52, 18, 0.7 * Math.PI, 1.85 * Math.PI);
-      ctx.stroke();
-      // 外場深紅髮圈與金珍珠
-      ctx.fillStyle = '#8e1d2c';
-      ctx.beginPath();
-      ctx.roundRect(226, 84, 60, 14, 7);
-      ctx.fill();
-      ctx.fillStyle = '#ffd700';
-      ctx.beginPath();
-      ctx.arc(256, 91, 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = hairColor;
-    } else if (hairStyle === 'high_ponytail') {
-      // 🐎 活力高馬尾 (往右上方高聳飄揚)
-      ctx.beginPath();
-      ctx.moveTo(300, 80);
-      ctx.bezierCurveTo(400, 60, 435, 170, 390, 260);
-      ctx.bezierCurveTo(410, 180, 370, 110, 305, 108);
-      ctx.fill();
-      ctx.fillStyle = '#8e1d2c';
-      ctx.beginPath();
-      ctx.roundRect(292, 85, 18, 16, 5);
-      ctx.fill();
-      ctx.fillStyle = hairColor;
-    } else if (hairStyle === 'low_ponytail') {
-      // 🎀 乾淨低馬尾
-      ctx.beginPath();
-      ctx.moveTo(270, 210);
-      ctx.bezierCurveTo(340, 230, 370, 290, 340, 350);
-      ctx.bezierCurveTo(325, 300, 295, 260, 250, 235);
-      ctx.fill();
-      ctx.fillStyle = '#8e1d2c';
-      ctx.beginPath();
-      ctx.roundRect(260, 215, 16, 12, 4);
-      ctx.fill();
-      ctx.fillStyle = hairColor;
-    } else if (hairStyle === 'wavy_long') {
-      // 🌸 浪漫波浪長髮 (雙側自然垂落於肩上)
-      ctx.beginPath();
-      ctx.roundRect(144, 115, 224, 230, [75, 75, 40, 40]);
-      ctx.fill();
-      // 左側大波浪
-      ctx.beginPath();
-      ctx.moveTo(148, 150);
-      ctx.bezierCurveTo(115, 200, 160, 260, 134, 340);
-      ctx.bezierCurveTo(166, 315, 182, 250, 176, 195);
-      ctx.fill();
-      // 右側大波浪
-      ctx.beginPath();
-      ctx.moveTo(364, 150);
-      ctx.bezierCurveTo(397, 200, 352, 260, 378, 340);
-      ctx.bezierCurveTo(346, 315, 330, 250, 336, 195);
-      ctx.fill();
-    } else if (hairStyle === 'shoulder_straight') {
-      // ✨ 及肩直髮 (順滑垂落肩際)
-      ctx.beginPath();
-      ctx.roundRect(144, 115, 224, 225, [75, 75, 30, 30]);
-      ctx.fill();
-      // 兩側垂肩髮片
-      ctx.beginPath();
-      ctx.roundRect(138, 155, 36, 155, [10, 0, 16, 16]);
-      ctx.roundRect(338, 155, 36, 155, [0, 10, 16, 16]);
-      ctx.fill();
-    } else if (hairStyle === 'bob_short') {
-      // 💇 日系鮑伯短髮底座
-      ctx.beginPath();
-      ctx.ellipse(256, 165, 118, 108, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else {
-    // 男性後髮與側髮輪廓
-    if (hairStyle === 'afro_curly') {
-      const curls = [
-        { x: 256, y: 55, r: 52 }, { x: 195, y: 65, r: 50 }, { x: 317, y: 65, r: 50 },
-        { x: 142, y: 98, r: 48 }, { x: 370, y: 98, r: 48 }, { x: 114, y: 148, r: 46 },
-        { x: 398, y: 148, r: 46 }, { x: 112, y: 200, r: 40 }, { x: 400, y: 200, r: 40 }
-      ];
-      curls.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-    } else if (hairStyle === 'wavy_short') {
-      ctx.beginPath();
-      ctx.ellipse(256, 155, 114, 102, 0, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (hairStyle === 'side_part' || hairStyle === 'comma_part' || hairStyle === 'short_clean') {
-      ctx.beginPath();
-      ctx.ellipse(256, 155, 110, 98, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  // ── [圖層 2: Q 版和諧 2.0 頭身小短腿與黑皮鞋 (男女完全一致)] ──
-  // 筆挺黑色工作長褲
-  ctx.fillStyle = '#14161f';
-  ctx.beginPath();
-  ctx.roundRect(216, 335, 32, 54, 4);
-  ctx.roundRect(264, 335, 32, 54, 4);
-  ctx.fill();
-
-  // 黑色工作皮鞋
-  ctx.fillStyle = '#0e0f14';
-  ctx.beginPath();
-  ctx.ellipse(230, 396, 19, 11, 0, 0, Math.PI * 2);
-  ctx.ellipse(282, 396, 19, 11, 0, 0, Math.PI * 2);
-  ctx.fill();
-  // 皮鞋亮面高光
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-  ctx.beginPath();
-  ctx.ellipse(228, 394, 7, 3.5, 0, 0, Math.PI * 2);
-  ctx.ellipse(280, 394, 7, 3.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── [圖層 3: 軀幹與外場標準工作服 (男女完全一致・示範圖片規格)] ──
-  // 1. 純白立領襯衫底色
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath();
-  ctx.roundRect(202, 240, 108, 98, [8, 8, 4, 4]);
-  ctx.fill();
-
-  // 2. 深曜藍黑工作圍裙馬甲主體
-  ctx.fillStyle = '#181f33';
-  ctx.beginPath();
-  ctx.roundRect(194, 256, 124, 82, [6, 6, 4, 4]);
-  ctx.fill();
-
-  // 雙肩背帶
-  ctx.beginPath();
-  ctx.roundRect(206, 242, 16, 26, 3);
-  ctx.roundRect(290, 242, 16, 26, 3);
-  ctx.fill();
-
-  // 圍裙正面口袋與精緻白邊
-  ctx.fillStyle = '#121728';
-  ctx.beginPath();
-  ctx.roundRect(224, 290, 64, 34, 4);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(224, 290, 64, 2.5);
-
-  // 3. 襯衫領口三角折領
-  ctx.fillStyle = '#f8fafc';
-  ctx.beginPath();
-  ctx.moveTo(234, 240);
-  ctx.lineTo(256, 258);
-  ctx.lineTo(278, 240);
-  ctx.closePath();
-  ctx.fill();
-
-  // 4. 外場酒紅領結 / 領帶 + 金色飾扣
-  ctx.fillStyle = '#8e1d2c';
-  ctx.beginPath();
-  ctx.moveTo(256, 250);
-  ctx.lineTo(238, 242);
-  ctx.lineTo(238, 258);
-  ctx.closePath();
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(256, 250);
-  ctx.lineTo(274, 242);
-  ctx.lineTo(274, 258);
-  ctx.closePath();
-  ctx.fill();
-  // 領結垂帶
-  ctx.beginPath();
-  ctx.moveTo(252, 252);
-  ctx.lineTo(245, 268);
-  ctx.lineTo(254, 264);
-  ctx.lineTo(256, 252);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(260, 252);
-  ctx.lineTo(267, 268);
-  ctx.lineTo(258, 264);
-  ctx.lineTo(256, 252);
-  ctx.fill();
-  // 金色中央飾結
-  ctx.fillStyle = '#ffd700';
-  ctx.beginPath();
-  ctx.arc(256, 250, 4.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── [圖層 4: 手臂與小圓手 (帶白襯衫袖口)] ──
-  // 左手臂
-  ctx.fillStyle = '#181f33';
-  ctx.beginPath();
-  ctx.roundRect(174, 252, 22, 64, 8);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(174, 308, 22, 5);
-  ctx.fillStyle = skinTone;
-  ctx.beginPath();
-  ctx.arc(185, 318, 9.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 右手臂
-  ctx.fillStyle = '#181f33';
-  ctx.beginPath();
-  ctx.roundRect(316, 252, 22, 64, 8);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(316, 308, 22, 5);
-  ctx.fillStyle = skinTone;
-  ctx.beginPath();
-  ctx.arc(327, 318, 9.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── [圖層 5: 頸部與立體動漫臉龐 (Head & Face)] ──
-  // 頸部
-  ctx.fillStyle = skinShadow;
-  ctx.fillRect(243, 226, 26, 20);
-
-  // 臉蛋繪製
-  ctx.fillStyle = skinTone;
-  if (faceShape === 'square') {
-    ctx.beginPath();
-    ctx.roundRect(154, 75, 204, 168, [75, 75, 22, 22]);
-    ctx.fill();
-  } else if (faceShape === 'oval') {
-    ctx.beginPath();
-    ctx.ellipse(256, 158, 96, 92, 0, 0, Math.PI * 2);
-    ctx.fill();
-  } else if (faceShape === 'pointed') {
-    ctx.beginPath();
-    ctx.moveTo(160, 135);
-    ctx.bezierCurveTo(154, 70, 358, 70, 352, 135);
-    ctx.bezierCurveTo(350, 210, 290, 248, 256, 250);
-    ctx.bezierCurveTo(222, 248, 162, 210, 160, 135);
-    ctx.fill();
-  } else {
-    // 經典精緻日系動漫臉 (圓潤雙頰・微收下巴)
-    ctx.beginPath();
-    ctx.ellipse(256, 158, 102, 88, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // 雙耳與立體耳廓
-  ctx.fillStyle = skinTone;
-  ctx.beginPath();
-  ctx.arc(150, 168, 16, 0, Math.PI * 2);
-  ctx.arc(362, 168, 16, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = skinShadow;
-  ctx.beginPath();
-  ctx.arc(152, 168, 8.5, 0, Math.PI * 2);
-  ctx.arc(360, 168, 8.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 粉嫩雙層動漫腮紅
-  ctx.fillStyle = blushColor;
-  ctx.beginPath();
-  ctx.ellipse(194, 188, 15, 8.5, 0, 0, Math.PI * 2);
-  ctx.ellipse(318, 188, 15, 8.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-  ctx.beginPath();
-  ctx.arc(189, 186, 2.5, 0, Math.PI * 2);
-  ctx.arc(323, 186, 2.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── [圖層 6: 眉毛與靈動大眼 (眉眼 100% 露在瀏海下方・立體漸層虹膜・雙重星芒高光)] ──
-  // 眉毛 (高置於 y: 132~138，高於眼睛且絕不被瀏海遮擋)
-  ctx.strokeStyle = hairColor;
-  ctx.lineWidth = gender === 'female' ? 2.8 : 3.8;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.arc(206, 134, 15, 1.15 * Math.PI, 1.85 * Math.PI);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(306, 134, 15, 1.15 * Math.PI, 1.85 * Math.PI);
-  ctx.stroke();
-
-  // 雙眼皮線
-  ctx.strokeStyle = 'rgba(60, 35, 25, 0.35)';
-  ctx.lineWidth = 1.6;
-  ctx.beginPath();
-  ctx.arc(206, 148, 15, 1.2 * Math.PI, 1.8 * Math.PI);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(306, 148, 15, 1.2 * Math.PI, 1.8 * Math.PI);
-  ctx.stroke();
-
-  // 大眼眼球 (y: 162)
-  // 1. 深色眼眶主體
-  ctx.fillStyle = '#1a1622';
-  ctx.beginPath();
-  ctx.ellipse(206, 162, 15, 20, 0, 0, Math.PI * 2);
-  ctx.ellipse(306, 162, 15, 20, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 2. 虹膜下緣漸層反光
-  ctx.fillStyle = '#5d4037';
-  ctx.beginPath();
-  ctx.arc(206, 168, 11, 0.1 * Math.PI, 0.9 * Math.PI);
-  ctx.arc(306, 168, 11, 0.1 * Math.PI, 0.9 * Math.PI);
-  ctx.fill();
-
-  // 3. 虹膜底部透亮弧線
-  ctx.fillStyle = '#a1887f';
-  ctx.beginPath();
-  ctx.arc(206, 172, 8, 0.2 * Math.PI, 0.8 * Math.PI);
-  ctx.arc(306, 172, 8, 0.2 * Math.PI, 0.8 * Math.PI);
-  ctx.fill();
-
-  // 4. 動漫多重靈動高光
-  ctx.fillStyle = '#ffffff';
-  // 主高光 (左上方大圓)
-  ctx.beginPath();
-  ctx.arc(201, 154, 5.5, 0, Math.PI * 2);
-  ctx.arc(301, 154, 5.5, 0, Math.PI * 2);
-  ctx.fill();
-  // 次高光 (右下方小圓)
-  ctx.beginPath();
-  ctx.arc(210, 169, 3, 0, Math.PI * 2);
-  ctx.arc(310, 169, 3, 0, Math.PI * 2);
-  ctx.fill();
-  // 底部星芒微光
-  ctx.beginPath();
-  ctx.arc(204, 174, 1.8, 0, Math.PI * 2);
-  ctx.arc(304, 174, 1.8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 女性上翹精緻雙睫毛
-  if (gender === 'female') {
-    ctx.strokeStyle = '#1a1622';
-    ctx.lineWidth = 2.4;
-    ctx.beginPath();
-    ctx.moveTo(219, 149);
-    ctx.lineTo(226, 144);
-    ctx.moveTo(221, 156);
-    ctx.lineTo(227, 153);
-    ctx.moveTo(293, 149);
-    ctx.lineTo(286, 144);
-    ctx.moveTo(291, 156);
-    ctx.lineTo(285, 153);
-    ctx.stroke();
-  }
-
-  // ── [圖層 7: 立體鼻子] ──
-  ctx.strokeStyle = '#a67253';
-  ctx.fillStyle = '#a67253';
-  if (noseShape === 'straight') {
-    ctx.lineWidth = 2.2;
-    ctx.beginPath();
-    ctx.moveTo(255, 160);
-    ctx.lineTo(255, 180);
-    ctx.lineTo(259, 180);
-    ctx.stroke();
-  } else if (noseShape === 'wide') {
-    ctx.lineWidth = 2.2;
-    ctx.beginPath();
-    ctx.arc(256, 180, 5, 0.1 * Math.PI, 0.9 * Math.PI);
-    ctx.stroke();
-  } else if (noseShape === 'sharp') {
-    ctx.lineWidth = 2.2;
-    ctx.beginPath();
-    ctx.moveTo(253, 162);
-    ctx.lineTo(258, 178);
-    ctx.lineTo(252, 180);
-    ctx.stroke();
-  } else {
-    // 經典小圓點萌鼻
-    ctx.beginPath();
-    ctx.arc(256, 179, 2.2, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // ── [圖層 8: 自然微笑嘴唇] ──
-  ctx.strokeStyle = '#6d2e24';
-  ctx.lineWidth = 2.8;
-  ctx.beginPath();
-  ctx.arc(256, 202, 11, 0.1 * Math.PI, 0.9 * Math.PI);
-  ctx.stroke();
-
-  // ── [圖層 9: 特徵 (精緻短鬚 / 嘴角痣)] ──
-  if (hasBeard) {
-    ctx.fillStyle = hairColor === '#422b1d' ? 'rgba(66, 43, 29, 0.55)' : 'rgba(30, 30, 35, 0.55)';
-    // 唇下與下巴精緻點狀鬍渣
-    const beardDots = [
-      [256, 218], [251, 222], [261, 222], [247, 226], [256, 226], [265, 226],
-      [243, 230], [250, 230], [256, 230], [262, 230], [269, 230]
-    ];
-    beardDots.forEach(([bx, by]) => {
-      ctx.beginPath();
-      ctx.arc(bx, by, 1.4, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-  if (hasBeautyMark) {
-    ctx.fillStyle = '#2b1b17';
-    ctx.beginPath();
-    ctx.arc(273, 210, 2.3, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // ── [圖層 10: 5 款精緻眼鏡] ──
-  if (glasses === 'round_black') {
-    ctx.strokeStyle = '#111114';
-    ctx.lineWidth = 4.2;
-    ctx.beginPath();
-    ctx.ellipse(206, 162, 30, 26, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.ellipse(306, 162, 30, 26, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(236, 162);
-    ctx.lineTo(276, 162);
-    ctx.stroke();
-  } else if (glasses === 'square_black') {
-    ctx.strokeStyle = '#111114';
-    ctx.lineWidth = 4.2;
-    ctx.beginPath();
-    ctx.roundRect(175, 138, 62, 46, 7);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.roundRect(275, 138, 62, 46, 7);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(237, 160);
-    ctx.lineTo(275, 160);
-    ctx.stroke();
-  } else if (glasses === 'round_wire') {
-    ctx.strokeStyle = '#a6823c';
-    ctx.lineWidth = 2.4;
-    ctx.beginPath();
-    ctx.ellipse(206, 162, 30, 26, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.ellipse(306, 162, 30, 26, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(236, 162);
-    ctx.lineTo(276, 162);
-    ctx.stroke();
-  } else if (glasses === 'square_wire') {
-    ctx.strokeStyle = '#546e7a';
-    ctx.lineWidth = 2.4;
-    ctx.beginPath();
-    ctx.roundRect(175, 138, 62, 46, 7);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.roundRect(275, 138, 62, 46, 7);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(237, 160);
-    ctx.lineTo(275, 160);
-    ctx.stroke();
-  }
-
-  // ── [圖層 11: 革命性前髮與超高辨識度造型 (下緣最高停在 y: 110~122，100% 露眉露眼！)] ──
-  ctx.fillStyle = hairColor;
-  if (gender === 'female') {
-    if (hairStyle === 'bob_short') {
-      // 💇 日系鮑伯短髮：圓潤內扣短髮，兩側自然包臉，瀏海輕盈露額
-      ctx.beginPath();
-      ctx.arc(256, 126, 112, 0.82 * Math.PI, 2.18 * Math.PI);
-      ctx.fill();
-      // 空氣八字瀏海 (下緣在 y: 112，完全露出雙眉與大眼)
-      ctx.beginPath();
-      ctx.moveTo(144, 155);
-      ctx.quadraticCurveTo(200, 95, 256, 114);
-      ctx.quadraticCurveTo(312, 95, 368, 155);
-      ctx.lineTo(365, 95);
-      ctx.lineTo(147, 95);
-      ctx.fill();
+    if (backHairStyle === 'bun_hair') {
+      // 包包頭：後頭部 + 頂上大圓髻
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY, HRX+6, HRY+6, 0, 0, Math.PI*2); }, hairColor, 3.5);
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY-95, 48, 44, 0, 0, Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'low_bun') {
+      // 氣質低包包：後頭部 + 頸部後方低髻
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY, HRX+6, HRY+6, 0, 0, Math.PI*2); }, hairColor, 3.5);
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY+88, 42, 38, 0, 0, Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'high_ponytail') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY, HRX+6, HRY+6, 0, 0, Math.PI*2); }, hairColor, 3.5);
+      // 高馬尾向上飄揚
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(285,118); ctx.bezierCurveTo(380,80,420,160,390,280);
+        ctx.bezierCurveTo(400,190,365,120,300,130); ctx.closePath();
+      }, hairColor, 3);
+    } else if (backHairStyle === 'low_ponytail') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY, HRX+6, HRY+6, 0, 0, Math.PI*2); }, hairColor, 3.5);
+      // 低馬尾垂落
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(272,268); ctx.bezierCurveTo(345,290,370,360,338,440);
+        ctx.bezierCurveTo(320,380,296,330,256,305); ctx.closePath();
+      }, hairColor, 3);
+    } else if (backHairStyle === 'wavy_long') {
+      // 大波浪：兩側垂落
+      fillOutline(() => {
+        ctx.beginPath(); ctx.roundRect(148,130, 216,230,[HRX,HRX,40,40]); 
+      }, hairColor, 3.5);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(152,170); ctx.bezierCurveTo(118,220,160,310,136,400);
+        ctx.bezierCurveTo(168,370,184,300,178,240); ctx.closePath();
+      }, hairColor, 3);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(360,170); ctx.bezierCurveTo(394,220,352,310,376,400);
+        ctx.bezierCurveTo(344,370,328,300,334,240); ctx.closePath();
+      }, hairColor, 3);
+    } else if (backHairStyle === 'shoulder_bob' || backHairStyle === 'bob_short') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY+8, HRX+14, HRY+14, 0, 0, Math.PI*2); }, hairColor, 3.5);
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(144,160,224,140,[0,0,24,24]); }, hairColor, 3.5);
+    } else if (backHairStyle === 'long_straight') {
+      fillOutline(() => {
+        ctx.beginPath(); ctx.roundRect(148,130, 216,230,[HRX,HRX,28,28]);
+      }, hairColor, 3.5);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.roundRect(140,170,36,190,[10,0,16,16]);
+      }, hairColor, 3);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.roundRect(336,170,36,190,[0,10,16,16]);
+      }, hairColor, 3);
+    } else if (backHairStyle === 'pixie_cut') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY-4, HRX+2, HRY+2, 0, 0, Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'layered_hair') {
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(146,130,220,220,[HRX,HRX,36,36]); }, hairColor, 3.5);
+      fillOutline(() => { ctx.beginPath(); ctx.moveTo(144,200); ctx.lineTo(130,340); ctx.lineTo(166,280); ctx.closePath(); }, hairColor, 3);
+      fillOutline(() => { ctx.beginPath(); ctx.moveTo(368,200); ctx.lineTo(382,340); ctx.lineTo(346,280); ctx.closePath(); }, hairColor, 3);
+    } else if (backHairStyle === 'half_up_half_down' || backHairStyle === 'half_up') {
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(148,130, 216,210,[HRX,HRX,34,34]); }, hairColor, 3.5);
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY-78, 36, 28, 0, 0, Math.PI*2); }, hairColor, 3);
     } else {
-      // 🥟 外場包包頭 / 🐎 高馬尾 / 🎀 低馬尾 / 🌸 波浪長髮 / ✨ 及肩直髮
-      // 頂部圓弧輪廓
-      ctx.beginPath();
-      ctx.arc(256, 126, 110, 0.85 * Math.PI, 2.15 * Math.PI);
-      ctx.fill();
-      // 輕盈空氣八字瀏海 (最高停在 y: 112，100% 露眉露眼！)
-      ctx.beginPath();
-      ctx.moveTo(148, 142);
-      ctx.quadraticCurveTo(205, 98, 256, 112);
-      ctx.quadraticCurveTo(307, 98, 364, 142);
-      ctx.lineTo(350, 92);
-      ctx.lineTo(160, 92);
-      ctx.fill();
-      // 兩側修容小鬢角髮絲 (自然垂在耳前)
-      ctx.beginPath();
-      ctx.moveTo(150, 140);
-      ctx.quadraticCurveTo(140, 170, 146, 195);
-      ctx.quadraticCurveTo(154, 170, 156, 145);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(362, 140);
-      ctx.quadraticCurveTo(372, 170, 366, 195);
-      ctx.quadraticCurveTo(358, 170, 356, 145);
-      ctx.fill();
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX, HY, HRX+6, HRY+6, 0, 0, Math.PI*2); }, hairColor, 3.5);
     }
   } else {
-    // 👦 男性 6 大極具辨識度髮型：
-    if (hairStyle === 'short_clean') {
-      // ✂️ 1. 俐落短髮：向上層次碎髮束 + 兩側俐落鬢角 + 露額碎瀏海
-      ctx.beginPath();
-      ctx.arc(256, 128, 110, 0.88 * Math.PI, 2.12 * Math.PI);
-      ctx.fill();
-      // 頂部層次碎髮尖角 (Spiky texture)
-      const spikes = [
-        [160, 115, 175, 62, 195, 98],
-        [195, 98, 220, 50, 245, 92],
-        [245, 92, 270, 48, 295, 92],
-        [295, 92, 320, 55, 345, 102],
-        [345, 102, 360, 72, 372, 120]
-      ];
-      spikes.forEach(s => {
-        ctx.beginPath();
-        ctx.moveTo(s[0], s[1]);
-        ctx.lineTo(s[2], s[3]);
-        ctx.lineTo(s[4], s[5]);
-        ctx.fill();
-      });
-      // 前額清爽露額碎瀏海 (下緣高置於 y: 110)
-      ctx.beginPath();
-      ctx.moveTo(148, 140);
-      ctx.quadraticCurveTo(200, 102, 256, 110);
-      ctx.quadraticCurveTo(312, 102, 364, 140);
-      ctx.lineTo(352, 92);
-      ctx.lineTo(160, 92);
-      ctx.fill();
-
-    } else if (hairStyle === 'side_part') {
-      // 👔 2. 經典側分：鮮明 3:7 側分線 + 俐落斜梳 + 紳士鬢角
-      ctx.beginPath();
-      ctx.arc(256, 126, 112, 0.88 * Math.PI, 2.12 * Math.PI);
-      ctx.fill();
-      // 3:7 分線蓬鬆髮流 (在 x:215 處有分線深凹，順梳至右側)
-      ctx.beginPath();
-      ctx.moveTo(146, 142);
-      ctx.lineTo(152, 90);
-      ctx.lineTo(215, 82); // 分線點
-      ctx.quadraticCurveTo(280, 75, 368, 115);
-      ctx.lineTo(366, 142);
-      ctx.quadraticCurveTo(310, 108, 215, 112); // 分線下緣
-      ctx.quadraticCurveTo(175, 102, 146, 142);
-      ctx.fill();
-
-    } else if (hairStyle === 'comma_part') {
-      // 🌟 3. 韓系逗號：標誌性雙 C 逗號內彎瀏海 + 額頭正中露空
-      ctx.beginPath();
-      ctx.arc(256, 126, 112, 0.85 * Math.PI, 2.15 * Math.PI);
-      ctx.fill();
-      // 左逗號 (C型內扣)
-      ctx.beginPath();
-      ctx.moveTo(146, 140);
-      ctx.quadraticCurveTo(190, 85, 235, 118);
-      ctx.quadraticCurveTo(210, 124, 185, 112);
-      ctx.lineTo(146, 140);
-      ctx.fill();
-      // 右逗號 (反向C型內扣)
-      ctx.beginPath();
-      ctx.moveTo(366, 140);
-      ctx.quadraticCurveTo(322, 85, 277, 118);
-      ctx.quadraticCurveTo(302, 124, 327, 112);
-      ctx.lineTo(366, 140);
-      ctx.fill();
-
-    } else if (hairStyle === 'buzz_cut') {
-      // ⚡ 4. 陽光寸頭：緊貼頭型漸層平頭 + 清晰髮際線
-      ctx.beginPath();
-      ctx.arc(256, 138, 104, 0.95 * Math.PI, 2.05 * Math.PI);
-      ctx.fill();
-      // 俐落髮際線 (Hairline)
-      ctx.beginPath();
-      ctx.moveTo(160, 132);
-      ctx.lineTo(185, 108);
-      ctx.lineTo(327, 108);
-      ctx.lineTo(352, 132);
-      ctx.lineTo(342, 88);
-      ctx.lineTo(170, 88);
-      ctx.fill();
-
-    } else if (hairStyle === 'afro_curly') {
-      // 🌀 5. 蓬鬆捲髮：多重螺旋雲朵捲束
-      const frontCurls = [
-        { x: 180, y: 98, r: 34 }, { x: 230, y: 92, r: 36 },
-        { x: 282, y: 92, r: 36 }, { x: 332, y: 98, r: 34 }
-      ];
-      frontCurls.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-    } else if (hairStyle === 'wavy_short') {
-      // 🌊 6. 微捲短髮：波浪微翹髮尾 + 日系紋理燙
-      ctx.beginPath();
-      ctx.arc(256, 126, 112, 0.85 * Math.PI, 2.15 * Math.PI);
-      ctx.fill();
-      // 微捲髮束波浪起伏
-      const waves = [
-        [150, 125, 172, 70, 198, 105],
-        [198, 105, 226, 60, 256, 96],
-        [256, 96, 286, 60, 314, 105],
-        [314, 105, 340, 70, 362, 125]
-      ];
-      waves.forEach(w => {
-        ctx.beginPath();
-        ctx.moveTo(w[0], w[1]);
-        ctx.quadraticCurveTo(w[2], w[3], w[4], w[5]);
-        ctx.fill();
-      });
-      // 露額微捲前髮 (下緣在 y: 110)
-      ctx.beginPath();
-      ctx.moveTo(148, 138);
-      ctx.quadraticCurveTo(200, 98, 256, 110);
-      ctx.quadraticCurveTo(312, 98, 364, 138);
-      ctx.lineTo(352, 90);
-      ctx.lineTo(160, 90);
-      ctx.fill();
+    // 男性後髮
+    if (backHairStyle === 'short_clean') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY,HRX+6,HRY+6,0,0,Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'side_part') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY,HRX+7,HRY+7,0,0,Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'high_ponytail') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY,HRX+6,HRY+6,0,0,Math.PI*2); }, hairColor, 3.5);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(280,120); ctx.bezierCurveTo(360,90,400,160,375,260);
+        ctx.bezierCurveTo(385,180,350,125,295,130); ctx.closePath();
+      }, hairColor, 3);
+    } else if (backHairStyle === 'low_ponytail') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY,HRX+6,HRY+6,0,0,Math.PI*2); }, hairColor, 3.5);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(268,266); ctx.bezierCurveTo(330,285,350,340,326,410);
+        ctx.bezierCurveTo(310,360,290,320,256,298); ctx.closePath();
+      }, hairColor, 3);
+    } else if (backHairStyle === 'wavy_long') {
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(148,130,216,210,[HRX,HRX,36,36]); }, hairColor, 3.5);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(150,180); ctx.bezierCurveTo(120,220,150,290,132,360);
+        ctx.bezierCurveTo(160,330,175,280,172,230); ctx.closePath();
+      }, hairColor, 3);
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(362,180); ctx.bezierCurveTo(392,220,362,290,380,360);
+        ctx.bezierCurveTo(352,330,337,280,340,230); ctx.closePath();
+      }, hairColor, 3);
+    } else if (backHairStyle === 'shoulder_straight') {
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(148,130,216,200,[HRX,HRX,24,24]); }, hairColor, 3.5);
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(142,170,32,130,[8,0,12,12]); }, hairColor, 3);
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(338,170,32,130,[0,8,12,12]); }, hairColor, 3);
+    } else if (backHairStyle === 'messy_curl' || backHairStyle === 'afro_curly') {
+      const curls = [{x:256,y:90,r:55},{x:196,y:100,r:52},{x:316,y:100,r:52},{x:144,y:138,r:50},{x:368,y:138,r:50},{x:122,y:185,r:44},{x:390,y:185,r:44}];
+      curls.forEach(c => { fillOutline(() => { ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2); }, hairColor, 3); });
+    } else if (backHairStyle === 'bob_cut') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY+6,HRX+12,HRY+12,0,0,Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'undercut_fade' || backHairStyle === 'two_block') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY,HRX+4,HRY+4,0,0,Math.PI*2); }, hairColor, 3.5);
+    } else if (backHairStyle === 'buzz_cut') {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY-1,HRX+2,HRY+2,0,0,Math.PI*2); }, hairColor, 3.5);
+    } else {
+      fillOutline(() => { ctx.beginPath(); ctx.ellipse(HX,HY,HRX+6,HRY+6,0,0,Math.PI*2); }, hairColor, 3.5);
     }
   }
 
-  // ── [圖層 12: 動漫天使光環 (Angel Ring Hair Highlight)] ──
+  // ───────────────────────────────────────
+  //  [2] 腿部 (Pants — behind body)
+  // ───────────────────────────────────────
+  fillOutline(() => {
+    ctx.beginPath(); ctx.roundRect(208,418, 40,118,6);
+  }, PANTS_COLOR, 3.5);
+  fillOutline(() => {
+    ctx.beginPath(); ctx.roundRect(264,418, 40,118,6);
+  }, PANTS_COLOR, 3.5);
+
+  // ───────────────────────────────────────
+  //  [3] 鞋子
+  // ───────────────────────────────────────
+  fillOutline(() => {
+    ctx.beginPath(); ctx.ellipse(228,545,30,14,0,0,Math.PI*2);
+  }, SHOE_COLOR, 3.5);
+  fillOutline(() => {
+    ctx.beginPath(); ctx.ellipse(284,545,30,14,0,0,Math.PI*2);
+  }, SHOE_COLOR, 3.5);
+  // 鞋面光澤
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath(); ctx.ellipse(222,542,11,4,0,0,Math.PI*2); ctx.ellipse(278,542,11,4,0,0,Math.PI*2); ctx.fill();
+
+  // ───────────────────────────────────────
+  //  [4] 軀幹・制服主體（深藍長袖衫）
+  // ───────────────────────────────────────
+  fillOutline(() => {
+    ctx.beginPath(); ctx.roundRect(196,278,120,140,[10,10,4,4]);
+  }, SHIRT_COLOR, 3.5);
+
+  // 門襟 (placket)
+  ctx.fillStyle = SHIRT_DARK;
+  ctx.beginPath(); ctx.rect(251,278,10,140); ctx.fill();
+
+  // 3 顆鈕扣
+  ctx.fillStyle = '#4a527a';
+  [308, 336, 364].forEach(by => {
+    ctx.beginPath(); ctx.arc(256,by,3.5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#111'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(256,by,3.5,0,Math.PI*2); ctx.stroke();
+  });
+
+  // 立領
+  ctx.fillStyle = SHIRT_DARK;
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(226,278); ctx.lineTo(251,298); ctx.lineTo(244,278); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(286,278); ctx.lineTo(261,298); ctx.lineTo(268,278); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  // 腰帶
+  fillOutline(() => { ctx.beginPath(); ctx.roundRect(196,418,120,14,3); }, BELT_COLOR, 3);
+  // 腰帶扣 (銀色方扣)
+  ctx.fillStyle = '#c0c8d2';
+  ctx.beginPath(); ctx.roundRect(246,416,20,18,2); ctx.fill();
+  ctx.strokeStyle='#111'; ctx.lineWidth=2; ctx.beginPath(); ctx.roundRect(246,416,20,18,2); ctx.stroke();
+  ctx.fillStyle='#0d0d0d'; ctx.beginPath(); ctx.roundRect(250,420,12,10,1.5); ctx.fill();
+
+  // ───────────────────────────────────────
+  //  [5] 手臂・手部
+  // ───────────────────────────────────────
+  // 左手臂
+  fillOutline(() => { ctx.beginPath(); ctx.roundRect(168,284,24,110,10); }, SHIRT_COLOR, 3.5);
+  ctx.fillStyle = SHIRT_DARK; ctx.fillRect(168,384,24,7);
+  fillOutline(() => { ctx.beginPath(); ctx.arc(180,398,14,0,Math.PI*2); }, skinFill, 3);
+  // 右手臂
+  fillOutline(() => { ctx.beginPath(); ctx.roundRect(320,284,24,110,10); }, SHIRT_COLOR, 3.5);
+  ctx.fillStyle = SHIRT_DARK; ctx.fillRect(320,384,24,7);
+  fillOutline(() => { ctx.beginPath(); ctx.arc(332,398,14,0,Math.PI*2); }, skinFill, 3);
+
+  // ───────────────────────────────────────
+  //  [6] 頸部
+  // ───────────────────────────────────────
+  ctx.fillStyle = skinShade;
+  ctx.beginPath(); ctx.roundRect(241,270,30,18,4); ctx.fill();
+  ctx.fillStyle = skinFill;
+  ctx.beginPath(); ctx.roundRect(243,268,26,15,3); ctx.fill();
+
+  // ───────────────────────────────────────
+  //  [7] 臉蛋 (Face)
+  // ───────────────────────────────────────
+  const faceShape = traits.face || 'round';
+  fillOutline(() => {
+    ctx.beginPath();
+    if (faceShape === 'square') {
+      ctx.roundRect(HX-HRX+4, HY-HRY+4, (HRX-4)*2, (HRY-4)*2, [HRY-4, HRY-4, 18, 18]);
+    } else if (faceShape === 'oval') {
+      ctx.ellipse(HX, HY+4, HRX-8, HRY+2, 0, 0, Math.PI*2);
+    } else if (faceShape === 'pointed') {
+      ctx.moveTo(HX-HRX+10, HY-20); ctx.bezierCurveTo(HX-HRX, HY-HRY+10, HX+HRX, HY-HRY+10, HX+HRX-10, HY-20);
+      ctx.bezierCurveTo(HX+HRX-5, HY+40, HX+30, HY+HRY-10, HX, HY+HRY+2);
+      ctx.bezierCurveTo(HX-30, HY+HRY-10, HX-HRX+5, HY+40, HX-HRX+10, HY-20);
+    } else {
+      ctx.ellipse(HX, HY, HRX, HRY, 0, 0, Math.PI*2);
+    }
+  }, skinFill, 3.5);
+
+  // 雙耳
+  fillOutline(() => { ctx.beginPath(); ctx.arc(HX-HRX-2, HY+4, 17, 0, Math.PI*2); }, skinFill, 3);
+  fillOutline(() => { ctx.beginPath(); ctx.arc(HX+HRX+2, HY+4, 17, 0, Math.PI*2); }, skinFill, 3);
+  ctx.fillStyle = skinShade;
+  ctx.beginPath(); ctx.arc(HX-HRX-2,HY+4,9,0,Math.PI*2); ctx.arc(HX+HRX+2,HY+4,9,0,Math.PI*2); ctx.fill();
+
+  // 腮紅
+  ctx.fillStyle = blush;
+  ctx.beginPath(); ctx.ellipse(HX-70, HY+28, 20, 10, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(HX+70, HY+28, 20, 10, 0, 0, Math.PI*2); ctx.fill();
+
+  // ───────────────────────────────────────
+  //  [8] 眉毛 (y = HY-52, 絕對在瀏海上方！)
+  // ───────────────────────────────────────
+  const eyeY = HY - 18;   // 眼球中心
+  const browY = eyeY - 34; // 眉毛 y (比眼睛高34px)
+  const EYE_LX = HX - 52, EYE_RX = HX + 52;
+
+  ctx.strokeStyle = hairColor;
+  ctx.lineWidth = gender === 'female' ? 3.0 : 4.0;
+  ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(EYE_LX, browY, 19, 1.15*Math.PI, 1.85*Math.PI); ctx.stroke();
+  ctx.beginPath(); ctx.arc(EYE_RX, browY, 19, 1.15*Math.PI, 1.85*Math.PI); ctx.stroke();
+
+  // ───────────────────────────────────────
+  //  [9] 大眼 (y = eyeY)
+  // ───────────────────────────────────────
+  // 眼眶 (黑色大杏眼)
+  fillOutline(() => {
+    ctx.beginPath(); ctx.ellipse(EYE_LX, eyeY, 20, 26, 0, 0, Math.PI*2);
+    ctx.ellipse(EYE_RX, eyeY, 20, 26, 0, 0, Math.PI*2);
+  }, '#1a1626', 3.5);
+
+  // 虹膜
+  ctx.fillStyle = '#5d4037';
+  ctx.beginPath(); ctx.arc(EYE_LX, eyeY+6, 15, 0.05*Math.PI, 0.95*Math.PI); ctx.fill();
+  ctx.beginPath(); ctx.arc(EYE_RX, eyeY+6, 15, 0.05*Math.PI, 0.95*Math.PI); ctx.fill();
+
+  // 瞳孔底反光
+  ctx.fillStyle = '#a1887f';
+  ctx.beginPath(); ctx.arc(EYE_LX, eyeY+10, 10, 0.15*Math.PI, 0.85*Math.PI); ctx.fill();
+  ctx.beginPath(); ctx.arc(EYE_RX, eyeY+10, 10, 0.15*Math.PI, 0.85*Math.PI); ctx.fill();
+
+  // 主高光 (大)
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.arc(EYE_LX-7, eyeY-10, 7, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(EYE_RX-7, eyeY-10, 7, 0, Math.PI*2); ctx.fill();
+  // 副高光 (小)
+  ctx.beginPath(); ctx.arc(EYE_LX+8, eyeY+6, 3.5, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(EYE_RX+8, eyeY+6, 3.5, 0, Math.PI*2); ctx.fill();
+
+  // 女生睫毛
+  if (gender === 'female') {
+    ctx.strokeStyle = '#1a1626'; ctx.lineWidth = 2.8;
+    ctx.beginPath();
+    ctx.moveTo(EYE_LX+18, eyeY-14); ctx.lineTo(EYE_LX+26, eyeY-22);
+    ctx.moveTo(EYE_LX+14, eyeY-22); ctx.lineTo(EYE_LX+20, eyeY-28);
+    ctx.moveTo(EYE_RX-18, eyeY-14); ctx.lineTo(EYE_RX-26, eyeY-22);
+    ctx.moveTo(EYE_RX-14, eyeY-22); ctx.lineTo(EYE_RX-20, eyeY-28);
+    ctx.stroke();
+  }
+
+  // ───────────────────────────────────────
+  //  [10] 鼻子 & 嘴巴
+  // ───────────────────────────────────────
+  const noseShape = traits.nose || 'dot';
+  const noseY = eyeY + 38;
+  const mouthY = noseY + 28;
+
+  ctx.strokeStyle = '#b07050'; ctx.fillStyle = '#b07050';
+  if (noseShape === 'straight') {
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(HX,noseY-8); ctx.lineTo(HX,noseY+2); ctx.lineTo(HX+5,noseY+2); ctx.stroke();
+  } else if (noseShape === 'wide') {
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(HX, noseY, 7, 0.1*Math.PI, 0.9*Math.PI); ctx.stroke();
+  } else if (noseShape === 'sharp') {
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(HX-4,noseY-8); ctx.lineTo(HX+2,noseY+2); ctx.lineTo(HX-4,noseY+4); ctx.stroke();
+  } else {
+    ctx.beginPath(); ctx.arc(HX, noseY, 3, 0, Math.PI*2); ctx.fill();
+  }
+
+  // 微笑嘴
+  ctx.strokeStyle = '#7a3028'; ctx.lineWidth = 3.2;
+  ctx.beginPath(); ctx.arc(HX, mouthY, 14, 0.1*Math.PI, 0.9*Math.PI); ctx.stroke();
+
+  // ───────────────────────────────────────
+  //  [11] 眼鏡
+  // ───────────────────────────────────────
+  if (glasses !== 'none') {
+    const glassY = eyeY;
+    const glassLX = EYE_LX, glassRX = EYE_RX;
+    if (glasses === 'round_black' || glasses === 'round_wire') {
+      const gc = glasses === 'round_black' ? '#111' : '#a6823c';
+      ctx.strokeStyle = gc; ctx.lineWidth = glasses === 'round_black' ? 5 : 2.8;
+      ctx.beginPath(); ctx.ellipse(glassLX, glassY, 28, 34, 0, 0, Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(glassRX, glassY, 28, 34, 0, 0, Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(glassLX+28, glassY); ctx.lineTo(glassRX-28, glassY); ctx.stroke();
+    } else if (glasses === 'square_black' || glasses === 'square_wire') {
+      const gc = glasses === 'square_black' ? '#111' : '#546e7a';
+      ctx.strokeStyle = gc; ctx.lineWidth = glasses === 'square_black' ? 5 : 2.8;
+      ctx.beginPath(); ctx.roundRect(glassLX-30, glassY-30, 60, 54, 8); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(glassRX-30, glassY-30, 60, 54, 8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(glassLX+30, glassY-4); ctx.lineTo(glassRX-30, glassY-4); ctx.stroke();
+    }
+  }
+
+  // ───────────────────────────────────────
+  //  [12] 前髮 (Front Hair — drawn last, over face)
+  //  bangs 下緣最低到 browY (眉毛以上)，絕不遮眼！
+  // ───────────────────────────────────────
+  ctx.fillStyle = hairColor;
+  const bangBottom = browY - 2; // 瀏海下緣 = 眉毛上方2px，100%絕不擋眼！
+
+  if (gender === 'female') {
+    if (bangStyle === 'bang_straight') {
+      // 齊直瀏海 (整齊微弧，剛好在眉毛上方)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+20);
+        ctx.lineTo(HX-HRX+4, HY-HRY+8); ctx.lineTo(HX+HRX-4, HY-HRY+8);
+        ctx.lineTo(HX+HRX-4, bangBottom+20);
+        ctx.quadraticCurveTo(HX+50, bangBottom-2, HX, bangBottom);
+        ctx.quadraticCurveTo(HX-50, bangBottom-2, HX-HRX+4, bangBottom+20);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_left_slant') {
+      // 左斜瀏海 (向左側梳理，露右側眉額)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+20);
+        ctx.quadraticCurveTo(HX-50, bangBottom, HX+10, bangBottom-6);
+        ctx.quadraticCurveTo(HX+60, bangBottom-14, HX+HRX-4, bangBottom+14);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_right_slant') {
+      // 右斜瀏海 (向右側梳理，露左側眉額)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+14);
+        ctx.quadraticCurveTo(HX-60, bangBottom-14, HX-10, bangBottom-6);
+        ctx.quadraticCurveTo(HX+50, bangBottom, HX+HRX-4, bangBottom+20);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_side_fringe') {
+      // 帶鬢角瀏海 (空氣微弧 + 左右兩側精緻側鬢角垂落)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+8, bangBottom+16);
+        ctx.quadraticCurveTo(HX-30, bangBottom-4, HX, bangBottom+2);
+        ctx.quadraticCurveTo(HX+30, bangBottom-4, HX+HRX-8, bangBottom+16);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+      // 左右兩側優雅鬢角片
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(HX-HRX+2, bangBottom+10, 18, 54, [0,0,6,6]); }, hairColor, 2.5);
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(HX+HRX-20, bangBottom+10, 18, 54, [0,0,6,6]); }, hairColor, 2.5);
+    } else if (bangStyle === 'bang_none') {
+      // 無瀏海 (俐落露額，完全露出飽滿額頭與清秀雙眉)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX, HY-HRY+18, HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_medium') {
+      // 中等長度自然弧形
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+20);
+        ctx.quadraticCurveTo(HX-40, bangBottom-2, HX, bangBottom+2);
+        ctx.quadraticCurveTo(HX+40, bangBottom-2, HX+HRX-4, bangBottom+20);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_short') {
+      // 眉上超短可愛瀏海 (高出眉毛 6px)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+14);
+        ctx.lineTo(HX-HRX+4, HY-HRY+8); ctx.lineTo(HX+HRX-4, HY-HRY+8);
+        ctx.lineTo(HX+HRX-4, bangBottom+14);
+        ctx.quadraticCurveTo(HX, bangBottom-8, HX-HRX+4, bangBottom+14);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_wavy') {
+      // 浪漫微捲 (S形自然弧度)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+20);
+        ctx.lineTo(HX-HRX+4, HY-HRY+8); ctx.lineTo(HX+HRX-4, HY-HRY+8);
+        ctx.lineTo(HX+HRX-4, bangBottom+20);
+        ctx.quadraticCurveTo(HX+45, bangBottom+4, HX+15, bangBottom-4);
+        ctx.quadraticCurveTo(HX-20, bangBottom-8, HX-HRX+4, bangBottom+20);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_layered') {
+      // 輕盈層次碎髮
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+20);
+        ctx.quadraticCurveTo(HX-50, bangBottom-2, HX-20, bangBottom+4);
+        ctx.quadraticCurveTo(HX, bangBottom-4, HX+20, bangBottom+4);
+        ctx.quadraticCurveTo(HX+50, bangBottom-2, HX+HRX-4, bangBottom+20);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_long') {
+      // 氣質長八字瀏海 (中分向兩側優雅外翻)
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+24);
+        ctx.quadraticCurveTo(HX-50, bangBottom+2, HX-6, bangBottom-8);
+        ctx.lineTo(HX, HY-HRY+12); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX+HRX-4, bangBottom+24);
+        ctx.quadraticCurveTo(HX+50, bangBottom+2, HX+6, bangBottom-8);
+        ctx.lineTo(HX, HY-HRY+12); ctx.lineTo(HX+HRX-4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else {
+      // 預設空氣瀏海
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+8, bangBottom+18);
+        ctx.quadraticCurveTo(HX-30, bangBottom-6, HX, bangBottom+2);
+        ctx.quadraticCurveTo(HX+30, bangBottom-6, HX+HRX-8, bangBottom+18);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    }
+  } else {
+    // ── 男性前髮 ──
+    if (bangStyle === 'bang_straight') {
+      // 俐落微碎直瀏海
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX-60, bangBottom, HX, bangBottom+4);
+        ctx.quadraticCurveTo(HX+60, bangBottom, HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+      const spikes = [[HX-78,bangBottom+8,HX-52,HY-HRY-18,HX-28,bangBottom+4],[HX-28,bangBottom+4,HX,HY-HRY-22,HX+28,bangBottom+4],[HX+28,bangBottom+4,HX+52,HY-HRY-18,HX+78,bangBottom+8]];
+      spikes.forEach(s => { fillOutline(() => { ctx.beginPath(); ctx.moveTo(s[0],s[1]); ctx.lineTo(s[2],s[3]); ctx.lineTo(s[4],s[5]); ctx.closePath(); }, hairColor, 2.5); });
+    } else if (bangStyle === 'bang_left_slant') {
+      // 左斜梳經典側分瀏海
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.lineTo(HX-HRX+8, HY-HRY+8);
+        ctx.lineTo(HX-30, HY-HRY-10);
+        ctx.quadraticCurveTo(HX+40, HY-HRY-6, HX+HRX-4, bangBottom+22);
+        ctx.quadraticCurveTo(HX+30, bangBottom, HX-20, bangBottom+6);
+        ctx.quadraticCurveTo(HX-60, bangBottom+8, HX-HRX+4, bangBottom+22);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_right_slant') {
+      // 右斜梳側分瀏海
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-8, HY-HRY+8);
+        ctx.lineTo(HX+30, HY-HRY-10);
+        ctx.quadraticCurveTo(HX-40, HY-HRY-6, HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX-30, bangBottom, HX+20, bangBottom+6);
+        ctx.quadraticCurveTo(HX+60, bangBottom+8, HX+HRX-4, bangBottom+22);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_side_fringe') {
+      // 有鬢角男性修飾髮型
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX-40, bangBottom+2, HX, bangBottom+4);
+        ctx.quadraticCurveTo(HX+40, bangBottom+2, HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(HX-HRX+2, bangBottom+14, 16, 42, [0,0,4,4]); }, hairColor, 2.5);
+      fillOutline(() => { ctx.beginPath(); ctx.roundRect(HX+HRX-18, bangBottom+14, 16, 42, [0,0,4,4]); }, hairColor, 2.5);
+    } else if (bangStyle === 'bang_none') {
+      // 陽光大露額寸頭/無瀏海
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+8, bangBottom+20); ctx.lineTo(HX-HRX+18, HY-HRY+14);
+        ctx.lineTo(HX+HRX-18, HY-HRY+14); ctx.lineTo(HX+HRX-8, bangBottom+20);
+        ctx.lineTo(HX+HRX-18, HY-HRY+4); ctx.lineTo(HX-HRX+18, HY-HRY+4);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_medium') {
+      // 中等長度微蓋
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX, bangBottom-2, HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_short') {
+      // 眉上超短俐落平直
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+14);
+        ctx.lineTo(HX-HRX+4, HY-HRY+8); ctx.lineTo(HX+HRX-4, HY-HRY+8);
+        ctx.lineTo(HX+HRX-4, bangBottom+14);
+        ctx.quadraticCurveTo(HX, bangBottom-8, HX-HRX+4, bangBottom+14);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_wavy') {
+      // 紋理微捲
+      fillOutline(() => {
+        ctx.beginPath(); ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        [HX-60,HX-30,HX,HX+30,HX+60].reduce((prev, cx, i) => {
+          ctx.quadraticCurveTo(prev+15, bangBottom+(i%2===0?-6:4), cx, bangBottom+(i%2===0?4:-2));
+          return cx;
+        }, HX-HRX+4);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.closePath();
+      }, hairColor, 3);
+    } else if (bangStyle === 'bang_layered') {
+      // 層次碎髮尖角
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX-60, bangBottom+2, HX, bangBottom+6);
+        ctx.quadraticCurveTo(HX+60, bangBottom+2, HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+      const wSpikes = [[HX-70,bangBottom+8,HX-46,HY-HRY-14,HX-22,bangBottom+4],[HX-22,bangBottom+4,HX,HY-HRY-18,HX+22,bangBottom+4],[HX+22,bangBottom+4,HX+46,HY-HRY-14,HX+70,bangBottom+8]];
+      wSpikes.forEach(s => { fillOutline(() => { ctx.beginPath(); ctx.moveTo(s[0],s[1]); ctx.lineTo(s[2],s[3]); ctx.lineTo(s[4],s[5]); ctx.closePath(); }, hairColor, 2.5); });
+    } else if (bangStyle === 'bang_textured') {
+      // 蓬鬆厚實質感
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.lineTo(HX-HRX+4, HY-HRY+8); ctx.lineTo(HX+HRX-4, HY-HRY+8);
+        ctx.lineTo(HX+HRX-4, bangBottom+22);
+        ctx.quadraticCurveTo(HX, bangBottom-4, HX-HRX+4, bangBottom+22);
+        ctx.closePath();
+      }, hairColor, 3);
+    } else {
+      fillOutline(() => {
+        ctx.beginPath();
+        ctx.moveTo(HX-HRX+4, bangBottom+22);
+        ctx.quadraticCurveTo(HX, bangBottom, HX+HRX-4, bangBottom+22);
+        ctx.lineTo(HX+HRX-4, HY-HRY+8); ctx.lineTo(HX-HRX+4, HY-HRY+8);
+        ctx.closePath();
+      }, hairColor, 3);
+    }
+  }
+
+  // ───────────────────────────────────────
+  //  [13] 髮絲高光 (Hair Highlight)
+  // ───────────────────────────────────────
   ctx.fillStyle = hairHighlight;
-  ctx.beginPath();
-  ctx.ellipse(256, 94, 66, 14, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-  ctx.beginPath();
-  ctx.ellipse(236, 92, 18, 5, 0, 0, Math.PI * 2);
-  ctx.ellipse(276, 92, 18, 5, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.beginPath(); ctx.ellipse(HX, HY-HRY+28, 60, 12, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.beginPath(); ctx.ellipse(HX-18, HY-HRY+26, 16, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(HX+18, HY-HRY+26, 16, 5, 0, 0, Math.PI*2); ctx.fill();
 
   return canvas.toDataURL('image/png');
 }
 
+
 // 9. 手動微調特徵 (即時重繪)
 function setAvatarTrait(traitType, val) {
   currentWhoTraits[traitType] = val;
+  if (traitType === 'backHair') {
+    currentWhoTraits.hair = val;
+  }
 
-  // 若切換性別，自動設定對應預設髮型與清空鬍鬚
+  // 若切換性別，自動設定對應預設髮型
   if (traitType === 'gender') {
     if (val === 'female') {
-      if (!HAIR_STYLES_BY_GENDER.female.some(h => h.id === currentWhoTraits.hair)) {
+      if (!BANG_STYLES_BY_GENDER.female.some(b => b.id === currentWhoTraits.bang)) {
+        currentWhoTraits.bang = 'bang_straight';
+      }
+      if (!BACK_HAIR_STYLES_BY_GENDER.female.some(h => h.id === currentWhoTraits.backHair)) {
+        currentWhoTraits.backHair = 'bun_hair';
         currentWhoTraits.hair = 'bun_hair';
       }
-      currentWhoTraits.beard = false;
     } else if (val === 'male') {
-      if (!HAIR_STYLES_BY_GENDER.male.some(h => h.id === currentWhoTraits.hair)) {
+      if (!BANG_STYLES_BY_GENDER.male.some(b => b.id === currentWhoTraits.bang)) {
+        currentWhoTraits.bang = 'bang_left_slant';
+      }
+      if (!BACK_HAIR_STYLES_BY_GENDER.male.some(h => h.id === currentWhoTraits.backHair)) {
+        currentWhoTraits.backHair = 'short_clean';
         currentWhoTraits.hair = 'short_clean';
       }
     }
   }
 
-  updateTraitPillsUI();
-
-  if (currentWhoState.selectedNameItem) {
-    const avatarUrl = generateTransparentChibiAvatar(currentWhoState.selectedNameItem, null, currentWhoTraits);
-    currentWhoState.generatedAvatarUrl = avatarUrl;
-    const avatarImg = document.getElementById('who-result-avatar-img');
-    if (avatarImg) avatarImg.src = avatarUrl;
-  }
-}
-
-// 切換特徵 (無特徵 / 嘴角痣 / 鬍渣短鬍)
-function setAvatarFeature(featName) {
-  if (featName === 'none') {
-    currentWhoTraits.beard = false;
-    currentWhoTraits.beautyMark = false;
-  } else if (featName === 'beautyMark') {
-    currentWhoTraits.beautyMark = true;
-    currentWhoTraits.beard = false;
-  } else if (featName === 'beard') {
-    currentWhoTraits.beard = true;
-    currentWhoTraits.beautyMark = false;
-  }
   updateTraitPillsUI();
 
   if (currentWhoState.selectedNameItem) {
@@ -11257,18 +12428,29 @@ function updateTraitPillsUI() {
   document.querySelectorAll('.trait-pill-skin').forEach(b => b.classList.remove('btn-primary'));
   document.getElementById('trait-skin-' + currentWhoTraits.skin)?.classList.add('btn-primary');
 
-  // 5. 髮型選項 (動態依性別渲染)
-  const hairContainer = document.getElementById('who-hair-options-container');
-  if (hairContainer) {
-    const styles = HAIR_STYLES_BY_GENDER[currentWhoTraits.gender] || HAIR_STYLES_BY_GENDER.female;
-    hairContainer.innerHTML = styles.map(h => `
-      <button class="btn btn-sm ${currentWhoTraits.hair === h.id ? 'btn-primary' : 'btn-ghost'}" onclick="setAvatarTrait('hair', '${h.id}')" style="font-size:0.75rem; padding:2px 8px;">
+  // 5. 瀏海選項 (動態依性別渲染 10 款日系瀏海)
+  const bangContainer = document.getElementById('who-bang-options-container');
+  if (bangContainer) {
+    const bangStyles = BANG_STYLES_BY_GENDER[currentWhoTraits.gender] || BANG_STYLES_BY_GENDER.female;
+    bangContainer.innerHTML = bangStyles.map(b => `
+      <button class="btn btn-sm ${currentWhoTraits.bang === b.id ? 'btn-primary' : 'btn-ghost'}" onclick="setAvatarTrait('bang', '${b.id}')" style="font-size:0.75rem; padding:2px 8px;">
+        ${b.label}
+      </button>
+    `).join('');
+  }
+
+  // 6. 後髮選項 (動態依性別渲染 10 款日系後髮)
+  const backHairContainer = document.getElementById('who-backhair-options-container');
+  if (backHairContainer) {
+    const backStyles = BACK_HAIR_STYLES_BY_GENDER[currentWhoTraits.gender] || BACK_HAIR_STYLES_BY_GENDER.female;
+    backHairContainer.innerHTML = backStyles.map(h => `
+      <button class="btn btn-sm ${(currentWhoTraits.backHair === h.id || currentWhoTraits.hair === h.id) ? 'btn-primary' : 'btn-ghost'}" onclick="setAvatarTrait('backHair', '${h.id}')" style="font-size:0.75rem; padding:2px 8px;">
         ${h.label}
       </button>
     `).join('');
   }
 
-  // 6. 髮色 (自然黑 / 深棕色)
+  // 7. 髮色 (自然黑 / 深棕色)
   document.querySelectorAll('.trait-pill-color').forEach(b => b.classList.remove('btn-primary'));
   if (currentWhoTraits.color === '#422b1d') {
     document.getElementById('trait-color-darkbrown')?.classList.add('btn-primary');
@@ -11276,19 +12458,9 @@ function updateTraitPillsUI() {
     document.getElementById('trait-color-black')?.classList.add('btn-primary');
   }
 
-  // 7. 眼鏡 (5 種精準選項)
+  // 8. 眼鏡 (5 種精準選項)
   document.querySelectorAll('.trait-pill-glasses').forEach(b => b.classList.remove('btn-primary'));
   document.getElementById('trait-glasses-' + currentWhoTraits.glasses)?.classList.add('btn-primary');
-
-  // 8. 特徵 (無特徵 / 嘴角痣 / 鬍渣短鬍)
-  document.querySelectorAll('.trait-pill-feature').forEach(b => b.classList.remove('btn-primary'));
-  if (currentWhoTraits.beard) {
-    document.getElementById('trait-feature-beard')?.classList.add('btn-primary');
-  } else if (currentWhoTraits.beautyMark) {
-    document.getElementById('trait-feature-beautyMark')?.classList.add('btn-primary');
-  } else {
-    document.getElementById('trait-feature-none')?.classList.add('btn-primary');
-  }
 }
 
 // 10. 直接重新取樣
@@ -11336,23 +12508,27 @@ function confirmSaveWhoAvatar() {
 function resetWhoModal() {
   const selectScreen = document.getElementById('who-screen-select');
   const genderScreen = document.getElementById('who-screen-gender');
+  const nationalityScreen = document.getElementById('who-screen-nationality');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
   if (selectScreen) selectScreen.style.display = 'block';
   if (genderScreen) genderScreen.style.display = 'none';
+  if (nationalityScreen) nationalityScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'none';
   if (resultScreen) resultScreen.style.display = 'none';
 
   const nameInput = document.getElementById('input-who-custom-name');
   const kanaInput = document.getElementById('input-who-custom-kana');
   const roleInput = document.getElementById('input-who-custom-role');
+  const natInput = document.getElementById('input-who-custom-nationality');
   if (nameInput) nameInput.value = '';
   if (kanaInput) kanaInput.value = '';
   if (roleInput) roleInput.value = '';
+  if (natInput) natInput.value = '';
 }
 
-// 14. 🎴 雙擊名字卡片跳出：Q 版個人立繪名牌彈窗 (絕不套用小楊範例圖)
+// 14. 🎴 雙擊名字卡片跳出：Q 版個人立繪名牌彈窗 (未設定不自動產生假頭像)
 let currentActiveCardItem = null;
 
 function openNameAvatarModal(vocabId) {
@@ -11369,34 +12545,64 @@ function openNameAvatarModal(vocabId) {
   const avatarImg = document.getElementById('name-card-avatar-img');
   const jaTitle = document.getElementById('name-card-ja-title');
   const zhTitle = document.getElementById('name-card-zh-title');
+  const rephotoBtn = document.getElementById('name-card-rephoto-btn');
 
-  // 若尚未有 avatarUrl 或為舊版 static photo，自動生成該同仁專屬立繪
-  let finalAvatarUrl = item.avatarUrl;
-  if (!finalAvatarUrl || finalAvatarUrl === './photos/avatar_yang.png') {
-    const isFemale = /(?:美|香|子|實|燕|瑪|蓉|涵|愛|蘭|琴|花|女|み|な|こ|楊)/.test(cleanName);
-    const colleagueTraits = item.traits || DEFAULT_COLLEAGUE_TRAITS[item.id] || {
-      gender: isFemale ? 'female' : 'male',
-      face: 'round',
-      nose: 'dot',
-      skin: isFemale ? 'fair' : 'natural',
-      hair: isFemale ? 'bun_hair' : 'short_clean',
-      color: '#1a191f',
-      glasses: 'none',
-      beard: false,
-      beautyMark: false
-    };
-    finalAvatarUrl = generateTransparentChibiAvatar(item, null, colleagueTraits);
-    item.avatarUrl = finalAvatarUrl;
-    item.traits = colleagueTraits;
+  const hasAvatar = !!(item.avatarUrl && item.avatarUrl.trim());
+
+  if (hasAvatar) {
+    if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
+    if (avatarImg) {
+      avatarImg.src = item.avatarUrl;
+      avatarImg.style.display = 'block';
+    }
+    const avatarPlaceholder = document.getElementById('name-card-avatar-placeholder');
+    if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+
+    if (jaTitle) jaTitle.innerHTML = item.ja || cleanName;
+    if (zhTitle) zhTitle.textContent = `${item.kana || cleanName}（${item.note || '溫泉旅館同仁'}）`;
+    if (rephotoBtn) rephotoBtn.innerHTML = `🎨 調整形象 / 重新捏臉`;
+  } else {
+    // 尚未設定形象：不自動捏造假頭像
+    if (bubbleText) bubbleText.innerHTML = `尚未設定專屬 Q 版形象 👤`;
+    if (avatarImg) {
+      avatarImg.src = '';
+      avatarImg.style.display = 'none';
+    }
+    let avatarPlaceholder = document.getElementById('name-card-avatar-placeholder');
+    if (!avatarPlaceholder) {
+      const frame = document.querySelector('#modal-name-avatar-card .who-avatar-square-frame');
+      if (frame) {
+        avatarPlaceholder = document.createElement('div');
+        avatarPlaceholder.id = 'name-card-avatar-placeholder';
+        avatarPlaceholder.style.cssText = 'display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:var(--muted);';
+        avatarPlaceholder.innerHTML = `<span style="font-size:3.5rem;">👤</span><span style="font-size:0.85rem; font-weight:700;">尚未建立 Q 版形象</span>`;
+        frame.appendChild(avatarPlaceholder);
+      }
+    } else {
+      avatarPlaceholder.style.display = 'flex';
+    }
+
+    if (jaTitle) jaTitle.innerHTML = item.ja || cleanName;
+    if (zhTitle) zhTitle.textContent = `${item.kana || cleanName}（${item.note || '溫泉旅館同仁'}）`;
+    if (rephotoBtn) rephotoBtn.innerHTML = `🎨 為【${cleanName}】建立 Q 版形象`;
   }
-
-  if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
-  if (avatarImg) avatarImg.src = finalAvatarUrl;
-  if (jaTitle) jaTitle.innerHTML = item.ja || cleanName;
-  if (zhTitle) zhTitle.textContent = `${item.kana || cleanName}（${item.note || '溫泉旅館同仁'}）`;
 
   modal.classList.add('open');
   modal.classList.add('show');
+}
+
+function playNameCardSpeech() {
+  if (!currentActiveCardItem) return;
+  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '');
+  speakJapanese(`${cleanName}です。よろしくお願いします。`);
+}
+
+function rephotoFromCard() {
+  closeModal('modal-name-avatar-card');
+  if (currentActiveCardItem) {
+    openWhoAreYouModal();
+    selectExistingColleagueForAvatar(currentActiveCardItem.id);
+  }
 }
 
 function playNameCardSpeech() {
