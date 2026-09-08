@@ -1368,218 +1368,324 @@
 
 
   /* ==============================================================
-     日文排版軟體 (page-typeset) 專用樣式
+     日文排版救星・手帳專屬排版神器 (page-typeset) 專用樣式 (v85)
      ============================================================== */
   #page-typeset {
     padding-bottom: 90px;
   }
-  .typeset-toolbar {
+  
+  /* 頂部功能面板與開關區 */
+  .typeset-control-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  }
+
+  /* 輸入框與快捷按鈕 */
+  .typeset-input-wrap {
+    margin-bottom: 12px;
+  }
+  .typeset-textarea {
+    width: 100%;
+    min-height: 110px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: var(--font-serif);
+    font-size: 0.96rem;
+    line-height: 1.8;
+    color: var(--ink);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .typeset-textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(92,61,30,0.12);
+  }
+
+  /* 快捷操作晶片列 */
+  .typeset-chips-bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
     gap: 8px;
-    margin-bottom: 14px;
-    padding: 10px 14px;
-    background: var(--bg-card);
+    margin-top: 8px;
+  }
+
+  /* 標音開關 Checkboxes 區塊 */
+  .typeset-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 12px 0;
+    padding: 12px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 12px;
+    border: 1px dashed var(--border);
+  }
+  .typeset-option-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    user-select: none;
+  }
+  .typeset-option-label input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    accent-color: var(--primary);
+  }
+
+  /* 排版微調收折面板 */
+  .typeset-sliders-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    padding: 14px;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
+    margin-top: 10px;
   }
-  .typeset-mode-tabs {
+  .typeset-slider-item {
     display: flex;
-    gap: 6px;
-    background: rgba(0,0,0,0.04);
-    padding: 3px;
-    border-radius: 10px;
+    flex-direction: column;
+    gap: 4px;
   }
-  .typeset-mode-btn {
-    border: none;
-    background: transparent;
-    padding: 6px 12px;
-    font-size: 0.82rem;
+  .typeset-slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
     font-weight: 700;
     color: var(--muted);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s ease;
   }
-  .typeset-mode-btn.active {
-    background: #fff;
+  .typeset-slider-header span:last-child {
     color: var(--primary);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   }
-  .typeset-actions-wrap {
+  .typeset-slider-item input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  /* 預覽與工作紙張容器 */
+  #typeset-scroll-page {
+    background: #fff;
+    border-radius: 18px;
+    border: 1.5px solid var(--border);
+    padding: 24px 28px;
+    min-height: 280px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.04);
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  /* 單句群組卡片 */
+  .content-group {
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+    transition: background 0.15s, transform 0.15s;
+    position: relative;
+    border: 1px solid transparent;
+  }
+  .content-group:hover {
+    background: rgba(92,61,30,0.03);
+    border-color: rgba(92,61,30,0.12);
+  }
+  .content-group-toolbar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+    opacity: 0.85;
+    transition: opacity 0.15s;
   }
-  .typeset-font-btn {
+  .content-group:hover .content-group-toolbar {
+    opacity: 1;
+  }
+  .content-group-toolbar .btn-icon-sm {
     border: 1px solid var(--border);
     background: var(--surface);
     border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 0.78rem;
-    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.76rem;
     cursor: pointer;
     color: var(--ink);
+    padding: 0;
+    transition: all 0.15s;
   }
-  .typeset-font-btn.active {
+  .content-group-toolbar .btn-icon-sm:hover {
     background: var(--primary);
     color: #fff;
     border-color: var(--primary);
+    transform: scale(1.05);
   }
 
-  /* 面試 20 題卡片清單 */
-  .interview-card {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 18px;
-    margin-bottom: 16px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  /* 日文與注音行 */
+  .jp-line {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 2.6;
+    color: var(--ink);
+    display: block;
+    outline: none;
+    letter-spacing: 0em;
   }
-  .interview-card:hover {
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  .jp-line ruby {
+    ruby-position: over;
+    ruby-align: center;
   }
-  .interview-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1.5px dashed var(--border);
+  .jp-line rt {
+    font-family: var(--font-sans);
+    line-height: 1;
+    user-select: none;
+    padding-bottom: 1px;
   }
-  .interview-title-wrap {
+  .jp-line rt.h {
+    color: #c46a5e;
+    font-size: 0.58em;
+    font-weight: 700;
+  }
+  .jp-line rt.r {
+    color: #276e90;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.54em;
+    font-weight: 600;
+  }
+  .jp-line rt.k {
+    color: #2e7d32;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.54em;
+    font-weight: 600;
+  }
+
+  /* 中文翻譯行 */
+  .zh-line {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #66524d;
+    background: rgba(248,236,233,0.5);
+    border-left: 3.5px solid rgba(196,106,94,0.45);
+    padding: 6px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 0.3em;
+    display: block;
+    outline: none;
+    font-style: italic;
+    letter-spacing: 0em;
+  }
+
+  /* 遮罩測驗模式 (Masking Mode) */
+  .mask-ruby .jp-line rt {
+    opacity: 0 !important;
+    transition: opacity 0.2s ease;
+  }
+  .mask-ruby .jp-line ruby:hover rt,
+  .mask-ruby .jp-line ruby:active rt {
+    opacity: 1 !important;
+  }
+  .mask-zh .zh-line {
+    filter: blur(6px) !important;
+    user-select: none !important;
+    cursor: pointer !important;
+    transition: filter 0.2s ease;
+  }
+  .mask-zh .zh-line:hover,
+  .mask-zh .zh-line:active {
+    filter: none !important;
+    user-select: text !important;
+  }
+
+  /* 分隔線 (Draggable Divider) */
+  .content-divider {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 6px 0;
+    cursor: grab;
+    margin: 8px 0;
   }
-  .interview-badge {
-    background: var(--primary);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 6px;
+  .content-divider:active {
+    cursor: grabbing;
   }
-  .interview-title {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--ink);
+  .content-divider hr {
+    border: none;
+    border-top: 1.5px dashed var(--border);
+    flex: 1;
+    margin: 0;
   }
-  .interview-category {
-    font-size: 0.75rem;
-    background: rgba(92,61,30,0.08);
-    color: var(--primary);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-weight: 600;
+  .div-del-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 0 6px;
+    transition: color 0.15s;
   }
-  
-  /* 質問與回答區塊 */
-  .interview-q-block {
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    border-left: 3.5px solid var(--accent);
+  .div-del-btn:hover {
+    color: #e57373;
   }
-  .interview-q-label {
-    font-size: 0.76rem;
-    font-weight: 800;
-    color: var(--accent);
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .interview-ans-block {
-    background: rgba(39, 110, 144, 0.04);
-    border: 1.5px solid rgba(39, 110, 144, 0.18);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-top: 10px;
-    border-left: 4.5px solid #276e90;
-  }
-  .interview-ans-label {
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: #276e90;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  /* 日文與假名排版核心 */
-  .typeset-ja-line {
-    font-size: 1.12rem;
-    line-height: 2.2;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: 0.03em;
-    margin-bottom: 4px;
-  }
-  .typeset-ja-line ruby {
-    ruby-position: over;
-  }
-  .typeset-ja-line ruby rt {
-    font-size: 0.62em;
-    font-weight: 600;
-    color: var(--primary);
-    padding-bottom: 1px;
-    letter-spacing: 0;
-  }
-  .typeset-zh-line {
-    font-size: 0.88rem;
-    line-height: 1.6;
-    color: #555;
-    font-style: normal;
-    padding-left: 6px;
-    border-left: 2px solid rgba(0,0,0,0.12);
-    margin-top: 2px;
-  }
-  
-  /* 字體尺寸調節 */
-  .font-size-md .typeset-ja-line { font-size: 1.12rem; line-height: 2.2; }
-  .font-size-lg .typeset-ja-line { font-size: 1.35rem; line-height: 2.3; }
-  .font-size-xl .typeset-ja-line { font-size: 1.6rem; line-height: 2.4; }
-  .font-size-md .typeset-zh-line { font-size: 0.88rem; }
-  .font-size-lg .typeset-zh-line { font-size: 1.02rem; }
-  .font-size-xl .typeset-zh-line { font-size: 1.18rem; }
 
-  /* 編輯器容器 */
-  .typeset-editor-box {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 18px;
-  }
-  .typeset-editor-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 14px;
-  }
-  @media (max-width: 768px) {
-    .typeset-editor-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  .typeset-preview-box {
+  /* 右鍵/長按懸浮選單 */
+  #typeset-ctx-menu {
+    position: fixed;
     background: #fff;
-    border: 2px dashed var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 12px;
-    padding: 16px 18px;
-    min-height: 100px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    z-index: 10000;
+    min-width: 175px;
+    display: none;
+    overflow: hidden;
+  }
+  #typeset-ctx-menu button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s;
+  }
+  #typeset-ctx-menu button:last-child {
+    border-bottom: none;
+  }
+  #typeset-ctx-menu button:hover {
+    background: rgba(92,61,30,0.06);
+    color: var(--primary);
+  }
+  #typeset-ctx-menu button.danger {
+    color: #d32f2f;
+  }
+  #typeset-ctx-menu button.danger:hover {
+    background: #ffebee;
   }
 
-  /* 列印輸出特別樣式 */
+  /* 列印專用樣式 */
   @media print {
-    header, nav#top-nav-bar, #offline-badge, .typeset-toolbar, .btn, .typeset-mode-tabs, .floating-raccoon-btn, .interview-q-label button, .interview-ans-label button, #typeset-search-input, #btn-play-all-interview {
+    header, nav#top-nav-bar, #offline-badge, .typeset-control-card, .content-group-toolbar, .div-del-btn, .floating-raccoon-btn, #toast-shelf, #typeset-ctx-menu {
       display: none !important;
     }
     body, main, #app {
@@ -1595,17 +1701,55 @@
       display: block !important;
       padding: 0 !important;
     }
-    .interview-card {
-      break-inside: avoid;
+    #typeset-scroll-page {
       box-shadow: none !important;
-      border: 1px solid #ccc !important;
-      margin-bottom: 18px !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      background: #fff !important;
     }
-    .typeset-ja-line ruby rt {
-      color: #000 !important;
+    .content-group {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      border: none !important;
+      padding: 6px 0 !important;
+      margin-bottom: 10px !important;
+    }
+
+    /* 一般 A4 黑白列印：消除背景色、高對比易讀 */
+    body:not(.print-keep-color) .zh-line {
+      background: transparent !important;
+      border-left: 2.5px solid #666 !important;
+      color: #333 !important;
+      padding-left: 8px !important;
+    }
+    body:not(.print-keep-color) .jp-line rt.h,
+    body:not(.print-keep-color) .jp-line rt.r,
+    body:not(.print-keep-color) .jp-line rt.k {
+      color: #333 !important;
+    }
+
+    /* 口袋小抄模式 (Pocket Card 3x5" / 2欄網格) */
+    .pocket-print-mode #typeset-scroll-page {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 12px !important;
+    }
+    .pocket-print-mode .content-group {
+      border: 1px dashed #999 !important;
+      border-radius: 8px !important;
+      padding: 8px 10px !important;
+      font-size: 0.85em !important;
+    }
+    .pocket-print-mode .jp-line {
+      font-size: 14px !important;
+      line-height: 2.2 !important;
+    }
+    .pocket-print-mode .zh-line {
+      font-size: 11px !important;
     }
   }
-
 </style>
 </head>
 <body>
@@ -1779,85 +1923,192 @@
     <!-- ==============================================================
          分頁：日文排版軟體與打工度假面試 20 題即戰力 (page-typeset)
     ============================================================== -->
+    <!-- ==============================================================
+         分頁：日文排版救星・手帳專屬排版神器 (page-typeset) (v85)
+    ============================================================== -->
     <section class="page" id="page-typeset">
-      <div class="page-sub">日文振假名排版軟體（上方標音、下方中文）與滑雪場・飯店面試 20 題全集</div>
+      <div class="page-sub">日文排版救星・漢字標假名、外來語羅馬拼音、英文KK音標、外場敬語修飾、照片OCR辨識與口袋列印</div>
 
-      <!-- 工具列：模式切換、搜尋、字級調整、朗讀與列印匯出 -->
-      <div class="typeset-toolbar">
-        <div class="typeset-mode-tabs">
-          <button class="typeset-mode-btn active" id="btn-mode-interview" onclick="setTypesetMode('interview')">🏂 面試 20 題全集</button>
-          <button class="typeset-mode-btn" id="btn-mode-editor" onclick="setTypesetMode('editor')">✍️ 自訂日文排版器</button>
-        </div>
+      <!-- 隱藏式拍照 / 圖片 OCR 上傳 input -->
+      <input type="file" id="typeset-ocr-file-input" accept="image/*" capture="environment" style="display:none;" onchange="handleTypesetImageUpload(event)" />
 
-        <div class="typeset-actions-wrap">
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span style="font-size:0.75rem; color:var(--muted); font-weight:700;">字級:</span>
-            <button class="typeset-font-btn" onclick="setTypesetFontSize('md')" id="font-btn-md">中</button>
-            <button class="typeset-font-btn active" onclick="setTypesetFontSize('lg')" id="font-btn-lg">大</button>
-            <button class="typeset-font-btn" onclick="setTypesetFontSize('xl')" id="font-btn-xl">特大</button>
-          </div>
-          <button class="btn btn-secondary btn-sm" onclick="printTypesetDocument()" title="友善 A4 排版輸出">🖨️ 列印 / PDF</button>
-          <button class="btn btn-secondary btn-sm" onclick="copyTypesetArticleMarkdown()" title="一鍵複製整篇 Markdown">📋 複製整篇</button>
-        </div>
-      </div>
-
-      <!-- 模式 1：面試 20 題全集 -->
-      <div id="typeset-interview-container" class="font-size-lg">
-        <div style="display:flex; gap:8px; margin-bottom:12px; align-items:center;">
-          <input type="text" id="typeset-search-input" placeholder="🔍 搜尋面試題目（例如：志望動機、殘業、滑雪、退職理由...）" oninput="filterInterviewTopics()" style="flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid var(--border); font-size:0.86rem; background:var(--surface); color:var(--ink);" />
-          <button class="btn btn-primary btn-sm" id="btn-play-all-interview" onclick="togglePlayAllInterview()">🔊 連續播放</button>
-        </div>
-        <div id="interview-cards-list">
-          <!-- 由 JS 動態注入 20 題問答 -->
-        </div>
-      </div>
-
-      <!-- 模式 2：自訂日文排版器 -->
-      <div id="typeset-editor-container" style="display:none;" class="font-size-lg">
-        <div class="typeset-editor-box">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
-            <div style="font-weight:800; font-size:0.96rem; color:var(--primary);">✍️ 日文與標音輸入</div>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button class="btn btn-secondary btn-sm" onclick="insertFuriganaSyntax()">＋ 標音標籤 (ruby)</button>
-              <button class="btn btn-secondary btn-sm" onclick="loadEditorTemplate('intro')">載入自我介紹</button>
-              <button class="btn btn-secondary btn-sm" onclick="loadEditorTemplate('motive')">載入應徵動機</button>
-              <button class="btn btn-secondary btn-sm" onclick="loadEditorTemplate('reverse_q')">載入逆質問</button>
-            </div>
-          </div>
-          
-          <div class="typeset-editor-grid">
-            <div>
-              <label style="font-size:0.82rem; font-weight:700; color:var(--muted); margin-bottom:4px; display:block;">
-                日文內容（支援 <code>漢字[かんじ]</code> 或 <code>漢字(かんじ)</code> 或 <code>&lt;ruby&gt;</code> 標籤）：
-              </label>
-              <textarea id="editor-ja-input" rows="5" placeholder="請在此輸入日文，例如：
-はじめまして。楊詠筑[ヤンユンジュ]と申[もう]します。
-台湾[たいわん]から来[き]ました。" oninput="updateEditorPreview()" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid var(--border); font-size:0.92rem; background:var(--surface); color:var(--ink); font-family:monospace;"></textarea>
-            </div>
-            <div>
-              <label style="font-size:0.82rem; font-weight:700; color:var(--muted); margin-bottom:4px; display:block;">
-                繁體中文翻譯（顯示於日文正下方）：
-              </label>
-              <textarea id="editor-zh-input" rows="5" placeholder="請輸入對應的繁體中文翻譯，例如：
-初次見面，我叫楊詠筑。來自台灣。" oninput="updateEditorPreview()" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid var(--border); font-size:0.92rem; background:var(--surface); color:var(--ink);"></textarea>
-            </div>
-          </div>
-
-          <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-            <span style="font-weight:700; font-size:0.88rem; color:var(--ink);">👁️ 即時排版預覽（上方標音、下方中文）：</span>
+      <!-- 頂部控制與設定卡片 -->
+      <div class="typeset-control-card">
+        <!-- 文字輸入區 -->
+        <div class="typeset-input-wrap">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="font-size:0.86rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:6px;">
+              <span>✍️ 貼入文章或中文（自動標音／翻譯／混合對照）</span>
+            </label>
             <div style="display:flex; gap:6px;">
-              <button class="btn btn-secondary btn-sm" onclick="speakEditorText()">🔊 播放發音</button>
-              <button class="btn btn-secondary btn-sm" onclick="copyEditorHtml()">📋 複製 HTML</button>
-              <button class="btn btn-primary btn-sm" onclick="printTypesetDocument()">🖨️ 列印此篇</button>
+              <button class="btn btn-secondary btn-sm" onclick="clearTypesetInput()">🧹 清空</button>
+              <button class="btn btn-secondary btn-sm" onclick="triggerTypesetImageOcr()">📷 拍照/上傳圖片 OCR</button>
             </div>
           </div>
+          <textarea id="typeset-input-text" class="typeset-textarea" placeholder="在此貼入日文（自動分析標音）、純中文（自動翻成日文並排版）、或日＋中混合（兩行一組）...
+例 1：はじめまして。楊詠筑と申します。
+例 2：台灣名產烏龍茶（自動翻譯為日文並標音）
+例 3：日文[標音]語法亦可直接輸入"></textarea>
+          
+          <!-- 快捷操作按鈕列 -->
+          <div class="typeset-chips-bar">
+            <button class="btn btn-primary btn-sm" id="btn-typeset-generate" onclick="generateTypesetArticle()" style="padding:6px 14px; font-weight:800;">
+              ⚡ 立即生成排版
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="convertTypesetTone('guest')" title="將日文重寫為外場對客人的正式接客語/謙讓語">
+              ✨ 轉為客人敬語
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="convertTypesetTone('kitchen')" title="將日文重寫為對內場廚房師傅的精簡通報口吻">
+              ✨ 轉為廚房通報
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="convertTypesetTone('colleague')" title="將日文重寫為同事之間的親切平級口吻">
+              ✨ 轉為同事口語
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="insertRubyTagToInput()">
+              ＋ 標音標籤 (ruby)
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleSlidersPanel()" id="btn-toggle-sliders">
+              📐 排版微調
+            </button>
+          </div>
+        </div>
 
-          <div class="typeset-preview-box" id="editor-live-preview">
-            <!-- 即時預覽渲染區 -->
+        <!-- 四重標音開關 Checkbox 區塊 -->
+        <div class="typeset-options-grid">
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-typeset-hiragana" checked onchange="refreshTypesetDisplay()" />
+            <span><span style="color:#c46a5e;">●</span> 漢字標平假名</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-typeset-romaji" checked onchange="refreshTypesetDisplay()" />
+            <span><span style="color:#276e90;">●</span> 片假名標羅馬音</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-typeset-kk" checked onchange="refreshTypesetDisplay()" />
+            <span><span style="color:#2e7d32;">●</span> 英文標 KK 音標</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-typeset-chinese" checked onchange="refreshTypesetDisplay()" />
+            <span><span style="color:#7d6a67;">●</span> 中文翻譯對照</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-mask-ruby" onchange="toggleMaskMode('ruby')" />
+            <span>👁️ 遮住上方標音 (背誦)</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-mask-zh" onchange="toggleMaskMode('zh')" />
+            <span>👁️ 遮住下方中文 (聽力)</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-pocket-mode" onchange="togglePocketMode()" />
+            <span>✂️ 圍裙口袋小抄版面</span>
+          </label>
+          <label class="typeset-option-label">
+            <input type="checkbox" id="opt-print-color" onchange="togglePrintColor()" />
+            <span>🎨 列印保留底色</span>
+          </label>
+        </div>
+
+        <!-- 排版微調滑桿面板 (預設收折) -->
+        <div id="typeset-sliders-panel" class="typeset-sliders-panel" style="display:none;">
+          <div class="typeset-slider-item">
+            <div class="typeset-slider-header"><span>日文字級</span><span id="val-jp-size">18px</span></div>
+            <input type="range" id="slider-jp-size" min="10" max="28" step="1" value="18" oninput="applyTypesetSpacing()" />
+          </div>
+          <div class="typeset-slider-item">
+            <div class="typeset-slider-header"><span>中文字級</span><span id="val-zh-size">13px</span></div>
+            <input type="range" id="slider-zh-size" min="8" max="24" step="1" value="13" oninput="applyTypesetSpacing()" />
+          </div>
+          <div class="typeset-slider-item">
+            <div class="typeset-slider-header"><span>日文行距</span><span id="val-lh">2.6</span></div>
+            <input type="range" id="slider-lh" min="1.0" max="4.0" step="0.1" value="2.6" oninput="applyTypesetSpacing()" />
+          </div>
+          <div class="typeset-slider-item">
+            <div class="typeset-slider-header"><span>日中垂直間距</span><span id="val-zh-gap">0.3em</span></div>
+            <input type="range" id="slider-zh-gap" min="0" max="1.5" step="0.05" value="0.3" oninput="applyTypesetSpacing()" />
+          </div>
+          <div class="typeset-slider-item">
+            <div class="typeset-slider-header"><span>日文字距</span><span id="val-ls">0em</span></div>
+            <input type="range" id="slider-ls" min="0" max="0.5" step="0.01" value="0" oninput="applyTypesetSpacing()" />
+          </div>
+          <div class="typeset-slider-item">
+            <div class="typeset-slider-header"><span>中文字距</span><span id="val-zh-ls">0em</span></div>
+            <input type="range" id="slider-zh-ls" min="0" max="0.5" step="0.01" value="0" oninput="applyTypesetSpacing()" />
+          </div>
+        </div>
+
+        <!-- 全文語音與匯出操作列 -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border);">
+          <!-- 朗讀控制組 -->
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="readAllTypeset(false)" title="全文朗讀一遍">
+              ▶️ 念一遍
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btn-typeset-loop" onclick="readAllTypeset(true)" title="全文無限循環朗讀">
+              🔁 循環
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="stopTypesetSpeech()" style="color:#d32f2f;" title="停止語音">
+              ⏹️ 停止
+            </button>
+          </div>
+
+          <!-- 匯出與複製控制組 -->
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="copyTypesetForLine('clean')" title="複製純日文文字（方便直接發送給主管或日本同事）">
+              💬 LINE 乾淨日文
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="copyTypesetForLine('bracket')" title="複製帶 [假名] 標音文字（方便自學筆記備忘）">
+              💬 LINE 括號注音
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="exportTypesetTxt('both')" title="匯出為 .txt 純文字檔案">
+              📤 匯出 TXT
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="openTypesetHistoryModal()" title="查看最近 5 筆歷史排版紀錄">
+              🕒 歷史紀錄
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="printTypesetDocument()" style="font-weight:800;">
+              🖨️ 列印 / 匯出 PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心排版與即時編輯工作區 (可點擊行內直接修改) -->
+      <div id="typeset-scroll-page">
+        <div id="typeset-preview-output">
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:220px; color:var(--muted); text-align:center; padding:30px;">
+            <span style="font-family:var(--font-serif); font-size:3.2rem; opacity:0.25; margin-bottom:8px;">あ</span>
+            <div style="font-size:0.95rem; font-weight:700; color:var(--ink);">請在上方貼入日文、中文、或點擊「📷 拍照 OCR」</div>
+            <div style="font-size:0.8rem; margin-top:4px;">支援點擊排版文字直接修改 (所見即所得)，支援右鍵單句編輯、拆分與收藏！</div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- 右鍵/長按懸浮上下文選單 -->
+    <div id="typeset-ctx-menu">
+      <button onclick="handleTypesetCtxAction('reprocess')">↻ 重新處理這句</button>
+      <button onclick="handleTypesetCtxAction('save_to_vocab')">⭐ 收藏至單字庫</button>
+      <button onclick="handleTypesetCtxAction('split')">✂ 拆分段落</button>
+      <button onclick="handleTypesetCtxAction('add_after')">+ 在後方新增段落</button>
+      <button onclick="handleTypesetCtxAction('divider')">— 插入分隔線</button>
+      <button onclick="handleTypesetCtxAction('merge_up')">↑ 與上一段合併</button>
+      <button onclick="handleTypesetCtxAction('undo')">⌘Z 復原</button>
+      <button onclick="handleTypesetCtxAction('delete')" class="danger">✕ 刪除此段</button>
+    </div>
+
+    <!-- 歷史紀錄彈窗 -->
+    <div class="modal-backdrop" id="modal-typeset-history">
+      <div class="modal-content" style="max-width:520px;">
+        <div class="modal-header">
+          <h3 style="margin:0; font-size:1.1rem; color:var(--primary);">🕒 最近排版歷史紀錄</h3>
+          <button class="modal-close" onclick="closeModal('modal-typeset-history')">✕</button>
+        </div>
+        <div class="modal-body" id="typeset-history-list" style="max-height:60vh; overflow-y:auto; padding:12px;">
+          <!-- JS 動態注入歷史項目 -->
+        </div>
+      </div>
+    </div>
 
     <!-- ==============================================================
          分頁 5：設定 (100% 繁體中文)
@@ -2843,7 +3094,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v84';
+const STORAGE_KEY = 'yang_runner_handbook_v85';
 
 function createRealRunnerData() {
   return {
@@ -13645,552 +13896,1076 @@ function toggleBroadcastMic() {
 
 
 /* ==============================================================
-   11. 日文排版軟體與打工度假面試 20 題即戰力 (page-typeset)
+   11. 日文排版救星・手帳專屬排版神器 (page-typeset) (v85)
 ============================================================== */
 
-const INTERVIEW_20_TOPICS = [
-  {
-    id: 1,
-    category: "基本背景",
-    title: "自己紹介（自我介紹）",
-    questions: [
-      { label: "質問A", ja: "<ruby>自己紹介<rt>じこしょうかい</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。", zh: "請做個自我介紹。" },
-      { label: "質問B", ja: "<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>自己<rt>じこ</rt></ruby>PRを<ruby>含<rt>ふく</rt></ruby>めて<ruby>自己紹介<rt>じこしょうかい</rt></ruby>をしていただけますか？", zh: "可以請您簡單包含自我優勢宣傳做個自我介紹嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はじめまして。<ruby>楊<rt>ヤン</rt></ruby><ruby>詠筑<rt>ユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>から<ruby>来<rt>き</rt></ruby>ました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本<rt>くまもと</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>のホテルで、レストランのホールスタッフをしています。<ruby>明<rt>あか</rt></ruby>るく<ruby>元気<rt>げんき</rt></ruby>にがんばります。よろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。", zh: "您好，初次見面。我叫楊詠筑。來自台灣。目前在熊本黑川溫泉的飯店擔任餐廳外場人員。我會開朗有活力地全力以赴。請多多指教。" }
-    ]
-  },
-  {
-    id: 2,
-    category: "應徵動機",
-    title: "志望動機（應徵動機）",
-    questions: [
-      { label: "質問A", ja: "どうしてこのホテル（スキー<ruby>場<rt>じょう</rt></ruby>）で<ruby>働<rt>はたら</rt></ruby>きたいのですか？", zh: "為什麼會想要在這家飯店／滑雪場工作呢？" },
-      { label: "質問B", ja: "<ruby>応募<rt>おうぼ</rt></ruby>の<ruby>理由<rt>りゆう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您應徵的理由。" }
-    ],
-    answers: [
-      { label: "回答", ja: "<ruby>冬<rt>ふゆ</rt></ruby>のスキー<ruby>場<rt>じょう</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いてみたいからです。レストランでの<ruby>経験<rt>けいけん</rt></ruby>をいかして、お<ruby>客様<rt>きゃくさま</rt></ruby>に<ruby>喜<rt>よろこ</rt></ruby>んでいただきたいです。", zh: "因為我想在冬天的滑雪場工作看看。希望能發揮在餐廳累積的經驗，讓客人感到開心滿意。" }
-    ]
-  },
-  {
-    id: 3,
-    category: "排班與期限",
-    title: "勤務開始日（開始上班日期）",
-    questions: [
-      { label: "質問A", ja: "いつから<ruby>働<rt>はたら</rt></ruby>くことができますか？", zh: "您從什麼時候開始可以上班呢？" },
-      { label: "質問B", ja: "<ruby>勤務開始<rt>きんむかいし</rt></ruby>の<ruby>希望日<rt>きぼうび</rt></ruby>はいつですか？", zh: "您希望開始上班的日期是哪一天呢？" }
-    ],
-    answers: [
-      { label: "回答", ja: "<ruby>今<rt>いま</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>の<ruby>契約<rt>けいやく</rt></ruby>が11<ruby>月<rt>がつ</rt></ruby>12<ruby>日<rt>にち</rt></ruby>に<ruby>終<rt>お</rt></ruby>わります。ですので、11<ruby>月下旬<rt>がつげじゅん</rt></ruby>か、12<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>ついたち</rt></ruby>から<ruby>働<rt>はたら</rt></ruby>けます。", zh: "我目前這份工作的合約到 11 月 12 日結束。因此，11 月下旬或 12 月 1 日起就可以開始上班。" }
-    ]
-  },
-  {
-    id: 4,
-    category: "排班與期限",
-    title: "勤務期間（可工作期限）",
-    questions: [
-      { label: "質問A", ja: "いつまで<ruby>働<rt>はたら</rt></ruby>けますか？", zh: "您可以工作到什麼時候呢？" },
-      { label: "質問B", ja: "どのくらいの<ruby>期間<rt>きかん</rt></ruby>、<ruby>勤務<rt>きんむ</rt></ruby>できますか？", zh: "您大概可以工作多長的期間呢？" }
-    ],
-    answers: [
-      { label: "回答", ja: "スキーシーズンの<ruby>終<rt>お</rt></ruby>わりまで、3<ruby>月末<rt>がつまつ</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>けます。", zh: "我可以工作到雪季結束，也就是 3 月底為止。" }
-    ]
-  },
-  {
-    id: 5,
-    category: "儀態與規範",
-    title: "タトゥー（刺青）の有無（刺青紋身確認）",
-    questions: [
-      { label: "質問A", ja: "タトゥーや<ruby>入<rt>い</rt></ruby>れ<ruby>墨<rt>ずみ</rt></ruby>は<ruby>入<rt>はい</rt></ruby>っていますか？", zh: "請問您身上有刺青或紋身嗎？" },
-      { label: "質問B", ja: "<ruby>体<rt>からだ</rt></ruby>に<ruby>刺青<rt>いれずみ</rt></ruby>などはありますか？", zh: "請問身體上有刺青之類的嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "いいえ、タトゥーや<ruby>入<rt>い</rt></ruby>れ<ruby>墨<rt>ずみ</rt></ruby>は<ruby>一切<rt>いっさい</rt></ruby>ありません。", zh: "沒有，完全沒有任何刺青或紋身。" }
-    ]
-  },
-  {
-    id: 6,
-    category: "儀態與規範",
-    title: "髪の色（頭髮顏色）",
-    questions: [
-      { label: "質問A", ja: "<ruby>現在<rt>げんざい</rt></ruby>の<ruby>髪<rt>かみ</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>は<ruby>何色<rt>なにいろ</rt></ruby>ですか？", zh: "您現在的頭髮是什麼顏色呢？" },
-      { label: "質問B", ja: "<ruby>髪<rt>かみ</rt></ruby>の<ruby>毛<rt>け</rt></ruby>は<ruby>染<rt>そ</rt></ruby>めていますか？", zh: "頭髮有染過顏色嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "<ruby>髪<rt>かみ</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>は<ruby>黒色<rt>くろいろ</rt></ruby>です。", zh: "我的頭髮是黑色。" }
-    ]
-  },
-  {
-    id: 7,
-    category: "儀態與規範",
-    title: "ネイル・爪の状態（指甲美甲狀態）",
-    questions: [
-      { label: "質問A", ja: "<ruby>爪<rt>つめ</rt></ruby>にネイルやマニキュアはしていますか？", zh: "指甲上有做美甲或塗指甲油嗎？" },
-      { label: "質問B", ja: "ネイルアートなどはされていますか？", zh: "有做藝術美甲之類的嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "いいえ、ネイルはしていません。<ruby>何<rt>なに</rt></ruby>もつけていません。", zh: "沒有，我沒有做美甲。指甲上什麼都沒有塗。" }
-    ]
-  },
-  {
-    id: 8,
-    category: "飲食與健康",
-    title: "アレルギーの有無（過敏體質確認）",
-    questions: [
-      { label: "質問A", ja: "<ruby>何<rt>なに</rt></ruby>かアレルギーはありますか？", zh: "請問有任何過敏嗎？" },
-      { label: "質問B", ja: "<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>などのアレルギーは<ruby>持<rt>も</rt></ruby>っていますか？", zh: "請問有食物過敏之類的嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はい、エビとカニのアレルギーがあります。<ruby>甲殻類<rt>こうかくるい</rt></ruby>が<ruby>食<rt>た</rt></ruby>べられません。", zh: "是的，我對蝦子和螃蟹過敏。甲殻類海鮮無法食用。" }
-    ]
-  },
-  {
-    id: 9,
-    category: "目前經驗",
-    title: "現在の仕事内容（目前工作內容）",
-    questions: [
-      { label: "質問A", ja: "<ruby>今<rt>いま</rt></ruby>、<ruby>旅館<rt>りょかん</rt></ruby>ではどんな<ruby>仕事<rt>しごと</rt></ruby>をしていますか？", zh: "現在在旅館都在做什麼樣的工作呢？" },
-      { label: "質問B", ja: "<ruby>現在<rt>げんざい</rt></ruby>の<ruby>業務内容<rt>ぎょうむないよう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您目前的業務內容。" }
-    ],
-    answers: [
-      { label: "回答", ja: "レストランでお<ruby>客様<rt>きゃくさま</rt></ruby>のご<ruby>案内<rt>あんない</rt></ruby>、<ruby>配膳<rt>はいぜん</rt></ruby>、テーブルの<ruby>片付<rt>かたづ</rt></ruby>けをしています。", zh: "我在餐廳負責引導接待客人、上菜端盤、以及餐桌收拾。" }
-    ]
-  },
-  {
-    id: 10,
-    category: "體力與適性",
-    title: "体力・立ち仕事への適性（體力與久站適應）",
-    questions: [
-      { label: "質問A", ja: "<ruby>立<rt>た</rt></ruby>ち<ruby>仕事<rt>しごと</rt></ruby>や<ruby>忙<rt>いそが</rt></ruby>しいシフトは<ruby>体力面<rt>たいりょくめん</rt></ruby>で<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？", zh: "久站工作或繁忙的排班在體力上能適應嗎？" },
-      { label: "質問B", ja: "<ruby>体力<rt>たいりょく</rt></ruby>には<ruby>自信<rt>じしん</rt></ruby>がありますか？", zh: "您對自己的體力有自信嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はい、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>体力<rt>たいりょく</rt></ruby>には<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>今<rt>いま</rt></ruby>の<ruby>職場<rt>しょくば</rt></ruby>でも<ruby>毎日<rt>まいにち</rt></ruby><ruby>元気<rt>げんき</rt></ruby>に<ruby>動<rt>うご</rt></ruby>いています。", zh: "是的，沒問題。我對自己的體力很有自信。在目前的職場也是每天充滿活力地工作。" }
-    ]
-  },
-  {
-    id: 11,
-    category: "排班配合",
-    title: "早朝・夜間勤務（早班・晚班排班配合）",
-    questions: [
-      { label: "質問A", ja: "<ruby>早番<rt>はやばん</rt></ruby>（<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く）や<ruby>遅番<rt>おそばん</rt></ruby>（<ruby>夜<rt>よる</rt></ruby><ruby>遅<rt>おそ</rt></ruby>く）のシフトは<ruby>入<rt>はい</rt></ruby>れますか？", zh: "早班（清晨）或晚班（深夜）的排班可以配合嗎？" },
-      { label: "質問B", ja: "<ruby>時間<rt>じかん</rt></ruby>の<ruby>不規則<rt>ふきそく</rt></ruby>なシフトでも<ruby>問題<rt>もんだい</rt></ruby>ないですか？", zh: "時間不規則的輪班也沒問題嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はい、<ruby>問題<rt>もんだい</rt></ruby>ありません。どの<ruby>時間<rt>じかん</rt></ruby>のシフトでも<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。", zh: "是的，完全沒有問題。任何時段的班次我都可以配合。" }
-    ]
-  },
-  {
-    id: 12,
-    category: "語言溝通",
-    title: "日本語でのコミュニケーション（日語應對能力）",
-    questions: [
-      { label: "質問A", ja: "<ruby>日本語<rt>にほんご</rt></ruby>での<ruby>接客<rt>せっきゃく</rt></ruby>や<ruby>会話<rt>かいわ</rt></ruby>は<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？", zh: "用日語接待客人或日常對話沒問題嗎？" },
-      { label: "質問B", ja: "<ruby>日本語<rt>にほんご</rt></ruby>での<ruby>指示<rt>しじ</rt></ruby>は<ruby>理解<rt>りかい</rt></ruby>できますか？", zh: "能聽懂日語下達的工作指示嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はい、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>難<rt>むずか</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>はまだ<ruby>勉強中<rt>べんきょうちゅう</rt></ruby>ですが、<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>聞<rt>き</rt></ruby>いて、<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>対応<rt>たいおう</rt></ruby>します。", zh: "是的，沒問題。雖然艱深的詞彙我還在學習中，但我會集中精神認真聆聽，並有禮貌且得體地應對。" }
-    ]
-  },
-  {
-    id: 13,
-    category: "冬季運動",
-    title: "スキー・スノーボードの経験（滑雪經驗）",
-    questions: [
-      { label: "質問A", ja: "スキーやスノーボードの<ruby>経験<rt>けいけん</rt></ruby>はありますか？", zh: "請問您有雙板或單板滑雪的經驗嗎？" },
-      { label: "質問B", ja: "ウインタースポーツはやったことがありますか？", zh: "請問有從事過冬季運動嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "まだ<ruby>経験<rt>けいけん</rt></ruby>はありません。この<ruby>冬<rt>ふゆ</rt></ruby>、<ruby>初<rt>はじ</rt></ruby>めて<ruby>挑戦<rt>ちょうせん</rt></ruby>してみたいです。", zh: "目前還沒有經驗。這個冬天，我非常想要第一次挑戰嘗試看看。" }
-    ]
-  },
-  {
-    id: 14,
-    category: "團隊協作",
-    title: "チームワーク・共同生活（團隊合作與人際相處）",
-    questions: [
-      { label: "質問A", ja: "<ruby>他<rt>ほか</rt></ruby>のスタッフと<ruby>協力<rt>きょうりょく</rt></ruby>して<ruby>仕事<rt>しごと</rt></ruby>ができますか？", zh: "能夠和其他工作夥伴互相合作完成工作嗎？" },
-      { label: "質問B", ja: "チームワークで<ruby>大切<rt>たいせつ</rt></ruby>にしていることは<ruby>何<rt>なん</rt></ruby>ですか？", zh: "在團隊合作中，您最重視的事情是什麼呢？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はい、<ruby>協力<rt>きょうりょく</rt></ruby>できます。<ruby>笑顔<rt>えがお</rt></ruby>で<ruby>挨拶<rt>あいさつ</rt></ruby>することと、<ruby>相手<rt>あいて</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>をよく<ruby>聞<rt>き</rt></ruby>くことを<ruby>大切<rt>たいせつ</rt></ruby>にしています。", zh: "是的，我能夠好好配合。我最重視的是帶著笑容打招呼，以及認真傾聽對方的想法與談話。" }
-    ]
-  },
-  {
-    id: 15,
-    category: "簽證身份",
-    title: "ビザの種類・期限（簽證種類與效期）",
-    questions: [
-      { label: "質問A", ja: "お<ruby>持<rt>も</rt></ruby>ちのビザの<ruby>種類<rt>しゅるい</rt></ruby>と<ruby>有効期限<rt>ゆうこうきげん</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您目前持有的簽證種類與有效期限。" },
-      { label: "質問B", ja: "<ruby>在留資格<rt>ざいりゅうしかく</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？", zh: "請問您的在留資格是什麼呢？" }
-    ],
-    answers: [
-      { label: "回答", ja: "ワーキングホリデービザです。<ruby>来年<rt>らいねん</rt></ruby>、2027<ruby>年<rt>ねん</rt></ruby>8<ruby>月<rt>がつ</rt></ruby>まで<ruby>有効<rt>ゆうこう</rt></ruby>です。", zh: "是打工度假簽證。有效期限到明年 2027 年 8 月為止。" }
-    ]
-  },
-  {
-    id: 16,
-    category: "環境適應",
-    title: "寒い環境への適応（對嚴寒氣候適應）",
-    questions: [
-      { label: "質問A", ja: "<ruby>雪山<rt>ゆきやま</rt></ruby>はとても<ruby>寒<rt>さむ</rt></ruby>いですが、<ruby>寒<rt>さむ</rt></ruby>さは<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？", zh: "雪山非常寒冷，請問耐寒方面沒問題嗎？" },
-      { label: "質問B", ja: "<ruby>寒<rt>さむ</rt></ruby>い<ruby>場所<rt>ばしょ</rt></ruby>での<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>不安<rt>ふあん</rt></ruby>はありませんか？", zh: "對於在寒冷地區的生活會有不安嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "はい、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>防寒対策<rt>ぼうかんたいさく</rt></ruby>をしっかりして、<ruby>健康管理<rt>けんこうかんり</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけます。", zh: "是的，完全沒問題。我會確實做好防寒保暖措施，並特別注意自己的健康管理。" }
-    ]
-  },
-  {
-    id: 17,
-    category: "個人優勢",
-    title: "長所（強み）（個人長處與優點）",
-    questions: [
-      { label: "質問A", ja: "ご<ruby>自身<rt>じしん</rt></ruby>の<ruby>長所<rt>ちょうしょ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？", zh: "請問您自己的長處優點是什麼呢？" },
-      { label: "質問B", ja: "ご<ruby>自身<rt>じしん</rt></ruby>の<ruby>強<rt>つよ</rt></ruby>みを<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您的個人優勢。" }
-    ],
-    answers: [
-      { label: "回答", ja: "いつも<ruby>明<rt>あか</rt></ruby>るく<ruby>前向<rt>まえむ</rt></ruby>きなところです。<ruby>新<rt>あたら</rt></ruby>しいことにも<ruby>自分<rt>じぶん</rt></ruby>から<ruby>積極的<rt>せっきょくてき</rt></ruby>に<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みます。", zh: "我的優點是總是開朗正向。面對新的事物我也會主動積極地去投入嘗試。" }
-    ]
-  },
-  {
-    id: 18,
-    category: "自省改善",
-    title: "短所・苦手なこと（短處與不擅長之處）",
-    questions: [
-      { label: "質問A", ja: "ご<ruby>自身<rt>じしん</rt></ruby>の<ruby>短所<rt>たんしょ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？", zh: "請問您自己的短處是什麼呢？" },
-      { label: "質問B", ja: "<ruby>苦手<rt>にがて</rt></ruby>なことはありますか？", zh: "請問有比較不擅長的事情嗎？" }
-    ],
-    answers: [
-      { label: "回答", ja: "<ruby>少<rt>すこ</rt></ruby>し<ruby>緊張<rt>きんちょう</rt></ruby>しやすいところです。でも、<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて<ruby>確認<rt>かくにん</rt></ruby>しながら<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>行動<rt>こうどう</rt></ruby>するようにしています。", zh: "我的短處是有點容易緊張。但我會讓自己沉著冷靜、邊確實確認邊細心謹慎地行動。" }
-    ]
-  },
-  {
-    id: 19,
-    category: "危機應變",
-    title: "忙しい時の対応（尖峰忙碌時應對）",
-    questions: [
-      { label: "質問A", ja: "お<ruby>店<rt>みせ</rt></ruby>がとても<ruby>忙<rt>いそが</rt></ruby>しい<ruby>時<rt>とき</rt></ruby>はどうしますか？", zh: "店裡非常忙碌的時候您會怎麼做呢？" },
-      { label: "質問B", ja: "<ruby>混雑<rt>こんざつ</rt></ruby>した<ruby>時<rt>とき</rt></ruby>、どう<ruby>行動<rt>こうどう</rt></ruby>しますか？", zh: "現場客滿混雜時，您會採取怎樣的行動呢？" }
-    ],
-    answers: [
-      { label: "回答", ja: "<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて<ruby>周<rt>まわ</rt></ruby>りを<ruby>見<rt>み</rt></ruby>ます。そして、<ruby>周<rt>まわ</rt></ruby>りのスタッフと<ruby>声<rt>こえ</rt></ruby>を<ruby>掛<rt>か</rt></ruby>け<ruby>合<rt>あ</rt></ruby>って<ruby>動<rt>うご</rt></ruby>きます。", zh: "我會先冷靜環顧四周情況。然後，與周圍的夥伴互相發聲打招呼、協同照應後再行動。" }
-    ]
-  },
-  {
-    id: 20,
-    category: "主動提問",
-    title: "逆質問（最後是否有問題想詢問面試官）",
-    questions: [
-      { label: "質問A", ja: "<ruby>最後<rt>さいご</rt></ruby>に<ruby>何<rt>なに</rt></ruby>か<ruby>質問<rt>しつもん</rt></ruby>はありますか？", zh: "最後有什麼想提問的嗎？" },
-      { label: "質問B", ja: "こちらに<ruby>聞<rt>き</rt></ruby>いておきたいことはありますか？", zh: "有想要先向我們詢問了解的事情嗎？" }
-    ],
-    answers: [
-      { label: "回答A（用具租借與折扣）", ja: "スキーの<ruby>用具<rt>ようぐ</rt></ruby>（<ruby>板<rt>いた</rt></ruby>やウェア）は、スタッフ<ruby>向<rt>む</rt></ruby>けのレンタルや<ruby>割引<rt>わりびき</rt></ruby>はありますか？", zh: "請問滑雪裝備（雪板與雪衣雪褲），是否有提供員工專屬的租借或員工折扣呢？" },
-      { label: "回答B（初學滑雪課程）", ja: "<ruby>初心者向<rt>しょしんしゃむ</rt></ruby>けのスキーレッスンはありますか？<ruby>無料<rt>むりょう</rt></ruby>か<ruby>有料<rt>ゆうりょう</rt></ruby>かも<ruby>知<rt>し</rt></ruby>りたいです。", zh: "請問有針對初學者的滑雪課程嗎？我也想了解是免費提供還是需要收費。" },
-      { label: "回答C（宿舍房型與通勤）", ja: "<ruby>寮<rt>りょう</rt></ruby>のお<ruby>部屋<rt>へや</rt></ruby>は<ruby>個室<rt>こしつ</rt></ruby>ですか？<ruby>職場<rt>しょくば</rt></ruby>までは<ruby>歩<rt>ある</rt></ruby>いて<ruby>何分<rt>なんぷん</rt></ruby>くらいですか？", zh: "請問員工宿舍的房間是獨立單人房嗎？到上班工作地點步行大概需要幾分鐘呢？" }
-    ]
-  }
-];
+let typesetLastData = null;
+let typesetUndoStack = [];
+let typesetCtxTarget = null;
+let isTypesetLooping = false;
+let typesetAllReadings = [];
 
-let currentTypesetMode = 'interview';
-let isInterviewContinuousPlaying = false;
-let currentPlayTopicIndex = 0;
-
+// 初始化與渲染分頁
 function renderTypesetPage() {
-  renderInterviewCardsList();
-  updateEditorPreview();
-}
-
-function setTypesetMode(mode) {
-  currentTypesetMode = mode;
-  const btnInterview = document.getElementById('btn-mode-interview');
-  const btnEditor = document.getElementById('btn-mode-editor');
-  const contInterview = document.getElementById('typeset-interview-container');
-  const contEditor = document.getElementById('typeset-editor-container');
-
-  if (mode === 'interview') {
-    if (btnInterview) btnInterview.classList.add('active');
-    if (btnEditor) btnEditor.classList.remove('active');
-    if (contInterview) contInterview.style.display = 'block';
-    if (contEditor) contEditor.style.display = 'none';
-  } else {
-    if (btnInterview) btnInterview.classList.remove('active');
-    if (btnEditor) btnEditor.classList.add('active');
-    if (contInterview) contInterview.style.display = 'none';
-    if (contEditor) contEditor.style.display = 'block';
-    updateEditorPreview();
-  }
-}
-
-function setTypesetFontSize(size) {
-  ['md', 'lg', 'xl'].forEach(s => {
-    const btn = document.getElementById('font-btn-' + s);
-    if (btn) btn.classList.toggle('active', s === size);
-  });
-  const c1 = document.getElementById('typeset-interview-container');
-  const c2 = document.getElementById('typeset-editor-container');
-  [c1, c2].forEach(c => {
-    if (c) {
-      c.classList.remove('font-size-md', 'font-size-lg', 'font-size-xl');
-      c.classList.add('font-size-' + size);
+  applyTypesetSpacing();
+  if (!typesetLastData) {
+    const saved = localStorage.getItem('yang_typeset_last_data');
+    if (saved) {
+      try {
+        typesetLastData = JSON.parse(saved);
+        renderTypesetResult(typesetLastData);
+      } catch(e) {}
     }
-  });
+  }
 }
 
-function stripRubyForSpeech(html) {
-  return html.replace(/<rt>[^<]*<\/rt>/g, '').replace(/<[^>]+>/g, '').trim();
+// 清空輸入
+function clearTypesetInput() {
+  const input = document.getElementById('typeset-input-text');
+  if (input) input.value = '';
 }
 
-function renderInterviewCardsList(filterKeyword = '') {
-  const container = document.getElementById('interview-cards-list');
-  if (!container) return;
+// 插入 <ruby> 標記
+function insertRubyTagToInput() {
+  const input = document.getElementById('typeset-input-text');
+  if (!input) return;
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+  const val = input.value;
+  const sel = val.substring(start, end) || '漢字';
+  const tag = sel + '[かんじ]';
+  input.value = val.substring(0, start) + tag + val.substring(end);
+  input.focus();
+}
 
-  const kw = filterKeyword.toLowerCase().trim();
-  const filtered = INTERVIEW_20_TOPICS.filter(t => {
-    if (!kw) return true;
-    const matchTitle = t.title.toLowerCase().includes(kw);
-    const matchCat = t.category.toLowerCase().includes(kw);
-    const matchQ = t.questions.some(q => q.ja.includes(kw) || q.zh.includes(kw));
-    const matchA = t.answers.some(a => a.ja.includes(kw) || a.zh.includes(kw));
-    return matchTitle || matchCat || matchQ || matchA;
-  });
+// 切換排版滑桿抽屜
+function toggleSlidersPanel() {
+  const panel = document.getElementById('typeset-sliders-panel');
+  if (!panel) return;
+  panel.style.display = panel.style.display === 'none' ? 'grid' : 'none';
+}
 
-  if (filtered.length === 0) {
-    container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--muted);">查無符合的面試題目，請嘗試其他關鍵字。</div>';
-    return;
+// 套用字級與間距滑桿
+function applyTypesetSpacing() {
+  const jpSize = document.getElementById('slider-jp-size')?.value || 18;
+  const zhSize = document.getElementById('slider-zh-size')?.value || 13;
+  const lh = document.getElementById('slider-lh')?.value || 2.6;
+  const zhGap = document.getElementById('slider-zh-gap')?.value || 0.3;
+  const ls = document.getElementById('slider-ls')?.value || 0;
+  const zhLs = document.getElementById('slider-zh-ls')?.value || 0;
+
+  const setT = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setT('val-jp-size', jpSize + 'px');
+  setT('val-zh-size', zhSize + 'px');
+  setT('val-lh', parseFloat(lh).toFixed(1));
+  setT('val-zh-gap', parseFloat(zhGap).toFixed(2) + 'em');
+  setT('val-ls', parseFloat(ls).toFixed(2) + 'em');
+  setT('val-zh-ls', parseFloat(zhLs).toFixed(2) + 'em');
+
+  let dynamicStyle = document.getElementById('typeset-dynamic-spacing-style');
+  if (!dynamicStyle) {
+    dynamicStyle = document.createElement('style');
+    dynamicStyle.id = 'typeset-dynamic-spacing-style';
+    document.head.appendChild(dynamicStyle);
   }
 
-  container.innerHTML = filtered.map(t => {
-    const qHtml = t.questions.map(q => {
-      const plainSpeech = stripRubyForSpeech(q.ja).replace(/"/g, '&quot;');
-      return `
-        <div class="interview-q-block">
-          <div class="interview-q-label">
-            <span>${q.label}</span>
-            <button class="btn btn-secondary btn-sm" onclick="speakJapaneseText('${plainSpeech}')" style="padding:2px 6px; font-size:0.75rem;">🔊 發音</button>
-          </div>
-          <div class="typeset-ja-line">${q.ja}</div>
-          <div class="typeset-zh-line">${q.zh}</div>
-        </div>
-      `;
-    }).join('');
-
-    const aHtml = t.answers.map(a => {
-      const plainSpeech = stripRubyForSpeech(a.ja).replace(/"/g, '&quot;');
-      return `
-        <div class="interview-ans-block">
-          <div class="interview-ans-label">
-            <span>✨ ${a.label}（楊詠筑）</span>
-            <button class="btn btn-secondary btn-sm" onclick="speakJapaneseText('${plainSpeech}')" style="padding:2px 6px; font-size:0.75rem;">🔊 播放應答</button>
-          </div>
-          <div class="typeset-ja-line">${a.ja}</div>
-          <div class="typeset-zh-line">${a.zh}</div>
-        </div>
-      `;
-    }).join('');
-
-    return `
-      <div class="interview-card" id="interview-card-${t.id}">
-        <div class="interview-header">
-          <div class="interview-title-wrap">
-            <span class="interview-badge">#${t.id}</span>
-            <span class="interview-title">${t.title}</span>
-          </div>
-          <span class="interview-category">${t.category}</span>
-        </div>
-        <div class="interview-body">
-          ${qHtml}
-          ${aHtml}
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function filterInterviewTopics() {
-  const input = document.getElementById('typeset-search-input');
-  if (input) renderInterviewCardsList(input.value);
-}
-
-function togglePlayAllInterview() {
-  const btn = document.getElementById('btn-play-all-interview');
-  if (isInterviewContinuousPlaying) {
-    window.speechSynthesis.cancel();
-    isInterviewContinuousPlaying = false;
-    if (btn) {
-      btn.textContent = '🔊 連續播放';
-      btn.classList.remove('btn-danger');
-      btn.classList.add('btn-primary');
+  dynamicStyle.textContent = `
+    #typeset-scroll-page .jp-line {
+      font-size: ${jpSize}px !important;
+      line-height: ${lh} !important;
+      letter-spacing: ${ls}em !important;
     }
-    return;
-  }
-
-  isInterviewContinuousPlaying = true;
-  currentPlayTopicIndex = 0;
-  if (btn) {
-    btn.textContent = '⏹️ 停止播放';
-    btn.classList.remove('btn-primary');
-    btn.classList.add('btn-danger');
-  }
-  playNextInterviewTopic();
-}
-
-function playNextInterviewTopic() {
-  if (!isInterviewContinuousPlaying || currentPlayTopicIndex >= INTERVIEW_20_TOPICS.length) {
-    isInterviewContinuousPlaying = false;
-    const btn = document.getElementById('btn-play-all-interview');
-    if (btn) {
-      btn.textContent = '🔊 連續播放';
-      btn.classList.remove('btn-danger');
-      btn.classList.add('btn-primary');
+    #typeset-scroll-page .zh-line {
+      font-size: ${zhSize}px !important;
+      margin-top: ${zhGap}em !important;
+      letter-spacing: ${zhLs}em !important;
     }
-    return;
-  }
-
-  const topic = INTERVIEW_20_TOPICS[currentPlayTopicIndex];
-  const cardEl = document.getElementById('interview-card-' + topic.id);
-  if (cardEl) {
-    cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    cardEl.style.borderColor = 'var(--primary)';
-  }
-
-  // Speak main answer of the topic
-  const answerText = stripRubyForSpeech(topic.answers[0].ja);
-  const u = new SpeechSynthesisUtterance(answerText);
-  u.lang = 'ja-JP';
-  u.rate = 0.92;
-  u.onend = () => {
-    if (cardEl) cardEl.style.borderColor = '';
-    currentPlayTopicIndex++;
-    setTimeout(playNextInterviewTopic, 1200);
-  };
-  u.onerror = () => {
-    if (cardEl) cardEl.style.borderColor = '';
-    currentPlayTopicIndex++;
-    setTimeout(playNextInterviewTopic, 1200);
-  };
-  window.speechSynthesis.speak(u);
-}
-
-// 智慧標音語法解析器：將 漢字[かんじ] 或 漢字(かんじ) 自動轉換為 <ruby>漢字<rt>かんじ</rt></ruby>
-function convertRubySyntax(text) {
-  if (!text) return '';
-  // 已經包含 ruby 標籤者保留
-  let result = text;
-  // 處理 漢字[かんじ]
-  result = result.replace(/([一-龯々ヶ]+)\[([\u3040-\u309F\u30A0-\u30FF]+)\]/g, '<ruby>$1<rt>$2</rt></ruby>');
-  // 處理 漢字(かんじ)
-  result = result.replace(/([一-龯々ヶ]+)\(([\u3040-\u309F\u30A0-\u30FF]+)\)/g, '<ruby>$1<rt>$2</rt></ruby>');
-  // 處理 {漢字|かんじ}
-  result = result.replace(/\{([一-龯々ヶ]+)\|([\u3040-\u309F\u30A0-\u30FF]+)\}/g, '<ruby>$1<rt>$2</rt></ruby>');
-  return result;
-}
-
-function updateEditorPreview() {
-  const jaInput = document.getElementById('editor-ja-input');
-  const zhInput = document.getElementById('editor-zh-input');
-  const preview = document.getElementById('editor-live-preview');
-  if (!preview) return;
-
-  const rawJa = jaInput ? jaInput.value.trim() : '';
-  const rawZh = zhInput ? zhInput.value.trim() : '';
-
-  if (!rawJa && !rawZh) {
-    preview.innerHTML = `
-      <div style="color:var(--muted); text-align:center; padding:20px;">
-        請在上方左側輸入日文（例如：<code>はじめまして。楊詠筑[ヤンユンジュ]と申[もう]します。</code>）<br>
-        並在右側輸入繁體中文翻譯，此處將即時產生日文在頂（標音在上）、中文在下的精準排版。
-      </div>
-    `;
-    return;
-  }
-
-  const formattedJa = convertRubySyntax(rawJa).replace(/\n/g, '<br>');
-  const formattedZh = rawZh.replace(/\n/g, '<br>');
-
-  preview.innerHTML = `
-    <div class="interview-card" style="margin-bottom:0; box-shadow:none;">
-      <div class="typeset-ja-line">${formattedJa}</div>
-      ${formattedZh ? `<div class="typeset-zh-line">${formattedZh}</div>` : ''}
-    </div>
   `;
 }
 
-function insertFuriganaSyntax() {
-  const jaInput = document.getElementById('editor-ja-input');
-  if (!jaInput) return;
-  const start = jaInput.selectionStart;
-  const end = jaInput.selectionEnd;
-  const val = jaInput.value;
-  const selected = val.substring(start, end) || '漢字';
-  const tag = '<ruby>' + selected + '<rt>かんじ</rt></ruby>';
-  jaInput.value = val.substring(0, start) + tag + val.substring(end);
-  updateEditorPreview();
-  showToast('已插入 ruby 標音標籤', 'success');
-}
-
-function loadEditorTemplate(type) {
-  const jaInput = document.getElementById('editor-ja-input');
-  const zhInput = document.getElementById('editor-zh-input');
-  if (!jaInput || !zhInput) return;
-
-  if (type === 'intro') {
-    jaInput.value = 'はじめまして。楊詠筑[ヤンユンジュ]と申[もう]します。\n台湾[たいわん]から来[き]ました。現在[げんざい]は熊本[くまもと]の黒川温泉[くろかわおんせん]のホテルで、レストランのホールスタッフをしています。\n明[あか]るく元気[げんき]にがんばります。よろしくお願[ねが]いいたします。';
-    zhInput.value = '您好，初次見面。我叫楊詠筑。來自台灣。目前在熊本黑川溫泉的飯店擔任餐廳外場人員。我會開朗有活力地全力以赴。請多多指教。';
-  } else if (type === 'motive') {
-    jaInput.value = '冬[ふゆ]のスキー場[じょう]で働[はたら]いてみたいからです。\nレストランでの経験[けいけん]をいかして、お客様[きゃくさま]に喜[よろこ]んでいただきたいです。';
-    zhInput.value = '因為我想在冬天的滑雪場工作看看。希望能發揮在餐廳累積的經驗，讓客人感到開心滿意。';
-  } else if (type === 'reverse_q') {
-    jaInput.value = 'スキーの用具[ようぐ]（板[いた]やウェア）は、スタッフ向[む]けのレンタルや割引[わりびき]はありますか？\n寮[りょう]のお部屋[へや]は個室[こしつ]ですか？職場[しょくば]までは歩[ある]いて何分[なんぷん]くらいですか？';
-    zhInput.value = '請問滑雪裝備（雪板與雪衣雪褲），是否有提供員工專屬的租借或員工折扣呢？\n請問員工宿舍的房間是獨立單人房嗎？到上班工作地點步行大概需要幾分鐘呢？';
+// 遮罩模式切換 (Ruby 標音 / 中文遮罩)
+function toggleMaskMode(type) {
+  const page = document.getElementById('typeset-scroll-page');
+  if (!page) return;
+  if (type === 'ruby') {
+    const chk = document.getElementById('opt-mask-ruby')?.checked;
+    page.classList.toggle('mask-ruby', !!chk);
+  } else if (type === 'zh') {
+    const chk = document.getElementById('opt-mask-zh')?.checked;
+    page.classList.toggle('mask-zh', !!chk);
   }
-  updateEditorPreview();
-  showToast('已載入模範範本', 'success');
 }
 
-function speakEditorText() {
-  const jaInput = document.getElementById('editor-ja-input');
-  if (!jaInput || !jaInput.value.trim()) {
-    showToast('請先輸入日文內容', 'info');
+// 口袋小抄列印模式
+function togglePocketMode() {
+  const chk = document.getElementById('opt-pocket-mode')?.checked;
+  document.body.classList.toggle('pocket-print-mode', !!chk);
+  showToast(chk ? '已啟用「✂️ 圍裙口袋小抄」列印排版' : '已恢復「標準 A4」列印排版', 'info');
+}
+
+// 列印保留底色
+function togglePrintColor() {
+  const chk = document.getElementById('opt-print-color')?.checked;
+  document.body.classList.toggle('print-keep-color', !!chk);
+  showToast(chk ? '列印時將保留溫暖彩色底色' : '列印時將使用純淨黑白高對比', 'info');
+}
+
+// 儲存 Undo Stack
+function saveTypesetUndo() {
+  const container = document.getElementById('typeset-preview-output');
+  if (!container) return;
+  typesetUndoStack.push(container.innerHTML);
+  if (typesetUndoStack.length > 30) typesetUndoStack.shift();
+}
+
+function doTypesetUndo() {
+  const container = document.getElementById('typeset-preview-output');
+  if (!container || !typesetUndoStack.length) {
+    showToast('沒有可復原的步驟', 'info');
     return;
   }
-  const plain = stripRubyForSpeech(convertRubySyntax(jaInput.value));
-  speakJapaneseText(plain);
+  container.innerHTML = typesetUndoStack.pop();
+  bindAllTypesetEvents(container);
+  showToast('已復原上一步', 'success');
 }
 
-function copyEditorHtml() {
-  const preview = document.getElementById('editor-live-preview');
-  if (!preview) return;
-  navigator.clipboard.writeText(preview.innerHTML).then(() => {
-    showToast('已複製排版 HTML 到剪貼簿', 'success');
-  }).catch(() => {
-    showToast('複製失敗，請手動選取複製', 'error');
+// 判斷是否為純中文
+function isPureChineseText(t) {
+  const zhCount = (t.match(/[\u4e00-\u9fff]/g) || []).length;
+  const jpKana = (t.match(/[\u3040-\u30ff]/g) || []).length;
+  return zhCount > 0 && jpKana === 0;
+}
+
+// 核心排版生成
+async function generateTypesetArticle() {
+  const input = document.getElementById('typeset-input-text');
+  const text = input ? input.value.trim() : '';
+  if (!text) {
+    showToast('請先貼入日文或中文文章', 'info');
+    return;
+  }
+
+  saveTypesetHistory(text);
+  saveTypesetUndo();
+
+  const btn = document.getElementById('btn-typeset-generate');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> 分析排版中…';
+  }
+
+  const output = document.getElementById('typeset-preview-output');
+  output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在智慧標音並解析排版，請稍候…</div>';
+
+  try {
+    // 檢查是否有日＋中雙行格式
+    const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean);
+    const hasMixedLines = lines.length > 1 && lines.some(l => (l.match(/[\u4e00-\u9fff]/g)||[]).length > 3 && (l.match(/[\u3040-\u30ff]/g)||[]).length === 0);
+
+    if (hasMixedLines) {
+      // 兩行一組模式（離線即可極速完成）
+      const parsedGroups = [];
+      let i = 0;
+      while (i < lines.length) {
+        const l1 = lines[i];
+        const l2 = lines[i+1] || '';
+        const isL2Zh = l2 && (l2.match(/[\u4e00-\u9fff]/g)||[]).length > 3 && (l2.match(/[\u3040-\u30ff]/g)||[]).length === 0;
+        if (isL2Zh) {
+          parsedGroups.push(parseLocalJapaneseSegments(l1, l2));
+          i += 2;
+        } else {
+          parsedGroups.push(parseLocalJapaneseSegments(l1, ''));
+          i++;
+        }
+      }
+      typesetLastData = { groups: parsedGroups };
+      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+      renderTypesetResult(typesetLastData);
+      showToast(`排版成功：已解析 ${parsedGroups.length} 個雙行對照組`, 'success');
+      return;
+    }
+
+    // 純中文：呼叫 Gemini 翻譯成日文並標音
+    if (isPureChineseText(text)) {
+      await processZhToJpViaGemini(text);
+      return;
+    }
+
+    // 純日文：先嘗試呼叫 Gemini 智慧標音，若失敗則無縫降級為本地離線引擎！
+    await processJpViaGeminiOrFallback(text);
+
+  } catch (err) {
+    console.warn('Typeset generation warning:', err);
+    // 最終保底：本地離線解析器保證 100% 不卡死
+    const fallbackGroups = text.split(/\n+/).map(line => parseLocalJapaneseSegments(line.trim(), ''));
+    typesetLastData = { groups: fallbackGroups };
+    renderTypesetResult(typesetLastData);
+    showToast('已切換為本地極速排版', 'info');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '⚡ 立即生成排版';
+    }
+  }
+}
+
+// 本地離線日文切詞與標記解析 (零網路、零 API 也能 100% 運行)
+function parseLocalJapaneseSegments(jpText, zhTranslation) {
+  const segments = [];
+  // 支援 漢字[かんじ] 或 漢字(かんじ) 或 純文字
+  const regex = /([一-龯々ヶ]+)(?:\[([\u3040-\u309F\u30A0-\u30FF]+)\]|\(([\u3040-\u309F\u30A0-\u30FF]+)\))|([\u30A0-\u30FFー]+)|([a-zA-Z]+)|([^一-龯々ヶ\u30A0-\u30FFa-zA-Z\[\]\(\)]+)/g;
+  let match;
+  while ((match = regex.exec(jpText)) !== null) {
+    if (match[1]) {
+      segments.push({
+        type: 'kanji',
+        text: match[1],
+        reading: match[2] || match[3] || ''
+      });
+    } else if (match[4]) {
+      segments.push({
+        type: 'katakana',
+        text: match[4],
+        romaji: convertKatakanaToRomaji(match[4])
+      });
+    } else if (match[5]) {
+      segments.push({
+        type: 'english',
+        text: match[5],
+        kk: ''
+      });
+    } else if (match[6]) {
+      segments.push({
+        type: 'other',
+        text: match[6]
+      });
+    }
+  }
+
+  if (segments.length === 0) {
+    segments.push({ type: 'other', text: jpText });
+  }
+
+  return {
+    segments: segments,
+    translation: zhTranslation || '',
+    reading_full: segments.map(s => s.reading || s.text).join('')
+  };
+}
+
+// 片假名轉羅馬音對照表 (本地極速備援)
+function convertKatakanaToRomaji(kana) {
+  const kanaMap = {
+    'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
+    'カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko',
+    'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
+    'タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to',
+    'ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no',
+    'ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
+    'ヤ':'ya','ユ':'yu','ヨ':'yo',
+    'ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro',
+    'ワ':'wa','ヲ':'wo','ン':'n',
+    'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
+    'ザ':'za','ジ':'ji','ズ':'zu','ゼ':'ze','ゾ':'zo',
+    'ダ':'da','ヂ':'ji','ヅ':'zu','デ':'de','ド':'do',
+    'バ':'ba','ビ':'bi','ブ':'bu','ベ':'be','ボ':'bo',
+    'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
+    'キャ':'kya','キュ':'kyu','キョ':'kyo',
+    'シャ':'sha','シュ':'shu','ショ':'sho',
+    'チャ':'cha','チュ':'chu','チョ':'cho',
+    'ニャ':'nya','ニュ':'nyu','ニョ':'nyo',
+    'ヒャ':'hya','ヒュ':'hyu','ヒョ':'hyo',
+    'ミャ':'mya','ミュ':'myu','ミョ':'myo',
+    'リャ':'rya','リュ':'ryu','リョ':'ryo',
+    'ギャ':'gya','ギュ':'gyu','ギョ':'gyo',
+    'ジャ':'ja','ジュ':'ju','ジョ':'jo',
+    'ビャ':'bya','ビュ':'byu','ビョ':'byo',
+    'ピャ':'pya','ピュ':'pyu','ピョ':'pyo',
+    'ー': '-'
+  };
+  let result = '';
+  let i = 0;
+  while (i < kana.length) {
+    if (i + 1 < kana.length && kanaMap[kana.substring(i, i + 2)]) {
+      result += kanaMap[kana.substring(i, i + 2)];
+      i += 2;
+    } else if (kanaMap[kana[i]]) {
+      result += kanaMap[kana[i]];
+      i++;
+    } else {
+      result += kana[i];
+      i++;
+    }
+  }
+  return result;
+}
+
+// 透過 Gemini API 智慧標音
+async function processJpViaGeminiOrFallback(text) {
+  const prompt = `
+你是專業的日文排版助理。請分析以下日文文章，逐句拆解標音並翻譯為道地繁體中文。
+請輸出嚴格且純淨的 JSON 格式（不要有任何多餘的 markdown 標記）：
+{
+  "groups": [
+    {
+      "segments": [
+        { "type": "kanji", "text": "漢字", "reading": "かんじ" },
+        { "type": "hiragana", "text": "は" },
+        { "type": "katakana", "text": "レストラン", "romaji": "resutoran" },
+        { "type": "english", "text": "Table", "kk": "tebḷ" },
+        { "type": "other", "text": "。" }
+      ],
+      "translation": "繁體中文翻譯",
+      "reading_full": "整句平假名"
+    }
+  ]
+}
+
+待分析日文：
+${text}
+`;
+
+  try {
+    const data = await callGeminiApiUnified(prompt);
+    if (data && data.groups && data.groups.length > 0) {
+      typesetLastData = data;
+      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+      renderTypesetResult(typesetLastData);
+      showToast(`AI 智慧標音完成：共 ${data.groups.length} 句`, 'success');
+      return;
+    }
+  } catch (err) {
+    console.warn('Gemini AI failed, using fallback:', err);
+  }
+
+  // 降級為本地解析
+  const fallbackGroups = text.split(/\n+/).map(line => parseLocalJapaneseSegments(line.trim(), ''));
+  typesetLastData = { groups: fallbackGroups };
+  renderTypesetResult(typesetLastData);
+  showToast('已使用本地引擎完成排版', 'info');
+}
+
+// 透過 Gemini 將純中文翻譯為日文並標音
+async function processZhToJpViaGemini(zhText) {
+  const prompt = `
+你是專業的中日外場翻譯與日文排版助理。請將以下繁體中文翻譯為自然道地的日文，並逐句標音。
+請輸出純淨的 JSON 格式：
+{
+  "groups": [
+    {
+      "segments": [
+        { "type": "kanji", "text": "料理", "reading": "りょうり" },
+        { "type": "hiragana", "text": "が" },
+        { "type": "katakana", "text": "テーブル", "romaji": "te-buru" }
+      ],
+      "translation": "原文對應的繁體中文",
+      "reading_full": "整句平假名"
+    }
+  ]
+}
+
+中文原文：
+${zhText}
+`;
+
+  try {
+    const data = await callGeminiApiUnified(prompt);
+    if (data && data.groups && data.groups.length > 0) {
+      typesetLastData = data;
+      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+      renderTypesetResult(typesetLastData);
+      showToast(`中文翻日文排版完成：共 ${data.groups.length} 句`, 'success');
+      return;
+    }
+  } catch(e) {
+    console.warn('Zh-Jp translation error:', e);
+  }
+
+  // 若無 API Key，顯示友善提示
+  const output = document.getElementById('typeset-preview-output');
+  output.innerHTML = '<div style="color:var(--primary); padding:30px; text-align:center;">中文自動翻譯為日文需連線 Gemini AI。請先至「設定」頁面輸入您的 Gemini API Key，或直接貼入日文進行排版。</div>';
+}
+
+// 📷 拍照 / 圖片 OCR 辨識排版
+function triggerTypesetImageOcr() {
+  const fileInput = document.getElementById('typeset-ocr-file-input');
+  if (fileInput) fileInput.click();
+}
+
+async function handleTypesetImageUpload(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : '';
+  if (!key) {
+    showToast('圖片辨識需使用 Google Gemini AI，請先至「設定」填入 API Key', 'error');
+    return;
+  }
+
+  showToast('📷 正在辨識圖片中的日文字元與公告…', 'info');
+  const output = document.getElementById('typeset-preview-output');
+  output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在 OCR 辨識照片中的日文文字，請稍候…</div>';
+
+  try {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Data = reader.result.split(',')[1];
+      const mimeType = file.type || 'image/jpeg';
+
+      const prompt = `
+請仔細辨識這張圖片中的所有日文內容（例如手寫便箋、公告白板、菜單或標籤）。
+將辨識出的日文進行繁體中文翻譯，並逐句標音。
+請輸出嚴格純淨的 JSON：
+{
+  "groups": [
+    {
+      "segments": [
+        { "type": "kanji", "text": "本日", "reading": "ほんじつ" },
+        { "type": "hiragana", "text": "の" },
+        { "type": "katakana", "text": "おすすめ", "romaji": "osusume" }
+      ],
+      "translation": "繁體中文翻譯",
+      "reading_full": "平假名"
+    }
+  ]
+}
+`;
+
+      const body = JSON.stringify({
+        contents: [{
+          role: 'user',
+          parts: [
+            { inline_data: { mime_type: mimeType, data: base64Data } },
+            { text: prompt }
+          ]
+        }],
+        generationConfig: { responseMimeType: 'application/json' }
+      });
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(key)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body
+      });
+      const resJson = await res.json();
+
+      if (resJson.candidates?.[0]?.content?.parts?.[0]?.text) {
+        let rawText = resJson.candidates[0].content.parts[0].text.trim();
+        if (rawText.startsWith('```json')) rawText = rawText.substring(7);
+        if (rawText.startsWith('```')) rawText = rawText.substring(3);
+        if (rawText.endsWith('```')) rawText = rawText.substring(0, rawText.length - 3);
+
+        const parsed = JSON.parse(rawText.trim());
+        if (parsed.groups && parsed.groups.length > 0) {
+          typesetLastData = parsed;
+          localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+          renderTypesetResult(typesetLastData);
+          showToast(`📷 圖片辨識成功：已排版 ${parsed.groups.length} 句！`, 'success');
+          return;
+        }
+      }
+      throw new Error('未能在圖片中辨識出清晰日文內容');
+    };
+    reader.readAsDataURL(file);
+  } catch (err) {
+    console.error('Image OCR error:', err);
+    showToast('圖片辨識失敗：' + err.message, 'error');
+  }
+}
+
+// ✨ 外場敬語 / 口吻轉換器
+async function convertTypesetTone(toneType) {
+  const input = document.getElementById('typeset-input-text');
+  const text = input ? input.value.trim() : '';
+  if (!text) {
+    showToast('請先輸入日文句子以轉換口吻', 'info');
+    return;
+  }
+
+  let toneDesc = '外場對客人使用的正式接客敬語 (謙讓語/尊敬語)';
+  if (toneType === 'kitchen') toneDesc = '外場對內場廚房師傅對講機叫菜與通報的精簡口吻';
+  if (toneType === 'colleague') toneDesc = '外場日本同事之間的親切平級口吻';
+
+  showToast(`✨ 正在將日文轉為【${toneDesc}】…`, 'info');
+
+  const prompt = `
+請將以下日文重寫為【${toneDesc}】。
+請輸出純淨的 JSON 格式：
+{
+  "groups": [
+    {
+      "segments": [
+        { "type": "kanji", "text": "漢字", "reading": "かんじ" }
+      ],
+      "translation": "中文翻譯",
+      "reading_full": "平假名"
+    }
+  ]
+}
+
+原句：
+${text}
+`;
+
+  try {
+    const data = await callGeminiApiUnified(prompt);
+    if (data && data.groups && data.groups.length > 0) {
+      typesetLastData = data;
+      renderTypesetResult(typesetLastData);
+      showToast(`口吻已修飾為【${toneDesc}】`, 'success');
+    }
+  } catch (err) {
+    showToast('轉換口吻失敗，請檢查 API Key 或網路', 'error');
+  }
+}
+
+// 渲染排版結果
+function renderTypesetResult(data) {
+  const output = document.getElementById('typeset-preview-output');
+  if (!output || !data || !data.groups) return;
+
+  const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
+  const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
+  const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
+  const showC = document.getElementById('opt-typeset-chinese')?.checked ?? true;
+
+  output.innerHTML = '';
+
+  data.groups.forEach((group, idx) => {
+    const gEl = document.createElement('div');
+    gEl.className = 'content-group';
+    gEl.dataset.groupIndex = idx;
+
+    // 工具列 (hover 浮現)
+    const tb = document.createElement('div');
+    tb.className = 'content-group-toolbar';
+
+    const fullReading = group.reading_full || group.segments.map(s => s.reading || s.text).join('');
+    
+    // 🔊 發音按鈕
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'btn-icon-sm';
+    speakBtn.title = '朗讀此句';
+    speakBtn.innerHTML = '🔊';
+    speakBtn.onclick = () => speakJapaneseText(fullReading);
+    tb.appendChild(speakBtn);
+
+    // ⭐ 收藏至手帳單字庫
+    const favBtn = document.createElement('button');
+    favBtn.className = 'btn-icon-sm';
+    favBtn.title = '⭐ 收藏此句至手帳單字庫';
+    favBtn.innerHTML = '⭐';
+    favBtn.onclick = () => saveTypesetSentenceToVocab(gEl);
+    tb.appendChild(favBtn);
+
+    // ✂ 拆分
+    const splitBtn = document.createElement('button');
+    splitBtn.className = 'btn-icon-sm';
+    splitBtn.title = '拆分段落';
+    splitBtn.innerHTML = '✂️';
+    splitBtn.onclick = () => splitTypesetGroup(gEl);
+    tb.appendChild(splitBtn);
+
+    // ✕ 刪除
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn-icon-sm';
+    delBtn.title = '刪除此句';
+    delBtn.innerHTML = '✕';
+    delBtn.onclick = () => { saveTypesetUndo(); gEl.remove(); };
+    tb.appendChild(delBtn);
+
+    gEl.appendChild(tb);
+
+    // 日文主行 (contentEditable)
+    const jpLine = document.createElement('span');
+    jpLine.className = 'jp-line';
+    jpLine.contentEditable = 'true';
+    renderTypesetSegmentsToElement(jpLine, group.segments, showH, showR, showK);
+    gEl.appendChild(jpLine);
+
+    // 中文對照行 (contentEditable)
+    if (showC && group.translation) {
+      const zhLine = document.createElement('span');
+      zhLine.className = 'zh-line';
+      zhLine.contentEditable = 'true';
+      zhLine.textContent = group.translation;
+      gEl.appendChild(zhLine);
+    }
+
+    output.appendChild(gEl);
+  });
+
+  bindAllTypesetEvents(output);
+  applyTypesetSpacing();
+}
+
+// 渲染 Segment 為 DOM (帶四重標音)
+function renderTypesetSegmentsToElement(container, segs, showH, showR, showK) {
+  container.innerHTML = '';
+  if (!segs || !Array.isArray(segs)) return;
+
+  segs.forEach(s => {
+    if (s.type === 'kanji' && showH && s.reading && s.reading !== s.text) {
+      const rb = document.createElement('ruby');
+      rb.appendChild(document.createTextNode(s.text));
+      const rt = document.createElement('rt');
+      rt.className = 'h';
+      rt.textContent = s.reading;
+      rb.appendChild(rt);
+      container.appendChild(rb);
+    } else if (s.type === 'katakana' && showR && s.romaji) {
+      const rb = document.createElement('ruby');
+      rb.appendChild(document.createTextNode(s.text));
+      const rt = document.createElement('rt');
+      rt.className = 'r';
+      rt.textContent = s.romaji;
+      rb.appendChild(rt);
+      container.appendChild(rb);
+    } else if (s.type === 'english' && showK && s.kk) {
+      const rb = document.createElement('ruby');
+      rb.appendChild(document.createTextNode(s.text));
+      const rt = document.createElement('rt');
+      rt.className = 'k';
+      rt.textContent = s.kk;
+      rb.appendChild(rt);
+      container.appendChild(rb);
+    } else {
+      container.appendChild(document.createTextNode(s.text));
+    }
   });
 }
 
-function printTypesetDocument() {
-  window.print();
+// 刷新顯示選項
+function refreshTypesetDisplay() {
+  if (typesetLastData) {
+    renderTypesetResult(typesetLastData);
+  }
 }
 
-function copyTypesetArticleMarkdown() {
-  let md = '# 🏂 日本打工度假（滑雪場・飯店）面試實戰問答 20 題完整對照手冊\n\n';
-  INTERVIEW_20_TOPICS.forEach(t => {
-    md += `## ${t.id}. ${t.title}\n\n`;
-    t.questions.forEach(q => {
-      md += `- **${q.label}**：\n  ${q.ja}\n  *（${q.zh}）*\n\n`;
+// 綁定所有互動事件
+function bindAllTypesetEvents(container) {
+  // 右鍵 Context Menu
+  const groups = container.querySelectorAll('.content-group');
+  groups.forEach(g => {
+    g.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      typesetCtxTarget = g;
+      const menu = document.getElementById('typeset-ctx-menu');
+      if (menu) {
+        menu.style.display = 'block';
+        menu.style.left = Math.min(e.clientX, window.innerWidth - 185) + 'px';
+        menu.style.top = Math.min(e.clientY, window.innerHeight - 260) + 'px';
+      }
     });
-    t.answers.forEach(a => {
-      md += `- **${a.label}**：\n  ${a.ja}\n  *（${a.zh}）*\n\n`;
-    });
-    md += '---\n\n';
+  });
+}
+
+// 點擊關閉 Context Menu
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('typeset-ctx-menu');
+  if (menu && !menu.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
+// 右鍵選單操作派發
+function handleTypesetCtxAction(action) {
+  const menu = document.getElementById('typeset-ctx-menu');
+  if (menu) menu.style.display = 'none';
+
+  const g = typesetCtxTarget;
+  if (!g && action !== 'undo') return;
+
+  switch (action) {
+    case 'reprocess':
+      reprocessSingleTypesetGroup(g);
+      break;
+    case 'save_to_vocab':
+      saveTypesetSentenceToVocab(g);
+      break;
+    case 'split':
+      splitTypesetGroup(g);
+      break;
+    case 'add_after':
+      saveTypesetUndo();
+      addEmptyTypesetGroup(g);
+      break;
+    case 'divider':
+      saveTypesetUndo();
+      addTypesetDivider(g);
+      break;
+    case 'merge_up':
+      saveTypesetUndo();
+      mergeTypesetUp(g);
+      break;
+    case 'undo':
+      doTypesetUndo();
+      break;
+    case 'delete':
+      saveTypesetUndo();
+      g.remove();
+      break;
+  }
+}
+
+// ⭐ 收藏整句至手帳單字庫
+function saveTypesetSentenceToVocab(g) {
+  const jpEl = g.querySelector('.jp-line');
+  const zhEl = g.querySelector('.zh-line');
+  if (!jpEl) return;
+
+  const jaText = jpEl.textContent.trim();
+  const zhText = zhEl ? zhEl.textContent.trim() : '';
+
+  if (!AppData.vocabularies.sop) AppData.vocabularies.sop = [];
+  const newVocab = {
+    id: 'typeset_fav_' + Date.now(),
+    ja: jpEl.innerHTML,
+    zh: zhText,
+    romaji: '',
+    category: '排版收藏',
+    starred: true,
+    image: null
+  };
+
+  AppData.vocabularies.sop.unshift(newVocab);
+  saveAppData();
+  showToast(`⭐ 已收藏至手帳單字庫：${jaText.substring(0, 12)}...`, 'success');
+}
+
+// 單句重新 AI 處理
+async function reprocessSingleTypesetGroup(g) {
+  const jpEl = g.querySelector('.jp-line');
+  if (!jpEl) return;
+  const rawText = jpEl.textContent.trim();
+  if (!rawText) return;
+
+  saveTypesetUndo();
+  showToast('正在重新分析此句…', 'info');
+
+  const prompt = `
+請針對以下單一句子分析標音並翻譯成繁體中文。輸出純 JSON：
+{
+  "segments": [
+    { "type": "kanji", "text": "漢字", "reading": "かんじ" },
+    { "type": "hiragana", "text": "は" }
+  ],
+  "translation": "中文翻譯",
+  "reading_full": "平假名"
+}
+
+句子：${rawText}
+`;
+
+  try {
+    const res = await callGeminiApiUnified(prompt);
+    if (res && res.segments) {
+      const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
+      const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
+      const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
+      renderTypesetSegmentsToElement(jpEl, res.segments, showH, showR, showK);
+
+      let zhEl = g.querySelector('.zh-line');
+      if (!zhEl) {
+        zhEl = document.createElement('span');
+        zhEl.className = 'zh-line';
+        zhEl.contentEditable = 'true';
+        g.appendChild(zhEl);
+      }
+      zhEl.textContent = res.translation || '';
+      showToast('單句重新處理完成！', 'success');
+    }
+  } catch (err) {
+    showToast('處理失敗：' + err.message, 'error');
+  }
+}
+
+// 拆分段落
+function splitTypesetGroup(g) {
+  const jp = g.querySelector('.jp-line');
+  if (!jp) return;
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+  const r = sel.getRangeAt(0);
+  if (!jp.contains(r.startContainer)) {
+    showToast('請先游標點選要拆分的位置', 'info');
+    return;
+  }
+  saveTypesetUndo();
+  const ar = document.createRange();
+  ar.setStart(r.startContainer, r.startOffset);
+  ar.setEndAfter(jp.lastChild || jp);
+  const frag = ar.extractContents();
+
+  const newG = createEmptyTypesetGroupElement();
+  const newJp = newG.querySelector('.jp-line');
+  newJp.appendChild(frag);
+
+  g.after(newG);
+  bindAllTypesetEvents(document.getElementById('typeset-preview-output'));
+  newJp.focus();
+}
+
+// 新增空白段落
+function addEmptyTypesetGroup(g) {
+  const newG = createEmptyTypesetGroupElement();
+  g.after(newG);
+  bindAllTypesetEvents(document.getElementById('typeset-preview-output'));
+  newG.querySelector('.jp-line').focus();
+}
+
+// 插入分隔線
+function addTypesetDivider(g) {
+  const d = document.createElement('div');
+  d.className = 'content-divider';
+  d.innerHTML = `
+    <hr />
+    <button class="div-del-btn" onclick="this.parentElement.remove()">✕</button>
+  `;
+  g.after(d);
+}
+
+// 向上合併
+function mergeTypesetUp(g) {
+  const prev = g.previousElementSibling;
+  if (!prev || !prev.classList.contains('content-group')) return;
+  const pj = prev.querySelector('.jp-line');
+  const cj = g.querySelector('.jp-line');
+  if (pj && cj) {
+    pj.appendChild(document.createTextNode(' '));
+    while (cj.firstChild) pj.appendChild(cj.firstChild);
+  }
+  const pz = prev.querySelector('.zh-line');
+  const cz = g.querySelector('.zh-line');
+  if (pz && cz) pz.textContent += ' ' + cz.textContent;
+  g.remove();
+}
+
+function createEmptyTypesetGroupElement() {
+  const g = document.createElement('div');
+  g.className = 'content-group';
+  g.innerHTML = `
+    <div class="content-group-toolbar">
+      <button class="btn-icon-sm" onclick="speakJapaneseText(this.parentElement.nextElementSibling.textContent)">🔊</button>
+      <button class="btn-icon-sm" onclick="saveTypesetSentenceToVocab(this.closest('.content-group'))">⭐</button>
+      <button class="btn-icon-sm" onclick="splitTypesetGroup(this.closest('.content-group'))">✂️</button>
+      <button class="btn-icon-sm" onclick="this.closest('.content-group').remove()">✕</button>
+    </div>
+    <span class="jp-line" contenteditable="true"></span>
+    <span class="zh-line" contenteditable="true"></span>
+  `;
+  return g;
+}
+
+// 語音連讀控制 (念一遍 / 循環播放)
+function readAllTypeset(loop = false) {
+  stopTypesetSpeech();
+  isTypesetLooping = loop;
+
+  const loopBtn = document.getElementById('btn-typeset-loop');
+  if (loopBtn) {
+    loopBtn.style.color = loop ? 'var(--primary)' : 'var(--ink)';
+    loopBtn.style.fontWeight = loop ? '800' : '600';
+  }
+
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  typesetAllReadings = Array.from(groups).map(g => {
+    const jp = g.querySelector('.jp-line');
+    return jp ? jp.textContent.trim() : '';
+  }).filter(Boolean);
+
+  if (typesetAllReadings.length === 0) {
+    showToast('沒有可朗讀的日文段落', 'info');
+    return;
+  }
+
+  playTypesetSequenceIndex(0);
+}
+
+function playTypesetSequenceIndex(idx) {
+  if (!isTypesetLooping && idx >= typesetAllReadings.length) {
+    stopTypesetSpeech();
+    return;
+  }
+
+  const currentIdx = idx % typesetAllReadings.length;
+  const text = typesetAllReadings[currentIdx];
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP';
+  u.rate = (AppData && AppData.ttsRate) ? AppData.ttsRate : 0.95;
+
+  u.onend = () => {
+    if (isTypesetLooping || idx + 1 < typesetAllReadings.length) {
+      setTimeout(() => playTypesetSequenceIndex(idx + 1), 600);
+    } else {
+      stopTypesetSpeech();
+    }
+  };
+  u.onerror = () => {
+    playTypesetSequenceIndex(idx + 1);
+  };
+
+  window.speechSynthesis.speak(u);
+}
+
+function stopTypesetSpeech() {
+  isTypesetLooping = false;
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  const loopBtn = document.getElementById('btn-typeset-loop');
+  if (loopBtn) {
+    loopBtn.style.color = 'var(--ink)';
+    loopBtn.style.fontWeight = '600';
+  }
+}
+
+// 💬 LINE 格式一鍵複製 (純日文 / 帶括號注音)
+function copyTypesetForLine(mode) {
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups.length) {
+    showToast('尚無排版內容可複製', 'info');
+    return;
+  }
+
+  let textLines = [];
+  groups.forEach(g => {
+    const jp = g.querySelector('.jp-line');
+    const zh = g.querySelector('.zh-line');
+    if (!jp) return;
+
+    if (mode === 'clean') {
+      // 純淨日文 (去掉所有假名標音標籤)
+      let cleanJp = '';
+      jp.childNodes.forEach(n => {
+        if (n.nodeType === 3) cleanJp += n.textContent;
+        else if (n.nodeName === 'RUBY') {
+          n.childNodes.forEach(c => { if (c.nodeName !== 'RT') cleanJp += c.textContent; });
+        } else if (n.nodeName !== 'RT') cleanJp += n.textContent;
+      });
+      textLines.push(cleanJp.trim());
+    } else if (mode === 'bracket') {
+      // 括號注音版 (如 漢字[かんじ])
+      let bracketJp = '';
+      jp.childNodes.forEach(n => {
+        if (n.nodeType === 3) bracketJp += n.textContent;
+        else if (n.nodeName === 'RUBY') {
+          let kanji = '';
+          let ruby = '';
+          n.childNodes.forEach(c => {
+            if (c.nodeName === 'RT') ruby += c.textContent;
+            else kanji += c.textContent;
+          });
+          bracketJp += ruby ? `${kanji}[${ruby}]` : kanji;
+        } else if (n.nodeName !== 'RT') bracketJp += n.textContent;
+      });
+      textLines.push(bracketJp.trim());
+    }
   });
 
-  navigator.clipboard.writeText(md).then(() => {
-    showToast('已複製整篇 20 題 Markdown 到剪貼簿', 'success');
+  const fullText = textLines.join('\n');
+  navigator.clipboard.writeText(fullText).then(() => {
+    showToast(mode === 'clean' ? '已複製純日文文字（LINE 專用）' : '已複製帶 [括號注音] 文字', 'success');
   }).catch(() => {
     showToast('複製失敗，請手動選取', 'error');
   });
+}
+
+// 📤 匯出 .txt 檔案
+function exportTypesetTxt(type) {
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups.length) {
+    showToast('尚無內容可匯出', 'info');
+    return;
+  }
+
+  let lines = [];
+  groups.forEach(g => {
+    const jp = g.querySelector('.jp-line');
+    const zh = g.querySelector('.zh-line');
+    if (jp && (type === 'jp' || type === 'both')) {
+      let t = '';
+      jp.childNodes.forEach(n => {
+        if (n.nodeType === 3) t += n.textContent;
+        else if (n.nodeName === 'RUBY') {
+          n.childNodes.forEach(c => { if (c.nodeName !== 'RT') t += c.textContent; });
+        } else if (n.nodeName !== 'RT') t += n.textContent;
+      });
+      if (t.trim()) lines.push(t.trim());
+    }
+    if (zh && zh.textContent.trim() && (type === 'zh' || type === 'both')) {
+      lines.push(zh.textContent.trim());
+    }
+    if (type === 'both') lines.push('');
+  });
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '楊の手帳_日文排版_' + new Date().toLocaleDateString('zh-TW') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('已匯出 .txt 檔案', 'success');
+}
+
+// 🕒 歷史紀錄儲存與瀏覽
+function saveTypesetHistory(text) {
+  if (!text || !text.trim()) return;
+  let h = JSON.parse(localStorage.getItem('yang_typeset_history') || '[]');
+  h = h.filter(x => x.text !== text);
+  h.unshift({
+    text: text,
+    date: new Date().toLocaleString('zh-TW'),
+    preview: text.substring(0, 36)
+  });
+  localStorage.setItem('yang_typeset_history', JSON.stringify(h.slice(0, 5)));
+}
+
+function openTypesetHistoryModal() {
+  const h = JSON.parse(localStorage.getItem('yang_typeset_history') || '[]');
+  const list = document.getElementById('typeset-history-list');
+  if (!list) return;
+
+  if (h.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted); text-align:center; padding:20px;">尚無歷史紀錄</div>';
+  } else {
+    list.innerHTML = h.map((item, idx) => `
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 14px; margin-bottom:8px; cursor:pointer; transition:background 0.15s;" onmouseover="this.style.background='rgba(92,61,30,0.06)'" onmouseout="this.style.background='var(--surface)'" onclick="loadTypesetHistoryItem(${idx})">
+        <div style="font-weight:700; font-size:0.86rem; color:var(--ink);">${item.preview}...</div>
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:3px;">${item.date}</div>
+      </div>
+    `).join('');
+  }
+
+  openModal('modal-typeset-history');
+}
+
+function loadTypesetHistoryItem(idx) {
+  const h = JSON.parse(localStorage.getItem('yang_typeset_history') || '[]');
+  if (!h[idx]) return;
+  const input = document.getElementById('typeset-input-text');
+  if (input) input.value = h[idx].text;
+  closeModal('modal-typeset-history');
+  generateTypesetArticle();
+}
+
+// 從外部（如單字庫或對話庫）一鍵送來排版
+function sendToTypeset(jaText, zhText) {
+  switchNavPage('page-typeset');
+  const input = document.getElementById('typeset-input-text');
+  if (input) {
+    input.value = zhText ? `${jaText}\n${zhText}` : jaText;
+    generateTypesetArticle();
+  }
+}
+
+// 列印文件
+function printTypesetDocument() {
+  window.print();
 }
 
 /* ==============================================================

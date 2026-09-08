@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v84'), 'Service Worker 快取版本已升級至 yang-pwa-v84');
-assert(html.includes('yang_runner_handbook_v84'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v84');
+assert(swContent.includes('yang-pwa-v85'), 'Service Worker 快取版本已升級至 yang-pwa-v85');
+assert(html.includes('yang_runner_handbook_v85'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v85');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -569,21 +569,21 @@ assert(textContent.includes('ソフトクリームと綿菓子'), '同步準備�
 assert(textContent.includes('詐欺メールに注意') && textContent.includes('前田洋'), '包含支配人防範冒名釣魚郵件通達');
 
 // 測試 36: 日文排版軟體與滑雪場/飯店面試 20 題即戰力 (v84)
-console.log('\n【測試 36：日文排版軟體與面試 20 題即戰力 (v84)】');
+console.log('\n【測試 36：日文排版救星・手帳專屬排版神器・五大融合與五大實戰新功能 (v85)】');
 assert(html.includes('data-page="page-typeset"'), '頂部導航列包含日文排版按鈕 (data-page="page-typeset")');
 assert(html.includes('id="page-typeset"'), 'HTML 包含日文排版專屬獨立分頁 (id="page-typeset")');
-assert(html.includes('INTERVIEW_20_TOPICS'), '資料庫包含滑雪場/飯店面試 20 題資料結構');
-assert(html.includes('convertRubySyntax'), '包含智慧標音語法解析器 (convertRubySyntax)');
-assert(html.includes('updateEditorPreview'), '包含日文排版即時預覽函式 (updateEditorPreview)');
-assert(html.includes('renderInterviewCardsList'), '包含 20 題問答動態卡片渲染函式 (renderInterviewCardsList)');
-assert(html.includes('setTypesetFontSize'), '包含字體大小調節功能 (setTypesetFontSize)');
-assert(html.includes('printTypesetDocument'), '包含 A4 乾淨輸出列印函式 (printTypesetDocument)');
-assert(html.includes('copyTypesetArticleMarkdown'), '包含整篇 20 題 Markdown 一鍵複製功能 (copyTypesetArticleMarkdown)');
-assert(html.includes('togglePlayAllInterview'), '包含面試題目連續播放與發音功能 (togglePlayAllInterview)');
-assert(html.includes('insertFuriganaSyntax'), '包含排版編輯器快捷插入 ruby 標籤功能 (insertFuriganaSyntax)');
-assert(html.includes('楊詠筑') && html.includes('ヤン') && html.includes('ユンジュ'), '面試自我介紹回答正確標記楊詠筑與假名音讀');
-
-
+assert(html.includes('opt-typeset-hiragana') && html.includes('opt-typeset-romaji') && html.includes('opt-typeset-kk') && html.includes('opt-typeset-chinese'), '包含四重標音體系開關 (平假名/羅馬拼音/KK音標/中文翻譯)');
+assert(html.includes('parseLocalJapaneseSegments') && html.includes('convertKatakanaToRomaji'), '包含強固本地離線日文切詞與標記解析引擎');
+assert(html.includes('triggerTypesetImageOcr') && html.includes('handleTypesetImageUpload'), '包含相機拍照 / 圖片 OCR 智慧辨識排版功能');
+assert(html.includes('convertTypesetTone'), '包含外場客人敬語/廚房通報/同事口吻修飾切換器');
+assert(html.includes('togglePocketMode') && html.includes('pocket-print-mode'), '包含圍裙口袋小抄模式 (Pocket Print Mode)');
+assert(html.includes('toggleMaskMode') && html.includes('mask-ruby') && html.includes('mask-zh'), '包含遮罩背誦與聽力盲測練習模式');
+assert(html.includes('copyTypesetForLine'), '包含 LINE 專用純日文與括號注音一鍵複製功能');
+assert(html.includes('saveTypesetSentenceToVocab'), '包含一鍵收藏句子至手帳單字庫 (跨模組融合)');
+assert(html.includes('readAllTypeset') && html.includes('stopTypesetSpeech'), '包含全文依序朗讀與循環朗讀控制');
+assert(html.includes('applyTypesetSpacing') && html.includes('typeset-sliders-panel'), '包含字級、行距、字距與日中間距微調滑桿面板');
+assert(html.includes('openTypesetHistoryModal'), '包含最近歷史排版紀錄儲存與彈窗載入功能');
+assert(html.includes('printTypesetDocument'), '包含 A4 / 口袋小抄版面列印與 PDF 匯出功能');
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -591,7 +591,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v84) 日文排版軟體・振假名編輯器・面試 20 題即戰力・字級縮放・列印匯出・語音朗讀全部就位！');
+  console.log('🎉 所有測試通過！(v85) 日文排版救星・手帳五大融合・相機OCR辨識・外場敬語轉換・口袋小抄・遮罩自測・LINE複製全部就位！');
 }
 
 
