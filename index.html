@@ -1366,6 +1366,246 @@
   align-items: center;
 }
 
+
+  /* ==============================================================
+     日文排版軟體 (page-typeset) 專用樣式
+     ============================================================== */
+  #page-typeset {
+    padding-bottom: 90px;
+  }
+  .typeset-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .typeset-mode-tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(0,0,0,0.04);
+    padding: 3px;
+    border-radius: 10px;
+  }
+  .typeset-mode-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .typeset-mode-btn.active {
+    background: #fff;
+    color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .typeset-actions-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .typeset-font-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .typeset-font-btn.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  /* 面試 20 題卡片清單 */
+  .interview-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .interview-card:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  }
+  .interview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px dashed var(--border);
+  }
+  .interview-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .interview-badge {
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .interview-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .interview-category {
+    font-size: 0.75rem;
+    background: rgba(92,61,30,0.08);
+    color: var(--primary);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  
+  /* 質問與回答區塊 */
+  .interview-q-block {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-left: 3.5px solid var(--accent);
+  }
+  .interview-q-label {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .interview-ans-block {
+    background: rgba(39, 110, 144, 0.04);
+    border: 1.5px solid rgba(39, 110, 144, 0.18);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    border-left: 4.5px solid #276e90;
+  }
+  .interview-ans-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #276e90;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* 日文與假名排版核心 */
+  .typeset-ja-line {
+    font-size: 1.12rem;
+    line-height: 2.2;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    margin-bottom: 4px;
+  }
+  .typeset-ja-line ruby {
+    ruby-position: over;
+  }
+  .typeset-ja-line ruby rt {
+    font-size: 0.62em;
+    font-weight: 600;
+    color: var(--primary);
+    padding-bottom: 1px;
+    letter-spacing: 0;
+  }
+  .typeset-zh-line {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #555;
+    font-style: normal;
+    padding-left: 6px;
+    border-left: 2px solid rgba(0,0,0,0.12);
+    margin-top: 2px;
+  }
+  
+  /* 字體尺寸調節 */
+  .font-size-md .typeset-ja-line { font-size: 1.12rem; line-height: 2.2; }
+  .font-size-lg .typeset-ja-line { font-size: 1.35rem; line-height: 2.3; }
+  .font-size-xl .typeset-ja-line { font-size: 1.6rem; line-height: 2.4; }
+  .font-size-md .typeset-zh-line { font-size: 0.88rem; }
+  .font-size-lg .typeset-zh-line { font-size: 1.02rem; }
+  .font-size-xl .typeset-zh-line { font-size: 1.18rem; }
+
+  /* 編輯器容器 */
+  .typeset-editor-box {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .typeset-editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 768px) {
+    .typeset-editor-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .typeset-preview-box {
+    background: #fff;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-height: 100px;
+  }
+
+  /* 列印輸出特別樣式 */
+  @media print {
+    header, nav#top-nav-bar, #offline-badge, .typeset-toolbar, .btn, .typeset-mode-tabs, .floating-raccoon-btn, .interview-q-label button, .interview-ans-label button, #typeset-search-input, #btn-play-all-interview {
+      display: none !important;
+    }
+    body, main, #app {
+      background: #fff !important;
+      color: #000 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .page {
+      display: none !important;
+    }
+    #page-typeset {
+      display: block !important;
+      padding: 0 !important;
+    }
+    .interview-card {
+      break-inside: avoid;
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+      margin-bottom: 18px !important;
+    }
+    .typeset-ja-line ruby rt {
+      color: #000 !important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1388,6 +1628,7 @@
       <button class="top-nav-btn" data-page="page-vocab-sop" onclick="switchNavPage('page-vocab-sop', this)"><span class="nav-icon">📖</span><span class="nav-label">實戰單字庫</span></button>
       <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">情境對話</span></button>
       <button class="top-nav-btn" data-page="page-broadcast" onclick="switchNavPage('page-broadcast', this)"><span class="nav-icon">🌐</span><span class="nav-label">四國翻譯</span></button>
+      <button class="top-nav-btn" data-page="page-typeset" onclick="switchNavPage('page-typeset', this)"><span class="nav-icon">🖨️</span><span class="nav-label">日文排版</span></button>
       <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
     </nav>
     <span id="offline-badge">📵 離線</span>
@@ -1531,6 +1772,90 @@
 
       <div class="broadcast-quad-grid" id="broadcast-cards-grid">
         <!-- 4 國語言卡片由 JS 動態渲染 -->
+      </div>
+    </section>
+
+    
+    <!-- ==============================================================
+         分頁：日文排版軟體與打工度假面試 20 題即戰力 (page-typeset)
+    ============================================================== -->
+    <section class="page" id="page-typeset">
+      <div class="page-sub">日文振假名排版軟體（上方標音、下方中文）與滑雪場・飯店面試 20 題全集</div>
+
+      <!-- 工具列：模式切換、搜尋、字級調整、朗讀與列印匯出 -->
+      <div class="typeset-toolbar">
+        <div class="typeset-mode-tabs">
+          <button class="typeset-mode-btn active" id="btn-mode-interview" onclick="setTypesetMode('interview')">🏂 面試 20 題全集</button>
+          <button class="typeset-mode-btn" id="btn-mode-editor" onclick="setTypesetMode('editor')">✍️ 自訂日文排版器</button>
+        </div>
+
+        <div class="typeset-actions-wrap">
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:0.75rem; color:var(--muted); font-weight:700;">字級:</span>
+            <button class="typeset-font-btn" onclick="setTypesetFontSize('md')" id="font-btn-md">中</button>
+            <button class="typeset-font-btn active" onclick="setTypesetFontSize('lg')" id="font-btn-lg">大</button>
+            <button class="typeset-font-btn" onclick="setTypesetFontSize('xl')" id="font-btn-xl">特大</button>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="printTypesetDocument()" title="友善 A4 排版輸出">🖨️ 列印 / PDF</button>
+          <button class="btn btn-secondary btn-sm" onclick="copyTypesetArticleMarkdown()" title="一鍵複製整篇 Markdown">📋 複製整篇</button>
+        </div>
+      </div>
+
+      <!-- 模式 1：面試 20 題全集 -->
+      <div id="typeset-interview-container" class="font-size-lg">
+        <div style="display:flex; gap:8px; margin-bottom:12px; align-items:center;">
+          <input type="text" id="typeset-search-input" placeholder="🔍 搜尋面試題目（例如：志望動機、殘業、滑雪、退職理由...）" oninput="filterInterviewTopics()" style="flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid var(--border); font-size:0.86rem; background:var(--surface); color:var(--ink);" />
+          <button class="btn btn-primary btn-sm" id="btn-play-all-interview" onclick="togglePlayAllInterview()">🔊 連續播放</button>
+        </div>
+        <div id="interview-cards-list">
+          <!-- 由 JS 動態注入 20 題問答 -->
+        </div>
+      </div>
+
+      <!-- 模式 2：自訂日文排版器 -->
+      <div id="typeset-editor-container" style="display:none;" class="font-size-lg">
+        <div class="typeset-editor-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+            <div style="font-weight:800; font-size:0.96rem; color:var(--primary);">✍️ 日文與標音輸入</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="insertFuriganaSyntax()">＋ 標音標籤 (ruby)</button>
+              <button class="btn btn-secondary btn-sm" onclick="loadEditorTemplate('intro')">載入自我介紹</button>
+              <button class="btn btn-secondary btn-sm" onclick="loadEditorTemplate('motive')">載入應徵動機</button>
+              <button class="btn btn-secondary btn-sm" onclick="loadEditorTemplate('reverse_q')">載入逆質問</button>
+            </div>
+          </div>
+          
+          <div class="typeset-editor-grid">
+            <div>
+              <label style="font-size:0.82rem; font-weight:700; color:var(--muted); margin-bottom:4px; display:block;">
+                日文內容（支援 <code>漢字[かんじ]</code> 或 <code>漢字(かんじ)</code> 或 <code>&lt;ruby&gt;</code> 標籤）：
+              </label>
+              <textarea id="editor-ja-input" rows="5" placeholder="請在此輸入日文，例如：
+はじめまして。楊詠筑[ヤンユンジュ]と申[もう]します。
+台湾[たいわん]から来[き]ました。" oninput="updateEditorPreview()" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid var(--border); font-size:0.92rem; background:var(--surface); color:var(--ink); font-family:monospace;"></textarea>
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:700; color:var(--muted); margin-bottom:4px; display:block;">
+                繁體中文翻譯（顯示於日文正下方）：
+              </label>
+              <textarea id="editor-zh-input" rows="5" placeholder="請輸入對應的繁體中文翻譯，例如：
+初次見面，我叫楊詠筑。來自台灣。" oninput="updateEditorPreview()" style="width:100%; padding:10px; border-radius:8px; border:1.5px solid var(--border); font-size:0.92rem; background:var(--surface); color:var(--ink);"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <span style="font-weight:700; font-size:0.88rem; color:var(--ink);">👁️ 即時排版預覽（上方標音、下方中文）：</span>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-secondary btn-sm" onclick="speakEditorText()">🔊 播放發音</button>
+              <button class="btn btn-secondary btn-sm" onclick="copyEditorHtml()">📋 複製 HTML</button>
+              <button class="btn btn-primary btn-sm" onclick="printTypesetDocument()">🖨️ 列印此篇</button>
+            </div>
+          </div>
+
+          <div class="typeset-preview-box" id="editor-live-preview">
+            <!-- 即時預覽渲染區 -->
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2518,7 +2843,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v83';
+const STORAGE_KEY = 'yang_runner_handbook_v84';
 
 function createRealRunnerData() {
   return {
@@ -5766,6 +6091,7 @@ function switchNavPage(targetPageId, triggerBtn) {
   if (targetPageId === 'page-vocab-conv') renderVocabPage('conv');
   if (targetPageId === 'page-roleplay') renderRoleplayPage();
   if (targetPageId === 'page-broadcast') renderBroadcastPage();
+  if (targetPageId === 'page-typeset') renderTypesetPage();
   if (targetPageId === 'page-settings') renderSettingsPage();
   
   updateRaccoonVisibility();
@@ -13317,8 +13643,558 @@ function toggleBroadcastMic() {
   }
 }
 
+
 /* ==============================================================
-   11. 初始化
+   11. 日文排版軟體與打工度假面試 20 題即戰力 (page-typeset)
+============================================================== */
+
+const INTERVIEW_20_TOPICS = [
+  {
+    id: 1,
+    category: "基本背景",
+    title: "自己紹介（自我介紹）",
+    questions: [
+      { label: "質問A", ja: "<ruby>自己紹介<rt>じこしょうかい</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。", zh: "請做個自我介紹。" },
+      { label: "質問B", ja: "<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>自己<rt>じこ</rt></ruby>PRを<ruby>含<rt>ふく</rt></ruby>めて<ruby>自己紹介<rt>じこしょうかい</rt></ruby>をしていただけますか？", zh: "可以請您簡單包含自我優勢宣傳做個自我介紹嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はじめまして。<ruby>楊<rt>ヤン</rt></ruby><ruby>詠筑<rt>ユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>から<ruby>来<rt>き</rt></ruby>ました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本<rt>くまもと</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>のホテルで、レストランのホールスタッフをしています。<ruby>明<rt>あか</rt></ruby>るく<ruby>元気<rt>げんき</rt></ruby>にがんばります。よろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。", zh: "您好，初次見面。我叫楊詠筑。來自台灣。目前在熊本黑川溫泉的飯店擔任餐廳外場人員。我會開朗有活力地全力以赴。請多多指教。" }
+    ]
+  },
+  {
+    id: 2,
+    category: "應徵動機",
+    title: "志望動機（應徵動機）",
+    questions: [
+      { label: "質問A", ja: "どうしてこのホテル（スキー<ruby>場<rt>じょう</rt></ruby>）で<ruby>働<rt>はたら</rt></ruby>きたいのですか？", zh: "為什麼會想要在這家飯店／滑雪場工作呢？" },
+      { label: "質問B", ja: "<ruby>応募<rt>おうぼ</rt></ruby>の<ruby>理由<rt>りゆう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您應徵的理由。" }
+    ],
+    answers: [
+      { label: "回答", ja: "<ruby>冬<rt>ふゆ</rt></ruby>のスキー<ruby>場<rt>じょう</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いてみたいからです。レストランでの<ruby>経験<rt>けいけん</rt></ruby>をいかして、お<ruby>客様<rt>きゃくさま</rt></ruby>に<ruby>喜<rt>よろこ</rt></ruby>んでいただきたいです。", zh: "因為我想在冬天的滑雪場工作看看。希望能發揮在餐廳累積的經驗，讓客人感到開心滿意。" }
+    ]
+  },
+  {
+    id: 3,
+    category: "排班與期限",
+    title: "勤務開始日（開始上班日期）",
+    questions: [
+      { label: "質問A", ja: "いつから<ruby>働<rt>はたら</rt></ruby>くことができますか？", zh: "您從什麼時候開始可以上班呢？" },
+      { label: "質問B", ja: "<ruby>勤務開始<rt>きんむかいし</rt></ruby>の<ruby>希望日<rt>きぼうび</rt></ruby>はいつですか？", zh: "您希望開始上班的日期是哪一天呢？" }
+    ],
+    answers: [
+      { label: "回答", ja: "<ruby>今<rt>いま</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>の<ruby>契約<rt>けいやく</rt></ruby>が11<ruby>月<rt>がつ</rt></ruby>12<ruby>日<rt>にち</rt></ruby>に<ruby>終<rt>お</rt></ruby>わります。ですので、11<ruby>月下旬<rt>がつげじゅん</rt></ruby>か、12<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>ついたち</rt></ruby>から<ruby>働<rt>はたら</rt></ruby>けます。", zh: "我目前這份工作的合約到 11 月 12 日結束。因此，11 月下旬或 12 月 1 日起就可以開始上班。" }
+    ]
+  },
+  {
+    id: 4,
+    category: "排班與期限",
+    title: "勤務期間（可工作期限）",
+    questions: [
+      { label: "質問A", ja: "いつまで<ruby>働<rt>はたら</rt></ruby>けますか？", zh: "您可以工作到什麼時候呢？" },
+      { label: "質問B", ja: "どのくらいの<ruby>期間<rt>きかん</rt></ruby>、<ruby>勤務<rt>きんむ</rt></ruby>できますか？", zh: "您大概可以工作多長的期間呢？" }
+    ],
+    answers: [
+      { label: "回答", ja: "スキーシーズンの<ruby>終<rt>お</rt></ruby>わりまで、3<ruby>月末<rt>がつまつ</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>けます。", zh: "我可以工作到雪季結束，也就是 3 月底為止。" }
+    ]
+  },
+  {
+    id: 5,
+    category: "儀態與規範",
+    title: "タトゥー（刺青）の有無（刺青紋身確認）",
+    questions: [
+      { label: "質問A", ja: "タトゥーや<ruby>入<rt>い</rt></ruby>れ<ruby>墨<rt>ずみ</rt></ruby>は<ruby>入<rt>はい</rt></ruby>っていますか？", zh: "請問您身上有刺青或紋身嗎？" },
+      { label: "質問B", ja: "<ruby>体<rt>からだ</rt></ruby>に<ruby>刺青<rt>いれずみ</rt></ruby>などはありますか？", zh: "請問身體上有刺青之類的嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "いいえ、タトゥーや<ruby>入<rt>い</rt></ruby>れ<ruby>墨<rt>ずみ</rt></ruby>は<ruby>一切<rt>いっさい</rt></ruby>ありません。", zh: "沒有，完全沒有任何刺青或紋身。" }
+    ]
+  },
+  {
+    id: 6,
+    category: "儀態與規範",
+    title: "髪の色（頭髮顏色）",
+    questions: [
+      { label: "質問A", ja: "<ruby>現在<rt>げんざい</rt></ruby>の<ruby>髪<rt>かみ</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>は<ruby>何色<rt>なにいろ</rt></ruby>ですか？", zh: "您現在的頭髮是什麼顏色呢？" },
+      { label: "質問B", ja: "<ruby>髪<rt>かみ</rt></ruby>の<ruby>毛<rt>け</rt></ruby>は<ruby>染<rt>そ</rt></ruby>めていますか？", zh: "頭髮有染過顏色嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "<ruby>髪<rt>かみ</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>は<ruby>黒色<rt>くろいろ</rt></ruby>です。", zh: "我的頭髮是黑色。" }
+    ]
+  },
+  {
+    id: 7,
+    category: "儀態與規範",
+    title: "ネイル・爪の状態（指甲美甲狀態）",
+    questions: [
+      { label: "質問A", ja: "<ruby>爪<rt>つめ</rt></ruby>にネイルやマニキュアはしていますか？", zh: "指甲上有做美甲或塗指甲油嗎？" },
+      { label: "質問B", ja: "ネイルアートなどはされていますか？", zh: "有做藝術美甲之類的嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "いいえ、ネイルはしていません。<ruby>何<rt>なに</rt></ruby>もつけていません。", zh: "沒有，我沒有做美甲。指甲上什麼都沒有塗。" }
+    ]
+  },
+  {
+    id: 8,
+    category: "飲食與健康",
+    title: "アレルギーの有無（過敏體質確認）",
+    questions: [
+      { label: "質問A", ja: "<ruby>何<rt>なに</rt></ruby>かアレルギーはありますか？", zh: "請問有任何過敏嗎？" },
+      { label: "質問B", ja: "<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>などのアレルギーは<ruby>持<rt>も</rt></ruby>っていますか？", zh: "請問有食物過敏之類的嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はい、エビとカニのアレルギーがあります。<ruby>甲殻類<rt>こうかくるい</rt></ruby>が<ruby>食<rt>た</rt></ruby>べられません。", zh: "是的，我對蝦子和螃蟹過敏。甲殻類海鮮無法食用。" }
+    ]
+  },
+  {
+    id: 9,
+    category: "目前經驗",
+    title: "現在の仕事内容（目前工作內容）",
+    questions: [
+      { label: "質問A", ja: "<ruby>今<rt>いま</rt></ruby>、<ruby>旅館<rt>りょかん</rt></ruby>ではどんな<ruby>仕事<rt>しごと</rt></ruby>をしていますか？", zh: "現在在旅館都在做什麼樣的工作呢？" },
+      { label: "質問B", ja: "<ruby>現在<rt>げんざい</rt></ruby>の<ruby>業務内容<rt>ぎょうむないよう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您目前的業務內容。" }
+    ],
+    answers: [
+      { label: "回答", ja: "レストランでお<ruby>客様<rt>きゃくさま</rt></ruby>のご<ruby>案内<rt>あんない</rt></ruby>、<ruby>配膳<rt>はいぜん</rt></ruby>、テーブルの<ruby>片付<rt>かたづ</rt></ruby>けをしています。", zh: "我在餐廳負責引導接待客人、上菜端盤、以及餐桌收拾。" }
+    ]
+  },
+  {
+    id: 10,
+    category: "體力與適性",
+    title: "体力・立ち仕事への適性（體力與久站適應）",
+    questions: [
+      { label: "質問A", ja: "<ruby>立<rt>た</rt></ruby>ち<ruby>仕事<rt>しごと</rt></ruby>や<ruby>忙<rt>いそが</rt></ruby>しいシフトは<ruby>体力面<rt>たいりょくめん</rt></ruby>で<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？", zh: "久站工作或繁忙的排班在體力上能適應嗎？" },
+      { label: "質問B", ja: "<ruby>体力<rt>たいりょく</rt></ruby>には<ruby>自信<rt>じしん</rt></ruby>がありますか？", zh: "您對自己的體力有自信嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はい、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>体力<rt>たいりょく</rt></ruby>には<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>今<rt>いま</rt></ruby>の<ruby>職場<rt>しょくば</rt></ruby>でも<ruby>毎日<rt>まいにち</rt></ruby><ruby>元気<rt>げんき</rt></ruby>に<ruby>動<rt>うご</rt></ruby>いています。", zh: "是的，沒問題。我對自己的體力很有自信。在目前的職場也是每天充滿活力地工作。" }
+    ]
+  },
+  {
+    id: 11,
+    category: "排班配合",
+    title: "早朝・夜間勤務（早班・晚班排班配合）",
+    questions: [
+      { label: "質問A", ja: "<ruby>早番<rt>はやばん</rt></ruby>（<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く）や<ruby>遅番<rt>おそばん</rt></ruby>（<ruby>夜<rt>よる</rt></ruby><ruby>遅<rt>おそ</rt></ruby>く）のシフトは<ruby>入<rt>はい</rt></ruby>れますか？", zh: "早班（清晨）或晚班（深夜）的排班可以配合嗎？" },
+      { label: "質問B", ja: "<ruby>時間<rt>じかん</rt></ruby>の<ruby>不規則<rt>ふきそく</rt></ruby>なシフトでも<ruby>問題<rt>もんだい</rt></ruby>ないですか？", zh: "時間不規則的輪班也沒問題嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はい、<ruby>問題<rt>もんだい</rt></ruby>ありません。どの<ruby>時間<rt>じかん</rt></ruby>のシフトでも<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。", zh: "是的，完全沒有問題。任何時段的班次我都可以配合。" }
+    ]
+  },
+  {
+    id: 12,
+    category: "語言溝通",
+    title: "日本語でのコミュニケーション（日語應對能力）",
+    questions: [
+      { label: "質問A", ja: "<ruby>日本語<rt>にほんご</rt></ruby>での<ruby>接客<rt>せっきゃく</rt></ruby>や<ruby>会話<rt>かいわ</rt></ruby>は<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？", zh: "用日語接待客人或日常對話沒問題嗎？" },
+      { label: "質問B", ja: "<ruby>日本語<rt>にほんご</rt></ruby>での<ruby>指示<rt>しじ</rt></ruby>は<ruby>理解<rt>りかい</rt></ruby>できますか？", zh: "能聽懂日語下達的工作指示嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はい、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>難<rt>むずか</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>はまだ<ruby>勉強中<rt>べんきょうちゅう</rt></ruby>ですが、<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>聞<rt>き</rt></ruby>いて、<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>対応<rt>たいおう</rt></ruby>します。", zh: "是的，沒問題。雖然艱深的詞彙我還在學習中，但我會集中精神認真聆聽，並有禮貌且得體地應對。" }
+    ]
+  },
+  {
+    id: 13,
+    category: "冬季運動",
+    title: "スキー・スノーボードの経験（滑雪經驗）",
+    questions: [
+      { label: "質問A", ja: "スキーやスノーボードの<ruby>経験<rt>けいけん</rt></ruby>はありますか？", zh: "請問您有雙板或單板滑雪的經驗嗎？" },
+      { label: "質問B", ja: "ウインタースポーツはやったことがありますか？", zh: "請問有從事過冬季運動嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "まだ<ruby>経験<rt>けいけん</rt></ruby>はありません。この<ruby>冬<rt>ふゆ</rt></ruby>、<ruby>初<rt>はじ</rt></ruby>めて<ruby>挑戦<rt>ちょうせん</rt></ruby>してみたいです。", zh: "目前還沒有經驗。這個冬天，我非常想要第一次挑戰嘗試看看。" }
+    ]
+  },
+  {
+    id: 14,
+    category: "團隊協作",
+    title: "チームワーク・共同生活（團隊合作與人際相處）",
+    questions: [
+      { label: "質問A", ja: "<ruby>他<rt>ほか</rt></ruby>のスタッフと<ruby>協力<rt>きょうりょく</rt></ruby>して<ruby>仕事<rt>しごと</rt></ruby>ができますか？", zh: "能夠和其他工作夥伴互相合作完成工作嗎？" },
+      { label: "質問B", ja: "チームワークで<ruby>大切<rt>たいせつ</rt></ruby>にしていることは<ruby>何<rt>なん</rt></ruby>ですか？", zh: "在團隊合作中，您最重視的事情是什麼呢？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はい、<ruby>協力<rt>きょうりょく</rt></ruby>できます。<ruby>笑顔<rt>えがお</rt></ruby>で<ruby>挨拶<rt>あいさつ</rt></ruby>することと、<ruby>相手<rt>あいて</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>をよく<ruby>聞<rt>き</rt></ruby>くことを<ruby>大切<rt>たいせつ</rt></ruby>にしています。", zh: "是的，我能夠好好配合。我最重視的是帶著笑容打招呼，以及認真傾聽對方的想法與談話。" }
+    ]
+  },
+  {
+    id: 15,
+    category: "簽證身份",
+    title: "ビザの種類・期限（簽證種類與效期）",
+    questions: [
+      { label: "質問A", ja: "お<ruby>持<rt>も</rt></ruby>ちのビザの<ruby>種類<rt>しゅるい</rt></ruby>と<ruby>有効期限<rt>ゆうこうきげん</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您目前持有的簽證種類與有效期限。" },
+      { label: "質問B", ja: "<ruby>在留資格<rt>ざいりゅうしかく</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？", zh: "請問您的在留資格是什麼呢？" }
+    ],
+    answers: [
+      { label: "回答", ja: "ワーキングホリデービザです。<ruby>来年<rt>らいねん</rt></ruby>、2027<ruby>年<rt>ねん</rt></ruby>8<ruby>月<rt>がつ</rt></ruby>まで<ruby>有効<rt>ゆうこう</rt></ruby>です。", zh: "是打工度假簽證。有效期限到明年 2027 年 8 月為止。" }
+    ]
+  },
+  {
+    id: 16,
+    category: "環境適應",
+    title: "寒い環境への適応（對嚴寒氣候適應）",
+    questions: [
+      { label: "質問A", ja: "<ruby>雪山<rt>ゆきやま</rt></ruby>はとても<ruby>寒<rt>さむ</rt></ruby>いですが、<ruby>寒<rt>さむ</rt></ruby>さは<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？", zh: "雪山非常寒冷，請問耐寒方面沒問題嗎？" },
+      { label: "質問B", ja: "<ruby>寒<rt>さむ</rt></ruby>い<ruby>場所<rt>ばしょ</rt></ruby>での<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>不安<rt>ふあん</rt></ruby>はありませんか？", zh: "對於在寒冷地區的生活會有不安嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "はい、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。<ruby>防寒対策<rt>ぼうかんたいさく</rt></ruby>をしっかりして、<ruby>健康管理<rt>けんこうかんり</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけます。", zh: "是的，完全沒問題。我會確實做好防寒保暖措施，並特別注意自己的健康管理。" }
+    ]
+  },
+  {
+    id: 17,
+    category: "個人優勢",
+    title: "長所（強み）（個人長處與優點）",
+    questions: [
+      { label: "質問A", ja: "ご<ruby>自身<rt>じしん</rt></ruby>の<ruby>長所<rt>ちょうしょ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？", zh: "請問您自己的長處優點是什麼呢？" },
+      { label: "質問B", ja: "ご<ruby>自身<rt>じしん</rt></ruby>の<ruby>強<rt>つよ</rt></ruby>みを<ruby>教<rt>おし</rt></ruby>えてください。", zh: "請告訴我們您的個人優勢。" }
+    ],
+    answers: [
+      { label: "回答", ja: "いつも<ruby>明<rt>あか</rt></ruby>るく<ruby>前向<rt>まえむ</rt></ruby>きなところです。<ruby>新<rt>あたら</rt></ruby>しいことにも<ruby>自分<rt>じぶん</rt></ruby>から<ruby>積極的<rt>せっきょくてき</rt></ruby>に<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みます。", zh: "我的優點是總是開朗正向。面對新的事物我也會主動積極地去投入嘗試。" }
+    ]
+  },
+  {
+    id: 18,
+    category: "自省改善",
+    title: "短所・苦手なこと（短處與不擅長之處）",
+    questions: [
+      { label: "質問A", ja: "ご<ruby>自身<rt>じしん</rt></ruby>の<ruby>短所<rt>たんしょ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか？", zh: "請問您自己的短處是什麼呢？" },
+      { label: "質問B", ja: "<ruby>苦手<rt>にがて</rt></ruby>なことはありますか？", zh: "請問有比較不擅長的事情嗎？" }
+    ],
+    answers: [
+      { label: "回答", ja: "<ruby>少<rt>すこ</rt></ruby>し<ruby>緊張<rt>きんちょう</rt></ruby>しやすいところです。でも、<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて<ruby>確認<rt>かくにん</rt></ruby>しながら<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>行動<rt>こうどう</rt></ruby>するようにしています。", zh: "我的短處是有點容易緊張。但我會讓自己沉著冷靜、邊確實確認邊細心謹慎地行動。" }
+    ]
+  },
+  {
+    id: 19,
+    category: "危機應變",
+    title: "忙しい時の対応（尖峰忙碌時應對）",
+    questions: [
+      { label: "質問A", ja: "お<ruby>店<rt>みせ</rt></ruby>がとても<ruby>忙<rt>いそが</rt></ruby>しい<ruby>時<rt>とき</rt></ruby>はどうしますか？", zh: "店裡非常忙碌的時候您會怎麼做呢？" },
+      { label: "質問B", ja: "<ruby>混雑<rt>こんざつ</rt></ruby>した<ruby>時<rt>とき</rt></ruby>、どう<ruby>行動<rt>こうどう</rt></ruby>しますか？", zh: "現場客滿混雜時，您會採取怎樣的行動呢？" }
+    ],
+    answers: [
+      { label: "回答", ja: "<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて<ruby>周<rt>まわ</rt></ruby>りを<ruby>見<rt>み</rt></ruby>ます。そして、<ruby>周<rt>まわ</rt></ruby>りのスタッフと<ruby>声<rt>こえ</rt></ruby>を<ruby>掛<rt>か</rt></ruby>け<ruby>合<rt>あ</rt></ruby>って<ruby>動<rt>うご</rt></ruby>きます。", zh: "我會先冷靜環顧四周情況。然後，與周圍的夥伴互相發聲打招呼、協同照應後再行動。" }
+    ]
+  },
+  {
+    id: 20,
+    category: "主動提問",
+    title: "逆質問（最後是否有問題想詢問面試官）",
+    questions: [
+      { label: "質問A", ja: "<ruby>最後<rt>さいご</rt></ruby>に<ruby>何<rt>なに</rt></ruby>か<ruby>質問<rt>しつもん</rt></ruby>はありますか？", zh: "最後有什麼想提問的嗎？" },
+      { label: "質問B", ja: "こちらに<ruby>聞<rt>き</rt></ruby>いておきたいことはありますか？", zh: "有想要先向我們詢問了解的事情嗎？" }
+    ],
+    answers: [
+      { label: "回答A（用具租借與折扣）", ja: "スキーの<ruby>用具<rt>ようぐ</rt></ruby>（<ruby>板<rt>いた</rt></ruby>やウェア）は、スタッフ<ruby>向<rt>む</rt></ruby>けのレンタルや<ruby>割引<rt>わりびき</rt></ruby>はありますか？", zh: "請問滑雪裝備（雪板與雪衣雪褲），是否有提供員工專屬的租借或員工折扣呢？" },
+      { label: "回答B（初學滑雪課程）", ja: "<ruby>初心者向<rt>しょしんしゃむ</rt></ruby>けのスキーレッスンはありますか？<ruby>無料<rt>むりょう</rt></ruby>か<ruby>有料<rt>ゆうりょう</rt></ruby>かも<ruby>知<rt>し</rt></ruby>りたいです。", zh: "請問有針對初學者的滑雪課程嗎？我也想了解是免費提供還是需要收費。" },
+      { label: "回答C（宿舍房型與通勤）", ja: "<ruby>寮<rt>りょう</rt></ruby>のお<ruby>部屋<rt>へや</rt></ruby>は<ruby>個室<rt>こしつ</rt></ruby>ですか？<ruby>職場<rt>しょくば</rt></ruby>までは<ruby>歩<rt>ある</rt></ruby>いて<ruby>何分<rt>なんぷん</rt></ruby>くらいですか？", zh: "請問員工宿舍的房間是獨立單人房嗎？到上班工作地點步行大概需要幾分鐘呢？" }
+    ]
+  }
+];
+
+let currentTypesetMode = 'interview';
+let isInterviewContinuousPlaying = false;
+let currentPlayTopicIndex = 0;
+
+function renderTypesetPage() {
+  renderInterviewCardsList();
+  updateEditorPreview();
+}
+
+function setTypesetMode(mode) {
+  currentTypesetMode = mode;
+  const btnInterview = document.getElementById('btn-mode-interview');
+  const btnEditor = document.getElementById('btn-mode-editor');
+  const contInterview = document.getElementById('typeset-interview-container');
+  const contEditor = document.getElementById('typeset-editor-container');
+
+  if (mode === 'interview') {
+    if (btnInterview) btnInterview.classList.add('active');
+    if (btnEditor) btnEditor.classList.remove('active');
+    if (contInterview) contInterview.style.display = 'block';
+    if (contEditor) contEditor.style.display = 'none';
+  } else {
+    if (btnInterview) btnInterview.classList.remove('active');
+    if (btnEditor) btnEditor.classList.add('active');
+    if (contInterview) contInterview.style.display = 'none';
+    if (contEditor) contEditor.style.display = 'block';
+    updateEditorPreview();
+  }
+}
+
+function setTypesetFontSize(size) {
+  ['md', 'lg', 'xl'].forEach(s => {
+    const btn = document.getElementById('font-btn-' + s);
+    if (btn) btn.classList.toggle('active', s === size);
+  });
+  const c1 = document.getElementById('typeset-interview-container');
+  const c2 = document.getElementById('typeset-editor-container');
+  [c1, c2].forEach(c => {
+    if (c) {
+      c.classList.remove('font-size-md', 'font-size-lg', 'font-size-xl');
+      c.classList.add('font-size-' + size);
+    }
+  });
+}
+
+function stripRubyForSpeech(html) {
+  return html.replace(/<rt>[^<]*<\/rt>/g, '').replace(/<[^>]+>/g, '').trim();
+}
+
+function renderInterviewCardsList(filterKeyword = '') {
+  const container = document.getElementById('interview-cards-list');
+  if (!container) return;
+
+  const kw = filterKeyword.toLowerCase().trim();
+  const filtered = INTERVIEW_20_TOPICS.filter(t => {
+    if (!kw) return true;
+    const matchTitle = t.title.toLowerCase().includes(kw);
+    const matchCat = t.category.toLowerCase().includes(kw);
+    const matchQ = t.questions.some(q => q.ja.includes(kw) || q.zh.includes(kw));
+    const matchA = t.answers.some(a => a.ja.includes(kw) || a.zh.includes(kw));
+    return matchTitle || matchCat || matchQ || matchA;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--muted);">查無符合的面試題目，請嘗試其他關鍵字。</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(t => {
+    const qHtml = t.questions.map(q => {
+      const plainSpeech = stripRubyForSpeech(q.ja).replace(/"/g, '&quot;');
+      return `
+        <div class="interview-q-block">
+          <div class="interview-q-label">
+            <span>${q.label}</span>
+            <button class="btn btn-secondary btn-sm" onclick="speakJapaneseText('${plainSpeech}')" style="padding:2px 6px; font-size:0.75rem;">🔊 發音</button>
+          </div>
+          <div class="typeset-ja-line">${q.ja}</div>
+          <div class="typeset-zh-line">${q.zh}</div>
+        </div>
+      `;
+    }).join('');
+
+    const aHtml = t.answers.map(a => {
+      const plainSpeech = stripRubyForSpeech(a.ja).replace(/"/g, '&quot;');
+      return `
+        <div class="interview-ans-block">
+          <div class="interview-ans-label">
+            <span>✨ ${a.label}（楊詠筑）</span>
+            <button class="btn btn-secondary btn-sm" onclick="speakJapaneseText('${plainSpeech}')" style="padding:2px 6px; font-size:0.75rem;">🔊 播放應答</button>
+          </div>
+          <div class="typeset-ja-line">${a.ja}</div>
+          <div class="typeset-zh-line">${a.zh}</div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="interview-card" id="interview-card-${t.id}">
+        <div class="interview-header">
+          <div class="interview-title-wrap">
+            <span class="interview-badge">#${t.id}</span>
+            <span class="interview-title">${t.title}</span>
+          </div>
+          <span class="interview-category">${t.category}</span>
+        </div>
+        <div class="interview-body">
+          ${qHtml}
+          ${aHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterInterviewTopics() {
+  const input = document.getElementById('typeset-search-input');
+  if (input) renderInterviewCardsList(input.value);
+}
+
+function togglePlayAllInterview() {
+  const btn = document.getElementById('btn-play-all-interview');
+  if (isInterviewContinuousPlaying) {
+    window.speechSynthesis.cancel();
+    isInterviewContinuousPlaying = false;
+    if (btn) {
+      btn.textContent = '🔊 連續播放';
+      btn.classList.remove('btn-danger');
+      btn.classList.add('btn-primary');
+    }
+    return;
+  }
+
+  isInterviewContinuousPlaying = true;
+  currentPlayTopicIndex = 0;
+  if (btn) {
+    btn.textContent = '⏹️ 停止播放';
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-danger');
+  }
+  playNextInterviewTopic();
+}
+
+function playNextInterviewTopic() {
+  if (!isInterviewContinuousPlaying || currentPlayTopicIndex >= INTERVIEW_20_TOPICS.length) {
+    isInterviewContinuousPlaying = false;
+    const btn = document.getElementById('btn-play-all-interview');
+    if (btn) {
+      btn.textContent = '🔊 連續播放';
+      btn.classList.remove('btn-danger');
+      btn.classList.add('btn-primary');
+    }
+    return;
+  }
+
+  const topic = INTERVIEW_20_TOPICS[currentPlayTopicIndex];
+  const cardEl = document.getElementById('interview-card-' + topic.id);
+  if (cardEl) {
+    cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    cardEl.style.borderColor = 'var(--primary)';
+  }
+
+  // Speak main answer of the topic
+  const answerText = stripRubyForSpeech(topic.answers[0].ja);
+  const u = new SpeechSynthesisUtterance(answerText);
+  u.lang = 'ja-JP';
+  u.rate = 0.92;
+  u.onend = () => {
+    if (cardEl) cardEl.style.borderColor = '';
+    currentPlayTopicIndex++;
+    setTimeout(playNextInterviewTopic, 1200);
+  };
+  u.onerror = () => {
+    if (cardEl) cardEl.style.borderColor = '';
+    currentPlayTopicIndex++;
+    setTimeout(playNextInterviewTopic, 1200);
+  };
+  window.speechSynthesis.speak(u);
+}
+
+// 智慧標音語法解析器：將 漢字[かんじ] 或 漢字(かんじ) 自動轉換為 <ruby>漢字<rt>かんじ</rt></ruby>
+function convertRubySyntax(text) {
+  if (!text) return '';
+  // 已經包含 ruby 標籤者保留
+  let result = text;
+  // 處理 漢字[かんじ]
+  result = result.replace(/([一-龯々ヶ]+)\[([\u3040-\u309F\u30A0-\u30FF]+)\]/g, '<ruby>$1<rt>$2</rt></ruby>');
+  // 處理 漢字(かんじ)
+  result = result.replace(/([一-龯々ヶ]+)\(([\u3040-\u309F\u30A0-\u30FF]+)\)/g, '<ruby>$1<rt>$2</rt></ruby>');
+  // 處理 {漢字|かんじ}
+  result = result.replace(/\{([一-龯々ヶ]+)\|([\u3040-\u309F\u30A0-\u30FF]+)\}/g, '<ruby>$1<rt>$2</rt></ruby>');
+  return result;
+}
+
+function updateEditorPreview() {
+  const jaInput = document.getElementById('editor-ja-input');
+  const zhInput = document.getElementById('editor-zh-input');
+  const preview = document.getElementById('editor-live-preview');
+  if (!preview) return;
+
+  const rawJa = jaInput ? jaInput.value.trim() : '';
+  const rawZh = zhInput ? zhInput.value.trim() : '';
+
+  if (!rawJa && !rawZh) {
+    preview.innerHTML = `
+      <div style="color:var(--muted); text-align:center; padding:20px;">
+        請在上方左側輸入日文（例如：<code>はじめまして。楊詠筑[ヤンユンジュ]と申[もう]します。</code>）<br>
+        並在右側輸入繁體中文翻譯，此處將即時產生日文在頂（標音在上）、中文在下的精準排版。
+      </div>
+    `;
+    return;
+  }
+
+  const formattedJa = convertRubySyntax(rawJa).replace(/\n/g, '<br>');
+  const formattedZh = rawZh.replace(/\n/g, '<br>');
+
+  preview.innerHTML = `
+    <div class="interview-card" style="margin-bottom:0; box-shadow:none;">
+      <div class="typeset-ja-line">${formattedJa}</div>
+      ${formattedZh ? `<div class="typeset-zh-line">${formattedZh}</div>` : ''}
+    </div>
+  `;
+}
+
+function insertFuriganaSyntax() {
+  const jaInput = document.getElementById('editor-ja-input');
+  if (!jaInput) return;
+  const start = jaInput.selectionStart;
+  const end = jaInput.selectionEnd;
+  const val = jaInput.value;
+  const selected = val.substring(start, end) || '漢字';
+  const tag = '<ruby>' + selected + '<rt>かんじ</rt></ruby>';
+  jaInput.value = val.substring(0, start) + tag + val.substring(end);
+  updateEditorPreview();
+  showToast('已插入 ruby 標音標籤', 'success');
+}
+
+function loadEditorTemplate(type) {
+  const jaInput = document.getElementById('editor-ja-input');
+  const zhInput = document.getElementById('editor-zh-input');
+  if (!jaInput || !zhInput) return;
+
+  if (type === 'intro') {
+    jaInput.value = 'はじめまして。楊詠筑[ヤンユンジュ]と申[もう]します。\n台湾[たいわん]から来[き]ました。現在[げんざい]は熊本[くまもと]の黒川温泉[くろかわおんせん]のホテルで、レストランのホールスタッフをしています。\n明[あか]るく元気[げんき]にがんばります。よろしくお願[ねが]いいたします。';
+    zhInput.value = '您好，初次見面。我叫楊詠筑。來自台灣。目前在熊本黑川溫泉的飯店擔任餐廳外場人員。我會開朗有活力地全力以赴。請多多指教。';
+  } else if (type === 'motive') {
+    jaInput.value = '冬[ふゆ]のスキー場[じょう]で働[はたら]いてみたいからです。\nレストランでの経験[けいけん]をいかして、お客様[きゃくさま]に喜[よろこ]んでいただきたいです。';
+    zhInput.value = '因為我想在冬天的滑雪場工作看看。希望能發揮在餐廳累積的經驗，讓客人感到開心滿意。';
+  } else if (type === 'reverse_q') {
+    jaInput.value = 'スキーの用具[ようぐ]（板[いた]やウェア）は、スタッフ向[む]けのレンタルや割引[わりびき]はありますか？\n寮[りょう]のお部屋[へや]は個室[こしつ]ですか？職場[しょくば]までは歩[ある]いて何分[なんぷん]くらいですか？';
+    zhInput.value = '請問滑雪裝備（雪板與雪衣雪褲），是否有提供員工專屬的租借或員工折扣呢？\n請問員工宿舍的房間是獨立單人房嗎？到上班工作地點步行大概需要幾分鐘呢？';
+  }
+  updateEditorPreview();
+  showToast('已載入模範範本', 'success');
+}
+
+function speakEditorText() {
+  const jaInput = document.getElementById('editor-ja-input');
+  if (!jaInput || !jaInput.value.trim()) {
+    showToast('請先輸入日文內容', 'info');
+    return;
+  }
+  const plain = stripRubyForSpeech(convertRubySyntax(jaInput.value));
+  speakJapaneseText(plain);
+}
+
+function copyEditorHtml() {
+  const preview = document.getElementById('editor-live-preview');
+  if (!preview) return;
+  navigator.clipboard.writeText(preview.innerHTML).then(() => {
+    showToast('已複製排版 HTML 到剪貼簿', 'success');
+  }).catch(() => {
+    showToast('複製失敗，請手動選取複製', 'error');
+  });
+}
+
+function printTypesetDocument() {
+  window.print();
+}
+
+function copyTypesetArticleMarkdown() {
+  let md = '# 🏂 日本打工度假（滑雪場・飯店）面試實戰問答 20 題完整對照手冊\n\n';
+  INTERVIEW_20_TOPICS.forEach(t => {
+    md += `## ${t.id}. ${t.title}\n\n`;
+    t.questions.forEach(q => {
+      md += `- **${q.label}**：\n  ${q.ja}\n  *（${q.zh}）*\n\n`;
+    });
+    t.answers.forEach(a => {
+      md += `- **${a.label}**：\n  ${a.ja}\n  *（${a.zh}）*\n\n`;
+    });
+    md += '---\n\n';
+  });
+
+  navigator.clipboard.writeText(md).then(() => {
+    showToast('已複製整篇 20 題 Markdown 到剪貼簿', 'success');
+  }).catch(() => {
+    showToast('複製失敗，請手動選取', 'error');
+  });
+}
+
+/* ==============================================================
+   12. 初始化
 ============================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   syncNetworkStatus();
