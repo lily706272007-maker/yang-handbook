@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v85'), 'Service Worker 快取版本已升級至 yang-pwa-v85');
-assert(html.includes('yang_runner_handbook_v85'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v85');
+assert(swContent.includes('yang-pwa-v86'), 'Service Worker 快取版本已升級至 yang-pwa-v86');
+assert(html.includes('yang_runner_handbook_v86'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v86');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
