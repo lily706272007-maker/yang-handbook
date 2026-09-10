@@ -1526,6 +1526,50 @@
     transform: scale(0.95);
   }
 
+  /* 朗誦中段落醒目高亮與自動捲動跟隨 */
+  .content-group.reading-active {
+    background: rgba(196, 106, 94, 0.12) !important;
+    border-left: 4px solid var(--primary) !important;
+    box-shadow: 0 2px 10px rgba(196, 106, 94, 0.18) !important;
+    padding-left: 12px !important;
+    transition: all 0.25s ease;
+  }
+
+  /* 朗誦控制面板 (全文朗誦 / 反覆朗誦 / 停止朗誦) */
+  .typeset-player-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin: 14px 0 16px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .typeset-player-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .typeset-player-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .typeset-status-pill {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
+    background: rgba(92,61,30,0.05);
+    padding: 4px 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
   /* 底部排版工具列 (集中放置在文章最末尾) */
   .typeset-footer-toolbar {
     display: flex;
@@ -2038,13 +2082,13 @@
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border);">
           <!-- 朗讀控制組 -->
           <div style="display:flex; align-items:center; gap:6px;">
-            <button class="btn btn-secondary btn-sm" onclick="readAllTypeset(false)" title="全文朗讀一遍">
-              ▶️ 念一遍
+            <button class="btn btn-primary btn-sm" id="btn-typeset-read-all" onclick="startTypesetSpeech(false)" style="font-weight:700;" title="從第 1 句開始全文朗誦一遍">
+              ▶️ 全文朗誦
             </button>
-            <button class="btn btn-secondary btn-sm" id="btn-typeset-loop" onclick="readAllTypeset(true)" title="全文無限循環朗讀">
-              🔁 循環
+            <button class="btn btn-secondary btn-sm" id="btn-typeset-loop" onclick="startTypesetSpeech(true)" style="font-weight:700;" title="無限反覆朗誦全文（適合聽力跟讀背誦）">
+              🔁 反覆朗誦
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="stopTypesetSpeech()" style="color:#d32f2f;" title="停止語音">
+            <button class="btn btn-secondary btn-sm" id="btn-typeset-stop" onclick="stopTypesetSpeech()" style="color:#d32f2f; font-weight:700;" title="停止語音朗誦">
               ⏹️ 停止
             </button>
           </div>
@@ -2067,6 +2111,24 @@
               🖨️ 列印 / 匯出 PDF
             </button>
           </div>
+        </div>
+      </div>
+
+      <!-- 全文朗誦狀態控制條 (全文朗誦 / 反覆朗誦 / 停止) -->
+      <div class="typeset-player-bar" id="typeset-player-bar">
+        <div class="typeset-player-controls">
+          <button class="btn btn-primary btn-sm" onclick="startTypesetSpeech(false)" style="font-weight:700;" title="從第 1 句開始全文朗誦一遍">
+            ▶️ 全文朗誦
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="startTypesetSpeech(true)" style="font-weight:700;" title="反覆循環朗誦全文">
+            🔁 反覆朗誦
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="stopTypesetSpeech()" style="color:#d32f2f; font-weight:700;" title="立即停止語音朗誦">
+            ⏹️ 停止
+          </button>
+        </div>
+        <div class="typeset-player-status" id="typeset-player-status">
+          <span class="typeset-status-pill" id="typeset-player-status-pill">💡 點擊「全文朗誦」或「反覆朗誦」即可開始逐句朗讀</span>
         </div>
       </div>
 
@@ -3091,7 +3153,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v87';
+const STORAGE_KEY = 'yang_runner_handbook_v88';
 
 function createRealRunnerData() {
   return {
@@ -14082,6 +14144,79 @@ function isPureChineseText(t) {
   return zhCount > 0 && jpKana === 0;
 }
 
+// 常用面試、餐飲、接客標題與高頻詞快速繁中字典 (提供毫秒級即時對照)
+const TYPESET_ZH_DICT = {
+  '1. 自己紹介': '1. 自我介紹',
+  '自己紹介': '自我介紹',
+  '2. 志望動機': '2. 應徵動機',
+  '志望動機': '應徵動機',
+  '3. 勤務開始日': '3. 可開始工作日',
+  '勤務開始日': '可開始工作日',
+  '4. 勤務期間': '4. 工作期間',
+  '勤務期間': '工作期間',
+  '5. 希望職種': '5. 希望職種',
+  '希望職種': '希望職種',
+  '長所・短所': '優點與缺點',
+  '長所': '優點',
+  '短所': '缺點',
+  '質問': '問題',
+  '回答': '回答',
+  'はじめまして。': '初次見面。',
+  'はじめまして': '初次見面',
+  'よろしくお願いいたします。': '請多多指教。',
+  'よろしくお願いいたします': '請多多指教',
+  'よろしくお願いします。': '請多多指教。',
+  'よろしくお願いします': '請多多指教',
+  'ありがとうございます。': '非常感謝。',
+  'ありがとうございます': '非常感謝',
+  'かしこまりました。': '好的，明白了。',
+  'かしこまりました': '好的，明白了'
+};
+
+function isChineseLine(text) {
+  if (!text) return false;
+  // 若含有日文平假名或片假名，則屬於日文句子，絕非純中文翻譯行
+  const hasKana = /[\u3040-\u309F\u30A0-\u30FF]/.test(text);
+  if (hasKana) return false;
+  const hanCount = (text.match(/[\u4e00-\u9fff]/g) || []).length;
+  return hanCount >= 2;
+}
+
+function extractPairsFromRawLines(lines) {
+  const pairs = [];
+  let i = 0;
+  while (i < lines.length) {
+    const l1 = lines[i];
+    const l2 = lines[i + 1] || '';
+
+    // 檢查行內是否自帶括號中文翻譯，例如「1. 自己紹介（自我介紹）」
+    const inlineMatch = l1.match(/^(.*?)[\(（]([\u4e00-\u9fff\s，。、！？!?,]+)[\)）]$/);
+    if (inlineMatch && !/[\u3040-\u309F\u30A0-\u30FF]/.test(inlineMatch[2])) {
+      pairs.push({ jp: inlineMatch[1].trim(), zh: inlineMatch[2].trim() });
+      i++;
+      continue;
+    }
+
+    const l1HasKana = /[\u3040-\u309F\u30A0-\u30FF]/.test(l1);
+    const l2IsZh = isChineseLine(l2);
+
+    if (l1HasKana && l2IsZh) {
+      // l1 包含假名為日文句子，l2 無假名且為中文翻譯
+      pairs.push({ jp: l1, zh: l2 });
+      i += 2;
+    } else if (!l1HasKana && l2IsZh && l1 !== l2 && lines.length % 2 === 0 && lines.filter(isChineseLine).length >= lines.length / 2) {
+      // 整篇交替出現純日文標題與中文標題
+      pairs.push({ jp: l1, zh: l2 });
+      i += 2;
+    } else {
+      // l1 為獨立日文句子或純漢字日文標題 (例如「1. 自己紹介」)，後方無現成中文，後續將自動呼叫翻譯
+      pairs.push({ jp: l1, zh: '' });
+      i++;
+    }
+  }
+  return pairs;
+}
+
 // 核心排版生成：AI 智慧標音 + 免費翻譯降級 + 零吃字保證
 async function generateTypesetArticle() {
   const input = document.getElementById('typeset-input-text');
@@ -14097,38 +14232,13 @@ async function generateTypesetArticle() {
   const btn = document.getElementById('btn-typeset-generate');
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> 分析排版中…';
+    btn.innerHTML = '<span class="spinner"></span> 正在排版並翻譯中文…';
   }
 
   const output = document.getElementById('typeset-preview-output');
-  output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在智慧標音並解析排版，請稍候…</div>';
+  output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在智慧標音並解析繁體中文翻譯，請稍候…</div>';
 
   try {
-    const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean);
-    const hasMixedLines = lines.length > 1 && lines.some(l => (l.match(/[\u4e00-\u9fff]/g)||[]).length > 3 && (l.match(/[\u3040-\u30ff]/g)||[]).length === 0);
-
-    if (hasMixedLines) {
-      const parsedGroups = [];
-      let i = 0;
-      while (i < lines.length) {
-        const l1 = lines[i];
-        const l2 = lines[i+1] || '';
-        const isL2Zh = l2 && (l2.match(/[\u4e00-\u9fff]/g)||[]).length > 3 && (l2.match(/[\u3040-\u30ff]/g)||[]).length === 0;
-        if (isL2Zh) {
-          parsedGroups.push(parseLocalJapaneseSegments(l1, l2));
-          i += 2;
-        } else {
-          parsedGroups.push(parseLocalJapaneseSegments(l1, ''));
-          i++;
-        }
-      }
-      typesetLastData = { groups: parsedGroups };
-      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
-      renderTypesetResult(typesetLastData);
-      showToast(`排版成功：已解析 ${parsedGroups.length} 個對照組`, 'success');
-      return;
-    }
-
     if (isPureChineseText(text)) {
       await processZhToJpViaGemini(text);
       return;
@@ -14283,20 +14393,28 @@ ${text}
   await processFallbackWithFreeTranslation(text);
 }
 
-// 免費翻譯降級處理：即使沒有 API Key，也自動翻譯成繁體中文！
+// 免費翻譯降級處理：即使沒有 API Key，也保證每句自動翻譯成繁體中文！
 async function processFallbackWithFreeTranslation(text) {
   const rawLines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
-  const groups = [];
+  if (rawLines.length === 0) return;
 
-  for (const line of rawLines) {
-    let zh = '';
-    try {
-      zh = await fetchFreeGoogleTranslate(line, 'zh-TW');
-    } catch(e) {
-      console.warn('Free translation error for line:', line, e);
+  const pairs = extractPairsFromRawLines(rawLines);
+
+  const groups = await Promise.all(pairs.map(async (pair) => {
+    let zh = pair.zh;
+    if (!zh) {
+      zh = TYPESET_ZH_DICT[pair.jp.trim()] || '';
+      if (!zh) {
+        try {
+          zh = await fetchFreeGoogleTranslate(pair.jp, 'zh-TW');
+        } catch(e) {
+          console.warn('Free translation error for line:', pair.jp, e);
+          zh = '';
+        }
+      }
     }
-    groups.push(parseLocalJapaneseSegments(line, zh));
-  }
+    return parseLocalJapaneseSegments(pair.jp, zh);
+  }));
 
   typesetLastData = { groups };
   localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
@@ -14528,21 +14646,40 @@ function renderTypesetResult(data) {
     gEl.appendChild(dotsBtn);
 
     // 中文對照行 (contentEditable)
-    if (showC && group.translation) {
+    if (showC) {
       const zhLine = document.createElement('span');
       zhLine.className = 'zh-line';
       zhLine.contentEditable = 'true';
-      zhLine.textContent = group.translation;
+      zhLine.textContent = group.translation || '（點擊直接輸入中文翻譯）';
+      if (!group.translation) {
+        zhLine.style.opacity = '0.65';
+        zhLine.style.fontStyle = 'italic';
+      }
+      zhLine.onfocus = () => {
+        if (zhLine.textContent === '（點擊直接輸入中文翻譯）') {
+          zhLine.textContent = '';
+          zhLine.style.opacity = '1';
+          zhLine.style.fontStyle = 'normal';
+        }
+      };
+      zhLine.onblur = () => {
+        group.translation = zhLine.textContent.trim();
+        saveTypesetUndo();
+      };
       gEl.appendChild(zhLine);
     }
 
     output.appendChild(gEl);
   });
 
-  // 底部集中工具列：剪刀、星星、分隔線等放在文章末尾，保證上方閱讀行雲流水！
+  // 底部集中工具列：剪刀、星星、分隔線等放在文章末尾，並包含語音全文朗誦操作！
   const footerTb = document.createElement('div');
   footerTb.className = 'typeset-footer-toolbar';
   footerTb.innerHTML = `
+    <button class="btn btn-primary btn-sm" onclick="startTypesetSpeech(false)" style="font-weight:700;" title="從第 1 句全文朗誦一遍">▶️ 全文朗誦</button>
+    <button class="btn btn-secondary btn-sm" onclick="startTypesetSpeech(true)" style="font-weight:700;" title="無限反覆循環朗誦">🔁 反覆朗誦</button>
+    <button class="btn btn-secondary btn-sm" onclick="stopTypesetSpeech()" style="color:#d32f2f; font-weight:700;" title="立即停止語音朗誦">⏹️ 停止朗誦</button>
+    <span style="border-left:1px solid var(--border); height:16px; margin:0 4px;"></span>
     <button class="btn btn-secondary btn-sm" onclick="saveAllTypesetToVocab()" title="將排版內容收藏至手帳單字庫">⭐ 收藏至單字庫</button>
     <button class="btn btn-secondary btn-sm" onclick="splitLastTypesetGroup()" title="拆分末尾段落">✂️ 拆分段落</button>
     <button class="btn btn-secondary btn-sm" onclick="addTypesetDividerAtEnd()" title="插入分隔線">— 插入分隔線</button>
@@ -14860,72 +14997,194 @@ function createEmptyTypesetGroupElement() {
   return g;
 }
 
-// 語音連讀控制
-function readAllTypeset(loop = false) {
-  stopTypesetSpeech();
-  isTypesetLooping = loop;
+// ==============================================================
+// 語音朗誦播放器控制：全文朗誦、反覆朗誦、停止朗誦
+// ==============================================================
+let isTypesetReading = false;
+let typesetSpeechTimer = null;
+let currentReadingIndex = -1;
 
+function getGroupSpokenText(groupEl, groupData) {
+  if (groupData && groupData.reading_full) return groupData.reading_full;
+  const jp = groupEl ? groupEl.querySelector('.jp-line') : null;
+  if (!jp) return '';
+  return extractSpokenJapanese(jp.innerHTML) || jp.textContent.trim();
+}
+
+function updateTypesetSpeechButtons(active, looping, currentNum, totalNum) {
+  const readAllBtn = document.getElementById('btn-typeset-read-all');
   const loopBtn = document.getElementById('btn-typeset-loop');
-  if (loopBtn) {
-    loopBtn.style.color = loop ? 'var(--primary)' : 'var(--ink)';
-    loopBtn.style.fontWeight = loop ? '800' : '600';
+  const statusPill = document.getElementById('typeset-player-status-pill');
+
+  if (readAllBtn) {
+    if (active && !looping) {
+      readAllBtn.innerHTML = '🔊 全文朗誦中… (' + currentNum + '/' + totalNum + ')';
+      readAllBtn.style.background = 'var(--primary)';
+      readAllBtn.style.color = '#fff';
+    } else {
+      readAllBtn.innerHTML = '▶️ 全文朗誦';
+      readAllBtn.style.background = '';
+      readAllBtn.style.color = '';
+    }
   }
+
+  if (loopBtn) {
+    if (active && looping) {
+      loopBtn.innerHTML = '🔁 反覆朗誦中… (' + currentNum + '/' + totalNum + ')';
+      loopBtn.style.background = 'var(--primary)';
+      loopBtn.style.color = '#fff';
+      loopBtn.style.fontWeight = '800';
+    } else {
+      loopBtn.innerHTML = '🔁 反覆朗誦';
+      loopBtn.style.background = '';
+      loopBtn.style.color = '';
+      loopBtn.style.fontWeight = '700';
+    }
+  }
+
+  if (statusPill) {
+    if (active) {
+      if (looping) {
+        statusPill.innerHTML = '🔁 <b>反覆朗誦中</b>：正在朗讀第 ' + currentNum + ' / ' + totalNum + ' 句（整篇念完將自動循環）';
+        statusPill.style.color = 'var(--primary)';
+      } else {
+        statusPill.innerHTML = '🔊 <b>全文朗誦中</b>：正在朗讀第 ' + currentNum + ' / ' + totalNum + ' 句';
+        statusPill.style.color = 'var(--primary)';
+      }
+    } else {
+      statusPill.innerHTML = '💡 點擊「全文朗誦」或「反覆朗誦」即可開始逐句朗讀';
+      statusPill.style.color = 'var(--muted)';
+    }
+  }
+}
+
+// 啟動朗誦：全文朗誦 (loop = false) 或 反覆朗誦 (loop = true)
+function startTypesetSpeech(loop = false) {
+  stopTypesetSpeech();
 
   const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
-  typesetAllReadings = Array.from(groups).map(g => {
-    const jp = g.querySelector('.jp-line');
-    return jp ? jp.textContent.trim() : '';
-  }).filter(Boolean);
-
-  if (typesetAllReadings.length === 0) {
-    showToast('沒有可朗讀的日文段落', 'info');
+  if (!groups || groups.length === 0) {
+    showToast('目前尚無可朗誦的排版內容，請先點擊立即生成排版', 'info');
     return;
   }
+
+  isTypesetReading = true;
+  isTypesetLooping = loop;
 
   playTypesetSequenceIndex(0);
 }
 
+// 向後相容呼叫別名
+function readAllTypeset(loop = false) {
+  startTypesetSpeech(loop);
+}
+
 function playTypesetSequenceIndex(idx) {
-  if (!isTypesetLooping && idx >= typesetAllReadings.length) {
+  if (!isTypesetReading) return;
+
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups || groups.length === 0) {
     stopTypesetSpeech();
     return;
   }
 
-  const currentIdx = idx % typesetAllReadings.length;
-  const text = typesetAllReadings[currentIdx];
+  if (idx >= groups.length) {
+    if (isTypesetLooping) {
+      // 反覆朗誦：間隔 800ms 後從第 1 句重新循環
+      typesetSpeechTimer = setTimeout(() => {
+        if (isTypesetReading && isTypesetLooping) {
+          playTypesetSequenceIndex(0);
+        }
+      }, 800);
+      return;
+    } else {
+      stopTypesetSpeech();
+      showToast('🎉 全文朗誦完畢！', 'success');
+      return;
+    }
+  }
 
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ja-JP';
+  currentReadingIndex = idx;
+  const currentGroup = groups[idx];
+
+  // 高亮目前朗誦句子並平滑捲動到該位置
+  groups.forEach((g, i) => {
+    if (i === idx) {
+      g.classList.add('reading-active');
+      g.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      g.classList.remove('reading-active');
+    }
+  });
+
+  updateTypesetSpeechButtons(true, isTypesetLooping, idx + 1, groups.length);
+
+  const groupData = typesetLastData?.groups?.[idx];
+  const textToSpeak = getGroupSpokenText(currentGroup, groupData);
+  if (!textToSpeak) {
+    playTypesetSequenceIndex(idx + 1);
+    return;
+  }
+
+  if (!('speechSynthesis' in window)) {
+    showToast('瀏覽器不支援語音合成', 'error');
+    stopTypesetSpeech();
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utt = new SpeechSynthesisUtterance(textToSpeak);
+  utt.lang = 'ja-JP';
   const pref = getSavedVoiceSettings();
-  u.rate = pref.rate || 0.92;
+  utt.rate = pref.rate || 0.92;
+
   if (pref.voiceURI || pref.voiceName) {
     const allVoices = window.speechSynthesis.getVoices();
     const voice = allVoices.find(v => (pref.voiceURI && v.voiceURI === pref.voiceURI) || (pref.voiceName && v.name === pref.voiceName));
-    if (voice) u.voice = voice;
+    if (voice) utt.voice = voice;
   }
 
-  u.onend = () => {
-    if (isTypesetLooping || idx + 1 < typesetAllReadings.length) {
-      setTimeout(() => playTypesetSequenceIndex(idx + 1), 600);
-    } else {
-      stopTypesetSpeech();
-    }
-  };
-  u.onerror = () => {
-    playTypesetSequenceIndex(idx + 1);
+  window._currentTypesetUtterance = utt; // 防止 Mac Chrome GC 提早回收
+
+  utt.onend = () => {
+    if (!isTypesetReading) return;
+    typesetSpeechTimer = setTimeout(() => {
+      playTypesetSequenceIndex(idx + 1);
+    }, 450); // 句與句之間自然停頓
   };
 
-  window.speechSynthesis.speak(u);
+  utt.onerror = (err) => {
+    console.warn('Speech playback warning:', err);
+    if (!isTypesetReading) return;
+    typesetSpeechTimer = setTimeout(() => {
+      playTypesetSequenceIndex(idx + 1);
+    }, 300);
+  };
+
+  window.speechSynthesis.speak(utt);
 }
 
+// 停止朗誦
 function stopTypesetSpeech() {
+  isTypesetReading = false;
   isTypesetLooping = false;
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  const loopBtn = document.getElementById('btn-typeset-loop');
-  if (loopBtn) {
-    loopBtn.style.color = 'var(--ink)';
-    loopBtn.style.fontWeight = '600';
+  if (typesetSpeechTimer) {
+    clearTimeout(typesetSpeechTimer);
+    typesetSpeechTimer = null;
   }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  currentReadingIndex = -1;
+  window._currentTypesetUtterance = null;
+
+  // 清除所有段落的高亮
+  document.querySelectorAll('#typeset-scroll-page .content-group').forEach(el => {
+    el.classList.remove('reading-active');
+  });
+
+  updateTypesetSpeechButtons(false, false, 0, 0);
 }
 
 // 💬 LINE 格式一鍵複製

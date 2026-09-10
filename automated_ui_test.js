@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v87'), 'Service Worker 快取版本已升級至 yang-pwa-v87');
-assert(html.includes('yang_runner_handbook_v87'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v87');
+assert(swContent.includes('yang-pwa-v88'), 'Service Worker 快取版本已升級至 yang-pwa-v88');
+assert(html.includes('yang_runner_handbook_v88'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v88');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -595,6 +595,16 @@ assert(html.includes('processFallbackWithFreeTranslation') && html.includes('fet
 assert(html.includes('speakJapaneseText') && html.includes('speakJapanese'), '支援單句發音函式呼叫');
 assert(html.includes('TYPESET_FURIGANA_DICT'), '包含常用外場/面試高頻漢字注音字典 (TYPESET_FURIGANA_DICT)');
 
+// 測試 38: 全文朗誦・反覆朗誦・停止按鈕・繁中對照行永久呈現・智慧句子配對 (v88)
+console.log('\n【測試 38：全文朗誦・反覆朗誦・停止按鈕・繁中對照行永久呈現・智慧句子配對 (v88)】');
+assert(html.includes('typeset-player-bar') && html.includes('typeset-player-status'), '包含獨立醒目的全文朗誦播放器控制條 (typeset-player-bar)');
+assert(html.includes('startTypesetSpeech') && html.includes('btn-typeset-read-all'), '包含「▶️ 全文朗誦」功能與按鈕');
+assert(html.includes('startTypesetSpeech(true)') && html.includes('btn-typeset-loop'), '包含「🔁 反覆朗誦」無限循環跟讀功能');
+assert(html.includes('stopTypesetSpeech'), '包含「⏹️ 停止朗誦」中斷語音按鈕');
+assert(html.includes('content-group.reading-active'), '包含朗誦時段落醒目高亮樣式 (reading-active)');
+assert(html.includes('TYPESET_ZH_DICT') && html.includes('extractPairsFromRawLines'), '包含面試高頻繁中字典與智慧中日句子交替提取函式');
+assert(html.includes('showC') && html.includes('zhLine.textContent = group.translation'), '中文對照開關開啟時保證中文行始終穩定呈現');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -602,7 +612,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v87) 漢字不漏・句尾三點發音・底端工具列・中文免費翻譯完美就位！');
+  console.log('🎉 所有測試通過！(v88) 全文朗誦・反覆朗誦・停止朗誦・中文翻譯完美修復！');
 }
 
 
