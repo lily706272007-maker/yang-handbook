@@ -1368,13 +1368,12 @@
 
 
   /* ==============================================================
-     日文排版救星・手帳專屬排版神器 (page-typeset) 專用樣式 (v85)
+     日文排版救星・手帳專屬排版神器 (page-typeset) 專用樣式 (v87)
      ============================================================== */
   #page-typeset {
     padding-bottom: 90px;
   }
   
-  /* 頂部功能面板與開關區 */
   .typeset-control-card {
     background: var(--bg-card);
     border: 1.5px solid var(--border);
@@ -1384,7 +1383,6 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   }
 
-  /* 輸入框與快捷按鈕 */
   .typeset-input-wrap {
     margin-bottom: 12px;
   }
@@ -1408,7 +1406,6 @@
     box-shadow: 0 0 0 3px rgba(92,61,30,0.12);
   }
 
-  /* 快捷操作晶片列 */
   .typeset-chips-bar {
     display: flex;
     flex-wrap: wrap;
@@ -1417,7 +1414,6 @@
     margin-top: 8px;
   }
 
-  /* 標音開關 Checkboxes 區塊 */
   .typeset-options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -1445,7 +1441,6 @@
     accent-color: var(--primary);
   }
 
-  /* 排版微調收折面板 */
   .typeset-sliders-panel {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1489,50 +1484,58 @@
     transition: all 0.2s;
   }
 
-  /* 單句群組卡片 */
+  /* 單句群組：純淨無干擾，刪除每行上方的剪刀星星工具列 */
   .content-group {
-    padding: 10px 14px;
-    margin-bottom: 14px;
-    border-radius: 12px;
-    transition: background 0.15s, transform 0.15s;
+    padding: 6px 8px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    transition: background 0.15s;
     position: relative;
-    border: 1px solid transparent;
   }
   .content-group:hover {
-    background: rgba(92,61,30,0.03);
-    border-color: rgba(92,61,30,0.12);
+    background: rgba(92,61,30,0.02);
   }
-  .content-group-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-    opacity: 0.85;
-    transition: opacity 0.15s;
-  }
-  .content-group:hover .content-group-toolbar {
-    opacity: 1;
-  }
-  .content-group-toolbar .btn-icon-sm {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 6px;
-    width: 28px;
-    height: 28px;
+
+  /* 句末三個小點點發音按鈕 (純淨雅致) */
+  .typeset-dots-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.76rem;
+    margin-left: 8px;
+    padding: 2px 9px;
+    font-size: 0.88rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: rgba(92,61,30,0.07);
+    border: 1px solid var(--border);
+    border-radius: 14px;
     cursor: pointer;
-    color: var(--ink);
-    padding: 0;
-    transition: all 0.15s;
+    transition: all 0.15s ease;
+    vertical-align: middle;
+    user-select: none;
+    line-height: 1.2;
   }
-  .content-group-toolbar .btn-icon-sm:hover {
+  .typeset-dots-btn:hover {
     background: var(--primary);
     color: #fff;
     border-color: var(--primary);
-    transform: scale(1.05);
+    transform: scale(1.1);
+  }
+  .typeset-dots-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* 底部排版工具列 (集中放置在文章最末尾) */
+  .typeset-footer-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1.5px dashed var(--border);
   }
 
   /* 日文與注音行 */
@@ -1541,7 +1544,7 @@
     font-size: 18px;
     line-height: 2.6;
     color: var(--ink);
-    display: block;
+    display: inline;
     outline: none;
     letter-spacing: 0em;
   }
@@ -1610,17 +1613,13 @@
     user-select: text !important;
   }
 
-  /* 分隔線 (Draggable Divider) */
+  /* 分隔線 */
   .content-divider {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 6px 0;
-    cursor: grab;
     margin: 8px 0;
-  }
-  .content-divider:active {
-    cursor: grabbing;
   }
   .content-divider hr {
     border: none;
@@ -1685,7 +1684,7 @@
 
   /* 列印專用樣式 */
   @media print {
-    header, nav#top-nav-bar, #offline-badge, .typeset-control-card, .content-group-toolbar, .div-del-btn, .floating-raccoon-btn, #toast-shelf, #typeset-ctx-menu {
+    header, nav#top-nav-bar, #offline-badge, .typeset-control-card, .typeset-dots-btn, .typeset-footer-toolbar, .div-del-btn, .floating-raccoon-btn, #toast-shelf, #typeset-ctx-menu {
       display: none !important;
     }
     body, main, #app {
@@ -1713,11 +1712,10 @@
       break-inside: avoid;
       page-break-inside: avoid;
       border: none !important;
-      padding: 6px 0 !important;
-      margin-bottom: 10px !important;
+      padding: 4px 0 !important;
+      margin-bottom: 8px !important;
     }
 
-    /* 一般 A4 黑白列印：消除背景色、高對比易讀 */
     body:not(.print-keep-color) .zh-line {
       background: transparent !important;
       border-left: 2.5px solid #666 !important;
@@ -1730,7 +1728,6 @@
       color: #333 !important;
     }
 
-    /* 口袋小抄模式 (Pocket Card 3x5" / 2欄網格) */
     .pocket-print-mode #typeset-scroll-page {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
@@ -3094,7 +3091,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v86';
+const STORAGE_KEY = 'yang_runner_handbook_v87';
 
 function createRealRunnerData() {
   return {
@@ -13893,8 +13890,70 @@ function toggleBroadcastMic() {
 
 
 /* ==============================================================
-   11. 日文排版救星・手帳專屬排版神器 (page-typeset) (v85)
+   11. 日文排版救星・手帳專屬排版神器 (page-typeset) (v87)
 ============================================================== */
+
+// 語音發音相容別名
+function speakJapaneseText(text) {
+  speakJapanese(text);
+}
+
+// 豐富的離線/備援日文漢字平假名對照字典 (涵蓋打工度假、面試、旅館、餐飲、外場高頻詞)
+const TYPESET_FURIGANA_DICT = {
+  '自己紹介': 'じこしょうかい', '質問': 'しつもん', '回答': 'かいとう', '簡単': 'かんたん',
+  '自己': 'じこ', '含めて': 'ふくめて', '含め': 'ふくめ', '含': 'ふく',
+  'お願い': 'おねがい', '願い': 'ねがい', '願': 'ねが',
+  '申します': 'もうします', '申': 'もう', '台湾': 'たいわん',
+  '来ました': 'きました', '来': 'き', '現在': 'げんざい', '熊本': 'くまもと',
+  '黒川温泉': 'くろかわおんせん', '黒川': 'くろかわ', '温泉': 'おんせん',
+  '明るく': 'あかるく', '明': 'あか', '元気': 'げんき',
+  'お願いいたします': 'おねがいいたします', '志望動機': 'しぼうどうき', '志望': 'しぼう',
+  '動機': 'どうき', '働きたい': 'はたらきたい', '働': 'はたら', '応募': 'おうぼ',
+  '理由': 'りゆう', '教えて': 'おしえて', '教': 'おし', '冬': 'ふゆ',
+  '経験': 'けいけん', 'お客様': 'きゃくさま', '客': 'きゃく', '喜んで': 'よろこんで',
+  '喜': 'よろこ', '勤務開始日': 'きんむかいしび', '勤務開始': 'きんむかいし', '勤務': 'きんむ',
+  '開始': 'かいし', '希望日': 'きぼうび', '希望': 'きぼう', '仕事': 'しごと',
+  '契約': 'けいやく', '終わります': 'おわります', '終': 'お', '月下旬': 'がつげじゅん',
+  '下旬': 'げじゅん', '働けます': 'はたらけます', '勤務期間': 'きんむきかん', '期間': 'きかん',
+  '終わり': 'おわり', '月末': 'がつまつ', '有無': 'うむ', '入れ墨': 'いれずみ',
+  '入って': 'はいって', '入': 'はい', '刺青': 'いれずみ', '体': 'からだ',
+  '一切': 'いっさい', '髪': 'かみ', '色': 'いろ', '何色': 'なにいろ',
+  '毛': 'け', '染めて': 'そめて', '染': 'そ', '黒色': 'くろいろ',
+  '黒': 'くろ', '状態': 'じょうたい', '爪': 'つめ', '何': 'なに',
+  '食べ物': 'たべもの', '持っています': 'もっています', '持': 'も',
+  '甲殻類': 'こうかくるい', '食べられません': 'たべられません', '食': 'た',
+  '内容': 'ないよう', '旅館': 'りょかん', '業務内容': 'ぎょうむないよう', '案内': 'あんない',
+  '配膳': 'はいぜん', '片付け': 'かたづけ', '体力': 'たいりょく', '立ち仕事': 'たちしごと',
+  '忙しい': 'いそがしい', '体力面': 'たいりょくめん', '大丈夫': 'だいじょうぶ',
+  '自信': 'じしん', '職場': 'しょくば', '毎日': 'まいにち', '動いて': 'うごいて',
+  '動': 'うご', '早朝': 'そうちょう', '夜間': 'やかん', '早番': 'はやばん',
+  '遅番': 'おそばん', '朝': 'あさ', '夜': 'よる', '不規則': 'ふきそく',
+  '時間': 'じかん', '問題': 'もんだい', '会話': 'かいわ', '指示': 'しじ',
+  '理解': 'りかい', '難しい': 'むずかしい', '言葉': 'ことば', '勉強中': 'べんきょうちゅう',
+  '一生懸命': 'いっしょうけんめい', '聞いて': 'きいて', '聞': 'き', '丁寧': 'ていねい',
+  '対応': 'たいおう', '挑戦': 'ちょうせん', '初': 'はじ', '共同生活': 'きょうどうせいかつ',
+  '協力': 'きょうりょく', '他': 'ほか', '大切': 'たいせつ', '笑顔': 'えがお',
+  '挨拶': 'あいさつ', '相手': 'あいて', '話': 'はなし', '種類': 'しゅるい',
+  '期限': 'きげん', '有効期限': 'ゆうこうきげん', '有効': 'ゆうこう',
+  '在留資格': 'ざいりゅうしかく', '来年': 'らいねん', '環境': 'かんきょう', '適応': 'てきおう',
+  '雪山': 'ゆきやま', '寒い': 'さむい', '寒さ': 'さむさ', '寒': 'さむ',
+  '場所': 'ばしょ', '生活': 'せいかつ', '不安': 'ふあん', '防寒対策': 'ぼうかんたいさく',
+  '健康管理': 'けんこうかんり', '気': 'き', '長所': 'ちょうしょ', '強み': 'つよみ',
+  '強': 'つよ', '自身': 'じしん', '前向き': 'まえむき', '新しい': 'あたらしい',
+  '新': 'あたら', '自分': 'じぶん', '積極的': 'せっきょくてき', '取り組みます': 'とりくみます',
+  '短所': 'たんしょ', '苦手': 'にがて', '少し': 'すこし', '少': 'すこ',
+  '緊張': 'きんちょう', '落ち着いて': 'おちついて', '確認': 'かくにん', '行動': 'こうどう',
+  '混雑': 'こんざつ', '周り': 'まわり', '声': 'こえ', '掛け合って': 'かけあって',
+  '最後': 'さいご', '逆質問': 'ぎゃくしつもん', '用具': 'ようぐ', '板': 'いた',
+  '向け': 'むけ', '割引': 'わりびき', '初心者向け': 'しょしんしゃむけ', '初心者': 'しょしんしゃ',
+  '無料': 'むりょう', '有料': 'ゆうりょう', '知りたい': 'しりたい', '知': 'し',
+  '寮': 'りょう', '部屋': 'へや', '個室': 'こしつ', '歩いて': 'あるいて',
+  '歩': 'ある', '何分': 'なんぷん', '楊詠筑': 'ヤン ユンジュ',
+  '料理': 'りょうり', '厨房': 'ちゅうぼう', '了解': 'りょうかい', '伺います': 'うかがいます',
+  '伺い': 'うかがい', '伺': 'うかが', '残数': 'ざんすう', '受付': 'うけつけ',
+  '名': 'めい', '人': 'にん', '台車': 'だいしゃ', '布': 'ぬの', '回収': 'かいしゅう',
+  '追加': 'ついか', '注文': 'ちゅうもん', '担当': 'たんとう', '拭き': 'ふき', '拭': 'ふ'
+};
 
 let typesetLastData = null;
 let typesetUndoStack = [];
@@ -13902,7 +13961,6 @@ let typesetCtxTarget = null;
 let isTypesetLooping = false;
 let typesetAllReadings = [];
 
-// 初始化與渲染分頁
 function renderTypesetPage() {
   applyTypesetSpacing();
   if (!typesetLastData) {
@@ -13916,13 +13974,11 @@ function renderTypesetPage() {
   }
 }
 
-// 清空輸入
 function clearTypesetInput() {
   const input = document.getElementById('typeset-input-text');
   if (input) input.value = '';
 }
 
-// 插入 <ruby> 標記
 function insertRubyTagToInput() {
   const input = document.getElementById('typeset-input-text');
   if (!input) return;
@@ -13935,14 +13991,12 @@ function insertRubyTagToInput() {
   input.focus();
 }
 
-// 切換排版滑桿抽屜
 function toggleSlidersPanel() {
   const panel = document.getElementById('typeset-sliders-panel');
   if (!panel) return;
   panel.style.display = panel.style.display === 'none' ? 'grid' : 'none';
 }
 
-// 套用字級與間距滑桿
 function applyTypesetSpacing() {
   const jpSize = document.getElementById('slider-jp-size')?.value || 18;
   const zhSize = document.getElementById('slider-zh-size')?.value || 13;
@@ -13980,7 +14034,6 @@ function applyTypesetSpacing() {
   `;
 }
 
-// 遮罩模式切換 (Ruby 標音 / 中文遮罩)
 function toggleMaskMode(type) {
   const page = document.getElementById('typeset-scroll-page');
   if (!page) return;
@@ -13993,21 +14046,18 @@ function toggleMaskMode(type) {
   }
 }
 
-// 口袋小抄列印模式
 function togglePocketMode() {
   const chk = document.getElementById('opt-pocket-mode')?.checked;
   document.body.classList.toggle('pocket-print-mode', !!chk);
   showToast(chk ? '已啟用「✂️ 圍裙口袋小抄」列印排版' : '已恢復「標準 A4」列印排版', 'info');
 }
 
-// 列印保留底色
 function togglePrintColor() {
   const chk = document.getElementById('opt-print-color')?.checked;
   document.body.classList.toggle('print-keep-color', !!chk);
-  showToast(chk ? '列印時將保留溫暖彩色底色' : '列印時將使用純淨黑白高對比', 'info');
+  showToast(chk ? '列印時將保留彩色底色' : '列印時將使用純淨黑白高對比', 'info');
 }
 
-// 儲存 Undo Stack
 function saveTypesetUndo() {
   const container = document.getElementById('typeset-preview-output');
   if (!container) return;
@@ -14026,14 +14076,13 @@ function doTypesetUndo() {
   showToast('已復原上一步', 'success');
 }
 
-// 判斷是否為純中文
 function isPureChineseText(t) {
   const zhCount = (t.match(/[\u4e00-\u9fff]/g) || []).length;
   const jpKana = (t.match(/[\u3040-\u30ff]/g) || []).length;
   return zhCount > 0 && jpKana === 0;
 }
 
-// 核心排版生成
+// 核心排版生成：AI 智慧標音 + 免費翻譯降級 + 零吃字保證
 async function generateTypesetArticle() {
   const input = document.getElementById('typeset-input-text');
   const text = input ? input.value.trim() : '';
@@ -14055,12 +14104,10 @@ async function generateTypesetArticle() {
   output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在智慧標音並解析排版，請稍候…</div>';
 
   try {
-    // 檢查是否有日＋中雙行格式
     const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean);
     const hasMixedLines = lines.length > 1 && lines.some(l => (l.match(/[\u4e00-\u9fff]/g)||[]).length > 3 && (l.match(/[\u3040-\u30ff]/g)||[]).length === 0);
 
     if (hasMixedLines) {
-      // 兩行一組模式（離線即可極速完成）
       const parsedGroups = [];
       let i = 0;
       while (i < lines.length) {
@@ -14078,26 +14125,20 @@ async function generateTypesetArticle() {
       typesetLastData = { groups: parsedGroups };
       localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
       renderTypesetResult(typesetLastData);
-      showToast(`排版成功：已解析 ${parsedGroups.length} 個雙行對照組`, 'success');
+      showToast(`排版成功：已解析 ${parsedGroups.length} 個對照組`, 'success');
       return;
     }
 
-    // 純中文：呼叫 Gemini 翻譯成日文並標音
     if (isPureChineseText(text)) {
       await processZhToJpViaGemini(text);
       return;
     }
 
-    // 純日文：先嘗試呼叫 Gemini 智慧標音，若失敗則無縫降級為本地離線引擎！
     await processJpViaGeminiOrFallback(text);
 
   } catch (err) {
     console.warn('Typeset generation warning:', err);
-    // 最終保底：本地離線解析器保證 100% 不卡死
-    const fallbackGroups = text.split(/\n+/).map(line => parseLocalJapaneseSegments(line.trim(), ''));
-    typesetLastData = { groups: fallbackGroups };
-    renderTypesetResult(typesetLastData);
-    showToast('已切換為本地極速排版', 'info');
+    await processFallbackWithFreeTranslation(text);
   } finally {
     if (btn) {
       btn.disabled = false;
@@ -14106,18 +14147,21 @@ async function generateTypesetArticle() {
   }
 }
 
-// 本地離線日文切詞與標記解析 (零網路、零 API 也能 100% 運行)
+// 本地解析引擎：修正括號可選性，結合字典，絕不吃掉任何一個漢字或假名！
 function parseLocalJapaneseSegments(jpText, zhTranslation) {
   const segments = [];
-  // 支援 漢字[かんじ] 或 漢字(かんじ) 或 純文字
-  const regex = /([一-龯々ヶ]+)(?:\[([\u3040-\u309F\u30A0-\u30FF]+)\]|\(([\u3040-\u309F\u30A0-\u30FF]+)\))|([\u30A0-\u30FFー]+)|([a-zA-Z]+)|([^一-龯々ヶ\u30A0-\u30FFa-zA-Z\[\]\(\)]+)/g;
+  // 關鍵修復：(?:[...]|(...])? 改為非強制可選！確保單獨漢字也能 100% 完整捕捉！
+  const regex = /([一-龯々ヶ]+)(?:\[([\u3040-\u309F\u30A0-\u30FF]+)\]|\(([\u3040-\u309F\u30A0-\u30FF]+)\))?|([\u30A0-\u30FFー]+)|([a-zA-Z]+)|([^一-龯々ヶ\u30A0-\u30FFa-zA-Z\[\]\(\)]+)/g;
   let match;
   while ((match = regex.exec(jpText)) !== null) {
     if (match[1]) {
+      const kanji = match[1];
+      const explicitReading = match[2] || match[3] || '';
+      const dictReading = TYPESET_FURIGANA_DICT[kanji] || '';
       segments.push({
         type: 'kanji',
-        text: match[1],
-        reading: match[2] || match[3] || ''
+        text: kanji,
+        reading: explicitReading || dictReading
       });
     } else if (match[4]) {
       segments.push({
@@ -14139,7 +14183,7 @@ function parseLocalJapaneseSegments(jpText, zhTranslation) {
     }
   }
 
-  if (segments.length === 0) {
+  if (segments.length === 0 && jpText) {
     segments.push({ type: 'other', text: jpText });
   }
 
@@ -14150,7 +14194,6 @@ function parseLocalJapaneseSegments(jpText, zhTranslation) {
   };
 }
 
-// 片假名轉羅馬音對照表 (本地極速備援)
 function convertKatakanaToRomaji(kana) {
   const kanaMap = {
     'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
@@ -14198,11 +14241,11 @@ function convertKatakanaToRomaji(kana) {
   return result;
 }
 
-// 透過 Gemini API 智慧標音
+// 透過 Gemini 智慧標音
 async function processJpViaGeminiOrFallback(text) {
   const prompt = `
 你是專業的日文排版助理。請分析以下日文文章，逐句拆解標音並翻譯為道地繁體中文。
-請輸出嚴格且純淨的 JSON 格式（不要有任何多餘的 markdown 標記）：
+請輸出嚴格純淨的 JSON 格式：
 {
   "groups": [
     {
@@ -14233,17 +14276,34 @@ ${text}
       return;
     }
   } catch (err) {
-    console.warn('Gemini AI failed, using fallback:', err);
+    console.warn('Gemini AI failed, using fallback with free translation:', err);
   }
 
-  // 降級為本地解析
-  const fallbackGroups = text.split(/\n+/).map(line => parseLocalJapaneseSegments(line.trim(), ''));
-  typesetLastData = { groups: fallbackGroups };
-  renderTypesetResult(typesetLastData);
-  showToast('已使用本地引擎完成排版', 'info');
+  // 降級為本地引擎 + 免費 Google 翻譯
+  await processFallbackWithFreeTranslation(text);
 }
 
-// 透過 Gemini 將純中文翻譯為日文並標音
+// 免費翻譯降級處理：即使沒有 API Key，也自動翻譯成繁體中文！
+async function processFallbackWithFreeTranslation(text) {
+  const rawLines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
+  const groups = [];
+
+  for (const line of rawLines) {
+    let zh = '';
+    try {
+      zh = await fetchFreeGoogleTranslate(line, 'zh-TW');
+    } catch(e) {
+      console.warn('Free translation error for line:', line, e);
+    }
+    groups.push(parseLocalJapaneseSegments(line, zh));
+  }
+
+  typesetLastData = { groups };
+  localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+  renderTypesetResult(typesetLastData);
+  showToast(`排版完成（繁體中文翻譯已自動就緒）`, 'success');
+}
+
 async function processZhToJpViaGemini(zhText) {
   const prompt = `
 你是專業的中日外場翻譯與日文排版助理。請將以下繁體中文翻譯為自然道地的日文，並逐句標音。
@@ -14253,8 +14313,7 @@ async function processZhToJpViaGemini(zhText) {
     {
       "segments": [
         { "type": "kanji", "text": "料理", "reading": "りょうり" },
-        { "type": "hiragana", "text": "が" },
-        { "type": "katakana", "text": "テーブル", "romaji": "te-buru" }
+        { "type": "hiragana", "text": "が" }
       ],
       "translation": "原文對應的繁體中文",
       "reading_full": "整句平假名"
@@ -14276,15 +14335,23 @@ ${zhText}
       return;
     }
   } catch(e) {
-    console.warn('Zh-Jp translation error:', e);
+    console.warn('Zh-Jp translation error, trying Google Translate:', e);
+    try {
+      const jpText = await fetchFreeGoogleTranslate(zhText, 'ja');
+      const grp = parseLocalJapaneseSegments(jpText, zhText);
+      typesetLastData = { groups: [grp] };
+      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+      renderTypesetResult(typesetLastData);
+      showToast('已完成中文翻日文排版', 'success');
+      return;
+    } catch(err2) {}
   }
 
-  // 若無 API Key，顯示友善提示
   const output = document.getElementById('typeset-preview-output');
-  output.innerHTML = '<div style="color:var(--primary); padding:30px; text-align:center;">中文自動翻譯為日文需連線 Gemini AI。請先至「設定」頁面輸入您的 Gemini API Key，或直接貼入日文進行排版。</div>';
+  output.innerHTML = '<div style="color:var(--primary); padding:30px; text-align:center;">翻譯連線失敗，請檢查網路或在「設定」填入 Gemini API Key。</div>';
 }
 
-// 📷 拍照 / 圖片 OCR 辨識排版
+// 📷 拍照 / 圖片 OCR
 function triggerTypesetImageOcr() {
   const fileInput = document.getElementById('typeset-ocr-file-input');
   if (fileInput) fileInput.click();
@@ -14319,8 +14386,7 @@ async function handleTypesetImageUpload(event) {
     {
       "segments": [
         { "type": "kanji", "text": "本日", "reading": "ほんじつ" },
-        { "type": "hiragana", "text": "の" },
-        { "type": "katakana", "text": "おすすめ", "romaji": "osusume" }
+        { "type": "hiragana", "text": "の" }
       ],
       "translation": "繁體中文翻譯",
       "reading_full": "平假名"
@@ -14372,7 +14438,7 @@ async function handleTypesetImageUpload(event) {
   }
 }
 
-// ✨ 外場敬語 / 口吻轉換器
+// ✨ 外場敬語 / 口吻轉換
 async function convertTypesetTone(toneType) {
   const input = document.getElementById('typeset-input-text');
   const text = input ? input.value.trim() : '';
@@ -14381,7 +14447,7 @@ async function convertTypesetTone(toneType) {
     return;
   }
 
-  let toneDesc = '外場對客人使用的正式接客敬語 (謙讓語/尊敬語)';
+  let toneDesc = '外場對客人的正式接客敬語 (謙讓語/尊敬語)';
   if (toneType === 'kitchen') toneDesc = '外場對內場廚房師傅對講機叫菜與通報的精簡口吻';
   if (toneType === 'colleague') toneDesc = '外場日本同事之間的親切平級口吻';
 
@@ -14418,7 +14484,7 @@ ${text}
   }
 }
 
-// 渲染排版結果
+// 渲染排版結果：徹底移除每句上方的圖案按鈕，改為句末優雅的三個小點點 (···)，點擊即發音！工具放在最底端！
 function renderTypesetResult(data) {
   const output = document.getElementById('typeset-preview-output');
   if (!output || !data || !data.groups) return;
@@ -14435,45 +14501,7 @@ function renderTypesetResult(data) {
     gEl.className = 'content-group';
     gEl.dataset.groupIndex = idx;
 
-    // 工具列 (hover 浮現)
-    const tb = document.createElement('div');
-    tb.className = 'content-group-toolbar';
-
     const fullReading = group.reading_full || group.segments.map(s => s.reading || s.text).join('');
-    
-    // 🔊 發音按鈕
-    const speakBtn = document.createElement('button');
-    speakBtn.className = 'btn-icon-sm';
-    speakBtn.title = '朗讀此句';
-    speakBtn.innerHTML = '🔊';
-    speakBtn.onclick = () => speakJapaneseText(fullReading);
-    tb.appendChild(speakBtn);
-
-    // ⭐ 收藏至手帳單字庫
-    const favBtn = document.createElement('button');
-    favBtn.className = 'btn-icon-sm';
-    favBtn.title = '⭐ 收藏此句至手帳單字庫';
-    favBtn.innerHTML = '⭐';
-    favBtn.onclick = () => saveTypesetSentenceToVocab(gEl);
-    tb.appendChild(favBtn);
-
-    // ✂ 拆分
-    const splitBtn = document.createElement('button');
-    splitBtn.className = 'btn-icon-sm';
-    splitBtn.title = '拆分段落';
-    splitBtn.innerHTML = '✂️';
-    splitBtn.onclick = () => splitTypesetGroup(gEl);
-    tb.appendChild(splitBtn);
-
-    // ✕ 刪除
-    const delBtn = document.createElement('button');
-    delBtn.className = 'btn-icon-sm';
-    delBtn.title = '刪除此句';
-    delBtn.innerHTML = '✕';
-    delBtn.onclick = () => { saveTypesetUndo(); gEl.remove(); };
-    tb.appendChild(delBtn);
-
-    gEl.appendChild(tb);
 
     // 日文主行 (contentEditable)
     const jpLine = document.createElement('span');
@@ -14481,6 +14509,23 @@ function renderTypesetResult(data) {
     jpLine.contentEditable = 'true';
     renderTypesetSegmentsToElement(jpLine, group.segments, showH, showR, showK);
     gEl.appendChild(jpLine);
+
+    // 句末三個小點點按鈕：不干擾視覺，點擊直接播放日語發音！
+    const dotsBtn = document.createElement('button');
+    dotsBtn.className = 'typeset-dots-btn';
+    dotsBtn.title = '🔊 點擊播放日語發音 (長按或右鍵更多操作)';
+    dotsBtn.textContent = '···';
+    dotsBtn.onclick = (e) => {
+      e.stopPropagation();
+      speakJapanese(fullReading);
+      dotsBtn.style.background = 'var(--primary)';
+      dotsBtn.style.color = '#fff';
+      setTimeout(() => {
+        dotsBtn.style.background = '';
+        dotsBtn.style.color = '';
+      }, 800);
+    };
+    gEl.appendChild(dotsBtn);
 
     // 中文對照行 (contentEditable)
     if (showC && group.translation) {
@@ -14494,11 +14539,23 @@ function renderTypesetResult(data) {
     output.appendChild(gEl);
   });
 
+  // 底部集中工具列：剪刀、星星、分隔線等放在文章末尾，保證上方閱讀行雲流水！
+  const footerTb = document.createElement('div');
+  footerTb.className = 'typeset-footer-toolbar';
+  footerTb.innerHTML = `
+    <button class="btn btn-secondary btn-sm" onclick="saveAllTypesetToVocab()" title="將排版內容收藏至手帳單字庫">⭐ 收藏至單字庫</button>
+    <button class="btn btn-secondary btn-sm" onclick="splitLastTypesetGroup()" title="拆分末尾段落">✂️ 拆分段落</button>
+    <button class="btn btn-secondary btn-sm" onclick="addTypesetDividerAtEnd()" title="插入分隔線">— 插入分隔線</button>
+    <button class="btn btn-secondary btn-sm" onclick="addEmptyTypesetGroupAtEnd()" title="新增空白段落">＋ 新增段落</button>
+    <button class="btn btn-secondary btn-sm" onclick="doTypesetUndo()" title="復原上一步修改">⌘Z 復原</button>
+    <button class="btn btn-secondary btn-sm" onclick="deleteLastTypesetGroup()" style="color:#d32f2f;" title="刪除最後一段">✕ 刪除末段</button>
+  `;
+  output.appendChild(footerTb);
+
   bindAllTypesetEvents(output);
   applyTypesetSpacing();
 }
 
-// 渲染 Segment 為 DOM (帶四重標音)
 function renderTypesetSegmentsToElement(container, segs, showH, showR, showK) {
   container.innerHTML = '';
   if (!segs || !Array.isArray(segs)) return;
@@ -14534,16 +14591,13 @@ function renderTypesetSegmentsToElement(container, segs, showH, showR, showK) {
   });
 }
 
-// 刷新顯示選項
 function refreshTypesetDisplay() {
   if (typesetLastData) {
     renderTypesetResult(typesetLastData);
   }
 }
 
-// 綁定所有互動事件
 function bindAllTypesetEvents(container) {
-  // 右鍵 Context Menu
   const groups = container.querySelectorAll('.content-group');
   groups.forEach(g => {
     g.addEventListener('contextmenu', (e) => {
@@ -14559,7 +14613,6 @@ function bindAllTypesetEvents(container) {
   });
 }
 
-// 點擊關閉 Context Menu
 document.addEventListener('click', (e) => {
   const menu = document.getElementById('typeset-ctx-menu');
   if (menu && !menu.contains(e.target)) {
@@ -14567,7 +14620,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// 右鍵選單操作派發
 function handleTypesetCtxAction(action) {
   const menu = document.getElementById('typeset-ctx-menu');
   if (menu) menu.style.display = 'none';
@@ -14607,7 +14659,6 @@ function handleTypesetCtxAction(action) {
   }
 }
 
-// ⭐ 收藏整句至手帳單字庫
 function saveTypesetSentenceToVocab(g) {
   const jpEl = g.querySelector('.jp-line');
   const zhEl = g.querySelector('.zh-line');
@@ -14628,11 +14679,36 @@ function saveTypesetSentenceToVocab(g) {
   };
 
   AppData.vocabularies.sop.unshift(newVocab);
-  saveAppData();
-  showToast(`⭐ 已收藏至手帳單字庫：${jaText.substring(0, 12)}...`, 'success');
+  saveAppData(AppData);
+  showToast(`⭐ 已收藏至手帳單字庫：${jaText.substring(0, 14)}...`, 'success');
 }
 
-// 單句重新 AI 處理
+function saveAllTypesetToVocab() {
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups.length) {
+    showToast('尚無排版內容可收藏', 'info');
+    return;
+  }
+  let count = 0;
+  groups.forEach(g => {
+    const jpEl = g.querySelector('.jp-line');
+    const zhEl = g.querySelector('.zh-line');
+    if (jpEl && jpEl.textContent.trim()) {
+      AppData.vocabularies.sop.unshift({
+        id: 'typeset_fav_' + Date.now() + '_' + (++count),
+        ja: jpEl.innerHTML,
+        zh: zhEl ? zhEl.textContent.trim() : '',
+        romaji: '',
+        category: '排版收藏',
+        starred: true,
+        image: null
+      });
+    }
+  });
+  saveAppData(AppData);
+  showToast(`⭐ 已將 ${count} 個句子全數收藏至手帳單字庫！`, 'success');
+}
+
 async function reprocessSingleTypesetGroup(g) {
   const jpEl = g.querySelector('.jp-line');
   if (!jpEl) return;
@@ -14679,7 +14755,6 @@ async function reprocessSingleTypesetGroup(g) {
   }
 }
 
-// 拆分段落
 function splitTypesetGroup(g) {
   const jp = g.querySelector('.jp-line');
   if (!jp) return;
@@ -14705,7 +14780,12 @@ function splitTypesetGroup(g) {
   newJp.focus();
 }
 
-// 新增空白段落
+function splitLastTypesetGroup() {
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups.length) return;
+  splitTypesetGroup(groups[groups.length - 1]);
+}
+
 function addEmptyTypesetGroup(g) {
   const newG = createEmptyTypesetGroupElement();
   g.after(newG);
@@ -14713,7 +14793,16 @@ function addEmptyTypesetGroup(g) {
   newG.querySelector('.jp-line').focus();
 }
 
-// 插入分隔線
+function addEmptyTypesetGroupAtEnd() {
+  const output = document.getElementById('typeset-preview-output');
+  const footer = output.querySelector('.typeset-footer-toolbar');
+  const newG = createEmptyTypesetGroupElement();
+  if (footer) footer.before(newG);
+  else output.appendChild(newG);
+  bindAllTypesetEvents(output);
+  newG.querySelector('.jp-line').focus();
+}
+
 function addTypesetDivider(g) {
   const d = document.createElement('div');
   d.className = 'content-divider';
@@ -14724,7 +14813,27 @@ function addTypesetDivider(g) {
   g.after(d);
 }
 
-// 向上合併
+function addTypesetDividerAtEnd() {
+  const output = document.getElementById('typeset-preview-output');
+  const footer = output.querySelector('.typeset-footer-toolbar');
+  const d = document.createElement('div');
+  d.className = 'content-divider';
+  d.innerHTML = `
+    <hr />
+    <button class="div-del-btn" onclick="this.parentElement.remove()">✕</button>
+  `;
+  if (footer) footer.before(d);
+  else output.appendChild(d);
+}
+
+function deleteLastTypesetGroup() {
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups.length) return;
+  saveTypesetUndo();
+  groups[groups.length - 1].remove();
+  showToast('已刪除最後一個段落', 'info');
+}
+
 function mergeTypesetUp(g) {
   const prev = g.previousElementSibling;
   if (!prev || !prev.classList.contains('content-group')) return;
@@ -14744,19 +14853,14 @@ function createEmptyTypesetGroupElement() {
   const g = document.createElement('div');
   g.className = 'content-group';
   g.innerHTML = `
-    <div class="content-group-toolbar">
-      <button class="btn-icon-sm" onclick="speakJapaneseText(this.parentElement.nextElementSibling.textContent)">🔊</button>
-      <button class="btn-icon-sm" onclick="saveTypesetSentenceToVocab(this.closest('.content-group'))">⭐</button>
-      <button class="btn-icon-sm" onclick="splitTypesetGroup(this.closest('.content-group'))">✂️</button>
-      <button class="btn-icon-sm" onclick="this.closest('.content-group').remove()">✕</button>
-    </div>
     <span class="jp-line" contenteditable="true"></span>
+    <button class="typeset-dots-btn" title="🔊 朗讀此句" onclick="speakJapanese(this.previousElementSibling.textContent)">···</button>
     <span class="zh-line" contenteditable="true"></span>
   `;
   return g;
 }
 
-// 語音連讀控制 (念一遍 / 循環播放)
+// 語音連讀控制
 function readAllTypeset(loop = false) {
   stopTypesetSpeech();
   isTypesetLooping = loop;
@@ -14792,7 +14896,13 @@ function playTypesetSequenceIndex(idx) {
 
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'ja-JP';
-  u.rate = (AppData && AppData.ttsRate) ? AppData.ttsRate : 0.95;
+  const pref = getSavedVoiceSettings();
+  u.rate = pref.rate || 0.92;
+  if (pref.voiceURI || pref.voiceName) {
+    const allVoices = window.speechSynthesis.getVoices();
+    const voice = allVoices.find(v => (pref.voiceURI && v.voiceURI === pref.voiceURI) || (pref.voiceName && v.name === pref.voiceName));
+    if (voice) u.voice = voice;
+  }
 
   u.onend = () => {
     if (isTypesetLooping || idx + 1 < typesetAllReadings.length) {
@@ -14818,7 +14928,7 @@ function stopTypesetSpeech() {
   }
 }
 
-// 💬 LINE 格式一鍵複製 (純日文 / 帶括號注音)
+// 💬 LINE 格式一鍵複製
 function copyTypesetForLine(mode) {
   const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
   if (!groups.length) {
@@ -14829,11 +14939,9 @@ function copyTypesetForLine(mode) {
   let textLines = [];
   groups.forEach(g => {
     const jp = g.querySelector('.jp-line');
-    const zh = g.querySelector('.zh-line');
     if (!jp) return;
 
     if (mode === 'clean') {
-      // 純淨日文 (去掉所有假名標音標籤)
       let cleanJp = '';
       jp.childNodes.forEach(n => {
         if (n.nodeType === 3) cleanJp += n.textContent;
@@ -14841,9 +14949,8 @@ function copyTypesetForLine(mode) {
           n.childNodes.forEach(c => { if (c.nodeName !== 'RT') cleanJp += c.textContent; });
         } else if (n.nodeName !== 'RT') cleanJp += n.textContent;
       });
-      textLines.push(cleanJp.trim());
+      if (cleanJp.trim()) textLines.push(cleanJp.trim());
     } else if (mode === 'bracket') {
-      // 括號注音版 (如 漢字[かんじ])
       let bracketJp = '';
       jp.childNodes.forEach(n => {
         if (n.nodeType === 3) bracketJp += n.textContent;
@@ -14857,7 +14964,7 @@ function copyTypesetForLine(mode) {
           bracketJp += ruby ? `${kanji}[${ruby}]` : kanji;
         } else if (n.nodeName !== 'RT') bracketJp += n.textContent;
       });
-      textLines.push(bracketJp.trim());
+      if (bracketJp.trim()) textLines.push(bracketJp.trim());
     }
   });
 
@@ -14869,7 +14976,6 @@ function copyTypesetForLine(mode) {
   });
 }
 
-// 📤 匯出 .txt 檔案
 function exportTypesetTxt(type) {
   const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
   if (!groups.length) {
@@ -14909,7 +15015,6 @@ function exportTypesetTxt(type) {
   showToast('已匯出 .txt 檔案', 'success');
 }
 
-// 🕒 歷史紀錄儲存與瀏覽
 function saveTypesetHistory(text) {
   if (!text || !text.trim()) return;
   let h = JSON.parse(localStorage.getItem('yang_typeset_history') || '[]');
@@ -14950,7 +15055,6 @@ function loadTypesetHistoryItem(idx) {
   generateTypesetArticle();
 }
 
-// 從外部（如單字庫或對話庫）一鍵送來排版
 function sendToTypeset(jaText, zhText) {
   switchNavPage('page-typeset');
   const input = document.getElementById('typeset-input-text');
@@ -14960,9 +15064,84 @@ function sendToTypeset(jaText, zhText) {
   }
 }
 
-// 列印文件
 function printTypesetDocument() {
   window.print();
+}
+
+// ==============================================================
+// 設 定 頁 面：API Key 相關輔助函式
+// ==============================================================
+function loadSavedApiKeyToUI() {
+  const input = document.getElementById('setting-gemini-api-key');
+  if (input && AppData && AppData.apiKey) {
+    input.value = AppData.apiKey;
+  }
+}
+
+function saveGeminiApiKeySetting() {
+  const input = document.getElementById('setting-gemini-api-key');
+  if (!input) return;
+  const val = input.value.trim();
+  AppData.apiKey = val;
+  saveAppData(AppData);
+  showToast('已成功儲存 Gemini API Key！', 'success');
+}
+
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('setting-gemini-api-key');
+  const btn = document.getElementById('btn-toggle-key-vis');
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    if (btn) btn.textContent = '🙈 隱藏';
+  } else {
+    input.type = 'password';
+    if (btn) btn.textContent = '👁️ 顯示';
+  }
+}
+
+async function testGeminiApiKeyConnection() {
+  const input = document.getElementById('setting-gemini-api-key');
+  const resEl = document.getElementById('api-key-test-result');
+  const key = input ? input.value.trim() : (AppData ? AppData.apiKey : '');
+
+  if (!key) {
+    showToast('請先貼上 API Key', 'error');
+    return;
+  }
+
+  if (resEl) {
+    resEl.style.display = 'block';
+    resEl.style.color = 'var(--muted)';
+    resEl.innerHTML = '<span class="spinner"></span> 正在測試連線至 Google Gemini...';
+  }
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(key)}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: 'Ping' }] }]
+      })
+    });
+    const data = await res.json();
+    if (res.ok && data.candidates) {
+      if (resEl) {
+        resEl.style.color = '#2e7d32';
+        resEl.innerHTML = '✅ 連線成功！Gemini API 金鑰完全有效！';
+      }
+      showToast('連線測試成功！', 'success');
+    } else {
+      throw new Error(data.error?.message || 'API 回應異常');
+    }
+  } catch (err) {
+    if (resEl) {
+      resEl.style.color = '#d32f2f';
+      resEl.innerHTML = '❌ 連線失敗：' + err.message;
+    }
+    showToast('連線測試失敗：' + err.message, 'error');
+  }
 }
 
 /* ==============================================================

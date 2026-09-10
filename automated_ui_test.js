@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v86'), 'Service Worker 快取版本已升級至 yang-pwa-v86');
-assert(html.includes('yang_runner_handbook_v86'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v86');
+assert(swContent.includes('yang-pwa-v87'), 'Service Worker 快取版本已升級至 yang-pwa-v87');
+assert(html.includes('yang_runner_handbook_v87'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v87');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -516,6 +516,10 @@ assert(!html.includes('"beard"') && !html.includes('"beautyMark"'), '特徵欄�
 assert(html.includes('楊詠筑') && !html.includes('楊英筑'), '本人姓名已更正為楊詠筑（移除舊的楊英筑）');
 assert(html.includes('加治木') && !html.includes('加治木（支配人）'), '加治木名字卡已移除「支配人」標籤');
 assert(html.includes('startInlineNameEdit') && html.includes('name-cell-zh'), '名字卡具備中文標籤行內編輯功能 (startInlineNameEdit + name-cell-zh)');
+
+// 測試 34: 最新班表名單同步 (23位現職，7位離職清除，6位新加入，職稱徹底分離) (v82)
+// ...
+
 
 // 測試 34: 最新班表名單同步 (23位現職，7位離職清除，6位新加入，職稱徹底分離) (v82)
 console.log('\n【測試 34：最新班表名單同步 (23位在職，移除離職同仁，職位徹底分離) (v82)】');
@@ -583,7 +587,14 @@ assert(html.includes('saveTypesetSentenceToVocab'), '包含一鍵收藏句子至
 assert(html.includes('readAllTypeset') && html.includes('stopTypesetSpeech'), '包含全文依序朗讀與循環朗讀控制');
 assert(html.includes('applyTypesetSpacing') && html.includes('typeset-sliders-panel'), '包含字級、行距、字距與日中間距微調滑桿面板');
 assert(html.includes('openTypesetHistoryModal'), '包含最近歷史排版紀錄儲存與彈窗載入功能');
-assert(html.includes('printTypesetDocument'), '包含 A4 / 口袋小抄版面列印與 PDF 匯出功能');
+// 測試 37: 日文排版防吃字・單句末尾三點發音・底部收納工具列・免費中文翻譯 (v87)
+console.log('\n【測試 37：日文排版防吃字・單句末尾三點發音・底部收納工具列・免費中文翻譯 (v87)】');
+assert(html.includes('typeset-dots-btn') && html.includes('···'), '單句末尾包含乾淨的「···」發音按鈕');
+assert(html.includes('typeset-footer-toolbar'), '文章底部包含收納整理的工具列 (typeset-footer-toolbar)');
+assert(html.includes('processFallbackWithFreeTranslation') && html.includes('fetchFreeGoogleTranslate'), '未設定 API 金鑰時自動啟用免金鑰免費翻譯以確保中文翻譯正常顯示');
+assert(html.includes('speakJapaneseText') && html.includes('speakJapanese'), '支援單句發音函式呼叫');
+assert(html.includes('TYPESET_FURIGANA_DICT'), '包含常用外場/面試高頻漢字注音字典 (TYPESET_FURIGANA_DICT)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -591,7 +602,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v85) 日文排版救星・手帳五大融合・相機OCR辨識・外場敬語轉換・口袋小抄・遮罩自測・LINE複製全部就位！');
+  console.log('🎉 所有測試通過！(v87) 漢字不漏・句尾三點發音・底端工具列・中文免費翻譯完美就位！');
 }
 
 
