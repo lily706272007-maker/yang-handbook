@@ -3185,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v92';
+const STORAGE_KEY = 'yang_runner_handbook_v93';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -4638,7 +4638,7 @@ function createRealRunnerData() {
         "id": "ds_guide_sake",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（指引）",
+        "speaker": "我要說的（指引）",
         "zh": "這是日本酒（清酒）。",
         "ja": "こちらは<ruby>日本酒<rt>にほんしゅ</rt></ruby>でございます。",
         "en": "This is Japanese sake."
@@ -4647,7 +4647,7 @@ function createRealRunnerData() {
         "id": "ds_guide_tansan",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（指引）",
+        "speaker": "我要說的（指引）",
         "zh": "碳酸水在這裡。（💡日本現場習慣說「碳酸水（たんさんすい）」，不說蘇打ソーダ）",
         "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby>はこちらにございます。（※ソーダではなく「炭酸水」）",
         "en": "Sparkling water (carbonated water) is right here. (In Japan, it is called 'tansansui', not 'soda')."
@@ -4656,7 +4656,7 @@ function createRealRunnerData() {
         "id": "ds_guide_water",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（指引）",
+        "speaker": "我要說的（指引）",
         "zh": "水在這裡喔。",
         "ja": "お<ruby>水<rt>みず</rt></ruby>はこちらにございます。",
         "en": "Water is right here."
@@ -4665,7 +4665,7 @@ function createRealRunnerData() {
         "id": "ds_guide_hotwater",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（指引）",
+        "speaker": "我要說的（指引）",
         "zh": "熱水在這邊喔。",
         "ja": "お<ruby>湯<rt>ゆ</rt></ruby>はこちらにございます。",
         "en": "Hot water is right here."
@@ -4674,7 +4674,7 @@ function createRealRunnerData() {
         "id": "ds_guide_coffee",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（指引）",
+        "speaker": "我要說的（指引）",
         "zh": "咖啡在這邊喔。",
         "ja": "コーヒーはこちらでございます。",
         "en": "Coffee is over here."
@@ -4683,7 +4683,7 @@ function createRealRunnerData() {
         "id": "ds_guide_liquors",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（指引）",
+        "speaker": "我要說的（指引）",
         "zh": "左手邊有威士忌、燒酒、梅酒、柚子酒等。",
         "ja": "<ruby>左手<rt>ひだりて</rt></ruby>にはウイスキー、<ruby>焼酎<rt>しょうちゅう</rt></ruby>、<ruby>梅酒<rt>うめしゅ</rt></ruby>、ゆず<ruby>酒<rt>しゅ</rt></ruby>などがございます。",
         "en": "On the left hand side, we have whisky, shochu, plum wine, and yuzu liqueur."
@@ -4694,7 +4694,7 @@ function createRealRunnerData() {
         "id": "ds_dessert_order",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "👨‍🍳 廚房通報（點點心）",
+        "speaker": "廚房通報（點點心）",
         "zh": "向廚房點點心：請幫忙出甜點/點心！（甜品櫃補充）",
         "ja": "デザート・お<ruby>菓子<rt>かし</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします！",
         "en": "To the kitchen: Please prepare and replenish the desserts!"
@@ -4703,7 +4703,7 @@ function createRealRunnerData() {
         "id": "ds_dessert_served",
         "type": "dialog",
         "category": "my_speech",
-        "speaker": "🗣️ 我要說的（端點心）",
+        "speaker": "我要說的（端點心）",
         "zh": "抱歉久等了，為您送上點心 / 撤換點心。（雙手端上並致歉久候）",
         "ja": "<ruby>大変<rt>たいへん</rt></ruby>お<ruby>待<rt>ま</rt></ruby>たせいたしました。デザートでございます。",
         "en": "Thank you very much for waiting, sorry for the delay! Here is your dessert."
@@ -4714,7 +4714,7 @@ function createRealRunnerData() {
         "id": "ds_qa_clear_plate_guest",
         "type": "dialog",
         "category": "other_speech",
-        "speaker": "👂 客人可能說的",
+        "speaker": "客人可能說的",
         "zh": "請問可以幫我收走這個空盤嗎？",
         "ja": "こちらのお<ruby>皿<rt>さら</rt></ruby>、<ruby>下<rt>さ</rt></ruby>げてもらえますか？",
         "en": "Could you clear this empty plate for me?"
@@ -4723,7 +4723,7 @@ function createRealRunnerData() {
         "id": "ds_qa_clear_plate_reply",
         "type": "dialog",
         "category": "my_reply",
-        "speaker": "💬 我要回答的",
+        "speaker": "我要回答的",
         "zh": "可以，好的，這就為您收走。",
         "ja": "はい、かしこまりました。お<ruby>下<rt>さ</rt></ruby>げいたします。",
         "en": "Yes, certainly. I will clear that for you right away."
@@ -4732,7 +4732,7 @@ function createRealRunnerData() {
         "id": "ds_qa_sake_loc_guest",
         "type": "dialog",
         "category": "other_speech",
-        "speaker": "👂 客人可能說的",
+        "speaker": "客人可能說的",
         "zh": "請問日本酒在哪裡？",
         "ja": "<ruby>日本酒<rt>にほんしゅ</rt></ruby>はどこにありますか？",
         "en": "Where is the Japanese sake located?"
@@ -4741,7 +4741,7 @@ function createRealRunnerData() {
         "id": "ds_qa_sake_loc_reply",
         "type": "dialog",
         "category": "my_reply",
-        "speaker": "💬 我要回答的",
+        "speaker": "我要回答的",
         "zh": "日本酒在這邊的專區喔，請自由倒取享用。",
         "ja": "<ruby>日本酒<rt>にほんしゅ</rt></ruby>はこちらのコーナーにございます。どうぞご<ruby>自由<rt>じゆう</rt></ruby>にお<ruby>注<rt>つ</rt></ruby>ぎください。",
         "en": "The Japanese sake is right here in this corner. Please feel free to serve yourself."
@@ -4750,7 +4750,7 @@ function createRealRunnerData() {
         "id": "ds_qa_glass_guest",
         "type": "dialog",
         "category": "other_speech",
-        "speaker": "👂 客人可能說的",
+        "speaker": "客人可能說的",
         "zh": "請問喝這個酒要用什麼杯子？",
         "ja": "このお<ruby>酒<rt>さけ</rt></ruby>はどのグラスを<ruby>使<rt>つか</rt></ruby>えばいいですか？",
         "en": "Which glass should I use for this drink?"
@@ -4759,7 +4759,7 @@ function createRealRunnerData() {
         "id": "ds_qa_glass_reply",
         "type": "dialog",
         "category": "my_reply",
-        "speaker": "💬 我要回答的",
+        "speaker": "我要回答的",
         "zh": "用什麼杯子都可以喔，請挑選您喜歡的杯子使用！",
         "ja": "どのグラスをお<ruby>使<rt>つか</rt></ruby>いいただいても<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>でございます。お<ruby>好<rt>す</rt></ruby>きのグラスでどうぞ！",
         "en": "You may use any glass you like. Please feel free to choose whichever you prefer!"
@@ -4768,7 +4768,7 @@ function createRealRunnerData() {
         "id": "ds_qa_what_guest",
         "type": "dialog",
         "category": "other_speech",
-        "speaker": "👂 客人可能說的",
+        "speaker": "客人可能說的",
         "zh": "這是什麼？",
         "ja": "これは<ruby>何<rt>なん</rt></ruby>ですか？",
         "en": "What is this?"
@@ -4777,7 +4777,7 @@ function createRealRunnerData() {
         "id": "ds_qa_syrup_reply",
         "type": "dialog",
         "category": "my_reply",
-        "speaker": "💬 我要回答的",
+        "speaker": "我要回答的",
         "zh": "這是不含酒精的糖漿（果汁風味糖漿）。",
         "ja": "こちらはノンアルコールのシロップでございます。",
         "en": "This is non-alcoholic syrup."
@@ -4786,7 +4786,7 @@ function createRealRunnerData() {
         "id": "ds_qa_conc_reply",
         "type": "dialog",
         "category": "my_reply",
-        "speaker": "💬 我要回答的",
+        "speaker": "我要回答的",
         "zh": "這是含酒精的濃縮液（調酒原液）。",
         "ja": "こちらはアルコール<ruby>入<rt>い</rt></ruby>りの<ruby>原液<rt>げんえき</rt></ruby>（コンク）でございます。",
         "en": "This is an alcoholic concentrate (liqueur base)."
@@ -5004,7 +5004,7 @@ function createRealRunnerData() {
           "id": "bs_my_1",
           "type": "dialog",
           "category": "my_speech",
-          "speaker": "🗣️ 我要說的",
+          "speaker": "我要說的",
           "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？（現場最標準禮貌用語）",
           "en": "Excuse me, may I clear this plate for you?",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
@@ -5023,7 +5023,7 @@ function createRealRunnerData() {
           "id": "bs_my_2",
           "type": "dialog",
           "category": "my_speech",
-          "speaker": "🗣️ 我要說的",
+          "speaker": "我要說的",
           "zh": "為您收走空盤喔，不好意思打擾了。（客人已將空盤推至桌邊時）",
           "en": "I will take away the empty plates. Excuse me.",
           "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたしますね。<ruby>失礼<rt>しつれい</rt></ruby>いたします。",
@@ -5042,7 +5042,7 @@ function createRealRunnerData() {
           "id": "bs_my_3",
           "type": "dialog",
           "category": "my_speech",
-          "speaker": "🗣️ 我要說的",
+          "speaker": "我要說的",
           "zh": "請問您用餐完畢了嗎？可以為您撤下餐盤嗎？（桌上還剩一點點時確認）",
           "en": "Have you finished your meal? May I take your plates?",
           "ja": "お<ruby>食事<rt>しょくじ</rt></ruby>はお<ruby>済<rt>す</rt></ruby>みでしょうか？お<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
@@ -5060,7 +5060,7 @@ function createRealRunnerData() {
           "id": "bs_my_4",
           "type": "dialog",
           "category": "my_speech",
-          "speaker": "🗣️ 我要說的",
+          "speaker": "我要說的",
           "zh": "為您整理一下桌面騰出空間喔。為您收走盤子。（盤子疊很多時主動幫客人清出大桌面）",
           "en": "Let me clear some space on your table and take these dishes.",
           "ja": "テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>広<rt>ひろ</rt></ruby>くいたしますね。お<ruby>皿<rt>さら</rt></ruby>お<ruby>下<rt>さ</rt></ruby>げいたします。",
@@ -5078,7 +5078,7 @@ function createRealRunnerData() {
           "id": "bs_my_5",
           "type": "dialog",
           "category": "my_speech",
-          "speaker": "🗣️ 我要說的",
+          "speaker": "我要說的",
           "zh": "請問這個湯碗/小缽可以為您收走嗎？（專門針對碗類詢問）",
           "en": "May I clear this soup bowl for you?",
           "ja": "こちらのお<ruby>椀<rt>わん</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
@@ -5096,7 +5096,7 @@ function createRealRunnerData() {
           "id": "bs_my_6",
           "type": "dialog",
           "category": "my_speech",
-          "speaker": "🗣️ 我要說的",
+          "speaker": "我要說的",
           "zh": "不好意思打擾了，方便幫您收走杯子嗎？（玻璃杯或咖啡杯見底時）",
           "en": "Excuse me, may I take this glass for you?",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
@@ -5114,7 +5114,7 @@ function createRealRunnerData() {
           "id": "bs_guest_1",
           "type": "dialog",
           "category": "other_speech",
-          "speaker": "👂 對方可能說的",
+          "speaker": "對方可能說的",
           "zh": "好的，麻煩你了。（客人爽快答應）",
           "en": "Yes, please.",
           "ja": "はい、お<ruby>願<rt>ねが</rt></ruby>いします。",
@@ -5132,7 +5132,7 @@ function createRealRunnerData() {
           "id": "bs_guest_2",
           "type": "dialog",
           "category": "other_speech",
-          "speaker": "👂 對方可能說的",
+          "speaker": "對方可能說的",
           "zh": "沒問題，請收走吧。（客人主動示意）",
           "en": "That is fine, please take it away.",
           "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。",
@@ -5151,7 +5151,7 @@ function createRealRunnerData() {
           "id": "bs_guest_3",
           "type": "dialog",
           "category": "other_speech",
-          "speaker": "👂 對方可能說的",
+          "speaker": "對方可能說的",
           "zh": "多謝款待／我吃飽了。（客人用餐完畢離桌前）",
           "en": "Thank you for the meal, I am full.",
           "ja": "ごちそうさまでした。",
@@ -5169,7 +5169,7 @@ function createRealRunnerData() {
           "id": "bs_guest_4",
           "type": "dialog",
           "category": "other_speech",
-          "speaker": "👂 對方可能說的",
+          "speaker": "對方可能說的",
           "zh": "啊，我還在吃（還在喝）。（客人還想繼續享用）",
           "en": "Oh, I am still eating (drinking) this.",
           "ja": "あ、まだ<ruby>食<rt>た</rt></ruby>べてます（<ruby>飲<rt>の</rt></ruby>んでます）。",
@@ -5188,7 +5188,7 @@ function createRealRunnerData() {
           "id": "bs_guest_5",
           "type": "dialog",
           "category": "other_speech",
-          "speaker": "👂 對方可能說的",
+          "speaker": "對方可能說的",
           "zh": "這個請幫我先留著。（客人指定特定盤子不要收）",
           "en": "Please leave this one here.",
           "ja": "これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。",
@@ -5206,7 +5206,7 @@ function createRealRunnerData() {
           "id": "bs_guest_6",
           "type": "dialog",
           "category": "other_speech",
-          "speaker": "👂 對方可能說的",
+          "speaker": "對方可能說的",
           "zh": "可以稍等一下再收嗎？（客人希望等一下再收）",
           "en": "Could you come back a little later?",
           "ja": "あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？",
@@ -5224,7 +5224,7 @@ function createRealRunnerData() {
           "id": "bs_reply_1",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "謝謝您，不好意思打擾了。（最標準撤盤禮貌退下句）",
           "en": "Thank you very much. Excuse me.",
           "ja": "ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。",
@@ -5243,7 +5243,7 @@ function createRealRunnerData() {
           "id": "bs_reply_2",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "謝謝您！請繼續慢用。（客人說ごちそうさま時）",
           "en": "Thank you very much! Please take your time and enjoy.",
           "ja": "ありがとうございます！ごゆっくりどうぞ。",
@@ -5261,7 +5261,7 @@ function createRealRunnerData() {
           "id": "bs_reply_3",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "啊，不好意思！請慢慢享用。（客人說還在吃時）",
           "en": "Oh, my apologies! Please take your time and enjoy.",
           "ja": "あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。",
@@ -5280,7 +5280,7 @@ function createRealRunnerData() {
           "id": "bs_reply_4",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "明白了，那這邊先幫您收喔。（客人指定特定盤子保留時）",
           "en": "Understood. I will clear this plate for you.",
           "ja": "わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。",
@@ -5299,7 +5299,7 @@ function createRealRunnerData() {
           "id": "bs_reply_5",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "不好意思，那我等一下再來喔。（客人表示稍後再收時）",
           "en": "My apologies. I will come back later.",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。",
@@ -5317,7 +5317,7 @@ function createRealRunnerData() {
           "id": "bs_reply_6",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "謝謝您！真是幫大忙了！（客人主動遞盤子或幫忙騰出空間時最真誠接地氣）",
           "en": "Thank you very much! That is very helpful!",
           "ja": "ありがとうございます！<ruby>助<rt>たす</rt></ruby>かります！",
@@ -5335,7 +5335,7 @@ function createRealRunnerData() {
           "id": "bs_reply_7",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "哪裡的話！請您慢慢享用！（🥇 No.1 現場最推薦首選句，絕不說生硬的どういたしまして！）",
           "en": "Not at all! Please take your time and enjoy!",
           "ja": "とんでもないです！ごゆっくりどうぞ！",
@@ -5354,7 +5354,7 @@ function createRealRunnerData() {
           "id": "bs_reply_8",
           "type": "dialog",
           "category": "my_reply",
-          "speaker": "💬 我要回答的",
+          "speaker": "我要回答的",
           "zh": "我才要謝謝您！（客人主動遞盤子說謝謝時，最真誠的雙向感謝）",
           "en": "Thank you very much as well!",
           "ja": "こちらこそ、ありがとうございます！",
@@ -7365,7 +7365,7 @@ function renderSopContent() {
               <div style="flex:1;">
                 <div class="compact-sop-zh" style="color:#8e1d2c; font-weight:700;">${escapeHtml(item.zh)}</div>
                 <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
-                ${item.en ? `<div class="compact-sop-en" style="font-size:0.75rem; color:#475569; font-style:italic; line-height:1.35; margin-top:3px; display:flex; align-items:flex-start; gap:4px;"><span style="font-style:normal;">🇬🇧</span><span>${escapeHtml(item.en)}</span></div>` : ''}
+                
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
                 <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
@@ -7396,7 +7396,7 @@ function renderSopContent() {
               <div style="flex:1;">
                 <div class="compact-sop-zh">${escapeHtml(item.zh)}</div>
                 <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
-                ${item.en ? `<div class="compact-sop-en" style="font-size:0.75rem; color:#475569; font-style:italic; line-height:1.35; margin-top:3px; display:flex; align-items:flex-start; gap:4px;"><span style="font-style:normal;">🇬🇧</span><span>${escapeHtml(item.en)}</span></div>` : ''}
+                
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
                 <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
@@ -7432,16 +7432,26 @@ function renderSopContent() {
         }
       }
 
+      // 乾淨去除發話者文字前多餘的 emoji 或空白，徹底避免 icon 重複渲染兩次！
+      let cleanSpeaker = (item.speaker || '對話').trim();
+      cleanSpeaker = cleanSpeaker.replace(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, '').trim();
+      if (!cleanSpeaker) cleanSpeaker = sectionTitle || '對話';
+
       secHtml += `
         <div class="dialog-bubble-item ${speakerClass}" onclick="handleDialogItemClick(event, '${item.id}', '${escapeJs(item.ja)}')" ondblclick="openItemGrammarModal('${item.id}')" title="點一下發音・點兩下查看文法詳解">
           <div class="dialog-bubble-content">
-            <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(item.speaker || '對話')}</span>
+            <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(cleanSpeaker)}</span>
             <div class="dialog-bubble-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
             <div class="dialog-bubble-zh">${escapeHtml(item.zh)}</div>
-            ${item.en ? `<div class="dialog-bubble-en" style="font-size:0.75rem; color:#475569; font-style:italic; line-height:1.35; margin-top:3px; display:flex; align-items:flex-start; gap:4px;"><span style="font-style:normal;">🇬🇧</span><span>${escapeHtml(item.en)}</span></div>` : ''}
+            ${item.en ? `
+            <div class="dialog-bubble-en" onclick="event.stopPropagation(); speakEnglish('${escapeJs(item.en)}'); showToast('🔊 正在朗讀英文發音…');" style="font-size:0.75rem; color:#334155; font-style:italic; line-height:1.35; margin-top:4px; display:inline-flex; align-items:center; gap:5px; cursor:pointer; padding:2px 6px; border-radius:4px; background:rgba(226,232,240,0.5); transition:all 0.15s;" onmouseover="this.style.background='rgba(203,213,225,0.7)'" onmouseout="this.style.background='rgba(226,232,240,0.5)'" title="點擊朗讀英文發音 🇺🇸">
+              <span style="font-style:normal; font-size:0.85rem;">🇺🇸</span>
+              <span>${escapeHtml(item.en)}</span>
+              <span style="font-size:0.7rem; opacity:0.6; font-style:normal; margin-left:1px;">🔊</span>
+            </div>` : ''}
           </div>
           <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
-            <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')">🔊</button>
+            <button class="btn-icon-mini" title="朗讀日文" onclick="speakJapanese('${escapeJs(item.ja)}')">🔊</button>
             <button class="btn-icon-mini" title="選單" onclick="openItemQuickMenuById('${item.id}', 'tab_item')">⋮</button>
           </div>
         </div>`;
@@ -8179,6 +8189,25 @@ function saveVoiceSettings() {
 
   localStorage.setItem(VOICE_STORAGE_KEY, JSON.stringify(pref));
   showToast('已成功儲存此設備的專屬聲線與語速！');
+}
+
+function speakEnglish(text) {
+  if (!text || !text.trim()) return;
+  if (!('speechSynthesis' in window)) {
+    showToast('您的裝置不支援語音合成', 'error');
+    return;
+  }
+  const cleanText = text.trim();
+  const utt = new SpeechSynthesisUtterance(cleanText);
+  utt.lang = 'en-US';
+  utt.rate = 0.95;
+
+  const allVoices = window.speechSynthesis.getVoices();
+  const enVoice = allVoices.find(v => v.lang === 'en-US') || allVoices.find(v => v.lang && v.lang.startsWith('en')) || null;
+  if (enVoice) utt.voice = enVoice;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
 }
 
 function speakJapanese(text) {
@@ -14161,12 +14190,12 @@ function renderQuadResults(data) {
       </div>
     </div>
 
-    <!-- 🇬🇧 英語（英文） -->
+    <!-- 🇺🇸 英語（英文） -->
     <div class="broadcast-lang-card" style="border-top:4px solid #1976d2;">
       <div>
         <div class="broadcast-lang-header" style="margin-bottom:8px;">
           <span class="broadcast-lang-badge" style="color:#1976d2; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇬🇧</span> 英語（英文）
+            <span style="font-size:1.2rem;">🇺🇸</span> 英語（英文）
           </span>
         </div>
         <div class="broadcast-text-main">
@@ -14215,7 +14244,7 @@ ${currentBroadcastData.ne}
 🇲🇲 緬甸語（緬甸文）：
 ${currentBroadcastData.my}
 
-🇬🇧 英語（英文）：
+🇺🇸 英語（英文）：
 ${currentBroadcastData.en}
 
 （中文原意：${currentBroadcastData.zh}）`;
@@ -14275,10 +14304,10 @@ function openBroadcastBigScreen() {
       ${currentBroadcastData.my_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.my_romaji}</div>` : ''}
     </div>
 
-    <!-- 🇬🇧 英文大字卡 -->
+    <!-- 🇺🇸 英文大字卡 -->
     <div class="bigscreen-card" style="border-left:6px solid #1976d2;">
       <div class="bigscreen-card-title">
-        <span>🇬🇧 英語（英文）</span>
+        <span>🇺🇸 英語（英文）</span>
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.en)}', 'en')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
       </div>
       <div class="bigscreen-card-content" style="color:#0d47a1;">

@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v92'), 'Service Worker 快取版本已升級至 yang-pwa-v92');
-assert(html.includes('yang_runner_handbook_v92'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v92');
+assert(swContent.includes('yang-pwa-v93'), 'Service Worker 快取版本已升級至 yang-pwa-v93');
+assert(html.includes('yang_runner_handbook_v93'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v93');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -657,8 +657,8 @@ assert(html.includes('丁寧體') && html.includes('です・ます調') && html
 // 4. 刪除多餘備註（外場夥伴母語、外場國際通用等）
 assert(!html.includes('職場普通丁寧體') && !html.includes('外場夥伴母語') && !html.includes('外場國際通用') && !html.includes('Standard Workplace English'), '翻譯結果卡片已徹底刪除外場夥伴母語/國際通用等冗贅備註');
 
-// 5. 食物 SOP 與外場對話支援英文版
-assert(html.includes('dialog-bubble-en') && html.includes('compact-sop-en'), 'SOP 介面渲染支援英文對照字幕節點 (dialog-bubble-en / compact-sop-en)');
+// 5. 現場對話支援英文版
+assert(html.includes('dialog-bubble-en'), '現場對話介面渲染支援英文對照字幕節點 (dialog-bubble-en)');
 assert(html.includes('Excuse me, may I clear this plate for you?') && html.includes('Please go and clear tables'), '收桌對話與主管指示包含實用英文版對話');
 
 // 6. 獨立飲料點心專區 (tab_drink_dessert_sop)
@@ -704,6 +704,23 @@ assert(html.includes('extractPairsFromRawLines') && html.includes('inlineSep = l
 assert(html.includes('typeset-player-bar') && html.includes('typeset-player-controls') && html.includes('id="btn-typeset-read-all"'), '朗讀控制台整合至頂部單一專業播放器 (typeset-player-bar)');
 assert(!html.includes('footerTb.innerHTML = `\n    <button class="btn btn-primary btn-sm" onclick="startTypesetSpeech'), '文章底部的重複朗讀按鈕已徹底移除，保留純粹編輯工具');
 
+// 測試 43: 實物 SOP 規範優化・去除重複發話者圖示・美國國旗替換・SOP純化無英文・點擊英文發音朗讀 (v93)
+console.log('\n【測試 43：實物 SOP 規範優化・去除重複發話者圖示・美國國旗替換・SOP純化無英文・點擊英文發音朗讀 (v93)】');
+// 1. 去除重複發話者圖示 (cleanSpeaker)
+assert(html.includes('cleanSpeaker.replace(/^[\\p{Extended_Pictographic}\\uFE0F\\u200D\\s]+/u') && html.includes('${speakerIcon} ${escapeHtml(cleanSpeaker)}'), '發話者標籤自動過濾重複 emoji 圖示，徹底杜絕圖示重複渲染兩次');
+
+// 2. 國旗換成美國國旗 (🇺🇸)
+assert(!html.includes('🇬🇧'), '全站英語標籤與對話已徹底替換英國國旗，全面改用美國國旗 (🇺🇸)');
+assert(html.includes('🇺🇸') && html.includes('dialog-bubble-en'), '對話氣泡與四國翻譯全面標示美國國旗 (🇺🇸)');
+
+// 3. SOP 流程與指示本身不顯示英文，僅對話氣泡顯示英文
+assert(!html.includes('compact-sop-en'), 'SOP 流程步驟與主管指示卡片已純化，徹底移除英文對照');
+assert(html.includes('dialog-bubble-en'), '現場對話氣泡保留英文對照');
+
+// 4. 點擊英文朗讀發音
+assert(html.includes('function speakEnglish(text)') && html.includes("utt.lang = 'en-US'"), '系統提供專屬英文語音朗讀合成函式 speakEnglish');
+assert(html.includes("onclick=\"event.stopPropagation(); speakEnglish('") && html.includes('dialog-bubble-en'), '點擊對話氣泡中的英文句子可直接觸發英文語音朗讀發音');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -711,7 +728,8 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v92) 日文排版三合一智慧引擎（貼日出中/貼中出日/中日對照）與移除重複朗讀按鈕！');
+  console.log('🎉 所有測試通過！(v93) 實物 SOP 規範優化・去除重複發話者圖示・美國國旗替換・SOP純化無英文・點擊英文發音朗讀！');
 }
+
 
 
