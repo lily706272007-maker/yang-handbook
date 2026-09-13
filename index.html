@@ -2984,6 +2984,20 @@
           <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-male" onclick="setAvatarTrait('gender', 'male')" style="font-size:0.78rem; padding:3px 10px;">👦 男生</button>
         </div>
 
+        <!-- 方案 B：身高（高挑 / 矮小） -->
+        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">身高：</span>
+          <button class="btn btn-sm btn-ghost trait-pill-height" id="trait-height-tall" onclick="setAvatarTrait('height', 'tall')" style="font-size:0.78rem; padding:3px 10px;">🦒 高挑身材</button>
+          <button class="btn btn-sm btn-ghost trait-pill-height" id="trait-height-short" onclick="setAvatarTrait('height', 'short')" style="font-size:0.78rem; padding:3px 10px;">🐥 矮小嬌小</button>
+        </div>
+
+        <!-- 方案 B：身材（標準偏瘦 / 偏胖微豐） -->
+        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">身材：</span>
+          <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-slim" onclick="setAvatarTrait('build', 'slim')" style="font-size:0.78rem; padding:3px 10px;">🏃 標準偏瘦</button>
+          <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-chubby" onclick="setAvatarTrait('build', 'chubby')" style="font-size:0.78rem; padding:3px 10px;">🐻 偏胖微豐</button>
+        </div>
+
         <!-- 2. 臉型 -->
         <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">臉型：</span>
@@ -12578,6 +12592,8 @@ let currentWhoState = {
 
 let currentWhoTraits = {
   gender: 'female',
+  height: 'tall',
+  build: 'slim',
   nationality: '日本 🇯🇵',
   face: 'round',
   nose: 'dot',
@@ -12991,17 +13007,12 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
 
   const traits = customTraits || (nameItem && nameItem.traits) || (nameItem && DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) || currentWhoTraits;
   const gender = traits.gender || 'female';
-  const skinType = traits.skin || (traits.nationality && traits.nationality.includes('尼泊爾') ? 'deep_bronze' : (traits.nationality && (traits.nationality.includes('越南') || traits.nationality.includes('緬甸')) ? 'tanned' : (gender === 'female' ? 'fair' : 'natural')));
-  const bangStyle = traits.bang || (gender === 'female' ? 'bang_straight' : 'bang_left_slant');
-  const backHairStyle = traits.backHair || traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
-  const hairColor = (traits.color === '#422b1d') ? '#362215' : '#18171d';
-  const hairHighlight = hairColor === '#362215' ? 'rgba(215, 170, 125, 0.35)' : 'rgba(195, 205, 225, 0.28)';
-  const glasses = traits.glasses || 'none';
-  const nat = traits.nationality || (nameItem && nameItem.nationality) || '日本 🇯🇵';
+  const height = traits.height || 'tall';
+  const build = traits.build || 'slim';
 
-  // ═══════════════════════════════════════════════════════
-  // [1] 背景層：取樣自飯店餐廳實景 (溫暖焦糖紅棕座椅、深色長木桌、大片明亮落地窗與窗外蓊鬱綠意)
-  // ═══════════════════════════════════════════════════════
+  // 方案 B：8 種無頭身材素體立繪（依性別 × 身高 × 胖瘦即時切換）
+  const bodyAssetKey = `body_${gender}_${height}_${build}.jpg`;
+  return `photos/${bodyAssetKey}`;
   // A. 窗外天空與陽光
   const skyGrad = ctx.createLinearGradient(0, 0, 0, 360);
   skyGrad.addColorStop(0, '#eaf2e8');
@@ -13510,6 +13521,14 @@ function updateTraitPillsUI() {
   // 1. 性別
   document.querySelectorAll('.trait-pill-gender').forEach(b => b.classList.remove('btn-primary'));
   document.getElementById('trait-gender-' + currentWhoTraits.gender)?.classList.add('btn-primary');
+
+  // 身高（方案 B）
+  document.querySelectorAll('.trait-pill-height').forEach(b => b.classList.remove('btn-primary'));
+  document.getElementById('trait-height-' + (currentWhoTraits.height || 'tall'))?.classList.add('btn-primary');
+
+  // 身材（方案 B）
+  document.querySelectorAll('.trait-pill-build').forEach(b => b.classList.remove('btn-primary'));
+  document.getElementById('trait-build-' + (currentWhoTraits.build || 'slim'))?.classList.add('btn-primary');
 
   // 2. 臉型
   document.querySelectorAll('.trait-pill-face').forEach(b => b.classList.remove('btn-primary'));

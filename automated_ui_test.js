@@ -885,6 +885,29 @@ const idxYakiPiiman = html.indexOf('"id": "vs_yaki_piiman"');
 const idxYakiNinjin = html.indexOf('"id": "vs_yaki_ninjin"');
 assert(idxYakiEbi < idxYakiPiiman && idxYakiPiiman < idxYakiNinjin, '夕食炭火烤物烤蝦、烤青椒與烤蘿蔔全數集中相鄰排列');
 
+// 測試 51: 8 種身材排列組合 (方案 B：高/矮 × 瘦/胖 × 男/女) 與獨立按鈕切換 (v102)
+console.log('\n【測試 51：8 種身材素體組合 (方案 B) 與獨立按鈕切換】');
+assert(html.includes('id="trait-height-tall"') && html.includes('id="trait-height-short"'), '包含獨立身高按鈕：高挑 (tall) 與 矮小 (short)');
+assert(html.includes('id="trait-build-slim"') && html.includes('id="trait-build-chubby"'), '包含獨立身材胖瘦按鈕：標準偏瘦 (slim) 與 偏胖微豐 (chubby)');
+assert(html.includes("currentWhoTraits.height") && html.includes("currentWhoTraits.build"), '狀態核心 currentWhoTraits 支援 height 與 build');
+assert(html.includes("body_male_tall_slim.jpg") || html.includes("body_${gender}_${height}_${build}.jpg"), '支援動態映射 8 種素體立繪檔案路徑');
+
+const expectedBodyFiles = [
+  'photos/body_male_tall_slim.jpg',
+  'photos/body_male_tall_chubby.jpg',
+  'photos/body_male_short_slim.jpg',
+  'photos/body_male_short_chubby.jpg',
+  'photos/body_female_tall_slim.jpg',
+  'photos/body_female_tall_chubby.jpg',
+  'photos/body_female_short_slim.jpg',
+  'photos/body_female_short_chubby.jpg'
+];
+
+expectedBodyFiles.forEach(f => {
+  const exists = fs.existsSync(path.join(__dirname, f));
+  assert(exists, `實體素體圖檔存在且有效: ${f}`);
+});
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -892,7 +915,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v101) 餐點依料理台配置圖 (朝食 ①~⑧ 號台與夕食專區) 實體動線精準重排成功上線！');
+  console.log('🎉 所有測試通過！(v102) 8 種身材素體組合 (方案 B：高瘦/高胖/矮瘦/矮胖 × 男女) 成功上線！');
 }
 
 
