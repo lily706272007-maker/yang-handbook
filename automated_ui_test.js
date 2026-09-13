@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v94'), 'Service Worker 快取版本已升級至 yang-pwa-v94');
-assert(html.includes('yang_runner_handbook_v94'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v94');
+assert(swContent.includes('yang-pwa-v95'), 'Service Worker 快取版本已升級至 yang-pwa-v95');
+assert(html.includes('yang_runner_handbook_v95'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v95');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -740,7 +740,8 @@ assert(html.includes('vs_enoki_gomaae') && html.includes('Enoki mushrooms with s
 assert(!html.includes('"cat": "食材", "imageUrl": "./photos/') && !html.includes('"cat": "餐具", "imageUrl": "./photos/') && !html.includes('"cat": "酒水", "imageUrl": "./photos/') && !html.includes('"cat": "工具", "imageUrl": "./photos/'), '食材、餐具、酒水、工具與對話之相片已全數下架，僅保留純文字名稱');
 
 // 6. 相片模式嚴格劃分早餐與晚餐
-assert(html.includes('getFoodMealType') && html.includes('currentGalleryMealFilter') && html.includes('🌅 早餐 (朝食)') && html.includes('🌙 晚餐 (夕食)'), '相片模式提供專屬早晚餐切換器 (全部餐點 / 早餐朝食 / 晚餐夕食)');
+// 7. 辛子蓮根換上最新實拍照片
+assert(html.includes('vs_karashi_renkon') && html.includes('辛子蓮根') && html.includes('Mustard lotus root'), '辛子蓮根成功更新為現場實拍最新照片並同步立牌說明');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -749,8 +750,9 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v94) 相片模式純化・僅保留餐點相片・嚴格劃分早晚餐・互換生菜豆苗・拉麵筍乾更換・非餐點相片全數下架！');
+  console.log('🎉 所有測試通過！(v95) 辛子蓮根換上最新實拍照・相片模式純化・早晚餐分類！');
 }
+
 
 
 
