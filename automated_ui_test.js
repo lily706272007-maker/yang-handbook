@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v99'), 'Service Worker 快取版本已升級至 yang-pwa-v99');
-assert(html.includes('yang_runner_handbook_v99'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v99');
+assert(swContent.includes('yang-pwa-v100'), 'Service Worker 快取版本已升級至 yang-pwa-v100');
+assert(html.includes('yang_runner_handbook_v100'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v100');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -806,9 +806,26 @@ assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0933.jpg')), '實體相片
 assert(html.includes('"id": "vs_sushi_wasabi"') && html.includes('"imageUrl": "./photos/IMG_0929.jpg"'), '山葵已精準配對生わさび獨立小包實拍照 photos/IMG_0929.jpg');
 assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0929.jpg')), '實體相片 photos/IMG_0929.jpg 存在且有效');
 
-// 3. 烤蝦 (IMG_0934: 炭火鹽烤鮮蝦串)
-assert(html.includes('"id": "vs_yaki_ebi"') && html.includes('"imageUrl": "./photos/IMG_0934.jpg"'), '炭火烤蝦已精準配對炭火烤蝦串實拍照 photos/IMG_0934.jpg');
-assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0934.jpg')), '實體相片 photos/IMG_0934.jpg 存在且有效');
+// 3. 烤蝦 (yaki_ebi: 炭火鹽烤鮮蝦串)
+assert(html.includes('"id": "vs_yaki_ebi"') && (html.includes('"imageUrl": "./photos/yaki_ebi.jpg"') || html.includes('"imageUrl": "./photos/IMG_0934.jpg"')), '炭火烤蝦已精準配對炭火烤蝦串實拍照');
+assert(fs.existsSync(path.join(__dirname, 'photos/yaki_ebi.jpg')), '實體相片 photos/yaki_ebi.jpg 存在且有效');
+
+// 測試 49: LIVE KITCHEN 烤豬排與炭火 3 大烤物 (烤青椒/烤蘿蔔/烤蝦子) (v100)
+console.log('\n【測試 49：LIVE KITCHEN 烤豬排與炭火 3 大烤物 (烤青椒/烤蘿蔔/烤蝦子) (v100)】');
+// 1. 烤豬排 (熊本りんどうポーク 肩ロースステーキ)
+assert(html.includes('"id": "vs_rindou_steak"') && html.includes('肩ロースステーキ') && html.includes('烤豬排') && html.includes('./photos/rindou_pork_steak.jpg'), '烤豬排成功配對現場立牌肩里肌排實拍照 rindou_pork_steak.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/rindou_pork_steak.jpg')), '實體相片 photos/rindou_pork_steak.jpg 存在且有效');
+
+// 2. 烤青椒 (ピーマン / yaki_piiman.jpg)
+assert(html.includes('"id": "vs_yaki_piiman"') && html.includes('ピーマン') && html.includes('烤青椒') && html.includes('./photos/yaki_piiman.jpg'), '烤青椒成功配對炭火鐵網烤青椒實拍照 yaki_piiman.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/yaki_piiman.jpg')), '實體相片 photos/yaki_piiman.jpg 存在且有效');
+
+// 3. 烤蘿蔔 (にんじん / yaki_ninjin.jpg)
+assert(html.includes('"id": "vs_yaki_ninjin"') && html.includes('にんじん') && html.includes('烤蘿蔔') && html.includes('./photos/yaki_ninjin.jpg'), '烤蘿蔔成功配對炭火鐵網烤紅蘿蔔實拍照 yaki_ninjin.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/yaki_ninjin.jpg')), '實體相片 photos/yaki_ninjin.jpg 存在且有效');
+
+// 4. 烤蝦子 (焼きエビ / yaki_ebi.jpg)
+assert(html.includes('"id": "vs_yaki_ebi"') && html.includes('烤蝦子') && html.includes('./photos/yaki_ebi.jpg'), '烤蝦子成功配對炭火烤鮮大蝦串實拍照 yaki_ebi.jpg');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -817,7 +834,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v99) 壽司甜薑片・山葵・炭火烤蝦照片精準歸位！');
+  console.log('🎉 所有測試通過！(v100) LIVE KITCHEN 烤豬排與炭火 3 大烤物 (烤青椒/烤蘿蔔/烤蝦子) 上線！');
 }
 
 

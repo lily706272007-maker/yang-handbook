@@ -3185,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v99';
+const STORAGE_KEY = 'yang_runner_handbook_v100';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -5888,6 +5888,7 @@ function createRealRunnerData() {
         { "id": "vs_ramen_chashu", "ja": "チャーシュー", "zh": "叉燒肉片", "cat": "餐點", "imageUrl": "./photos/chashu.jpg", "note": "豚骨拉麵專用叉燒肉片" },
         { "id": "vs_ramen_negi", "ja": "<ruby>青葱<rt>あおねぎ</rt></ruby>", "zh": "青蔥", "cat": "餐點", "imageUrl": "./photos/IMG_0938.jpg", "note": "豚骨拉麵專用青蔥配料" },
     { "id": "vs_hotpot", "ja": "<ruby>熊本<rt>くまもと</rt></ruby> りんどうポーク<ruby>味<rt>あじ</rt></ruby> しゃぶしゃぶ", "zh": "熊本龍膽豬涮涮鍋", "cat": "餐點", "imageUrl": "./photos/IMG_0952.jpg", "note": "夕食名物・熊本龍膽豬涮涮鍋（備有柑橘醋、胡麻醬與洋蔥醋）" },
+    { "id": "vs_rindou_steak", "ja": "<ruby>熊本<rt>くまもと</rt></ruby>りんどうポーク <ruby>肩<rt>かた</rt></ruby>ロースステーキ", "zh": "烤豬排（熊本龍膽豬肩里肌排）", "cat": "餐點", "imageUrl": "./photos/rindou_pork_steak.jpg", "note": "夕食 LIVE KITCHEN 現烤名物・立牌：熊本りんどうポーク 肩ロースステーキ (Kumamoto Rindo Pork Shoulder Loin Steak)，主廚眼前現烤鮮嫩多汁" },
     { "id": "vs_enoki_gomaae", "ja": "えのき<ruby>茸<rt>たけ</rt></ruby>の<ruby>胡麻和<rt>ごまあ</rt></ruby>え", "zh": "金針菇胡麻拌菜（菠菜金針菇胡麻拌）", "cat": "餐點", "imageUrl": "./photos/IMG_0946.jpg", "note": "朝食小菜・立牌：えのきの胡麻和え (Enoki mushrooms with sesame sauce)，以深綠菠菜/青菜與金針菇拌白芝麻醬" },
     { "id": "vs_ganmo_ingen", "ja": "がんもといんげん", "zh": "油豆腐雁擬與四季豆煮", "cat": "餐點", "imageUrl": "./photos/IMG_0945.jpg", "note": "朝食小菜・がんもといんげん" },
     { "id": "vs_homemade_pickles", "ja": "<ruby>自家製<rt>じかせい</rt></ruby>ピクルス", "zh": "自製鮭魚醋漬物", "cat": "餐點", "imageUrl": "./photos/IMG_0944.jpg", "note": "朝食小菜・自家製ピクルス（含鮭魚）" },
@@ -5899,7 +5900,9 @@ function createRealRunnerData() {
     { "id": "vs_ham_egg", "ja": "ハムエッグ", "zh": "火腿煎蛋", "cat": "餐點", "imageUrl": "", "note": "朝食いろり" },
     { "id": "vs_yaki_saba", "ja": "<ruby>鯖<rt>さば</rt></ruby>", "zh": "烤鯖魚", "cat": "餐點", "imageUrl": "", "note": "朝食いろり烤魚" },
     { "id": "vs_satsuma_age", "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ", "zh": "薩摩炸魚餅", "cat": "餐點", "imageUrl": "", "note": "朝食いろり炸物" },
-    { "id": "vs_yaki_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "烤蝦", "cat": "餐點", "imageUrl": "./photos/IMG_0934.jpg", "note": "夕食いろり烤物・炭火鹽烤鮮蝦串" },
+    { "id": "vs_yaki_piiman", "ja": "ピーマン", "zh": "烤青椒", "cat": "餐點", "imageUrl": "./photos/yaki_piiman.jpg", "note": "夕食いろり炭火烤物・立牌：ピーマン (綠青椒)，可沾味噌享用" },
+    { "id": "vs_yaki_ninjin", "ja": "にんじん", "zh": "烤蘿蔔", "cat": "餐點", "imageUrl": "./photos/yaki_ninjin.jpg", "note": "夕食いろり炭火烤物・立牌：にんじん (紅蘿蔔)，可沾味噌享用" },
+    { "id": "vs_yaki_ebi", "ja": "<ruby>焼<rt>や</rt></ruby>きエビ", "zh": "烤蝦子", "cat": "餐點", "imageUrl": "./photos/yaki_ebi.jpg", "note": "夕食いろり炭火烤物・立牌：焼きエビ，炭火鹽烤鮮蝦串" },
     { "id": "vs_nikumaki", "ja": "<ruby>豚肉<rt>ぶたにく</rt></ruby><ruby>巻<rt>ま</rt></ruby>き", "zh": "豬肉蔬菜捲", "cat": "餐點", "imageUrl": "./photos/IMG_0966.jpg", "note": "熱菜・新鮮豬肉捲" },
 
         // ── 🥗 熊本市場直送 沙拉吧專區 (經 Vision 影像辨識與立牌雙重校正) ──
