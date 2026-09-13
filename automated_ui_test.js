@@ -126,7 +126,7 @@ assert(html.includes('阿蘇高菜拌飯'), '主食：阿蘇高菜拌飯');
 assert(html.includes('熊本龍膽豬涮涮鍋') || html.includes('りんどうポーク'), '名物鍋物：熊本龍膽豬涮涮鍋');
 assert(html.includes('豚骨拉麵'), '主食：豚骨拉麵');
 assert(html.includes('玉子燒壽司') && html.includes('鮪魚壽司') && html.includes('鮭魚壽司'), '壽司：玉子、鮪魚、鮭魚');
-assert(html.includes('鰻魚壽司') && html.includes('烏賊壽司') && html.includes('鮮蝦壽司') && html.includes('照燒壽司'), '壽司：鰻魚、烏賊、鮮蝦、照燒');
+assert(html.includes('鰻魚壽司') && html.includes('烏賊壽司') && html.includes('鮮蝦壽司') && (html.includes('照燒壽司') || html.includes('鳥のてり焼き')), '壽司：鰻魚、烏賊、鮮蝦、照燒/鳥のてり焼き');
 assert(html.includes('哈密瓜') && html.includes('巧克力蛋糕') && html.includes('和菓子丸子'), '水果甜點：哈密瓜、巧克力蛋糕、和菓子');
 
 // 測試 7: 酒水飲品、水之型態與機台操作說明 (店內全面統稱「炭酸」)
@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v97'), 'Service Worker 快取版本已升級至 yang-pwa-v97');
-assert(html.includes('yang_runner_handbook_v97'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v97');
+assert(swContent.includes('yang-pwa-v98'), 'Service Worker 快取版本已升級至 yang-pwa-v98');
+assert(html.includes('yang_runner_handbook_v98'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v98');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -773,8 +773,28 @@ assert(fs.existsSync(path.join(__dirname, 'photos/chashu.jpg')), '實體相片 p
 assert(html.includes('"id": "vs_ramen_negi"') && html.includes('青葱') && html.includes('青蔥') && html.includes('./photos/IMG_0938.jpg'), '青蔥成功獨立為單獨項目 vs_ramen_negi，配對綠油油碎蔥花實拍照 IMG_0938.jpg');
 assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0938.jpg')), '實體相片 photos/IMG_0938.jpg 存在且有效');
 
-// 3. 叉燒與青蔥皆屬於晚餐拉麵配料 (dinner)
-assert(html.includes('"id": "vs_ramen_chashu"') && html.includes('"id": "vs_ramen_negi"'), '資料庫完整包含叉燒肉片與青蔥兩項獨立餐點');
+// 測試 47: 壽司實拍照全面校準・玉子/鮪魚/鮭魚/鰻魚/烏賊/鮮蝦圖片校正・鳥のてり焼き更名 (v98)
+console.log('\n【測試 47：壽司實拍照全面校準・玉子/鮪魚/鮭魚/鰻魚/烏賊/鮮蝦圖片校正・鳥のてり焼き更名 (v98)】');
+// 1. 玉子燒壽司 (IMG_0870)
+assert(html.includes('"id": "vs_sushi_tamago"') && html.includes('"imageUrl": "./photos/IMG_0870.jpg"'), '玉子燒壽司精準校正為 IMG_0870.jpg (厚煎甜蛋)');
+
+// 2. 鮪魚壽司 (IMG_0871)
+assert(html.includes('"id": "vs_sushi_maguro"') && html.includes('"imageUrl": "./photos/IMG_0871.jpg"'), '鮪魚壽司精準校正為 IMG_0871.jpg (本鮪/鮪魚)');
+
+// 3. 鮭魚壽司 (IMG_0872)
+assert(html.includes('"id": "vs_sushi_salmon"') && html.includes('"imageUrl": "./photos/IMG_0872.jpg"'), '鮭魚壽司精準校正為 IMG_0872.jpg (生/炙鮭魚)');
+
+// 4. 鰻魚壽司 (IMG_0873)
+assert(html.includes('"id": "vs_sushi_unagi"') && html.includes('"imageUrl": "./photos/IMG_0873.jpg"'), '鰻魚壽司精準校正為 IMG_0873.jpg (蒲燒甜醬鰻魚)');
+
+// 5. 烏賊壽司 (IMG_0874)
+assert(html.includes('"id": "vs_sushi_ika"') && html.includes('"imageUrl": "./photos/IMG_0874.jpg"'), '烏賊壽司精準校正為 IMG_0874.jpg (新鮮烏賊)');
+
+// 6. 鮮蝦壽司 (IMG_0875)
+assert(html.includes('"id": "vs_sushi_ebi"') && html.includes('"imageUrl": "./photos/IMG_0875.jpg"'), '鮮蝦壽司精準校正為 IMG_0875.jpg (鮮甜海老)');
+
+// 7. 鳥のてり焼き (IMG_0876)
+assert(html.includes('"id": "vs_sushi_teriyaki"') && html.includes('鳥のてり焼き') && html.includes('"imageUrl": "./photos/IMG_0876.jpg"'), '照燒壽司成功更名為現場立牌名「鳥のてり焼き (照燒雞肉壽司)」，配對 IMG_0876.jpg');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -783,7 +803,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v97) 叉燒換上正確肉片照片・青蔥獨立出單獨料理項目！');
+  console.log('🎉 所有測試通過！(v98) 壽司實拍照全面校準・玉子/鮪魚/鮭魚/鰻魚/烏賊/鮮蝦圖片校正・鳥のてり焼き更名！');
 }
 
 
