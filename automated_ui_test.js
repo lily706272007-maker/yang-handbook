@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v95'), 'Service Worker 快取版本已升級至 yang-pwa-v95');
-assert(html.includes('yang_runner_handbook_v95'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v95');
+assert(swContent.includes('yang-pwa-v96'), 'Service Worker 快取版本已升級至 yang-pwa-v96');
+assert(html.includes('yang_runner_handbook_v96'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v96');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -743,6 +743,26 @@ assert(!html.includes('"cat": "食材", "imageUrl": "./photos/') && !html.includ
 // 7. 辛子蓮根換上最新實拍照片
 assert(html.includes('vs_karashi_renkon') && html.includes('辛子蓮根') && html.includes('Mustard lotus root'), '辛子蓮根成功更新為現場實拍最新照片並同步立牌說明');
 
+// 測試 45: 手漬醬菜拆分為三道獨立料理(手製醬菜/梅乾/青菜)・獨立實拍照與立牌對應 (v96)
+console.log('\n【測試 45：手漬醬菜拆分為三道獨立料理(手製醬菜/梅乾/青菜)・獨立實拍照與立牌對應 (v96)】');
+// 1. 三道獨立料理 ID 與餐點屬性
+assert(html.includes('"id": "vs_tsubozuke"') && html.includes('"id": "vs_umeboshi"') && html.includes('"id": "vs_aonazuke"'), '資料庫已成功建立 vs_tsubozuke、vs_umeboshi 與 vs_aonazuke 三道獨立小菜');
+
+// 2. 左邊（黃色）：手製醬菜 (壺漬け / tsubozuke)
+assert(html.includes('"id": "vs_tsubozuke"') && html.includes('壺漬') && html.includes('手製醬菜') && html.includes('./photos/tsubozuke.jpg'), '左邊黃色小菜成功設定為「手製醬菜 (壺漬け)」，並配對專屬實拍照 tsubozuke.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/tsubozuke.jpg')), '實體相片 photos/tsubozuke.jpg 存在且有效');
+
+// 3. 中間（紅色）：梅乾 (梅干し / umeboshi)
+assert(html.includes('"id": "vs_umeboshi"') && html.includes('梅干') && html.includes('梅乾') && html.includes('./photos/umeboshi.jpg'), '中間紅色小菜成功設定為「梅乾 (梅干し)」，並配對專屬實拍照 umeboshi.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/umeboshi.jpg')), '實體相片 photos/umeboshi.jpg 存在且有效');
+
+// 4. 右邊（綠色）：青菜 (青菜漬け / aonazuke)
+assert(html.includes('"id": "vs_aonazuke"') && html.includes('青菜') && html.includes('./photos/aonazuke.jpg'), '右邊綠色小菜成功設定為「青菜 (青菜漬け)」，並配對專屬實拍照 aonazuke.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/aonazuke.jpg')), '實體相片 photos/aonazuke.jpg 存在且有效');
+
+// 5. 早晚餐分類判定包含新小菜
+assert(html.includes("v.id === 'vs_tsubozuke'") && html.includes("v.id === 'vs_umeboshi'") && html.includes("v.id === 'vs_aonazuke'"), 'getFoodMealType 包含三道新醬菜之早餐判斷邏輯');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -750,7 +770,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v95) 辛子蓮根換上最新實拍照・相片模式純化・早晚餐分類！');
+  console.log('🎉 所有測試通過！(v96) 手漬醬菜拆分為三道獨立料理(手製醬菜/梅乾/青菜)・獨立實拍照與立牌對應！');
 }
 
 

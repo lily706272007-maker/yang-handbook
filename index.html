@@ -3185,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v95';
+const STORAGE_KEY = 'yang_runner_handbook_v96';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -5890,7 +5890,9 @@ function createRealRunnerData() {
     { "id": "vs_enoki_gomaae", "ja": "えのき<ruby>茸<rt>たけ</rt></ruby>の<ruby>胡麻和<rt>ごまあ</rt></ruby>え", "zh": "金針菇胡麻拌菜（菠菜金針菇胡麻拌）", "cat": "餐點", "imageUrl": "./photos/IMG_0946.jpg", "note": "朝食小菜・立牌：えのきの胡麻和え (Enoki mushrooms with sesame sauce)，以深綠菠菜/青菜與金針菇拌白芝麻醬" },
     { "id": "vs_ganmo_ingen", "ja": "がんもといんげん", "zh": "油豆腐雁擬與四季豆煮", "cat": "餐點", "imageUrl": "./photos/IMG_0945.jpg", "note": "朝食小菜・がんもといんげん" },
     { "id": "vs_homemade_pickles", "ja": "<ruby>自家製<rt>じかせい</rt></ruby>ピクルス", "zh": "自製鮭魚醋漬物", "cat": "餐點", "imageUrl": "./photos/IMG_0944.jpg", "note": "朝食小菜・自家製ピクルス（含鮭魚）" },
-    { "id": "vs_tsukemono_mix", "ja": "<ruby>手漬<rt>てづ</rt></ruby>け<ruby>漬物<rt>つけもの</rt></ruby>", "zh": "手漬醬菜（梅干・青菜）", "cat": "餐點", "imageUrl": "./photos/IMG_0940.jpg", "note": "朝食小菜・梅干し、青菜漬け" },
+    { "id": "vs_tsubozuke", "ja": "<ruby>壺漬<rt>つぼづ</rt></ruby>け", "zh": "手製醬菜", "cat": "餐點", "imageUrl": "./photos/tsubozuke.jpg", "note": "朝食小菜・立牌：つぼ漬け (Pickles)，日式傳統甜鹹黃蘿蔔醬菜" },
+    { "id": "vs_umeboshi", "ja": "<ruby>梅干<rt>うめぼ</rt></ruby>し", "zh": "梅乾", "cat": "餐點", "imageUrl": "./photos/umeboshi.jpg", "note": "朝食小菜・立牌：梅干し (Pickles)，日式紫蘇酸梅干" },
+    { "id": "vs_aonazuke", "ja": "<ruby>青菜<rt>あおな</rt></ruby><ruby>漬<rt>づ</rt></ruby>け", "zh": "青菜", "cat": "餐點", "imageUrl": "./photos/aonazuke.jpg", "note": "朝食小菜・立牌：青菜 (Pickles)，油豆腐紅蘿蔔拌青菜漬" },
     { "id": "vs_chingensai_namul", "ja": "<ruby>青梗菜<rt>チンゲンサイ</rt></ruby>のナムル", "zh": "涼拌青江菜", "cat": "餐點", "imageUrl": "", "note": "夕食小菜" },
     { "id": "vs_milk_bread", "ja": "ミルク<ruby>食<rt>しょく</rt></ruby>パン", "zh": "牛奶吐司", "cat": "餐點", "imageUrl": "", "note": "朝食麵包" },
     { "id": "vs_ham_egg", "ja": "ハムエッグ", "zh": "火腿煎蛋", "cat": "餐點", "imageUrl": "", "note": "朝食いろり" },
@@ -7600,7 +7602,7 @@ let currentGalleryMealFilter = '全部'; // '全部' | '朝食' | '夕食'
 function getFoodMealType(v) {
   if (v.meal) return v.meal;
   const text = ((v.note || '') + ' ' + (v.zh || '') + ' ' + (v.id || '')).toLowerCase();
-  if (text.includes('朝食') || text.includes('朝牛') || text.includes('早餐') || text.includes('沙拉') || text.includes('salad') || v.id.startsWith('vs_salad') || v.id === 'vs_dashimaki' || v.id === 'vs_onsen_tamago' || v.id === 'vs_aji_nanban' || v.id === 'vs_ebi_cutlet' || v.id === 'vs_asari_shoga' || v.id === 'vs_gyudon' || v.id === 'vs_gyudon_std' || v.id === 'vs_takana_rice' || v.id === 'vs_karashi_renkon' || v.id === 'vs_enoki_gomaae' || v.id === 'vs_ganmo_ingen' || v.id === 'vs_homemade_pickles' || v.id === 'vs_tsukemono_mix' || v.id === 'vs_nikumaki') {
+  if (text.includes('朝食') || text.includes('朝牛') || text.includes('早餐') || text.includes('沙拉') || text.includes('salad') || v.id.startsWith('vs_salad') || v.id === 'vs_dashimaki' || v.id === 'vs_onsen_tamago' || v.id === 'vs_aji_nanban' || v.id === 'vs_ebi_cutlet' || v.id === 'vs_asari_shoga' || v.id === 'vs_gyudon' || v.id === 'vs_gyudon_std' || v.id === 'vs_takana_rice' || v.id === 'vs_karashi_renkon' || v.id === 'vs_enoki_gomaae' || v.id === 'vs_ganmo_ingen' || v.id === 'vs_homemade_pickles' || v.id === 'vs_tsukemono_mix' || v.id === 'vs_tsubozuke' || v.id === 'vs_umeboshi' || v.id === 'vs_aonazuke' || v.id === 'vs_nikumaki') {
     return 'breakfast';
   }
   return 'dinner';
