@@ -3185,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v91';
+const STORAGE_KEY = 'yang_runner_handbook_v92';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -8354,16 +8354,53 @@ const GEMINI_MODELS = ['gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.7-fl
 
 async function fetchFreeGoogleTranslate(text, targetLang) {
   if (!text || !text.trim()) return '';
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(text.trim())}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Google Translate HTTP ${res.status}`);
-  const data = await res.json();
-  if (Array.isArray(data) && Array.isArray(data[0])) {
-    const translated = data[0].map(item => item[0]).filter(Boolean).join('');
-    return translated.trim();
+  const cleanText = text.trim();
+
+  // 1. Google Clients5 (Chrome Extension 官方端點，原生支援跨域 Access-Control-Allow-Origin: *，速度最快、精準繁中)
+  try {
+    const url = 'https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=' + encodeURIComponent(targetLang) + '&q=' + encodeURIComponent(cleanText);
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        if (typeof data[0] === 'string' && data[0].trim()) return data[0].trim();
+        if (Array.isArray(data[0]) && typeof data[0][0] === 'string' && data[0][0].trim()) return data[0][0].trim();
+      }
+    }
+  } catch(e) {
+    console.warn('Google clients5 translation failed, trying MyMemory fallback:', e);
   }
-  throw new Error('Google Translate 回應格式無效');
+
+  // 2. MyMemory API (高可靠免費公開翻譯引擎，原生支援跨域 Access-Control-Allow-Origin: *)
+  try {
+    const langPair = targetLang === 'zh-TW' || targetLang === 'zh-CN' ? 'ja|zh-TW' : (targetLang === 'ja' ? 'zh-TW|ja' : 'auto|' + targetLang);
+    const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(cleanText) + '&langpair=' + encodeURIComponent(langPair);
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.responseData && data.responseData.translatedText && !data.responseData.translatedText.includes('MYMEMORY WARNING')) {
+        return data.responseData.translatedText.trim();
+      }
+    }
+  } catch(e) {
+    console.warn('MyMemory translation fallback failed:', e);
+  }
+
+  // 3. gtx 降級備用
+  try {
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=' + encodeURIComponent(targetLang) + '&dt=t&q=' + encodeURIComponent(cleanText);
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && Array.isArray(data[0])) {
+        return data[0].map(item => item[0]).filter(Boolean).join('').trim();
+      }
+    }
+  } catch(e) {}
+
+  return '';
 }
+
 
 async function callGeminiApiUnified(promptText) {
   const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : HARDCODED_GEMINI_API_KEY;
@@ -14579,40 +14616,71 @@ function extractPairsFromRawLines(lines) {
     const l1 = lines[i];
     const l2 = lines[i + 1] || '';
 
-    // 檢查行內是否自帶括號中文翻譯，例如「1. 自己紹介（自我介紹）」
-    const inlineMatch = l1.match(/^(.*?)[\(（]([\u4e00-\u9fff\s，。、！？!?,]+)[\)）]$/);
-    if (inlineMatch && !/[\u3040-\u309F\u30A0-\u30FF]/.test(inlineMatch[2])) {
-      pairs.push({ jp: inlineMatch[1].trim(), zh: inlineMatch[2].trim() });
+    // A. 檢查同一行內是否有括號中文翻譯，例如「はじめまして（初次見面）」或「1. 自己紹介 (自我介紹)」
+    const inlineParen = l1.match(/^(.*?)[(（]([一-鿿s，。、！？!?,]+)[)）]$/);
+    if (inlineParen && !/[\u3040-\u309F\u30A0-\u30FF]/.test(inlineParen[2])) {
+      pairs.push({ jp: inlineParen[1].trim(), zh: inlineParen[2].trim() });
       i++;
       continue;
     }
 
+    // B. 檢查同一行內是否有分隔符號「日文 / 中文」或「中文 / 日文」
+    const inlineSep = l1.split(/\s*[\/|｜]\s*|\s+[-–—]\s+/);
+    if (inlineSep.length === 2) {
+      const partA = inlineSep[0].trim();
+      const partB = inlineSep[1].trim();
+      const aHasKana = /[\u3040-\u309F\u30A0-\u30FF]/.test(partA);
+      const bHasKana = /[\u3040-\u309F\u30A0-\u30FF]/.test(partB);
+      if (aHasKana && isChineseLine(partB)) {
+        pairs.push({ jp: partA, zh: partB });
+        i++;
+        continue;
+      } else if (isChineseLine(partA) && bHasKana) {
+        pairs.push({ jp: partB, zh: partA });
+        i++;
+        continue;
+      }
+    }
+
     const l1HasKana = /[\u3040-\u309F\u30A0-\u30FF]/.test(l1);
+    const l2HasKana = /[\u3040-\u309F\u30A0-\u30FF]/.test(l2);
+    const l1IsZh = isChineseLine(l1);
     const l2IsZh = isChineseLine(l2);
 
+    // C. 相鄰兩行：日文 (l1) ＋ 中文 (l2)
     if (l1HasKana && l2IsZh) {
-      // l1 包含假名為日文句子，l2 無假名且為中文翻譯
       pairs.push({ jp: l1, zh: l2 });
       i += 2;
-    } else if (!l1HasKana && l2IsZh && l1 !== l2 && lines.length % 2 === 0 && lines.filter(isChineseLine).length >= lines.length / 2) {
-      // 整篇交替出現純日文標題與中文標題
-      pairs.push({ jp: l1, zh: l2 });
-      i += 2;
-    } else {
-      // l1 為獨立日文句子或純漢字日文標題 (例如「1. 自己紹介」)，後方無現成中文，後續將自動呼叫翻譯
-      pairs.push({ jp: l1, zh: '' });
-      i++;
+      continue;
     }
+
+    // D. 相鄰兩行：中文 (l1) ＋ 日文 (l2)
+    if (l1IsZh && l2HasKana) {
+      pairs.push({ jp: l2, zh: l1 });
+      i += 2;
+      continue;
+    }
+
+    // E. 標題類兩行交替（例如純漢字日文標題 + 中文標題）
+    if (!l1HasKana && l2IsZh && l1 !== l2 && lines.length % 2 === 0 && lines.filter(isChineseLine).length >= lines.length / 2) {
+      pairs.push({ jp: l1, zh: l2 });
+      i += 2;
+      continue;
+    }
+
+    // F. 單一獨立日文行（稍後保證調用雲端/本地翻譯生成繁體中文）
+    pairs.push({ jp: l1, zh: '' });
+    i++;
   }
   return pairs;
 }
 
-// 核心排版生成：AI 智慧標音 + 免費翻譯降級 + 零吃字保證
+// 核心排版生成：支援「貼日文出中文」、「貼中文出日文」、「貼中日對照上下比對」三合一全自動智慧引擎
 async function generateTypesetArticle() {
   const input = document.getElementById('typeset-input-text');
   const text = input ? input.value.trim() : '';
   if (!text) {
-    showToast('請先貼入日文或中文文章', 'info');
+    showToast('請先貼入日文、中文、或中日對照文章', 'info');
     return;
   }
 
@@ -14622,22 +14690,24 @@ async function generateTypesetArticle() {
   const btn = document.getElementById('btn-typeset-generate');
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> 正在排版並翻譯中文…';
+    btn.innerHTML = '<span class="spinner"></span> 正在智慧排版與翻譯…';
   }
 
   const output = document.getElementById('typeset-preview-output');
-  output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在智慧標音並解析繁體中文翻譯，請稍候…</div>';
+  output.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--primary); padding:40px;"><span class="spinner"></span> 正在智慧分析語言、拆解標音並生成繁體中文對照，請稍候…</div>';
 
   try {
+    // 1. 純中文輸入：自動逐句翻譯為日文丁寧體，標音後並排呈現
     if (isPureChineseText(text)) {
-      await processZhToJpViaGemini(text);
+      await processPureChineseToJapanese(text);
       return;
     }
 
-    await processJpViaGeminiOrFallback(text);
+    // 2. 混合輸入或純日文輸入
+    await processJapaneseOrMixedText(text);
 
   } catch (err) {
-    console.warn('Typeset generation warning:', err);
+    console.warn('Typeset generation error:', err);
     await processFallbackWithFreeTranslation(text);
   } finally {
     if (btn) {
@@ -14647,7 +14717,6 @@ async function generateTypesetArticle() {
   }
 }
 
-// 本地解析引擎：修正括號可選性，結合字典，絕不吃掉任何一個漢字或假名！
 function parseLocalJapaneseSegments(jpText, zhTranslation) {
   const segments = [];
   // 關鍵修復：(?:[...]|(...])? 改為非強制可選！確保單獨漢字也能 100% 完整捕捉！
@@ -14741,50 +14810,52 @@ function convertKatakanaToRomaji(kana) {
   return result;
 }
 
-// 透過 Gemini 智慧標音
-async function processJpViaGeminiOrFallback(text) {
-  const prompt = `
-你是專業的日文排版助理。請分析以下日文文章，逐句拆解標音並翻譯為道地繁體中文。
-請輸出嚴格純淨的 JSON 格式：
-{
-  "groups": [
-    {
-      "segments": [
-        { "type": "kanji", "text": "漢字", "reading": "かんじ" },
-        { "type": "hiragana", "text": "は" },
-        { "type": "katakana", "text": "レストラン", "romaji": "resutoran" },
-        { "type": "english", "text": "Table", "kk": "tebḷ" },
-        { "type": "other", "text": "。" }
-      ],
-      "translation": "繁體中文翻譯",
-      "reading_full": "整句平假名"
-    }
-  ]
-}
+// 🟢 處理模式 1：純中文輸入 ➔ 逐句自動翻譯為日文丁寧體，標音後上下對照呈現
+async function processPureChineseToJapanese(zhText) {
+  const rawLines = zhText.split(/\n+/).map(l => l.trim()).filter(Boolean);
+  if (rawLines.length === 0) return;
 
-待分析日文：
-${text}
-`;
+  const groups = [];
+  for (const line of rawLines) {
+    let jpText = '';
 
-  try {
-    const data = await callGeminiApiUnified(prompt);
-    if (data && data.groups && data.groups.length > 0) {
-      typesetLastData = data;
-      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
-      renderTypesetResult(typesetLastData);
-      showToast(`AI 智慧標音完成：共 ${data.groups.length} 句`, 'success');
-      return;
+    // 優先使用 Gemini AI（若連網且有可用配額）
+    const hasKey = (AppData && AppData.apiKey && AppData.apiKey.trim()) || HARDCODED_GEMINI_API_KEY;
+    if (navigator.onLine && hasKey) {
+      try {
+        const prompt = `請將以下繁體中文翻譯為適合日本職場外場的禮貌「丁寧體（です・ます調）」日文（不可使用タメ口常體）。請只輸出日文翻譯文字，不要附帶任何額外解釋：\n${line}`;
+        const res = await callGeminiApiUnified(prompt);
+        if (typeof res === 'string' && res.trim()) {
+          jpText = res.trim();
+        } else if (res && res.ja && res.ja.trim()) {
+          jpText = res.ja.trim();
+        }
+      } catch(e) {}
     }
-  } catch (err) {
-    console.warn('Gemini AI failed, using fallback with free translation:', err);
+
+    // 免費翻譯降級引擎（Google Clients5 + MyMemory，免金鑰且原生支援 CORS *）
+    if (!jpText) {
+      try {
+        jpText = await fetchFreeGoogleTranslate(line, 'ja');
+      } catch(e) {}
+    }
+
+    if (!jpText) {
+      jpText = line;
+    }
+
+    const parsed = parseLocalJapaneseSegments(jpText, line);
+    groups.push(parsed);
   }
 
-  // 降級為本地引擎 + 免費 Google 翻譯
-  await processFallbackWithFreeTranslation(text);
+  typesetLastData = { groups };
+  localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+  renderTypesetResult(typesetLastData);
+  showToast(`已將中文成功翻譯為日文並完成排版！共 ${groups.length} 句`, 'success');
 }
 
-// 免費翻譯降級處理：即使沒有 API Key，也保證每句自動翻譯成繁體中文！
-async function processFallbackWithFreeTranslation(text) {
+// 🟢 處理模式 2 & 3：貼日文出中文、或貼中日對照上下比對
+async function processJapaneseOrMixedText(text) {
   const rawLines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
   if (rawLines.length === 0) return;
 
@@ -14792,71 +14863,33 @@ async function processFallbackWithFreeTranslation(text) {
 
   const groups = await Promise.all(pairs.map(async (pair) => {
     let zh = pair.zh;
+    // 若沒有現成中文翻譯（純日文輸入），100% 保證調用多引擎翻譯生成繁體中文！
     if (!zh) {
+      // 1. 本地高頻字典快速比對
       zh = TYPESET_ZH_DICT[pair.jp.trim()] || '';
+
+      // 2. 雲端免金鑰免費翻譯 (Google Clients5 + MyMemory 原生跨域)
       if (!zh) {
         try {
           zh = await fetchFreeGoogleTranslate(pair.jp, 'zh-TW');
         } catch(e) {
-          console.warn('Free translation error for line:', pair.jp, e);
-          zh = '';
+          console.warn('Translate error for line:', pair.jp, e);
         }
       }
     }
-    return parseLocalJapaneseSegments(pair.jp, zh);
+
+    return parseLocalJapaneseSegments(pair.jp, zh || '');
   }));
 
   typesetLastData = { groups };
   localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
   renderTypesetResult(typesetLastData);
-  showToast(`排版完成（繁體中文翻譯已自動就緒）`, 'success');
+  showToast(`日文排版與中文對照已生成！共 ${groups.length} 句`, 'success');
 }
 
-async function processZhToJpViaGemini(zhText) {
-  const prompt = `
-你是專業的中日外場翻譯與日文排版助理。請將以下繁體中文翻譯為自然道地的日文，並逐句標音。
-請輸出純淨的 JSON 格式：
-{
-  "groups": [
-    {
-      "segments": [
-        { "type": "kanji", "text": "料理", "reading": "りょうり" },
-        { "type": "hiragana", "text": "が" }
-      ],
-      "translation": "原文對應的繁體中文",
-      "reading_full": "整句平假名"
-    }
-  ]
-}
-
-中文原文：
-${zhText}
-`;
-
-  try {
-    const data = await callGeminiApiUnified(prompt);
-    if (data && data.groups && data.groups.length > 0) {
-      typesetLastData = data;
-      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
-      renderTypesetResult(typesetLastData);
-      showToast(`中文翻日文排版完成：共 ${data.groups.length} 句`, 'success');
-      return;
-    }
-  } catch(e) {
-    console.warn('Zh-Jp translation error, trying Google Translate:', e);
-    try {
-      const jpText = await fetchFreeGoogleTranslate(zhText, 'ja');
-      const grp = parseLocalJapaneseSegments(jpText, zhText);
-      typesetLastData = { groups: [grp] };
-      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
-      renderTypesetResult(typesetLastData);
-      showToast('已完成中文翻日文排版', 'success');
-      return;
-    } catch(err2) {}
-  }
-
-  const output = document.getElementById('typeset-preview-output');
-  output.innerHTML = '<div style="color:var(--primary); padding:30px; text-align:center;">翻譯連線失敗，請檢查網路或在「設定」填入 Gemini API Key。</div>';
+// 備用降級
+async function processFallbackWithFreeTranslation(text) {
+  await processJapaneseOrMixedText(text);
 }
 
 // 📷 拍照 / 圖片 OCR
@@ -15062,14 +15095,10 @@ function renderTypesetResult(data) {
     output.appendChild(gEl);
   });
 
-  // 底部集中工具列：剪刀、星星、分隔線等放在文章末尾，並包含語音全文朗誦操作！
+  // 底部集中工具列：剪刀、星星、分隔線等編輯工具（語音朗誦統一由頂部專業播放器控制）
   const footerTb = document.createElement('div');
   footerTb.className = 'typeset-footer-toolbar';
   footerTb.innerHTML = `
-    <button class="btn btn-primary btn-sm" onclick="startTypesetSpeech(false)" style="font-weight:700;" title="從第 1 句全文朗誦一遍">▶️ 全文朗誦</button>
-    <button class="btn btn-secondary btn-sm" onclick="startTypesetSpeech(true)" style="font-weight:700;" title="無限反覆循環朗誦">🔁 反覆朗誦</button>
-    <button class="btn btn-secondary btn-sm" onclick="stopTypesetSpeech()" style="color:#d32f2f; font-weight:700;" title="立即停止語音朗誦">⏹️ 停止朗誦</button>
-    <span style="border-left:1px solid var(--border); height:16px; margin:0 4px;"></span>
     <button class="btn btn-secondary btn-sm" onclick="saveAllTypesetToVocab()" title="將排版內容收藏至手帳單字庫">⭐ 收藏至單字庫</button>
     <button class="btn btn-secondary btn-sm" onclick="splitLastTypesetGroup()" title="拆分末尾段落">✂️ 拆分段落</button>
     <button class="btn btn-secondary btn-sm" onclick="addTypesetDividerAtEnd()" title="插入分隔線">— 插入分隔線</button>

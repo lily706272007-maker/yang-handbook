@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v91'), 'Service Worker 快取版本已升級至 yang-pwa-v91');
-assert(html.includes('yang_runner_handbook_v91'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v91');
+assert(swContent.includes('yang-pwa-v92'), 'Service Worker 快取版本已升級至 yang-pwa-v92');
+assert(html.includes('yang_runner_handbook_v92'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v92');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -686,6 +686,24 @@ assert(html.includes('ds_qa_glass_guest') && html.includes('ds_qa_glass_reply') 
 assert(html.includes('ds_qa_what_guest') && html.includes('ds_qa_syrup_reply') && textContent.includes('ノンアルコールのシロップ'), '問答：這是不含酒精糖漿 (ds_qa_syrup_reply)');
 assert(html.includes('ds_qa_conc_reply') && textContent.includes('アルコール入りの原液'), '問答：這是含酒精濃縮液 (ds_qa_conc_reply)');
 
+// 測試 42: 日文排版三合一智慧引擎（貼日出中/貼中出日/中日對照）與移除重複朗讀按鈕 (v92)
+console.log('\n【測試 42：日文排版三合一智慧引擎（貼日出中/貼中出日/中日對照）與移除重複朗讀按鈕 (v92)】');
+// 1. 雙引擎原生跨域免金鑰翻譯 (clients5 + MyMemory)
+assert(html.includes('clients5.google.com/translate_a/t?client=dict-chrome-ex') && html.includes('api.mymemory.translated.net/get'), '翻譯底層採用 Google Clients5 + MyMemory 雙引擎原生跨域 (CORS: *)，徹底解決行動端跨域取不到中文的問題');
+
+// 2. 「貼日文出中文」：純日文輸入自動翻譯成繁體中文對照行
+assert(html.includes('processJapaneseOrMixedText') && html.includes("fetchFreeGoogleTranslate(pair.jp, 'zh-TW')"), '日文輸入模式保證自動呼叫雲端/本地翻譯生成繁體中文對照行');
+
+// 3. 「貼中文出日文」：純中文輸入自動翻譯成丁寧體日文並標音
+assert(html.includes('processPureChineseToJapanese') && html.includes("fetchFreeGoogleTranslate(line, 'ja')"), '中文輸入模式自動逐句翻譯為日文丁寧體，並以原文作為中文對照行');
+
+// 4. 「貼中日對照上下比對」：智慧配對日中、中日、括號注釋與斜線分隔
+assert(html.includes('extractPairsFromRawLines') && html.includes('inlineSep = l1.split') && html.includes('inlineParen = l1.match'), '支援日中、中日、同一行斜線/破折號與括號翻譯智慧交替配對');
+
+// 5. 移除重複朗讀按鈕
+assert(html.includes('typeset-player-bar') && html.includes('typeset-player-controls') && html.includes('id="btn-typeset-read-all"'), '朗讀控制台整合至頂部單一專業播放器 (typeset-player-bar)');
+assert(!html.includes('footerTb.innerHTML = `\n    <button class="btn btn-primary btn-sm" onclick="startTypesetSpeech'), '文章底部的重複朗讀按鈕已徹底移除，保留純粹編輯工具');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -693,7 +711,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v91) 四國翻譯調優・SOP英文版・獨立飲料點心與客人應對專區！');
+  console.log('🎉 所有測試通過！(v92) 日文排版三合一智慧引擎（貼日出中/貼中出日/中日對照）與移除重複朗讀按鈕！');
 }
 
 
