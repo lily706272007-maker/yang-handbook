@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v98'), 'Service Worker 快取版本已升級至 yang-pwa-v98');
-assert(html.includes('yang_runner_handbook_v98'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v98');
+assert(swContent.includes('yang-pwa-v99'), 'Service Worker 快取版本已升級至 yang-pwa-v99');
+assert(html.includes('yang_runner_handbook_v99'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v99');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -796,6 +796,20 @@ assert(html.includes('"id": "vs_sushi_ebi"') && html.includes('"imageUrl": "./ph
 // 7. 鳥のてり焼き (IMG_0876)
 assert(html.includes('"id": "vs_sushi_teriyaki"') && html.includes('鳥のてり焼き') && html.includes('"imageUrl": "./photos/IMG_0876.jpg"'), '照燒壽司成功更名為現場立牌名「鳥のてり焼き (照燒雞肉壽司)」，配對 IMG_0876.jpg');
 
+// 測試 48: 壽司甜薑片・山葵・炭火烤蝦照片精準歸位 (v99)
+console.log('\n【測試 48：壽司甜薑片・山葵・炭火烤蝦照片精準歸位 (v99)】');
+// 1. 壽司甜薑片 (IMG_0933: 白碗甜醋薑片附夾子)
+assert(html.includes('"id": "vs_sushi_gari"') && html.includes('"imageUrl": "./photos/IMG_0933.jpg"'), '壽司甜薑片已精準配對白碗夾子甜薑片實拍照 photos/IMG_0933.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0933.jpg')), '實體相片 photos/IMG_0933.jpg 存在且有效');
+
+// 2. 山葵 (IMG_0929: 生わさび獨立小包)
+assert(html.includes('"id": "vs_sushi_wasabi"') && html.includes('"imageUrl": "./photos/IMG_0929.jpg"'), '山葵已精準配對生わさび獨立小包實拍照 photos/IMG_0929.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0929.jpg')), '實體相片 photos/IMG_0929.jpg 存在且有效');
+
+// 3. 烤蝦 (IMG_0934: 炭火鹽烤鮮蝦串)
+assert(html.includes('"id": "vs_yaki_ebi"') && html.includes('"imageUrl": "./photos/IMG_0934.jpg"'), '炭火烤蝦已精準配對炭火烤蝦串實拍照 photos/IMG_0934.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0934.jpg')), '實體相片 photos/IMG_0934.jpg 存在且有效');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -803,7 +817,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v98) 壽司實拍照全面校準・玉子/鮪魚/鮭魚/鰻魚/烏賊/鮮蝦圖片校正・鳥のてり焼き更名！');
+  console.log('🎉 所有測試通過！(v99) 壽司甜薑片・山葵・炭火烤蝦照片精準歸位！');
 }
 
 

@@ -3185,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v98';
+const STORAGE_KEY = 'yang_runner_handbook_v99';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -5899,7 +5899,7 @@ function createRealRunnerData() {
     { "id": "vs_ham_egg", "ja": "ハムエッグ", "zh": "火腿煎蛋", "cat": "餐點", "imageUrl": "", "note": "朝食いろり" },
     { "id": "vs_yaki_saba", "ja": "<ruby>鯖<rt>さば</rt></ruby>", "zh": "烤鯖魚", "cat": "餐點", "imageUrl": "", "note": "朝食いろり烤魚" },
     { "id": "vs_satsuma_age", "ja": "さつま<ruby>揚<rt>あ</rt></ruby>げ", "zh": "薩摩炸魚餅", "cat": "餐點", "imageUrl": "", "note": "朝食いろり炸物" },
-    { "id": "vs_yaki_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "烤蝦", "cat": "餐點", "imageUrl": "", "note": "夕食いろり烤物" },
+    { "id": "vs_yaki_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "烤蝦", "cat": "餐點", "imageUrl": "./photos/IMG_0934.jpg", "note": "夕食いろり烤物・炭火鹽烤鮮蝦串" },
     { "id": "vs_nikumaki", "ja": "<ruby>豚肉<rt>ぶたにく</rt></ruby><ruby>巻<rt>ま</rt></ruby>き", "zh": "豬肉蔬菜捲", "cat": "餐點", "imageUrl": "./photos/IMG_0966.jpg", "note": "熱菜・新鮮豬肉捲" },
 
         // ── 🥗 熊本市場直送 沙拉吧專區 (經 Vision 影像辨識與立牌雙重校正) ──
@@ -5924,8 +5924,8 @@ function createRealRunnerData() {
     { "id": "vs_sushi_ebi", "ja": "<ruby>海老<rt>えび</rt></ruby>", "zh": "鮮蝦壽司（海老）", "cat": "餐點", "imageUrl": "./photos/IMG_0875.jpg", "note": "壽司台名物・招牌漢字標記「海老」" },
     { "id": "vs_sushi_unagi", "ja": "<ruby>鰻<rt>うなぎ</rt></ruby>", "zh": "鰻魚壽司", "cat": "餐點", "imageUrl": "./photos/IMG_0873.jpg", "note": "壽司台名物・蒲燒甜醬鰻魚" },
     { "id": "vs_sushi_teriyaki", "ja": "<ruby>鳥<rt>とり</rt></ruby>のてり<ruby>焼<rt>や</rt></ruby>き", "zh": "照燒壽司（鳥のてり焼き / 照燒雞肉）", "cat": "餐點", "imageUrl": "./photos/IMG_0876.jpg", "note": "壽司台名物・立牌：鳥のてり焼き" },
-    { "id": "vs_sushi_gari", "ja": "<ruby>ガリ<rt>gari</rt></ruby>", "zh": "壽司甜薑片", "cat": "餐點", "imageUrl": "./photos/IMG_0934.jpg", "note": "壽司台配料・解膩甜醋生薑片（無標牌直接拍攝）" },
-    { "id": "vs_sushi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵 / 哇沙比（芥末）", "cat": "餐點", "imageUrl": "./photos/IMG_0933.jpg", "note": "壽司台配料・現磨生山葵芥末小碟（無標牌直接拍攝）" },
+    { "id": "vs_sushi_gari", "ja": "<ruby>ガリ<rt>gari</rt></ruby>", "zh": "壽司甜薑片", "cat": "餐點", "imageUrl": "./photos/IMG_0933.jpg", "note": "壽司台配料・白碗甜醋生薑片附夾子" },
+    { "id": "vs_sushi_wasabi", "ja": "<ruby>山葵<rt>わさび</rt></ruby>", "zh": "山葵 / 哇沙比（芥末）", "cat": "餐點", "imageUrl": "./photos/IMG_0929.jpg", "note": "壽司台配料・生わさび生山葵獨立小包" },
     { "id": "vs_sushi_counter", "ja": "<ruby>寿司<rt>すし</rt></ruby>カウンター", "zh": "壽司餐檯與招牌牌匾", "cat": "工具", "imageUrl": "", "note": "優彩自助餐廳壽司現做餐檯與招牌木牌" },
 
     // ── 🍮 點心類 ──
