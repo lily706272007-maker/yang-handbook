@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v96'), 'Service Worker 快取版本已升級至 yang-pwa-v96');
-assert(html.includes('yang_runner_handbook_v96'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v96');
+assert(swContent.includes('yang-pwa-v97'), 'Service Worker 快取版本已升級至 yang-pwa-v97');
+assert(html.includes('yang_runner_handbook_v97'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v97');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -763,6 +763,19 @@ assert(fs.existsSync(path.join(__dirname, 'photos/aonazuke.jpg')), '實體相片
 // 5. 早晚餐分類判定包含新小菜
 assert(html.includes("v.id === 'vs_tsubozuke'") && html.includes("v.id === 'vs_umeboshi'") && html.includes("v.id === 'vs_aonazuke'"), 'getFoodMealType 包含三道新醬菜之早餐判斷邏輯');
 
+// 測試 46: 叉燒換上正確肉片照片・青蔥獨立出單獨料理項目 (v97)
+console.log('\n【測試 46：叉燒換上正確肉片照片・青蔥獨立出單獨料理項目 (v97)】');
+// 1. 叉燒肉片換上正確肉片實拍照 (chashu.jpg)
+assert(html.includes('"id": "vs_ramen_chashu"') && html.includes('チャーシュー') && html.includes('./photos/chashu.jpg'), '叉燒肉片成功換上白盤夾子切片肉片實拍照 photos/chashu.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/chashu.jpg')), '實體相片 photos/chashu.jpg 存在且有效');
+
+// 2. 青蔥獨立建立為單獨項目 (vs_ramen_negi)
+assert(html.includes('"id": "vs_ramen_negi"') && html.includes('青葱') && html.includes('青蔥') && html.includes('./photos/IMG_0938.jpg'), '青蔥成功獨立為單獨項目 vs_ramen_negi，配對綠油油碎蔥花實拍照 IMG_0938.jpg');
+assert(fs.existsSync(path.join(__dirname, 'photos/IMG_0938.jpg')), '實體相片 photos/IMG_0938.jpg 存在且有效');
+
+// 3. 叉燒與青蔥皆屬於晚餐拉麵配料 (dinner)
+assert(html.includes('"id": "vs_ramen_chashu"') && html.includes('"id": "vs_ramen_negi"'), '資料庫完整包含叉燒肉片與青蔥兩項獨立餐點');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -770,7 +783,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v96) 手漬醬菜拆分為三道獨立料理(手製醬菜/梅乾/青菜)・獨立實拍照與立牌對應！');
+  console.log('🎉 所有測試通過！(v97) 叉燒換上正確肉片照片・青蔥獨立出單獨料理項目！');
 }
 
 
