@@ -3163,7 +3163,7 @@
 
     <!-- 中文原句 -->
     <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:8px 12px; margin-bottom:10px; font-size:0.88rem; color:var(--muted);">
-      <span style="font-weight:700; color:var(--ink);">中文原意：</span><span id="bigscreen-zh-preview">我做了一些料理，歡迎大家一起吃！</span>
+      <span style="font-weight:700; color:var(--ink);">中文原意：</span><span id="bigscreen-zh-preview">（請在上方輸入中文事項）</span>
     </div>
 
     <!-- 大字並排網格 -->
@@ -3185,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v90';
+const STORAGE_KEY = 'yang_runner_handbook_v91';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -4286,6 +4286,7 @@ function createRealRunnerData() {
         "type": "dialog",
         "speaker": "CB點單(我)",
         "zh": "【話術 1・通常量追加】向廚房叫正常份量的菜品。",
+        "en": "To Kitchen: Please prepare additional [dish name] in standard portion.",
         "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、〇〇（<ruby>料理名<rt>りょうりめい</rt></ruby>）の<ruby>追加<rt>ついか</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします』",
         "grammar": {
           "vocabs": [
@@ -4312,6 +4313,7 @@ function createRealRunnerData() {
         "type": "dialog",
         "speaker": "CB點單(我)",
         "zh": "【話術 2・少份量/半量追加】客人變少時，避免出太多料理冷掉浪費。",
+        "en": "To Kitchen: Please prepare half portion / smaller amount of [dish name].",
         "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、〇〇を<ruby>半分<rt>はんぶん</rt></ruby>で（<ruby>少<rt>すく</rt></ruby>なめで）<ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』",
         "grammar": {
           "vocabs": [
@@ -4338,6 +4340,7 @@ function createRealRunnerData() {
         "type": "dialog",
         "speaker": "CB點單(我)",
         "zh": "【話術 3・精確個數追加】小缽或需指定個數的料理。",
+        "en": "To Kitchen: Please prepare [number] bowls/pieces of [dish name].",
         "ja": "『<ruby>厨房<rt>ちゅうぼう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、〇〇を〇<ruby>個<rt>こ</rt></ruby><ruby>追加<rt>ついか</rt></ruby>お<ruby>願<rt>ねが</rt></ruby>いします』（<ruby>例<rt>れい</rt></ruby>：<ruby>小鉢<rt>こばち</rt></ruby>を10<ruby>個<rt>こ</rt></ruby>）",
         "grammar": {
           "vocabs": [
@@ -4584,6 +4587,213 @@ function createRealRunnerData() {
     ]
   },
   {
+    "id": "tab_drink_dessert_sop",
+    "name": "飲料・點心與客人應對 (ドリンク・甘味)",
+    "icon": "🍹",
+    "items": [
+      // ── 🌊 (a) 水的各種狀態與外場用法 (Water States & Usage) ──
+      {
+        "id": "ds_water_hot",
+        "type": "sop",
+        "speaker": "💧 水的狀態與用法",
+        "zh": "【熱水 / 滾水】90°C 以上高溫熱水，用於沖泡煎茶、熱咖啡、焙茶或提供給客人沖泡熱飲。（壺身極燙，務必隔布端取）",
+        "ja": "<ruby>熱湯<rt>ねっとう</rt></ruby>（お<ruby>湯<rt>ゆ</rt></ruby>）",
+        "en": "Hot water / Boiling water (used for brewing tea, coffee, or hot beverages. Kettle is extremely hot, handle with a cloth)."
+      },
+      {
+        "id": "ds_water_lukewarm",
+        "type": "sop",
+        "speaker": "💧 水的狀態與用法",
+        "zh": "【不熱的 / 溫水 / 常溫水】常溫或微溫的水。客人吃藥、身體不適或不喝冰水時常主動索取「ぬるま湯」。",
+        "ja": "ぬるま<ruby>湯<rt>ゆ</rt></ruby>（<ruby>常温<rt>じょうおん</rt></ruby>のお<ruby>水<rt>みず</rt></ruby>）",
+        "en": "Lukewarm water / Room-temperature water (often requested by guests for taking medicine or when avoiding cold drinks)."
+      },
+      {
+        "id": "ds_water_fresh_boiled",
+        "type": "sop",
+        "speaker": "💧 水的狀態與用法",
+        "zh": "【剛熱好的水】剛在後場燒開的沸水，補入保溫壺時請注意高溫蒸氣防燙傷。",
+        "ja": "<ruby>沸<rt>わ</rt></ruby>かしたてのお<ruby>湯<rt>ゆ</rt></ruby>",
+        "en": "Freshly boiled hot water (just boiled in the back kitchen; watch out for hot steam when refilling thermo pots)."
+      },
+      {
+        "id": "ds_water_cold",
+        "type": "sop",
+        "speaker": "💧 水的狀態與用法",
+        "zh": "【冰水 / 冷水】外場桌上常備冰水壺或水機供水，日本餐飲標準奉水「お冷（おひや）」。",
+        "ja": "<ruby>冷<rt>つめ</rt></ruby>たいお<ruby>水<rt>みず</rt></ruby>（お<ruby>冷<rt>ひ</rt></ruby>や / <ruby>冷水<rt>れいすい</rt></ruby>）",
+        "en": "Cold water / Ice water (standard complimentary cold table water served in Japanese dining)."
+      },
+      {
+        "id": "ds_water_ice",
+        "type": "sop",
+        "speaker": "💧 水的狀態與用法",
+        "zh": "【冰塊】製冰機取用之食用冰塊，放置保冷冰桶供客人調酒（水割/威士忌/加冰）或冷飲自取。",
+        "ja": "<ruby>氷<rt>こおり</rt></ruby>（ロックアイス）",
+        "en": "Ice cubes / Rock ice (retrieved from the ice machine for liquor on the rocks, mizuwari, juices, and cold drinks)."
+      },
+
+      // ── 🗣️ (b) 介紹與指引 (Introduction & Directions) ──
+      {
+        "id": "ds_guide_sake",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（指引）",
+        "zh": "這是日本酒（清酒）。",
+        "ja": "こちらは<ruby>日本酒<rt>にほんしゅ</rt></ruby>でございます。",
+        "en": "This is Japanese sake."
+      },
+      {
+        "id": "ds_guide_tansan",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（指引）",
+        "zh": "碳酸水在這裡。（💡日本現場習慣說「碳酸水（たんさんすい）」，不說蘇打ソーダ）",
+        "ja": "<ruby>炭酸水<rt>たんさんすい</rt></ruby>はこちらにございます。（※ソーダではなく「炭酸水」）",
+        "en": "Sparkling water (carbonated water) is right here. (In Japan, it is called 'tansansui', not 'soda')."
+      },
+      {
+        "id": "ds_guide_water",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（指引）",
+        "zh": "水在這裡喔。",
+        "ja": "お<ruby>水<rt>みず</rt></ruby>はこちらにございます。",
+        "en": "Water is right here."
+      },
+      {
+        "id": "ds_guide_hotwater",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（指引）",
+        "zh": "熱水在這邊喔。",
+        "ja": "お<ruby>湯<rt>ゆ</rt></ruby>はこちらにございます。",
+        "en": "Hot water is right here."
+      },
+      {
+        "id": "ds_guide_coffee",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（指引）",
+        "zh": "咖啡在這邊喔。",
+        "ja": "コーヒーはこちらでございます。",
+        "en": "Coffee is over here."
+      },
+      {
+        "id": "ds_guide_liquors",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（指引）",
+        "zh": "左手邊有威士忌、燒酒、梅酒、柚子酒等。",
+        "ja": "<ruby>左手<rt>ひだりて</rt></ruby>にはウイスキー、<ruby>焼酎<rt>しょうちゅう</rt></ruby>、<ruby>梅酒<rt>うめしゅ</rt></ruby>、ゆず<ruby>酒<rt>しゅ</rt></ruby>などがございます。",
+        "en": "On the left hand side, we have whisky, shochu, plum wine, and yuzu liqueur."
+      },
+
+      // ── 🍰 (c) 點心相關通報與端送 (Dessert Orders & Serving) ──
+      {
+        "id": "ds_dessert_order",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "👨‍🍳 廚房通報（點點心）",
+        "zh": "向廚房點點心：請幫忙出甜點/點心！（甜品櫃補充）",
+        "ja": "デザート・お<ruby>菓子<rt>かし</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします！",
+        "en": "To the kitchen: Please prepare and replenish the desserts!"
+      },
+      {
+        "id": "ds_dessert_served",
+        "type": "dialog",
+        "category": "my_speech",
+        "speaker": "🗣️ 我要說的（端點心）",
+        "zh": "抱歉久等了，為您送上點心 / 撤換點心。（雙手端上並致歉久候）",
+        "ja": "<ruby>大変<rt>たいへん</rt></ruby>お<ruby>待<rt>ま</rt></ruby>たせいたしました。デザートでございます。",
+        "en": "Thank you very much for waiting, sorry for the delay! Here is your dessert."
+      },
+
+      // ── 💬 (d) 客人常見問答 (Guest Q&A at Drink Station) ──
+      {
+        "id": "ds_qa_clear_plate_guest",
+        "type": "dialog",
+        "category": "other_speech",
+        "speaker": "👂 客人可能說的",
+        "zh": "請問可以幫我收走這個空盤嗎？",
+        "ja": "こちらのお<ruby>皿<rt>さら</rt></ruby>、<ruby>下<rt>さ</rt></ruby>げてもらえますか？",
+        "en": "Could you clear this empty plate for me?"
+      },
+      {
+        "id": "ds_qa_clear_plate_reply",
+        "type": "dialog",
+        "category": "my_reply",
+        "speaker": "💬 我要回答的",
+        "zh": "可以，好的，這就為您收走。",
+        "ja": "はい、かしこまりました。お<ruby>下<rt>さ</rt></ruby>げいたします。",
+        "en": "Yes, certainly. I will clear that for you right away."
+      },
+      {
+        "id": "ds_qa_sake_loc_guest",
+        "type": "dialog",
+        "category": "other_speech",
+        "speaker": "👂 客人可能說的",
+        "zh": "請問日本酒在哪裡？",
+        "ja": "<ruby>日本酒<rt>にほんしゅ</rt></ruby>はどこにありますか？",
+        "en": "Where is the Japanese sake located?"
+      },
+      {
+        "id": "ds_qa_sake_loc_reply",
+        "type": "dialog",
+        "category": "my_reply",
+        "speaker": "💬 我要回答的",
+        "zh": "日本酒在這邊的專區喔，請自由倒取享用。",
+        "ja": "<ruby>日本酒<rt>にほんしゅ</rt></ruby>はこちらのコーナーにございます。どうぞご<ruby>自由<rt>じゆう</rt></ruby>にお<ruby>注<rt>つ</rt></ruby>ぎください。",
+        "en": "The Japanese sake is right here in this corner. Please feel free to serve yourself."
+      },
+      {
+        "id": "ds_qa_glass_guest",
+        "type": "dialog",
+        "category": "other_speech",
+        "speaker": "👂 客人可能說的",
+        "zh": "請問喝這個酒要用什麼杯子？",
+        "ja": "このお<ruby>酒<rt>さけ</rt></ruby>はどのグラスを<ruby>使<rt>つか</rt></ruby>えばいいですか？",
+        "en": "Which glass should I use for this drink?"
+      },
+      {
+        "id": "ds_qa_glass_reply",
+        "type": "dialog",
+        "category": "my_reply",
+        "speaker": "💬 我要回答的",
+        "zh": "用什麼杯子都可以喔，請挑選您喜歡的杯子使用！",
+        "ja": "どのグラスをお<ruby>使<rt>つか</rt></ruby>いいただいても<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>でございます。お<ruby>好<rt>す</rt></ruby>きのグラスでどうぞ！",
+        "en": "You may use any glass you like. Please feel free to choose whichever you prefer!"
+      },
+      {
+        "id": "ds_qa_what_guest",
+        "type": "dialog",
+        "category": "other_speech",
+        "speaker": "👂 客人可能說的",
+        "zh": "這是什麼？",
+        "ja": "これは<ruby>何<rt>なん</rt></ruby>ですか？",
+        "en": "What is this?"
+      },
+      {
+        "id": "ds_qa_syrup_reply",
+        "type": "dialog",
+        "category": "my_reply",
+        "speaker": "💬 我要回答的",
+        "zh": "這是不含酒精的糖漿（果汁風味糖漿）。",
+        "ja": "こちらはノンアルコールのシロップでございます。",
+        "en": "This is non-alcoholic syrup."
+      },
+      {
+        "id": "ds_qa_conc_reply",
+        "type": "dialog",
+        "category": "my_reply",
+        "speaker": "💬 我要回答的",
+        "zh": "這是含酒精的濃縮液（調酒原液）。",
+        "ja": "こちらはアルコール<ruby>入<rt>い</rt></ruby>りの<ruby>原液<rt>げんえき</rt></ruby>（コンク）でございます。",
+        "en": "This is an alcoholic concentrate (liqueur base)."
+      }
+    ]
+  },
+  {
     "id": "tab_akaushi_basashi",
     "name": "赤牛・馬刺し (夕食限定)",
     "icon": "🥩",
@@ -4739,6 +4949,7 @@ function createRealRunnerData() {
           "category": "supervisor",
           "speaker": "👨‍🍳 主管/上級指示",
           "zh": "【指示1】請去收桌子（bussing）",
+          "en": "Please go and clear tables (bussing).",
           "ja": "テーブルのバッシング<ruby>行<rt>い</rt></ruby>ってきて。（テーブル<ruby>片付<rt>かたづ</rt></ruby>けてきて）",
           "grammar": {
             "vocabs": [
@@ -4757,6 +4968,7 @@ function createRealRunnerData() {
           "category": "supervisor",
           "speaker": "👨‍🍳 主管/上級指示",
           "zh": "【指示2】請去擦桌子",
+          "en": "Please go and wipe down the tables.",
           "ja": "テーブル<ruby>拭<rt>ふ</rt></ruby>いてきて。（テーブル<ruby>拭<rt>ふ</rt></ruby>いといて）",
           "grammar": {
             "vocabs": [
@@ -4775,6 +4987,7 @@ function createRealRunnerData() {
           "category": "supervisor",
           "speaker": "👨‍🍳 主管/上級指示",
           "zh": "【指示3】請去收長柄打火機",
+          "en": "Please go and collect the long lighters.",
           "ja": "チャッカマン<ruby>回収<rt>かいしゅう</rt></ruby>してきて。（チャッカマン<ruby>集<rt>あつ</rt></ruby>めてきて）",
           "grammar": {
             "vocabs": [
@@ -4793,6 +5006,7 @@ function createRealRunnerData() {
           "category": "my_speech",
           "speaker": "🗣️ 我要說的",
           "zh": "不好意思打擾了，請問這個盤子可以幫您收走嗎？（現場最標準禮貌用語）",
+          "en": "Excuse me, may I clear this plate for you?",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします。こちらのお<ruby>皿<rt>さら</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
           "grammar": {
             "vocabs": [
@@ -4811,6 +5025,7 @@ function createRealRunnerData() {
           "category": "my_speech",
           "speaker": "🗣️ 我要說的",
           "zh": "為您收走空盤喔，不好意思打擾了。（客人已將空盤推至桌邊時）",
+          "en": "I will take away the empty plates. Excuse me.",
           "ja": "<ruby>空<rt>あ</rt></ruby>いたお<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げいたしますね。<ruby>失礼<rt>しつれい</rt></ruby>いたします。",
           "grammar": {
             "vocabs": [
@@ -4829,6 +5044,7 @@ function createRealRunnerData() {
           "category": "my_speech",
           "speaker": "🗣️ 我要說的",
           "zh": "請問您用餐完畢了嗎？可以為您撤下餐盤嗎？（桌上還剩一點點時確認）",
+          "en": "Have you finished your meal? May I take your plates?",
           "ja": "お<ruby>食事<rt>しょくじ</rt></ruby>はお<ruby>済<rt>す</rt></ruby>みでしょうか？お<ruby>皿<rt>さら</rt></ruby>をお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
           "grammar": {
             "vocabs": [
@@ -4846,6 +5062,7 @@ function createRealRunnerData() {
           "category": "my_speech",
           "speaker": "🗣️ 我要說的",
           "zh": "為您整理一下桌面騰出空間喔。為您收走盤子。（盤子疊很多時主動幫客人清出大桌面）",
+          "en": "Let me clear some space on your table and take these dishes.",
           "ja": "テーブルの<ruby>上<rt>うえ</rt></ruby>、お<ruby>広<rt>ひろ</rt></ruby>くいたしますね。お<ruby>皿<rt>さら</rt></ruby>お<ruby>下<rt>さ</rt></ruby>げいたします。",
           "grammar": {
             "vocabs": [
@@ -4863,6 +5080,7 @@ function createRealRunnerData() {
           "category": "my_speech",
           "speaker": "🗣️ 我要說的",
           "zh": "請問這個湯碗/小缽可以為您收走嗎？（專門針對碗類詢問）",
+          "en": "May I clear this soup bowl for you?",
           "ja": "こちらのお<ruby>椀<rt>わん</rt></ruby>、お<ruby>下<rt>さ</rt></ruby>げしてもよろしいでしょうか？",
           "grammar": {
             "vocabs": [
@@ -4880,6 +5098,7 @@ function createRealRunnerData() {
           "category": "my_speech",
           "speaker": "🗣️ 我要說的",
           "zh": "不好意思打擾了，方便幫您收走杯子嗎？（玻璃杯或咖啡杯見底時）",
+          "en": "Excuse me, may I take this glass for you?",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>いたします、グラスをお<ruby>下<rt>さ</rt></ruby>げしてもよろしいですか？",
           "grammar": {
             "vocabs": [
@@ -4897,6 +5116,7 @@ function createRealRunnerData() {
           "category": "other_speech",
           "speaker": "👂 對方可能說的",
           "zh": "好的，麻煩你了。（客人爽快答應）",
+          "en": "Yes, please.",
           "ja": "はい、お<ruby>願<rt>ねが</rt></ruby>いします。",
           "grammar": {
             "vocabs": [
@@ -4914,6 +5134,7 @@ function createRealRunnerData() {
           "category": "other_speech",
           "speaker": "👂 對方可能說的",
           "zh": "沒問題，請收走吧。（客人主動示意）",
+          "en": "That is fine, please take it away.",
           "ja": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です、<ruby>下<rt>さ</rt></ruby>げてください。",
           "grammar": {
             "vocabs": [
@@ -4932,6 +5153,7 @@ function createRealRunnerData() {
           "category": "other_speech",
           "speaker": "👂 對方可能說的",
           "zh": "多謝款待／我吃飽了。（客人用餐完畢離桌前）",
+          "en": "Thank you for the meal, I am full.",
           "ja": "ごちそうさまでした。",
           "grammar": {
             "vocabs": [
@@ -4949,6 +5171,7 @@ function createRealRunnerData() {
           "category": "other_speech",
           "speaker": "👂 對方可能說的",
           "zh": "啊，我還在吃（還在喝）。（客人還想繼續享用）",
+          "en": "Oh, I am still eating (drinking) this.",
           "ja": "あ、まだ<ruby>食<rt>た</rt></ruby>べてます（<ruby>飲<rt>の</rt></ruby>んでます）。",
           "grammar": {
             "vocabs": [
@@ -4967,6 +5190,7 @@ function createRealRunnerData() {
           "category": "other_speech",
           "speaker": "👂 對方可能說的",
           "zh": "這個請幫我先留著。（客人指定特定盤子不要收）",
+          "en": "Please leave this one here.",
           "ja": "これはそのままでお<ruby>願<rt>ねが</rt></ruby>いします。",
           "grammar": {
             "vocabs": [
@@ -4984,6 +5208,7 @@ function createRealRunnerData() {
           "category": "other_speech",
           "speaker": "👂 對方可能說的",
           "zh": "可以稍等一下再收嗎？（客人希望等一下再收）",
+          "en": "Could you come back a little later?",
           "ja": "あ、もうちょっと<ruby>後<rt>あと</rt></ruby>でいいですか？",
           "grammar": {
             "vocabs": [
@@ -5001,6 +5226,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "謝謝您，不好意思打擾了。（最標準撤盤禮貌退下句）",
+          "en": "Thank you very much. Excuse me.",
           "ja": "ありがとうございます。<ruby>失礼<rt>しつれい</rt></ruby>します。",
           "grammar": {
             "vocabs": [
@@ -5019,6 +5245,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "謝謝您！請繼續慢用。（客人說ごちそうさま時）",
+          "en": "Thank you very much! Please take your time and enjoy.",
           "ja": "ありがとうございます！ごゆっくりどうぞ。",
           "grammar": {
             "vocabs": [
@@ -5036,6 +5263,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "啊，不好意思！請慢慢享用。（客人說還在吃時）",
+          "en": "Oh, my apologies! Please take your time and enjoy.",
           "ja": "あ、<ruby>失礼<rt>しつれい</rt></ruby>しました！ごゆっくりどうぞ。",
           "grammar": {
             "vocabs": [
@@ -5054,6 +5282,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "明白了，那這邊先幫您收喔。（客人指定特定盤子保留時）",
+          "en": "Understood. I will clear this plate for you.",
           "ja": "わかりました。こちらは<ruby>下<rt>さ</rt></ruby>げますね。",
           "grammar": {
             "vocabs": [
@@ -5072,6 +5301,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "不好意思，那我等一下再來喔。（客人表示稍後再收時）",
+          "en": "My apologies. I will come back later.",
           "ja": "<ruby>失礼<rt>しつれい</rt></ruby>しました。また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ますね。",
           "grammar": {
             "vocabs": [
@@ -5089,6 +5319,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "謝謝您！真是幫大忙了！（客人主動遞盤子或幫忙騰出空間時最真誠接地氣）",
+          "en": "Thank you very much! That is very helpful!",
           "ja": "ありがとうございます！<ruby>助<rt>たす</rt></ruby>かります！",
           "grammar": {
             "vocabs": [
@@ -5106,6 +5337,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "哪裡的話！請您慢慢享用！（🥇 No.1 現場最推薦首選句，絕不說生硬的どういたしまして！）",
+          "en": "Not at all! Please take your time and enjoy!",
           "ja": "とんでもないです！ごゆっくりどうぞ！",
           "grammar": {
             "vocabs": [
@@ -5124,6 +5356,7 @@ function createRealRunnerData() {
           "category": "my_reply",
           "speaker": "💬 我要回答的",
           "zh": "我才要謝謝您！（客人主動遞盤子說謝謝時，最真誠的雙向感謝）",
+          "en": "Thank you very much as well!",
           "ja": "こちらこそ、ありがとうございます！",
           "grammar": {
             "vocabs": [
@@ -6378,7 +6611,7 @@ function loadAppData() {
     }
     const data = JSON.parse(raw);
     // 嚴格校驗：若 tabs 不完整或未包含最新食材分類/同事平級指示/撤盤情境/最新班表名單/乾淨無斜線標音/蓮藕無誤植照片，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.tabs.some(t => t.id === 'tab_breakfast_sop') || !data.tabs.some(t => t.id === 'tab_dinner_sop') || !data.tabs.some(t => t.id === 'tab_akaushi_basashi') || !data.vocabSop.some(v => v.id === 'vn_yamamoto_kano') || data.vocabSop.some(v => v.id === 'vn_entiha')) {
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.tabs.some(t => t.id === 'tab_breakfast_sop') || !data.tabs.some(t => t.id === 'tab_dinner_sop') || !data.tabs.some(t => t.id === 'tab_akaushi_basashi') || !data.tabs.some(t => t.id === 'tab_drink_dessert_sop') || !data.vocabSop.some(v => v.id === 'vn_yamamoto_kano') || data.vocabSop.some(v => v.id === 'vn_entiha')) {
       const fresh = createRealRunnerData();
       saveAppData(fresh);
       return fresh;
@@ -7105,7 +7338,7 @@ function renderSopContent() {
 
   const items = tab.items || [];
   const supervisorItems = items.filter(i => i.type === 'supervisor' || i.category === 'supervisor');
-  const standardSopItems = items.filter(i => i.type === 'sop' && i.type !== 'supervisor' && i.category !== 'supervisor');
+  const standardSopItems = items.filter(i => (i.type === 'sop' || i.type === 'guide') && i.type !== 'supervisor' && i.category !== 'supervisor');
   const mySpeechItems = items.filter(i => i.category === 'my_speech');
   const otherSpeechItems = items.filter(i => i.category === 'other_speech');
   const myReplyItems = items.filter(i => i.category === 'my_reply');
@@ -7132,6 +7365,7 @@ function renderSopContent() {
               <div style="flex:1;">
                 <div class="compact-sop-zh" style="color:#8e1d2c; font-weight:700;">${escapeHtml(item.zh)}</div>
                 <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
+                ${item.en ? `<div class="compact-sop-en" style="font-size:0.75rem; color:#475569; font-style:italic; line-height:1.35; margin-top:3px; display:flex; align-items:flex-start; gap:4px;"><span style="font-style:normal;">🇬🇧</span><span>${escapeHtml(item.en)}</span></div>` : ''}
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
                 <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
@@ -7162,6 +7396,7 @@ function renderSopContent() {
               <div style="flex:1;">
                 <div class="compact-sop-zh">${escapeHtml(item.zh)}</div>
                 <div class="compact-sop-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja || item.zh)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
+                ${item.en ? `<div class="compact-sop-en" style="font-size:0.75rem; color:#475569; font-style:italic; line-height:1.35; margin-top:3px; display:flex; align-items:flex-start; gap:4px;"><span style="font-style:normal;">🇬🇧</span><span>${escapeHtml(item.en)}</span></div>` : ''}
               </div>
               <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
                 <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja || item.zh)}')">🔊</button>
@@ -7203,6 +7438,7 @@ function renderSopContent() {
             <span class="dialog-bubble-speaker">${speakerIcon} ${escapeHtml(item.speaker || '對話')}</span>
             <div class="dialog-bubble-ja" onclick="event.stopPropagation(); speakJapanese('${escapeJs(item.ja)}'); showToast('🔊 正在朗讀日文句子…');" style="cursor:pointer;" title="點擊發音 🔊">${item.ja} <span style="font-size:0.75rem; opacity:0.6;">🔊</span></div>
             <div class="dialog-bubble-zh">${escapeHtml(item.zh)}</div>
+            ${item.en ? `<div class="dialog-bubble-en" style="font-size:0.75rem; color:#475569; font-style:italic; line-height:1.35; margin-top:3px; display:flex; align-items:flex-start; gap:4px;"><span style="font-style:normal;">🇬🇧</span><span>${escapeHtml(item.en)}</span></div>` : ''}
           </div>
           <div style="display:flex; align-items:center; gap:2px; margin-left:6px;" onclick="event.stopPropagation()">
             <button class="btn-icon-mini" title="朗讀" onclick="speakJapanese('${escapeJs(item.ja)}')">🔊</button>
@@ -7268,6 +7504,10 @@ function renderSopContent() {
     extraGroups.push({ title: '🍽️ 現場餐具', items: tablewareVocabs });
   } else if (tabId === 'tab_bashing_sop') {
     extraGroups.push({ title: '🍽️ 現場餐具與器皿', items: tablewareVocabs });
+  } else if (tabId === 'tab_drink_dessert_sop') {
+    extraGroups.push({ title: '🍹 酒水飲料分類單字', items: drinkVocabs });
+    extraGroups.push({ title: '🍰 點心甜品分類單字', items: dessertVocabs });
+    extraGroups.push({ title: '🍽️ 飲料區杯具與托盤', items: tablewareVocabs.filter(v => v.zh.includes('杯') || v.zh.includes('盤') || v.ja.includes('グラス') || v.ja.includes('皿')) });
   } else if (tabId === 'tab_safety_notice') {
     extraGroups.push({ title: '🧰 現場工具', items: tablewareVocabs });
   }
@@ -13615,16 +13855,14 @@ const QUAD_BROADCAST_TEMPLATES = [
   }
 ];
 
-let currentBroadcastData = { ...QUAD_BROADCAST_TEMPLATES[0], isAi: false };
+let currentBroadcastData = null;
 let isBroadcastMicActive = false;
 let broadcastRecognition = null;
 
 function renderBroadcastPage() {
+  // 一開始不預設填入任何初始文字，保持輸入框乾淨空白
   const input = document.getElementById('broadcast-zh-input');
-  if (input && !input.value.trim()) {
-    input.value = currentBroadcastData.zh || QUAD_BROADCAST_TEMPLATES[0].zh;
-  }
-
+  // 不強制自動填入任何預設句子
   renderQuadResults(currentBroadcastData);
 }
 
@@ -13699,19 +13937,22 @@ async function executeQuadTranslation(zhText) {
     try {
       const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、英文 English）的翻譯專家。
 請將使用者輸入的中文內容「100% 忠實、精確直譯」為 4 國語言，並提供發音拼音輔助。
-【日文特別要求】：請使用親切自然的「普通丁寧體」（〜です／〜ます／〜てみてくださいね／〜よかったら食べてみてください等），適合日本職場同仁與各國夥伴之間的日常交流，請勿使用過於拘謹生硬的高級敬語/謙讓語（不要用「召し上がる」「お召し上がりください」等生疏客套話）。
+【日文特別要求（務必使用丁寧體，勿用常體）】：
+1. 請務必使用合適禮貌的「丁寧體」（です・ます調）。
+2. 例如感謝時「ありがとう」務必加上「ございます」（必須為「ありがとうございます」）；請託或指示時使用「〜してください」「〜をお願いします」；狀態陳述使用「〜です」「〜ます」。
+3. 語氣保持日本職場外場同事夥伴之間合適的禮貌程度（丁寧體）：嚴禁使用常體/タメ口（不可使用 だ、である、ありがとう 等朋友私聊隨便常體），但也不需要像對客人鞠躬那樣過度使用繁複敬語/謙讓語（如不用刻意「お召し上がりください」）。
 中文內容：「${zhText}」
 
 請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字）：
 {
   "zh": "${zhText.replace(/"/g, '\\"')}",
-  "ja": "日文普通丁寧體精確翻譯",
+  "ja": "日文丁寧體（です・ます調，如ありがとうございます）精確翻譯",
   "ja_romaji": "日文平假名或羅馬音",
   "ne": "नेपाली (標準尼泊爾文天城體)",
   "ne_romaji": "Nepali Romanized 羅馬拼音",
   "my": "မြန်မာဘာသာ (標準緬甸文 Unicode)",
   "my_romaji": "Burmese Romanized 羅馬拼音",
-  "en": "English standard translation"
+  "en": "English standard workplace translation"
 }`;
 
       const aiRes = await callGeminiApiUnified(prompt);
@@ -13814,24 +14055,32 @@ async function executeQuadTranslation(zhText) {
 }
 
 function renderQuadResults(data) {
-  if (!data) return;
   const grid = document.getElementById('broadcast-cards-grid');
   if (!grid) return;
 
+  if (!data || (!data.zh && !data.ja)) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; background:#fff; border:1px dashed var(--border); border-radius:16px; padding:32px 16px; text-align:center; color:var(--muted);">
+        <div style="font-size:2.2rem; margin-bottom:8px;">🌐</div>
+        <div style="font-size:0.92rem; font-weight:700; color:var(--ink); margin-bottom:4px;">目前尚未輸入翻譯內容</div>
+        <div style="font-size:0.8rem; line-height:1.5;">請在上方輸入中文事項，點擊「🌐 立即同步翻譯」<br>即可在此即時並排展示【日文・尼泊爾文・緬甸文・英文】！</div>
+      </div>`;
+    return;
+  }
+
   grid.innerHTML = `
-    <!-- 🇯🇵 日文 (日本語) -->
+    <!-- 🇯🇵 日本語（日文） -->
     <div class="broadcast-lang-card" style="border-top:4px solid #b84b29;">
       <div>
-        <div class="broadcast-lang-header">
-          <span class="broadcast-lang-badge" style="color:#b84b29;">
-            <span style="font-size:1.2rem;">🇯🇵</span> 日本語 (Japanese)
+        <div class="broadcast-lang-header" style="margin-bottom:8px;">
+          <span class="broadcast-lang-badge" style="color:#b84b29; font-weight:800; font-size:0.95rem;">
+            <span style="font-size:1.2rem;">🇯🇵</span> 日本語（日文）
           </span>
-          <span style="font-size:0.72rem; color:var(--muted);">職場普通丁寧體</span>
         </div>
         <div class="broadcast-text-main ja-text">
           ${data.ja}
         </div>
-        ${data.ja_romaji ? `<div class="broadcast-text-sub">🗣️ 拼音：${data.ja_romaji}</div>` : ''}
+        ${data.ja_romaji ? `<div class="broadcast-text-sub">🗣️ 標音：${data.ja_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ja)}', 'ja')">🔊 朗讀</button>
@@ -13839,14 +14088,13 @@ function renderQuadResults(data) {
       </div>
     </div>
 
-    <!-- 🇳🇵 尼泊爾文 (नेपाली) -->
+    <!-- 🇳🇵 尼泊爾語（尼泊爾文） -->
     <div class="broadcast-lang-card" style="border-top:4px solid #2e7d32;">
       <div>
-        <div class="broadcast-lang-header">
-          <span class="broadcast-lang-badge" style="color:#2e7d32;">
-            <span style="font-size:1.2rem;">🇳🇵</span> नेपाली (Nepali)
+        <div class="broadcast-lang-header" style="margin-bottom:8px;">
+          <span class="broadcast-lang-badge" style="color:#2e7d32; font-weight:800; font-size:0.95rem;">
+            <span style="font-size:1.2rem;">🇳🇵</span> 尼泊爾語（尼泊爾文）
           </span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場夥伴母語</span>
         </div>
         <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
           ${data.ne}
@@ -13858,14 +14106,13 @@ function renderQuadResults(data) {
       </div>
     </div>
 
-    <!-- 🇲🇲 緬甸文 (မြန်မာဘာသာ) -->
+    <!-- 🇲🇲 緬甸語（緬甸文） -->
     <div class="broadcast-lang-card" style="border-top:4px solid #f57f17;">
       <div>
-        <div class="broadcast-lang-header">
-          <span class="broadcast-lang-badge" style="color:#f57f17;">
-            <span style="font-size:1.2rem;">🇲🇲</span> မြန်မာဘာသာ (Burmese)
+        <div class="broadcast-lang-header" style="margin-bottom:8px;">
+          <span class="broadcast-lang-badge" style="color:#f57f17; font-weight:800; font-size:0.95rem;">
+            <span style="font-size:1.2rem;">🇲🇲</span> 緬甸語（緬甸文）
           </span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場夥伴母語</span>
         </div>
         <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
           ${data.my}
@@ -13877,19 +14124,17 @@ function renderQuadResults(data) {
       </div>
     </div>
 
-    <!-- 🇬🇧 英文 (English) -->
+    <!-- 🇬🇧 英語（英文） -->
     <div class="broadcast-lang-card" style="border-top:4px solid #1976d2;">
       <div>
-        <div class="broadcast-lang-header">
-          <span class="broadcast-lang-badge" style="color:#1976d2;">
-            <span style="font-size:1.2rem;">🇬🇧</span> English (英文)
+        <div class="broadcast-lang-header" style="margin-bottom:8px;">
+          <span class="broadcast-lang-badge" style="color:#1976d2; font-weight:800; font-size:0.95rem;">
+            <span style="font-size:1.2rem;">🇬🇧</span> 英語（英文）
           </span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場國際通用</span>
         </div>
         <div class="broadcast-text-main">
           ${data.en}
         </div>
-        <div class="broadcast-text-sub">🗣️ Standard Workplace English</div>
       </div>
       <div class="broadcast-lang-actions">
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.en)}', 'en')">🔊 朗讀</button>
@@ -13923,17 +14168,17 @@ function copySingleLang(langKey) {
 
 function copyAllQuadBroadcast() {
   if (!currentBroadcastData) return;
-  const fullText = `【🌐 現場四國同步翻譯 / Multilingual Translation】
-🇯🇵 日本語 (Japanese)：
+  const fullText = `【🌐 現場四國同步翻譯】
+🇯🇵 日本語（日文）：
 ${currentBroadcastData.ja}
 
-🇳🇵 नेपाली (Nepali)：
+🇳🇵 尼泊爾語（尼泊爾文）：
 ${currentBroadcastData.ne}
 
-🇲🇲 မြန်မာဘာသာ (Burmese)：
+🇲🇲 緬甸語（緬甸文）：
 ${currentBroadcastData.my}
 
-🇬🇧 English (英文)：
+🇬🇧 英語（英文）：
 ${currentBroadcastData.en}
 
 （中文原意：${currentBroadcastData.zh}）`;
@@ -13962,7 +14207,7 @@ function openBroadcastBigScreen() {
     <!-- 🇯🇵 日文大字卡 -->
     <div class="bigscreen-card" style="border-left:6px solid #b84b29;">
       <div class="bigscreen-card-title">
-        <span>🇯🇵 日本語 (Japanese)</span>
+        <span>🇯🇵 日本語（日文）</span>
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ja)}', 'ja')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
       </div>
       <div class="bigscreen-card-content" style="font-family:var(--font-serif); color:var(--primary);">
@@ -13974,7 +14219,7 @@ function openBroadcastBigScreen() {
     <!-- 🇳🇵 尼泊爾文大字卡 -->
     <div class="bigscreen-card" style="border-left:6px solid #2e7d32;">
       <div class="bigscreen-card-title">
-        <span>🇳🇵 नेपाली (Nepali)</span>
+        <span>🇳🇵 尼泊爾語（尼泊爾文）</span>
       </div>
       <div class="bigscreen-card-content" style="color:#1b5e20;">
         ${currentBroadcastData.ne}
@@ -13985,7 +14230,7 @@ function openBroadcastBigScreen() {
     <!-- 🇲🇲 緬甸文大字卡 -->
     <div class="bigscreen-card" style="border-left:6px solid #f57f17;">
       <div class="bigscreen-card-title">
-        <span>🇲🇲 မြန်မာဘာသာ (Burmese)</span>
+        <span>🇲🇲 緬甸語（緬甸文）</span>
       </div>
       <div class="bigscreen-card-content" style="color:#e65100;">
         ${currentBroadcastData.my}
@@ -13996,7 +14241,7 @@ function openBroadcastBigScreen() {
     <!-- 🇬🇧 英文大字卡 -->
     <div class="bigscreen-card" style="border-left:6px solid #1976d2;">
       <div class="bigscreen-card-title">
-        <span>🇬🇧 English (英文)</span>
+        <span>🇬🇧 英語（英文）</span>
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.en)}', 'en')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
       </div>
       <div class="bigscreen-card-content" style="color:#0d47a1;">

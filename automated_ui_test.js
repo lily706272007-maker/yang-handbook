@@ -285,7 +285,7 @@ assert(html.includes('日本語') && html.includes('नेपाली') && html
 
 assert(html.includes('fetchFreeGoogleTranslate'), '包含免金鑰 Google 雲端即時直譯引擎 (fetchFreeGoogleTranslate)');
 assert(html.includes('gemini-flash-latest') && html.includes('gemini-3.6-flash'), 'Gemini API 模型配置更新為最新穩定版 (gemini-flash-latest / gemini-3.6-flash)');
-assert(html.includes('職場普通丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '四國翻譯全面採用親切自然之普通丁寧體日文');
+assert(html.includes('丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '四國翻譯全面採用親切自然之普通丁寧體日文');
 
 // 測試 20: 外場撤盤 6 組自然應對與同事平級 10 大動作 30 句高頻指示
 console.log('\n【測試 20：外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示】');
@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v90'), 'Service Worker 快取版本已升級至 yang-pwa-v90');
-assert(html.includes('yang_runner_handbook_v90'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v90');
+assert(swContent.includes('yang-pwa-v91'), 'Service Worker 快取版本已升級至 yang-pwa-v91');
+assert(html.includes('yang_runner_handbook_v91'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v91');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -643,6 +643,49 @@ assert(html.includes('vs_cb_chumon') && textContent.includes('CB注文'), '職�
 assert(html.includes('vs_open_junbi') && textContent.includes('オープン準備'), '職稱清單包含 オープン準備 (vs_open_junbi)');
 assert(html.includes('vs_shime_kakunin') && textContent.includes('締め'), '職稱清單包含 締め / 最終確認 (vs_shime_kakunin)');
 
+// 測試 41: 四國翻譯無預設文字・中文括弧・丁寧體要求・無贅述備註・SOP英文版・獨立飲料點心區 (v91)
+console.log('\n【測試 41：四國翻譯調優・SOP英文版・獨立飲料點心區 (v91)】');
+// 1. 四國翻譯不強制預填初始文字
+assert(html.includes('currentBroadcastData = null;') && !html.includes('input.value = currentBroadcastData.zh'), '四國翻譯初始化不強制預填料理分享初始文字');
+
+// 2. 語言名稱括弧全面改為繁中
+assert(html.includes('日本語（日文）') && html.includes('尼泊爾語（尼泊爾文）') && html.includes('緬甸語（緬甸文）') && html.includes('英語（英文）'), '語言標籤括弧內全面使用繁體中文（日本語（日文）、尼泊爾語（尼泊爾文）等）');
+
+// 3. 日語語氣嚴格指定丁寧體（です・ます調，禁止タメ口）
+assert(html.includes('丁寧體') && html.includes('です・ます調') && html.includes('ありがとうございます'), 'Gemini AI 與翻譯提示詞嚴格指定職場丁寧體，規範ありがとうございます');
+
+// 4. 刪除多餘備註（外場夥伴母語、外場國際通用等）
+assert(!html.includes('職場普通丁寧體') && !html.includes('外場夥伴母語') && !html.includes('外場國際通用') && !html.includes('Standard Workplace English'), '翻譯結果卡片已徹底刪除外場夥伴母語/國際通用等冗贅備註');
+
+// 5. 食物 SOP 與外場對話支援英文版
+assert(html.includes('dialog-bubble-en') && html.includes('compact-sop-en'), 'SOP 介面渲染支援英文對照字幕節點 (dialog-bubble-en / compact-sop-en)');
+assert(html.includes('Excuse me, may I clear this plate for you?') && html.includes('Please go and clear tables'), '收桌對話與主管指示包含實用英文版對話');
+
+// 6. 獨立飲料點心專區 (tab_drink_dessert_sop)
+assert(html.includes('tab_drink_dessert_sop') && html.includes('飲料・點心與客人應對'), '包含獨立飲料點心專區分頁 (tab_drink_dessert_sop)');
+// (a) 水的各種狀態
+assert(html.includes('ds_water_hot') && html.includes('熱湯') && textContent.includes('熱水'), '包含水狀態：熱水/熱湯 (ds_water_hot)');
+assert(html.includes('ds_water_lukewarm') && html.includes('ぬるま湯') && textContent.includes('溫水'), '包含水狀態：溫水/ぬるま湯 (ds_water_lukewarm)');
+assert(html.includes('ds_water_fresh_boiled') && textContent.includes('沸かしたてのお湯') && textContent.includes('剛熱好'), '包含水狀態：剛熱好的水 (ds_water_fresh_boiled)');
+assert(html.includes('ds_water_cold') && (textContent.includes('冷たいお水') || textContent.includes('お冷')) && textContent.includes('冰水'), '包含水狀態：冰水/冷水/お冷 (ds_water_cold)');
+assert(html.includes('ds_water_ice') && textContent.includes('ロックアイス') && textContent.includes('冰塊'), '包含水狀態：冰塊 (ds_water_ice)');
+// (b) 介紹與指引
+assert(html.includes('ds_guide_sake') && textContent.includes('這是日本酒'), '指引：這是日本酒 (ds_guide_sake)');
+assert(html.includes('ds_guide_tansan') && textContent.includes('炭酸水') && textContent.includes('碳酸水在這裡'), '指引：碳酸水（日本人說炭酸水不用蘇打）(ds_guide_tansan)');
+assert(html.includes('ds_guide_water') && textContent.includes('水在這裡'), '指引：水在這裡 (ds_guide_water)');
+assert(html.includes('ds_guide_hotwater') && textContent.includes('熱水在這邊'), '指引：熱水在這裡 (ds_guide_hotwater)');
+assert(html.includes('ds_guide_coffee') && textContent.includes('咖啡在這邊'), '指引：咖啡在這邊 (ds_guide_coffee)');
+assert(html.includes('ds_guide_liquors') && textContent.includes('左手邊有威士忌、燒酒、梅酒、柚子酒'), '指引：左手邊有威士忌燒酒梅酒柚子酒 (ds_guide_liquors)');
+// (c) 點心相關
+assert(html.includes('ds_dessert_order') && textContent.includes('向廚房點點心'), '點心：向廚房點點心 (ds_dessert_order)');
+assert(html.includes('ds_dessert_served') && textContent.includes('大変お待たせいたしました') && textContent.includes('抱歉久等了'), '點心：端點心致歉久等 (ds_dessert_served)');
+// (d) 客人常見問答
+assert(html.includes('ds_qa_clear_plate_guest') && html.includes('ds_qa_clear_plate_reply') && textContent.includes('はい、かしこまりました'), '問答：收走空盤→可以 (ds_qa_clear_plate)');
+assert(html.includes('ds_qa_sake_loc_guest') && html.includes('ds_qa_sake_loc_reply'), '問答：日本酒在哪裡→指引專區 (ds_qa_sake_loc)');
+assert(html.includes('ds_qa_glass_guest') && html.includes('ds_qa_glass_reply') && textContent.includes('どのグラスをお使いいただいても'), '問答：用什麼杯子→用什麼杯子都可以 (ds_qa_glass)');
+assert(html.includes('ds_qa_what_guest') && html.includes('ds_qa_syrup_reply') && textContent.includes('ノンアルコールのシロップ'), '問答：這是不含酒精糖漿 (ds_qa_syrup_reply)');
+assert(html.includes('ds_qa_conc_reply') && textContent.includes('アルコール入りの原液'), '問答：這是含酒精濃縮液 (ds_qa_conc_reply)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -650,7 +693,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v90) 實物圖片牆模式・4大新工具・朝食料理台配置圖・新班表職稱同步！');
+  console.log('🎉 所有測試通過！(v91) 四國翻譯調優・SOP英文版・獨立飲料點心與客人應對專區！');
 }
 
 
