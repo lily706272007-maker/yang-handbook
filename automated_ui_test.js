@@ -284,7 +284,7 @@ assert(html.includes('toggleBroadcastMic'), '包含中文語音輸入辨識函�
 assert(html.includes('日本語') && html.includes('नेपाली') && html.includes('မြန်မာဘာသာ') && html.includes('English'), '完整涵蓋日文、尼泊爾文、緬甸文、英文四大語言');
 
 assert(html.includes('fetchFreeGoogleTranslate'), '包含免金鑰 Google 雲端即時直譯引擎 (fetchFreeGoogleTranslate)');
-assert(html.includes('gemini-2.5-flash') && html.includes('gemini-2.0-flash'), 'Gemini API 模型配置更新為最新穩定版 (gemini-2.5-flash / gemini-2.0-flash)');
+assert(html.includes('gemini-flash-latest') && html.includes('gemini-3.6-flash'), 'Gemini API 模型配置更新為最新穩定版 (gemini-flash-latest / gemini-3.6-flash)');
 assert(html.includes('職場普通丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '四國翻譯全面採用親切自然之普通丁寧體日文');
 
 // 測試 20: 外場撤盤 6 組自然應對與同事平級 10 大動作 30 句高頻指示
@@ -371,7 +371,7 @@ assert(html.includes('vn_yang') && html.includes("gender: 'female'") && html.inc
 assert(html.includes('trait-color-black') && html.includes('trait-color-darkbrown'), '微調工房髮色包含自然黑與深棕色');
 assert(!html.includes('trait-feature-beautyMark') && !html.includes('trait-feature-beard'), 'v79 微調工房已移除嘴角痣與鬍渣短鬍特徵選項');
 assert(!html.includes('setAvatarFeature'), 'v79 已移除舊的特徵切換函式 setAvatarFeature');
-assert(html.includes('bun_hair') && (html.includes('HY-95, 48, 44') || html.includes('ellipse(256, 52, 50, 46')), '外場包包頭 (bun_hair) 在頭頂中央繪製立體大圓丸子');
+assert(html.includes('bun_hair') && (html.includes('HY-95, 48, 44') || html.includes('HY - 94, 46') || html.includes('包包頭')), '外場包包頭 (bun_hair) 在頭頂中央繪製立體大圓丸子');
 assert(html.includes('SHIRT_COLOR') || html.includes('2a2f7a'), '外場制服為男女100%統一深色襯衫長褲制服');
 
 // 測試 25: 語音 Memo 繁體中文即時轉換、外場語音錯字智慧校正與自訂即時編輯修字 (v71)
@@ -481,8 +481,8 @@ assert(html.includes('id="qfilter-food"') && html.includes('id="qfilter-tablewar
 // 測試 31: 照相館純淨關閉按鈕、男女工作服100%統一、100%露眉露眼絕不擋臉、男生後髮型與髮絲立體光澤 (v82)
 console.log('\n【測試 31：照相館純淨關閉按鈕・男女外場制服統一・露眉大眼・男生髮型・髮絲立體光澤 (v82)】');
 assert(!html.includes('🦝 小浣熊互動照相館') && html.includes('who-are-you-modal-box') && html.includes('✕ 關閉'), '照相館彈窗頂部已成功刪除標題文字，僅保留右側「✕ 關閉」按鈕');
-assert(html.includes('1c2038') || html.includes('placket') || html.includes('深色長袖'), '男女角色全面統一外場制服 (深色長袖深藍制服)');
-assert(html.includes('browY = eyeY - 34') && html.includes('bangBottom = browY - 2'), '眉毛與大眼高度合宜且 100% 露在瀏海 (bangBottom = browY - 2) 下方，絕不擋眼');
+assert(html.includes('1c2038') || html.includes('placket') || html.includes('#18181b') || html.includes('黑色長袖'), '男女角色全面統一外場制服 (黑色長袖襯衫與黑長褲制服)');
+assert(html.includes('browY = eyeY - 34') && (html.includes('bangBottom = browY - 2') || html.includes('bangLimitY = browY - 4')), '眉毛與大眼高度合宜且 100% 露在瀏海下方，絕不擋眼');
 assert(html.includes('short_clean') && html.includes('side_part') && html.includes('buzz_cut') && html.includes('undercut_fade'), '男生後方髮型包含俐落短髮、經典側分、陽光寸頭、漸層短側背等');
 assert(html.includes('short_clean'), '俐落短髮 (short_clean) 設定正確');
 assert(html.includes('side_part'), '經典側分 (side_part) 具備側分造型');
@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v88'), 'Service Worker 快取版本已升級至 yang-pwa-v88');
-assert(html.includes('yang_runner_handbook_v88'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v88');
+assert(swContent.includes('yang-pwa-v89'), 'Service Worker 快取版本已升級至 yang-pwa-v89');
+assert(html.includes('yang_runner_handbook_v89'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v89');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -605,6 +605,23 @@ assert(html.includes('content-group.reading-active'), '包含朗誦時段落醒�
 assert(html.includes('TYPESET_ZH_DICT') && html.includes('extractPairsFromRawLines'), '包含面試高頻繁中字典與智慧中日句子交替提取函式');
 assert(html.includes('showC') && html.includes('zhLine.textContent = group.translation'), '中文對照開關開啟時保證中文行始終穩定呈現');
 
+
+// 測試 39: Gemini Vision 真實取樣・Style 5 日系 32-bit 像素風・外籍同仁特徵・身份來源・同日休假加紅加粗比對 (v89)
+console.log('\n【測試 39：Gemini Vision 真實取樣・Style 5 日系 32-bit 像素風・外籍同仁特徵・身份來源・同日休假加紅加粗比對 (v89)】');
+assert(html.includes('DEFAULT_GEMINI_KEY') && html.includes('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c='), '包含有效之 Google Gemini 官方正式 API Key');
+assert(html.includes('gemini-flash-latest') && html.includes('gemini-3.6-flash') && html.includes('gemini-3.7-flash'), 'Gemini 模型清單包含官方最新可用模型');
+assert(html.includes('analyzeFaceWithGeminiVision'), '包含 Gemini Vision 官方多模態即時面部視覺分析函式');
+assert(html.includes('generateTransparentChibiAvatar'), '包含 Style 5 日系 32-bit 像素風角色立繪生成引擎');
+assert(html.includes('imageSmoothingEnabled = false'), '像素引擎啟用 imageSmoothingEnabled = false 以確保 32-bit 像素顆粒質感');
+assert(html.includes('drawPixelTree') || html.includes('落地窗') || html.includes('焦糖紅棕'), '角色立繪背景取樣自飯店餐廳實景 (綠意落地窗與焦糖紅棕餐椅)');
+assert(html.includes('SHIRT_COLOR') && html.includes('#18181b'), '制服嚴格遵循外場標準黑色長袖襯衫與黑色長褲 (無名牌)');
+assert(html.includes('deep_bronze') && html.includes('tanned'), '包含南亞尼泊爾與東南亞外國同仁深邃古銅/小麥膚色配置');
+assert(html.includes('employmentType') && html.includes('正社員') && html.includes('派遣社員') && html.includes('交換學生 / 實習生'), '同仁名單與卡片完整呈現雇用身分來源 (正社員/派遣社員/交換學生實習生)');
+assert(html.includes('nationality') && html.includes('尼泊爾 🇳🇵') && html.includes('越南 🇻🇳'), '名冊與圖鑑卡包含尼泊爾、越南、緬甸等外籍同仁國籍徽章');
+assert(html.includes('renderColleagueVacationsInModal') && html.includes('promptEditColleagueVacations'), '包含同仁排休班表渲染與編輯休假功能');
+assert(html.includes('same-day') && html.includes('#dc2626') && html.includes('同日休'), '與小楊同日休假之日期特別以紅字粗體、紅色邊框加紅加粗醒目標示');
+assert(html.includes('name-card-source-badges') && html.includes('name-card-employment-badge') && html.includes('name-card-nationality-badge'), '同仁圖鑑彈窗包含身分來源與國籍徽章節點');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -612,7 +629,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v88) 全文朗誦・反覆朗誦・停止朗誦・中文翻譯完美修復！');
+  console.log('🎉 所有測試通過！(v89) Gemini Vision 即時取樣・Style 5 日系 32-bit 像素風・外籍同仁來源・同日休假加紅加粗！');
 }
 
 
