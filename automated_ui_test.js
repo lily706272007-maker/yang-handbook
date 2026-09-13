@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v100'), 'Service Worker 快取版本已升級至 yang-pwa-v100');
-assert(html.includes('yang_runner_handbook_v100'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v100');
+assert(swContent.includes('yang-pwa-v101'), 'Service Worker 快取版本已升級至 yang-pwa-v101');
+assert(html.includes('yang_runner_handbook_v101'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v101');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -827,6 +827,64 @@ assert(fs.existsSync(path.join(__dirname, 'photos/yaki_ninjin.jpg')), '實體相
 // 4. 烤蝦子 (焼きエビ / yaki_ebi.jpg)
 assert(html.includes('"id": "vs_yaki_ebi"') && html.includes('烤蝦子') && html.includes('./photos/yaki_ebi.jpg'), '烤蝦子成功配對炭火烤鮮大蝦串實拍照 yaki_ebi.jpg');
 
+// 測試 50: 依料理台配置圖(朝食 ①~⑧ 號台與夕食專區)實體動線精準重排 (v101)
+console.log('\n【測試 50：依料理台配置圖 (朝食 ①~⑧ 號台與夕食各專區) 實體動線精準重排 (v101)】');
+// 1. 朝食 ①~⑧ 號台順序驗證
+const idxStation1 = html.indexOf('"id": "vs_dashimaki"');
+const idxStation2 = html.indexOf('"id": "vs_wiener"');
+const idxStation3 = html.indexOf('"id": "vs_soup_miso"');
+const idxStation4 = html.indexOf('"id": "vs_okayu"');
+const idxStation5 = html.indexOf('"id": "vs_french_toast"');
+const idxStation6 = html.indexOf('"id": "vs_ham_egg"');
+const idxStation7 = html.indexOf('"id": "vs_milk_bread"');
+const idxStation8 = html.indexOf('"id": "vs_salad_sweetcorn"');
+
+assert(idxStation1 < idxStation2 && idxStation2 < idxStation3 && idxStation3 < idxStation4 && idxStation4 < idxStation5 && idxStation5 < idxStation6 && idxStation6 < idxStation7 && idxStation7 < idxStation8, '朝食餐點依料理台配置圖 ① 到 ⑧ 號台動線嚴格先後排列');
+
+// 2. 朝食各分台內部相鄰擺放驗證
+const idxDashimaki = html.indexOf('"id": "vs_dashimaki"');
+const idxOnsen = html.indexOf('"id": "vs_onsen_tamago"');
+const idxAji = html.indexOf('"id": "vs_aji_nanban"');
+assert(idxDashimaki < idxOnsen && idxOnsen < idxAji, '① 號台內部熱菜 (厚蛋捲/溫泉蛋/竹莢魚) 相鄰緊密相連');
+
+const idxWiener = html.indexOf('"id": "vs_wiener"');
+const idxScramble = html.indexOf('"id": "vs_scramble"');
+const idxBroccoli = html.indexOf('"id": "vs_broccoli_bacon"');
+assert(idxWiener < idxScramble && idxScramble < idxBroccoli, '② 號台內部西式熱菜 (維也納香腸/炒蛋/炒青花菜) 相鄰緊密相連');
+
+const idxMiso = html.indexOf('"id": "vs_soup_miso"');
+const idxRice = html.indexOf('"id": "vs_rice"');
+const idxIkaNatto = html.indexOf('"id": "vs_ika_natto"');
+assert(idxMiso < idxRice && idxRice < idxIkaNatto, '③ 號台主配膳湯品與主食 (味噌湯/白米/烏賊納豆) 相鄰緊密相連');
+
+const idxOkayu = html.indexOf('"id": "vs_okayu"');
+const idxMentaiko = html.indexOf('"id": "vs_mentaiko"');
+const idxKarashi = html.indexOf('"id": "vs_karashi_renkon"');
+const idxTsubozuke = html.indexOf('"id": "vs_tsubozuke"');
+assert(idxOkayu < idxMentaiko && idxMentaiko < idxKarashi && idxKarashi < idxTsubozuke, '④ 號台小菜與漬物 (白粥/明太子/蓮藕/醬菜) 相鄰緊密相連');
+
+// 3. 夕食專區內部相鄰擺放驗證
+const idxSushiMaguro = html.indexOf('"id": "vs_sushi_maguro"');
+const idxSushiGari = html.indexOf('"id": "vs_sushi_gari"');
+const idxSushiWasabi = html.indexOf('"id": "vs_sushi_wasabi"');
+assert(idxSushiMaguro < idxSushiGari && idxSushiGari < idxSushiWasabi, '夕食壽司專區壽司、甜薑片與山葵全數集中相鄰擺放');
+
+const idxRamen = html.indexOf('"id": "vs_ramen"');
+const idxRamenMenma = html.indexOf('"id": "vs_ramen_menma"');
+const idxRamenChashu = html.indexOf('"id": "vs_ramen_chashu"');
+const idxRamenNegi = html.indexOf('"id": "vs_ramen_negi"');
+assert(idxRamen < idxRamenMenma && idxRamenMenma < idxRamenChashu && idxRamenChashu < idxRamenNegi, '夕食拉麵專區拉麵、筍乾、叉燒肉片與青蔥全數集中相鄰擺放');
+
+const idxPorkSteak = html.indexOf('"id": "vs_rindou_steak"');
+const idxHotpot = html.indexOf('"id": "vs_hotpot"');
+const idxNikumaki = html.indexOf('"id": "vs_nikumaki"');
+assert(idxPorkSteak < idxHotpot && idxHotpot < idxNikumaki, '夕食 LIVE KITCHEN 烤豬排、火鍋與豬肉蔬菜捲相鄰緊密排列');
+
+const idxYakiEbi = html.indexOf('"id": "vs_yaki_ebi"');
+const idxYakiPiiman = html.indexOf('"id": "vs_yaki_piiman"');
+const idxYakiNinjin = html.indexOf('"id": "vs_yaki_ninjin"');
+assert(idxYakiEbi < idxYakiPiiman && idxYakiPiiman < idxYakiNinjin, '夕食炭火烤物烤蝦、烤青椒與烤蘿蔔全數集中相鄰排列');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -834,7 +892,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v100) LIVE KITCHEN 烤豬排與炭火 3 大烤物 (烤青椒/烤蘿蔔/烤蝦子) 上線！');
+  console.log('🎉 所有測試通過！(v101) 餐點依料理台配置圖 (朝食 ①~⑧ 號台與夕食專區) 實體動線精準重排成功上線！');
 }
 
 
