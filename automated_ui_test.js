@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v93'), 'Service Worker 快取版本已升級至 yang-pwa-v93');
-assert(html.includes('yang_runner_handbook_v93'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v93');
+assert(swContent.includes('yang-pwa-v94'), 'Service Worker 快取版本已升級至 yang-pwa-v94');
+assert(html.includes('yang_runner_handbook_v94'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v94');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -630,11 +630,11 @@ assert(html.includes('vt_sumibi') && textContent.includes('炭火') && html.incl
 assert(html.includes('vt_mokutan') && textContent.includes('木炭') && html.includes('もくたん'), '單字庫包含工具：木炭 (vt_mokutan / もくたん)');
 assert(html.includes('vt_hashigo') && textContent.includes('梯子') && (html.includes('脚立') || html.includes('はしご')), '單字庫包含工具：梯子 (vt_hashigo / 脚立 / はしご)');
 
-// 2. 實物圖片牆模式 (只看得到有拍照的物品)
-assert(html.includes('btn-vocab-view-list') && html.includes('btn-vocab-view-gallery'), '單字庫包含檢視模式切換器（列表清單 vs 實物圖片牆）');
+// 2. 實物圖片牆模式 / 相片模式 (只看得到有拍照的餐點)
+assert(html.includes('btn-vocab-view-list') && html.includes('btn-vocab-view-gallery'), '單字庫包含檢視模式切換器（列表清單 vs 相片模式）');
 assert(html.includes('setVocabViewMode') && html.includes('currentVocabViewMode'), '包含切換單字庫檢視模式之函式與狀態');
 assert(html.includes('vocab-gallery-grid') && html.includes('gallery-photo-card'), '包含圖片牆專屬 CSS 響應式網格與相片卡片節點');
-assert(html.includes('photoItems = filtered.filter(v => v.imageUrl'), '圖片牆嚴格過濾只呈現具備實物拍照 (imageUrl) 之項目');
+assert(html.includes('allFoodPhotos = data.filter(v => v.cat === \'餐點\' && v.imageUrl'), '相片模式嚴格過濾只呈現具備實物拍照之餐點項目');
 
 // 3. 朝食料理台配置圖與新班表職稱
 assert(html.includes('bs_layout_map') && html.includes('IMG_2035.jpg'), '朝食 SOP 包含餐廳料理台與外場配置圖 (bs_layout_map)');
@@ -721,6 +721,27 @@ assert(html.includes('dialog-bubble-en'), '現場對話氣泡保留英文對照'
 assert(html.includes('function speakEnglish(text)') && html.includes("utt.lang = 'en-US'"), '系統提供專屬英文語音朗讀合成函式 speakEnglish');
 assert(html.includes("onclick=\"event.stopPropagation(); speakEnglish('") && html.includes('dialog-bubble-en'), '點擊對話氣泡中的英文句子可直接觸發英文語音朗讀發音');
 
+// 測試 44: 相片模式純化・僅保留餐點相片・嚴格劃分早晚餐・互換生菜豆苗・拉麵筍乾更換・非餐點相片全數下架 (v94)
+console.log('\n【測試 44：相片模式純化・僅保留餐點相片・嚴格劃分早晚餐・互換生菜豆苗・拉麵筍乾更換・非餐點相片全數下架 (v94)】');
+// 1. 實物圖片牆改名為「相片」
+assert(html.includes('id="btn-vocab-view-gallery"') && html.includes('📷 相片'), '切換按鈕文字已精準更新為「📷 相片」');
+
+// 2. ベビーリーフ與豆苗照片互換
+assert(html.includes('"id": "vs_salad_babyleaf"') && html.includes('"imageUrl": "./photos/IMG_0964.jpg"'), 'ベビーリーフ (嫩葉生菜) 已成功換為 IMG_0964');
+assert(html.includes('"id": "vs_salad_toumyou"') && html.includes('"imageUrl": "./photos/IMG_0961.jpg"'), '豆苗已成功換為 IMG_0961');
+
+// 3. メンマ拉麵筍乾圖片更換為 IMG_0937
+assert(html.includes('"id": "vs_ramen_menma"') && html.includes('"imageUrl": "./photos/IMG_0937.jpg"'), 'メンマ拉麵筍乾已精準配對 IMG_0937');
+
+// 4. 金針菇胡麻拌菜 (えのき茸の胡麻和え) 備註更新
+assert(html.includes('vs_enoki_gomaae') && html.includes('Enoki mushrooms with sesame sauce'), '金針菇胡麻拌菜備註標明立牌英文與菠菜金針菇料理特色');
+
+// 5. 非餐點相片（食材、餐具、酒水、工具、對話）全數下架
+assert(!html.includes('"cat": "食材", "imageUrl": "./photos/') && !html.includes('"cat": "餐具", "imageUrl": "./photos/') && !html.includes('"cat": "酒水", "imageUrl": "./photos/') && !html.includes('"cat": "工具", "imageUrl": "./photos/'), '食材、餐具、酒水、工具與對話之相片已全數下架，僅保留純文字名稱');
+
+// 6. 相片模式嚴格劃分早餐與晚餐
+assert(html.includes('getFoodMealType') && html.includes('currentGalleryMealFilter') && html.includes('🌅 早餐 (朝食)') && html.includes('🌙 晚餐 (夕食)'), '相片模式提供專屬早晚餐切換器 (全部餐點 / 早餐朝食 / 晚餐夕食)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -728,8 +749,9 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v93) 實物 SOP 規範優化・去除重複發話者圖示・美國國旗替換・SOP純化無英文・點擊英文發音朗讀！');
+  console.log('🎉 所有測試通過！(v94) 相片模式純化・僅保留餐點相片・嚴格劃分早晚餐・互換生菜豆苗・拉麵筍乾更換・非餐點相片全數下架！');
 }
+
 
 
 
