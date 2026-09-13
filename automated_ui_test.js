@@ -502,8 +502,8 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v89'), 'Service Worker 快取版本已升級至 yang-pwa-v89');
-assert(html.includes('yang_runner_handbook_v89'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v89');
+assert(swContent.includes('yang-pwa-v90'), 'Service Worker 快取版本已升級至 yang-pwa-v90');
+assert(html.includes('yang_runner_handbook_v90'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v90');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
 console.log('\n【測試 33：頭像系統升級・選國籍步驟・瀏海與後髮獨立 10+10・深色制服・移除特徵欄・楊詠筑姓名修正】');
@@ -622,6 +622,27 @@ assert(html.includes('renderColleagueVacationsInModal') && html.includes('prompt
 assert(html.includes('same-day') && html.includes('#dc2626') && html.includes('同日休'), '與小楊同日休假之日期特別以紅字粗體、紅色邊框加紅加粗醒目標示');
 assert(html.includes('name-card-source-badges') && html.includes('name-card-employment-badge') && html.includes('name-card-nationality-badge'), '同仁圖鑑彈窗包含身分來源與國籍徽章節點');
 
+// 測試 40: 實物圖片牆模式・4大新工具・朝食料理台配置圖・新班表職稱同步 (v90)
+console.log('\n【測試 40：實物圖片牆模式・4大新工具・朝食料理台配置圖・新班表職稱同步 (v90)】');
+// 1. 4大新工具
+assert(html.includes('vt_scissors') && textContent.includes('剪刀') && (html.includes('キッチンバサミ') || html.includes('はさみ')), '單字庫包含工具：剪刀 (vt_scissors / キッチンバサミ)');
+assert(html.includes('vt_sumibi') && textContent.includes('炭火') && html.includes('すみび'), '單字庫包含工具：炭火 (vt_sumibi / すみび)');
+assert(html.includes('vt_mokutan') && textContent.includes('木炭') && html.includes('もくたん'), '單字庫包含工具：木炭 (vt_mokutan / もくたん)');
+assert(html.includes('vt_hashigo') && textContent.includes('梯子') && (html.includes('脚立') || html.includes('はしご')), '單字庫包含工具：梯子 (vt_hashigo / 脚立 / はしご)');
+
+// 2. 實物圖片牆模式 (只看得到有拍照的物品)
+assert(html.includes('btn-vocab-view-list') && html.includes('btn-vocab-view-gallery'), '單字庫包含檢視模式切換器（列表清單 vs 實物圖片牆）');
+assert(html.includes('setVocabViewMode') && html.includes('currentVocabViewMode'), '包含切換單字庫檢視模式之函式與狀態');
+assert(html.includes('vocab-gallery-grid') && html.includes('gallery-photo-card'), '包含圖片牆專屬 CSS 響應式網格與相片卡片節點');
+assert(html.includes('photoItems = filtered.filter(v => v.imageUrl'), '圖片牆嚴格過濾只呈現具備實物拍照 (imageUrl) 之項目');
+
+// 3. 朝食料理台配置圖與新班表職稱
+assert(html.includes('bs_layout_map') && html.includes('IMG_2035.jpg'), '朝食 SOP 包含餐廳料理台與外場配置圖 (bs_layout_map)');
+assert(html.includes('vs_cb_hojo') && textContent.includes('CB補助'), '職稱清單包含 CB補助 (vs_cb_hojo)');
+assert(html.includes('vs_cb_chumon') && textContent.includes('CB注文'), '職稱清單包含 CB注文 (vs_cb_chumon)');
+assert(html.includes('vs_open_junbi') && textContent.includes('オープン準備'), '職稱清單包含 オープン準備 (vs_open_junbi)');
+assert(html.includes('vs_shime_kakunin') && textContent.includes('締め'), '職稱清單包含 締め / 最終確認 (vs_shime_kakunin)');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -629,7 +650,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v89) Gemini Vision 即時取樣・Style 5 日系 32-bit 像素風・外籍同仁來源・同日休假加紅加粗！');
+  console.log('🎉 所有測試通過！(v90) 實物圖片牆模式・4大新工具・朝食料理台配置圖・新班表職稱同步！');
 }
 
 

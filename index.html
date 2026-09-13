@@ -1848,10 +1848,22 @@
     <section class="page" id="page-vocab-sop">
       <div class="page-sub">涵蓋餐點、酒水、工具、名字、職稱與實用對話之高密度速查庫</div>
 
+      <!-- 檢視模式切換器：列表文字 vs 實物圖片牆 -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+        <div style="display:inline-flex; gap:4px; background:#f1f5f9; padding:3px; border-radius:10px; border:1px solid var(--border);">
+          <button id="btn-vocab-view-list" class="btn btn-sm btn-primary" onclick="setVocabViewMode('list')" style="font-size:0.75rem; padding:4px 12px; font-weight:700;">
+            📋 列表清單
+          </button>
+          <button id="btn-vocab-view-gallery" class="btn btn-sm btn-ghost" onclick="setVocabViewMode('gallery')" style="font-size:0.75rem; padding:4px 12px; font-weight:700;">
+            🖼️ 實物圖片牆 (只看有拍照)
+          </button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModalVocab('sop', 'add')" style="font-size:0.75rem; padding:4px 10px;">＋ 新增工作單字</button>
+      </div>
+
       <div class="vocab-filter-bar" id="filter-bar-sop"></div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <button class="btn btn-primary btn-sm" onclick="openModalVocab('sop', 'add')">＋ 新增工作單字</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <span style="font-size:0.78rem; color:var(--muted)" id="count-vocab-sop"></span>
       </div>
 
@@ -3173,7 +3185,7 @@
 /* ==============================================================
    1. 資料模型與 localStorage 儲存層 (真實傳菜手冊資料)
 ============================================================== */
-const STORAGE_KEY = 'yang_runner_handbook_v89';
+const STORAGE_KEY = 'yang_runner_handbook_v90';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 function createRealRunnerData() {
@@ -3184,6 +3196,27 @@ function createRealRunnerData() {
     "name": "朝食崗位手冊 (朝食)",
     "icon": "☀️",
     "items": [
+        {
+          "id": "bs_layout_map",
+          "type": "guide",
+          "speaker": "🗺️ 餐廳朝食料理台與外場配置圖 (現場 Layout)",
+          "zh": "【四大專區配置】\n① 主配膳台區：味噌汁、咖哩、4種常備小菜、白粥、白飯、餐具與白取皿\n② 和惣菜冷缽區：烏賊納豆、小國豆腐、辛子明太子、辛子蓮根、蔥花、生薑、橙醋\n③ 溫熱主食料理區：淺蜊生薑蒸、炒西蘭花培根、玉子燒、竹莢魚南蠻漬、煎蝦排、朝牛、溫泉蛋、德式香腸、炒蛋、冷拌義大利麵、鬆餅\n④ いろり爐端燒炭烤台：炭火烤鯖魚、烤薩摩揚甜不辣、鐵板火腿蛋\n\n【四大擔當職位】\n• CB注文擔當：掌握客人人數殘數、通報對講機叫菜\n• 廚房擔當：內場烹調熱菜補充\n• いろり擔當：負責炭火網烤鯖魚與現煎火腿蛋\n• 飲料擔當：咖啡機、冰水壺、冰牛奶、茶水補料整備",
+          "ja": "【朝食料理台レイアウト（4大エリア）】\n① 主配膳台：味噌汁・カレー・おばんざい4種・お粥・白米・茶碗・白取り皿\n② 和惣菜小鉢：烏賊納豆・小国豆腐・明太子・辛子蓮根・ネギ・生姜・ポン酢\n③ 温熱料理：浅利生姜蒸し・ブロッコリーベーコン・だし巻き玉子・鰺南蛮・海老カツ・朝牛・温卵・ボイルウインナー・スクランブルエッグ・冷製パスタ・ワッフル\n④ いろり炭火焼き：炭火焼き鯖・さつま揚げ・鉄板ハムエッグ\n\n【各ポジション】\n• CB注文：残数把握・インカム叫菜\n• 厨房担当：温熱料理補充\n• いろり担当：焼き魚・ハムエッグ\n• ドリンク担当：水・牛乳・コーヒー補充",
+          "imageUrl": "./photos/IMG_2035.jpg",
+          "grammar": {
+            "vocabs": [
+              { "ja": "料理台レイアウト", "zh": "料理台/取餐台平面配置圖" },
+              { "ja": "CB注文担当", "zh": "配膳跑菜點單通報擔當" },
+              { "ja": "いろり担当", "zh": "爐端燒炭火烤台擔當" },
+              { "ja": "ドリンク担当", "zh": "飲料水水補料擔當" }
+            ],
+            "points": [
+              { "title": "【殘數30人以下叫菜規則】", "desc": "鯖魚與甜不辣改叫10個各1列，防止過量浪費。" },
+              { "title": "【器皿顏色嚴格區分】", "desc": "水色平皿裝烤魚、赤平皿裝炒蔬菜、青平皿裝熱主菜、和柄平皿裝醬料。" }
+            ],
+            "tips": "點擊上方照片可直接查看完整現場手寫料理台配置平面圖與機材配置表。"
+          }
+        },
       {
         "id": "bs_common_rule",
         "type": "sop",
@@ -5705,7 +5738,11 @@ function createRealRunnerData() {
     { "id": "vd_mizuwari", "ja": "<ruby>水割<rt>みずわ</rt></ruby>り", "zh": "兌水（水割調酒法）", "cat": "酒水", "imageUrl": "", "note": "燒酎或威士忌加水與冰塊飲用" },
     { "id": "vd_oyuwari", "ja": "お<ruby>湯割<rt>ゆわ</rt></ruby>り", "zh": "兌熱水（熱水割）", "cat": "酒水", "imageUrl": "", "note": "燒酎加熱開水溫飲" },
 
-    // ── 🧹 工具類 ──
+        // ── 🧹 工具類 (包含外場常態器具、剪刀、炭火、木炭、梯子等實務工具) ──
+    { "id": "vt_scissors", "ja": "<ruby>鋏<rt>はさみ</rt></ruby>（キッチンバサミ）", "kana": "はさみ", "zh": "剪刀 / 料理剪刀", "cat": "工具", "imageUrl": "./photos/IMG_0884.jpg", "note": "外場分切食物、拆開食材包裝與修整袋口必備剪刀" },
+    { "id": "vt_sumibi", "ja": "<ruby>炭火<rt>すみび</rt></ruby>", "kana": "すみび", "zh": "炭火", "cat": "工具", "imageUrl": "./photos/IMG_1976.jpg", "note": "いろり爐端燒、炭烤鯖魚、甜不辣與地雞之炭火，出餐高溫嚴防燙傷" },
+    { "id": "vt_mokutan", "ja": "<ruby>木炭<rt>もくたん</rt></ruby>（<ruby>炭<rt>すみ</rt></ruby>）", "kana": "もくたん", "zh": "木炭 / 備長炭", "cat": "工具", "imageUrl": "", "note": "烤爐添炭、備長炭開爐與保溫補料用木炭" },
+    { "id": "vt_hashigo", "ja": "<ruby>梯子<rt>はしご</rt></ruby>（<ruby>脚立<rt>きゃたつ</rt></ruby>）", "kana": "はしご", "zh": "梯子 / 折疊梯（腳立）", "cat": "工具", "imageUrl": "", "note": "拿取高處備品、盤架與天花板清潔用之折疊踏梯" },
     { "id": "vt_lighter", "ja": "<ruby>ライター<rt>raita-</rt></ruby>", "zh": "打火機", "cat": "工具", "imageUrl": "", "note": "一般隨身打火機" },
         { "id": "vt_chakkaman", "ja": "チャッカマン", "zh": "長嘴點火器（點火槍）", "cat": "工具", "imageUrl": "", "note": "點火鍋固體燃料專用長嘴點火槍" },
     { "id": "vt_1", "ja": "<ruby>台車<rt>だいしゃ</rt></ruby>", "zh": "推車（搬運推車）", "cat": "工具", "imageUrl": "", "note": "取餐傳菜用搬運台車" },
@@ -5751,7 +5788,11 @@ function createRealRunnerData() {
     { "id": "vn_nagai_miyuki", "ja": "<ruby>長井<rt>ながい</rt></ruby> <ruby>美幸<rt>みゆき</rt></ruby>", "kana": "ながい みゆき", "zh": "長井 美幸", "cat": "名字", "imageUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
     { "id": "vn_kawabata", "ja": "<ruby>川畑<rt>かわばた</rt></ruby>", "kana": "かわばた", "zh": "川畑", "cat": "名字", "imageUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/8 (一)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/28 (日)"] },
 
-    // ── 💼 職稱與班表類 (依據班表雇用形態與館內職務編制) ──
+        // ── 💼 職稱與班表類 (依據班表雇用形態與館內職務編制，含最新CB補助、注文、準備與締め) ──
+    { "id": "vs_cb_hojo", "ja": "CB<ruby>補助<rt>ほじょ</rt></ruby>", "kana": "しーびーほじょ", "zh": "CB補助（中央配膳與跑菜支援同仁）", "cat": "職稱", "imageUrl": "", "note": "負責配膳台出菜通報、餐盤備置與外場推車運送（小楊、山本、韓等同仁班表職位）" },
+    { "id": "vs_cb_chumon", "ja": "CB<ruby>注文<rt>ちゅうもん</rt></ruby>", "kana": "しーびーちゅうもん", "zh": "CB注文擔當（料理點單通報主管）", "cat": "職稱", "imageUrl": "", "note": "掌握現場殘數、對講機叫菜與出餐順序排定（須藤、內間、山本）" },
+    { "id": "vs_open_junbi", "ja": "オープン<ruby>準備<rt>じゅんび</rt></ruby>", "kana": "おーぷんじゅんび", "zh": "開門營業準備同仁", "cat": "職稱", "imageUrl": "", "note": "早晚開門前擺桌、餐台開爐、醬料配料填補之現場整備人員" },
+    { "id": "vs_shime_kakunin", "ja": "<ruby>締<rt>し</rt></ruby>め / <ruby>最終確認<rt>さいしゅうかくにん</rt></ruby>", "kana": "しめ / さいしゅうかくにん", "zh": "打烊打掃 / 最終巡檢同仁", "cat": "職稱", "imageUrl": "", "note": "餐期結束後火源確認、餐台清潔、推車歸位與翌日交接巡檢" },
     { "id": "vs_shihainin", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "kana": "しはいにん", "zh": "經理 / 總經理 (支配人)", "cat": "職稱", "imageUrl": "", "note": "旅館營運與管理最高主管 (如：加治木 支配人)" },
     { "id": "vs_seishain", "ja": "<ruby>正社員<rt>せいしゃいん</rt></ruby>", "kana": "せいしゃいん", "zh": "正職同仁 / 正社員", "cat": "職稱", "imageUrl": "", "note": "旅館正式員工 (如：川畑、ビム、ハン、須藤等)" },
     { "id": "vs_hakenshain", "ja": "<ruby>派遣社員<rt>はけんしゃいん</rt></ruby>", "kana": "はけんしゃいん", "zh": "派遣同仁 / 打工夥伴", "cat": "職稱", "imageUrl": "", "note": "外場派遣與打工夥伴 (如：小楊、長森、市石、森田等)" },
@@ -7303,6 +7344,23 @@ function renderSopContent() {
    5. 全局單字庫 (實務必備高密度速查庫)
 ============================================================== */
 let globalFilterSop = '全部';
+let currentVocabViewMode = 'list'; // 'list' | 'gallery'
+
+function setVocabViewMode(mode) {
+  currentVocabViewMode = mode;
+  const btnList = document.getElementById('btn-vocab-view-list');
+  const btnGallery = document.getElementById('btn-vocab-view-gallery');
+  if (btnList && btnGallery) {
+    if (mode === 'gallery') {
+      btnGallery.className = 'btn btn-sm btn-primary';
+      btnList.className = 'btn btn-sm btn-ghost';
+    } else {
+      btnList.className = 'btn btn-sm btn-primary';
+      btnGallery.className = 'btn btn-sm btn-ghost';
+    }
+  }
+  renderVocabPage('sop');
+}
 
 
 
@@ -7359,6 +7417,54 @@ function renderVocabPage(type) {
   }
 
   let filtered = currentFilter === '全部' ? data : data.filter(v => v.cat === currentFilter);
+
+  // ── 🖼️ 實物圖片牆模式 (只看得到有拍照的物品：直接陳列照片、下方放日文與中文) ──
+  if (currentVocabViewMode === 'gallery') {
+    const photoItems = filtered.filter(v => v.imageUrl && v.imageUrl.trim() && !v.imageUrl.includes('placeholder') && !v.imageUrl.includes('avatar'));
+    
+    if (countEl) {
+      countEl.innerHTML = `<span style="color:var(--primary); font-weight:700;">🖼️ 實物圖片模式</span>：共 <strong>${photoItems.length}</strong> 個拍照項目（未拍照者已依需求自動隱藏）`;
+    }
+
+    if (photoItems.length === 0) {
+      listEl.innerHTML = `
+        <div class="empty-box" style="text-align:center; padding:40px 16px; background:#fff; border:1px dashed var(--border); border-radius:14px; margin-top:10px;">
+          <div style="font-size:2.8rem; margin-bottom:8px;">📷</div>
+          <p style="font-size:0.92rem; font-weight:700; color:var(--ink); margin-bottom:4px;">此分類目前尚無實物照片</p>
+          <p style="font-size:0.78rem; color:var(--muted); margin:0;">您可以切換上方其他分類標籤，或點擊「📋 列表清單」查看完整單字庫！</p>
+        </div>`;
+      return;
+    }
+
+    let galleryHtml = `<div class="vocab-gallery-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px; margin-top:6px; margin-bottom:24px;">`;
+    photoItems.forEach(v => {
+      galleryHtml += `
+        <div class="gallery-photo-card" 
+             onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+             ondblclick="openWordDetailModal('${v.id}')"
+             title="點一下發音・連點兩下查看完整詳情"
+             style="background:#fff; border:1.5px solid var(--border); border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06); display:flex; flex-direction:column; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;">
+          <div style="position:relative; width:100%; aspect-ratio:4/3; background:#f8fafc; overflow:hidden;">
+            <img src="${v.imageUrl}" style="width:100%; height:100%; object-fit:cover;" loading="lazy" alt="${escapeHtml(v.zh || '')}" />
+            <span style="position:absolute; top:6px; left:6px; background:rgba(0,0,0,0.65); color:#fff; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:6px; backdrop-filter:blur(4px);">
+              ${v.cat}
+            </span>
+            <button class="cell-btn-mini" onclick="event.stopPropagation(); speakJapanese('${escapeJs(v.ja || v.zh)}')" 
+                    style="position:absolute; bottom:6px; right:6px; background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.1); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 5px rgba(0,0,0,0.2); font-size:0.8rem; cursor:pointer;" title="朗讀發音">
+              🔊
+            </button>
+          </div>
+          <div style="padding:8px 10px; display:flex; flex-direction:column; gap:2px; flex-grow:1;">
+            <div class="cell-ja" style="font-size:0.85rem; font-weight:800; font-family:var(--font-serif); line-height:1.35; color:var(--ink);">${v.ja}</div>
+            <div class="cell-zh" style="font-size:0.75rem; color:var(--muted); font-weight:600; line-height:1.3;">${escapeHtml(v.zh)}</div>
+            ${v.note ? `<div style="font-size:0.68rem; color:#64748b; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(v.note)}">${escapeHtml(v.note)}</div>` : ''}
+          </div>
+        </div>`;
+    });
+    galleryHtml += `</div>`;
+    listEl.innerHTML = galleryHtml;
+    return;
+  }
 
   if (countEl) countEl.textContent = '共 ' + filtered.length + ' 個項目';
 
