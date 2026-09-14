@@ -885,27 +885,23 @@ const idxYakiPiiman = html.indexOf('"id": "vs_yaki_piiman"');
 const idxYakiNinjin = html.indexOf('"id": "vs_yaki_ninjin"');
 assert(idxYakiEbi < idxYakiPiiman && idxYakiPiiman < idxYakiNinjin, '夕食炭火烤物烤蝦、烤青椒與烤蘿蔔全數集中相鄰排列');
 
-// 測試 51: 8 種身材排列組合 (方案 B：高/矮 × 瘦/胖 × 男/女) 與獨立按鈕切換 (v102)
-console.log('\n【測試 51：8 種身材素體組合 (方案 B) 與獨立按鈕切換】');
-assert(html.includes('id="trait-height-tall"') && html.includes('id="trait-height-short"'), '包含獨立身高按鈕：高挑 (tall) 與 矮小 (short)');
-assert(html.includes('id="trait-build-slim"') && html.includes('id="trait-build-chubby"'), '包含獨立身材胖瘦按鈕：標準偏瘦 (slim) 與 偏胖微豐 (chubby)');
-assert(html.includes("currentWhoTraits.height") && html.includes("currentWhoTraits.build"), '狀態核心 currentWhoTraits 支援 height 與 build');
-assert(html.includes("body_male_tall_slim.jpg") || html.includes("body_${gender}_${height}_${build}.jpg"), '支援動態映射 8 種素體立繪檔案路徑');
+// 測試 51: 半身身軀素體架構 (腰部以上半身，免除高矮問題，聚焦男女與普通/微胖身材) (v103)
+console.log('\n【測試 51：半身身軀素體架構 (普通/微胖 × 男女，免除高矮複雜度)】');
+assert(html.includes('id="trait-build-normal"') && html.includes('id="trait-build-chubby"'), '包含半身身材按鈕：普通身材 (normal) 與 偏胖微豐 (chubby)');
+assert(!html.includes('id="trait-height-tall"'), '已徹底移除身高控制 (半身構圖無需考慮高矮)');
+assert(html.includes("currentWhoTraits.build"), '狀態核心 currentWhoTraits 支援 build');
+assert(html.includes("half_${gender}_${build}.jpg"), '支援動態映射半身素體立繪檔案路徑');
 
-const expectedBodyFiles = [
-  'photos/body_male_tall_slim.jpg',
-  'photos/body_male_tall_chubby.jpg',
-  'photos/body_male_short_slim.jpg',
-  'photos/body_male_short_chubby.jpg',
-  'photos/body_female_tall_slim.jpg',
-  'photos/body_female_tall_chubby.jpg',
-  'photos/body_female_short_slim.jpg',
-  'photos/body_female_short_chubby.jpg'
+const expectedHalfBodyFiles = [
+  'photos/half_male_normal.jpg',
+  'photos/half_male_chubby.jpg',
+  'photos/half_female_normal.jpg',
+  'photos/half_female_chubby.jpg'
 ];
 
-expectedBodyFiles.forEach(f => {
+expectedHalfBodyFiles.forEach(f => {
   const exists = fs.existsSync(path.join(__dirname, f));
-  assert(exists, `實體素體圖檔存在且有效: ${f}`);
+  assert(exists, `實體半身圖檔存在且有效: ${f}`);
 });
 
 console.log('====================================================');
@@ -915,7 +911,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v102) 8 種身材素體組合 (方案 B：高瘦/高胖/矮瘦/矮胖 × 男女) 成功上線！');
+  console.log('🎉 所有測試通過！(v103) 半身身軀素體架構 (免除高矮，男女 × 普通/微胖) 成功上線！');
 }
 
 

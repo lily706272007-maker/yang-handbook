@@ -2984,17 +2984,10 @@
           <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-male" onclick="setAvatarTrait('gender', 'male')" style="font-size:0.78rem; padding:3px 10px;">👦 男生</button>
         </div>
 
-        <!-- 方案 B：身高（高挑 / 矮小） -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">身高：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-height" id="trait-height-tall" onclick="setAvatarTrait('height', 'tall')" style="font-size:0.78rem; padding:3px 10px;">🦒 高挑身材</button>
-          <button class="btn btn-sm btn-ghost trait-pill-height" id="trait-height-short" onclick="setAvatarTrait('height', 'short')" style="font-size:0.78rem; padding:3px 10px;">🐥 矮小嬌小</button>
-        </div>
-
-        <!-- 方案 B：身材（標準偏瘦 / 偏胖微豐） -->
+        <!-- 半身身形（普通身材 / 偏胖微豐，無需考慮身高） -->
         <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">身材：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-slim" onclick="setAvatarTrait('build', 'slim')" style="font-size:0.78rem; padding:3px 10px;">🏃 標準偏瘦</button>
+          <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-normal" onclick="setAvatarTrait('build', 'normal')" style="font-size:0.78rem; padding:3px 10px;">👔 普通身材</button>
           <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-chubby" onclick="setAvatarTrait('build', 'chubby')" style="font-size:0.78rem; padding:3px 10px;">🐻 偏胖微豐</button>
         </div>
 
@@ -12592,8 +12585,7 @@ let currentWhoState = {
 
 let currentWhoTraits = {
   gender: 'female',
-  height: 'tall',
-  build: 'slim',
+  build: 'normal',
   nationality: '日本 🇯🇵',
   face: 'round',
   nose: 'dot',
@@ -13007,11 +12999,10 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
 
   const traits = customTraits || (nameItem && nameItem.traits) || (nameItem && DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) || currentWhoTraits;
   const gender = traits.gender || 'female';
-  const height = traits.height || 'tall';
-  const build = traits.build || 'slim';
+  const build = (traits.build === 'chubby') ? 'chubby' : 'normal';
 
-  // 方案 B：8 種無頭身材素體立繪（依性別 × 身高 × 胖瘦即時切換）
-  const bodyAssetKey = `body_${gender}_${height}_${build}.jpg`;
+  // 半身身軀素體立繪（依性別 × 胖瘦即時切換，腰部以上半身免除身高問題）
+  const bodyAssetKey = `half_${gender}_${build}.jpg`;
   return `photos/${bodyAssetKey}`;
   // A. 窗外天空與陽光
   const skyGrad = ctx.createLinearGradient(0, 0, 0, 360);
@@ -13522,13 +13513,9 @@ function updateTraitPillsUI() {
   document.querySelectorAll('.trait-pill-gender').forEach(b => b.classList.remove('btn-primary'));
   document.getElementById('trait-gender-' + currentWhoTraits.gender)?.classList.add('btn-primary');
 
-  // 身高（方案 B）
-  document.querySelectorAll('.trait-pill-height').forEach(b => b.classList.remove('btn-primary'));
-  document.getElementById('trait-height-' + (currentWhoTraits.height || 'tall'))?.classList.add('btn-primary');
-
-  // 身材（方案 B）
+  // 半身身材（普通身材 / 偏胖微豐）
   document.querySelectorAll('.trait-pill-build').forEach(b => b.classList.remove('btn-primary'));
-  document.getElementById('trait-build-' + (currentWhoTraits.build || 'slim'))?.classList.add('btn-primary');
+  document.getElementById('trait-build-' + (currentWhoTraits.build === 'chubby' ? 'chubby' : 'normal'))?.classList.add('btn-primary');
 
   // 2. 臉型
   document.querySelectorAll('.trait-pill-face').forEach(b => b.classList.remove('btn-primary'));
