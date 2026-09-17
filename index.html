@@ -12999,10 +12999,15 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
 
   const traits = customTraits || (nameItem && nameItem.traits) || (nameItem && DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) || currentWhoTraits;
   const gender = traits.gender || 'female';
-  const build = (traits.build === 'chubby') ? 'chubby' : 'normal';
+  const isChubby = (traits.build === 'chubby' || traits.build === 'sturdy');
 
-  // 半身身軀素體立繪（依性別 × 胖瘦即時切換，腰部以上半身免除身高問題）
-  const bodyAssetKey = `half_${gender}_${build}.jpg`;
+  // 半身身軀素體立繪（男：壯實/普通，女：微豐/普通，同一高度與微側角度）
+  let bodyAssetKey = '';
+  if (gender === 'male') {
+    bodyAssetKey = isChubby ? 'half_male_sturdy.jpg' : 'half_male_normal.jpg';
+  } else {
+    bodyAssetKey = isChubby ? 'half_female_chubby.jpg' : 'half_female_normal.jpg';
+  }
   return `photos/${bodyAssetKey}`;
   // A. 窗外天空與陽光
   const skyGrad = ctx.createLinearGradient(0, 0, 0, 360);

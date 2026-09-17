@@ -890,18 +890,23 @@ console.log('\n【測試 51：半身身軀素體架構 (普通/微胖 × 男女�
 assert(html.includes('id="trait-build-normal"') && html.includes('id="trait-build-chubby"'), '包含半身身材按鈕：普通身材 (normal) 與 偏胖微豐 (chubby)');
 assert(!html.includes('id="trait-height-tall"'), '已徹底移除身高控制 (半身構圖無需考慮高矮)');
 assert(html.includes("currentWhoTraits.build"), '狀態核心 currentWhoTraits 支援 build');
-assert(html.includes("half_${gender}_${build}.jpg"), '支援動態映射半身素體立繪檔案路徑');
+assert(html.includes("half_male_sturdy.jpg") || html.includes("photos/${bodyAssetKey}"), '支援動態映射半身素體立繪檔案路徑');
 
 const expectedHalfBodyFiles = [
   'photos/half_male_normal.jpg',
-  'photos/half_male_chubby.jpg',
+  'photos/half_male_sturdy.jpg',
   'photos/half_female_normal.jpg',
-  'photos/half_female_chubby.jpg'
+  'photos/half_female_chubby.jpg',
+  'photos/body_layer_male_normal.png',
+  'photos/body_layer_male_sturdy.png',
+  'photos/body_layer_female_normal.png',
+  'photos/body_layer_female_chubby.png',
+  'photos/clean_restaurant_pixel_bg.jpg'
 ];
 
 expectedHalfBodyFiles.forEach(f => {
   const exists = fs.existsSync(path.join(__dirname, f));
-  assert(exists, `實體半身圖檔存在且有效: ${f}`);
+  assert(exists, `實體圖層檔案存在且有效: ${f}`);
 });
 
 console.log('====================================================');
