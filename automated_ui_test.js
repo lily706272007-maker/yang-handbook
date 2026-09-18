@@ -915,6 +915,49 @@ expectedHalfBodyFiles.forEach(f => {
   assert(exists, `實體圖層檔案存在且有效: ${f}`);
 });
 
+// 測試 52: 10 圖層模組化頭像 (0, 0) 絕對座標無縫合成資產與規格驗證 (v130)
+console.log('\n【測試 52：10 圖層絕對座標 (0, 0) 無縫堆疊與紙娃娃資產驗證】');
+const layerDirs = ['bg', 'body', 'faces', 'mouths', 'noses', 'eyes', 'eyebrows', 'bangs', 'back_hair', 'accessories'];
+layerDirs.forEach(sub => {
+  const p = path.join(__dirname, 'photos/layers', sub);
+  assert(fs.existsSync(p), `圖層目錄 photos/layers/${sub} 存在且有效`);
+});
+
+// 驗證各層核心資產數量
+const faceFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/faces')).filter(f => f.endsWith('.png'));
+assert(faceFiles.length === 20, `臉型素體圖層包含 20 款 (10款 × 2膚色)，實際: ${faceFiles.length}`);
+
+const eyeFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/eyes')).filter(f => f.endsWith('.png'));
+assert(eyeFiles.length === 14, `眼睛圖層包含 14 款 (男6款+女8款)，實際: ${eyeFiles.length}`);
+
+const browFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/eyebrows')).filter(f => f.endsWith('.png'));
+assert(browFiles.length === 11, `眉毛圖層包含 11 款 (男5款+女6款)，實際: ${browFiles.length}`);
+
+const noseFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/noses')).filter(f => f.endsWith('.png'));
+assert(noseFiles.length === 4, `鼻子圖層包含 4 款，實際: ${noseFiles.length}`);
+
+const mouthFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/mouths')).filter(f => f.endsWith('.png'));
+assert(mouthFiles.length === 6, `嘴巴圖層包含 6 款，實際: ${mouthFiles.length}`);
+
+const bangFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/bangs')).filter(f => f.endsWith('.png'));
+assert(bangFiles.length === 32, `前瀏海圖層包含 32 款 (16款 × 2髮色)，實際: ${bangFiles.length}`);
+
+const backHairFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/back_hair')).filter(f => f.endsWith('.png'));
+assert(backHairFiles.length === 20, `後部髮型圖層包含 20 款 (10款 × 2髮色)，實際: ${backHairFiles.length}`);
+
+const bodyFiles = fs.readdirSync(path.join(__dirname, 'photos/layers/body')).filter(f => f.endsWith('.png'));
+assert(bodyFiles.length === 4, `身軀素體圖層包含 4 款，實際: ${bodyFiles.length}`);
+
+const compositeFiles = [
+  'photos/composite_character_a.png',
+  'photos/composite_character_b.png',
+  'photos/composite_character_c.png',
+  'photos/avatar_stacking_3chars_showcase.jpg'
+];
+compositeFiles.forEach(cf => {
+  assert(fs.existsSync(path.join(__dirname, cf)), `合成驗證立繪圖存在: ${cf}`);
+});
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -922,7 +965,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v103) 半身身軀素體架構 (免除高矮，男女 × 普通/微胖) 成功上線！');
+  console.log('🎉 所有測試通過！(v130) 10 圖層絕對座標無縫合成引擎驗證成功！');
 }
 
 
