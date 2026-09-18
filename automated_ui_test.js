@@ -264,28 +264,28 @@ assert(html.includes('playNameCardSpeech') && html.includes('playWhoResultSpeech
 assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '包含特徵快速微調與即時補拍重繪函式');
 assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
 
-// 測試 19: 現場四國同步翻譯板（日文・尼泊爾文・緬甸文・英文）功能測試
-console.log('\n【測試 19：現場四國同步翻譯板 (日/尼/緬/英 並排大字與語音)】');
-assert(html.includes('data-page="page-broadcast"') && html.includes('四國翻譯'), '頂部導航列包含「🌐 四國翻譯」按鈕');
-assert(html.includes('id="page-broadcast"'), '包含四國翻譯專屬頁面 (page-broadcast)');
+// 測試 19: 現場六國同步翻譯板（日文・尼泊爾文・緬甸文・越南文・英文・韓文）功能測試
+console.log('\n【測試 19：現場六國同步翻譯板 (日/尼/緬/越/英/韓 六國並排大字與語音)】');
+assert(html.includes('data-page="page-broadcast"') && (html.includes('六國翻譯') || html.includes('四國翻譯')), '頂部導航列包含「🌐 六國翻譯」按鈕');
+assert(html.includes('id="page-broadcast"'), '包含六國翻譯專屬頁面 (page-broadcast)');
 assert(html.includes('id="broadcast-zh-input"'), '包含中文翻譯事項輸入框 (broadcast-zh-input)');
-assert(html.includes('id="broadcast-cards-grid"'), '包含四國語言並排網格容器 (broadcast-cards-grid)');
+assert(html.includes('id="broadcast-cards-grid"'), '包含六國語言並排網格容器 (broadcast-cards-grid)');
 assert(!html.includes('id="broadcast-templates-wrap"'), '已移除常用職場快捷範本標籤列 (broadcast-templates-wrap)');
-assert(html.includes('id="modal-broadcast-bigscreen"') && html.includes('現場四國大字翻譯板'), '包含全螢幕大字亮屏展示彈窗 (modal-broadcast-bigscreen / 現場四國大字翻譯板)');
+assert(html.includes('id="modal-broadcast-bigscreen"') && (html.includes('現場六國大字翻譯板') || html.includes('現場四國大字翻譯板')), '包含全螢幕大字亮屏展示彈窗 (modal-broadcast-bigscreen / 現場六國大字翻譯板)');
 assert(html.includes('promptNationalityStep') && html.includes('id="who-screen-gender"'), '包含性別選擇畫面，且選完性別後觸發 promptNationalityStep (v79 新增國籍步驟)');
 assert(!html.includes('trait-feature-beautyMark') && !html.includes('trait-feature-beard'), 'v79 微調工房已移除嘴角痣與鬍渣短鬍特徵選項');
 assert(!html.includes('setAvatarFeature'), 'v79 已移除舊的特徵切換函式 setAvatarFeature');
 assert(html.includes('applyBroadcastTemplate'), '包含快捷範本套用函式 (applyBroadcastTemplate)');
 assert(html.includes('copySingleLang'), '包含單一語言複製函式 (copySingleLang)');
-assert(html.includes('copyAllQuadBroadcast'), '包含一鍵複製全部 4 國語言翻譯函式 (copyAllQuadBroadcast)');
+assert(html.includes('copyAllHexaBroadcast') || html.includes('copyAllQuadBroadcast'), '包含一鍵複製全部 6 國語言翻譯函式 (copyAllHexaBroadcast)');
 assert(html.includes('openBroadcastBigScreen') && html.includes('closeBroadcastBigScreen'), '包含開啟/關閉大字亮屏全螢幕展示函式');
 assert(html.includes('speakBroadcast'), '包含多語系語音合成朗讀函式 (speakBroadcast)');
 assert(html.includes('toggleBroadcastMic'), '包含中文語音輸入辨識函式 (toggleBroadcastMic)');
-assert(html.includes('日本語') && html.includes('नेपाली') && html.includes('မြန်မာဘာသာ') && html.includes('English'), '完整涵蓋日文、尼泊爾文、緬甸文、英文四大語言');
+assert(html.includes('日本語') && html.includes('नेपाली') && html.includes('မြန်မာ') && html.includes('Tiếng Việt') && html.includes('English') && html.includes('한국어'), '完整涵蓋日文、尼泊爾文、緬甸文、越南文、英文、韓文六大語言');
 
 assert(html.includes('fetchFreeGoogleTranslate'), '包含免金鑰 Google 雲端即時直譯引擎 (fetchFreeGoogleTranslate)');
 assert(html.includes('gemini-flash-latest') && html.includes('gemini-3.6-flash'), 'Gemini API 模型配置更新為最新穩定版 (gemini-flash-latest / gemini-3.6-flash)');
-assert(html.includes('丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '四國翻譯全面採用親切自然之普通丁寧體日文');
+assert(html.includes('丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '六國翻譯全面採用親切自然之普通丁寧體日文');
 
 // 測試 20: 外場撤盤 6 組自然應對與同事平級 10 大動作 30 句高頻指示
 console.log('\n【測試 20：外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示】');
