@@ -2991,6 +2991,13 @@
           <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-chubby" onclick="setAvatarTrait('build', 'chubby')" style="font-size:0.78rem; padding:3px 10px;">🐻 偏胖微豐</button>
         </div>
 
+        <!-- 膚色選擇（自然日本人膚色 / 深色暖膚：緬甸・越南・尼泊爾） -->
+        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">膚色：</span>
+          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-natural" onclick="setAvatarTrait('skin', 'natural')" style="font-size:0.78rem; padding:3px 10px;">🇯🇵 自然膚色 (一般/日籍)</button>
+          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-tan" onclick="setAvatarTrait('skin', 'tan')" style="font-size:0.78rem; padding:3px 10px;">🇲🇲 深色暖膚 (緬甸/越南/尼泊爾)</button>
+        </div>
+
         <!-- 2. 臉型 -->
         <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
           <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">臉型：</span>
@@ -13001,12 +13008,18 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   const gender = traits.gender || 'female';
   const isChubby = (traits.build === 'chubby' || traits.build === 'sturdy');
 
-  // 半身身軀素體立繪（男：壯實/普通，女：微豐/普通，同一高度與微側角度）
+  const isTan = (traits.skin === 'tan' || traits.skinTone === 'tan' || traits.skin === 'deep');
+
+  // 半身身軀素體立繪（男：壯實/普通，女：微豐/普通，同一高度與微側角度，支援自然/深色雙膚色）
   let bodyAssetKey = '';
   if (gender === 'male') {
-    bodyAssetKey = isChubby ? 'half_male_sturdy.jpg' : 'half_male_normal.jpg';
+    bodyAssetKey = isChubby
+      ? (isTan ? 'half_male_sturdy_tan.jpg' : 'half_male_sturdy.jpg')
+      : (isTan ? 'half_male_normal_tan.jpg' : 'half_male_normal.jpg');
   } else {
-    bodyAssetKey = isChubby ? 'half_female_chubby.jpg' : 'half_female_normal.jpg';
+    bodyAssetKey = isChubby
+      ? (isTan ? 'half_female_chubby_tan.jpg' : 'half_female_chubby.jpg')
+      : (isTan ? 'half_female_normal_tan.jpg' : 'half_female_normal.jpg');
   }
   return `photos/${bodyAssetKey}`;
   // A. 窗外天空與陽光

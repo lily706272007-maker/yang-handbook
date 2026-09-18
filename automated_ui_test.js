@@ -892,11 +892,17 @@ assert(!html.includes('id="trait-height-tall"'), '已徹底移除身高控制 (�
 assert(html.includes("currentWhoTraits.build"), '狀態核心 currentWhoTraits 支援 build');
 assert(html.includes("half_male_sturdy.jpg") || html.includes("photos/${bodyAssetKey}"), '支援動態映射半身素體立繪檔案路徑');
 
+assert(html.includes('id="trait-skin-natural"') && html.includes('id="trait-skin-tan"'), '包含雙膚色切換按鈕：自然膚色 (natural) 與 深色暖膚 (tan)');
+
 const expectedHalfBodyFiles = [
   'photos/half_male_normal.jpg',
   'photos/half_male_sturdy.jpg',
   'photos/half_female_normal.jpg',
   'photos/half_female_chubby.jpg',
+  'photos/half_male_normal_tan.jpg',
+  'photos/half_male_sturdy_tan.jpg',
+  'photos/half_female_normal_tan.jpg',
+  'photos/half_female_chubby_tan.jpg',
   'photos/body_layer_male_normal.png',
   'photos/body_layer_male_sturdy.png',
   'photos/body_layer_female_normal.png',
