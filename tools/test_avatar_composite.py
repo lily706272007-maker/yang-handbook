@@ -18,23 +18,23 @@ def composite_avatar(layers_list, out_path, add_forehead_shadow=True):
             if 'bangs/' in layer_rel:
                 bangs_im = layer_im
                 if add_forehead_shadow:
-                    # Stepped anime cel-shaded drop shadow on forehead with dithered edge
+                    # Delicate warm anime skin shadow under bangs with dithered edge
                     shadow = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
                     for y in range(110, 205):
                         for x in range(410, 545):
                             bx = x - 2
-                            by = y - 5
+                            by = y - 4
                             if 0 <= bx < 1024 and 0 <= by < 1024:
                                 p_bang = bangs_im.getpixel((bx, by))
                                 if p_bang[3] > 180:
                                     p_curr = bangs_im.getpixel((x, y))
                                     if p_curr[3] < 50:
-                                        by_edge = y - 6
+                                        by_edge = y - 5
                                         p_edge = bangs_im.getpixel((bx, by_edge)) if 0 <= by_edge < 1024 else (0,0,0,0)
                                         if p_edge[3] < 120 and ((x + y) % 2 == 0):
-                                            shadow.putpixel((x, y), (55, 26, 22, 36))
+                                            shadow.putpixel((x, y), (170, 105, 75, 14))
                                         else:
-                                            shadow.putpixel((x, y), (55, 26, 22, 65))
+                                            shadow.putpixel((x, y), (170, 105, 75, 26))
                     canvas.alpha_composite(shadow)
             canvas.alpha_composite(layer_im)
         else:
@@ -115,26 +115,26 @@ font_h2 = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 17)
 font_desc = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 13)
 
 d.rectangle([(0, 0), (showcase_w, 65)], fill=(30, 39, 46))
-d.text((30, 18), '【10 圖層絕對座標無縫合成・v138 極致美學重構版】日系像素人型實測成果', font=font_title, fill=(255, 255, 255))
+d.text((30, 18), '【10 圖層絕對座標無縫合成・v139 無瑕瓷肌重調版】日系像素人型實測成果', font=font_title, fill=(255, 255, 255))
 
 chars_info = [
     (im_a, '示範同仁 A（精緻甜美風）', [
         '性別體型：女性・優雅修身肩線',
         '五官搭配：幼態短臉＋柔美美睫眼＋果凍微笑唇',
         '髮型配色：低包包頭＋法式八字外翻（焦糖亞麻棕）',
-        '美學修復：修長天鵝頸、臥蠶微笑眼、抖動階梯影'
+        '美學修復：無瑕純淨基底、纖細法式外翻髮尾、柔和點鼻'
     ]),
     (im_b, '示範同仁 B（俐落專業風）', [
         '性別體型：男性・英挺幹練身軀',
         '五官搭配：柔和方臉＋自信聚焦小眼＋舒展劍眉',
         '髮型配件：漸層短髮＋韓系逗號中分＋透光黑框鏡',
-        '美學修復：微抿笑意、輕薄逗號瀏海、抗眩透光鏡'
+        '美學修復：抹除眼眶黑圈、端正挺拔直鼻、消除方塊色差'
     ]),
     (im_c, '示範同仁 C（率性中性風）', [
         '性別體型：女性身軀 × 男士短髮（Unisex）',
         '五官搭配：經典鵝蛋臉＋英氣神采眼＋深邃開朗笑',
         '髮型配色：層次碎短髮＋微捲短髮（純黑）',
-        '美學修復：修除怪髮、左右平衡顱頂、細膩齒齦笑'
+        '美學修復：修除假人眼窩、中性立體臉容、純淨瓷白膚質'
     ])
 ]
 
@@ -152,6 +152,6 @@ for idx, (im, name, desc_lines) in enumerate(chars_info):
 # Save versioned and master showcases
 showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase.jpg'), quality=95)
 showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase.jpg'), quality=95)
-showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase_v138.jpg'), quality=95)
-showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase_v138.jpg'), quality=95)
-print('All showcases regenerated successfully with v138!')
+showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase_v139.jpg'), quality=95)
+showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase_v139.jpg'), quality=95)
+print('All showcases regenerated successfully with v139!')
