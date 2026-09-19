@@ -1,20 +1,34 @@
 import os
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 WORKSPACE = '/Users/yangyongzhu/.gemini/antigravity/scratch/yang-pwa'
 LAYERS_DIR = os.path.join(WORKSPACE, 'photos/layers')
 PHOTOS_DIR = os.path.join(WORKSPACE, 'photos')
 BRAIN_DIR = '/Users/yangyongzhu/.gemini/antigravity/brain/b58ba25a-e9f5-48ce-a86c-daf46a4f945e'
 
-def composite_avatar(layers_list, out_path):
+def composite_avatar(layers_list, out_path, add_forehead_shadow=True):
     canvas = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
+    bangs_im = None
     for layer_rel in layers_list:
         if not layer_rel:
             continue
         p = os.path.join(LAYERS_DIR, layer_rel)
         if os.path.exists(p):
             layer_im = Image.open(p).convert('RGBA')
-            canvas.alpha_composite(layer_im, (0, 0))
+            if 'bangs/' in layer_rel:
+                bangs_im = layer_im
+                if add_forehead_shadow:
+                    # Forehead drop shadow under bangs
+                    alpha = bangs_im.split()[-1]
+                    mask = alpha.filter(ImageFilter.GaussianBlur(3))
+                    shadow = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
+                    for y in range(4, 1024):
+                        for x in range(1, 1024):
+                            a = mask.getpixel((x - 1, y - 4))
+                            if a > 35:
+                                shadow.putpixel((x, y), (45, 25, 20, int(a * 0.38)))
+                    canvas.alpha_composite(shadow)
+            canvas.alpha_composite(layer_im)
         else:
             print(f'Warning: Layer not found: {p}')
     canvas.convert('RGB').save(out_path, quality=95)
@@ -92,68 +106,44 @@ font_title = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 26)
 font_h2 = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 17)
 font_desc = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 13)
 
-# Header
 d.rectangle([(0, 0), (showcase_w, 65)], fill=(30, 39, 46))
-d.text((30, 18), '【10 圖層絕對座標無縫合成】32位元日系像素人型・即時疊加驗證成果', font=font_title, fill=(255, 255, 255))
+d.text((30, 18), '【10 圖層絕對座標無縫合成・終極美學重構版】日系像素人型實測成果', font=font_title, fill=(255, 255, 255))
 
 chars_info = [
     (im_a, '示範同仁 A（精緻甜美風）', [
-        '• 後髮：2. 低包包頭（亞麻棕）',
-        '• 臉型：2. 清秀瓜子臉（自然膚）',
-        '• 眼睛：5. 濃密美睫眼（上下睫毛）',
-        '• 眉毛：6. 歐式細眉',
-        '• 瀏海：8. 法式八字外翻（亞麻棕）',
-        '• 身軀：女外場制服'
+        '性別體型：女性・一般標準身軀',
+        '五官搭配：幼態短臉＋接睫毛美睫眼＋微笑唇',
+        '髮型配色：低包包頭＋法式八字外翻（亞麻棕）',
+        '美學修復：自然鎖骨頸部、眼神星芒高光、額頭落影'
     ]),
-    (im_b, '示範同仁 B（沈穩俐落風）', [
-        '• 後髮：7. 漸層俐落短髮（純黑）',
-        '• 臉型：5. 柔和圓角方臉',
-        '• 眼睛：4. 小眼睛款（自然沈穩）',
-        '• 眉毛：1. 劍眉英氣眉',
-        '• 瀏海：3. 韓系逗號中分（純黑）',
-        '• 配件：黑框方型眼鏡'
+    (im_b, '示範同仁 B（俐落專業風）', [
+        '性別體型：男性・一般標準身軀',
+        '五官搭配：柔和方臉＋清爽神采小眼＋劍眉＋挺拔直鼻',
+        '髮型配件：漸層短髮＋韓系逗號中分＋黑框方眼鏡',
+        '美學修復：領口無縫包覆、耳周髮量飽滿、立體下巴'
     ]),
-    (im_c, '示範同仁 C（女生留男生頭・中性風）', [
-        '• 後髮：10. 層次碎短髮（純黑）',
-        '• 臉型：1. 經典鵝蛋臉',
-        '• 眼睛：1. 清爽神采眼',
-        '• 眉毛：2. 溫柔平直眉',
-        '• 瀏海：5. 四六微捲短髮（男士款）',
-        '• 身軀：女外場制服（打破性別限制）'
-    ]),
+    (im_c, '示範同仁 C（率性中性風）', [
+        '性別體型：女性身軀 × 男士短髮（Unisex）',
+        '五官搭配：經典鵝蛋臉＋英氣神采眼＋開朗露齒笑',
+        '髮型配色：層次碎短髮＋四六微捲中分（純黑）',
+        '美學修復：比例協調、完整頭顱髮量、親切生動'
+    ])
 ]
 
-card_w = 470
-card_h = 570
-crop_box = (200, 20, 824, 760) # crop head and upper body
-crop_size = (crop_box[2] - crop_box[0], crop_box[3] - crop_box[1])
-
 for idx, (im, name, desc_lines) in enumerate(chars_info):
-    cx = 30 + idx * (card_w + 33)
-    cy = 85
-    # card background
-    d.rounded_rectangle([(cx, cy), (cx + card_w, cy + card_h)], radius=10, fill=(255, 255, 255), outline=(218, 225, 233), width=1)
-    # title banner
-    d.rounded_rectangle([(cx, cy), (cx + card_w, cy + 45)], radius=10, fill=(240, 243, 248))
-    d.rectangle([(cx, cy + 30), (cx + card_w, cy + 45)], fill=(240, 243, 248))
-    d.text((cx + 15, cy + 12), name, font=font_h2, fill=(44, 62, 80))
-    
-    # avatar preview
-    cropped = im.crop(crop_box)
-    preview = cropped.resize((240, int(240 * (crop_size[1] / crop_size[0]))), Image.Resampling.LANCZOS)
-    d.rectangle([(cx + 15, cy + 58), (cx + 15 + preview.width + 4, cy + 58 + preview.height + 4)], fill=(230, 234, 240))
-    showcase.paste(preview, (cx + 17, cy + 60))
-    
-    # Layer details list
-    tx = cx + 275
-    ty = cy + 68
-    d.text((tx, ty), '【10 層堆疊明細】', font=font_h2, fill=(39, 174, 96))
-    ty += 32
-    for line in desc_lines:
-        d.text((tx, ty), line, font=font_desc, fill=(74, 85, 104))
-        ty += 28
+    card_x = 30 + idx * 500
+    card_y = 85
+    d.rounded_rectangle([(card_x, card_y), (card_x + 475, card_y + 570)], radius=12, fill=(255, 255, 255), outline=(218, 225, 231), width=2)
+    thumb = im.crop((240, 20, 784, 564)).resize((445, 445), Image.Resampling.LANCZOS)
+    showcase.paste(thumb, (card_x + 15, card_y + 15))
+    d.rectangle([(card_x + 15, card_y + 420), (card_x + 460, card_y + 460)], fill=(0, 0, 0, 160))
+    d.text((card_x + 25, card_y + 428), name, font=font_h2, fill=(255, 230, 100))
+    for l_idx, line in enumerate(desc_lines):
+        d.text((card_x + 25, card_y + 472 + l_idx * 21), line, font=font_desc, fill=(70, 80, 95))
 
-showcase_path = os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase.jpg')
-showcase.save(showcase_path, quality=95)
+# Save versioned and master showcases
+showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase.jpg'), quality=95)
 showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase.jpg'), quality=95)
-print(f'Saved showcase: {showcase_path}')
+showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase_v136.jpg'), quality=95)
+showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase_v136.jpg'), quality=95)
+print('All showcases regenerated successfully!')
