@@ -18,15 +18,18 @@ def composite_avatar(layers_list, out_path, add_forehead_shadow=True):
             if 'bangs/' in layer_rel:
                 bangs_im = layer_im
                 if add_forehead_shadow:
-                    # Forehead drop shadow under bangs
-                    alpha = bangs_im.split()[-1]
-                    mask = alpha.filter(ImageFilter.GaussianBlur(3))
+                    # Stepped anime cel-shaded drop shadow on forehead (pure pixel-art harmony)
                     shadow = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
-                    for y in range(4, 1024):
-                        for x in range(1, 1024):
-                            a = mask.getpixel((x - 1, y - 4))
-                            if a > 35:
-                                shadow.putpixel((x, y), (45, 25, 20, int(a * 0.38)))
+                    for y in range(110, 205):
+                        for x in range(410, 545):
+                            bx = x - 2
+                            by = y - 5
+                            if 0 <= bx < 1024 and 0 <= by < 1024:
+                                p_bang = bangs_im.getpixel((bx, by))
+                                if p_bang[3] > 180:
+                                    p_curr = bangs_im.getpixel((x, y))
+                                    if p_curr[3] < 50:
+                                        shadow.putpixel((x, y), (55, 28, 22, 65))
                     canvas.alpha_composite(shadow)
             canvas.alpha_composite(layer_im)
         else:
@@ -107,26 +110,26 @@ font_h2 = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 17)
 font_desc = ImageFont.truetype('/System/Library/Fonts/PingFang.ttc', 13)
 
 d.rectangle([(0, 0), (showcase_w, 65)], fill=(30, 39, 46))
-d.text((30, 18), '【10 圖層絕對座標無縫合成・終極美學重構版】日系像素人型實測成果', font=font_title, fill=(255, 255, 255))
+d.text((30, 18), '【10 圖層絕對座標無縫合成・v137 終極美學重構版】日系像素人型實測成果', font=font_title, fill=(255, 255, 255))
 
 chars_info = [
     (im_a, '示範同仁 A（精緻甜美風）', [
         '性別體型：女性・一般標準身軀',
-        '五官搭配：幼態短臉＋接睫毛美睫眼＋微笑唇',
+        '五官搭配：幼態短臉＋柔美美睫眼＋微笑唇',
         '髮型配色：低包包頭＋法式八字外翻（亞麻棕）',
-        '美學修復：自然鎖骨頸部、眼神星芒高光、額頭落影'
+        '美學修復：修長天鵝頸、雙頰蜜桃氣色、立體賽璐珞影'
     ]),
     (im_b, '示範同仁 B（俐落專業風）', [
         '性別體型：男性・一般標準身軀',
-        '五官搭配：柔和方臉＋清爽神采小眼＋劍眉＋挺拔直鼻',
-        '髮型配件：漸層短髮＋韓系逗號中分＋黑框方眼鏡',
-        '美學修復：領口無縫包覆、耳周髮量飽滿、立體下巴'
+        '五官搭配：柔和方臉＋聚焦英氣小眼＋劍眉＋立體直鼻',
+        '髮型配件：漸層短髮＋韓系逗號中分＋透光黑框眼鏡',
+        '美學修復：45度自然下巴影、透光眼鏡不遮眼、高顱頂'
     ]),
     (im_c, '示範同仁 C（率性中性風）', [
         '性別體型：女性身軀 × 男士短髮（Unisex）',
-        '五官搭配：經典鵝蛋臉＋英氣神采眼＋開朗露齒笑',
-        '髮型配色：層次碎短髮＋四六微捲中分（純黑）',
-        '美學修復：比例協調、完整頭顱髮量、親切生動'
+        '五官搭配：經典鵝蛋臉＋英氣神采眼＋親切微笑唇',
+        '髮型配色：層次碎短髮＋微捲短髮（純黑）',
+        '美學修復：修除外突怪髮、口腔深邃笑容、天鵝修長頸'
     ])
 ]
 
@@ -144,6 +147,6 @@ for idx, (im, name, desc_lines) in enumerate(chars_info):
 # Save versioned and master showcases
 showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase.jpg'), quality=95)
 showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase.jpg'), quality=95)
-showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase_v136.jpg'), quality=95)
-showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase_v136.jpg'), quality=95)
+showcase.save(os.path.join(PHOTOS_DIR, 'avatar_stacking_3chars_showcase_v137.jpg'), quality=95)
+showcase.save(os.path.join(BRAIN_DIR, 'avatar_stacking_3chars_showcase_v137.jpg'), quality=95)
 print('All showcases regenerated successfully!')
