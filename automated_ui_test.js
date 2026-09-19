@@ -286,6 +286,9 @@ assert(html.includes('日本語') && html.includes('नेपाली') && html
 assert(html.includes('fetchFreeGoogleTranslate'), '包含免金鑰 Google 雲端即時直譯引擎 (fetchFreeGoogleTranslate)');
 assert(html.includes('gemini-flash-latest') && html.includes('gemini-3.6-flash'), 'Gemini API 模型配置更新為最新穩定版 (gemini-flash-latest / gemini-3.6-flash)');
 assert(html.includes('丁寧體') && html.includes('料理を作ったので、よかったら皆さんで食べてみてくださいね！'), '六國翻譯全面採用親切自然之普通丁寧體日文');
+assert(!html.includes('data.ja_romaji') && !html.includes('data.ne_romaji') && !html.includes('data.my_romaji') && !html.includes('data.ko_romaji'), '六國翻譯卡片徹底移除標音與羅馬拼音 (ja/ne/my/ko_romaji)');
+assert(html.includes('HEXA_TRANSLATION_CACHE') && html.includes('saveHexaTranslationToCache'), '包含現場六國翻譯極速快取機制 (HEXA_TRANSLATION_CACHE)');
+assert(!html.includes('currentBroadcastData.ja_romaji') && !html.includes('currentBroadcastData.ne_romaji'), '六國翻譯全螢幕大字彈窗徹底移除標音與羅馬拼音');
 
 // 測試 20: 外場撤盤 6 組自然應對與同事平級 10 大動作 30 句高頻指示
 console.log('\n【測試 20：外場撤盤 6 組自然應對與同事平級 10 個動作 30 句高頻指示】');

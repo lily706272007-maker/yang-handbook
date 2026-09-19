@@ -1950,7 +1950,7 @@
           <label style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:block;">
             ✏️ 輸入想要翻譯的中文事項：
           </label>
-          <textarea id="broadcast-zh-input" rows="3" class="form-control" style="width:100%; font-size:0.95rem; line-height:1.5; border-radius:12px; padding:10px 12px;" placeholder="例如：我做了一些料理請大家一起吃、這盤子很燙請小心、垃圾已滿請幫忙換袋子…"></textarea>
+          <textarea id="broadcast-zh-input" rows="3" class="form-control" style="width:100%; font-size:0.95rem; line-height:1.5; border-radius:12px; padding:10px 12px;" placeholder="例如：我做了一些料理請大家一起吃、這盤子很燙請小心、垃圾已滿請幫忙換袋子…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();triggerBroadcastTranslation();}"></textarea>
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
@@ -1982,7 +1982,7 @@
       <!-- 六國語言並排卡片網格 (3x2 Grid, 手機單欄) -->
       <div class="section-label">
         <div class="section-label-left">🌐 六國語言同步翻譯卡片</div>
-        <span style="font-size:0.75rem; color:var(--muted);" id="broadcast-engine-badge">⚡ 雙引擎：離線核心 ＋ Gemini AI</span>
+        <span style="font-size:0.75rem; color:var(--muted);" id="broadcast-engine-badge">⚡ 極速雙引擎：毫秒級直譯 ＋ 智慧校準</span>
       </div>
 
       <div class="broadcast-quad-grid broadcast-hexa-grid" id="broadcast-cards-grid">
@@ -13856,16 +13856,12 @@ const HEXA_BROADCAST_TEMPLATES = [
     title: '分享料理',
     zh: '我做了一些料理，歡迎大家一起吃！',
     keywords: ['料理', '做', '吃', '點心', '煮', '食物', '一起吃', '大家吃', '請吃', '分享'],
-    ja: '料理を作ったので、よかったら皆さんで食べてみてくださいね！',
-    ja_romaji: 'Ryōri o tsukutta node, yokattara minasan de tabete mite kudasai ne!',
+    ja: '料理を作ったので、よかったら皆さんで食べてみてくださいね！', // 丁寧體職場禮貌日文
     ne: 'मैले केही खाना बनाएको छु, कृपया सबैजना मिलेर खानुहोस्!',
-    ne_romaji: 'Maile kehī khānā banāeko chhu, kripayā sabaijanā milera khānuhos!',
     my: 'ကျွန်တော်/ကျွန်မ ဟင်းပွဲတချို့ ချက်ထားပါတယ်၊ အားလုံး အတူတူ သုံးဆောင်ကြပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Kyun-naw/Kyun-ma hin-pwe ta-cho chet-htar-par-te, arr-lone a-tu-tu thone-saung gya-par!',
     vi: 'Tôi làm một ít món ăn, mời mọi người cùng thưởng thức nhé!',
     en: 'I made some food, please feel free to help yourselves and enjoy!',
-    ko: '음식을 좀 만들었으니, 괜찮으시면 다 같이 드셔보세요!',
-    ko_romaji: 'Eumsig-eul jom mandeul-eoss-euni, da gat-i deusyeoboseyo!'
+    ko: '음식을 좀 만들었으니, 괜찮으시면 다 같이 드셔보세요!'
   },
   {
     id: 'tb_hot_plate',
@@ -13874,15 +13870,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '這盤子很燙，拿的時候請小心！',
     keywords: ['燙', '熱', '小心', '盤子燙', '燙手', '高溫', '熱的', '注意', '拿'],
     ja: 'このお皿は大変熱いので、持つ際はお気をつけください！',
-    ja_romaji: 'Kono o-sara wa taihen atsui node, motsu sai wa o-ki o tsukekudasai!',
     ne: 'यो प्लेट धेरै तातो छ, कृपया समात्दा होसियार हुनुहोस्!',
-    ne_romaji: 'Yo pleṭ dherai tāto chha, kripayā samātdā hosiyār hunuhos!',
     my: 'ဒီပန်းကန် အရမ်းပူပါတယ်၊ ကိုင်တဲ့အခါ သတိထားပါနော်!',
-    my_romaji: 'Di pan-kan a-yan pu-par-te, kaing-te a-khar tha-di htar-par naw!',
     vi: 'Chiếc đĩa này rất nóng, khi bưng bê xin vui lòng cẩn thận!',
     en: 'This plate is very hot, please be careful when handling it!',
-    ko: '이 접시는 매우 뜨거우니, 잡으실 때 조심해 주세요!',
-    ko_romaji: 'I jeobsi-neun maeu tteugeouni, josimhae juseyo!'
+    ko: '이 접시는 매우 뜨거우니, 잡으실 때 조심해 주세요!'
   },
   {
     id: 'tb_dry_dishes',
@@ -13891,15 +13883,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '盤子已經洗好了，請幫忙擦乾！',
     keywords: ['擦乾', '擦盤子', '洗好', '洗完了', '水份', '盤子擦', '擦拭', '擦乾淨'],
     ja: 'お皿の洗浄が終わりましたので、拭き上げをお願いします！',
-    ja_romaji: 'O-sara no senjō ga owarimashita node, fukiage o onegaishimasu!',
     ne: 'प्लेटहरू धोएर सकियो, कृपया पुछेर सुकाउन मद्दत गर्नुहोस्!',
-    ne_romaji: 'Pleṭharū dhoera sakiyo, kripayā puchhera sukāuna maddat garnuhos!',
     my: 'ပန်းကန်တွေ ဆေးကြောပြီးပါပြီ၊ ရေခြောက်အောင် သုတ်ပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Pan-kan tway say-kyaw pee-par-bee, yay-chauk-aung thoke-pay-par!',
     vi: 'Đĩa đã rửa xong rồi, nhờ mọi người lau khô giúp nhé!',
     en: 'The plates are washed, please help dry them with a cloth!',
-    ko: '접시 세척이 끝났으니, 물기를 닦아주시기 바랍니다!',
-    ko_romaji: 'Jeobsi secheog-i kkeutnass-euni, mulgi-reul dakk-ajusigi baramnida!'
+    ko: '접시 세척이 끝났으니, 물기를 닦아주시기 바랍니다!'
   },
   {
     id: 'tb_trash_full',
@@ -13908,15 +13896,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '垃圾桶已經滿了，請幫忙更換垃圾袋！',
     keywords: ['垃圾', '滿了', '換垃圾袋', '倒垃圾', '垃圾桶', '滿', '更換'],
     ja: 'ゴミ箱がいっぱいなので、ゴミ袋の交換をお願いします！',
-    ja_romaji: 'Gomibako ga ippai na node, gomibukuro no kōkan o onegaishimasu!',
     ne: 'फोहोरको डस्टबिन भरियो, कृपया फोहोरको झोला फेरिदिनुहोस्!',
-    ne_romaji: 'Phohorko ḍasṭabin bhariyo, kripayā phohorko jholā pheridinuhos!',
     my: 'အမှိုက်ပုံး ပြည့်သွားပါပြီ၊ အမှိုက်အိတ် အသစ်လဲပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Ah-mhoik-pone pyayt-thwar-par-bee, ah-mhoik-ate a-thit le-pay-par!',
     vi: 'Thùng rác đã đầy rồi, xin vui lòng giúp thay túi rác mới!',
     en: 'The trash can is full, please help replace the trash bag!',
-    ko: '쓰레기통이 가득 찼으니, 쓰레기봉투 교체를 부탁드립니다!',
-    ko_romaji: 'Sseuregitong-i gadeuk chass-euni, bongtu gyoche-reul butakdeurimnida!'
+    ko: '쓰레기통이 가득 찼으니, 쓰레기봉투 교체를 부탁드립니다!'
   },
   {
     id: 'tb_chicken_ready',
@@ -13925,15 +13909,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '南蠻炸雞快好了，大約再等 3 分鐘！',
     keywords: ['炸雞', '南蠻', '快好了', '等3分鐘', '稍等', '幾分鐘', '好了', '3分鐘', '廚房'],
     ja: 'チキン南蛮がもうすぐ揚がります。あと3分ほどお待ちください！',
-    ja_romaji: 'Chikin nanban ga mōsugu agarimasu. Ato san-pun hodo o-machi kudasai!',
     ne: 'चिकन नानबान तयार हुन लाग्यो, कृपया लगभग ३ मिनेट पर्खनुहोस्!',
-    ne_romaji: 'Chikan nānbān tayār huna lāgyo, kripayā lagbhag 3 miṇeṭ parkhanuhos!',
     my: 'ကြက်ကြော် မကြာခင်ရပါတော့မယ်၊ ၃ မိနစ်လောက် စောင့်ပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Kyet-kyaw ma-kyar-khin ya-par-tawt-me, 3 mi-nit lauk saung-pay-par!',
     vi: 'Gà chiên Nanban sắp xong rồi, xin vui lòng đợi khoảng 3 phút!',
     en: 'Chicken Nanban will be ready soon, please wait about 3 minutes!',
-    ko: '치킨 난반이 곧 튀겨집니다. 3분 정도만 기다려 주세요!',
-    ko_romaji: 'Chikin nanban-i got twigyeojimnida. 3bun jeongdoman gidaryeo juseyo!'
+    ko: '치킨 난반이 곧 튀겨집니다. 3분 정도만 기다려 주세요!'
   },
   {
     id: 'tb_soup_low',
@@ -13942,15 +13922,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '味噌湯快見底了，需要再煮一鍋！',
     keywords: ['味噌湯', '湯', '沒了', '快沒了', '見底', '煮湯', '補湯', '追加'],
     ja: 'お味噌汁が少なくなってきたので、追加の準備をお願いします！',
-    ja_romaji: 'O-misoshiru ga sukunaku natte kita node, tsuika no junbi o onegaishimasu!',
     ne: 'मिसो सुप सकिन लाग्यो, कृपया थप तयार गरिदिनुहोस्!',
-    ne_romaji: 'Miso sup sakina lāgyo, kripayā thap tayār garidinuhos!',
     my: 'မီဆိုဟင်းရည် ကုန်ခါနီးပါပြီ၊ ထပ်ချက်ပေးဖို့ လိုအပ်ပါတယ်ခင်ဗျာ/ရှင်!',
-    my_romaji: 'Miso hin-yay kone-khar-nee-par-bee, thap-chet-pay-foe lo-at-par-te!',
     vi: 'Súp Miso sắp hết rồi, cần chuẩn bị thêm một nồi mới!',
     en: 'Miso soup is running low, we need to prepare another pot!',
-    ko: '미소된장국이 얼마 남지 않았으니, 추가 준비를 부탁드립니다!',
-    ko_romaji: 'Misodoenjangguk-i eolma namji anh-ass-euni, chuga junbi-reul butakdeurimnida!'
+    ko: '미소된장국이 얼마 남지 않았으니, 추가 준비를 부탁드립니다!'
   },
   {
     id: 'tb_ice_replenish',
@@ -13959,15 +13935,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '冰塊快用完了，請幫忙補製冰機的冰塊！',
     keywords: ['冰塊', '冰', '製冰機', '補冰', '沒冰塊', '少冰', '補充冰塊'],
     ja: '氷が少なくなってきたので、製氷機から補充をお願いします！',
-    ja_romaji: 'Kōri ga sukunaku natte kita node, seihyōki kara hojū o onegaishimasu!',
     ne: 'बरफ सकिन लाग्यो, कृपया आइस मेसिनबाट बरफ थपिदिनुहोस्!',
-    ne_romaji: 'Baraph sakina lāgyo, kripayā āis mesīnbāṭa baraph thapidinuhos!',
     my: 'ရေခဲတွေ ကုန်ခါနီးပါပြီ၊ ရေခဲစက်ကနေ ဖြည့်ပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Yay-khe tway kone-khar-nee-par-bee, yay-khe-set ka-nay phyayt-pay-par!',
     vi: 'Đá sắp hết rồi, xin vui lòng lấy thêm đá từ máy làm đá!',
     en: 'Ice is running low, please replenish ice from the ice machine!',
-    ko: '얼음이 부족해지고 있으니, 제빙기에서 보충해 주세요!',
-    ko_romaji: 'Eoreum-i bujokhaejigo iss-euni, jebinggi-eseo bochunghae juseyo!'
+    ko: '얼음이 부족해지고 있으니, 제빙기에서 보충해 주세요!'
   },
   {
     id: 'tb_roast_beef',
@@ -13976,15 +13948,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '烤牛肉（Roast Beef）已經切好補上去了！',
     keywords: ['烤牛肉', '牛肉', '切好', '補好', '補充了', 'roast beef', '補上', '切肉'],
     ja: 'ローストビーフをスライスして補充完了しました！',
-    ja_romaji: 'Rōsuto bīfu o suraisu shite hojū kanryō shimashita!',
     ne: 'रोस्ट बीफ काटेर नयाँ राखिसकियो!',
-    ne_romaji: 'Rosṭa bīph kāṭera nayāñ rākhisakiyo!',
     my: 'အမဲသားကင် လှီးဖြတ်ပြီး အသစ်ပြန်ဖြည့်ထားပြီးပါပြီ!',
-    my_romaji: 'A-me-thar-kin hlee-phyat pee a-thit pyan-phyayt-htar pee-par-bee!',
     vi: 'Thịt bò nướng (Roast Beef) đã thái xong và bổ sung lên quầy rồi!',
     en: 'Roast beef is sliced and replenished on the buffet counter!',
-    ko: '로스트 비프를 슬라이스해서 보충 완료했습니다!',
-    ko_romaji: 'Loseuteu bipeu-reul seullaisuhaeseo bochung wanryohaesumnida!'
+    ko: '로스트 비프를 슬라이스해서 보충 완료했습니다!'
   },
   {
     id: 'tb_team_help',
@@ -13993,15 +13961,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '這個我來處理就好，你去幫忙另一邊！',
     keywords: ['我來', '你去幫忙', '另一邊', '處理', '分工', '幫忙那邊', '交給我', '你去'],
     ja: 'こちらは私がやりますので、あちらのサポートをお願いします！',
-    ja_romaji: 'Kochira wa watashi ga yarimasu node, achira no sapōto o onegaishimasu!',
     ne: 'यो म हेर्छु, तपाईँ कृपया उतातिर मद्दत गरिदिनुहोस्!',
-    ne_romaji: 'Yo ma herchhu, tapāīñ kripayā utātira maddat garidinuhos!',
     my: 'ဒီဘက်ကို ကျွန်တော်/မ လုပ်လိုက်ပါ့မယ်၊ ဟိုဘက်ကို သွားကူပေးပါနော်!',
-    my_romaji: 'Di-bet go kyun-naw/ma lote-lite-par-me, ho-bet go thwar-ku-pay-par naw!',
     vi: 'Phần này để tôi xử lý cho, bạn hãy qua hỗ trợ bên kia nhé!',
     en: 'I will handle this part, please go help over on the other side!',
-    ko: '이쪽은 제가 할 테니, 저쪽 지원을 부탁드립니다!',
-    ko_romaji: 'Ijjog-eun jega hal teni, jeojjok jiwon-eul butakdeurimnida!'
+    ko: '이쪽은 제가 할 테니, 저쪽 지원을 부탁드립니다!'
   },
   {
     id: 'tb_wipe_counter',
@@ -14010,15 +13974,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '自助餐台檯面有髒污，請幫忙擦拭乾淨！',
     keywords: ['餐台', '檯面', '髒', '擦乾淨', '桌面', '擦桌子', '抹布', '髒污', '擦拭'],
     ja: 'ビュッフェ台が汚れているので、台拭きをお願いします！',
-    ja_romaji: 'Byuffe-dai ga yogorete iru node, daifuki o onegaishimasu!',
     ne: 'बुफे काउन्टर फोहोर भएको छ, कृपया पुछेर सफा गरिदिनुहोस्!',
-    ne_romaji: 'Buphe kāunṭar phohor bhaeko chha, kripayā puchhera saphā garidinuhos!',
     my: 'ဘူဖေးစားပွဲခုံ ပေကျံနေပါတယ်၊ သန့်ရှင်းအောင် သုတ်ပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Bu-fay sar-pwe-khone pay-kyan-nay-par-te, thant-shin-aung thoke-pay-par!',
     vi: 'Quầy buffet bị bẩn, xin vui lòng lau chùi sạch sẽ!',
     en: 'The buffet counter is dirty, please help wipe and clean it!',
-    ko: '뷔페 테이블이 더러워졌으니, 행주로 닦아주세요!',
-    ko_romaji: 'Bwipye teibeul-i deoreowojyeoss-euni, haengju-ro dakk-ajuseyo!'
+    ko: '뷔페 테이블이 더러워졌으니, 행주로 닦아주세요!'
   },
   {
     id: 'tb_cutlery_filled',
@@ -14027,15 +13987,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '乾淨的餐具已經補到工作台抽屜了！',
     keywords: ['餐具', '補好了', '抽屜', '筷子', '刀叉', '工作台', '補滿', '乾淨餐具'],
     ja: '清潔なカトラリーをステーションの引き出しに補充しました！',
-    ja_romaji: 'Seiketsu na katorarī o sutēshon no hikidashi ni hojū shimashita!',
     ne: 'सफा चम्चा-काँटा स्टेशनको घर्रामा थपिसकियो!',
-    ne_romaji: 'Saphā chamchā-kāñṭā sṭeśanko gharrāmā thapisakiyo!',
     my: 'သန့်ရှင်းတဲ့ ဇွန်း/ခရင်း/တူတွေကို ကောင်တာအံဆွဲထဲ ဖြည့်ထားပြီးပါပြီ!',
-    my_romaji: 'Thant-shin-te zwun/kha-yin/tu tway go kounter an-swe-hte phyayt-htar pee-par-bee!',
     vi: 'Dao thìa nĩa sạch đã được bổ sung vào ngăn kéo quầy phục vụ rồi!',
     en: 'Clean cutlery has been replenished in the service station drawers!',
-    ko: '청결한 커트러리를 서비스 스테이션 서랍에 보충했습니다!',
-    ko_romaji: 'Cheong-gyeolhan keoteureori-reul seobiseu seuteisyeon seorab-e bochunghaesumnida!'
+    ko: '청결한 커트러리를 서비스 스테이션 서랍에 보충했습니다!'
   },
   {
     id: 'tb_boss_looking',
@@ -14044,15 +14000,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '主管在找你，請去前台/廚房一下！',
     keywords: ['主管', '找你', '店長', '前台', '廚房找你', '叫你', '呼叫', '找人'],
     ja: 'リーダーがお呼びですので、フロント/厨房へ行ってください！',
-    ja_romaji: 'Rīdā ga o-yobi desu node, furonto/chūbō e itte kudasai!',
     ne: 'म्यानेजर/इन्चार्जले तपाईँलाई खोज्दै हुनुहुन्छ, कृपया फ्रन्ट/किचेनमा जानुहोस्!',
-    ne_romaji: 'Myānejar/In-chārjle tapāīñlāī khojdai hunuhunchha, kripayā phranṭ/kichenmā jānuhos!',
     my: 'တာဝန်ခံ/ခေါင်းဆောင် ခေါ်နေပါတယ်၊ ဧည့်ကြို/မီးဖိုချောင်ဘက် သွားပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Tar-wun-khan/Khaung-saung khaw-nay-par-te, front/kitchen bet thwar-pay-par!',
     vi: 'Quản lý đang tìm bạn, vui lòng qua quầy lễ tân hoặc nhà bếp nhé!',
     en: 'The supervisor is looking for you, please head to the front desk or kitchen!',
-    ko: '리더님이 찾으시니, 프런트나 주방으로 가보세요!',
-    ko_romaji: 'Lideo-nim-i chaj-eusini, peureonteu-na jubang-euro gaboseyo!'
+    ko: '리더님이 찾으시니, 프런트나 주방으로 가보세요!'
   },
   {
     id: 'tb_tea_water',
@@ -14061,15 +14013,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '熱茶機需要補充茶葉和熱水！',
     keywords: ['熱茶', '茶機', '補水', '茶葉', '補茶', '給茶機', '熱水', '茶水'],
     ja: '給茶機の茶葉とお湯の補充をお願いします！',
-    ja_romaji: 'Kyūchaki no chaba to o-yu no hojū o onegaishimasu!',
     ne: 'चिया मेसिनमा चियापत्ती र तातो पानी थपिदिनुहोस्!',
-    ne_romaji: 'Chiyā mesīnmā chiyāpattī ra tāto pānī thapidinuhos!',
     my: 'လက်ဖက်ရည်စက်မှာ လက်ဖက်ခြောက်နဲ့ ရေနွေး ဖြည့်ပေးပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Let-phet-yay-set hmar let-phet-chauk ne yay-nway phyayt-pay-par!',
     vi: 'Máy pha trà cần bổ sung thêm lá trà và nước nóng!',
     en: 'The hot tea dispenser needs tea leaves and hot water replenished!',
-    ko: '온차기에 찻잎과 온수를 보충해 주세요!',
-    ko_romaji: 'Onchagi-e chas-ip-gwa onsu-reul bochunghae juseyo!'
+    ko: '온차기에 찻잎과 온수를 보충해 주세요!'
   },
   {
     id: 'tb_break_time',
@@ -14078,15 +14026,11 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '休息時間到了，請輪流去用餐！',
     keywords: ['休息', '吃飯', '休息時間', '輪流', '用餐', '換班', '放飯', '去休息'],
     ja: '休憩の時間になりましたので、交代で休憩・食事に入ってください！',
-    ja_romaji: 'Kyūkei no jikan ni narimashita node, kōtai de kyūkei・shokuji ni haitte kudasai!',
     ne: 'ब्रेकको समय भयो, कृपया पालो गरेर खान/आराम गर्न जानुहोस्!',
-    ne_romaji: 'Brekko samaya bhayo, kripayā pālo garera khāna/ārām garna jānuhos!',
     my: 'နားချိန်ရောက်ပါပြီ၊ အလှည့်ကျ ထမင်းစား/အနားယူ သွားကြပါခင်ဗျာ/ရှင်!',
-    my_romaji: 'Nar-chein yauk-par-bee, a-hlet-kya hta-min-sar/a-nar-yu thwar-gya-par!',
     vi: 'Đến giờ nghỉ rồi, xin vui lòng thay phiên nhau đi ăn và nghỉ ngơi nhé!',
     en: 'It is break time now, please take turns going for lunch/break!',
-    ko: '휴게 시간이 되었으니, 교대로 식사와 휴식을 취해 주세요!',
-    ko_romaji: 'Hyuge sigan-i doe-eoss-euni, gyodaero siksa-wa hyusik-eul chwihae juseyo!'
+    ko: '휴게 시간이 되었으니, 교대로 식사와 휴식을 취해 주세요!'
   },
   {
     id: 'tb_otsukare',
@@ -14095,20 +14039,110 @@ const HEXA_BROADCAST_TEMPLATES = [
     zh: '今天辛苦了！收拾完畢就可以下班了！',
     keywords: ['辛苦了', '下班', '收拾完', '結束', '收尾', '回家', '打卡', '辛苦'],
     ja: '今日もお疲れ様でした！片付けが終わったら上がりましょう！',
-    ja_romaji: 'Kyō mo o-tsukaresama deshita! Katadzuke ga owattara agarimashō!',
     ne: 'आजको कामको लागि धेरै धन्यवाद! सरसफाइ सकेपछि घर जान सक्नुहुन्छ!',
-    ne_romaji: 'Ājako kākmo lāgi dherai dhanyavād! Sarasaphāi sakepachhi ghar jāna saknuhunchha!',
     my: 'ဒီနေ့အတွက် အားလုံး ပင်ပန်းသွားပါပြီ! သိမ်းဆည်းပြီးရင် အလုပ်ဆင်းလို့ရပါပြီခင်ဗျာ/ရှင်!',
-    my_romaji: 'Di-nay a-twet arr-lone pin-pan-thwar-par-bee! Theim-see pee-yin a-lote-sin loh ya-par-bee!',
     vi: 'Hôm nay mọi người đã vất vả rồi! Dọn dẹp xong là có thể tan làm rồi!',
     en: 'Thank you for your hard work today! Once everything is cleared up, you may clock out!',
-    ko: '오늘도 수고 많으셨습니다! 뒷정리가 끝나면 퇴근합시다!',
-    ko_romaji: 'Oneul-do sugo manh-eusyeoss-sumnida! Dwijjeongri-ga kkeutnamyeon toegeunhabsida!'
+    ko: '오늘도 수고 많으셨습니다! 뒷정리가 끝나면 퇴근합시다!'
+  },
+  {
+    id: 'tb_excuse_me',
+    icon: '🚶',
+    title: '請借過一下',
+    zh: '不好意思，請借過一下！',
+    keywords: ['借過', '借過一下', '借光', '不好意思', '借走', '讓一下', '讓開', '通過'],
+    ja: 'すみません、後ろを通ります！失礼します！',
+    ne: 'माफ गर्नुहोस्, मलाई बाटो छोडिदिनुहोस्!',
+    my: 'ခွင့်ပြုပါခင်ဗျာ/ရှင်၊ လမ်းနည်းနည်း ဖယ်ပေးပါနော်!',
+    vi: 'Xin lỗi, cho tôi xin phép đi qua một chút!',
+    en: 'Excuse me, coming through please!',
+    ko: '죄송합니다, 잠시 지나가겠습니다!'
+  },
+  {
+    id: 'tb_wait_moment',
+    icon: '⏳',
+    title: '請稍等一下',
+    zh: '好的，請稍等我一下！',
+    keywords: ['稍等', '等一下', '等我', '請等', '馬上', '稍候'],
+    ja: 'かしこまりました、少々お待ちください！',
+    ne: 'हुन्छ, कृपया एकैछिन पर्खनुहोस्!',
+    my: 'ဟုတ်ကဲ့ပါ၊ ခဏလောက် စောင့်ပေးပါခင်ဗျာ/ရှင်!',
+    vi: 'Vâng, xin vui lòng đợi tôi một chút nhé!',
+    en: 'Certainly, please give me just a moment!',
+    ko: '네, 잠시만 기다려 주세요!'
+  },
+  {
+    id: 'tb_clear_table',
+    icon: '🍽️',
+    title: '收拾餐桌',
+    zh: '這桌客人已經離開了，請幫忙收拾餐桌！',
+    keywords: ['收拾', '桌子', '餐桌', '撤桌', '收拾桌子', '收桌', '離開了', '客人走'],
+    ja: 'こちらのお客様がお帰りになりましたので、テーブルの片付け（バッシング）をお願いします！',
+    ne: 'यो टेबलका पाहुना गइसक्नुभयो, कृपया टेबल सफा गरिदिनुहोस्!',
+    my: 'ဒီစားပွဲက ဧည့်သည် ပြန်သွားပါပြီ၊ စားပွဲသိမ်းပေးပါခင်ဗျာ/ရှင်!',
+    vi: 'Khách bàn này đã về rồi, xin vui lòng giúp dọn dẹp bàn nhé!',
+    en: 'The guests at this table have left, please help clear and wipe the table!',
+    ko: '이쪽 손님께서 퇴점하셨으니, 테이블 정리(배싱)를 부탁드립니다!'
+  },
+  {
+    id: 'tb_dish_done',
+    icon: '🧼',
+    title: '洗碗機好了',
+    zh: '洗碗機已經洗好了，請幫忙取出分類！',
+    keywords: ['洗碗機', '洗好了', '洗碗', '拿出來', '取出', '烘乾', '分類'],
+    ja: '食洗機の洗浄が完了しましたので、取り出しと仕分けをお願いします！',
+    ne: 'डिशवाशरमा भाँडा धोइसक्यो, कृपया निकालेर मिलाइदिनुहोस्!',
+    my: 'ပန်းကန်ဆေးစက် ပြီးသွားပါပြီ၊ ထုတ်ပြီး နေရာတကျ ပြန်စီပေးပါခင်ဗျာ/ရှင်!',
+    vi: 'Máy rửa bát đã rửa xong rồi, xin vui lòng lấy ra và sắp xếp nhé!',
+    en: 'The dishwasher has finished, please help unload and sort the dishes!',
+    ko: '식기세척기 세척이 완료되었으니, 꺼내서 분류해 주세요!'
+  },
+  {
+    id: 'tb_need_help',
+    icon: '🤝',
+    title: '需要幫忙嗎',
+    zh: '有什麼我能幫忙的嗎？',
+    keywords: ['需要幫忙', '幫忙', '協助', '要幫忙嗎', '幫你', '有什麼事'],
+    ja: '何か私にお手伝いできることはありますか？',
+    ne: 'के म तपाईंलाई केही मद्दत गर्न सक्छु?',
+    my: 'ကျွန်တော်/မ ဘာကူညီပေးရမလဲခင်ဗျာ/ရှင်?',
+    vi: 'Có điều gì tôi có thể giúp bạn không?',
+    en: 'Is there anything I can help you with?',
+    ko: '제가 도와드릴 일이 있을까요?'
   }
 ];
 
 // 向下相容
 const QUAD_BROADCAST_TEMPLATES = HEXA_BROADCAST_TEMPLATES;
+
+// ⚡ 現場六國同步翻譯極速快取層（localStorage 持久化，實現 0 毫秒秒出）
+let HEXA_TRANSLATION_CACHE = {};
+try {
+  const _rawCache = localStorage.getItem('yang_hexa_translation_cache_v2');
+  if (_rawCache) {
+    HEXA_TRANSLATION_CACHE = JSON.parse(_rawCache);
+  }
+} catch (e) {}
+
+function saveHexaTranslationToCache(zhText, data) {
+  if (!zhText || !data) return;
+  try {
+    const key = zhText.trim();
+    HEXA_TRANSLATION_CACHE[key] = {
+      ja: data.ja || '',
+      ne: data.ne || '',
+      my: data.my || '',
+      vi: data.vi || '',
+      en: data.en || '',
+      ko: data.ko || ''
+    };
+    const keys = Object.keys(HEXA_TRANSLATION_CACHE);
+    if (keys.length > 300) {
+      delete HEXA_TRANSLATION_CACHE[keys[0]];
+    }
+    localStorage.setItem('yang_hexa_translation_cache_v2', JSON.stringify(HEXA_TRANSLATION_CACHE));
+  } catch (e) {}
+}
 
 let currentBroadcastData = null;
 let isBroadcastMicActive = false;
@@ -14163,170 +14197,198 @@ async function executeQuadTranslation(zhText) {
   return await executeHexaTranslation(zhText);
 }
 
+/**
+ * ⚡ 現場六國同步翻譯核心引擎 (極速響應 + 0 標音純淨版)
+ * 1. 本地快取立即命中 (0ms)
+ * 2. 智慧高頻職場範本模糊/關鍵字匹配 (0ms)
+ * 3. 六國並行高速直譯引擎 (Promise.allSettled 200ms 秒出)
+ * 4. 背景非阻塞 Gemini 丁寧體智慧潤飾 (不卡頓畫面)
+ */
 async function executeHexaTranslation(zhText) {
+  const cleanZh = (zhText || '').trim();
+  if (!cleanZh) return;
   const statusEl = document.getElementById('broadcast-status-banner');
-  
-  // 1. 若完全符合預設範本句（精確比對），直接套用預設範本
-  const exactMatch = HEXA_BROADCAST_TEMPLATES.find(t => t.zh === zhText);
-  if (exactMatch) {
-    currentBroadcastData = { ...exactMatch, isAi: false };
+
+  // 1. 本地快取 0 毫秒秒出
+  if (HEXA_TRANSLATION_CACHE[cleanZh]) {
+    const cached = HEXA_TRANSLATION_CACHE[cleanZh];
+    currentBroadcastData = { zh: cleanZh, ...cached, isAi: true };
     renderHexaResults(currentBroadcastData);
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.background = 'rgba(56,142,60,0.1)';
+      statusEl.style.color = '#2e7d32';
+      statusEl.innerHTML = `⚡ 本地快取瞬間秒出：<strong>${escapeHtml(cleanZh)}</strong>`;
+    }
+    showToast('六國語言翻譯完成！', 'success');
+    return;
+  }
+
+  // 2. 精準或語意關鍵字範本匹配 (0 毫秒極速秒出)
+  const normalized = cleanZh.replace(/[，。！？、\s]/g, '');
+  const templateMatch = HEXA_BROADCAST_TEMPLATES.find(t => {
+    if (t.zh === cleanZh) return true;
+    const tNorm = t.zh.replace(/[，。！？、\s]/g, '');
+    if (tNorm === normalized) return true;
+    if (cleanZh.length >= 3 && (t.zh.includes(cleanZh) || cleanZh.includes(t.zh))) return true;
+    if (t.keywords && t.keywords.some(k => k.length >= 2 && cleanZh.includes(k))) return true;
+    return false;
+  });
+
+  if (templateMatch) {
+    currentBroadcastData = { ...templateMatch, isAi: false };
+    renderHexaResults(currentBroadcastData);
+    saveHexaTranslationToCache(cleanZh, templateMatch);
     if (statusEl) {
       statusEl.style.display = 'block';
       statusEl.style.background = 'rgba(92,61,30,0.08)';
       statusEl.style.color = 'var(--primary)';
-      statusEl.innerHTML = `⚡ 離線 100% 精準匹配：<strong>${exactMatch.title}</strong>`;
+      statusEl.innerHTML = `⚡ 職場高頻範本精準秒出：<strong>${templateMatch.title}</strong>`;
     }
     showToast('離線六國翻譯完成！', 'success');
     return;
   }
 
-  // 2. 第一優先：若有連網且有 Gemini 金鑰，調用 Gemini AI 進行精確直譯（日文指定普通丁寧體）
+  // 3. 超高速並行 Google 雲端多國語言直譯引擎 (150~250ms 秒出，告別卡頓)
+  if (statusEl) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'rgba(184,75,41,0.08)';
+    statusEl.style.color = 'var(--accent)';
+    statusEl.innerHTML = `⚡ 正在高速直譯六國語言【日/尼/緬/越/英/韓】…`;
+  }
+
+  let fastCompleted = false;
+
+  if (navigator.onLine) {
+    try {
+      const fastPromise = Promise.allSettled([
+        fetchFreeGoogleTranslate(cleanZh, 'ja'),
+        fetchFreeGoogleTranslate(cleanZh, 'ne'),
+        fetchFreeGoogleTranslate(cleanZh, 'my'),
+        fetchFreeGoogleTranslate(cleanZh, 'vi'),
+        fetchFreeGoogleTranslate(cleanZh, 'en'),
+        fetchFreeGoogleTranslate(cleanZh, 'ko')
+      ]);
+
+      // 限制 2.5 秒超時，保證永不當住
+      const results = await Promise.race([
+        fastPromise,
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 2800))
+      ]);
+
+      const jaText = results[0].status === 'fulfilled' && results[0].value ? results[0].value : '';
+      const neText = results[1].status === 'fulfilled' && results[1].value ? results[1].value : '';
+      const myText = results[2].status === 'fulfilled' && results[2].value ? results[2].value : '';
+      const viText = results[3].status === 'fulfilled' && results[3].value ? results[3].value : '';
+      const enText = results[4].status === 'fulfilled' && results[4].value ? results[4].value : '';
+      const koText = results[5].status === 'fulfilled' && results[5].value ? results[5].value : '';
+
+      if (jaText || enText || viText) {
+        fastCompleted = true;
+        currentBroadcastData = {
+          zh: cleanZh,
+          ja: jaText || cleanZh,
+          ne: neText || 'कृपया अनुवाद हेर्नुहोस्',
+          my: myText || 'ဘာသာပြန်ချက်ကို ကြည့်ရှုပါ',
+          vi: viText || cleanZh,
+          en: enText || cleanZh,
+          ko: koText || cleanZh,
+          isAi: true
+        };
+        renderHexaResults(currentBroadcastData);
+        saveHexaTranslationToCache(cleanZh, currentBroadcastData);
+
+        if (statusEl) {
+          statusEl.style.display = 'block';
+          statusEl.style.background = 'rgba(56,142,60,0.1)';
+          statusEl.style.color = '#2e7d32';
+          statusEl.innerHTML = `⚡ 六國同步翻譯瞬間秒出！（日・尼・緬・越・英・韓）`;
+        }
+        showToast('六國語言翻譯完成！', 'success');
+      }
+    } catch (err) {
+      console.warn('快速直譯引擎超時或異常，嘗試備援：', err);
+    }
+  }
+
+  // 4. 背景非阻塞 Gemini AI 丁寧體與尊待語精修 (不卡畫面，秒級非同步升級)
   const hasApiKey = (AppData && AppData.apiKey && AppData.apiKey.trim()) || HARDCODED_GEMINI_API_KEY;
   if (navigator.onLine && hasApiKey) {
-    if (statusEl) {
-      statusEl.style.display = 'block';
-      statusEl.style.background = 'rgba(184,75,41,0.1)';
-      statusEl.style.color = 'var(--accent)';
-      statusEl.innerHTML = `🤖 正在使用 Gemini AI 多國語言引擎即時直譯【日/尼/緬/越/英/韓】…`;
-    }
-    
-    try {
-      const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、越南文 Vietnamese、英文 English、韓文 Korean）的專業職場翻譯專家。
-請將使用者輸入的中文內容「100% 忠實、精確直譯」為 6 國語言，並提供發音拼音輔助。
+    (async () => {
+      try {
+        const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、越南文 Vietnamese、英文 English、韓文 Korean）的專業職場翻譯專家。
+請將使用者輸入的中文內容「100% 忠實、精確直譯」為 6 國語言（純文字翻譯，嚴禁輸出任何發音標音、假名標註或羅馬拼音）。
 【日文特別要求（務必使用丁寧體，勿用常體）】：
 1. 請務必使用合適禮貌的「丁寧體」（です・ます調）。
 2. 例如感謝時「ありがとう」務必加上「ございます」（必須為「ありがとうございます」）；請託或指示時使用「〜してください」「〜をお願いします」；狀態陳述使用「〜です」「〜ます」。
-3. 語氣保持日本職場外場同事夥伴之間合適的禮貌程度（丁寧體）：嚴禁使用常體/タメ口，但也不需要過度繁複謙讓語。
+3. 語氣保持日本職場外場同事夥伴之間合適的禮貌程度（丁寧體）：嚴禁使用常體/タメ口。
 【韓文特別要求】：
 請使用標準職場禮貌尊待語（존댓말，如 ~해주세요, ~입니다）。
-中文內容：「${zhText}」
+中文內容：「${cleanZh}」
 
-請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字）：
+請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字，嚴禁輸出任何標音或拼音）：
 {
-  "zh": "${zhText.replace(/"/g, '\\"')}",
+  "zh": "${cleanZh.replace(/"/g, '\\"')}",
   "ja": "日文丁寧體（です・ます調，如ありがとうございます）精確翻譯",
-  "ja_romaji": "日文平假名或羅馬音",
-  "ne": "नेपाली (標準尼泊爾文天城體)",
-  "ne_romaji": "Nepali Romanized 羅馬拼音",
-  "my": "မြန်မာဘာသာ (標準緬甸文 Unicode)",
-  "my_romaji": "Burmese Romanized 羅馬拼音",
-  "vi": "Tiếng Việt (標準越南文含聲調)",
+  "ne": "नेपाली (標準尼泊爾文)",
+  "my": "မြန်မာဘာသာ (標準緬甸文)",
+  "vi": "Tiếng Việt (標準越南文)",
   "en": "English standard workplace translation",
-  "ko": "한국어 (標準韓文丁寧體/존댓말)",
-  "ko_romaji": "Korean Romanized 羅馬拼音"
+  "ko": "한국어 (標準韓文丁寧體/존댓말)"
 }`;
+        const aiRes = await Promise.race([
+          callGeminiApiUnified(prompt),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('AI timeout')), 4000))
+        ]);
 
-      const aiRes = await callGeminiApiUnified(prompt);
-      if (aiRes && aiRes.ja && aiRes.en) {
-        currentBroadcastData = {
-          zh: zhText,
-          ja: aiRes.ja,
-          ja_romaji: aiRes.ja_romaji || '',
-          ne: aiRes.ne || '',
-          ne_romaji: aiRes.ne_romaji || '',
-          my: aiRes.my || '',
-          my_romaji: aiRes.my_romaji || '',
-          vi: aiRes.vi || '',
-          en: aiRes.en,
-          ko: aiRes.ko || '',
-          ko_romaji: aiRes.ko_romaji || '',
-          isAi: true
-        };
-        renderHexaResults(currentBroadcastData);
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          statusEl.style.background = 'rgba(56,142,60,0.1)';
-          statusEl.style.color = '#2e7d32';
-          statusEl.innerHTML = `✨ Gemini AI 即時同步直譯完成（日・尼・緬・越・英・韓 6 國語言生成）`;
+        if (aiRes && aiRes.ja && aiRes.en) {
+          currentBroadcastData = {
+            zh: cleanZh,
+            ja: aiRes.ja,
+            ne: aiRes.ne || (currentBroadcastData ? currentBroadcastData.ne : ''),
+            my: aiRes.my || (currentBroadcastData ? currentBroadcastData.my : ''),
+            vi: aiRes.vi || (currentBroadcastData ? currentBroadcastData.vi : ''),
+            en: aiRes.en,
+            ko: aiRes.ko || (currentBroadcastData ? currentBroadcastData.ko : ''),
+            isAi: true
+          };
+          renderHexaResults(currentBroadcastData);
+          saveHexaTranslationToCache(cleanZh, currentBroadcastData);
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.background = 'rgba(56,142,60,0.1)';
+            statusEl.style.color = '#2e7d32';
+            statusEl.innerHTML = `✨ Gemini AI 禮貌體精修校準完成（日・尼・緬・越・英・韓 6 國直譯）`;
+          }
         }
-        showToast('六國語言翻譯完成！', 'success');
-        return;
+      } catch (aiErr) {
+        // 背景精修異常時不打擾使用者，已顯示快速直譯結果
+        console.log('Gemini background enhancement notice:', aiErr.message);
       }
-    } catch (e) {
-      console.warn('Gemini 翻譯失敗，無縫切換免金鑰雲端即時直譯：', e);
-    }
+    })();
   }
 
-  // 3. 第二優先：免金鑰 Google 雲端多國語言即時直譯引擎（有網路但無 Gemini 金鑰或 Gemini 異常時）
-  if (navigator.onLine) {
+  // 5. 離線狀態（完全無網路且快取無資料時之萬用展示卡）
+  if (!fastCompleted && (!currentBroadcastData || currentBroadcastData.zh !== cleanZh)) {
+    currentBroadcastData = {
+      zh: cleanZh,
+      ja: `【連絡】${cleanZh}。よろしくお願いします。`,
+      ne: `【जानकारी】 ${cleanZh}।`,
+      my: `【အသိပေးချက်】 ${cleanZh}။`,
+      vi: `【Thông báo】 ${cleanZh}. Xin cảm ơn!`,
+      en: `[Notice] ${cleanZh}. Thank you!`,
+      ko: `【안내】 ${cleanZh}. 잘 부탁드립니다.`,
+      isAi: false
+    };
+    renderHexaResults(currentBroadcastData);
     if (statusEl) {
       statusEl.style.display = 'block';
-      statusEl.style.background = 'rgba(184,75,41,0.1)';
-      statusEl.style.color = 'var(--accent)';
-      statusEl.innerHTML = `🌐 正在使用雲端翻譯引擎即時直譯【日/尼/緬/越/英/韓】…`;
+      statusEl.style.background = 'rgba(92,61,30,0.08)';
+      statusEl.style.color = 'var(--primary)';
+      statusEl.innerHTML = `📡 離線模式：已產出六國對照展示卡（連網後可獲得高精度即時翻譯）`;
     }
-
-    try {
-      const [jaRes, neRes, myRes, viRes, enRes, koRes] = await Promise.allSettled([
-        fetchFreeGoogleTranslate(zhText, 'ja'),
-        fetchFreeGoogleTranslate(zhText, 'ne'),
-        fetchFreeGoogleTranslate(zhText, 'my'),
-        fetchFreeGoogleTranslate(zhText, 'vi'),
-        fetchFreeGoogleTranslate(zhText, 'en'),
-        fetchFreeGoogleTranslate(zhText, 'ko')
-      ]);
-
-      const jaText = jaRes.status === 'fulfilled' ? jaRes.value : '';
-      const neText = neRes.status === 'fulfilled' ? neRes.value : '';
-      const myText = myRes.status === 'fulfilled' ? myRes.value : '';
-      const viText = viRes.status === 'fulfilled' ? viRes.value : '';
-      const enText = enRes.status === 'fulfilled' ? enRes.value : '';
-      const koText = koRes.status === 'fulfilled' ? koRes.value : '';
-
-      if (jaText || enText || viText) {
-        currentBroadcastData = {
-          zh: zhText,
-          ja: jaText || zhText,
-          ja_romaji: '',
-          ne: neText || 'कृपया अनुवाद हेर्नुहोस्',
-          ne_romaji: '',
-          my: myText || 'ဘာသာပြန်ချက်ကို ကြည့်ရှုပါ',
-          my_romaji: '',
-          vi: viText || zhText,
-          en: enText || zhText,
-          ko: koText || zhText,
-          ko_romaji: '',
-          isAi: true
-        };
-        renderHexaResults(currentBroadcastData);
-        if (statusEl) {
-          statusEl.style.display = 'block';
-          statusEl.style.background = 'rgba(56,142,60,0.1)';
-          statusEl.style.color = '#2e7d32';
-          statusEl.innerHTML = `✨ 雲端即時同步直譯完成（日・尼・緬・越・英・韓 6 國語言直譯）`;
-        }
-        showToast('六國語言翻譯完成！', 'success');
-        return;
-      }
-    } catch (err) {
-      console.warn('Google 即時直譯失敗：', err);
-    }
+    showToast('六國翻譯卡片已產出！', 'info');
   }
-
-  // 4. 離線狀態（完全無網路時之萬用直譯卡片）
-  currentBroadcastData = {
-    zh: zhText,
-    ja: `【連絡】${zhText}。よろしくお願いします。`,
-    ja_romaji: `[Renraku] ${zhText}. Yoroshiku onegaishimasu.`,
-    ne: `【जानकारी】 ${zhText}।`,
-    ne_romaji: `[Jānakārī] ${zhText}`,
-    my: `【အသိပေးချက်】 ${zhText}။`,
-    my_romaji: `[A-thi-pay-gyet] ${zhText}`,
-    vi: `【Thông báo】 ${zhText}. Xin cảm ơn!`,
-    en: `[Notice] ${zhText}. Thank you!`,
-    ko: `【안내】 ${zhText}. 잘 부탁드립니다.`,
-    ko_romaji: `[An-nae] ${zhText}. Jal butagdeurimnida.`,
-    isAi: false
-  };
-  renderHexaResults(currentBroadcastData);
-  if (statusEl) {
-    statusEl.style.display = 'block';
-    statusEl.style.background = 'rgba(92,61,30,0.08)';
-    statusEl.style.color = 'var(--primary)';
-    statusEl.innerHTML = `📡 離線模式：已產出六國對照展示卡（連網後可獲得高精度即時翻譯）`;
-  }
-  showToast('六國翻譯卡片已產出！', 'info');
 }
 
 // 支援舊名
@@ -14361,7 +14423,6 @@ function renderHexaResults(data) {
         <div class="broadcast-text-main ja-text">
           ${data.ja || ''}
         </div>
-        ${data.ja_romaji ? `<div class="broadcast-text-sub">🗣️ 標音：${data.ja_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ja || '')}', 'ja')">🔊 朗讀</button>
@@ -14380,7 +14441,6 @@ function renderHexaResults(data) {
         <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
           ${data.ne || ''}
         </div>
-        ${data.ne_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.ne_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ne || '')}', 'ne')">🔊 朗讀</button>
@@ -14399,7 +14459,6 @@ function renderHexaResults(data) {
         <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
           ${data.my || ''}
         </div>
-        ${data.my_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.my_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.my || '')}', 'my')">🔊 朗讀</button>
@@ -14454,7 +14513,6 @@ function renderHexaResults(data) {
         <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
           ${data.ko || ''}
         </div>
-        ${data.ko_romaji ? `<div class="broadcast-text-sub">🗣️ 羅馬音：${data.ko_romaji}</div>` : ''}
       </div>
       <div class="broadcast-lang-actions">
         <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ko || '')}', 'ko')">🔊 朗讀</button>
@@ -14547,7 +14605,6 @@ function openBroadcastBigScreen() {
       <div class="bigscreen-card-content" style="font-family:var(--font-serif); color:var(--primary);">
         ${currentBroadcastData.ja || ''}
       </div>
-      ${currentBroadcastData.ja_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.ja_romaji}</div>` : ''}
     </div>
 
     <!-- 2. 🇳🇵 尼泊爾文大字卡 -->
@@ -14559,7 +14616,6 @@ function openBroadcastBigScreen() {
       <div class="bigscreen-card-content" style="color:#1b5e20;">
         ${currentBroadcastData.ne || ''}
       </div>
-      ${currentBroadcastData.ne_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.ne_romaji}</div>` : ''}
     </div>
 
     <!-- 3. 🇲🇲 緬甸文大字卡 -->
@@ -14571,7 +14627,6 @@ function openBroadcastBigScreen() {
       <div class="bigscreen-card-content" style="color:#e65100;">
         ${currentBroadcastData.my || ''}
       </div>
-      ${currentBroadcastData.my_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.my_romaji}</div>` : ''}
     </div>
 
     <!-- 4. 🇻🇳 越南文大字卡 -->
@@ -14605,7 +14660,6 @@ function openBroadcastBigScreen() {
       <div class="bigscreen-card-content" style="color:#4a148c;">
         ${currentBroadcastData.ko || ''}
       </div>
-      ${currentBroadcastData.ko_romaji ? `<div style="font-size:0.85rem; color:var(--muted); margin-top:8px;">${currentBroadcastData.ko_romaji}</div>` : ''}
     </div>
   `;
 

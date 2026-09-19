@@ -549,9 +549,6 @@ for name, box, target_w in bang_cards:
             # skip center face
             if 0.38 * card.width < x < 0.62 * card.width and y > 0.55 * card.height:
                 continue
-            # Specifically for bang_05: skip the weird external growth curl on right cheek
-            if name == 'bang_05' and x > 135 and y > 100:
-                continue
             if max(p) < 140:
                 dark_pixels.add((x, y))
 
@@ -595,12 +592,6 @@ for name, box, target_w in bang_cards:
         py = 25 # High cranial dome!
         c_black.paste(scaled, (px, py), scaled)
         
-        # Clean any remaining stray bits on bang_05 cheek and balance skull
-        if name == 'bang_05':
-            for cy in range(180, 245):
-                for cx in range(536, 600):
-                    c_black.putpixel((cx, cy), (0, 0, 0, 0))
-                    
         # Refine bang_03 (Character B comma bangs): soften the heavy slug tip
         if name == 'bang_03':
             for cy in range(178, 192):
@@ -687,21 +678,21 @@ right_box = [(486, 185), (536, 215)]
 d_sq.rounded_rectangle(left_box, radius=3, fill=(215, 235, 255, 24))
 d_sq.rounded_rectangle(right_box, radius=3, fill=(215, 235, 255, 24))
 
-# 2. Outer dark acetate frame
-d_sq.rounded_rectangle(left_box, radius=3, outline=(35, 35, 42, 255), width=3)
-d_sq.rounded_rectangle(right_box, radius=3, outline=(35, 35, 42, 255), width=3)
+# 2. Outer dark acetate frame (sleek 2px outline)
+d_sq.rounded_rectangle(left_box, radius=3, outline=(35, 35, 42, 255), width=2)
+d_sq.rounded_rectangle(right_box, radius=3, outline=(35, 35, 42, 255), width=2)
 
 # 3. Top frame subtle metallic edge reflection
 d_sq.line([(428, 185), (474, 185)], fill=(115, 120, 135, 255), width=1)
 d_sq.line([(488, 185), (534, 185)], fill=(115, 120, 135, 255), width=1)
 
 # 4. Arched nose bridge resting above nose tip (y=191, clear of pupil at y=201)
-d_sq.line([(476, 191), (486, 191)], fill=(35, 35, 42, 255), width=3)
+d_sq.line([(476, 191), (486, 191)], fill=(35, 35, 42, 255), width=2)
 d_sq.line([(476, 190), (486, 190)], fill=(115, 120, 135, 255), width=1)
 
 # 5. Temples going back to ears
-d_sq.line([(426, 193), (405, 195)], fill=(35, 35, 42, 255), width=3)
-d_sq.line([(536, 193), (555, 195)], fill=(35, 35, 42, 255), width=3)
+d_sq.line([(426, 193), (405, 195)], fill=(35, 35, 42, 255), width=2)
+d_sq.line([(536, 193), (555, 195)], fill=(35, 35, 42, 255), width=2)
 acc_sq.save(os.path.join(LAYERS_DIR, 'accessories/acc_glasses_square.png'))
 
 acc_rd = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
