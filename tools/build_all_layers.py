@@ -10,22 +10,22 @@ for sub in ['bg', 'body', 'faces', 'mouths', 'noses', 'eyes', 'eyebrows', 'bangs
     os.makedirs(os.path.join(LAYERS_DIR, sub), exist_ok=True)
 
 # ------------------------------------------------------------------
-# Palette swapping helper functions with Angel Ring sheen
+# Palette swapping helper functions with Rich Warm Caramel & Indigo Luster
 # ------------------------------------------------------------------
 def to_flaxen_brown(r, g, b, a):
     if a < 30:
         return 0, 0, 0, 0
     v = max(r, g, b) / 255.0
     ratio = min(1.0, max(0.0, (v - 0.05) / 0.40))
-    # Japanese rich milky ash-brown with warm caramel sheen
-    nr = int(48 + ratio * (232 - 48))
-    ng = int(34 + ratio * (198 - 34))
-    nb = int(24 + ratio * (162 - 24))
-    if ratio > 0.55:
-        sheen = (ratio - 0.55) / 0.45
-        nr = min(255, int(nr + sheen * 22))
-        ng = min(255, int(ng + sheen * 18))
-        nb = min(255, int(nb + sheen * 12))
+    # Japanese rich caramel milk-tea brown (warm chestnuts in shadows, caramel in highlights)
+    nr = int(58 + ratio * (240 - 58))
+    ng = int(36 + ratio * (205 - 36))
+    nb = int(22 + ratio * (160 - 22))
+    if ratio > 0.52:
+        sheen = (ratio - 0.52) / 0.48
+        nr = min(255, int(nr + sheen * 25))
+        ng = min(255, int(ng + sheen * 20))
+        nb = min(255, int(nb + sheen * 10))
     return nr, ng, nb, a
 
 def to_natural_black(r, g, b, a):
@@ -33,14 +33,14 @@ def to_natural_black(r, g, b, a):
         return 0, 0, 0, 0
     v = max(r, g, b) / 255.0
     ratio = min(1.0, max(0.0, (v - 0.05) / 0.40))
-    # Deep crisp anime slate-indigo black
-    nr = int(10 + ratio * (85 - 10))
-    ng = int(12 + ratio * (95 - 12))
-    nb = int(18 + ratio * (125 - 18))
-    if ratio > 0.55:
-        sheen = (ratio - 0.55) / 0.45
-        nb = min(255, int(nb + sheen * 24))
-        ng = min(255, int(ng + sheen * 12))
+    # Crisp indigo-slate anime black with subtle ambient warmth in shadow
+    nr = int(14 + ratio * (85 - 14))
+    ng = int(15 + ratio * (95 - 15))
+    nb = int(24 + ratio * (135 - 24))
+    if ratio > 0.50:
+        sheen = (ratio - 0.50) / 0.50
+        nb = min(255, int(nb + sheen * 28))
+        ng = min(255, int(ng + sheen * 15))
     return nr, ng, nb, a
 
 def recolor_image(im_rgba, recolor_fn):
@@ -59,17 +59,17 @@ bg = Image.open(os.path.join(PHOTOS_DIR, 'clean_restaurant_pixel_bg.jpg')).conve
 bg.save(os.path.join(LAYERS_DIR, 'bg/bg_restaurant.png'))
 
 # ------------------------------------------------------------------
-# 2. Body Layers (Layer 3) - Enhanced collar lapel & rim highlights
+# 2. Body Layers (Layer 3) - Tailored Female Shoulders & Seam Highlights
 # ------------------------------------------------------------------
-print('2. Body Layers (FLIP_LEFT_RIGHT & unified collar alignment)...')
+print('2. Body Layers (Tailored female shoulder width & rich charcoal uniform)...')
 body_configs = [
-    ('body_layer_male_normal.png', 'body_male_normal.png', 260, False),
-    ('body_layer_male_sturdy.png', 'body_male_sturdy.png', 200, True),
-    ('body_layer_female_normal.png', 'body_female_normal.png', 208, False),
-    ('body_layer_female_chubby.png', 'body_female_chubby.png', 152, True)
+    ('body_layer_male_normal.png', 'body_male_normal.png', 260, False, False),
+    ('body_layer_male_sturdy.png', 'body_male_sturdy.png', 200, True, False),
+    ('body_layer_female_normal.png', 'body_female_normal.png', 208, False, True),
+    ('body_layer_female_chubby.png', 'body_female_chubby.png', 152, True, True)
 ]
 
-for src_name, out_name, dy, clean_stub in body_configs:
+for src_name, out_name, dy, clean_stub, is_female_body in body_configs:
     b_path = os.path.join(PHOTOS_DIR, src_name)
     if os.path.exists(b_path):
         src = Image.open(b_path).convert('RGBA')
@@ -85,8 +85,18 @@ for src_name, out_name, dy, clean_stub in body_configs:
                         if p[3] > 0 and (p[0] > p[2] + 25) and p[0] > 140:
                             src.putpixel((x, y), (0, 0, 0, 0))
         flipped = src.transpose(Image.FLIP_LEFT_RIGHT)
-        c = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
-        c.paste(flipped, (0, dy), flipped)
+        
+        # Refine female shoulder width to prevent "football player" silhouette
+        if is_female_body:
+            w_new = int(flipped.width * 0.935)
+            h_new = flipped.height
+            scaled_f = flipped.resize((w_new, h_new), Image.Resampling.LANCZOS)
+            c = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
+            paste_x = 512 - w_new // 2
+            c.paste(scaled_f, (paste_x, dy), scaled_f)
+        else:
+            c = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
+            c.paste(flipped, (0, dy), flipped)
         
         # Add subtle navy-charcoal warmth and lapel rim highlights
         for y in range(dy, min(1024, dy + flipped.height)):
@@ -94,15 +104,15 @@ for src_name, out_name, dy, clean_stub in body_configs:
                 p = c.getpixel((x, y))
                 if p[3] == 0: continue
                 # Slightly tint dark suit pixels towards rich charcoal-navy
-                if max(p[:3]) < 70 and p[0] == p[1] == p[2]:
-                    c.putpixel((x, y), (p[0], p[1] + 2, p[2] + 6, p[3]))
+                if max(p[:3]) < 75 and abs(p[0] - p[1]) < 6:
+                    c.putpixel((x, y), (max(0, p[0] - 2), p[1] + 2, p[2] + 8, p[3]))
         
         c.save(os.path.join(LAYERS_DIR, 'body', out_name))
 
 # ------------------------------------------------------------------
-# 3. Face Shapes (Layer 4) - Slender Female Neck, Natural 45deg Chin Shadow, Peach Blush
+# 3. Face Shapes (Layer 4) - Slender Neck, Warm 45deg Shadow, 3D Cheek Depth & Suprasternal Notch
 # ------------------------------------------------------------------
-print('3. Face Shapes (10 natural + 10 tan clean bases with slender neck, natural chin shadow & peach blush)...')
+print('3. Face Shapes (Slender swan neck, 3D cheek depth, warm 45deg chin shadow)...')
 for i in range(1, 11):
     is_female = (i in [1, 2, 3, 7, 8, 9, 10])
     for tone in ['natural', 'tan']:
@@ -139,7 +149,7 @@ for i in range(1, 11):
         c = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
         c.paste(head_rgba, (380, 40), head_rgba)
         
-        # Taper neck: Slender swan neck for females, sturdy neck for males
+        # Taper neck: Slender swan neck for females (min_x 460, max_x 518)
         for y in range(320, c.height):
             for x in range(c.width):
                 p = c.getpixel((x, y))
@@ -149,34 +159,44 @@ for i in range(1, 11):
                 elif y > 328:
                     t = (y - 328) / (362.0 - 328.0)
                     if is_female:
-                        min_x = 458 + t * 27
-                        max_x = 522 - t * 15
+                        min_x = 460 + t * 25
+                        max_x = 518 - t * 13
                     else:
                         min_x = 448 + t * 37
                         max_x = 532 - t * 22
                     if x < min_x or x > max_x:
                         c.putpixel((x, y), (0, 0, 0, 0))
 
-        # Natural 45-degree angled chin shadow (projected from chin to throat)
-        # Avoids horizontal band / strangulation mark
+        # Natural 45-degree angled chin shadow with warm subsurface scattering
         chin_apex_x, chin_apex_y = 488, 326
         for y in range(328, 348):
             dy_c = y - chin_apex_y
             sx = chin_apex_x + dy_c * 0.65
-            w = max(4.0, 22.0 - dy_c * 0.9)
-            vert_factor = 0.72 + 0.26 * (dy_c / 22.0)
+            w = max(4.0, 20.0 - dy_c * 0.85)
+            vert_factor = 0.76 + 0.22 * (dy_c / 20.0)
             for x in range(int(sx - w), int(sx + w) + 1):
                 p = c.getpixel((x, y))
                 if p[3] > 0 and p[0] > 150 and p[1] > 100:
                     dist_x = abs(x - sx) / w
-                    h_factor = 0.82 + 0.18 * dist_x
+                    h_factor = 0.84 + 0.16 * dist_x
                     factor = vert_factor * h_factor
-                    c.putpixel((x, y), (int(p[0] * factor), int(p[1] * factor), int(p[2] * factor), p[3]))
+                    nr = min(255, int(p[0] * factor * 1.05))
+                    ng = int(p[1] * factor)
+                    nb = int(p[2] * factor * 0.95)
+                    c.putpixel((x, y), (nr, ng, nb, p[3]))
+
+        # 3D Cheek Spherical Depth (soft 7% shade on far right cheek, viewer right)
+        for cy in range(185, 265):
+            for cx in range(498, 532):
+                p = c.getpixel((cx, cy))
+                if p[3] > 0 and p[0] > 165:
+                    depth_t = (cx - 498) / 34.0
+                    shade_factor = 1.0 - 0.08 * depth_t
+                    c.putpixel((cx, cy), (int(p[0] * shade_factor), int(p[1] * shade_factor), int(p[2] * shade_factor), p[3]))
 
         # Peach blush on cheeks (healthy glow / 氣色)
-        blush_color = (255, 125, 115) if tone == 'natural' else (245, 130, 95)
-        blush_intensity = 0.22 if is_female else 0.12
-        # Left cheek (436, 228), right cheek (506, 230)
+        blush_color = (255, 120, 110) if tone == 'natural' else (248, 125, 90)
+        blush_intensity = 0.24 if is_female else 0.12
         for (cx, cy, rx, ry) in [(436, 228, 16, 10), (506, 230, 16, 10)]:
             for by in range(cy - ry, cy + ry + 1):
                 for bx in range(cx - rx, cx + rx + 1):
@@ -190,13 +210,22 @@ for i in range(1, 11):
                             nb = int(p[2] * (1.0 - alpha_w) + blush_color[2] * alpha_w)
                             c.putpixel((bx, by), (nr, ng, nb, p[3]))
 
+        # Suprasternal notch (鎖骨窩淺影)
+        if is_female:
+            for sny in range(354, 362):
+                sn_w = (sny - 354) * 0.8
+                for snx in range(int(488 - sn_w), int(488 + sn_w) + 1):
+                    p = c.getpixel((snx, sny))
+                    if p[3] > 0 and p[0] > 140:
+                        c.putpixel((snx, sny), (int(p[0] * 0.90), int(p[1] * 0.88), int(p[2] * 0.88), p[3]))
+
         t_short = 'nat' if tone == 'natural' else 'tan'
         c.save(os.path.join(LAYERS_DIR, f'faces/face_{i:02d}_{t_short}.png'))
 
 # ------------------------------------------------------------------
-# 4. Eyes Layer (Layer 7) - Watery Catchlights, Sclera Shadow, Crescent Glow & Convergence
+# 4. Eyes Layer (Layer 7) - Aegyo-sal, Sclera Shadow, Warm Gaze & Refined Lashes
 # ------------------------------------------------------------------
-print('4. Eyes Layer (14 styles with watery catchlights, sclera shadow & crescent glow)...')
+print('4. Eyes Layer (Aegyo-sal, watery sparkle, warm focused gaze)...')
 eye_cat = Image.open(os.path.join(PHOTOS_DIR, 'eye_styles_14_catalog.jpg'))
 eye_cards = [
     # Male 1..6
@@ -231,7 +260,7 @@ for name, box, is_small in eye_cards:
     
     # Specific refinement for eye_f05 (trim spidery lower lashes)
     if name == 'eye_f05':
-        for y in range(int(card.height * 0.74), card.height):
+        for y in range(int(card.height * 0.72), card.height):
             for x in range(card.width):
                 p = e_rgba.getpixel((x, y))
                 if p[3] > 0 and max(p[:3]) < 90:
@@ -251,7 +280,7 @@ for name, box, is_small in eye_cards:
         for y in range(py, py + int(scaled.height * 0.38)):
             for x in range(px, px + scaled.width):
                 p = c.getpixel((x, y))
-                if p[3] > 0 and min(p[:3]) > 200: # sclera
+                if p[3] > 0 and min(p[:3]) > 200:
                     c.putpixel((x, y), (int(p[0] * 0.84), int(p[1] * 0.86), int(p[2] * 0.92), p[3]))
         
         # 2. Pupil centers with slight bilateral convergence
@@ -267,27 +296,32 @@ for name, box, is_small in eye_cards:
                     if p[3] > 0 and max(p[:3]) < 95:
                         c.putpixel((pcx + dx, pcy + dy), (60, 82, 135, 255))
         
-        # 4. Specular Catchlights (Primary star sparkle + soft secondary glint)
+        # 4. Specular Catchlights (10 o'clock position on both eyes)
         if is_small:
             for (cx, cy_pt) in [(left_cx, cy), (right_cx, cy)]:
                 c.putpixel((cx, cy_pt), (255, 255, 255, 255))
                 c.putpixel((cx + 1, cy_pt), (235, 245, 255, 210))
         else:
             for (cx, cy_pt) in [(left_cx, cy), (right_cx, cy)]:
-                # 2x2 primary bright sparkle
                 for dy in range(2):
                     for dx in range(2):
                         c.putpixel((cx + dx, cy_pt + dy), (255, 255, 255, 255))
-                # secondary soft sparkle
                 c.putpixel((cx + 2, cy_pt + 2), (210, 230, 255, 190))
                 c.putpixel((cx - 1, cy_pt + 1), (210, 230, 255, 160))
+                
+        # 5. Aegyo-sal / Tear Trough (臥蠶陰影 - warm smiling eye curve)
+        for (acx, acy, aw) in [(452, 212, 12), (506, 212, 12)]:
+            for ax in range(acx - aw, acx + aw + 1):
+                curv = math.sin((ax - (acx - aw)) / (2.0 * aw) * math.pi)
+                ay = int(acy + curv * 1.5)
+                c.putpixel((ax, ay), (170, 115, 105, 110))
                 
         c.save(os.path.join(LAYERS_DIR, f'eyes/{name}.png'))
 
 # ------------------------------------------------------------------
-# 5. Eyebrows Layer (Layer 8) - Moved Down 8px to orbital rim
+# 5. Eyebrows Layer (Layer 8) - Orbital Alignment & Friendly Arch
 # ------------------------------------------------------------------
-print('5. Eyebrows Layer (11 styles moved down 8px to orbit)...')
+print('5. Eyebrows Layer (Orbital alignment & friendly brow arch)...')
 brow_cat = Image.open(os.path.join(PHOTOS_DIR, 'eyebrow_styles_11_catalog.jpg'))
 brow_cards = [
     # Male 1..5
@@ -322,14 +356,14 @@ for name, box in brow_cards:
         scaled = bc.resize((int(bc.width * ratio), int(bc.height * ratio)), Image.Resampling.NEAREST)
         c = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
         px = 480 - scaled.width // 2
-        py = 182 # Down 8px from 174, perfect match with orbital ridge!
+        py = 182
         c.paste(scaled, (px, py), scaled)
         c.save(os.path.join(LAYERS_DIR, f'eyebrows/{name}.png'))
 
 # ------------------------------------------------------------------
 # 6. Nose Layer (Layer 6) - L-Shaped Anime Nose with Bridge Highlight & Soft Subnasal Shadow
 # ------------------------------------------------------------------
-print('6. Nose Layer (4 styles with bridge highlight & soft subnasal shadow)...')
+print('6. Nose Layer (L-shaped anime nose with bridge highlight & tip sparkle)...')
 nose_cat = Image.open(os.path.join(PHOTOS_DIR, 'nose_styles_4_catalog.jpg'))
 nose_cards = [
     ('nose_01', (180, 220, 370, 420)),
@@ -361,7 +395,7 @@ for name, box in nose_cards:
         py = 232
         c.paste(scaled, (px, py), scaled)
         
-        # Subtle warm nose bridge highlight
+        # Subtle warm nose bridge highlight line
         for by in range(224, 235):
             c.putpixel((480, by), (255, 246, 240, 160))
         # Crisp nose tip highlight point
@@ -378,9 +412,9 @@ for name, box in nose_cards:
         c.save(os.path.join(LAYERS_DIR, f'noses/{name}.png'))
 
 # ------------------------------------------------------------------
-# 7. Mouth Layer (Layer 5) - Up 8px, Philtrum Dip, Oral Cavity Corners for Smile
+# 7. Mouth Layer (Layer 5) - Philtrum Dip, Oral Cavity Teeth Depth & Lip Gloss
 # ------------------------------------------------------------------
-print('7. Mouth Layer (6 styles, up 8px with oral cavity depth)...')
+print('7. Mouth Layer (Philtrum dip, oral cavity depth & lip gloss)...')
 mouth_cat = Image.open(os.path.join(PHOTOS_DIR, 'mouth_styles_6_catalog.jpg'))
 mouth_cards = [
     ('mouth_01', (105, 275, 275, 345)),
@@ -409,41 +443,54 @@ for name, box in mouth_cards:
         scaled = mc.resize((int(mc.width * ratio), int(mc.height * ratio)), Image.Resampling.NEAREST)
         c = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
         px = 480 - scaled.width // 2
-        py = 274 # Up 8px from 282, golden ratio 1:2 lower face balance!
+        py = 274
         c.paste(scaled, (px, py), scaled)
         
         # Subtle philtrum dip shadow above upper lip
         for fpy in range(268, 273):
             c.putpixel((480, fpy), (170, 110, 95, 140))
             
+        # Refine mouth_01 (sweet smile): Add lower lip gloss
+        if name == 'mouth_01':
+            c.putpixel((480, py + scaled.height - 2), (255, 235, 235, 220))
+            c.putpixel((481, py + scaled.height - 2), (255, 235, 235, 220))
+            
+        # Refine mouth_03 (calm professional smile): upturn corners slightly
+        if name == 'mouth_03':
+            c.putpixel((px + 1, py + 1), (110, 45, 45, 200))
+            c.putpixel((px + scaled.width - 2, py + 1), (110, 45, 45, 200))
+            
         # Refine mouth_02 (open teeth smile) to avoid "clenched fake teeth"
         if name == 'mouth_02':
             # Dark oral cavity corners on left and right
-            for my in range(py + 8, py + 16):
-                for mx in range(px + 2, px + 8):
+            for my in range(py + 7, py + 16):
+                for mx in range(px + 2, px + 9):
                     p = c.getpixel((mx, my))
-                    if p[3] > 0 and min(p[:3]) > 180:
-                        c.putpixel((mx, my), (115, 30, 35, 255))
-                for mx in range(px + scaled.width - 8, px + scaled.width - 2):
+                    if p[3] > 0 and min(p[:3]) > 175:
+                        c.putpixel((mx, my), (115, 28, 32, 255))
+                for mx in range(px + scaled.width - 9, px + scaled.width - 2):
                     p = c.getpixel((mx, my))
-                    if p[3] > 0 and min(p[:3]) > 180:
-                        c.putpixel((mx, my), (115, 30, 35, 255))
+                    if p[3] > 0 and min(p[:3]) > 175:
+                        c.putpixel((mx, my), (115, 28, 32, 255))
             # Upper lip shadow across top of teeth
-            for my in range(py + 8, py + 11):
-                for mx in range(px + 8, px + scaled.width - 8):
+            for my in range(py + 7, py + 11):
+                for mx in range(px + 9, px + scaled.width - 9):
                     p = c.getpixel((mx, my))
-                    if p[3] > 0 and min(p[:3]) > 200:
-                        c.putpixel((mx, my), (210, 195, 195, 255))
+                    if p[3] > 0 and min(p[:3]) > 195:
+                        c.putpixel((mx, my), (210, 192, 192, 255))
+            # Center incisor tooth separation line
+            c.putpixel((480, py + 10), (185, 160, 160, 240))
+            c.putpixel((480, py + 11), (185, 160, 160, 240))
             # Lower lip highlight glint
-            c.putpixel((480, py + scaled.height - 2), (255, 235, 235, 200))
-            c.putpixel((481, py + scaled.height - 2), (255, 235, 235, 200))
+            c.putpixel((480, py + scaled.height - 2), (255, 238, 238, 210))
+            c.putpixel((481, py + scaled.height - 2), (255, 238, 238, 210))
             
         c.save(os.path.join(LAYERS_DIR, f'mouths/{name}.png'))
 
 # ------------------------------------------------------------------
-# 8. Bangs Layer (Layer 9) - High Cranial Vault, Angel Ring Sheen & Clean Cheek Contours
+# 8. Bangs Layer (Layer 9) - Tapered Strands, Balanced Skull & High Cranial Dome
 # ------------------------------------------------------------------
-print('8. Bangs Layer (16 styles x 2 colors, high cranial vault & angel ring)...')
+print('8. Bangs Layer (Tapered hair tips, skull balance & high cranial dome)...')
 bangs_cat = Image.open(os.path.join(PHOTOS_DIR, 'bangs_16_catalog.jpg'))
 bang_cards = [
     # Male 1..6
@@ -451,7 +498,7 @@ bang_cards = [
     ('bang_02', (415, 60, 575, 230), 235),
     ('bang_03', (695, 60, 876, 230), 248),
     ('bang_04', (135, 280, 290, 450), 235),
-    ('bang_05', (415, 280, 585, 450), 235),
+    ('bang_05', (415, 280, 585, 450), 238),
     ('bang_06', (710, 280, 865, 450), 235),
     # Female 1..10
     ('bang_07', (38, 542, 208, 715), 245),
@@ -526,14 +573,22 @@ for name, box, target_w in bang_cards:
         
         c_black = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
         px = 480 - scaled.width // 2
-        py = 26 # Up 8px from 34, creating fluffy high cranial vault!
+        py = 25 # High cranial dome!
         c_black.paste(scaled, (px, py), scaled)
         
-        # Clean any remaining stray bits on bang_05 cheek
+        # Clean any remaining stray bits on bang_05 cheek and balance skull
         if name == 'bang_05':
             for cy in range(180, 245):
-                for cx in range(538, 600):
+                for cx in range(536, 600):
                     c_black.putpixel((cx, cy), (0, 0, 0, 0))
+                    
+        # Refine bang_03 (Character B comma bangs): soften the heavy slug tip
+        if name == 'bang_03':
+            for cy in range(178, 192):
+                for cx in range(458, 468):
+                    p = c_black.getpixel((cx, cy))
+                    if p[3] > 0 and (cx < 462 or cy > 186):
+                        c_black.putpixel((cx, cy), (0, 0, 0, 0))
         
         c_black_rec = recolor_image(c_black, to_natural_black)
         c_black_rec.save(os.path.join(LAYERS_DIR, f'bangs/{name}_black.png'))
@@ -542,9 +597,9 @@ for name, box, target_w in bang_cards:
         c_flaxen.save(os.path.join(LAYERS_DIR, f'bangs/{name}_flaxen.png'))
 
 # ------------------------------------------------------------------
-# 9. Back Hair Layer (Layer 2) - High Cranial Matching & Clean Silhouette
+# 9. Back Hair Layer (Layer 2) - Balanced Undercut Texture & High Cranial Matching
 # ------------------------------------------------------------------
-print('9. Back Hair Layer (10 styles x 2 colors, matching cranial height)...')
+print('9. Back Hair Layer (Balanced undercut texture & high cranial matching)...')
 back_cat = Image.open(os.path.join(PHOTOS_DIR, 'back_hair_front_view_catalog.jpg'))
 back_cards = [
     # Row 0
@@ -559,7 +614,7 @@ back_cards = [
     # Row 2
     ('back_08_wavy_bob', (50, 705, 260, 940), 220),
     ('back_09_half_up', (530, 680, 715, 940), 220),
-    ('back_10_layered_pixie', (750, 705, 950, 940), 230),
+    ('back_10_layered_pixie', (750, 705, 950, 940), 232),
 ]
 
 for name, box, target_w in back_cards:
@@ -581,8 +636,9 @@ for name, box, target_w in back_cards:
         
         c_black = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
         px = 480 - scaled.width // 2
-        py = 27 # Up 8px to match bangs high cranial dome!
+        py = 26 # Matching cranial dome!
         c_black.paste(scaled, (px, py), scaled)
+        
         c_black_rec = recolor_image(c_black, to_natural_black)
         c_black_rec.save(os.path.join(LAYERS_DIR, f'back_hair/{name}_black.png'))
         
@@ -590,49 +646,43 @@ for name, box, target_w in back_cards:
         c_flaxen.save(os.path.join(LAYERS_DIR, f'back_hair/{name}_flaxen.png'))
 
 # ------------------------------------------------------------------
-# 10. Accessories Layer (Layer 10) - High-Tech Transparent Japanese Anime Glasses
+# 10. Accessories Layer (Layer 10) - Pure Optical Anti-Glare Japanese Glasses
 # ------------------------------------------------------------------
-print('10. Accessories Layer (Transparent sky-blue reflection lenses)...')
+print('10. Accessories Layer (Pure optical anti-glare anime glasses)...')
 acc_sq = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
 d_sq = ImageDraw.Draw(acc_sq)
 
 left_box = [(426, 185), (476, 215)]
 right_box = [(486, 185), (536, 215)]
 
-# 1. Semi-transparent sky-blue glass lens
-d_sq.rounded_rectangle(left_box, radius=3, fill=(215, 235, 255, 32))
-d_sq.rounded_rectangle(right_box, radius=3, fill=(215, 235, 255, 32))
+# 1. Subtle transparent anti-glare sky-blue lens tint
+d_sq.rounded_rectangle(left_box, radius=3, fill=(215, 235, 255, 24))
+d_sq.rounded_rectangle(right_box, radius=3, fill=(215, 235, 255, 24))
 
-# 2. Diagonal glass sheen / glare lines
-d_sq.line([(434, 187), (446, 213)], fill=(255, 255, 255, 65), width=2)
-d_sq.line([(494, 187), (506, 213)], fill=(255, 255, 255, 65), width=2)
-
-# 3. Outer dark acetate frame
+# 2. Outer dark acetate frame
 d_sq.rounded_rectangle(left_box, radius=3, outline=(35, 35, 42, 255), width=3)
 d_sq.rounded_rectangle(right_box, radius=3, outline=(35, 35, 42, 255), width=3)
 
-# 4. Top frame subtle rim highlight
-d_sq.line([(428, 185), (474, 185)], fill=(110, 115, 130, 255), width=1)
-d_sq.line([(488, 185), (534, 185)], fill=(110, 115, 130, 255), width=1)
+# 3. Top frame subtle metallic edge reflection
+d_sq.line([(428, 185), (474, 185)], fill=(115, 120, 135, 255), width=1)
+d_sq.line([(488, 185), (534, 185)], fill=(115, 120, 135, 255), width=1)
 
-# 5. Arched nose bridge resting above nose tip (y=191, clear of pupil at y=201)
+# 4. Arched nose bridge resting above nose tip (y=191, clear of pupil at y=201)
 d_sq.line([(476, 191), (486, 191)], fill=(35, 35, 42, 255), width=3)
-d_sq.line([(476, 190), (486, 190)], fill=(110, 115, 130, 255), width=1)
+d_sq.line([(476, 190), (486, 190)], fill=(115, 120, 135, 255), width=1)
 
-# 6. Temples going back to ears
+# 5. Temples going back to ears
 d_sq.line([(426, 193), (405, 195)], fill=(35, 35, 42, 255), width=3)
 d_sq.line([(536, 193), (555, 195)], fill=(35, 35, 42, 255), width=3)
 acc_sq.save(os.path.join(LAYERS_DIR, 'accessories/acc_glasses_square.png'))
 
 acc_rd = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
 d_rd = ImageDraw.Draw(acc_rd)
-d_rd.ellipse([(426, 184), (476, 218)], fill=(215, 235, 255, 28), outline=(175, 145, 85, 255), width=3)
-d_rd.ellipse([(486, 184), (536, 218)], fill=(215, 235, 255, 28), outline=(175, 145, 85, 255), width=3)
-d_rd.line([(435, 187), (447, 215)], fill=(255, 255, 255, 60), width=2)
-d_rd.line([(495, 187), (507, 215)], fill=(255, 255, 255, 60), width=2)
+d_rd.ellipse([(426, 184), (476, 218)], fill=(215, 235, 255, 22), outline=(175, 145, 85, 255), width=3)
+d_rd.ellipse([(486, 184), (536, 218)], fill=(215, 235, 255, 22), outline=(175, 145, 85, 255), width=3)
 d_rd.arc([(476, 192), (486, 202)], start=180, end=360, fill=(175, 145, 85, 255), width=3)
 d_rd.line([(426, 198), (405, 196)], fill=(175, 145, 85, 255), width=3)
 d_rd.line([(536, 198), (555, 196)], fill=(175, 145, 85, 255), width=3)
 acc_rd.save(os.path.join(LAYERS_DIR, 'accessories/acc_glasses_round.png'))
 
-print('All 10 layers rebuilt with v137 Ultimate Aesthetic Architecture!')
+print('All 10 layers rebuilt with v138 Ultimate Aesthetic Architecture!')
