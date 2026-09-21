@@ -961,6 +961,27 @@ compositeFiles.forEach(cf => {
   assert(fs.existsSync(path.join(__dirname, cf)), `合成驗證立繪圖存在: ${cf}`);
 });
 
+// 測試 53: AI 日文面試即時聽譯 ＆ 應答軍師 (page-interview) 與逆質問產生器 (v143)
+console.log('\n【測試 53：AI 日文面試即時聽譯 ＆ 應答軍師 (page-interview) 與逆質問產生器 (v143)】');
+assert(html.includes('data-page="page-interview"') && html.includes('面試助手'), '頂部導航包含面試助手按鈕 (data-page="page-interview")');
+assert(html.indexOf('data-page="page-typeset"') < html.indexOf('data-page="page-interview"') && html.indexOf('data-page="page-interview"') < html.indexOf('data-page="page-settings"'), '面試助手按鈕位置嚴格位於「日文排版」右側、「設定」左側');
+assert(html.includes('id="page-interview"'), 'HTML 包含獨立的面試分頁容器 (id="page-interview")');
+assert(html.includes('Transync AI') && html.includes('interview-control-bar'), '包含 Transync AI 風格頂部控制列 (interview-control-bar)');
+assert(html.includes('interview-source-btn') && html.includes('擴音/麥克風收音'), '支援切換擴音/麥克風收音、分頁系統音訊與模擬測試模式');
+assert(html.includes('interview-meter-bar') && html.includes('interview-timer-display'), '包含即時動態收音電平條與 00:00:00 計時器');
+assert(html.includes('interview-buffer-bar') && html.includes('ご質問ありがとうございます。少し考えさせていただいてもよろしいでしょうか'), '頂部常駐萬用爭取思考時間之救命緩衝句 (interview-buffer-bar)');
+assert(html.includes('interview-grid') && html.includes('interview-col-left') && html.includes('interview-col-right'), '主體採用 1:1 雙欄佈局 (左欄即時日翻中聽譯，右欄 AI 軍師專屬回答)');
+assert(html.includes('interview-stream-box') && html.includes('iv-card-jp') && html.includes('iv-card-zh'), '左欄包含即時日語原文與繁體中文字幕串流容器');
+assert(html.includes('iv-ans-badge simple') && html.includes('iv-ans-badge story'), '右欄推薦回答同時提供「版本 A：簡單俐落版」與「版本 B：豐富故事版」');
+assert(html.includes('iv-ans-ruby-body') && html.includes('ruby-align') && html.includes('iv-ans-zh-card'), '回答排版嚴格遵照上層振假名、中層日文敬語、下層粉框繁中翻譯卡片');
+assert(html.includes('btn-story-shrine') && html.includes('木造建築與 7 本御朱印'), '包含招牌故事快捷標籤：木造建築與 7 本御朱印');
+assert(html.includes('btn-story-kurokawa') && html.includes('黑川備料・補菜・設定'), '包含招牌故事快捷標籤：黑川備料・補菜・設定');
+assert(html.includes('btn-story-voice') && html.includes('聲優親和力與溫暖微笑'), '包含招牌故事快捷標籤：聲優親和力與溫暖微笑');
+assert(html.includes('modal-interview-context') && html.includes('楊 詠筑') && html.includes('成功大學中文系'), '上下文彈窗完整預載楊詠筑通用履歷檔案 (成大中文輔建築、聲優、黑川現場、個室寮、甲殼類過敏)');
+assert(html.includes('modal-interview-reverse-questions') && html.includes('休日などに料理をするのが好きなのですが、寮で自炊や料理をすることは可能でしょうか'), '逆質問專區包含修正後的「宿舍自炊料理 (休假喜歡做料理)」提問');
+assert(html.includes('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか'), '逆質問專區包含「宿舍到職場步行距離/時間」提問');
+assert(html.includes('generateRandomReverseQuestions') && html.includes('quickTriggerRandomReverseQuestions'), '具備一鍵動態隨機抽取 5 個高分逆質問產生器');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');

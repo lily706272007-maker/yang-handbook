@@ -1809,6 +1809,582 @@
       font-size: 11px !important;
     }
   }
+
+  /* ==============================================================
+     AI 日文面試即時聽譯 ＆ 應答軍師 (page-interview) 專用樣式
+     ============================================================== */
+  #page-interview {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 10px 12px 100px;
+  }
+
+  .interview-control-bar {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+    margin-bottom: 12px;
+  }
+
+  .interview-ctrl-left, .interview-ctrl-center, .interview-ctrl-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .interview-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .interview-brand-logo {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
+  .interview-brand-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    transition: all 0.2s;
+  }
+  .interview-brand-badge.listening {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fca5a5;
+    animation: ivPulse 1.5s infinite;
+  }
+
+  .interview-source-select-wrap {
+    position: relative;
+  }
+  .interview-source-btn {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .interview-source-btn:hover {
+    background: #e5e7eb;
+  }
+  .interview-source-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+    z-index: 80;
+    min-width: 260px;
+    display: none;
+  }
+  .interview-source-dropdown.open {
+    display: block;
+  }
+  .interview-source-option {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    color: var(--ink);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .interview-source-option:hover {
+    background: #f3f4f6;
+  }
+  .interview-source-option.active {
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 700;
+  }
+
+  /* 即時收音電平 */
+  .interview-meter-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 20px;
+    padding: 0 4px;
+  }
+  .interview-meter-bar {
+    width: 3.5px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
+    transition: height 0.08s ease, background-color 0.15s;
+  }
+  .interview-meter-bar.active {
+    background: #22c55e;
+  }
+
+  /* 錄音監聽開關與時間 */
+  .interview-record-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 24px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+    transition: all 0.2s;
+  }
+  .interview-record-toggle-btn:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+  .interview-record-toggle-btn.listening {
+    background: #ef4444;
+    box-shadow: 0 2px 10px rgba(239,68,68,0.4);
+    animation: ivPulse 1.5s infinite;
+  }
+  .interview-timer {
+    font-family: monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: #f3f4f6;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .interview-tool-btn {
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .interview-tool-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+  }
+  .interview-tool-btn.highlight {
+    background: #fef3c7;
+    border-color: #fcd34d;
+    color: #92400e;
+  }
+  .interview-tool-btn.primary {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+  }
+
+  /* 頂部常駐救命思考緩衝句 (Emergency Buffer Phrase) */
+  .interview-buffer-bar {
+    background: #fffbeb;
+    border: 1.5px solid #fde68a;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(245,158,11,0.06);
+  }
+  .interview-buffer-content {
+    flex: 1;
+  }
+  .interview-buffer-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #b45309;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    border-radius: 6px;
+    padding: 1px 7px;
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  .interview-buffer-jp {
+    font-family: var(--font-serif, "Yu Mincho", "Hiragino Mincho ProN", serif);
+    font-size: 1.08rem;
+    line-height: 2.1;
+    color: #1f2937;
+    letter-spacing: 0.02em;
+  }
+  .interview-buffer-jp ruby {
+    ruby-align: center;
+  }
+  .interview-buffer-jp rt {
+    font-size: 0.55em;
+    color: #b45309;
+    font-weight: 600;
+    user-select: none;
+  }
+  .interview-buffer-zh {
+    font-size: 0.83rem;
+    color: #78350f;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+  .interview-buffer-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  /* 主體雙欄工作區 (Left: 考官日翻中 / Right: AI 推薦雙版本回答) */
+  .interview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 16px;
+  }
+  @media (max-width: 960px) {
+    .interview-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .interview-col {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 16px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    min-height: 580px;
+  }
+  .interview-col-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .interview-col-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .interview-col-pill {
+    font-size: 0.74rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: #e0e7ff;
+    color: #3730a3;
+    border: 1px solid #c7d2fe;
+  }
+  .interview-col-company {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(92,61,30,0.06);
+    border: 1px solid rgba(92,61,30,0.15);
+    border-radius: 10px;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .interview-col-company:hover {
+    background: rgba(92,61,30,0.12);
+  }
+  .interview-live-indicator {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #f3f4f6;
+  }
+  .interview-live-indicator.listening {
+    color: #b91c1c;
+    background: #fee2e2;
+    animation: ivPulse 1.5s infinite;
+  }
+
+  /* 即時聽譯對話盒 */
+  .interview-stream-box {
+    flex: 1;
+    min-height: 280px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .interview-stream-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: border-color 0.2s;
+  }
+  .interview-stream-card.active {
+    border-color: #0284c7;
+    background: #f8fafc;
+  }
+  .iv-card-time {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .iv-card-jp {
+    font-family: var(--font-serif, "Yu Mincho", serif);
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  .iv-card-zh-wrap {
+    margin-top: 8px;
+    border-left: 3.5px solid #0284c7;
+    background: #f0f9ff;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+  .iv-card-zh {
+    font-size: 0.88rem;
+    color: #0369a1;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* 手動輸入與快捷題目 */
+  .interview-input-wrap {
+    border-top: 1.5px solid var(--border);
+    padding-top: 12px;
+  }
+  .interview-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .interview-input-text {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    color: var(--ink);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .interview-input-text:focus {
+    border-color: var(--primary);
+  }
+  .interview-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .iv-chip-btn {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 3px 10px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .iv-chip-btn:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  /* 右欄：個人故事快捷標籤 */
+  .interview-story-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px dashed var(--border);
+  }
+  .iv-story-btn {
+    background: #f9fafb;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .iv-story-btn:hover {
+    border-color: #cbd5e1;
+    background: #f1f5f9;
+  }
+  .iv-story-btn.active {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(239,68,68,0.12);
+  }
+
+  /* 回答卡片容器 (A 簡單版 & B 豐富版) */
+  .interview-answers-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .interview-answer-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .interview-answer-card:hover {
+    border-color: #fda4af;
+  }
+  .iv-ans-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .iv-ans-badge {
+    font-size: 0.76rem;
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .iv-ans-badge.simple {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+  }
+  .iv-ans-badge.story {
+    background: #fce7f3;
+    color: #9d174d;
+    border: 1px solid #fbcfe8;
+  }
+  .iv-ans-tag-hint {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  /* 振假名排版主體 */
+  .iv-ans-ruby-body {
+    font-family: var(--font-serif, "Yu Mincho", "Hiragino Mincho ProN", serif);
+    font-size: 1.15rem;
+    line-height: 2.3;
+    color: #111827;
+    letter-spacing: 0.025em;
+  }
+  .iv-ans-ruby-body ruby {
+    ruby-align: center;
+  }
+  .iv-ans-ruby-body rt {
+    font-size: 0.54em;
+    color: #dc2626;
+    font-weight: 600;
+    line-height: 1.1;
+    user-select: none;
+  }
+
+  /* 中文對照卡片 (粉色左邊條) */
+  .iv-ans-zh-card {
+    border-left: 3.5px solid #f43f5e;
+    background: #fff1f2;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .iv-ans-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    justify-content: flex-end;
+  }
+
+  /* 逆質問卡片 */
+  .iv-reverse-q-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: border-color 0.15s;
+  }
+  .iv-reverse-q-card:hover {
+    border-color: #f59e0b;
+  }
+  .iv-reverse-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #92400e;
+    background: #fef3c7;
+    border-radius: 6px;
+    padding: 1px 8px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  @keyframes ivPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.02); }
+  }
 </style>
 </head>
 <body>
@@ -1832,6 +2408,7 @@
       <button class="top-nav-btn" data-page="page-roleplay" onclick="switchNavPage('page-roleplay', this)"><span class="nav-icon">🎭</span><span class="nav-label">情境對話</span></button>
       <button class="top-nav-btn" data-page="page-broadcast" onclick="switchNavPage('page-broadcast', this)"><span class="nav-icon">🌐</span><span class="nav-label">六國翻譯</span></button>
       <button class="top-nav-btn" data-page="page-typeset" onclick="switchNavPage('page-typeset', this)"><span class="nav-icon">🖨️</span><span class="nav-label">日文排版</span></button>
+      <button class="top-nav-btn" data-page="page-interview" onclick="switchNavPage('page-interview', this)"><span class="nav-icon">🎙️</span><span class="nav-label">面試助手</span></button>
       <button class="top-nav-btn" data-page="page-settings" onclick="switchNavPage('page-settings', this)"><span class="nav-icon">⚙️</span><span class="nav-label">設定</span></button>
     </nav>
     <span id="offline-badge">📵 離線</span>
@@ -2195,6 +2772,264 @@
         </div>
         <div class="modal-body" id="typeset-history-list" style="max-height:60vh; overflow-y:auto; padding:12px;">
           <!-- JS 動態注入歷史項目 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         分頁：AI 日文面試即時聽譯 ＆ 應答軍師 (page-interview)
+         雙欄同步工作台：左欄日翻中即時聽譯，右欄雙版本推薦回答（振假名排版）
+    ============================================================== -->
+    <section class="page" id="page-interview">
+      <div class="page-sub">Transync AI 面試軍師・線上面試擴音聽譯・日翻中即時字幕・客製化雙版本應答（振假名排版）與逆質問產生器</div>
+
+      <!-- 頂部 Transync AI 控制列 -->
+      <div class="interview-control-bar">
+        <div class="interview-ctrl-left">
+          <div class="interview-brand">
+            <span class="interview-brand-logo">Transync AI</span>
+            <span class="interview-brand-badge" id="interview-status-badge">待命中</span>
+          </div>
+          <div class="interview-source-select-wrap">
+            <button class="interview-source-btn" id="interview-source-btn" onclick="toggleAudioSourceMenu()">
+              <span id="interview-source-label">聲音來源：🔊 擴音/麥克風收音</span>
+              <span style="font-size:0.75rem;">▾</span>
+            </button>
+            <div class="interview-source-dropdown" id="interview-source-dropdown">
+              <div class="interview-source-option active" onclick="setAudioSource('mic')">🔊 擴音/麥克風收音 (電腦喇叭放音直接收)</div>
+              <div class="interview-source-option" onclick="setAudioSource('system')">💻 分頁/系統音訊 (視訊會議共享音訊)</div>
+              <div class="interview-source-option" onclick="setAudioSource('sim')">🧪 模擬文字提問 (無麥克風免音訊測試)</div>
+            </div>
+          </div>
+          <!-- 即時電平條 -->
+          <div class="interview-meter-wrap" title="即時收音電平">
+            <div class="interview-meter-bar" id="iv-meter-1"></div>
+            <div class="interview-meter-bar" id="iv-meter-2"></div>
+            <div class="interview-meter-bar" id="iv-meter-3"></div>
+            <div class="interview-meter-bar" id="iv-meter-4"></div>
+            <div class="interview-meter-bar" id="iv-meter-5"></div>
+            <div class="interview-meter-bar" id="iv-meter-6"></div>
+          </div>
+        </div>
+
+        <div class="interview-ctrl-center">
+          <button class="interview-record-toggle-btn" id="btn-toggle-interview-listen" onclick="toggleInterviewListening()">
+            <span id="iv-listen-icon">▶</span>
+            <span id="iv-listen-text">開始監聽</span>
+          </button>
+          <div class="interview-timer" id="interview-timer-display">00:00:00</div>
+        </div>
+
+        <div class="interview-ctrl-right">
+          <button class="interview-tool-btn" onclick="openModal('modal-interview-context')">
+            <span>💼</span> 履歷與求人票 (上下文)
+          </button>
+          <button class="interview-tool-btn highlight" onclick="openModal('modal-interview-reverse-questions')">
+            <span>❓</span> 逆質問專區
+          </button>
+          <button class="interview-tool-btn primary" onclick="quickTriggerRandomReverseQuestions()">
+            <span>🎲</span> 隨機 5 題逆質問
+          </button>
+        </div>
+      </div>
+
+      <!-- 頂部常駐救命思考緩衝句 (Emergency Buffer Phrase) -->
+      <div class="interview-buffer-bar">
+        <div class="interview-buffer-content">
+          <div class="interview-buffer-badge">💡 爭取思考時間・萬用緩衝句</div>
+          <div class="interview-buffer-jp">
+            <ruby>ご質問<rt>ごしつもん</rt></ruby>ありがとうございます。<ruby>少<rt>すこ</rt></ruby>し<ruby>考<rt>かんが</rt></ruby>えさせていただいてもよろしいでしょうか。
+          </div>
+          <div class="interview-buffer-zh">
+            ▎謝謝您的提問，請容我稍微思考一下可以嗎？（自然為自己爭取 5 秒鐘看右邊回答）
+          </div>
+        </div>
+        <div class="interview-buffer-actions">
+          <button class="btn btn-sm btn-outline" onclick="speakJapanese('ご質問ありがとうございます。少し考えさせていただいてもよろしいでしょうか。')">🔊 試聽</button>
+          <button class="btn btn-sm btn-outline" onclick="copyText('ご質問ありがとうございます。少し考えさせていただいてもよろしいでしょうか。')">📋 複製</button>
+        </div>
+      </div>
+
+      <!-- 主體雙欄工作區 (Left: 考官日翻中 / Right: AI 推薦雙版本回答) -->
+      <div class="interview-grid">
+        <!-- 左欄：考官發言 · 日翻中即時聽譯 -->
+        <div class="interview-col interview-col-left">
+          <div class="interview-col-header">
+            <div class="interview-col-title">
+              <span class="interview-col-pill">ja ➔ zh</span>
+              <span>考官發言・即時聽譯</span>
+            </div>
+            <div class="interview-col-actions">
+              <span class="interview-live-indicator" id="iv-live-indicator">○ 待命</span>
+              <button class="btn btn-sm btn-outline" onclick="clearInterviewTranscript()" title="清空紀錄">🗑️ 清空</button>
+            </div>
+          </div>
+
+          <!-- 即時轉寫與中譯串流呈現盒 -->
+          <div class="interview-stream-box" id="interview-stream-box">
+            <div class="interview-stream-card active" id="iv-current-question-card">
+              <div class="iv-card-time" id="iv-card-time">12:00:00</div>
+              <div class="iv-card-jp" id="iv-card-jp">「なぜ日本に来ようと思ったのですか？」</div>
+              <div class="iv-card-zh-wrap">
+                <div class="iv-card-zh" id="iv-card-zh">為什麼決定來日本？</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手動模擬輸入與快捷題型列 (方便測試或無麥克風使用) -->
+          <div class="interview-input-wrap">
+            <div class="interview-input-row">
+              <input type="text" id="interview-manual-input" class="interview-input-text" placeholder="輸入或貼上考官日文提問進行測試..." onkeydown="if(event.key==='Enter') testSimulateQuestion()" />
+              <button class="btn btn-primary btn-sm" onclick="testSimulateQuestion()">🚀 模擬提問</button>
+            </div>
+            <div class="interview-quick-chips">
+              <span style="font-size:0.75rem; color:var(--muted); font-weight:700;">快速考題：</span>
+              <button class="iv-chip-btn" onclick="quickSelectQuestion('自己紹介をお願いします。')">自己紹介</button>
+              <button class="iv-chip-btn" onclick="quickSelectQuestion('なぜ日本に来ようと思ったのですか？')">來日動機</button>
+              <button class="iv-chip-btn" onclick="quickSelectQuestion('黒川温泉の旅館では、どのようなお仕事をされていましたか？')">黑川工作內容</button>
+              <button class="iv-chip-btn" onclick="quickSelectQuestion('休日はどのように過ごしていますか？')">休假做什麼</button>
+              <button class="iv-chip-btn" onclick="quickSelectQuestion('繁忙期の忙しい時間帯でも体力やフットワークには自信がありますか？')">旺季體力</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右欄：AI 面試軍師 · 專屬推薦回答 (雙版本 · 振假名排版) -->
+        <div class="interview-col interview-col-right">
+          <div class="interview-col-header">
+            <div class="interview-col-title">
+              <span class="interview-col-pill" style="background:#fef3c7; color:#92400e; border-color:#fcd34d;">AI 軍師</span>
+              <span>專屬推薦回答 (雙版本・振假名排版)</span>
+            </div>
+            <div class="interview-col-company" id="iv-target-company-badge" onclick="openModal('modal-interview-context')" title="點擊切換目標飯店與求人票">
+              🏢 <span id="iv-current-company-name">THE ALPS HOTEL HAKUBA (アルプスホテル白馬様)</span> ✎
+            </div>
+          </div>
+
+          <!-- 個人亮點故事快速標籤 (Story Tags) -->
+          <div class="interview-story-bar">
+            <span style="font-size:0.76rem; font-weight:700; color:var(--muted);">招牌故事：</span>
+            <button class="iv-story-btn active" id="btn-story-shrine" onclick="applyStoryTag('shrine')">⛩️ 木造建築與 7 本御朱印</button>
+            <button class="iv-story-btn" id="btn-story-kurokawa" onclick="applyStoryTag('kurokawa')">🍱 黑川備料・補菜・設定</button>
+            <button class="iv-story-btn" id="btn-story-voice" onclick="applyStoryTag('voice')">🎙️ 聲優親和力與溫暖微笑</button>
+          </div>
+
+          <!-- 回答卡片容器 (版本 A 簡單版 & 版本 B 豐富版) -->
+          <div class="interview-answers-wrap" id="interview-answers-container">
+            <!-- JS 動態注入回答卡片 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 彈窗：履歷與求人票設定 (Context Modal) -->
+    <div class="modal-backdrop" id="modal-interview-context">
+      <div class="modal-content" style="max-width:620px;">
+        <div class="modal-header">
+          <h3 style="margin:0; font-size:1.1rem; color:var(--primary);">💼 應試者履歷與目標求人票 (上下文)</h3>
+          <button class="modal-close" onclick="closeModal('modal-interview-context')">✕</button>
+        </div>
+        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:16px;">
+          <!-- 固定通用履歷資產卡 -->
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:12px 14px; margin-bottom:14px;">
+            <div style="font-weight:700; font-size:0.86rem; color:#0f172a; margin-bottom:6px;">👤 永久通用核心個人檔案 (已鎖定)</div>
+            <div style="font-size:0.8rem; color:#475569; line-height:1.6;">
+              • <strong>姓名</strong>：楊 詠筑（よう えいちく） / 成功大學中文系（輔修建築）<br>
+              • <strong>日語程度</strong>：JLPT N2 (在日中，打工度假簽證)<br>
+              • <strong>現職實務</strong>：黑川溫泉「優彩」餐廳現場業務（備料準備、尖峰快速補菜、打烊清潔與設定）<br>
+              • <strong>文化特質</strong>：熱愛木造建築與神社文化，已收集 7 本御朱印，全日本皆能適應<br>
+              • <strong>聲音特質</strong>：曾任自由接案聲優，咬字清晰、親和力高、笑容溫暖<br>
+              • <strong>生活要求</strong>：希望單人寮、甲殼類（蝦蟹）過敏
+            </div>
+          </div>
+
+          <!-- 動態目標飯店與求人票 -->
+          <div style="background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:14px; margin-bottom:14px;">
+            <div style="font-weight:700; font-size:0.88rem; color:var(--ink); margin-bottom:10px;">🏢 當前應徵公司與求人票設定</div>
+            
+            <div class="form-group" style="margin-bottom:10px;">
+              <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:4px;">應徵公司/飯店名稱：</label>
+              <input type="text" id="iv-input-company" class="form-control" value="THE ALPS HOTEL HAKUBA" placeholder="例如：THE ALPS HOTEL HAKUBA" oninput="updateCompanyHonorificPreview()" />
+              <div style="font-size:0.75rem; color:var(--muted); margin-top:4px;">
+                自動尊稱轉換：<strong id="iv-preview-honorific" style="color:var(--primary);">アルプスホテル白馬様 / 御社</strong>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:10px;">
+              <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:4px;">第一志望職種：</label>
+              <select id="iv-input-role" class="form-control">
+                <option value="レストランサービス" selected>レストランサービス (餐廳外場服務 / 配膳)</option>
+                <option value="調理補助">調理補助 (廚房後台協助)</option>
+                <option value="フロント">フロント (櫃台接待)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:4px;">求人票詳細內容 (可直接複製貼上招募簡章)：</label>
+              <textarea id="iv-input-jobslip" class="form-control" style="min-height:90px; font-size:0.82rem;" placeholder="貼入求人票的工作內容、要求條件、飯店特色..."></textarea>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="closeModal('modal-interview-context')">取消</button>
+            <button class="btn btn-primary btn-sm" onclick="saveInterviewContext()">💾 儲存並更新軍師題庫</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 彈窗：逆質問專區 (Reverse Questions Modal) -->
+    <div class="modal-backdrop" id="modal-interview-reverse-questions">
+      <div class="modal-content" style="max-width:680px;">
+        <div class="modal-header">
+          <h3 style="margin:0; font-size:1.1rem; color:#92400e;">❓ 逆質問專區・面試尾聲反問考官專用小卡</h3>
+          <button class="modal-close" onclick="closeModal('modal-interview-reverse-questions')">✕</button>
+        </div>
+        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:16px;">
+          <div style="font-size:0.82rem; color:var(--muted); margin-bottom:14px; background:#fffbeb; padding:8px 12px; border-radius:8px; border:1px solid #fef3c7;">
+            💡 當考官詢問 <code>「何かご質問はありますか？」</code>（有什麼問題想問我們嗎？）時，請從容挑選 1~2 題詢問：
+          </div>
+
+          <!-- 區塊 1：生活與宿舍必備提問 (2 題) -->
+          <div style="font-weight:800; font-size:0.9rem; color:var(--ink); margin-bottom:10px;">🏠 宿舍生活與通勤提問 (必備專用)</div>
+          
+          <!-- 提問 1：自炊做料理 -->
+          <div class="iv-reverse-q-card">
+            <div class="iv-reverse-tag">🍳 宿舍自炊料理（個人休閒興趣）</div>
+            <div class="iv-ans-ruby-body">
+              <ruby>休日<rt>きゅうじつ</rt></ruby>などに<ruby>料理<rt>りょうり</rt></ruby>をするのが<ruby>好<rt>す</rt></ruby>きなのですが、<ruby>寮<rt>りょう</rt></ruby>で<ruby>自炊<rt>じすい</rt></ruby>や<ruby>料理<rt>りょうり</rt></ruby>をすることは<ruby>可能<rt>かのう</rt></ruby>でしょうか？
+            </div>
+            <div class="iv-ans-zh-card">
+              ▎休假時我自己蠻喜歡做做料理的，想請教一下在宿舍裡面是可以自己開伙做飯的嗎？
+            </div>
+            <div class="iv-ans-actions">
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('休日などに料理をするのが好きなのですが、寮で自炊や料理をすることは可能でしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('休日などに料理をするのが好きなのですが、寮で自炊や料理をすることは可能でしょうか？')">📋 複製</button>
+            </div>
+          </div>
+
+          <!-- 提問 2：上班通勤距離 -->
+          <div class="iv-reverse-q-card">
+            <div class="iv-reverse-tag">🚶 通勤距離時間</div>
+            <div class="iv-ans-ruby-body">
+              <ruby>寮<rt>りょう</rt></ruby>から<ruby>職場<rt>しょくば</rt></ruby>までは、<ruby>徒歩<rt>とほ</rt></ruby>でどのくらいの<ruby>時間<rt>じかん</rt></ruby>がかかりますでしょうか？
+            </div>
+            <div class="iv-ans-zh-card">
+              ▎想請教從宿舍到上班的地方，走路大約需要幾分鐘呢？
+            </div>
+            <div class="iv-ans-actions">
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか？')">📋 複製</button>
+            </div>
+          </div>
+
+          <!-- 區塊 2：隨機 5 個逆質問產生器 (根據求人票) -->
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-top:20px; margin-bottom:10px; border-top:1.5px dashed var(--border); padding-top:16px;">
+            <div style="font-weight:800; font-size:0.9rem; color:var(--ink);">🎲 求人票客製化・隨機 5 個高分逆質問</div>
+            <button class="btn btn-sm btn-primary" onclick="generateRandomReverseQuestions()">🎲 換一批 5 個逆質問</button>
+          </div>
+          <div id="iv-dynamic-reverse-list">
+            <!-- JS 動態生成 5 題 -->
+          </div>
         </div>
       </div>
     </div>
@@ -6757,6 +7592,7 @@ function switchNavPage(targetPageId, triggerBtn) {
   if (targetPageId === 'page-roleplay') renderRoleplayPage();
   if (targetPageId === 'page-broadcast') renderBroadcastPage();
   if (targetPageId === 'page-typeset') renderTypesetPage();
+  if (targetPageId === 'page-interview') renderInterviewPage();
   if (targetPageId === 'page-settings') renderSettingsPage();
   
   updateRaccoonVisibility();
@@ -16205,6 +17041,681 @@ async function testGeminiApiKeyConnection() {
 }
 
 /* ==============================================================
+   11.5 AI 日文面試即時聽譯 ＆ 應答軍師 (page-interview)
+   ・雙欄同步工作台：左欄考官發言即時日翻中，右欄雙版本推薦應答（振假名排版）
+   ・招牌個人故事快捷標籤（木造建築與7本御朱印、黑川備料補菜設定、聲優親和力）
+   ・求人票動態綁定與尊稱自動轉換
+   ・宿舍自炊與通勤逆質問 ＆ 隨機 5 個高分逆質問產生器
+============================================================== */
+
+// 全域複製輔助函式
+function copyText(text) {
+  if (!text) return;
+  const clean = text.replace(/<rt>.*?<\/rt>/g, '').replace(/<[^>]+>/g, '').trim();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(clean).then(() => {
+      showToast('已複製到剪貼簿！', 'success');
+    }).catch(() => {
+      showToast('複製成功：' + clean.slice(0, 18) + '...', 'success');
+    });
+  } else {
+    showToast('已複製：' + clean.slice(0, 18) + '...', 'success');
+  }
+}
+
+const InterviewEngine = {
+  isListening: false,
+  audioSource: 'mic', // 'mic' | 'system' | 'sim'
+  timerSeconds: 0,
+  timerInterval: null,
+  meterInterval: null,
+  activeStoryTag: 'shrine', // 'shrine' | 'kurokawa' | 'voice'
+  companyName: 'THE ALPS HOTEL HAKUBA',
+  companyHonorific: 'アルプスホテル白馬様 / 御社',
+  role: 'レストランサービス',
+  jobSlip: '',
+  recognition: null,
+  currentQuestion: 'なぜ日本に来ようと思ったのですか？',
+  currentQuestionZh: '為什麼決定來日本？',
+  
+  // 候選人永久通用個人檔案 (固定資產)
+  profile: {
+    name: '楊 詠筑',
+    nameKana: 'よう えいちく',
+    school: '國立成功大學 中國文學系（副：建築學系）',
+    jlpt: 'JLPT N2',
+    workSummary: '熊本黑川溫泉「優彩」餐廳業務（開店前備料、尖峰時段持續補菜、打烊清潔與明日設定）',
+    passion: '熱愛木造建築與神社文化，收集 7 本御朱印，全日本皆能適應並開朗投入',
+    voice: '自由接案聲優，聲音親和力高、咬字清晰、笑容溫暖',
+    preferences: '希望單人宿舍（個室寮）、甲殼類（蝦蟹）過敏'
+  },
+
+  // 經典題目對應之雙版本資料庫 (結合求人票尊稱動態置換)
+  qaDatabase: {
+    'なぜ日本に来ようと思ったのですか？': {
+      zh: '為什麼決定來日本？',
+      simple: {
+        ruby: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>やおもてなしが<ruby>好<rt>す</rt></ruby>きで、<ruby>日本<rt>にほん</rt></ruby>で<ruby>生活<rt>せいかつ</rt></ruby>しながら<ruby>日本語<rt>にほんご</rt></ruby>と<ruby>仕事<rt>しごと</rt></ruby>のスキルをもっと<ruby>磨<rt>みが</rt></ruby>きたいと<ruby>思<rt>おも</rt></ruby>ったからです。',
+        raw: '日本の文化やおもてなしが好きで、日本で生活しながら日本語と仕事のスキルをもっと磨きたいと思ったからです。',
+        zh: '我喜歡日本的文化與熱情款待（おもてなし），希望能一邊在日本生活，一邊磨練日語與現場工作技能。'
+      },
+      story: {
+        shrine: {
+          ruby: '<ruby>大学<rt>だいがく</rt></ruby>で<ruby>建築<rt>けんちく</rt></ruby>を<ruby>学<rt>まな</rt></ruby>んだことをきっかけに、<ruby>日本<rt>にほん</rt></ruby>の<ruby>伝統的<rt>でんとうてき</rt></ruby>な<ruby>木造<rt>もくぞう</rt></ruby><ruby>建築<rt>けんちく</rt></ruby>や<ruby>神社<rt>じんじゃ</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>が<ruby>大好<rt>だいす</rt></ruby>きになりました。<ruby>御朱印帳<rt>ごしゅいんちょう</rt></ruby>もすでに7<ruby>冊<rt>さつ</rt></ruby><ruby>集<rt>あつ</rt></ruby>めております。<ruby>日本<rt>にほん</rt></ruby><ruby>全国<rt>ぜんこく</rt></ruby>どこでも<ruby>前向<rt>まえむ</rt></ruby>きに、<ruby>楽<rt>たの</rt></ruby>しく<ruby>適応<rt>てきおう</rt></ruby>して<ruby>働<rt>はたら</rt></ruby>けることが<ruby>私<rt>わたし</rt></ruby>の<ruby>強<rt>つよ</rt></ruby>みです。',
+          raw: '大学で建築を学んだことをきっかけに、日本の伝統的な木造建築や神社文化が大好きになりました。御朱印帳もすでに7冊集めております。日本全国どこでも前向きに、楽しく適応して働けることが私の強みです。',
+          zh: '因為在大學接觸建築的契機，我深深愛上了日本的傳統木造建築與神社文化，目前已經收集了 7 本御朱印帳。正因如此，無論在日本哪個地方工作，我都能以開朗正向的心態快適應並全心投入，這是我最大的優勢。'
+        },
+        kurokawa: {
+          ruby: '<ruby>台湾<rt>たいわん</rt></ruby>での<ruby>接客<rt>せっきゃく</rt></ruby><ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かし、<ruby>本場<rt>ほんば</rt></ruby>の<ruby>日本<rt>にほん</rt></ruby>の<ruby>旅館<rt>りょかん</rt></ruby>でおもてなしを<ruby>学<rt>まな</rt></ruby>びたいと<ruby>考<rt>かんが</rt></ruby>えて<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>現在<rt>げんざい</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>「<ruby>優彩<rt>ゆうさい</rt></ruby>」でも、レストランの<ruby>準備<rt>じゅんび</rt></ruby>や<ruby>補充<rt>ほじゅう</rt></ruby>を<ruby>通<rt>とお</rt></ruby>じて<ruby>日々<rt>ひび</rt></ruby><ruby>現場<rt>げんば</rt></ruby>のスピード<ruby>感<rt>かん</rt></ruby>を<ruby>身<rt>み</rt></ruby>につけております。',
+          raw: '台湾での接客経験を活かし、本場の日本の旅館でおもてなしを学びたいと考えて来日いたしました。現在の黒川温泉「優彩」でも、レストランの準備や補充を通じて日々現場のスピード感を身につけております。',
+          zh: '活用在台灣的服務經驗，希望能親自來到日本旅館學習真正的款待之道。在目前的黑川溫泉「優彩」也是透過每日備料與尖峰補菜，持續鍛鍊現場節奏感。'
+        },
+        voice: {
+          ruby: '<ruby>台湾<rt>たいわん</rt></ruby>で<ruby>声優<rt>せいゆう</rt></ruby>などの<ruby>仕事<rt>しごと</rt></ruby>をしていた<ruby>頃<rt>ころ</rt></ruby>から、<ruby>日本<rt>にほん</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>の<ruby>響<rt>ひび</rt></ruby>きや<ruby>心遣<rt>こころづか</rt></ruby>いが<ruby>好<rt>す</rt></ruby>きで、<ruby>実際<rt>じっさい</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>でお<ruby>客様<rt>きゃくさま</rt></ruby>と<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>笑顔<rt>えがお</rt></ruby>でコミュニケーションをとりたいと<ruby>思<rt>おも</rt></ruby>い<ruby>来日<rt>らいにち</rt></ruby>いたしました。',
+          raw: '台湾で声優などの仕事をしていた頃から、日本の言葉の響きや心遣いが好きで、実際に日本の現場でお客様と直接笑顔でコミュニケーションをとりたいと思い来日いたしました。',
+          zh: '在台灣從事配音等工作時，我就很喜歡日語的聲調美感與體貼心意，因此希望能親自來到日本第一線，與客人帶著微笑面對面溝通交流。'
+        }
+      }
+    },
+
+    '自己紹介をお願いします。': {
+      zh: '請自我介紹。',
+      simple: {
+        ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby><ruby>後<rt>ご</rt></ruby>、<ruby>今年<rt>ことし</rt></ruby>の8<ruby>月<rt>がつ</rt></ruby>からワーキングホリデーで<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日常<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        raw: '楊詠筑と申します。台湾の大学を卒業後、今年の8月からワーキングホリデーで来日いたしました。現在は熊本県の黒川温泉にある旅館のレストランで働いております。本日はよろしくお願いいたします。',
+        zh: '我叫楊詠筑。台灣的大學畢業後，今年8月透過打工度假來到日本。目前在熊本縣黑川溫泉的旅館餐廳工作。今天請多多指教。'
+      },
+      story: {
+        shrine: {
+          ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>大学<rt>だいがく</rt></ruby>で<ruby>建築<rt>けんちく</rt></ruby>を<ruby>学<rt>まな</rt></ruby>び、<ruby>日本<rt>にほん</rt></ruby>の<ruby>木造<rt>もくぞう</rt></ruby><ruby>建築<rt>けんちく</rt></ruby>や<ruby>神社<rt>じんじゃ</rt></ruby><ruby>巡<rt>めぐ</rt></ruby>りに<ruby>魅了<rt>みりょう</rt></ruby>されて<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の<ruby>旅館<rt>りょかん</rt></ruby>レストランで<ruby>接客<rt>せっきゃく</rt></ruby>を<ruby>担当<rt>たんとう</rt></ruby>しております。<ruby>新<rt>あたら</rt></ruby>しい<ruby>環境<rt>かんきょう</rt></ruby>でも<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>挑戦<rt>ちょうせん</rt></ruby>し、[HONORIFIC]の<ruby>力<rt>ちから</rt></ruby>になりたいと<ruby>考<rt>かんが</rt></ruby>えております。',
+          raw: '楊詠筑と申します。大学で建築を学び、日本の木造建築や神社巡りに魅了されて来日いたしました。現在は黒川温泉の旅館レストランで接客を担当しております。新しい環境でも前向きに挑戦し、[HONORIFIC]の力になりたいと考えております。',
+          zh: '我叫楊詠筑。大學學習建築，因著迷於日本木造建築與神社參拜而來到日本。目前在黑川溫泉旅館餐廳負責外場接待。面對新環境我也能積極挑戰，希望能為貴飯店貢獻力量。'
+        },
+        kurokawa: {
+          ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>現在<rt>げんざい</rt></ruby>、<ruby>熊本<rt>くまもと</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>「<ruby>優彩<rt>ゆうさい</rt></ruby>」にて、レストランの<ruby>準備<rt>じゅんび</rt></ruby>、<ruby>料理<rt>りょうり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>、そして<ruby>片付<rt>かたづ</rt></ruby>けと<ruby>翌日<rt>よくじつ</rt></ruby>のセッティングを<ruby>担当<rt>たんとう</rt></ruby>しております。<ruby>現場<rt>げんば</rt></ruby>のスピード<ruby>感<rt>かん</rt></ruby>とチームワークには<ruby>自信<rt>じしん</rt></ruby>があります。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+          raw: '楊詠筑と申します。現在、熊本の黒川温泉「優彩」にて、レストランの準備、料理の補充、そして片付けと翌日のセッティングを担当しております。現場のスピード感とチームワークには自信があります。どうぞよろしくお願いいたします。',
+          zh: '我叫楊詠筑。目前在熊本黑川溫泉「優彩」負責餐廳備料準備、料理即時補充、打烊清潔與隔日會場設定。對於現場的工作節奏與團隊協作很有自信。請多多指教。'
+        },
+        voice: {
+          ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>では声優（せいゆう）やサロンでの<ruby>接客<rt>せっきゃく</rt></ruby>をしておりましたので、<ruby>明<rt>あか</rt></ruby>るい<ruby>笑顔<rt>えがお</rt></ruby>と<ruby>伝<rt>つた</rt></ruby>わりやすいお<ruby>声<rt>こえ</rt></ruby>がけが<ruby>得意<rt>とくい</rt></ruby>です。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でのレストラン<ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かし、[HONORIFIC]でもお<ruby>客様<rt>きゃくさま</rt></ruby>を<ruby>温<rt>あたた</rt></ruby>かくお<ruby>迎<rt>むか</rt></ruby>えいたします。',
+          raw: '楊詠筑と申します。台湾では声優やサロンでの接客をしておりましたので、明るい笑顔と伝わりやすいお声がけが得意です。黒川温泉でのレストラン経験を活かし、[HONORIFIC]でもお客様を温かくお迎えいたします。',
+          zh: '我叫楊詠筑。在台灣曾從事配音與沙龍接待，擅長用開朗微笑與清晰親切的聲音向客人打招呼。我會活用在黑川溫泉的餐廳經驗，在貴飯店也溫暖迎接每一位客人。'
+        }
+      }
+    },
+
+    '黒川温泉の旅館では、どのようなお仕事をされていましたか？': {
+      zh: '在黑川溫泉的旅館，具體負責哪些工作？',
+      simple: {
+        ruby: 'レストランでのお<ruby>客様<rt>きゃくさま</rt></ruby>の<ruby>案内<rt>あんない</rt></ruby>、お<ruby>料理<rt>りょうり</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>や<ruby>補充<rt>ほじゅう</rt></ruby>、そして<ruby>片付<rt>かたづ</rt></ruby>けを<ruby>中心<rt>ちゅうしん</rt></ruby>に<ruby>担当<rt>たんとう</rt></ruby>しております。',
+        raw: 'レストランでお客様の案内、お料理の準備や補充、そして片付けを中心に担当しております。',
+        zh: '主要在餐廳負責引導客人、料理的事前準備與尖峰補充，以及營業結束後的收拾與清潔。'
+      },
+      story: {
+        shrine: {
+          ruby: 'レストランにて、オープン<ruby>前<rt>まえ</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>、お<ruby>食事<rt>しょくじ</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>が<ruby>切<rt>き</rt></ruby>れないよう<ruby>目配<rt>めくば</rt></ruby>りをして<ruby>素早<rt>すばや</rt></ruby>く<ruby>補充<rt>ほじゅう</rt></ruby>すること、そして<ruby>営業<rt>えいぎょう</rt></ruby><ruby>後<rt>ご</rt></ruby>の<ruby>清掃<rt>せいそう</rt></ruby>と<ruby>明日<rt>あす</rt></ruby>のセッティングまで<ruby>責任<rt>せきにん</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>おこな</rt></ruby>っております。チームで<ruby>連携<rt>れんけい</rt></ruby>してテキパキ<ruby>動<rt>うご</rt></ruby>くことができます。',
+          raw: 'レストランにて、オープン前の料理の準備、お食事中に料理が切れないよう目配りをして素早く補充すること、そして営業後の清掃と明日のセッティングまで責任を持って行っております。チームで連携してテキパキ動くことができます。',
+          zh: '在餐廳裡，我負責營業前的料理準備、用餐中留意菜餚分量並迅速補充以防斷菜，以及打烊後的清潔與隔日會場 Set up。我非常擅長與團隊緊密配合、手腳俐落敏捷地工作。'
+        },
+        kurokawa: {
+          ruby: '<ruby>主<rt>おも</rt></ruby>に3つの<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>分<rt>わ</rt></ruby>かれております。<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>や<ruby>器<rt>うつわ</rt></ruby>の<ruby>事前<rt>じぜん</rt></ruby><ruby>準備<rt>じゅんび</rt></ruby>、ピーク<ruby>時<rt>じ</rt></ruby>は<ruby>切<rt>き</rt></ruby>れ<ruby>間<rt>ま</rt></ruby>なく<ruby>料理<rt>りょうり</rt></ruby>を<ruby>補充<rt>ほじゅう</rt></ruby>するフットワーク、そして<ruby>最後<rt>さいご</rt></ruby>に<ruby>徹底的<rt>てっていてき</rt></ruby>な<ruby>清掃<rt>せいそう</rt></ruby>と<ruby>明日<rt>あす</rt></ruby>の<ruby>朝夕食<rt>あさゆうしょく</rt></ruby>のセッティングです。<ruby>次<rt>つぎ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>働<rt>はたら</rt></ruby>きやすい<ruby>環境<rt>かんきょう</rt></ruby>づくりを<ruby>心<rt>こころ</rt></ruby>がけております。',
+          raw: '主に3つの時間帯に分かれております。最初に料理や器の事前準備、ピーク時は切れ間なく料理を補充するフットワーク、そして最後に徹底的な清掃と明日の朝夕食のセッティングです。次の人が働きやすい環境づくりを心がけております。',
+          zh: '工作主要分為三個階段：首先是料理與餐具的事前準備；尖峰時段以敏捷的行動力隨時補齊菜品；最後是徹底的打掃清潔與翌日早晚餐的會場設定。我始終用心營造讓下一班同仁更好作業的環境。'
+        },
+        voice: {
+          ruby: 'レストランでの<ruby>準備<rt>じゅんび</rt></ruby>や<ruby>補充<rt>ほじゅう</rt></ruby>だけでなく、お<ruby>客様<rt>きゃくさま</rt></ruby>に「ごゆっくりどうぞ」と<ruby>明<rt>あか</rt></ruby>るいお<ruby>声<rt>こえ</rt></ruby>がけをすることを<ruby>大切<rt>たいせつ</rt></ruby>にしています。<ruby>声優<rt>せいゆう</rt></ruby>の<ruby>経験<rt>けいけん</rt></ruby>もあり、お<ruby>客様<rt>きゃくさま</rt></ruby>から「<ruby>気持<rt>きも</rt></ruby>ちのいい<ruby>挨拶<rt>あいさつ</rt></ruby>だね」とおっしゃっていただけることが<ruby>多<rt>おお</rt></ruby>いです。',
+          raw: 'レストランでの準備や補充だけでなく、お客様に「ごゆっくりどうぞ」と明るいお声がけをすることを大切にしています。声優の経験もあり、お客様から「気持ちのいい挨拶だね」とおっしゃっていただけることが多いです。',
+          zh: '除了餐廳備料與補菜，我也非常重視帶著明亮溫暖的聲音對客人說「請慢用」。因為有配音經歷，常有客人稱讚我的問候聽起來令人心情愉快。'
+        }
+      }
+    },
+
+    '休日はどのように過ごしていますか？': {
+      zh: '休假時都怎麼度過？',
+      simple: {
+        ruby: '<ruby>近<rt>ちか</rt></ruby>くの<ruby>神社<rt>じんじゃ</rt></ruby>や<ruby>街<rt>まち</rt></ruby>を<ruby>散策<rt>さんさく</rt></ruby>して<ruby>御朱印<rt>ごしゅいん</rt></ruby>をいただいたり、<ruby>寮<rt>りょう</rt></ruby>で<ruby>好<rt>す</rt></ruby>きな<ruby>料理<rt>りょうり</rt></ruby>を作ったりしてリフレッシュしています。',
+        raw: '近くの神社や街を散策して御朱印をいただいたり、寮で好きな料理を作ったりしてリフレッシュしています。',
+        zh: '我會在附近散步拜訪神社並收集御朱印，或者在宿舍做做自己喜歡的料理，放鬆身心。'
+      },
+      story: {
+        shrine: {
+          ruby: '<ruby>休日常<rt>きゅうじつ</rt></ruby>は<ruby>木造<rt>もくぞう</rt></ruby><ruby>建築<rt>けんちく</rt></ruby>の<ruby>美<rt>うつく</rt></ruby>しい<ruby>神社<rt>じんじゃ</rt></ruby>を<ruby>訪<rt>おとず</rt></ruby>れ、<ruby>御朱印<rt>ごしゅいん</rt></ruby>をいただくのが<ruby>楽<rt>たの</rt></ruby>しみです。また、<ruby>料理<rt>りょうり</rt></ruby>をするのも<ruby>好<rt>す</rt></ruby>きなので、<ruby>部屋<rt>へや</rt></ruby>で<ruby>自炊<rt>じすい</rt></ruby>をして<ruby>翌週<rt>よくしゅう</rt></ruby>のエネルギーをチャージしています。',
+          raw: '休日は木造建築の美しい神社を訪れ、御朱印をいただくのが楽しみです。また、料理をするのも好きなので、部屋で自炊をして翌週のエネルギーをチャージしています。',
+          zh: '休假時我最喜歡造訪擁有美麗木造建築的神社，並祈求收集御朱印。此外我也很喜歡料理，在房間做做自己想吃的飯菜，為接下來一週的工作充飽能量。'
+        },
+        kurokawa: {
+          ruby: '<ruby>休日常<rt>きゅうじつ</rt></ruby>は<ruby>温泉街<rt>おんせんがい</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>いて<ruby>他<rt>ほか</rt></ruby>の<ruby>旅館<rt>りょかん</rt></ruby>の<ruby>雰囲気<rt>ふんいき</rt></ruby>を<ruby>学<rt>まな</rt></ruby>んだり、<ruby>地元<rt>じもと</rt></ruby>の<ruby>食材<rt>しょくざい</rt></ruby>で<ruby>料理<rt>りょうり</rt></ruby>を作ったりしています。<ruby>体調<rt>たいちょう</rt></ruby>をしっかり<ruby>整<rt>ととの</rt></ruby>えて、<ruby>常<rt>つね</rt></ruby>に<ruby>元気<rt>げんき</rt></ruby>に<ruby>出勤<rt>しゅっきん</rt></ruby>できるようにしています。',
+          raw: '休日は温泉街を歩いて他の旅館の雰囲気を学んだり、地元の食材で料理を作ったりしています。体調をしっかり整えて、常に元気に出勤できるようにしています。',
+          zh: '休假時我會在溫泉街散步觀察其他旅館的氛圍，或用當地食材自己做做菜。把身體調養好，確保隨時能精力充沛地出勤。'
+        },
+        voice: {
+          ruby: '<ruby>休日常<rt>きゅうじつ</rt></ruby>は<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聴<rt>き</rt></ruby>いたり、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んだり、のんびり<ruby>料理<rt>りょうり</rt></ruby>をすることが<ruby>好<rt>す</rt></ruby>きです。<ruby>声<rt>こえ</rt></ruby>のケアもしながら、リラックスして<ruby>気持<rt>きも</rt></ruby>ちをリセットしています。',
+          raw: '休日は音楽を聴いたり、本を読んだり、のんびり料理をすることが好きです。声のケアもしながら、リラックスして気持ちをリセットしています。',
+          zh: '休假時我喜歡聽音樂、閱讀，或悠閒地做做料理。在照顧嗓音的同時，放鬆身心重整工作心情。'
+        }
+      }
+    },
+
+    '繁忙期の忙しい時間帯でも体力やフットワークには自信がありますか？': {
+      zh: '旺季繁忙時間帶，對體力與靈活行動力有自信嗎？',
+      simple: {
+        ruby: 'はい、とても<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>のレストランでも<ruby>毎日<rt>まいにち</rt></ruby>テキパキと<ruby>動<rt>うご</rt></ruby>いており、<ruby>体力<rt>たいりょく</rt></ruby>には<ruby>問題<rt>もんだい</rt></ruby>ございません。',
+        raw: 'はい、とても自信があります。黒川温泉のレストランでも毎日テキパキと動いており、体力には問題ございません。',
+        zh: '是的，我非常有自信。在黑川溫泉的餐廳也是每天俐落走動服務，體力完全沒有問題。'
+      },
+      story: {
+        shrine: {
+          ruby: 'はい、フットワークの<ruby>軽<rt>かる</rt></ruby>さには<ruby>大<rt>おお</rt></ruby>きな<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>神社<rt>じんじゃ</rt></ruby><ruby>巡<rt>めぐ</rt></ruby>りで<ruby>山道<rt>やまみち</rt></ruby>や<ruby>石段<rt>いしだん</rt></ruby>を<ruby>何時間<rt>なんじかん</rt></ruby>も<ruby>歩<rt>ある</rt></ruby>くことが<ruby>多<rt>おお</rt></ruby>いため、<ruby>足腰<rt>あしこし</rt></ruby>も<ruby>丈夫<rt>じょうぶ</rt></ruby>です。[HONORIFIC]の<ruby>繁忙期<rt>はんぼうき</rt></ruby>でも、<ruby>明<rt>あか</rt></ruby>るく<ruby>元気<rt>げんき</rt></ruby>に<ruby>動<rt>うご</rt></ruby>き<ruby>続<rt>つづ</rt></ruby>けます。',
+          raw: 'はい、フットワークの軽さには大きな自信があります。神社巡りで山道や石段を何時間も歩くことが多いため、足腰も丈夫です。[HONORIFIC]の繁忙期でも、明るく元気に動き続けます。',
+          zh: '是的，我對自己的俐落身手很有自信。拜訪神社時經常走好幾個小時的山路與石階，腿腳體力都很硬朗。在貴飯店繁忙期我也會持續保持活力元氣！'
+        },
+        kurokawa: {
+          ruby: 'はい、<ruby>体力<rt>たいりょく</rt></ruby>とフットワークの<ruby>軽<rt>かる</rt></ruby>さには<ruby>大<rt>おお</rt></ruby>きな<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の「<ruby>優彩<rt>ゆうさい</rt></ruby>」でも、<ruby>満席<rt>まんせき</rt></ruby>のピーク<ruby>時<rt>じ</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>が<ruby>切<rt>き</rt></ruby>れないよう<ruby>常<rt>つね</rt></ruby>に<ruby>走<rt>はし</rt></ruby>り<ruby>回<rt>まわ</rt></ruby>って<ruby>補充<rt>ほじゅう</rt></ruby>しております。[HONORIFIC]の<ruby>繁忙期<rt>はんぼうき</rt></ruby>でも、<ruby>明<rt>あか</rt></ruby>るく<ruby>元気<rt>げんき</rt></ruby>にチームをサポートいたします。',
+          raw: 'はい、体力とフットワークの軽さには大きな自信があります。黒川温泉の「優彩」でも、満席のピーク時に料理が切れないよう常に走り回って補充しております。[HONORIFIC]の繁忙期でも、明るく元気にチームをサポートいたします。',
+          zh: '是的，我對自己的體力與靈活行動力非常有自信。在黑川溫泉「優彩」客滿的高峰期，我也是隨時眼明手快地走動補菜。在貴飯店的繁忙期，我也一定會以開朗精神全力支援團隊。'
+        },
+        voice: {
+          ruby: 'はい、<ruby>自信<rt>じしん</rt></ruby>があります。どれほど忙しいときでも<ruby>焦<rt>あせ</rt></ruby>らず、<ruby>笑顔<rt>えがお</rt></ruby>とお<ruby>だやかなお声がけを<ruby>崩<rt>くず</rt></ruby>さないよう<ruby>意識<rt>いしき</rt></ruby>して<ruby>動<rt>うご</rt></ruby>くことができます。チームの<ruby>力<rt>ちから</rt></ruby>になれるよう<ruby>全力<rt>ぜんりょく</rt></ruby>で<ruby>努<rt>つと</rt></ruby>めます。',
+          raw: 'はい、自信があります。どれほど忙しいときでも焦らず、笑顔とおだやかなお声がけを崩さないよう意識して動くことができます。チームの力になれるよう全力で努めます。',
+          zh: '是的，我有充分自信。再忙碌時我也不會慌亂，能時刻保持微笑與溫和清晰的問候。我會全力以赴成為團隊得力的力量。'
+        }
+      }
+    }
+  },
+
+  // 逆質問題目庫 (10 題高分題池，每次隨機挑 5 題)
+  reverseQuestionsPool: [
+    {
+      tag: '🌟 提前充實準備（超高分）',
+      ruby: '<ruby>採用<rt>さいよう</rt></ruby>していただけた<ruby>場合<rt>ばあい</rt></ruby>、<ruby>勤務<rt>きんむ</rt></ruby><ruby>開始<rt>かいし</rt></ruby>までに<ruby>事前<rt>じぜん</rt></ruby>に<ruby>勉強<rt>べんきょう</rt></ruby>や<ruby>準備<rt>じゅんび</rt></ruby>をしておくべきことはありますでしょうか？',
+      raw: '採用していただけた場合、勤務開始までに事前に勉強や準備をしておくべきことはありますでしょうか？',
+      zh: '如果我有幸獲得錄取，在正式開始上班前，有什麼是我可以提前先自修或做準備的嗎？'
+    },
+    {
+      tag: '👥 團隊現場氛圍',
+      ruby: 'レストランのスタッフの<ruby>皆様<rt>みなさま</rt></ruby>は、どのような<ruby>年齢層<rt>ねんれいそう</rt></ruby>や<ruby>雰囲気<rt>ふんいき</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>かれていますでしょうか？',
+      raw: 'レストランのスタッフの皆様は、どのような年齢層や雰囲気で働かれていますでしょうか？',
+      zh: '想請教一下，餐廳現場的夥伴同仁大約是怎樣的年齡層，以及平時工作時的氣氛如何呢？'
+    },
+    {
+      tag: '🌐 客人國籍與外語需求',
+      ruby: '<ruby>冬場<rt>ふゆば</rt></ruby>は<ruby>海外<rt>かいがい</rt></ruby>からのお<ruby>客様<rt>きゃくさま</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いと<ruby>伺<rt>うかが</rt></ruby>っておりますが、レストランでの<ruby>外国語<rt>がいこくご</rt></ruby>の<ruby>使用<rt>しよう</rt></ruby><ruby>割合<rt>わりあい</rt></ruby>はどのくらいでしょうか？',
+      raw: '冬場は海外からのお客様も多いと伺っておりますが、レストランでの外国語の使用割合はどのくらいでしょうか？',
+      zh: '聽說冬天會有許多來自海外的滑雪旅客，想了解一下在餐廳內使用外語（如英文/中文）接待的比例大約是多少呢？'
+    },
+    {
+      tag: '📖 現場培訓與適應流程',
+      ruby: '<ruby>入社<rt>にゅうしゃ</rt></ruby><ruby>後<rt>ご</rt></ruby>は、どのように<ruby>業務<rt>ぎょうむ</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えていただけるのか、<ruby>研修<rt>けんしゅう</rt></ruby>の<ruby>流<rt>なが</rt></ruby>れについて<ruby>伺<rt>うかが</rt></ruby>ってもよろしいでしょうか？',
+      raw: '入社後は、どのように業務を教えていただけるのか、研修の流れについて伺ってもよろしいでしょうか？',
+      zh: '想請教報到之後，現場的指導與培訓流程大約是如何安排帶領新人的呢？'
+    },
+    {
+      tag: '🏪 生活周邊採買便利性',
+      ruby: '<ruby>寮<rt>りょう</rt></ruby>の<ruby>周辺<rt>しゅうへん</rt></ruby>に、スーパーや<ruby>日用品<rt>にちようひん</rt></ruby>を<ruby>買<rt>か</rt></ruby>い<ruby>出<rt>だ</rt></ruby>しできるお<ruby>店<rt>みせ</rt></ruby>はありますでしょうか？',
+      raw: '寮の周辺に、スーパーや日用品を買い出しできるお店はありますでしょうか？',
+      zh: '想請教在宿舍周邊，有可以採買食材或生活日用品的超市或店家嗎？'
+    },
+    {
+      tag: '⏰ 繁忙期排班節奏',
+      ruby: 'レストランの<ruby>繁忙期<rt>はんぼうき</rt></ruby>において、1<ruby>日<rt>にち</rt></ruby>の<ruby>大<rt>おお</rt></ruby>まかな<ruby>勤務<rt>きんむ</rt></ruby>スケジュールやシフトの<ruby>流<rt>なが</rt></ruby>れを<ruby>教<rt>おし</rt></ruby>えていただけますでしょうか？',
+      raw: 'レストランの繁忙期において、1日の大まかな勤務スケジュールやシフトの流れを教えていただけますでしょうか？',
+      zh: '想請教在餐廳最忙碌的時期，一天大致的工作時程安排與排班輪替節奏大約是如何呢？'
+    },
+    {
+      tag: '💡 飯店最重視特質',
+      ruby: '[HONORIFIC]がレストランスタッフに、<ruby>特<rt>とく</rt></ruby>に<ruby>大切<rt>たいせつ</rt></ruby>にしてほしい<ruby>心構<rt>こころがま</rt></ruby>えや<ruby>姿勢<rt>しせい</rt></ruby>はどのような<ruby>点<rt>てん</rt></ruby>でしょうか？',
+      raw: '[HONORIFIC]がレストランスタッフに、特に大切にしてほしい心構えや姿勢はどのような点でしょうか？',
+      zh: '想請教貴飯店對於餐廳外場同仁，最希望大家具備的核心工作心態或態度是什麼呢？'
+    },
+    {
+      tag: '👔 制服與備品準備',
+      ruby: '<ruby>制服<rt>せいふく</rt></ruby>は<ruby>貸与<rt>たいよ</rt></ruby>していただけますでしょうか？また、<ruby>自分<rt>じぶん</rt></ruby>で<ruby>準備<rt>じゅんび</rt></ruby>すべき<ruby>靴<rt>くつ</rt></ruby>などの<ruby>備品<rt>びひん</rt></ruby>はございますか？',
+      raw: '制服は貸与していただけますでしょうか？また、自分で準備すべき靴などの備品はございますか？',
+      zh: '想請教制服是由飯店借借提供嗎？另外是否有需要自備的鞋子或隨身備品呢？'
+    },
+    {
+      tag: '🤝 團隊融合與文化',
+      ruby: '<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>くチームの<ruby>皆様<rt>みなさま</rt></ruby>と<ruby>早<rt>はや</rt></ruby>く<ruby>打<rt>う</rt></ruby>ち<ruby>解<rt>と</rt></ruby>けるために、<ruby>職場<rt>しょくば</rt></ruby>で<ruby>大切<rt>たいせつ</rt></ruby>にされている<ruby>習慣<rt>しゅうかん</rt></ruby>などはありますか？',
+      raw: '一緒に働くチームの皆様と早く打ち解けるために、職場で大切にされている習慣などはありますか？',
+      zh: '為了能儘快與一起工作的團隊夥伴融洽相處，想請問職場上有沒有大家特別重視的習慣或交流文化呢？'
+    },
+    {
+      tag: '⛷️ 滑雪與冬季休閒',
+      ruby: '<ruby>休日常<rt>きゅうじつ</rt></ruby>にスキー<ruby>場<rt>じょう</rt></ruby>などを<ruby>利用<rt>りよう</rt></ruby>する<ruby>際<rt>さい</rt></ruby>、スタッフ<ruby>向<rt>む</rt></ruby>けの<ruby>優待<rt>ゆうたい</rt></ruby>やリフト<ruby>券<rt>けん</rt></ruby>などのサポートはございますでしょうか？',
+      raw: '休日にスキー場などを利用する際、スタッフ向けの優待やリフト券などのサポートはございますでしょうか？',
+      zh: '想請教休假時若想去附近的滑雪場體驗，是否有員工專屬的雪票優待或相關福利呢？'
+    }
+  ]
+};
+
+// 渲染面試主頁面
+function renderInterviewPage() {
+  // 載入 localStorage 設定
+  const savedCompany = localStorage.getItem('yang_interview_company');
+  if (savedCompany) {
+    InterviewEngine.companyName = savedCompany;
+    InterviewEngine.companyHonorific = (savedCompany.includes('ホテル') ? savedCompany : savedCompany + '様') + ' / 御社';
+  }
+  const savedRole = localStorage.getItem('yang_interview_role');
+  if (savedRole) InterviewEngine.role = savedRole;
+  const savedSlip = localStorage.getItem('yang_interview_jobslip');
+  if (savedSlip) InterviewEngine.jobSlip = savedSlip;
+
+  const compEl = document.getElementById('iv-current-company-name');
+  if (compEl) compEl.textContent = `${InterviewEngine.companyName} (${InterviewEngine.companyHonorific.split('/')[0].trim()})`;
+
+  const inputComp = document.getElementById('iv-input-company');
+  if (inputComp) inputComp.value = InterviewEngine.companyName;
+  const inputRole = document.getElementById('iv-input-role');
+  if (inputRole) inputRole.value = InterviewEngine.role;
+  const inputSlip = document.getElementById('iv-input-jobslip');
+  if (inputSlip) inputSlip.value = InterviewEngine.jobSlip;
+  updateCompanyHonorificPreview();
+
+  // 渲染當前問題的回答
+  renderCurrentAnswers();
+
+  // 渲染逆質問
+  generateRandomReverseQuestions();
+}
+
+// 渲染回答卡片
+function renderCurrentAnswers() {
+  const container = document.getElementById('interview-answers-container');
+  if (!container) return;
+
+  const q = InterviewEngine.currentQuestion;
+  const tag = InterviewEngine.activeStoryTag;
+  const dbItem = InterviewEngine.qaDatabase[q];
+
+  let simpleRuby = '', simpleRaw = '', simpleZh = '';
+  let storyRuby = '', storyRaw = '', storyZh = '';
+
+  const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
+
+  if (dbItem) {
+    simpleRuby = dbItem.simple.ruby.replace(/\[HONORIFIC\]/g, honorific);
+    simpleRaw = dbItem.simple.raw.replace(/\[HONORIFIC\]/g, honorific);
+    simpleZh = dbItem.simple.zh;
+
+    const storyObj = dbItem.story[tag] || dbItem.story.shrine;
+    storyRuby = storyObj.ruby.replace(/\[HONORIFIC\]/g, honorific);
+    storyRaw = storyObj.raw.replace(/\[HONORIFIC\]/g, honorific);
+    storyZh = storyObj.zh;
+  } else {
+    // 萬用應答
+    simpleRuby = `はい、ご<ruby>質問<rt>しつもん</rt></ruby>ありがとうございます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でのレストラン<ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かし、${honorific}でもチームと<ruby>協力<rt>きょうりょく</rt></ruby>して<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みたいと<ruby>考<rt>かんが</rt></ruby>えております。`;
+    simpleRaw = `はい、ご質問ありがとうございます。黒川温泉でのレストラン経験を活かし、${honorific}でもチームと協力して前向きに取り組みたいと考えております。`;
+    simpleZh = `是的，謝謝您的提問。我會活用在黑川溫泉的餐廳經驗，在貴公司也與團隊通力合作、正向積極地投入工作。`;
+
+    storyRuby = `<ruby>大学<rt>だいがく</rt></ruby>で<ruby>建築<rt>けんちく</rt></ruby>を<ruby>学<rt>まな</rt></ruby>び、<ruby>木造<rt>もくぞう</rt></ruby><ruby>建築<rt>けんちく</rt></ruby>や<ruby>神社<rt>じんじゃ</rt></ruby><ruby>巡<rt>めぐ</rt></ruby>りが<ruby>好<rt>す</rt></ruby>きで<ruby>御朱印帳<rt>ごしゅいんちょう</rt></ruby>を7<ruby>冊<rt>さつ</rt></ruby><ruby>集<rt>あつ</rt></ruby>めました。どんな<ruby>場所<rt>ばしょ</rt></ruby>でも<ruby>楽<rt>たの</rt></ruby>しく<ruby>適応<rt>てきおう</rt></ruby>できるフットワークの<ruby>軽<rt>かる</rt></ruby>さと、<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>ったレストランのスピード<ruby>感<rt>かん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かして、${honorific}に<ruby>貢献<rt>こうけん</rt></ruby>いたします。`;
+    storyRaw = `大学で建築を学び、木造建築や神社巡りが好きで御朱印帳を7冊集めました。どんな場所でも楽しく適応できるフットワークの軽さと、黒川温泉で培ったレストランのスピード感を活かして、${honorific}に貢献いたします。`;
+    storyZh = `我在大學學習建築，熱愛木造建築與走訪神社並收集了 7 本御朱印。我會發揮無論在哪裡都能開朗適應的靈活動力，以及在黑川溫泉培養的餐廳即戰力節奏，全力為貴飯店做出貢獻。`;
+  }
+
+  container.innerHTML = `
+    <!-- 卡片 1：版本 A 簡單俐落版 -->
+    <div class="interview-answer-card">
+      <div class="iv-ans-header">
+        <span class="iv-ans-badge simple">⚡ 版本 A：簡單俐落版 (不易打結)</span>
+        <span class="iv-ans-tag-hint">約 15 秒・文法直接・安心不慌亂</span>
+      </div>
+      <div class="iv-ans-ruby-body" id="ans-a-ruby">
+        ${simpleRuby}
+      </div>
+      <div class="iv-ans-zh-card">
+        ▎${escapeHtml(simpleZh)}
+      </div>
+      <div class="iv-ans-actions">
+        <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(simpleRaw)}')">🔊 試聽發音</button>
+        <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(simpleRaw)}')">📋 複製</button>
+      </div>
+    </div>
+
+    <!-- 卡片 2：版本 B 豐富故事版 -->
+    <div class="interview-answer-card">
+      <div class="iv-ans-header">
+        <span class="iv-ans-badge story">📖 版本 B：豐富故事版 (展現優勢)</span>
+        <span class="iv-ans-tag-hint">約 35 秒・結合個人真實故事・高分印象</span>
+      </div>
+      <div class="iv-ans-ruby-body" id="ans-b-ruby">
+        ${storyRuby}
+      </div>
+      <div class="iv-ans-zh-card">
+        ▎${escapeHtml(storyZh)}
+      </div>
+      <div class="iv-ans-actions">
+        <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(storyRaw)}')">🔊 試聽發音</button>
+        <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(storyRaw)}')">📋 複製</button>
+      </div>
+    </div>
+  `;
+}
+
+// 切換個人亮點故事標籤
+function applyStoryTag(tagId) {
+  InterviewEngine.activeStoryTag = tagId;
+  document.querySelectorAll('.iv-story-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`btn-story-${tagId}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  renderCurrentAnswers();
+  showToast('已切換招牌故事標籤！', 'info');
+}
+
+// 快速點選預設題目
+async function quickSelectQuestion(qJp) {
+  InterviewEngine.currentQuestion = qJp;
+  
+  // 更新左欄
+  const cardJp = document.getElementById('iv-card-jp');
+  const cardZh = document.getElementById('iv-card-zh');
+  const cardTime = document.getElementById('iv-card-time');
+  if (cardJp) cardJp.textContent = `「${qJp}」`;
+  if (cardTime) cardTime.textContent = new Date().toLocaleTimeString('ja-JP');
+
+  if (InterviewEngine.qaDatabase[qJp]) {
+    InterviewEngine.currentQuestionZh = InterviewEngine.qaDatabase[qJp].zh;
+    if (cardZh) cardZh.textContent = InterviewEngine.currentQuestionZh;
+  } else {
+    if (cardZh) cardZh.textContent = '翻譯中...';
+    try {
+      const trans = await fetchFreeGoogleTranslate(qJp, 'zh-TW');
+      InterviewEngine.currentQuestionZh = trans || qJp;
+      if (cardZh) cardZh.textContent = InterviewEngine.currentQuestionZh;
+    } catch(e) {
+      if (cardZh) cardZh.textContent = qJp;
+    }
+  }
+
+  renderCurrentAnswers();
+}
+
+// 手動模擬考官提問
+async function testSimulateQuestion() {
+  const input = document.getElementById('interview-manual-input');
+  if (!input) return;
+  const q = input.value.trim();
+  if (!q) {
+    showToast('請輸入考官提問日文', 'warning');
+    return;
+  }
+  input.value = '';
+  await quickSelectQuestion(q);
+  showToast('已接收考官提問，軍師已生成雙版本回答！', 'success');
+}
+
+// 開始/停止監聽
+function toggleInterviewListening() {
+  if (InterviewEngine.isListening) {
+    stopInterviewListening();
+  } else {
+    startInterviewListening();
+  }
+}
+
+function startInterviewListening() {
+  InterviewEngine.isListening = true;
+  
+  // 更新按鈕與 Badge
+  const btn = document.getElementById('btn-toggle-interview-listen');
+  const icon = document.getElementById('iv-listen-icon');
+  const txt = document.getElementById('iv-listen-text');
+  const badge = document.getElementById('interview-status-badge');
+  const indicator = document.getElementById('iv-live-indicator');
+
+  if (btn) btn.classList.add('listening');
+  if (icon) icon.textContent = '⏹';
+  if (txt) txt.textContent = '停止監聽';
+  if (badge) {
+    badge.textContent = '● 正在監聽中';
+    badge.classList.add('listening');
+  }
+  if (indicator) {
+    indicator.textContent = '● 正在監聽擴音...';
+    indicator.classList.add('listening');
+  }
+
+  // 計時器啟動
+  InterviewEngine.timerSeconds = 0;
+  clearInterval(InterviewEngine.timerInterval);
+  InterviewEngine.timerInterval = setInterval(() => {
+    InterviewEngine.timerSeconds++;
+    updateInterviewTimerDisplay();
+  }, 1000);
+
+  // 動態電平條
+  clearInterval(InterviewEngine.meterInterval);
+  InterviewEngine.meterInterval = setInterval(() => {
+    for (let i = 1; i <= 6; i++) {
+      const bar = document.getElementById(`iv-meter-${i}`);
+      if (bar) {
+        const h = Math.floor(Math.random() * 16) + 4;
+        bar.style.height = `${h}px`;
+        bar.classList.add('active');
+      }
+    }
+  }, 120);
+
+  // 嘗試啟動語音辨識
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRec && InterviewEngine.audioSource !== 'sim') {
+    try {
+      const rec = new SpeechRec();
+      rec.lang = 'ja-JP';
+      rec.continuous = true;
+      rec.interimResults = true;
+
+      rec.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+
+        const cardJp = document.getElementById('iv-card-jp');
+        if (interimTranscript && cardJp) {
+          cardJp.textContent = `「${interimTranscript}」`;
+        }
+        if (finalTranscript && finalTranscript.trim().length > 1) {
+          quickSelectQuestion(finalTranscript.trim());
+        }
+      };
+
+      rec.onerror = (e) => {
+        console.warn('SpeechRecognition error:', e);
+      };
+
+      rec.onend = () => {
+        if (InterviewEngine.isListening) {
+          try { rec.start(); } catch(err) {}
+        }
+      };
+
+      rec.start();
+      InterviewEngine.recognition = rec;
+      showToast('已開啟擴音收音監聽！考官發言將即時聽譯', 'success');
+      return;
+    } catch(err) {
+      console.warn('SpeechRecognition start failed:', err);
+    }
+  }
+
+  showToast('已進入模擬監聽模式（可點選快速考題或手動輸入）', 'info');
+}
+
+function stopInterviewListening() {
+  InterviewEngine.isListening = false;
+  
+  const btn = document.getElementById('btn-toggle-interview-listen');
+  const icon = document.getElementById('iv-listen-icon');
+  const txt = document.getElementById('iv-listen-text');
+  const badge = document.getElementById('interview-status-badge');
+  const indicator = document.getElementById('iv-live-indicator');
+
+  if (btn) btn.classList.remove('listening');
+  if (icon) icon.textContent = '▶';
+  if (txt) txt.textContent = '開始監聽';
+  if (badge) {
+    badge.textContent = '待命中';
+    badge.classList.remove('listening');
+  }
+  if (indicator) {
+    indicator.textContent = '○ 待命';
+    indicator.classList.remove('listening');
+  }
+
+  clearInterval(InterviewEngine.timerInterval);
+  clearInterval(InterviewEngine.meterInterval);
+
+  for (let i = 1; i <= 6; i++) {
+    const bar = document.getElementById(`iv-meter-${i}`);
+    if (bar) {
+      bar.style.height = '4px';
+      bar.classList.remove('active');
+    }
+  }
+
+  if (InterviewEngine.recognition) {
+    try {
+      InterviewEngine.recognition.stop();
+      InterviewEngine.recognition = null;
+    } catch(e) {}
+  }
+
+  showToast('已停止監聽', 'info');
+}
+
+function updateInterviewTimerDisplay() {
+  const s = InterviewEngine.timerSeconds;
+  const hh = String(Math.floor(s / 3600)).padStart(2, '0');
+  const mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+  const ss = String(s % 60).padStart(2, '0');
+  const el = document.getElementById('interview-timer-display');
+  if (el) el.textContent = `${hh}:${mm}:${ss}`;
+}
+
+// 聲音來源選單
+function toggleAudioSourceMenu() {
+  const menu = document.getElementById('interview-source-dropdown');
+  if (menu) menu.classList.toggle('open');
+}
+
+function setAudioSource(srcType) {
+  InterviewEngine.audioSource = srcType;
+  const label = document.getElementById('interview-source-label');
+  if (label) {
+    if (srcType === 'mic') label.textContent = '聲音來源：🔊 擴音/麥克風收音';
+    if (srcType === 'system') label.textContent = '聲音來源：💻 分頁/系統音訊';
+    if (srcType === 'sim') label.textContent = '聲音來源：🧪 模擬測試模式';
+  }
+  document.querySelectorAll('.interview-source-option').forEach(opt => opt.classList.remove('active'));
+  const menu = document.getElementById('interview-source-dropdown');
+  if (menu) menu.classList.remove('open');
+  showToast('收音來源已切換', 'info');
+}
+
+// 清空即時聽譯
+function clearInterviewTranscript() {
+  const cardJp = document.getElementById('iv-card-jp');
+  const cardZh = document.getElementById('iv-card-zh');
+  if (cardJp) cardJp.textContent = '「等待考官發言或點選下方考題...」';
+  if (cardZh) cardZh.textContent = '中文字幕將即時顯示於此';
+  showToast('已清空畫面紀錄', 'info');
+}
+
+// 求人票與尊稱預覽
+function updateCompanyHonorificPreview() {
+  const inputComp = document.getElementById('iv-input-company');
+  const preview = document.getElementById('iv-preview-honorific');
+  if (!inputComp || !preview) return;
+
+  const val = inputComp.value.trim();
+  if (!val) {
+    preview.textContent = '御社 / 貴社';
+    return;
+  }
+  let h = val;
+  if (val.toLowerCase().includes('hotel') || val.includes('ホテル')) {
+    h = val + '様';
+  } else if (!val.endsWith('様') && !val.endsWith('さま')) {
+    h = val + '様';
+  }
+  preview.textContent = `${h} / 御社`;
+}
+
+// 儲存上下文設定
+function saveInterviewContext() {
+  const inputComp = document.getElementById('iv-input-company');
+  const inputRole = document.getElementById('iv-input-role');
+  const inputSlip = document.getElementById('iv-input-jobslip');
+
+  if (inputComp) {
+    InterviewEngine.companyName = inputComp.value.trim() || 'THE ALPS HOTEL HAKUBA';
+    localStorage.setItem('yang_interview_company', InterviewEngine.companyName);
+    InterviewEngine.companyHonorific = (InterviewEngine.companyName.includes('ホテル') ? InterviewEngine.companyName : InterviewEngine.companyName + '様') + ' / 御社';
+  }
+  if (inputRole) {
+    InterviewEngine.role = inputRole.value;
+    localStorage.setItem('yang_interview_role', InterviewEngine.role);
+  }
+  if (inputSlip) {
+    InterviewEngine.jobSlip = inputSlip.value.trim();
+    localStorage.setItem('yang_interview_jobslip', InterviewEngine.jobSlip);
+  }
+
+  const compEl = document.getElementById('iv-current-company-name');
+  if (compEl) compEl.textContent = `${InterviewEngine.companyName} (${InterviewEngine.companyHonorific.split('/')[0].trim()})`;
+
+  closeModal('modal-interview-context');
+  renderCurrentAnswers();
+  generateRandomReverseQuestions();
+  showToast('目標飯店與求人票已更新！尊稱與應答已同步刷新', 'success');
+}
+
+// 隨機產生 5 個逆質問
+function generateRandomReverseQuestions() {
+  const container = document.getElementById('iv-dynamic-reverse-list');
+  if (!container) return;
+
+  const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
+
+  // 隨機洗牌取出 5 題
+  const shuffled = [...InterviewEngine.reverseQuestionsPool].sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0, 5);
+
+  container.innerHTML = selected.map((q, idx) => {
+    const qRuby = q.ruby.replace(/\[HONORIFIC\]/g, honorific);
+    const qRaw = q.raw.replace(/\[HONORIFIC\]/g, honorific);
+    return `
+      <div class="iv-reverse-q-card">
+        <div class="iv-reverse-tag">${idx + 1}. ${escapeHtml(q.tag)}</div>
+        <div class="iv-ans-ruby-body">
+          ${qRuby}
+        </div>
+        <div class="iv-ans-zh-card">
+          ▎${escapeHtml(q.zh)}
+        </div>
+        <div class="iv-ans-actions">
+          <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(qRaw)}')">🔊 試聽</button>
+          <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(qRaw)}')">📋 複製</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 頂部快速點選「🎲 隨機 5 題逆質問」
+function quickTriggerRandomReverseQuestions() {
+  generateRandomReverseQuestions();
+  openModal('modal-interview-reverse-questions');
+  showToast('已為您動態生成 5 題高分逆質問！', 'success');
+}
+
+/* ==============================================================
    12. 初始化
 ============================================================== */
 document.addEventListener('DOMContentLoaded', () => {
@@ -16212,6 +17723,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSopTabs();
   renderVocabPage('sop');
   renderBroadcastPage();
+  renderInterviewPage();
   initFloatingRaccoon();
 
   if ('speechSynthesis' in window) {
