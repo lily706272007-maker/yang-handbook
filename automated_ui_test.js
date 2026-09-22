@@ -982,6 +982,13 @@ assert(html.includes('modal-interview-reverse-questions') && html.includes('休�
 assert(html.includes('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか'), '逆質問專區包含「宿舍到職場步行距離/時間」提問');
 assert(html.includes('generateRandomReverseQuestions') && html.includes('quickTriggerRandomReverseQuestions'), '具備一鍵動態隨機抽取 5 個高分逆質問產生器');
 
+// 測試 54: AI 面試四大核心體驗升級 (多輪滾動回溯、專屬針對性回答、求人票 PDF 上傳、擴音靈敏度增益) (v144)
+console.log('\n【測試 54：AI 面試四大核心體驗升級 (多輪滾動回溯、專屬針對性回答、求人票 PDF 上傳、擴音靈敏度增益) (v144)】');
+assert(html.includes('renderDialogueHistory') && html.includes('dialogueHistory') && html.includes('selectHistoricalQuestion'), '完整支援多輪對話歷史串流、自動滾動與點擊卡片回溯查看');
+assert(html.includes('080-2853-5431') && html.includes('2027年8月14日') && html.includes('matchSemanticCandidateAnswer'), '專屬回答涵蓋 25+ 真實主題（手機門號、在留期限、甲殼類過敏、防寒、語學），精準針對考官提問');
+assert(html.includes('pdf.min.js') && html.includes('handleJobSlipPdfUpload') && html.includes('iv-top-pdf-file-input') && html.includes('iv-pdf-upload-box'), '完整支援一鍵上傳與拖曳求人票 PDF，自動解析目標飯店與職缺');
+assert(html.includes('interview-gain-btn') && html.includes('setAudioGain') && html.includes('setupWebAudioBooster') && html.includes('echoCancellation: false'), '具備擴音收音專用增益放大 (1.0x-3.0x) 與關閉回音消除，避免外接擴音被濾除');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -989,7 +996,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v130) 10 圖層絕對座標無縫合成引擎驗證成功！');
+  console.log('🎉 所有測試通過！(v144) 面試助手四大核心體驗升級全面驗證成功！');
 }
 
 
