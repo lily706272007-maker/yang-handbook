@@ -2909,10 +2909,6 @@
         </div>
 
         <div class="interview-ctrl-right">
-          <button class="interview-tool-btn" onclick="triggerJobSlipPdfUpload()" title="上傳求人票 PDF，自動解析飯店名稱與職務">
-            <span>📄</span> 上傳求人票 PDF
-          </button>
-          <input type="file" id="iv-top-pdf-file-input" accept=".pdf,application/pdf" style="display:none;" onchange="handleJobSlipPdfUpload(this)">
           <button class="interview-tool-btn" onclick="openModal('modal-interview-context')">
             <span>💼</span> 履歷與求人票 (上下文)
           </button>
@@ -18326,18 +18322,64 @@ async function handleJobSlipPdfUpload(input) {
       localStorage.setItem('yang_interview_role', detectedRole);
     }
 
-    InterviewEngine.jobSlip = fullText.slice(0, 2000).trim();
+    // 智能抽取重點待遇與工作摘要
+    const summaryList = [];
+    if (detectedCompany) summaryList.push(`• 應徵飯店：${detectedCompany}`);
+    if (detectedRole) summaryList.push(`• 應徵職務：${detectedRole}`);
+    
+    const locMatch = fullText.match(/(?:勤務地|所在地|就業場所)[：:\s]*([^\n\r,，、]{2,40})/i);
+    if (locMatch && locMatch[1]) summaryList.push(`• 勤務地點：${locMatch[1].trim()}`);
+    
+    const salaryMatch = fullText.match(/(?:時給|給与|月給|賃金)[：:\s]*([^\n\r,，、]{2,30})/i);
+    if (salaryMatch && salaryMatch[1]) summaryList.push(`• 給與待遇：${salaryMatch[1].trim()}`);
+
+    const dormMatch = fullText.match(/(?:寮|宿泊|住居|部屋)[：:\s]*([^\n\r,，、]{2,40})/i);
+    if (dormMatch && dormMatch[1]) summaryList.push(`• 宿舍環境：${dormMatch[1].trim()}`);
+
+    let formattedJobSlip = '';
+    if (summaryList.length > 0) {
+      formattedJobSlip = `【求人票智能解析摘要】\n${summaryList.join('\n')}\n\n【完整文字內容】\n` + fullText.slice(0, 1800).trim();
+    } else {
+      formattedJobSlip = fullText.slice(0, 2000).trim();
+    }
+
+    InterviewEngine.jobSlip = formattedJobSlip;
     localStorage.setItem('yang_interview_jobslip', InterviewEngine.jobSlip);
 
-    // 界面同步刷新
+    // 界面同步自動填入欄位 (自動填寫：應徵公司、第一志願職種、求人票詳細內容)
     const compEl = document.getElementById('iv-current-company-name');
     if (compEl) compEl.textContent = `${InterviewEngine.companyName} (${InterviewEngine.companyHonorific.split('/')[0].trim()})`;
+    
     const inputComp = document.getElementById('iv-input-company');
     if (inputComp) inputComp.value = InterviewEngine.companyName;
+    
     const inputRole = document.getElementById('iv-input-role');
-    if (inputRole) inputRole.value = InterviewEngine.role;
+    if (inputRole) {
+      let matchedIndex = -1;
+      const roleStr = InterviewEngine.role || '';
+      for (let i = 0; i < inputRole.options.length; i++) {
+        const optVal = inputRole.options[i].value;
+        if (roleStr === optVal || roleStr.includes(optVal) || (optVal === 'レストランサービス' && (roleStr.includes('レストラン') || roleStr.includes('配膳') || roleStr.includes('外場')))) {
+          matchedIndex = i;
+          break;
+        }
+      }
+      if (matchedIndex >= 0) {
+        inputRole.selectedIndex = matchedIndex;
+        InterviewEngine.role = inputRole.options[matchedIndex].value;
+      } else if (roleStr) {
+        // 自訂職缺選項動態加入並選取
+        const newOpt = document.createElement('option');
+        newOpt.value = roleStr;
+        newOpt.textContent = `${roleStr} (求人票解析)`;
+        newOpt.selected = true;
+        inputRole.appendChild(newOpt);
+      }
+    }
+    
     const inputSlip = document.getElementById('iv-input-jobslip');
     if (inputSlip) inputSlip.value = InterviewEngine.jobSlip;
+    
     updateCompanyHonorificPreview();
 
     // 刷新當前回答與逆質問
@@ -18345,7 +18387,7 @@ async function handleJobSlipPdfUpload(input) {
     renderCurrentAnswers();
     generateRandomReverseQuestions();
 
-    showToast(`🎉 求人票解析成功！已自動填入目標公司：${InterviewEngine.companyName} (${InterviewEngine.role})`, 'success');
+    showToast(`🎉 求人票解析成功！已自動填入應徵公司、職種與求人票細節！`, 'success');
   } catch (err) {
     console.error('PDF Parse error:', err);
     showToast('解析 PDF 失敗，請確認檔案格式是否正確', 'error');
@@ -18355,7 +18397,7 @@ async function handleJobSlipPdfUpload(input) {
 }
 
 function triggerJobSlipPdfUpload() {
-  const fileInput = document.getElementById('iv-top-pdf-file-input') || document.getElementById('iv-context-pdf-file-input');
+  const fileInput = document.getElementById('iv-context-pdf-file-input');
   if (fileInput) fileInput.click();
 }
 

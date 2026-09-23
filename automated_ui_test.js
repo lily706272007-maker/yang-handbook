@@ -986,7 +986,7 @@ assert(html.includes('generateRandomReverseQuestions') && html.includes('quickTr
 console.log('\n【測試 54：AI 面試四大核心體驗升級 (多輪滾動回溯、專屬針對性回答、求人票 PDF 上傳、擴音靈敏度增益) (v144)】');
 assert(html.includes('renderDialogueHistory') && html.includes('dialogueHistory') && html.includes('selectHistoricalQuestion'), '完整支援多輪對話歷史串流、自動滾動與點擊卡片回溯查看');
 assert(html.includes('080-2853-5431') && html.includes('2027年8月14日') && html.includes('matchSemanticCandidateAnswer'), '專屬回答涵蓋 25+ 真實主題（手機門號、在留期限、甲殼類過敏、防寒、語學），精準針對考官提問');
-assert(html.includes('pdf.min.js') && html.includes('handleJobSlipPdfUpload') && html.includes('iv-top-pdf-file-input') && html.includes('iv-pdf-upload-box'), '完整支援一鍵上傳與拖曳求人票 PDF，自動解析目標飯店與職缺');
+assert(html.includes('pdf.min.js') && html.includes('handleJobSlipPdfUpload') && html.includes('iv-context-pdf-file-input') && html.includes('iv-pdf-upload-box'), '完整支援一鍵上傳與拖曳求人票 PDF，自動解析目標飯店與職缺');
 assert(html.includes('interview-gain-btn') && html.includes('setAudioGain') && html.includes('setupWebAudioBooster') && html.includes('echoCancellation: false'), '具備擴音收音專用增益放大 (1.0x-3.0x) 與關閉回音消除，避免外接擴音被濾除');
 
 console.log('====================================================');
