@@ -3136,6 +3136,9 @@
           <button class="interview-tool-btn primary" onclick="quickTriggerRandomReverseQuestions()">
             <span>🎲</span> 隨機 5 題逆質問
           </button>
+          <button class="interview-tool-btn" id="btn-interview-history-log" onclick="openInterviewHistoryLogModal()" title="查看過往監聽留存之對話紀錄">
+            <span>📜</span> 歷史紀錄
+          </button>
           <button class="interview-tool-btn" id="btn-interview-summary" onclick="openInterviewSummaryModal()" title="面試結束後產生完整對話整理與致謝信">
             <span>📝</span> 面試紀要
           </button>
@@ -3170,28 +3173,13 @@
             </div>
             <div class="interview-col-actions">
               <span class="interview-live-indicator" id="iv-live-indicator">○ 待命</span>
-              <button class="btn btn-sm btn-outline" onclick="clearInterviewTranscript()" title="清空紀錄">🗑️ 清空</button>
+              <button class="btn btn-sm btn-outline" onclick="clearInterviewTranscript()" title="清空對話串流（前次內容自動存檔於歷史紀錄）">🗑️ 清空</button>
             </div>
           </div>
 
           <!-- 即時轉寫與中譯串流呈現盒 (Transync AI 連續對話流) -->
           <div class="interview-stream-box" id="interview-stream-box">
-            <div class="interview-stream-card active" id="iv-current-question-card" ondblclick="selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" style="cursor:pointer;" title="💡 點兩下（雙擊）此句立即生成版本 A 與 B 推薦擬答">
-              <div class="iv-card-header-row">
-                <div style="display:flex; align-items:center; gap:6px;">
-                  <span class="iv-card-time" id="iv-card-time">00:01</span>
-                  <span class="iv-q-pill">🎯 當前擬答</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:6px;">
-                  <span class="iv-dblclick-hint">🖱️ 雙擊擬答</span>
-                  <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" title="針對此句推薦回答">💡 依此句推薦回答</button>
-                </div>
-              </div>
-              <div class="iv-card-jp" id="iv-card-jp">なぜ日本に来ようと思ったのですか？</div>
-              <div class="iv-card-zh-wrap">
-                <div class="iv-card-zh" id="iv-card-zh">為什麼決定來日本？</div>
-              </div>
-            </div>
+            <!-- 初始清空狀態，由 JS 動態渲染待命提示 -->
           </div>
 
           <!-- 手動模擬輸入與快捷題型列 (方便測試或無麥克風使用) -->
@@ -3422,6 +3410,42 @@
             <div style="font-weight:700; font-size:0.92rem; color:var(--ink); margin-bottom:4px;">尚待生成面試紀要</div>
             <div style="font-size:0.8rem;">在面試進行中或結束後，點擊上方「立即生成完整紀要與感謝信」即可自動分析產出。</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 彈窗：面試歷史監聽會話紀錄與回查 (Interview History Log Modal) -->
+    <div class="modal-backdrop" id="modal-interview-history-log">
+      <div class="modal-content" style="max-width:760px;">
+        <div class="modal-header">
+          <h3 style="margin:0; font-size:1.1rem; color:var(--ink); display:flex; align-items:center; gap:8px;">
+            <span>📜</span>
+            <span>面試歷史監聽會話紀錄與回查</span>
+          </h3>
+          <button class="modal-close" onclick="closeModal('modal-interview-history-log')">✕</button>
+        </div>
+        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:18px;">
+          <div style="font-size:0.82rem; color:var(--muted); margin-bottom:12px; background:#f8fafc; padding:10px 14px; border-radius:10px; border:1px solid #e2e8f0; line-height:1.6;">
+            💡 系統會為您自動留存過往每場面試的<strong>即時監聽與對話明細</strong>。您可以在此展開回查過往考官提問、載回串流複習，或一鍵複製對話文字。
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px; background:#f1f5f9; padding:8px 12px; border-radius:8px;">
+            <div style="font-size:0.84rem; color:#475569;">
+              📊 總計已留存：<strong id="iv-history-log-count" style="color:var(--primary); font-size:0.95rem;">0</strong> 場次監聽紀錄
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-xs btn-outline" onclick="copyAllInterviewHistory()">📋 複製全部文字</button>
+              <button class="btn btn-xs btn-outline" style="color:#ef4444; border-color:#fca5a5;" onclick="clearAllInterviewHistory()">🗑️ 清空所有紀錄</button>
+            </div>
+          </div>
+
+          <!-- 歷史紀錄場次清單 -->
+          <div id="iv-history-log-list">
+            <!-- JS 動態渲染各場次卡片 -->
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end;">
+          <button class="btn btn-sm btn-primary" onclick="closeModal('modal-interview-history-log')">關閉</button>
         </div>
       </div>
     </div>
@@ -17504,8 +17528,8 @@ const InterviewEngine = {
   role: 'レストランサービス',
   jobSlip: '',
   recognition: null,
-  currentQuestion: 'なぜ日本に来ようと思ったのですか？',
-  currentQuestionZh: '為什麼決定來日本？',
+  currentQuestion: '',
+  currentQuestionZh: '',
   speechBuffer: '',
   activeInterimText: '',
   silenceTimer: null,
@@ -17527,17 +17551,8 @@ const InterviewEngine = {
     preferences: '希望單人宿舍（個室寮）、甲殼類（蝦蟹）過敏'
   },
 
-  // 對話歷史紀錄 (支援多輪對話累計、歷史回溯滾動與點擊查看)
-  dialogueHistory: [
-    {
-      id: 'dh-init',
-      time: '00:01',
-      jp: 'なぜ日本に来ようと思ったのですか？',
-      zh: '為什麼決定來日本？',
-      isQuestion: true,
-      isFinal: true
-    }
-  ],
+  // 對話歷史紀錄 (初始為清空狀態，隨即時語音或點選題目動態向下累積)
+  dialogueHistory: [],
 
   // 經典題目對應之雙版本資料庫 (結合求人票尊稱動態置換)
   qaDatabase: {
@@ -17769,6 +17784,19 @@ function renderInterviewPage() {
 function renderDialogueHistory() {
   const box = document.getElementById('interview-stream-box');
   if (!box) return;
+
+  if (InterviewEngine.dialogueHistory.length === 0 && !InterviewEngine.activeInterimText) {
+    box.innerHTML = `
+      <div class="interview-stream-card" style="border:2px dashed #cbd5e1; background:#f8fafc; text-align:center; padding:36px 16px; color:#64748b; margin-bottom:0;">
+        <div style="font-size:2rem; margin-bottom:8px;">🎧</div>
+        <div style="font-weight:700; font-size:0.95rem; color:#334155; margin-bottom:6px;">面試即時聽譯待命中</div>
+        <div style="font-size:0.82rem; line-height:1.6; color:#64748b;">
+          點擊上方<strong>「開始監聽」</strong>或由下方<strong>常用考題/手動輸入</strong>。<br>考官日語提問與即時繁中翻譯將在此呈現。
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   const currentQ = InterviewEngine.currentQuestion;
   let html = '';
@@ -18225,6 +18253,9 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
 
 // 動態產生專屬回答 (整合 Gemini API 與 25+ 主題語意引擎)
 async function generateDynamicInterviewAnswers(questionText) {
+  if (!questionText || questionText.trim().length === 0) {
+    return null;
+  }
   const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
 
   // 1. 若資料庫有精確匹配題型，直接取用
@@ -18274,6 +18305,19 @@ async function generateDynamicInterviewAnswers(questionText) {
 function renderCurrentAnswers() {
   const container = document.getElementById('interview-answers-container');
   if (!container) return;
+
+  if (!InterviewEngine.currentQuestion) {
+    container.innerHTML = `
+      <div class="interview-answer-card" style="border:2px dashed #cbd5e1; background:#f8fafc; text-align:center; padding:48px 20px; color:#64748b;">
+        <div style="font-size:2.2rem; margin-bottom:10px;">💡</div>
+        <div style="font-weight:700; font-size:1.05rem; color:#334155; margin-bottom:8px;">等待考官提問中</div>
+        <div style="font-size:0.85rem; line-height:1.6; max-width:420px; margin:0 auto; color:#64748b;">
+          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，系統將即時為您生成專屬的版本 A (俐落短句) 與版本 B (故事長句) 擬答。
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
   const tag = InterviewEngine.activeStoryTag;
@@ -18454,9 +18498,11 @@ async function handleNewRecognizedUtterance(qJp) {
         if (newZh) {
           lastItem.zh = newZh;
           renderDialogueHistory();
+          archiveCurrentInterviewSession(false);
         }
       }).catch(() => {});
       renderDialogueHistory();
+      archiveCurrentInterviewSession(false);
       return;
     }
 
@@ -18504,6 +18550,9 @@ async function handleNewRecognizedUtterance(qJp) {
 
   // 重新渲染左側對話串流盒 (自動滾動至最底部)
   renderDialogueHistory();
+
+  // 自動留存此句對話至當前會話歷史紀錄
+  archiveCurrentInterviewSession(false);
 
   // 注意：依使用者明確需求，不再依據句尾自動跳轉右側擬答，保持畫面絕對穩定！
   // 使用者只要對想回答的那句話「按兩下（雙擊）」即可隨時生成雙版本擬答。
@@ -18605,6 +18654,9 @@ async function setupWebAudioBooster() {
 
 function startInterviewListening() {
   InterviewEngine.isListening = true;
+  if (!InterviewEngine.currentSessionId || !InterviewEngine.dialogueHistory || InterviewEngine.dialogueHistory.length === 0) {
+    InterviewEngine.currentSessionId = 'session_' + Date.now();
+  }
   
   const btn = document.getElementById('btn-toggle-interview-listen');
   const icon = document.getElementById('iv-listen-icon');
@@ -18809,6 +18861,10 @@ function stopInterviewListening() {
     } catch(e) {}
   }
 
+  if (InterviewEngine.dialogueHistory && InterviewEngine.dialogueHistory.length > 0) {
+    archiveCurrentInterviewSession(false);
+  }
+
   showToast('已停止監聽', 'info');
 }
 
@@ -18868,14 +18924,23 @@ function setAudioGain(level) {
   showToast(`收音靈敏度已設為 ${InterviewEngine.audioGainLevel.toFixed(1)}x！適合擴音收音`, 'info');
 }
 
-// 清空即時聽譯
+// 清空即時聽譯（自動封存前次內容至歷史紀錄，並徹底恢復乾淨待命狀態）
 function clearInterviewTranscript() {
+  if (InterviewEngine.dialogueHistory && InterviewEngine.dialogueHistory.length > 0) {
+    archiveCurrentInterviewSession(false);
+  }
+  InterviewEngine.currentSessionId = null;
   InterviewEngine.dialogueHistory = [];
   InterviewEngine.activeInterimText = '';
-  InterviewEngine.currentQuestion = 'ご質問をお待ちしております...';
-  InterviewEngine.currentQuestionZh = '等待考官提問中...';
+  InterviewEngine.speechBuffer = '';
+  InterviewEngine.currentQuestion = '';
+  InterviewEngine.currentQuestionZh = '';
+  InterviewEngine.currentAnswers = null;
+  InterviewEngine.timerSeconds = 0;
+  updateInterviewTimerDisplay();
   renderDialogueHistory();
-  showToast('已清空對話紀錄', 'info');
+  renderCurrentAnswers();
+  showToast('已清空對話串流（前次內容已安全留存於歷史紀錄）', 'info');
 }
 
 // 打開面試會議紀要彈窗
@@ -18999,6 +19064,284 @@ function copyFullInterviewSummary() {
   showToast('已複製完整面試會議紀要！', 'success');
 }
 
+// ==============================================================
+// 面試歷史監聽會話紀錄庫與回查管理 (Interview History Log Engine)
+// ==============================================================
+
+// 封存或更新當前面試對話串流至歷史紀錄 (localStorage: yang_interview_history_sessions)
+function archiveCurrentInterviewSession(showToastNotification = false) {
+  if (!InterviewEngine.dialogueHistory || InterviewEngine.dialogueHistory.length === 0) {
+    return;
+  }
+  try {
+    let sessions = [];
+    const raw = localStorage.getItem('yang_interview_history_sessions');
+    if (raw) {
+      sessions = JSON.parse(raw);
+    }
+    if (!Array.isArray(sessions)) sessions = [];
+
+    if (!InterviewEngine.currentSessionId) {
+      InterviewEngine.currentSessionId = 'session_' + Date.now();
+    }
+
+    const items = InterviewEngine.dialogueHistory.map(item => ({
+      time: item.time || '00:00',
+      jp: item.jp || '',
+      zh: item.zh || '',
+      isQuestion: !!item.isQuestion
+    }));
+
+    const timerEl = document.getElementById('interview-timer-display');
+    const duration = (timerEl && timerEl.textContent) ? timerEl.textContent : '00:00:00';
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+    const existingIdx = sessions.findIndex(s => s.id === InterviewEngine.currentSessionId);
+    if (existingIdx >= 0) {
+      sessions[existingIdx].count = items.length;
+      sessions[existingIdx].items = items;
+      sessions[existingIdx].duration = duration;
+      sessions[existingIdx].company = InterviewEngine.companyName || sessions[existingIdx].company || 'THE ALPS HOTEL HAKUBA';
+      sessions[existingIdx].role = InterviewEngine.role || sessions[existingIdx].role || 'レストランサービス';
+    } else {
+      const newSession = {
+        id: InterviewEngine.currentSessionId,
+        date: dateStr,
+        company: InterviewEngine.companyName || 'THE ALPS HOTEL HAKUBA',
+        role: InterviewEngine.role || 'レストランサービス',
+        duration: duration,
+        count: items.length,
+        items: items
+      };
+      sessions.unshift(newSession);
+    }
+
+    if (sessions.length > 50) sessions = sessions.slice(0, 50);
+    localStorage.setItem('yang_interview_history_sessions', JSON.stringify(sessions));
+
+    if (showToastNotification) {
+      showToast('已留存此場對話紀錄至歷史紀錄庫', 'info');
+    }
+  } catch (err) {
+    console.error('Failed to archive interview session:', err);
+  }
+}
+
+// 渲染面試歷史監聽紀錄清單
+function renderInterviewHistoryLogList() {
+  const container = document.getElementById('iv-history-log-list');
+  const countEl = document.getElementById('iv-history-log-count');
+  if (!container) return;
+
+  let sessions = [];
+  try {
+    const raw = localStorage.getItem('yang_interview_history_sessions');
+    if (raw) sessions = JSON.parse(raw);
+  } catch (e) {
+    sessions = [];
+  }
+  if (!Array.isArray(sessions)) sessions = [];
+
+  if (countEl) countEl.textContent = String(sessions.length);
+
+  if (sessions.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:36px 16px; color:#94a3b8; background:#fff; border-radius:12px; border:1px dashed #cbd5e1;">
+        <div style="font-size:2rem; margin-bottom:8px;">📭</div>
+        <div style="font-weight:600; font-size:0.95rem; color:#475569; margin-bottom:4px;">尚無歷史監聽會話紀錄</div>
+        <div style="font-size:0.8rem; line-height:1.5;">當您開始監聽面試或手動輸入對話後，系統將會在此自動為您安全留存。</div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  sessions.forEach((session) => {
+    const itemCount = (session.items && session.items.length) || 0;
+    html += `
+      <div class="iv-history-session-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:all 0.2s ease;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:8px; flex-wrap:wrap;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+              <span style="font-size:0.9rem; font-weight:700; color:#1e293b;">📅 ${escapeHtml(session.date || '未知時間')}</span>
+              <span style="background:#e0f2fe; color:#0369a1; font-size:0.75rem; font-weight:600; padding:2px 8px; border-radius:12px;">${escapeHtml(session.company || '面試')}</span>
+              <span style="background:#f1f5f9; color:#475569; font-size:0.75rem; font-weight:600; padding:2px 8px; border-radius:12px;">${escapeHtml(session.role || '職種')}</span>
+            </div>
+            <div style="font-size:0.78rem; color:#64748b;">
+              ⏱️ 監聽時長：<strong>${escapeHtml(session.duration || '00:00:00')}</strong> ｜ 💬 對話句數：<strong>${itemCount}</strong> 句
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-xs btn-outline" onclick="toggleSessionTranscript('${session.id}')" title="展開或收合對話明細">👁️ 展開明細</button>
+            <button class="btn btn-xs btn-outline" style="color:#0284c7; border-color:#bae6fd;" onclick="restoreSessionToStream('${session.id}')" title="將這場對話載入回左側對話串流">📥 載入串流</button>
+            <button class="btn btn-xs btn-outline" onclick="copySessionTranscript('${session.id}')" title="複製此場次所有對話文字">📋 複製</button>
+            <button class="btn btn-xs btn-outline" style="color:#ef4444; border-color:#fecaca;" onclick="deleteSessionFromHistory('${session.id}')" title="刪除此筆紀錄">🗑️ 刪除</button>
+          </div>
+        </div>
+
+        <!-- 摺疊明細容器 -->
+        <div id="iv-session-body-${session.id}" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed #e2e8f0; max-height:260px; overflow-y:auto;">
+          ${(session.items && session.items.length > 0) ? session.items.map((item, itemIdx) => `
+            <div style="background:#f8fafc; border:1px solid #f1f5f9; border-radius:8px; padding:8px 10px; margin-bottom:6px; font-size:0.84rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                <span style="font-size:0.72rem; color:#94a3b8; font-weight:600;">[${escapeHtml(item.time || '00:00')}] #${itemIdx+1}</span>
+                ${item.isQuestion ? '<span style="font-size:0.68rem; background:#fef3c7; color:#b45309; padding:1px 6px; border-radius:6px; font-weight:700;">考官提問</span>' : ''}
+              </div>
+              <div style="font-weight:600; color:#1e293b; margin-bottom:2px; line-height:1.4;">${escapeHtml(item.jp)}</div>
+              <div style="color:#0284c7; font-size:0.8rem; line-height:1.4;">▎${escapeHtml(item.zh)}</div>
+            </div>
+          `).join('') : '<div style="font-size:0.8rem; color:#94a3b8;">此場次無對話內容</div>'}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// 開啟面試歷史紀錄彈窗
+function openInterviewHistoryLogModal() {
+  renderInterviewHistoryLogList();
+  openModal('modal-interview-history-log');
+}
+
+// 展開 / 收合對話明細
+function toggleSessionTranscript(sessionId) {
+  const el = document.getElementById('iv-session-body-' + sessionId);
+  if (!el) return;
+  const isHidden = (el.style.display === 'none' || !el.style.display);
+  el.style.display = isHidden ? 'block' : 'none';
+}
+
+// 載入指定場次對話至當前串流
+function restoreSessionToStream(sessionId) {
+  let sessions = [];
+  try {
+    const raw = localStorage.getItem('yang_interview_history_sessions');
+    if (raw) sessions = JSON.parse(raw);
+  } catch (e) {}
+
+  const session = sessions.find(s => s.id === sessionId);
+  if (!session || !session.items || session.items.length === 0) {
+    showToast('該場次無有效對話內容', 'warning');
+    return;
+  }
+
+  InterviewEngine.currentSessionId = session.id;
+  InterviewEngine.dialogueHistory = session.items.map((item, idx) => ({
+    id: 'dh-restored-' + idx + '-' + Date.now(),
+    timestamp: Date.now(),
+    time: item.time || '00:00',
+    jp: item.jp,
+    zh: item.zh,
+    isQuestion: item.isQuestion,
+    isFinal: true
+  }));
+
+  // 若存在題目，選中最後一句考官提問或最後一句
+  const lastQ = [...session.items].reverse().find(it => it.isQuestion) || session.items[session.items.length - 1];
+  if (lastQ) {
+    InterviewEngine.currentQuestion = lastQ.jp;
+    InterviewEngine.currentQuestionZh = lastQ.zh;
+  }
+
+  renderDialogueHistory();
+  renderCurrentAnswers();
+  closeModal('modal-interview-history-log');
+  showToast(`已載入「${session.date}」的 ${session.items.length} 句對話至串流！`, 'success');
+}
+
+// 複製指定場次對話文字
+function copySessionTranscript(sessionId) {
+  let sessions = [];
+  try {
+    const raw = localStorage.getItem('yang_interview_history_sessions');
+    if (raw) sessions = JSON.parse(raw);
+  } catch (e) {}
+
+  const session = sessions.find(s => s.id === sessionId);
+  if (!session || !session.items || session.items.length === 0) {
+    showToast('此場次無對話內容可複製', 'warning');
+    return;
+  }
+
+  let text = `【面試歷史監聽紀錄】\n`;
+  text += `日期：${session.date}\n`;
+  text += `公司：${session.company} (${session.role})\n`;
+  text += `時長：${session.duration}\n`;
+  text += `==============================\n\n`;
+
+  session.items.forEach((item, idx) => {
+    text += `[${item.time}] #${idx + 1} ${item.isQuestion ? '【考官提問】' : ''}\n`;
+    text += `日文：${item.jp}\n`;
+    text += `翻譯：${item.zh}\n\n`;
+  });
+
+  copyText(text);
+  showToast('已複製該場次面試對話文字！', 'success');
+}
+
+// 複製全部歷史紀錄文字
+function copyAllInterviewHistory() {
+  let sessions = [];
+  try {
+    const raw = localStorage.getItem('yang_interview_history_sessions');
+    if (raw) sessions = JSON.parse(raw);
+  } catch (e) {}
+
+  if (!sessions || sessions.length === 0) {
+    showToast('目前尚無任何歷史紀錄可複製', 'warning');
+    return;
+  }
+
+  let text = `【全部面試歷史監聽總紀錄】(共 ${sessions.length} 場次)\n`;
+  text += `匯出時間：${new Date().toLocaleString('zh-TW')}\n\n`;
+
+  sessions.forEach((session, sIdx) => {
+    text += `--------------------------------------------------\n`;
+    text += `第 ${sIdx + 1} 場 ｜ ${session.date} ｜ ${session.company} (${session.role})\n`;
+    text += `監聽時長：${session.duration} ｜ 句數：${session.items ? session.items.length : 0}\n`;
+    text += `--------------------------------------------------\n`;
+    if (session.items && session.items.length > 0) {
+      session.items.forEach((item, idx) => {
+        text += `[${item.time}] #${idx + 1} ${item.isQuestion ? '【考官提問】' : ''}\n`;
+        text += `日文：${item.jp}\n`;
+        text += `翻譯：${item.zh}\n\n`;
+      });
+    } else {
+      text += `（無對話內容）\n\n`;
+    }
+  });
+
+  copyText(text);
+  showToast(`已複製全部 ${sessions.length} 場次的面試歷史紀錄！`, 'success');
+}
+
+// 刪除指定歷史場次
+function deleteSessionFromHistory(sessionId) {
+  let sessions = [];
+  try {
+    const raw = localStorage.getItem('yang_interview_history_sessions');
+    if (raw) sessions = JSON.parse(raw);
+  } catch (e) {}
+
+  sessions = sessions.filter(s => s.id !== sessionId);
+  localStorage.setItem('yang_interview_history_sessions', JSON.stringify(sessions));
+  renderInterviewHistoryLogList();
+  showToast('已刪除該場次紀錄', 'info');
+}
+
+// 清空全部歷史紀錄
+function clearAllInterviewHistory() {
+  if (!confirm('確定要清空所有已留存的面試歷史監聽紀錄嗎？此動作無法復原。')) {
+    return;
+  }
+  localStorage.removeItem('yang_interview_history_sessions');
+  renderInterviewHistoryLogList();
+  showToast('已清空全部歷史監聽紀錄', 'info');
+}
+
 // 求人票 PDF 拖曳/檔案上傳解析器
 async function handleJobSlipPdfUpload(input) {
   if (!input || !input.files || !input.files[0]) return;
@@ -19117,7 +19460,11 @@ async function handleJobSlipPdfUpload(input) {
     updateCompanyHonorificPreview();
 
     // 刷新當前回答與逆質問
-    InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(InterviewEngine.currentQuestion);
+    if (InterviewEngine.currentQuestion) {
+      InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(InterviewEngine.currentQuestion);
+    } else {
+      InterviewEngine.currentAnswers = null;
+    }
     renderCurrentAnswers();
     generateRandomReverseQuestions();
 
@@ -19179,7 +19526,11 @@ async function saveInterviewContext() {
   if (compEl) compEl.textContent = `${InterviewEngine.companyName} (${InterviewEngine.companyHonorific.split('/')[0].trim()})`;
 
   closeModal('modal-interview-context');
-  InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(InterviewEngine.currentQuestion);
+  if (InterviewEngine.currentQuestion) {
+    InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(InterviewEngine.currentQuestion);
+  } else {
+    InterviewEngine.currentAnswers = null;
+  }
   renderCurrentAnswers();
   generateRandomReverseQuestions();
   showToast('目標飯店與求人票已更新！尊稱與應答已同步刷新', 'success');

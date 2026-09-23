@@ -1082,8 +1082,34 @@ if (semanticFuncMatch) {
   assert(familyAns.simple.raw.includes('家族') || familyAns.simple.raw.includes('両親'), '家族提問：成功匹配雙親支持應答');
 
   const fallbackAns = evalSemantic('お気に入りの映画は何ですか？', '御社');
-  assert(fallbackAns.simple.raw.includes('お気に入りの映画は何ですか？') || fallbackAns.simple.ruby.includes('お気に入りの映画は何ですか？'), '未預期提問：動態置入考官提問文字，確保非靜態死板內容');
+  assert(fallbackAns.simple.raw.includes('お気に入りの映画 substance') || fallbackAns.simple.raw.includes('お気に入りの映画は何ですか？') || fallbackAns.simple.ruby.includes('お気に入りの映画は何ですか？'), '未預期提問：動態置入考官提問文字，確保非靜態死板內容');
 }
+
+// 測試 59: 初始狀態清空待命（無寫死問題）與面試歷史會話紀錄庫 (v149)
+console.log('\n【測試 59：初始狀態清空待命（無寫死問題）與面試歷史會話紀錄庫 (v149)】');
+assert(html.includes("currentQuestion: '',") && html.includes("currentQuestionZh: '',"), 'InterviewEngine 初始 currentQuestion 與 currentQuestionZh 為完全清空待命');
+assert(html.includes("dialogueHistory: [],"), 'InterviewEngine 初始 dialogueHistory 為空陣列');
+assert(!html.includes('id="iv-current-question-card" ondblclick="selectHistoricalQuestion(\'なぜ日本に来ようと思ったのですか？'), 'HTML 靜態結構中已徹底移除硬編碼的初始提問卡片');
+assert(html.includes('面試即時聽譯待命中') && html.includes('renderDialogueHistory'), 'renderDialogueHistory 在對話為空時呈現優雅待命提示卡片');
+assert(html.includes('等待考官提問中') && html.includes('renderCurrentAnswers'), 'renderCurrentAnswers 在尚未鎖定題目時呈現等待提問提示卡片');
+assert(html.includes('id="btn-interview-history-log"') && html.includes('openInterviewHistoryLogModal()'), '頂部控制列右側包含低調的「📜 歷史紀錄」按鈕');
+assert(html.includes('id="modal-interview-history-log"'), '包含歷史紀錄與回查專屬彈窗 (modal-interview-history-log)');
+assert(html.includes('id="iv-history-log-list"') && html.includes('id="iv-history-log-count"'), '歷史紀錄彈窗包含會話清單容器與已存場次計數器');
+assert(html.includes('function archiveCurrentInterviewSession'), '具備會話自動封存函式 archiveCurrentInterviewSession');
+assert(html.includes('function renderInterviewHistoryLogList'), '具備歷史紀錄清單渲染函式 renderInterviewHistoryLogList');
+assert(html.includes('function openInterviewHistoryLogModal'), '具備開啟歷史彈窗函式 openInterviewHistoryLogModal');
+assert(html.includes('function toggleSessionTranscript'), '具備展開/收合單場對話明細函式 toggleSessionTranscript');
+assert(html.includes('function restoreSessionToStream'), '具備載入指定場次對話至當前串流函式 restoreSessionToStream');
+assert(html.includes('function copySessionTranscript'), '具備複製單場次對話函式 copySessionTranscript');
+assert(html.includes('function copyAllInterviewHistory'), '具備一鍵複製全部歷史紀錄函式 copyAllInterviewHistory');
+assert(html.includes('function deleteSessionFromHistory'), '具備刪除指定歷史場次函式 deleteSessionFromHistory');
+assert(html.includes('function clearAllInterviewHistory'), '具備清空所有歷史紀錄函式 clearAllInterviewHistory');
+assert(html.includes('yang_interview_history_sessions'), '使用 localStorage (yang_interview_history_sessions) 進行歷史會話持久化儲存');
+
+// 驗證 clearInterviewTranscript 包含封存與徹底重置
+assert(html.includes('function clearInterviewTranscript()') && 
+       html.includes('archiveCurrentInterviewSession(false)') && 
+       html.includes('currentAnswers = null'), 'clearInterviewTranscript 在清空前先自動留存歷史，並徹底清空當前狀態與擬答');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1092,7 +1118,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v148) 語音三層防重複去重機制、年齡/生年月日擬答精準匹配與鎖定題目橫幅全面上線！');
+  console.log('🎉 所有測試通過！(v149) 初始清空待命狀態與面試歷史會話紀錄庫全面上線！');
 }
 
 
