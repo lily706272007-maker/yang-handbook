@@ -989,6 +989,28 @@ assert(html.includes('080-2853-5431') && html.includes('2027年8月14日') && ht
 assert(html.includes('pdf.min.js') && html.includes('handleJobSlipPdfUpload') && html.includes('iv-context-pdf-file-input') && html.includes('iv-pdf-upload-box'), '完整支援一鍵上傳與拖曳求人票 PDF，自動解析目標飯店與職缺');
 assert(html.includes('interview-gain-btn') && html.includes('setAudioGain') && html.includes('setupWebAudioBooster') && html.includes('echoCancellation: false'), '具備擴音收音專用增益放大 (1.0x-3.0x) 與關閉回音消除，避免外接擴音被濾除');
 
+// 測試 55: Transync AI 風格重構、智能提問意圖偵測、會議紀要與致謝信 (v145)
+console.log('\n【測試 55：Transync AI 風格重構、智能提問意圖偵測、會議紀要與致謝信 (v145)】');
+assert(!html.includes('🎙️ 考官提問') && !html.includes('🗣️ 候選人發言'), '徹底移除「🎙️ 考官提問」與「🗣️ 候選人發言」固定標籤，符合雙向日語對話真實情境');
+assert(html.includes('iv-card-action-btn') && html.includes('💡 依此句推薦回答'), '卡片包含 Transync AI 風格時間戳與微型「💡 依此句推薦回答」按鈕');
+assert(html.includes('isQuestionSentence') && html.includes('Question Intent Detection'), '具備日語智能提問意圖偵測引擎 (isQuestionSentence)，自動辨識疑問詞與助詞');
+assert(html.includes('btn-interview-summary') && html.includes('openInterviewSummaryModal'), '頂部控制列右側包含低調不顯眼的「📝 面試紀要」按鈕');
+assert(html.includes('modal-interview-summary') && html.includes('generateInterviewSummary'), '包含面試會議紀要彈窗，一鍵自動分析所有問答並彙整');
+assert(html.includes('copyThankYouEmail') && html.includes('件名：面接のお礼') && html.includes('お礼メール'), '自動產出完整專業日文面試感謝信 (お礼メール)，帶入候選人姓名與聯絡資訊');
+assert(html.includes('file:') && html.includes('not-allowed') && html.includes('audio-capture'), '具備瀏覽器安全協定檢測 (file:// 提示) 與麥克風錯誤友善提示');
+
+// 執行 Node.js 沙盒邏輯驗證 isQuestionSentence 實測
+const isQuestionFuncMatch = html.match(/function isQuestionSentence\([\s\S]*?return false;\s*\}/);
+assert(isQuestionFuncMatch, '成功抽取 isQuestionSentence 執行體');
+const evalQuestionTest = new Function(`${isQuestionFuncMatch[0]}; return isQuestionSentence;`)();
+assert(evalQuestionTest('なぜ日本に来ようと思ったのですか？') === true, 'isQuestionSentence 正確識別「なぜ日本に来ようと思ったのですか？」為提問');
+assert(evalQuestionTest('自己紹介をお願いします。') === true, 'isQuestionSentence 正確識別「自己紹介をお願いします。」為提問');
+assert(evalQuestionTest('志望動機を教えてください。') === true, 'isQuestionSentence 正確識別「志望動機を教えてください。」為提問');
+assert(evalQuestionTest('寮での自炊は可能でしょうか？') === true, 'isQuestionSentence 正確識別「寮での自炊は可能でしょうか？」為提問');
+assert(evalQuestionTest('私は以前、熊本の黒川温泉で働いていました。') === false, 'isQuestionSentence 正確排除自我陳述句「私は以前、熊本の黒川温泉で働いていました。」');
+assert(evalQuestionTest('なるほど、素晴らしいですね。') === false, 'isQuestionSentence 正確排除考官點頭附和句「なるほど、素晴らしいですね。」');
+assert(evalQuestionTest('はい、承知いたしました。') === false, 'isQuestionSentence 正確排除禮貌回應句「はい、承知いたしました。」');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -996,7 +1018,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v144) 面試助手四大核心體驗升級全面驗證成功！');
+  console.log('🎉 所有測試通過！(v145) Transync AI 雙向聽譯、智能問題聯動、面試紀要全面升級成功！');
 }
 
 

@@ -2263,6 +2263,51 @@
     font-weight: 600;
     line-height: 1.5;
   }
+  .iv-card-action-btn {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #0369a1;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .iv-card-action-btn:hover {
+    background: #e0f2fe;
+    border-color: #38bdf8;
+    color: #0284c7;
+  }
+  .iv-q-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #b45309;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    padding: 1px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  .iv-summary-section {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .iv-summary-section-title {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .iv-summary-content {
+    font-size: 0.84rem;
+  }
 
   /* 手動輸入與快捷題目 */
   .interview-input-wrap {
@@ -2918,6 +2963,9 @@
           <button class="interview-tool-btn primary" onclick="quickTriggerRandomReverseQuestions()">
             <span>🎲</span> 隨機 5 題逆質問
           </button>
+          <button class="interview-tool-btn" id="btn-interview-summary" onclick="openInterviewSummaryModal()" title="面試結束後產生完整對話整理與致謝信">
+            <span>📝</span> 面試紀要
+          </button>
         </div>
       </div>
 
@@ -2940,12 +2988,12 @@
 
       <!-- 主體雙欄工作區 (Left: 考官日翻中 / Right: AI 推薦雙版本回答) -->
       <div class="interview-grid">
-        <!-- 左欄：考官發言 · 日翻中即時聽譯 -->
+        <!-- 左欄：即時日翻中聽譯串流 (Transync AI 風格) -->
         <div class="interview-col interview-col-left">
           <div class="interview-col-header">
             <div class="interview-col-title">
               <span class="interview-col-pill">ja ➔ zh</span>
-              <span>考官發言・即時聽譯</span>
+              <span>即時對話・雙向聽譯</span>
             </div>
             <div class="interview-col-actions">
               <span class="interview-live-indicator" id="iv-live-indicator">○ 待命</span>
@@ -2955,8 +3003,14 @@
 
           <!-- 即時轉寫與中譯串流呈現盒 -->
           <div class="interview-stream-box" id="interview-stream-box">
-            <div class="interview-stream-card active" id="iv-current-question-card">
-              <div class="iv-card-time" id="iv-card-time">12:00:00</div>
+            <div class="interview-stream-card active" id="iv-current-question-card" onclick="selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" style="cursor:pointer;" title="點擊切換查看此句專屬回答">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="iv-card-time" id="iv-card-time"><span style="opacity:0.6;">⏱️</span> 12:00:00</span>
+                  <span class="iv-q-pill">❓ 提問</span>
+                </div>
+                <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" title="針對此句推薦回答">💡 依此句推薦回答</button>
+              </div>
               <div class="iv-card-jp" id="iv-card-jp">「なぜ日本に来ようと思ったのですか？」</div>
               <div class="iv-card-zh-wrap">
                 <div class="iv-card-zh" id="iv-card-zh">為什麼決定來日本？</div>
@@ -3128,6 +3182,69 @@
           </div>
           <div id="iv-dynamic-reverse-list">
             <!-- JS 動態生成 5 題 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 彈窗：面試會議紀要與感謝信 (Interview Summary Modal) -->
+    <div class="modal-backdrop" id="modal-interview-summary">
+      <div class="modal-content" style="max-width:720px;">
+        <div class="modal-header">
+          <h3 style="margin:0; font-size:1.1rem; color:var(--ink); display:flex; align-items:center; gap:8px;">
+            <span>📝</span>
+            <span>面試會議紀要 ＆ 面試後日文致謝信 (お礼メール)</span>
+          </h3>
+          <button class="modal-close" onclick="closeModal('modal-interview-summary')">✕</button>
+        </div>
+        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:18px;">
+          <div style="font-size:0.82rem; color:var(--muted); margin-bottom:14px; background:#f8fafc; padding:10px 14px; border-radius:10px; border:1px solid #e2e8f0; line-height:1.6;">
+            💡 面試結束後，點擊下方按鈕即可一鍵將整場面試的<strong>雙向對話紀錄</strong>整理為結構化面試會議紀要，並自動生成發送給飯店的<strong>日文感謝信 (お礼メール)</strong>！
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--ink);">
+              當前對話發言數：<span id="iv-summary-count" style="color:var(--primary); font-weight:800;">0</span> 句
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="generateInterviewSummary()" style="display:inline-flex; align-items:center; gap:6px;">
+              <span>✨</span> 立即生成完整紀要與感謝信
+            </button>
+          </div>
+
+          <!-- 會議紀要渲染區塊 -->
+          <div id="iv-summary-result-wrap" style="display:none;">
+            <!-- 會議紀要卡片 -->
+            <div class="iv-summary-section">
+              <div class="iv-summary-section-title">📊 面試基本資訊與概況</div>
+              <div id="iv-summary-meta" class="iv-summary-content"></div>
+            </div>
+
+            <!-- 考官核心提問與應答整理 -->
+            <div class="iv-summary-section">
+              <div class="iv-summary-section-title">❓ 面試提問與重點應對整理</div>
+              <div id="iv-summary-qa-list" class="iv-summary-content"></div>
+            </div>
+
+            <!-- 面試後必發：日文感謝信 (お礼メール) -->
+            <div class="iv-summary-section" style="border-color:#bbf7d0; background:#f0fdf4;">
+              <div class="iv-summary-section-title" style="color:#166534; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                <span>💌 面試後日文感謝信草稿 (お礼メール)</span>
+                <button class="btn btn-sm btn-outline" onclick="copyThankYouEmail()" style="font-size:0.75rem; background:#fff;">📋 一鍵複製信件</button>
+              </div>
+              <div id="iv-summary-email" class="iv-summary-content" style="font-family:var(--font-serif, 'Yu Mincho', serif); white-space:pre-wrap; line-height:1.7; color:#14532d; font-size:0.86rem; background:#fff; padding:12px; border-radius:8px; border:1px solid #86efac; margin-top:8px;"></div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+              <button class="btn btn-sm btn-outline" onclick="copyFullInterviewSummary()">📋 複製全部紀要</button>
+              <button class="btn btn-sm btn-primary" onclick="closeModal('modal-interview-summary')">完成關閉</button>
+            </div>
+          </div>
+
+          <!-- 尚未生成時的預設引導 -->
+          <div id="iv-summary-empty-state" style="text-align:center; padding:32px 16px; color:var(--muted);">
+            <div style="font-size:2.2rem; margin-bottom:8px;">📋</div>
+            <div style="font-weight:700; font-size:0.92rem; color:var(--ink); margin-bottom:4px;">尚待生成面試紀要</div>
+            <div style="font-size:0.8rem;">在面試進行中或結束後，點擊上方「立即生成完整紀要與感謝信」即可自動分析產出。</div>
           </div>
         </div>
       </div>
@@ -17205,9 +17322,9 @@ const InterviewEngine = {
     {
       id: 'dh-init',
       time: '12:00:00',
-      role: 'interviewer',
       jp: 'なぜ日本に来ようと思ったのですか？',
       zh: '為什麼決定來日本？',
+      isQuestion: true,
       isFinal: true
     }
   ],
@@ -17438,7 +17555,7 @@ function renderInterviewPage() {
   generateRandomReverseQuestions();
 }
 
-// 渲染對話串流盒 (支援累積歷史、往回滾動與點擊重選)
+// 渲染對話串流盒 (Transync AI 風格：純粹雙向對話紀錄、時間戳記、中譯、支援點擊回溯)
 function renderDialogueHistory() {
   const box = document.getElementById('interview-stream-box');
   if (!box) return;
@@ -17452,14 +17569,16 @@ function renderDialogueHistory() {
     const jpId = isActive ? 'id="iv-card-jp"' : '';
     const zhId = isActive ? 'id="iv-card-zh"' : '';
     const timeId = isActive ? 'id="iv-card-time"' : '';
+    const isQ = item.isQuestion !== undefined ? item.isQuestion : isQuestionSentence(item.jp);
 
     html += `
-      <div class="interview-stream-card ${isActive ? 'active' : ''}" ${isCurrentRef} onclick="selectHistoricalQuestion('${escapeHtml(item.jp).replace(/'/g, "\\'")}', '${escapeHtml(item.zh).replace(/'/g, "\\'")}')" style="cursor:pointer;" title="點擊切換查看此題專屬回答">
+      <div class="interview-stream-card ${isActive ? 'active' : ''}" ${isCurrentRef} onclick="selectHistoricalQuestion('${escapeHtml(item.jp).replace(/'/g, "\\'")}', '${escapeHtml(item.zh).replace(/'/g, "\\'")}')" style="cursor:pointer;" title="點擊切換查看此句專屬回答">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <span style="font-size:0.75rem; font-weight:700; color:${item.role === 'interviewer' ? '#0369a1' : '#059669'};">
-            ${item.role === 'interviewer' ? '🎙️ 考官提問' : '🗣️ 候選人發言'}
-          </span>
-          <span class="iv-card-time" ${timeId}>${escapeHtml(item.time)}</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="iv-card-time" ${timeId}><span style="opacity:0.6;">⏱️</span> ${escapeHtml(item.time)}</span>
+            ${isQ ? '<span class="iv-q-pill">❓ 提問</span>' : ''}
+          </div>
+          <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('${escapeHtml(item.jp).replace(/'/g, "\\'")}', '${escapeHtml(item.zh).replace(/'/g, "\\'")}')" title="針對此句推薦回答">💡 依此句推薦回答</button>
         </div>
         <div class="iv-card-jp" ${jpId}>「${escapeHtml(item.jp)}」</div>
         <div class="iv-card-zh-wrap">
@@ -17474,7 +17593,7 @@ function renderDialogueHistory() {
       <div class="interview-stream-card active-interim">
         <div style="display:flex; align-items:center; margin-bottom:4px;">
           <span class="iv-live-dot"></span>
-          <span style="font-size:0.75rem; font-weight:700; color:#0284c7;">考官正在發言收音中...</span>
+          <span style="font-size:0.75rem; font-weight:700; color:#0284c7;">即時語音收音中...</span>
         </div>
         <div class="iv-card-jp" style="color:#0369a1;">「${escapeHtml(InterviewEngine.activeInterimText)}」</div>
       </div>
@@ -17898,7 +18017,46 @@ async function applyStoryTag(tagId) {
   showToast('已切換招牌故事標籤！', 'info');
 }
 
-// 處理新辨識出的對話語句 (加入累積串流、翻譯與生成回答)
+// 判斷語句是否具備提問意圖 (Question Intent Detection)
+function isQuestionSentence(text) {
+  if (!text) return false;
+  const t = text.trim();
+  if (t.length < 2) return false;
+
+  // 1. 問號標點
+  if (/[?？]$/.test(t) || t.includes('?') || t.includes('？')) return true;
+
+  // 2. 句尾疑問助詞或句型 (日文敬語常不加問號，靠句尾助詞如 か、でしょうか、ますか、ですか 等)
+  if (/(か|ですか|ますか|でしょうか|のか|どうですか|いかがですか|いただけますでしょうか|いただけますか|てもらえますか|でしょうかね|かい)[。、\s]*$/i.test(t)) {
+    return true;
+  }
+
+  // 3. 常見疑問詞或面試引導提問語
+  if (/(なぜ|どうして|なんで|どこで|どこに|いつ頃|いつから|いつまで|どれくらい|どのくらい|どのような|どういう|何が|何を|何時|誰が|どちら|志望動機|自己紹介|強み|弱み|教えて|お聞かせ|伺え|ご質問)/i.test(t)) {
+    return true;
+  }
+
+  return false;
+}
+
+// 動態電平條指示輔助
+function animateMetersActive(isActive) {
+  for (let i = 1; i <= 6; i++) {
+    const bar = document.getElementById(`iv-meter-${i}`);
+    if (bar) {
+      if (isActive) {
+        const randH = Math.floor(Math.random() * 16) + 6;
+        bar.style.height = `${randH}px`;
+        bar.classList.add('active');
+      } else {
+        bar.style.height = '4px';
+        bar.classList.remove('active');
+      }
+    }
+  }
+}
+
+// 處理新辨識出的對話語句 (加入累積串流、翻譯與智能問題判定)
 async function handleNewRecognizedUtterance(qJp) {
   if (!qJp || qJp.trim().length < 2) return;
   const cleanQ = qJp.trim();
@@ -17920,26 +18078,33 @@ async function handleNewRecognizedUtterance(qJp) {
     }
   }
 
-  // 加入歷史對話
+  // 智慧判斷此句是否具有提問意圖 (Question Intent)
+  const isQuestion = isQuestionSentence(cleanQ);
+
+  // 加入歷史對話 (純淨 Transync AI 雙向對話紀錄，不標注考官或候選人)
   const timeNow = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   InterviewEngine.dialogueHistory.push({
     id: 'dh-' + Date.now(),
     time: timeNow,
-    role: 'interviewer',
     jp: cleanQ,
     zh: qZh,
+    isQuestion: isQuestion,
     isFinal: true
   });
 
-  InterviewEngine.currentQuestion = cleanQ;
-  InterviewEngine.currentQuestionZh = qZh;
-
-  // 重新渲染對話串流與觸發回答生成
+  // 重新渲染對話串流盒 (自動滾動至最底部)
   renderDialogueHistory();
-  showAnswerLoadingShimmer(cleanQ);
 
-  InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(cleanQ);
-  renderCurrentAnswers();
+  // 若判定為提問，自動連動右側軍師生成推薦回答！若非提問（例如候選人自己的發言或一般附和），則保留當前回答不覆蓋
+  if (isQuestion) {
+    InterviewEngine.currentQuestion = cleanQ;
+    InterviewEngine.currentQuestionZh = qZh;
+    showAnswerLoadingShimmer(cleanQ);
+
+    InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(cleanQ);
+    renderCurrentAnswers();
+    showToast('✨ 偵測到提問，已為您自動更新推薦回答！', 'info');
+  }
 }
 
 // 快速點選預設題目
@@ -17970,14 +18135,12 @@ function toggleInterviewListening() {
   }
 }
 
-// 啟動 Web Audio API 增益放大器與真實收音電平條
+// 啟動 Web Audio API 增益放大器與真實收音電平條 (支援容錯與平滑模擬)
 async function setupWebAudioBooster() {
   try {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    InterviewEngine.audioContext = new AudioCtx();
-    if (InterviewEngine.audioContext.state === 'suspended') {
-      await InterviewEngine.audioContext.resume();
+    if (!AudioCtx || !window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      return;
     }
 
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -17986,55 +18149,54 @@ async function setupWebAudioBooster() {
         noiseSuppression: false,  // 關閉過度抑制，保護語音頻率
         autoGainControl: true     // 開啟硬體自動增益
       }
+    }).catch(err => {
+      console.warn('getUserMedia non-fatal stream warning:', err);
+      return null;
     });
-    InterviewEngine.mediaStream = stream;
 
-    const source = InterviewEngine.audioContext.createMediaStreamSource(stream);
-    const gainNode = InterviewEngine.audioContext.createGain();
-    gainNode.gain.value = InterviewEngine.audioGainLevel || 2.0;
-    InterviewEngine.gainNode = gainNode;
-
-    const analyser = InterviewEngine.audioContext.createAnalyser();
-    analyser.fftSize = 64;
-    InterviewEngine.analyserNode = analyser;
-
-    source.connect(gainNode);
-    gainNode.connect(analyser);
-
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    clearInterval(InterviewEngine.meterInterval);
-    InterviewEngine.meterInterval = setInterval(() => {
-      if (!InterviewEngine.isListening || !InterviewEngine.analyserNode) return;
-      analyser.getByteFrequencyData(dataArray);
-      let sum = 0;
-      for (let i = 0; i < dataArray.length; i++) {
-        sum += dataArray[i];
+    if (stream) {
+      InterviewEngine.mediaStream = stream;
+      InterviewEngine.audioContext = new AudioCtx();
+      if (InterviewEngine.audioContext.state === 'suspended') {
+        await InterviewEngine.audioContext.resume();
       }
-      const avg = sum / dataArray.length;
 
-      for (let i = 1; i <= 6; i++) {
-        const bar = document.getElementById(`iv-meter-${i}`);
-        if (bar) {
-          const binVal = dataArray[i * 3] || avg;
-          const h = Math.max(4, Math.min(22, Math.round((binVal / 255) * 22 * (InterviewEngine.audioGainLevel / 1.5))));
-          bar.style.height = `${h}px`;
-          bar.classList.add('active');
+      const source = InterviewEngine.audioContext.createMediaStreamSource(stream);
+      const gainNode = InterviewEngine.audioContext.createGain();
+      gainNode.gain.value = InterviewEngine.audioGainLevel || 2.0;
+      InterviewEngine.gainNode = gainNode;
+
+      const analyser = InterviewEngine.audioContext.createAnalyser();
+      analyser.fftSize = 64;
+      InterviewEngine.analyserNode = analyser;
+
+      source.connect(gainNode);
+      gainNode.connect(analyser);
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      clearInterval(InterviewEngine.meterInterval);
+      InterviewEngine.meterInterval = setInterval(() => {
+        if (!InterviewEngine.isListening || !InterviewEngine.analyserNode) return;
+        analyser.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
         }
-      }
-    }, 80);
+        const avg = sum / dataArray.length;
+
+        for (let i = 1; i <= 6; i++) {
+          const bar = document.getElementById(`iv-meter-${i}`);
+          if (bar) {
+            const binVal = dataArray[i * 3] || avg;
+            const h = Math.max(4, Math.min(22, Math.round((binVal / 255) * 22 * (InterviewEngine.audioGainLevel / 1.5))));
+            bar.style.height = `${h}px`;
+            bar.classList.toggle('active', binVal > 15);
+          }
+        }
+      }, 80);
+    }
   } catch (err) {
-    console.warn('Web Audio Booster setup fallback to simulation:', err);
-    clearInterval(InterviewEngine.meterInterval);
-    InterviewEngine.meterInterval = setInterval(() => {
-      for (let i = 1; i <= 6; i++) {
-        const bar = document.getElementById(`iv-meter-${i}`);
-        if (bar) {
-          const h = Math.floor(Math.random() * 16) + 4;
-          bar.style.height = `${h}px`;
-          bar.classList.add('active');
-        }
-      }
-    }, 120);
+    console.warn('Web Audio Booster setup fallback:', err);
   }
 }
 
@@ -18067,19 +18229,46 @@ function startInterviewListening() {
     updateInterviewTimerDisplay();
   }, 1000);
 
+  // 環境檢測：若為 file:// 協定提醒使用者
+  if (window.location && window.location.protocol === 'file:') {
+    showToast('⚠️ 瀏覽器麥克風與語音辨識需在 localhost 或 HTTPS 運行。目前為 file://，建議使用 local server 開啟，或點選下方「🚀 模擬提問」測試！', 'warning', 8000);
+  }
+
   // 啟動 Web Audio 增益音訊鏈結
   setupWebAudioBooster();
 
-  // 嘗試啟動語音辨識
+  // 嘗試啟動語音辨識 (Web Speech API)
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (SpeechRec && InterviewEngine.audioSource !== 'sim') {
     try {
+      if (InterviewEngine.recognition) {
+        try { InterviewEngine.recognition.stop(); } catch(e) {}
+      }
       const rec = new SpeechRec();
       rec.lang = 'ja-JP';
       rec.continuous = true;
       rec.interimResults = true;
+      rec.maxAlternatives = 1;
+
+      rec.onstart = () => {
+        InterviewEngine.isListening = true;
+        const ind = document.getElementById('iv-live-indicator');
+        if (ind) {
+          ind.textContent = '● 正在監聽收音中...';
+          ind.classList.add('listening');
+        }
+      };
+
+      rec.onspeechstart = () => {
+        animateMetersActive(true);
+      };
+
+      rec.onspeechend = () => {
+        animateMetersActive(false);
+      };
 
       rec.onresult = (event) => {
+        animateMetersActive(true);
         let interimTranscript = '';
         let finalChunk = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -18102,13 +18291,14 @@ function startInterviewListening() {
 
           if (InterviewEngine.silenceTimer) clearTimeout(InterviewEngine.silenceTimer);
 
-          const isQuestionMarker = /[?？]$|か$|ですか$|ますか$|でしょうか$|のか$|どうですか$|いかがですか$/i.test(InterviewEngine.speechBuffer);
-          const delay = isQuestionMarker ? 750 : 1300;
+          const isQ = isQuestionSentence(InterviewEngine.speechBuffer);
+          const delay = isQ ? 650 : 1200;
 
           InterviewEngine.silenceTimer = setTimeout(async () => {
             const fullUtterance = InterviewEngine.speechBuffer.trim();
             InterviewEngine.speechBuffer = '';
             InterviewEngine.activeInterimText = '';
+            animateMetersActive(false);
             if (fullUtterance.length >= 2) {
               await handleNewRecognizedUtterance(fullUtterance);
             }
@@ -18118,17 +18308,28 @@ function startInterviewListening() {
 
       rec.onerror = (e) => {
         console.warn('SpeechRecognition error:', e);
+        if (e.error === 'not-allowed') {
+          showToast('🎤 請在瀏覽器網址列左側允許「麥克風」存取權限！', 'error', 6000);
+        } else if (e.error === 'audio-capture') {
+          showToast('⚠️ 未偵測到麥克風音訊設備，請檢查設備是否被佔用', 'warning', 5000);
+        } else if (e.error === 'network') {
+          console.warn('語音辨識網路暫時斷線，正在自動重試...');
+        }
       };
 
       rec.onend = () => {
         if (InterviewEngine.isListening) {
-          try { rec.start(); } catch(err) {}
+          setTimeout(() => {
+            if (InterviewEngine.isListening && InterviewEngine.recognition) {
+              try { rec.start(); } catch(err) {}
+            }
+          }, 150);
         }
       };
 
       rec.start();
       InterviewEngine.recognition = rec;
-      showToast('已開啟擴音收音監聽！考官發言將即時聽譯並滾動留存', 'success');
+      showToast('已開啟擴音收音監聽！雙向日文對話將即時聽譯並滾動留存', 'success');
       return;
     } catch(err) {
       console.warn('SpeechRecognition start failed:', err);
@@ -18263,6 +18464,127 @@ function clearInterviewTranscript() {
   InterviewEngine.currentQuestionZh = '等待考官提問中...';
   renderDialogueHistory();
   showToast('已清空對話紀錄', 'info');
+}
+
+// 打開面試會議紀要彈窗
+function openInterviewSummaryModal() {
+  const countEl = document.getElementById('iv-summary-count');
+  if (countEl) countEl.textContent = String(InterviewEngine.dialogueHistory.length);
+  openModal('modal-interview-summary');
+}
+
+// 生成完整面試紀要與致謝信
+function generateInterviewSummary() {
+  const history = InterviewEngine.dialogueHistory;
+  const resultWrap = document.getElementById('iv-summary-result-wrap');
+  const emptyState = document.getElementById('iv-summary-empty-state');
+  const metaEl = document.getElementById('iv-summary-meta');
+  const qaEl = document.getElementById('iv-summary-qa-list');
+  const emailEl = document.getElementById('iv-summary-email');
+
+  if (!resultWrap || !emptyState || !metaEl || !qaEl || !emailEl) return;
+
+  const compName = InterviewEngine.companyName || 'THE ALPS HOTEL HAKUBA';
+  const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || compName + '様';
+  const roleName = InterviewEngine.role || 'レストランサービス';
+  const dateStr = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // 1. 基本資訊
+  metaEl.innerHTML = `
+    <div style="line-height:1.7; font-size:0.85rem; color:var(--ink);">
+      • <strong>面試日期</strong>：${dateStr}<br>
+      • <strong>應徵公司</strong>：${escapeHtml(compName)} (${escapeHtml(honorific)})<br>
+      • <strong>應徵職務</strong>：${escapeHtml(roleName)}<br>
+      • <strong>應試候選人</strong>：楊 詠筑（よう えいちく） / 成大中文（輔修建築）<br>
+      • <strong>累計對話發言</strong>：共 ${history.length} 則語句（含即時日翻中翻譯）
+    </div>
+  `;
+
+  // 2. 篩選提問與重點應答
+  const questions = history.filter(h => h.isQuestion || isQuestionSentence(h.jp));
+  let qaHtml = '';
+  if (questions.length > 0) {
+    questions.forEach((q, idx) => {
+      qaHtml += `
+        <div style="margin-bottom:10px; padding:10px 12px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+          <div style="font-weight:700; color:#0369a1; font-size:0.86rem; margin-bottom:4px;">
+            Q${idx + 1} (${escapeHtml(q.time)})：${escapeHtml(q.jp)}
+          </div>
+          <div style="font-size:0.82rem; color:#475569;">
+            ▎中文意涵：${escapeHtml(q.zh)}
+          </div>
+        </div>
+      `;
+    });
+  } else if (history.length > 0) {
+    qaHtml = `
+      <div style="font-size:0.84rem; color:#475569; line-height:1.6;">
+        本次面試對話共記錄 ${history.length} 句發言。未偵測到顯著疑問句型，但全數發言已完整收錄於主對話串流中。
+      </div>
+    `;
+  } else {
+    qaHtml = `
+      <div style="font-size:0.84rem; color:var(--muted); font-style:italic;">
+        暫無對話紀錄，面試開始後發言將自動彙整至此。
+      </div>
+    `;
+  }
+  qaEl.innerHTML = qaHtml;
+
+  // 3. 生成日文感謝信草稿 (お礼メール)
+  const emailDraft = `件名：面接のお礼（${roleName}応募）／楊 詠筑（よう えいちく）
+
+${honorific}
+採用ご担当者様
+
+拝啓
+
+貴社におかれましては、ますますご清栄のこととお慶び申し上げます。
+本日、${roleName}の面接の機会をいただきました、楊 詠筑（よう えいちく）と申します。
+
+本日はご多忙の折、貴重なお時間を割いていただき、誠にありがとうございました。
+
+面接を通じて、${compName}様の職場の温かい雰囲気や、チームでお客様をおもてなしされる姿勢について直接お話を伺うことができ、貴社で貢献したいという気持ちが一層強くなりました。
+
+私がこれまでに培ってきた現場での迅速な対応力や、笑顔を大切にしたコミュニケーションを活かし、チームの皆様と力を合わせて一日も早く戦力として貢献できるよう努めてまいります。
+
+略儀ではございますが、取り急ぎメールにて本日の面接のお礼を申し上げます。
+何卒よろしくお願い申し上げます。
+
+敬具
+
+--------------------------------------------------
+楊 詠筑（よう えいちく）
+TEL：080-2853-5431
+E-mail：d11014022@gmail.com
+在留資格：特定活動（ワーキングホリデー・2027年8月14日まで有効）
+--------------------------------------------------`;
+
+  emailEl.textContent = emailDraft;
+
+  // 顯示結果
+  emptyState.style.display = 'none';
+  resultWrap.style.display = 'block';
+  showToast('面試會議紀要與感謝信已生成！', 'success');
+}
+
+// 複製感謝信
+function copyThankYouEmail() {
+  const emailEl = document.getElementById('iv-summary-email');
+  if (!emailEl || !emailEl.textContent) return;
+  copyText(emailEl.textContent);
+  showToast('已複製面試感謝信 (お礼メール) 到剪貼簿！', 'success');
+}
+
+// 複製全部紀要
+function copyFullInterviewSummary() {
+  const metaEl = document.getElementById('iv-summary-meta');
+  const qaEl = document.getElementById('iv-summary-qa-list');
+  const emailEl = document.getElementById('iv-summary-email');
+  
+  const text = `【面試會議紀要】\n${metaEl ? metaEl.innerText : ''}\n\n【核心問答彙整】\n${qaEl ? qaEl.innerText : ''}\n\n【面試後感謝信草稿】\n${emailEl ? emailEl.textContent : ''}`;
+  copyText(text);
+  showToast('已複製完整面試會議紀要！', 'success');
 }
 
 // 求人票 PDF 拖曳/檔案上傳解析器
