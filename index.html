@@ -2503,6 +2503,22 @@
     flex: 1;
     overflow-y: auto;
   }
+  .iv-current-target-q-banner {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1.5px solid #f59e0b;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.12);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    animation: ivTargetFadeIn 0.3s ease-out;
+  }
+  @keyframes ivTargetFadeIn {
+    0% { opacity: 0; transform: translateY(-4px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
   .interview-answer-card {
     background: #fff;
     border: 1.5px solid var(--border);
@@ -17493,6 +17509,8 @@ const InterviewEngine = {
   speechBuffer: '',
   activeInterimText: '',
   silenceTimer: null,
+  lastFlushedText: '',
+  lastFlushedTime: 0,
   currentAnswers: null,
   
   // 候選人永久通用個人檔案 (固定資產)
@@ -17761,12 +17779,10 @@ function renderDialogueHistory() {
     const jpId = isActive ? 'id="iv-card-jp"' : '';
     const zhId = isActive ? 'id="iv-card-zh"' : '';
     const timeId = isActive ? 'id="iv-card-time"' : '';
-    const escapedJp = escapeHtml(item.jp).replace(/'/g, "\\'");
-    const escapedZh = escapeHtml(item.zh).replace(/'/g, "\\'");
 
     html += `
       <div class="interview-stream-card ${isActive ? 'active' : ''}" ${isCurrentRef} 
-           ondblclick="selectHistoricalQuestion('${escapedJp}', '${escapedZh}')" 
+           ondblclick="selectHistoricalQuestionByIndex(${index})" 
            style="cursor:pointer;" 
            title="💡 點兩下（雙擊）此句立即為您生成版本 A 與 B 推薦擬答">
         <div class="iv-card-header-row">
@@ -17776,7 +17792,7 @@ function renderDialogueHistory() {
           </div>
           <div style="display:flex; align-items:center; gap:6px;">
             <span class="iv-dblclick-hint">🖱️ 雙擊擬答</span>
-            <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('${escapedJp}', '${escapedZh}')" title="針對此句生成推薦回答">💡 依此句推薦回答</button>
+            <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestionByIndex(${index})" title="針對此句生成推薦回答">💡 依此句推薦回答</button>
           </div>
         </div>
         <div class="iv-card-jp" ${jpId}>${escapeHtml(item.jp)}</div>
@@ -17801,6 +17817,13 @@ function renderDialogueHistory() {
 
   box.innerHTML = html;
   box.scrollTop = box.scrollHeight;
+}
+
+// 依據索引安全選取歷史對話卡片（完全防範特殊引號跳脫異常）
+function selectHistoricalQuestionByIndex(index) {
+  const item = InterviewEngine.dialogueHistory[index];
+  if (!item) return;
+  selectHistoricalQuestion(item.jp, item.zh);
 }
 
 // 雙擊或點選歷史對話卡片：針對該句立即生成版本 A 與版本 B 擬答
@@ -17828,9 +17851,57 @@ function showAnswerLoadingShimmer(qText) {
   `;
 }
 
-// 25+ 主題智慧語意對策引擎 (涵蓋手機通話、在留期限、過敏、防寒、語學等真實面試情境)
+// 25+ 主題智慧語意對策引擎 (涵蓋年齡/生年月日、手機通話、在留期限、過敏、防寒、語學等真實面試情境)
 function matchSemanticCandidateAnswer(questionText, honorific) {
   const q = questionText.toLowerCase();
+
+  // 0. 年齢・何歳・生年月日・誕生日・生まれた年
+  if (/何歳|年齢|おいくつ|生年月日|生まれた|何年生まれ|何才|お幾つ|いつ生まれ|歳/.test(q)) {
+    return {
+      simple: {
+        ruby: '<ruby>今年<rt>ことし</rt></ruby>31<ruby>歳<rt>さい</rt></ruby>になります。1995<ruby>年<rt>ねん</rt></ruby>1<ruby>月<rt>がつ</rt></ruby>6<ruby>日<rt>にち</rt></ruby><ruby>生<rt>う</rt></ruby>まれです。<ruby>体力<rt>たいりょく</rt></ruby>にはとても<ruby>自信<rt>じしん</rt></ruby>があり、<ruby>毎日<rt>まいにち</rt></ruby><ruby>元気<rt>げんき</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>いております。',
+        raw: '今年31歳になります。1995年1月6日生まれです。体力にはとても自信があり、毎日元気に働いております。',
+        zh: '我今年 31 歲，1995年1月6日出生。體力非常好很有自信，每天都活力充沛地投入工作。'
+      },
+      story: {
+        ruby: '1995<ruby>年<rt>ねん</rt></ruby>1<ruby>月<rt>がつ</rt></ruby>6<ruby>日<rt>にち</rt></ruby><ruby>生<rt>う</rt></ruby>まれで、<ruby>現在<rt>げんざい</rt></ruby>31<ruby>歳<rt>さい</rt></ruby>です。<ruby>大学<rt>だいがく</rt></ruby><ruby>卒業<rt>そつぎょう</rt></ruby><ruby>後<rt>ご</rt></ruby>、<ruby>台湾<rt>たいわん</rt></ruby>での<ruby>声優<rt>せいゆう</rt></ruby>やサロン<ruby>接客<rt>せっきゃく</rt></ruby>の<ruby>社会<rt>しゃかい</rt></ruby><ruby>人<rt>じん</rt></ruby><ruby>経験<rt>けいけん</rt></ruby>を<ruby>経<rt>へ</rt></ruby>て、<ruby>現在<rt>げんざい</rt></ruby>は<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>で<ruby>毎日<rt>まいにち</rt></ruby><ruby>階段<rt>かいだん</rt></ruby>の<ruby>昇降<rt>しょうこう</rt></ruby>やお<ruby>盆<rt>ぼん</rt></ruby>の<ruby>運搬<rt>うんぱん</rt></ruby>で<ruby>足腰<rt>あしこし</rt></ruby>を<ruby>鍛<rt>きた</rt></ruby>えております。20<ruby>代<rt>だい</rt></ruby>の<ruby>頃<rt>ころ</rt></ruby>よりも<ruby>体力<rt>たいりょく</rt></ruby>と<ruby>柔軟<rt>じゅうなん</rt></ruby>な<ruby>適応<rt>てきおう</rt></ruby><ruby>力<rt>りょく</rt></ruby>があり、' + honorific + 'でもフルタイムで<ruby>貢献<rt>こうけん</rt></ruby>いたします。',
+        raw: '1995年1月6日生まれで、現在31歳です。大学卒業後、台湾での声優やサロン接客の社会人経験を経て、現在は黒川温泉で毎日階段の昇降やお盆の運搬で足腰を鍛えております。20代の頃よりも体力と柔軟な適応力があり、' + honorific + 'でもフルタイムで貢献いたします。',
+        zh: '我是 1995 年 1 月 6 日出生，目前 31 歲。大學畢業後歷練過配音與沙龍接待的社會人經驗，目前在黑川溫泉每天爬樓梯與搬運端盤，足腰體力鍛鍊得非常硬朗。比起二十出頭兼具更好的體力與成熟適應力，定能全力為貴飯店做出貢獻。'
+      }
+    };
+  }
+
+  // 0.1 自己紹介・名前・お名前・どちら様・出身
+  if (/自己紹介|名前|お名前|どちら様|誰|楊|出身|成大|大学/.test(q)) {
+    return {
+      simple: {
+        ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>成功大学<rt>せいこうだいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し、JLPT N2を<ruby>取得<rt>しゅとく</rt></ruby>しております。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日常<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        raw: '楊詠筑と申します。台湾の成功大学を卒業し、JLPT N2を取得しております。現在は熊本県の黒川温泉にある旅館のレストランで働いております。本日はよろしくお願いいたします。',
+        zh: '我叫楊詠筑。台灣成功大學畢業，持有 JLPT N2。目前在熊本縣黑川溫泉的旅館餐廳工作。今天請多多指教。'
+      },
+      story: {
+        ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>大学<rt>だいがく</rt></ruby>で<ruby>中国文学<rt>ちゅうごくぶんがく</rt></ruby>と<ruby>建築<rt>けんちく</rt></ruby>を<ruby>学<rt>まな</rt></ruby>び、<ruby>日本<rt>にほん</rt></ruby>の<ruby>木造<rt>もくぞう</rt></ruby><ruby>建築<rt>けんちく</rt></ruby>や<ruby>神社<rt>じんじゃ</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>に<ruby>魅了<rt>みりょう</rt></ruby>されてワーキングホリデーで<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の<ruby>旅館<rt>りょかん</rt></ruby>レストランで<ruby>朝夕<rt>あさゆう</rt></ruby>の<ruby>配膳<rt>はいぜん</rt></ruby>や<ruby>接客<rt>せっきゃく</rt></ruby>を<ruby>担当<rt>たんとう</rt></ruby>しております。<ruby>声優<rt>せいゆう</rt></ruby><ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かした<ruby>明<rt>あか</rt></ruby>るい<ruby>笑顔<rt>えがお</rt></ruby>とフットワークで、' + honorific + 'の<ruby>力<rt>ちから</rt></ruby>になりたいです。',
+        raw: '楊詠筑と申します。大学で中国文学と建築を学び、日本の木造建築や神社文化に魅了されてワーキングホリデーで来日いたしました。現在は黒川温泉の旅館レストランで朝夕の配膳や接客を担当しております。声優経験を活かした明るい笑顔とフットワークで、' + honorific + 'の力になりたいです。',
+        zh: '我叫楊詠筑。在大學主修中文、副修建築，深深著迷於日本木造建築與神社文化而來日。目前在黑川溫泉旅館餐廳負責朝夕餐配膳與接待。希望能發揮配音經驗培養的親切微笑與敏捷身手，全力為貴飯店貢獻！'
+      }
+    };
+  }
+
+  // 0.2 よろしく・挨拶・こんにちは・おはよう・お時間
+  if (/よろしく|お願い|挨拶|こんにちは|おはよう|お時間/.test(q)) {
+    return {
+      simple: {
+        ruby: '<ruby>本日常<rt>ほんじつ</rt></ruby>はお<ruby>忙<rt>いそが</rt></ruby>しい<ruby>中<rt>なか</rt></ruby>、<ruby>貴重<rt>きちょう</rt></ruby>なお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>誠<rt>まこと</rt></ruby>にありがとうございます。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        raw: '本日はお忙しい中、貴重なお時間をいただき誠にありがとうございます。どうぞよろしくお願いいたします。',
+        zh: '今天非常感謝您在百忙之中撥冗給我面試機會。請多多指教。'
+      },
+      story: {
+        ruby: '<ruby>本日常<rt>ほんじつ</rt></ruby>は<ruby>面接<rt>めんせつ</rt></ruby>のお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>心<rt>こころ</rt></ruby>より<ruby>感謝<rt>かんしゃ</rt></ruby>いたします。' + honorific + 'で<ruby>働<rt>はたら</rt></ruby>きたいという<ruby>強<rt>つよ</rt></ruby>い<ruby>気持<rt>きも</rt></ruby>ちを<ruby>持<rt>も</rt></ruby>って<ruby>臨<rt>のぞ</rt></ruby>ませていただきました。<ruby>私<rt>わたし</rt></ruby>の<ruby>熱意<rt>ねつい</rt></ruby>と<ruby>経験<rt>けいけん</rt></ruby>をしっかりお<ruby>伝<rt>つた</rt></ruby>えできればと<ruby>思<rt>おも</rt></ruby>います。よろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        raw: '本日は面接のお時間をいただき心より感謝いたします。' + honorific + 'で働きたいという強い気持ちを持って臨ませていただきました。私の熱意と経験をしっかりお伝えできればと思います。よろしくお願いいたします。',
+        zh: '衷心感謝今天給我面試的機會。我懷抱著非常想在貴飯店工作的強烈心願前來參加面試。希望能向您好好傳達我的熱忱與經歷，請多多指教！'
+      }
+    };
+  }
 
   // 1. 携帯・電話・SIM・連絡先
   if (/[携行]帯|電話|スマホ|sim|番号|連絡先|通話/.test(q)) {
@@ -18072,17 +18143,82 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 預設通用智慧合成回答
+  // 16. 体力・立ち仕事・重い・足腰
+  if (/体力|立ち仕事|重い|重いもの|足腰|疲れる|ハード|運動/.test(q)) {
+    return {
+      simple: {
+        ruby: 'はい、<ruby>体力<rt>たいりょく</rt></ruby>と<ruby>足腰<rt>あしこし</rt></ruby>にはとても<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でも<ruby>毎日<rt>まいにち</rt></ruby>の<ruby>立<rt>た</rt></ruby>ち<ruby>仕事<rt>しごと</rt></ruby>や<ruby>重<rt>おも</rt></ruby>いお<ruby>膳<rt>ぜん</rt></ruby>の<ruby>運搬<rt>うんぱん</rt></ruby>を<ruby>無遅刻<rt>むちこく</rt></ruby>・<ruby>無欠勤<rt>むけっきん</rt></ruby>でこなしております。',
+        raw: 'はい、体力と足腰にはとても自信があります。黒川温泉でも毎日の立ち仕事や重いお膳の運搬を無遅刻・無欠勤でこなしております。',
+        zh: '是的，我對自己的體力與足腰非常有自信。在黑川溫泉每天長時間站立工作與搬運重托盤，也始終保持全勤無遲到。'
+      },
+      story: {
+        ruby: 'はい、<ruby>体力<rt>たいりょく</rt></ruby>には<ruby>大<rt>おお</rt></ruby>いに<ruby>自信<rt>じしん</rt></ruby>があります。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>では<ruby>毎日<rt>まいにち</rt></ruby><ruby>階段<rt>かいだん</rt></ruby>を<ruby>何十<rt>なんじゅう</rt></ruby><ruby>往復<rt>おうふく</rt></ruby>もしながらお<ruby>料理<rt>りょうり</rt></ruby>やお<ruby>皿<rt>さら</rt></ruby>をテキパキ<ruby>運<rt>はこ</rt></ruby>んでおります。また<ruby>休日<rt>きゅうじつ</rt></ruby>の<ruby>神社<rt>じんじゃ</rt></ruby><ruby>巡<rt>めぐ</rt></ruby>りでも1<ruby>日<rt>にち</rt></ruby>2<ruby>万<rt>まん</rt></ruby><ruby>歩<rt>ぽ</rt></ruby><ruby>以上<rt>いじょう</rt></ruby><ruby>歩<rt>ある</rt></ruby>くフットワークがありますので、' + honorific + 'のピーク<ruby>時<rt>じ</rt></ruby>でも<ruby>最後<rt>さいご</rt></ruby>まで<ruby>笑顔<rt>えがお</rt></ruby>で<ruby>元氣<rt>げんき</rt></ruby>に<ruby>動<rt>うご</rt></ruby>けます！',
+        raw: 'はい、体力には大いに自信があります。黒川温泉の現場では毎日階段を何十往復もしながらお料理やお皿をテキパキ運んでおります。また休日の神社巡りでも1日2万歩以上歩くフットワークがありますので、' + honorific + 'のピーク時でも最後まで笑顔で元気に動けます！',
+        zh: '是的，我對體力非常有自信！黑川溫泉現場每天要上下樓梯幾十趟搬運餐盤，我都手腳俐落地完成。休假走訪神社我也常日行兩萬步以上，即使在貴飯店的尖峰繁忙期，我也能始終保持笑容與滿滿活力！'
+      }
+    };
+  }
+
+  // 17. 家族・両親・親・反対・応援
+  if (/家族|両親|親|反対|応援/.test(q)) {
+    return {
+      simple: {
+        ruby: 'はい、<ruby>家族<rt>かぞく</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>でのワーキングホリデーや<ruby>新<rt>あたら</rt></ruby>しい<ruby>挑戦<rt>ちょうせん</rt></ruby>を<ruby>温<rt>あたた</rt></ruby>かく<ruby>応援<rt>おうえん</rt></ruby>してくれております。',
+        raw: 'はい、家族や両親も日本でのワーキングホリデーや新しい挑戦を温かく応援してくれております。',
+        zh: '是的，家人與父母也非常溫暖支持我來日本打工度假以及接受新的挑戰。'
+      },
+      story: {
+        ruby: 'はい、<ruby>両親<rt>りょうしん</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>の<ruby>自立<rt>じりつ</rt></ruby><ruby>心<rt>しん</rt></ruby>を<ruby>信<rt>しん</rt></ruby>じて、<ruby>日本<rt>にほん</rt></ruby>での<ruby>就労<rt>しゅうろう</rt></ruby>をとても<ruby>応援<rt>おうえん</rt></ruby>してくれております。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>家族<rt>かぞく</rt></ruby>とは<ruby>日頃<rt>ひごろ</rt></ruby>からLINEでまめに<ruby>連絡<rt>れんらく</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>合<rt>あ</rt></ruby>っており、<ruby>何<rt>なに</rt></ruby>の<ruby>心配<rt>しんぱい</rt></ruby>もなく' + honorific + 'での<ruby>業務<rt>ぎょうむ</rt></ruby>に100％<ruby>専念<rt>せんねん</rt></ruby>できます。',
+        raw: 'はい、両親は私の自立心を信じて、日本での就労をとても応援してくれております。台湾の家族とは日頃からLINEでまめに連絡を取り合っており、何の心配もなく' + honorific + 'での業務に100％専念できます。',
+        zh: '是的，父母很信任我的獨立性，非常支持我在日本工作。我平時常和台灣家人用 LINE 保持聯繫，毫無後顧之憂，能百分之百全心投入在貴飯店的工作。'
+      }
+    };
+  }
+
+  // 18. 運転・免許・車
+  if (/運転|免許|車/.test(q)) {
+    return {
+      simple: {
+        ruby: '<ruby>車<rt>くるま</rt></ruby>の<ruby>運転<rt>うんてん</rt></ruby><ruby>免許<rt>めんきょ</rt></ruby>は<ruby>持<rt>も</rt></ruby>っておりませんが、<ruby>徒歩<rt>とほ</rt></ruby>や<ruby>公共<rt>こうきょう</rt></ruby><ruby>交通<rt>こうつう</rt></ruby>、<ruby>送迎<rt>そうげい</rt></ruby>などを<ruby>利用<rt>りよう</rt></ruby>して<ruby>通勤<rt>つうきん</rt></ruby>や<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>支障<rt>ししょう</rt></ruby>がないよう<ruby>準備<rt>じゅんび</rt></ruby>しております。',
+        raw: '車の運転免許は持っておりませんが、徒歩や公共交通、送迎などを利用して通勤や生活に支障がないよう準備しております。',
+        zh: '我沒有自用車駕照，但會利用步行、公共交通工具或接駁車等方式，妥善規劃生活與通勤，絕不會影響出勤。'
+      },
+      story: {
+        ruby: '<ruby>運転<rt>うんてん</rt></ruby><ruby>免許<rt>めんきょ</rt></ruby>は<ruby>所持<rt>しょじ</rt></ruby>しておりませんが、<ruby>寮<rt>りょう</rt></ruby>から<ruby>職場<rt>しょくば</rt></ruby>への<ruby>徒歩<rt>とほ</rt></ruby><ruby>移動<rt>いどう</rt></ruby>や<ruby>雪道<rt>ゆきみち</rt></ruby>での<ruby>歩行<rt>ほこう</rt></ruby><ruby>対策<rt>たいさく</rt></ruby>（スノーブーツ等）もしっかり<ruby>整<rt>ととの</rt></ruby>えております。<ruby>現在<rt>げんざい</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でも<ruby>徒歩<rt>とほ</rt></ruby>で<ruby>毎日<rt>まいにち</rt></ruby><ruby>通勤<rt>つうきん</rt></ruby>しており、<ruby>全<rt>まった</rt></ruby>く<ruby>問題<rt>もんだい</rt></ruby>ございません。',
+        raw: '運転免許は所持しておりませんが、寮から職場への徒歩移動や雪道での歩行対策（スノーブーツ等）もしっかり整えております。現在の黒川温泉でも徒歩で毎日通勤しており、全く問題ございません。',
+        zh: '我雖然沒有駕照，但從宿舍到職場的步行移動與雪地防滑措施（雪靴等）都已準備齊全。目前在黑川溫泉也是每天走路上下班，完全沒有問題。'
+      }
+    };
+  }
+
+  // 19. 短所・弱み・苦手
+  if (/短所|弱み|失敗|苦手/.test(q)) {
+    return {
+      simple: {
+        ruby: '<ruby>私<rt>わたし</rt></ruby>の<ruby>短所<rt>たんしょ</rt></ruby>は<ruby>慎重<rt>しんちょう</rt></ruby>になりすぎることですが、常に「<ruby>報連相<rt>ほうれんそう</rt></ruby>」を<ruby>徹底<rt>てってい</rt></ruby>し、<ruby>素早<rt>すばや</rt></ruby>く<ruby>確認<rt>かくにん</rt></ruby>して<ruby>進<rt>すす</rt></ruby>めるよう<ruby>心<rt>こころ</rt></ruby>がけております。',
+        raw: '私の短所は慎重になりすぎることですが、常に「報連相」を徹底し、素早く確認して進めるよう心がけております。',
+        zh: '我的缺點是有時會過度謹慎，但我會時常徹底落實「報連相」，主動迅速確認後再推進工作。'
+      },
+      story: {
+        ruby: '<ruby>責任感<rt>せきにんかん</rt></ruby>から<ruby>一人<rt>ひとり</rt></ruby>で<ruby>慎重<rt>しんちょう</rt></ruby>に<ruby>抱<rt>かか</rt></ruby>え<ruby>込<rt>こ</rt></ruby>みそうになることがありましたが、<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でのチームワークを<ruby>通<rt>とお</rt></ruby>じて「<ruby>迷<rt>まよ</rt></ruby>ったらすぐに<ruby>先輩<rt>せんぱい</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>する」ことの<ruby>大切<rt>たいせつ</rt></ruby>さを<ruby>学<rt>まな</rt></ruby>びました。<ruby>今<rt>いま</rt></ruby>ではテキパキと<ruby>周囲<rt>しゅうい</rt></ruby>とコミュニケーションを<ruby>取<rt>と</rt></ruby>りながら<ruby>克服<rt>こくふく</rt></ruby>しております。',
+        raw: '責任感から一人で慎重に抱え込みそうになることがありましたが、黒川温泉でのチームワークを通じて「迷ったらすぐに先輩に相談する」ことの大切さを学びました。今ではテキパキと周囲とコミュニケーションを取りながら克服しております。',
+        zh: '以往曾因為責任心強而想一個人謹慎承擔，但在黑川溫泉團隊協作中深刻體會到「一有疑問立刻向主管前輩報連相」的重要性。現在我已能手腳俐落地與周遭保持密切溝通並克服這個缺點。'
+      }
+    };
+  }
+
+  // 預設通用智慧合成回答 (動態帶入考官提問，確保即便 fallback 也完全客製化)
+  const safeQ = questionText ? questionText.slice(0, 30) : '考官提問';
   return {
     simple: {
-      ruby: 'はい、ご<ruby>質問<rt>しつもん</rt></ruby>ありがとうございます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でのレストラン<ruby>実務<rt>じつむ</rt></ruby><ruby>経験<rt>けいけん</rt></ruby>とチームワークを<ruby>活<rt>い</rt></ruby>かし、' + honorific + 'でも<ruby>迅速<rt>じんそく</rt></ruby>かつ<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>貢献<rt>こうけん</rt></ruby>いたします。',
-      raw: 'はい、ご質問ありがとうございます。黒川温泉でのレストラン実務経験とチームワークを活かし、' + honorific + 'でも迅速かつ前向きに貢献いたします。',
-      zh: '是的，謝謝您的提問。我會活用在黑川溫泉累積的餐飲實務經驗與團隊協作力，在貴飯店迅速且積極正面地做出貢獻。'
+      ruby: 'はい、「' + escapeHtml(safeQ) + '」についてのご<ruby>質問<rt>しつもん</rt></ruby>ありがとうございます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でのレストラン<ruby>実務<rt>じつむ</rt></ruby><ruby>経験<rt>けいけん</rt></ruby>とチームワークを<ruby>活<rt>い</rt></ruby>かし、' + honorific + 'でも<ruby>迅速<rt>じんそく</rt></ruby>かつ<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>貢献<rt>こうけん</rt></ruby>いたします。',
+      raw: 'はい、「' + safeQ + '」についてのご質問ありがとうございます。黒川温泉でのレストラン実務経験とチームワークを活かし、' + honorific + 'でも迅速かつ前向きに貢献いたします。',
+      zh: '是的，關於「' + safeQ + '」非常感謝您的提問。我會活用在黑川溫泉累積的餐飲實務經驗與團隊協作力，在貴飯店迅速且積極正面地做出貢獻。'
     },
     story: {
-      ruby: '<ruby>大学<rt>だいがく</rt></ruby>で<ruby>建築<rt>けんちく</rt></ruby>を<ruby>学<rt>まな</rt></ruby>び、<ruby>日本<rt>にほん</rt></ruby>の<ruby>木造<rt>もくぞう</rt></ruby><ruby>建築<rt>けんちく</rt></ruby>や<ruby>神社<rt>じんじゃ</rt></ruby><ruby>巡<rt>めぐ</rt></ruby>り（7<ruby>冊<rt>さつ</rt></ruby>の<ruby>御朱印<rt>ごしゅいん</rt></ruby>）が<ruby>大好<rt>だいす</rt></ruby>きで<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>で<ruby>鍛<rt>きた</rt></ruby>えたピーク<ruby>時<rt>じ</rt></ruby>のスピード<ruby>感<rt>かん</rt></ruby>と、どんな<ruby>場所<rt>ばしょ</rt></ruby>でも<ruby>明<rt>あか</rt></ruby>るく<ruby>適応<rt>てきおう</rt></ruby>できるフットワークで、' + honorific + 'の<ruby>力<rt>ちから</rt></ruby>になります！',
-      raw: '大学で建築を学び、日本の木造建築や神社巡り（7冊の御朱印）が大好きで来日いたしました。黒川温泉で鍛えたピーク時のスピード感と、どんな場所でも明るく適応できるフットワークで、' + honorific + 'の力になります！',
-      zh: '我在大學學習建築，熱愛日本木造建築與走訪神社（已收集7本御朱印）而來日。在黑川溫泉磨練出的尖峰俐落速度，加上無論何處都能開朗適應的靈活身手，定能為貴飯店竭誠效力！'
+      ruby: 'ご<ruby>質問<rt>しつもん</rt></ruby>いただきありがとうございます。<ruby>私<rt>わたし</rt></ruby>は<ruby>新<rt>あたら</rt></ruby>しい<ruby>環境<rt>かんきょう</rt></ruby>やどんなお<ruby>仕事<rt>しごと</rt></ruby>にも<ruby>素早<rt>すばや</rt></ruby>く<ruby>馴染<rt>なじ</rt></ruby>める「<ruby>適応<rt>てきおう</rt></ruby><ruby>力<rt>りょく</rt></ruby>」と、<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>ったピーク<ruby>時<rt>じ</rt></ruby>の「スピード<ruby>感<rt>かん</rt></ruby>」が<ruby>武器<rt>ぶき</rt></ruby>です。' + honorific + 'でもお<ruby>客様<rt>きゃくさま</rt></ruby>やスタッフの<ruby>皆様<rt>みなさま</rt></ruby>に<ruby>明<rt>あか</rt></ruby>るい<ruby>笑顔<rt>えがお</rt></ruby>をお<ruby>届<rt>とど</rt></ruby>けしながら、テキパキと<ruby>動<rt>うご</rt></ruby>いてチームを<ruby>支<rt>ささ</rt></ruby>えます！',
+      raw: 'ご質問いただきありがとうございます。私は新しい環境やどんなお仕事にも素早く馴染める「適応力」と、黒川温泉で培ったピーク時の「スピード感」が武器です。' + honorific + 'でもお客様やスタッフの皆様に明るい笑顔をお届けしながら、テキパキと動いてチームを支えます！',
+      zh: '非常感謝您的提問。我的強項在於能迅速融入任何新環境的「高適應力」，以及在黑川溫泉磨練出的尖峰「敏捷節奏」。在貴飯店我也會帶著親切微笑迎接每位客人與同仁，手腳俐落地支援整個團隊！'
     }
   };
 }
@@ -18110,48 +18246,31 @@ async function generateDynamicInterviewAnswers(questionText) {
     };
   }
 
-  // 2. 檢測是否有設定 Gemini API Key
-  const apiKey = localStorage.getItem('gemini_api_key') || (window.AppData && window.AppData.geminiApiKey) || '';
-  if (apiKey) {
-    try {
-      const prompt = `你是台灣求職者「楊詠筑」（女性，成大中文輔建築，JLPT N2，聲音清晰親切如聲優，持有可通話日本手機門號 080-2853-5431，持有打工度假特定活動簽證至2027年8月14日，熊本黑川溫泉優彩餐廳現場備料補菜經驗，熱愛木造建築與神社收集7本御朱印，甲殼類過敏，希望單人房）的日文線上面試即時應答軍師。
+  // 2. 嘗試調用 Gemini API (使用專案統一之 callGeminiApiUnified，具備模型自動容錯與金鑰管理)
+  try {
+    const prompt = `你是台灣求職者「楊詠筑」（女性，1995年1月6日生，31歲，成大中文輔建築，JLPT N2，聲音清晰親切如聲優，持有可通話日本手機門號 080-2853-5431，持有打工度假特定活動簽證至2027年8月14日，目前在熊本黑川溫泉優彩旅館餐廳負責外場配膳出餐補菜與清潔，熱愛木造建築與神社收集7本御朱印，甲殻類過敏，希望單人房）的日文線上面試即時應答軍師。
 當前面試官提問：「${questionText}」。應徵公司：${InterviewEngine.companyName} (${honorific})，應徵職種：${InterviewEngine.role}。
-請針對該具體問題，生成兩個版本回答：
-版本 A (simple): 簡單俐落版（約15秒，不易打結）
+請針對該具體問題，生成兩個版本日文應答：
+版本 A (simple): 簡單俐落版（約15秒，文法直接不易打結）
 版本 B (story): 豐富故事版（約35秒，展現個人優勢與真誠經歷）
-請務必輸出標準 JSON 格式（日文部分漢字須標註 <ruby>漢字<rt>よみ</rt></ruby>）：
+請務必輸出標準 JSON 格式（日文部分漢字須標註 HTML <ruby>漢字<rt>よみ</rt></ruby> 標籤）：
 {
   "simple": { "ruby": "HTML含ruby標籤", "raw": "純日文無HTML標籤", "zh": "繁體中文翻譯" },
   "story": { "ruby": "HTML含ruby標籤", "raw": "純日文無HTML標籤", "zh": "繁體中文翻譯" }
 }`;
-      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: 'application/json' }
-        })
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          const parsed = JSON.parse(text);
-          if (parsed.simple && parsed.story) {
-            return parsed;
-          }
-        }
-      }
-    } catch (e) {
-      console.warn('Gemini API dynamic generation fallback:', e);
+    const parsed = await callGeminiApiUnified(prompt);
+    if (parsed && parsed.simple && parsed.story && parsed.simple.ruby && parsed.story.ruby) {
+      return parsed;
     }
+  } catch (e) {
+    console.warn('Gemini API dynamic generation fallback to semantic engine:', e);
   }
 
   // 3. 使用強效語意引擎快速生成
   return matchSemanticCandidateAnswer(questionText, honorific);
 }
 
-// 渲染回答卡片
+// 渲染回答卡片 (頂部具備當前鎖定考官題目橫幅與雙版本擬答)
 function renderCurrentAnswers() {
   const container = document.getElementById('interview-answers-container');
   if (!container) return;
@@ -18168,7 +18287,23 @@ function renderCurrentAnswers() {
   let storyRaw = ans.story.raw;
   let storyZh = ans.story.zh;
 
+  const targetJp = InterviewEngine.currentQuestion || '考官提問';
+  const targetZh = InterviewEngine.currentQuestionZh || '';
+
   container.innerHTML = `
+    <!-- 當前鎖定目標考官問題提示橫幅 -->
+    <div class="iv-current-target-q-banner" style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1.5px solid #f59e0b; border-radius:10px; padding:12px 14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(245, 158, 11, 0.12); display:flex; align-items:flex-start; gap:10px; animation:ivFadeIn 0.3s ease-out;">
+      <span style="font-size:1.4rem; line-height:1; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1));">🎯</span>
+      <div style="flex:1; min-width:0;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
+          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">當前針對考官題目生成專屬擬答</span>
+          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">即時專屬應答</span>
+        </div>
+        <div style="font-size:1rem; font-weight:800; color:#1e293b; line-height:1.4; word-break:break-word;">${escapeHtml(targetJp)}</div>
+        ${targetZh ? `<div style="font-size:0.85rem; color:#64748b; margin-top:2px;">▎${escapeHtml(targetZh)}</div>` : ''}
+      </div>
+    </div>
+
     <!-- 卡片 1：版本 A 簡單俐落版 -->
     <div class="interview-answer-card">
       <div class="iv-ans-header">
@@ -18258,7 +18393,7 @@ function animateMetersActive(isActive) {
   }
 }
 
-// 即時收音暫存沉澱為正式發言 (避免臨時語音停留未沉澱)
+// 即時收音暫存沉澱為正式發言 (具備時間窗與重複內容防護，避免同一句重複沉澱)
 function flushActiveInterimToHistory() {
   if (InterviewEngine.silenceTimer) {
     clearTimeout(InterviewEngine.silenceTimer);
@@ -18269,14 +18404,24 @@ function flushActiveInterimToHistory() {
   InterviewEngine.activeInterimText = '';
   animateMetersActive(false);
 
-  if (textToFlush.length >= 2) {
-    handleNewRecognizedUtterance(textToFlush);
-  } else {
+  if (!textToFlush || textToFlush.length < 2) {
     renderDialogueHistory();
+    return;
   }
+
+  const now = Date.now();
+  // 第 1 重防護：若此句與 4 秒內剛沉澱的內容完全相同，直接略過
+  if (textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000) {
+    renderDialogueHistory();
+    return;
+  }
+
+  InterviewEngine.lastFlushedText = textToFlush;
+  InterviewEngine.lastFlushedTime = now;
+  handleNewRecognizedUtterance(textToFlush);
 }
 
-// 處理新辨識出的對話語句 (加入累積串流、翻譯並沉澱，不自動覆蓋右側回答)
+// 處理新辨識出的對話語句 (加入累積串流、翻譯並沉澱，第 3 重對話歷史去重與延伸就地升級)
 async function handleNewRecognizedUtterance(qJp) {
   if (!qJp || qJp.trim().length < 2) return;
   const cleanQ = qJp.trim();
@@ -18284,6 +18429,41 @@ async function handleNewRecognizedUtterance(qJp) {
   // 若純粹是過短單一語助詞，不單獨成行
   if (/^(えっと|あのー|あの|ええと)$/.test(cleanQ)) {
     return;
+  }
+
+  // 第 3 重防護：與歷史紀錄最後一句進行比對
+  if (InterviewEngine.dialogueHistory && InterviewEngine.dialogueHistory.length > 0) {
+    const lastItem = InterviewEngine.dialogueHistory[InterviewEngine.dialogueHistory.length - 1];
+    const normClean = cleanQ.replace(/[\s\u3000。、？！?!]/g, '');
+    const normLast = (lastItem.jp || '').replace(/[\s\u3000。、？！?!]/g, '');
+    const now = Date.now();
+
+    // 1. 完全相同（含忽略標點後相同），直接視為重複辨識，略過
+    if (normClean === normLast) {
+      return;
+    }
+
+    // 2. 新句是上一句的後續延伸（例如 interim 剛沉澱「今日は」，隨後 final 辨識出完整句「今日はよろしくお願いします」）
+    // 且時間在 5 秒內 -> 直接升級更新上一張卡片，不拆分成兩張重複卡片！
+    if (normClean.startsWith(normLast) && normLast.length >= 2 && (now - (lastItem.timestamp || 0)) < 5000) {
+      lastItem.jp = cleanQ;
+      lastItem.isQuestion = isQuestionSentence(cleanQ);
+      lastItem.timestamp = now;
+      // 異步更新中文翻譯
+      fetchFreeGoogleTranslate(cleanQ, 'zh-TW').then(newZh => {
+        if (newZh) {
+          lastItem.zh = newZh;
+          renderDialogueHistory();
+        }
+      }).catch(() => {});
+      renderDialogueHistory();
+      return;
+    }
+
+    // 3. 上一句已經完整包含新句（新句為上一句之子字串，常見於語音切片斷句延遲）-> 略過
+    if (normLast.startsWith(normClean) && normClean.length >= 2) {
+      return;
+    }
   }
 
   // 取得中文翻譯 (優先查庫，其次透過 Google 翻譯 API)
@@ -18314,6 +18494,7 @@ async function handleNewRecognizedUtterance(qJp) {
   // 加入歷史對話 (純淨 Transync AI 雙向對話紀錄，向下連續累積)
   InterviewEngine.dialogueHistory.push({
     id: 'dh-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+    timestamp: Date.now(),
     time: timeStr,
     jp: cleanQ,
     zh: qZh,
@@ -18506,7 +18687,13 @@ function startInterviewListening() {
         }
 
         if (finalChunk) {
-          InterviewEngine.speechBuffer = (InterviewEngine.speechBuffer + ' ' + finalChunk).trim();
+          const trimmedFinal = finalChunk.trim();
+          const now = Date.now();
+          // 第 2 重防護：若此 finalChunk 與剛剛 4 秒內沉澱的內容完全相同，不重覆累加至 speechBuffer
+          const isDup = (trimmedFinal === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000);
+          if (!isDup) {
+            InterviewEngine.speechBuffer = (InterviewEngine.speechBuffer + ' ' + trimmedFinal).trim();
+          }
         }
 
         const liveText = (InterviewEngine.speechBuffer + ' ' + interimTranscript).trim();

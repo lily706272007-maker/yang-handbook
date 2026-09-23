@@ -505,7 +505,7 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v101'), 'Service Worker 快取版本已升級至 yang-pwa-v101');
+assert(swContent.includes('yang-pwa-v101') || swContent.includes('yang-pwa-v102'), 'Service Worker 快取版本已升級至 yang-pwa-v101 或以上');
 assert(html.includes('yang_runner_handbook_v101'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v101');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
@@ -1042,6 +1042,49 @@ const mockMetaKeys = ['ja', 'ne', 'my', 'vi', 'en', 'ko'];
 assert(mockSelectedLangs.every(l => mockMetaKeys.includes(l)), '已選語言清單結構正確符合支援代碼');
 assert(html.includes('已複製所選') && html.includes('國語言翻譯文字'), '一鍵複製按鈕動態呈現實際勾選複製語言數量');
 
+// 測試 58: 語音三層防重複去重機制、年齡/生年月日擬答精準匹配與鎖定題目橫幅 (v148)
+console.log('\n【測試 58：語音三層防重複去重機制、年齡/生年月日擬答精準匹配與鎖定題目橫幅 (v148)】');
+assert(html.includes('lastFlushedText:') && html.includes('lastFlushedTime:'), 'InterviewEngine 具備 lastFlushedText 與 lastFlushedTime 狀態紀錄');
+assert(html.includes('textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000'), 'flushActiveInterimToHistory 具備 4 秒同句沉澱去重防護 (第 1 重)');
+assert(html.includes('trimmedFinal === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000'), 'rec.onresult finalChunk 具備已沉澱防重複累加防護 (第 2 重)');
+assert(html.includes('normClean === normLast') && html.includes('normClean.startsWith(normLast)'), 'handleNewRecognizedUtterance 具備歷史去重與 5 秒前綴就地延伸升級 (第 3 重)');
+assert(html.includes('function selectHistoricalQuestionByIndex(index)'), '具備安全索引對話卡片選取函式 selectHistoricalQuestionByIndex，杜絕引號跳脫異常');
+assert(html.includes('ondblclick="selectHistoricalQuestionByIndex(${index})"'), '對話歷史卡片雙擊與按鈕改以索引精確觸發擬答');
+assert(html.includes('iv-current-target-q-banner'), '右側擬答頂部包含當前鎖定考官題目橫幅 (iv-current-target-q-banner)');
+assert(html.includes('callGeminiApiUnified(prompt)'), 'generateDynamicInterviewAnswers 改採專案統一 callGeminiApiUnified，具備多模型輪換與正確 Key 管理');
+
+// 抽取 matchSemanticCandidateAnswer 進行純函數語意匹配驗證
+const semanticFuncMatch = html.match(/function matchSemanticCandidateAnswer\(questionText, honorific\) \{[\s\S]*?\n\}(?=\s*\n\s*\/\/\s*動態產生專屬回答)/);
+assert(semanticFuncMatch, '成功抽取 matchSemanticCandidateAnswer 執行體');
+if (semanticFuncMatch) {
+  // 注入 escapeHtml 輔助
+  const evalSemantic = new Function(`
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    ${semanticFuncMatch[0]};
+    return matchSemanticCandidateAnswer;
+  `)();
+
+  const ageAns1 = evalSemantic('今何歳ですか', 'アルプスホテル白馬様');
+  assert(ageAns1.simple.raw.includes('31歳') && ageAns1.simple.raw.includes('1995年1月6日'), '今何歳ですか：版本 A 包含 31 歲與 1995年1月6日出生');
+  assert(ageAns1.story.raw.includes('31歳') && ageAns1.story.raw.includes('黒川温泉'), '今何歳ですか：版本 B 包含 31 歲、黑川溫泉足腰體力優勢');
+  assert(ageAns1.simple.zh.includes('31 歲'), '今何歳ですか：中文翻譯包含 31 歲');
+
+  const ageAns2 = evalSemantic('おいくつですか？', '御社');
+  assert(ageAns2.simple.raw.includes('31歳'), 'おいくつですか：成功匹配年齡應答');
+
+  const ageAns3 = evalSemantic('生年月日を教えてください', '御社');
+  assert(ageAns3.simple.raw.includes('1995年1月6日'), '生年月日を教えてください：成功匹配生年月日應答');
+
+  const strengthAns = evalSemantic('体力に自信はありますか？', '御社');
+  assert(strengthAns.simple.raw.includes('体力') && strengthAns.simple.raw.includes('黒川温泉'), '体力に自信はありますか：成功匹配體力與黑川溫泉經驗');
+
+  const familyAns = evalSemantic('ご家族は日本での就労を応援していますか？', '御社');
+  assert(familyAns.simple.raw.includes('家族') || familyAns.simple.raw.includes('両親'), '家族提問：成功匹配雙親支持應答');
+
+  const fallbackAns = evalSemantic('お気に入りの映画は何ですか？', '御社');
+  assert(fallbackAns.simple.raw.includes('お気に入りの映画は何ですか？') || fallbackAns.simple.ruby.includes('お気に入りの映画は何ですか？'), '未預期提問：動態置入考官提問文字，確保非靜態死板內容');
+}
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1049,7 +1092,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v147) 六國翻譯自選 1~6 國語言勾選框與按需提速直譯全面上線！');
+  console.log('🎉 所有測試通過！(v148) 語音三層防重複去重機制、年齡/生年月日擬答精準匹配與鎖定題目橫幅全面上線！');
 }
 
 
