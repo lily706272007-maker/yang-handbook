@@ -1111,6 +1111,19 @@ assert(html.includes('function clearInterviewTranscript()') &&
        html.includes('archiveCurrentInterviewSession(false)') && 
        html.includes('currentAnswers = null'), 'clearInterviewTranscript 在清空前先自動留存歷史，並徹底清空當前狀態與擬答');
 
+// 測試 60: 面試雙版本回答重塑為「日文簡單版 (N4 程度)」與「日文禮貌版 (N2 程度)」(v150)
+console.log('\n【測試 60：面試雙版本回答重塑為「日文簡單版 (N4 程度)」與「日文禮貌版 (N2 程度)」(v150)】');
+assert(html.includes('日文簡單版 N4 ＆ 日文禮貌版 N2'), '右欄頂部標題標示「日文簡單版 N4 ＆ 日文禮貌版 N2」');
+assert(html.includes('版本 A：日文簡單版 (N4 程度)'), '卡片 1 徽章明確標註「版本 A：日文簡單版 (N4 程度)」');
+assert(html.includes('版本 B：日文禮貌版 (N2 程度)'), '卡片 2 徽章明確標註「版本 B：日文禮貌版 (N2 程度)」');
+assert(html.includes('N4 文法・緊張不打結・好記安心說'), '版本 A 副標籤提示說明「N4 文法・緊張不打結・好記安心說」');
+assert(html.includes('N2 敬語・商務得體・展現日語實力'), '版本 B 副標籤提示說明「N2 敬語・商務得體・展現日語實力」');
+assert(html.includes('N4簡單 / N2禮貌'), '當前鎖定目標題目橫幅徽章標註「N4簡單 / N2禮貌」');
+assert(html.includes('版本 A (日文簡單版 N4)') && html.includes('版本 B (日文禮貌版 N2)'), '等待考官提問卡片引導說明提及版本 A (N4) 與版本 B (N2)');
+assert(html.includes('約 N4 程度。文法單純直接、短句好記、以基礎丁寧語 です/ます 表達'), 'Gemini API 提示詞嚴格要求生成 N4 簡單直接短句');
+assert(html.includes('約 N2 程度。使用高級商務敬語、謙讓語 いたします/存じます、連接詞與得體句型'), 'Gemini API 提示詞嚴格要求生成 N2 高級敬語禮貌長句');
+assert(html.includes('軍師已生成 N4簡單版 與 N2禮貌版 擬答！'), '選取歷史問題後吐司訊息提示已生成 N4簡單版 與 N2禮貌版 擬答');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1118,7 +1131,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v149) 初始清空待命狀態與面試歷史會話紀錄庫全面上線！');
+  console.log('🎉 所有測試通過！(v150) 面試雙版本回答精確定位為 N4簡單版 與 N2禮貌版 全面上線！');
 }
 
 

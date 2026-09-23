@@ -3199,12 +3199,12 @@
           </div>
         </div>
 
-        <!-- 右欄：AI 面試軍師 · 專屬推薦回答 (雙版本 · 振假名排版) -->
+        <!-- 右欄：AI 面試軍師 · 專屬推薦回答 (日文簡單版 N4 ＆ 日文禮貌版 N2) -->
         <div class="interview-col interview-col-right">
           <div class="interview-col-header">
             <div class="interview-col-title">
               <span class="interview-col-pill" style="background:#fef3c7; color:#92400e; border-color:#fcd34d;">AI 軍師</span>
-              <span>專屬推薦回答 (雙版本・振假名排版)</span>
+              <span>專屬推薦回答 (日文簡單版 N4 ＆ 日文禮貌版 N2)</span>
             </div>
             <div class="interview-col-company" id="iv-target-company-badge" onclick="openModal('modal-interview-context')" title="點擊切換目標飯店與求人票">
               🏢 <span id="iv-current-company-name">THE ALPS HOTEL HAKUBA (アルプスホテル白馬様)</span> ✎
@@ -3219,7 +3219,7 @@
             <button class="iv-story-btn" id="btn-story-voice" onclick="applyStoryTag('voice')">🎙️ 聲優親和力與溫暖微笑</button>
           </div>
 
-          <!-- 回答卡片容器 (版本 A 簡單版 & 版本 B 豐富版) -->
+          <!-- 回答卡片容器 (版本 A 日文簡單版 N4 & 版本 B 日文禮貌版 N2) -->
           <div class="interview-answers-wrap" id="interview-answers-container">
             <!-- JS 動態注入回答卡片 -->
           </div>
@@ -17864,7 +17864,7 @@ async function selectHistoricalQuestion(jp, zh) {
   showAnswerLoadingShimmer(cleanJp);
   InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(cleanJp);
   renderCurrentAnswers();
-  showToast('✨ 已鎖定該句，軍師已生成專屬雙版本擬答！', 'success');
+  showToast('✨ 已鎖定該句，軍師已生成 N4簡單版 與 N2禮貌版 擬答！', 'success');
 }
 
 // 顯示 AI 軍師生成中 Shimmer 動畫
@@ -18235,18 +18235,18 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 預設通用智慧合成回答 (動態帶入考官提問，確保即便 fallback 也完全客製化)
+  // 預設通用智慧合成回答 (動態帶入考官提問，確保即便 fallback 也完全客製化，並精準區分 N4簡單版 與 N2禮貌版)
   const safeQ = questionText ? questionText.slice(0, 30) : '考官提問';
   return {
     simple: {
-      ruby: 'はい、「' + escapeHtml(safeQ) + '」についてのご<ruby>質問<rt>しつもん</rt></ruby>ありがとうございます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でのレストラン<ruby>実務<rt>じつむ</rt></ruby><ruby>経験<rt>けいけん</rt></ruby>とチームワークを<ruby>活<rt>い</rt></ruby>かし、' + honorific + 'でも<ruby>迅速<rt>じんそく</rt></ruby>かつ<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>貢献<rt>こうけん</rt></ruby>いたします。',
-      raw: 'はい、「' + safeQ + '」についてのご質問ありがとうございます。黒川温泉でのレストラン実務経験とチームワークを活かし、' + honorific + 'でも迅速かつ前向きに貢献いたします。',
-      zh: '是的，關於「' + safeQ + '」非常感謝您的提問。我會活用在黑川溫泉累積的餐飲實務經驗與團隊協作力，在貴飯店迅速且積極正面地做出貢獻。'
+      ruby: 'はい、「' + escapeHtml(safeQ) + '」についての質問、ありがとうございます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>での<ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かして、' + honorific + 'でも<ruby>元気<rt>げんき</rt></ruby>に<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>頑張<rt>がんば</rt></ruby>ります。',
+      raw: 'はい、「' + safeQ + '」についての質問、ありがとうございます。黒川温泉での経験を活かして、' + honorific + 'でも元気に一生懸命頑張ります。',
+      zh: '是的，關於「' + safeQ + '」非常感謝您的提問。我會活用在黑川溫泉的經驗，在貴飯店充滿活力地全力以赴努力。'
     },
     story: {
-      ruby: 'ご<ruby>質問<rt>しつもん</rt></ruby>いただきありがとうございます。<ruby>私<rt>わたし</rt></ruby>は<ruby>新<rt>あたら</rt></ruby>しい<ruby>環境<rt>かんきょう</rt></ruby>やどんなお<ruby>仕事<rt>しごと</rt></ruby>にも<ruby>素早<rt>すばや</rt></ruby>く<ruby>馴染<rt>なじ</rt></ruby>める「<ruby>適応<rt>てきおう</rt></ruby><ruby>力<rt>りょく</rt></ruby>」と、<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>ったピーク<ruby>時<rt>じ</rt></ruby>の「スピード<ruby>感<rt>かん</rt></ruby>」が<ruby>武器<rt>ぶき</rt></ruby>です。' + honorific + 'でもお<ruby>客様<rt>きゃくさま</rt></ruby>やスタッフの<ruby>皆様<rt>みなさま</rt></ruby>に<ruby>明<rt>あか</rt></ruby>るい<ruby>笑顔<rt>えがお</rt></ruby>をお<ruby>届<rt>とど</rt></ruby>けしながら、テキパキと<ruby>動<rt>うご</rt></ruby>いてチームを<ruby>支<rt>ささ</rt></ruby>えます！',
-      raw: 'ご質問いただきありがとうございます。私は新しい環境やどんなお仕事にも素早く馴染める「適応力」と、黒川温泉で培ったピーク時の「スピード感」が武器です。' + honorific + 'でもお客様やスタッフの皆様に明るい笑顔をお届けしながら、テキパキと動いてチームを支えます！',
-      zh: '非常感謝您的提問。我的強項在於能迅速融入任何新環境的「高適應力」，以及在黑川溫泉磨練出的尖峰「敏捷節奏」。在貴飯店我也會帶著親切微笑迎接每位客人與同仁，手腳俐落地支援整個團隊！'
+      ruby: '「' + escapeHtml(safeQ) + '」についてご<ruby>質問<rt>しつもん</rt></ruby>いただき<ruby>心<rt>こころ</rt></ruby>より<ruby>感謝<rt>かんしゃ</rt></ruby><ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>った「<ruby>適応<rt>てきおう</rt></ruby><ruby>力<rt>りょく</rt></ruby>」とピーク<ruby>時<rt>じ</rt></ruby>の「スピード<ruby>感<rt>かん</rt></ruby>」を<ruby>最大限<rt>さいだいげん</rt></ruby>に<ruby>発揮<rt>はっき</rt></ruby>し、' + honorific + 'の<ruby>業務<rt>ぎょうむ</rt></ruby>に<ruby>貢献<rt>こうけん</rt></ruby>させていただきたく<ruby>存<rt>ぞん</rt></ruby>じます。',
+      raw: '「' + safeQ + '」についてご質問いただき心より感謝申し上げます。黒川温泉の現場で培った「適応力」とピーク時の「スピード感」を最大限に発揮し、' + honorific + 'の業務に貢献させていただきたく存じます。',
+      zh: '關於「' + safeQ + '」非常感謝您的提問。我定會全力發揮在黑川溫泉磨練出的高適應力與敏捷節奏，全力為貴飯店的各項業務貢獻心力。'
     }
   };
 }
@@ -18281,9 +18281,9 @@ async function generateDynamicInterviewAnswers(questionText) {
   try {
     const prompt = `你是台灣求職者「楊詠筑」（女性，1995年1月6日生，31歲，成大中文輔建築，JLPT N2，聲音清晰親切如聲優，持有可通話日本手機門號 080-2853-5431，持有打工度假特定活動簽證至2027年8月14日，目前在熊本黑川溫泉優彩旅館餐廳負責外場配膳出餐補菜與清潔，熱愛木造建築與神社收集7本御朱印，甲殻類過敏，希望單人房）的日文線上面試即時應答軍師。
 當前面試官提問：「${questionText}」。應徵公司：${InterviewEngine.companyName} (${honorific})，應徵職種：${InterviewEngine.role}。
-請針對該具體問題，生成兩個版本日文應答：
-版本 A (simple): 簡單俐落版（約15秒，文法直接不易打結）
-版本 B (story): 豐富故事版（約35秒，展現個人優勢與真誠經歷）
+請針對該具體問題，生成兩個「日文程度不同」的回答版本：
+版本 A (simple): 日文簡單版（約 N4 程度。文法單純直接、短句好記、以基礎丁寧語 です/ます 表達，在緊張或腦袋空白時能順暢脫口而出）
+版本 B (story): 日文禮貌版（約 N2 程度。使用高級商務敬語、謙讓語 いたします/存じます、連接詞與得體句型，充分展現 N2 日語實力與專業成熟度）
 請務必輸出標準 JSON 格式（日文部分漢字須標註 HTML <ruby>漢字<rt>よみ</rt></ruby> 標籤）：
 {
   "simple": { "ruby": "HTML含ruby標籤", "raw": "純日文無HTML標籤", "zh": "繁體中文翻譯" },
@@ -18301,7 +18301,7 @@ async function generateDynamicInterviewAnswers(questionText) {
   return matchSemanticCandidateAnswer(questionText, honorific);
 }
 
-// 渲染回答卡片 (頂部具備當前鎖定考官題目橫幅與雙版本擬答)
+// 渲染回答卡片 (頂部具備當前鎖定考官題目橫幅與雙版本擬答：N4簡單版 ＆ N2禮貌版)
 function renderCurrentAnswers() {
   const container = document.getElementById('interview-answers-container');
   if (!container) return;
@@ -18312,7 +18312,7 @@ function renderCurrentAnswers() {
         <div style="font-size:2.2rem; margin-bottom:10px;">💡</div>
         <div style="font-weight:700; font-size:1.05rem; color:#334155; margin-bottom:8px;">等待考官提問中</div>
         <div style="font-size:0.85rem; line-height:1.6; max-width:420px; margin:0 auto; color:#64748b;">
-          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，系統將即時為您生成專屬的版本 A (俐落短句) 與版本 B (故事長句) 擬答。
+          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，系統將即時為您生成專屬的<strong>版本 A (日文簡單版 N4)</strong> 與<strong>版本 B (日文禮貌版 N2)</strong> 擬答。
         </div>
       </div>
     `;
@@ -18340,19 +18340,19 @@ function renderCurrentAnswers() {
       <span style="font-size:1.4rem; line-height:1; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1));">🎯</span>
       <div style="flex:1; min-width:0;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
-          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">當前針對考官題目生成專屬擬答</span>
-          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">即時專屬應答</span>
+          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">當前針對考官題目生成雙程度擬答</span>
+          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">N4簡單 / N2禮貌</span>
         </div>
         <div style="font-size:1rem; font-weight:800; color:#1e293b; line-height:1.4; word-break:break-word;">${escapeHtml(targetJp)}</div>
         ${targetZh ? `<div style="font-size:0.85rem; color:#64748b; margin-top:2px;">▎${escapeHtml(targetZh)}</div>` : ''}
       </div>
     </div>
 
-    <!-- 卡片 1：版本 A 簡單俐落版 -->
+    <!-- 卡片 1：版本 A 日文簡單版 (N4 程度) -->
     <div class="interview-answer-card">
       <div class="iv-ans-header">
-        <span class="iv-ans-badge simple">⚡ 版本 A：簡單俐落版 (不易打結)</span>
-        <span class="iv-ans-tag-hint">約 15 秒・文法直接・安心不慌亂</span>
+        <span class="iv-ans-badge simple">🔰 版本 A：日文簡單版 (N4 程度)</span>
+        <span class="iv-ans-tag-hint">N4 文法・緊張不打結・好記安心說</span>
       </div>
       <div class="iv-ans-ruby-body" id="ans-a-ruby">
         ${simpleRuby}
@@ -18366,11 +18366,11 @@ function renderCurrentAnswers() {
       </div>
     </div>
 
-    <!-- 卡片 2：版本 B 豐富故事版 -->
+    <!-- 卡片 2：版本 B 日文禮貌版 (N2 程度) -->
     <div class="interview-answer-card">
       <div class="iv-ans-header">
-        <span class="iv-ans-badge story">📖 版本 B：豐富故事版 (展現優勢)</span>
-        <span class="iv-ans-tag-hint">約 35 秒・結合個人真實故事・高分印象</span>
+        <span class="iv-ans-badge story">✨ 版本 B：日文禮貌版 (N2 程度)</span>
+        <span class="iv-ans-tag-hint">N2 敬語・商務得體・展現日語實力</span>
       </div>
       <div class="iv-ans-ruby-body" id="ans-b-ruby">
         ${storyRuby}
