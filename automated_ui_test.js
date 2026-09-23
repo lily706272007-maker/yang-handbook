@@ -1011,6 +1011,14 @@ assert(evalQuestionTest('私は以前、熊本の黒川温泉で働いていま�
 assert(evalQuestionTest('なるほど、素晴らしいですね。') === false, 'isQuestionSentence 正確排除考官點頭附和句「なるほど、素晴らしいですね。」');
 assert(evalQuestionTest('はい、承知いたしました。') === false, 'isQuestionSentence 正確排除禮貌回應句「はい、承知いたしました。」');
 
+// 測試 56: Transync AI 連續對話流向下延伸、雙擊擬答觸發與防卡住沉澱機制 (v146)
+console.log('\n【測試 56：Transync AI 連續對話流向下延伸、雙擊擬答觸發與防卡住沉澱機制 (v146)】');
+assert(html.includes('ondblclick="selectHistoricalQuestion(') || html.includes('ondblclick="selectHistoricalQuestion'), '卡片支援雙擊 (ondblclick) 立即鎖定句子並生成雙版本擬答');
+assert(html.includes('iv-dblclick-hint') && html.includes('雙擊擬答'), '具備直觀提示「🖱️ 雙擊擬答」，引導候選人自主掌控生成時機');
+assert(html.includes('flushActiveInterimToHistory'), '具備 flushActiveInterimToHistory 停頓雙保險沉澱機制，徹底解決語音卡在 interim 藍框問題');
+assert(html.includes('00:01') && html.includes('iv-card-header-row'), '時間戳記採用 Transync AI 經典 mm:ss 格式，與原圖排版高度一致');
+assert(html.includes('box.scrollTop = box.scrollHeight'), '對話串流盒支援新發言自動平滑滾動至最底端');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1018,7 +1026,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v145) Transync AI 雙向聽譯、智能問題聯動、面試紀要全面升級成功！');
+  console.log('🎉 所有測試通過！(v146) Transync AI 連續對話流、雙擊擬答全面上線！');
 }
 
 

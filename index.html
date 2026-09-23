@@ -2138,39 +2138,67 @@
     animation: ivPulse 1.5s infinite;
   }
 
-  /* 即時聽譯對話串流盒 (支援歷史累積與往回滾動) */
+  /* Transync AI 即時聽譯對話串流盒 (支援無限向下延伸與縱向滾動) */
   .interview-stream-box {
     flex: 1;
-    min-height: 320px;
-    max-height: 460px;
+    min-height: 380px;
+    max-height: 520px;
     overflow-y: auto;
     scroll-behavior: smooth;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px;
+    background: #fafaf9;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 18px;
     margin-bottom: 12px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
   .interview-stream-card {
     background: #fff;
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    transition: border-color 0.2s, background-color 0.2s;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    transition: all 0.18s ease;
     flex-shrink: 0;
+    cursor: pointer;
+    user-select: text;
+  }
+  .interview-stream-card:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
   }
   .interview-stream-card.active {
-    border-color: #0284c7;
-    background: #f8fafc;
+    border-left: 4px solid #0284c7;
+    border-color: #bae6fd;
+    background: #f0f9ff;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.08);
   }
   .interview-stream-card.active-interim {
-    border-color: #38bdf8;
+    border: 1.5px dashed #38bdf8;
     background: #f0f9ff;
-    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+  }
+  .iv-card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .iv-card-time {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-family: monospace;
+    font-weight: 600;
+  }
+  .iv-dblclick-hint {
+    font-size: 0.7rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 1px 6px;
+    border-radius: 4px;
+    opacity: 0.85;
   }
   .iv-live-dot {
     display: inline-block;
@@ -2233,35 +2261,28 @@
     font-size: 0.95rem;
     animation: ivPulse 1.5s infinite;
   }
-  .interview-stream-card.active {
-    border-color: #0284c7;
-    background: #f8fafc;
-  }
-  .iv-card-time {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
   .iv-card-jp {
     font-family: var(--font-serif, "Yu Mincho", serif);
-    font-size: 1.12rem;
-    font-weight: 700;
-    color: #111827;
-    line-height: 1.7;
-    letter-spacing: 0.02em;
+    font-size: 1.06rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+    margin-bottom: 4px;
   }
   .iv-card-zh-wrap {
-    margin-top: 8px;
-    border-left: 3.5px solid #0284c7;
-    background: #f0f9ff;
-    padding: 8px 12px;
-    border-radius: 6px;
+    margin-top: 4px;
+    padding-left: 2px;
   }
   .iv-card-zh {
     font-size: 0.88rem;
+    color: #475569;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+  .interview-stream-card.active .iv-card-zh {
     color: #0369a1;
     font-weight: 600;
-    line-height: 1.5;
   }
   .iv-card-action-btn {
     background: #f8fafc;
@@ -2285,9 +2306,9 @@
   .iv-q-pill {
     font-size: 0.7rem;
     font-weight: 700;
-    color: #b45309;
-    background: #fef3c7;
-    border: 1px solid #fde68a;
+    color: #0284c7;
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
     padding: 1px 6px;
     border-radius: 4px;
     display: inline-block;
@@ -3001,17 +3022,20 @@
             </div>
           </div>
 
-          <!-- 即時轉寫與中譯串流呈現盒 -->
+          <!-- 即時轉寫與中譯串流呈現盒 (Transync AI 連續對話流) -->
           <div class="interview-stream-box" id="interview-stream-box">
-            <div class="interview-stream-card active" id="iv-current-question-card" onclick="selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" style="cursor:pointer;" title="點擊切換查看此句專屬回答">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <div class="interview-stream-card active" id="iv-current-question-card" ondblclick="selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" style="cursor:pointer;" title="💡 點兩下（雙擊）此句立即生成版本 A 與 B 推薦擬答">
+              <div class="iv-card-header-row">
                 <div style="display:flex; align-items:center; gap:6px;">
-                  <span class="iv-card-time" id="iv-card-time"><span style="opacity:0.6;">⏱️</span> 12:00:00</span>
-                  <span class="iv-q-pill">❓ 提問</span>
+                  <span class="iv-card-time" id="iv-card-time">00:01</span>
+                  <span class="iv-q-pill">🎯 當前擬答</span>
                 </div>
-                <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" title="針對此句推薦回答">💡 依此句推薦回答</button>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="iv-dblclick-hint">🖱️ 雙擊擬答</span>
+                  <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('なぜ日本に来ようと思ったのですか？', '為什麼決定來日本？')" title="針對此句推薦回答">💡 依此句推薦回答</button>
+                </div>
               </div>
-              <div class="iv-card-jp" id="iv-card-jp">「なぜ日本に来ようと思ったのですか？」</div>
+              <div class="iv-card-jp" id="iv-card-jp">なぜ日本に来ようと思ったのですか？</div>
               <div class="iv-card-zh-wrap">
                 <div class="iv-card-zh" id="iv-card-zh">為什麼決定來日本？</div>
               </div>
@@ -17321,7 +17345,7 @@ const InterviewEngine = {
   dialogueHistory: [
     {
       id: 'dh-init',
-      time: '12:00:00',
+      time: '00:01',
       jp: 'なぜ日本に来ようと思ったのですか？',
       zh: '為什麼決定來日本？',
       isQuestion: true,
@@ -17555,7 +17579,7 @@ function renderInterviewPage() {
   generateRandomReverseQuestions();
 }
 
-// 渲染對話串流盒 (Transync AI 風格：純粹雙向對話紀錄、時間戳記、中譯、支援點擊回溯)
+// 渲染對話串流盒 (Transync AI 風格：純粹雙向對話紀錄、時間戳記、中譯、雙擊生成擬答)
 function renderDialogueHistory() {
   const box = document.getElementById('interview-stream-box');
   if (!box) return;
@@ -17569,18 +17593,25 @@ function renderDialogueHistory() {
     const jpId = isActive ? 'id="iv-card-jp"' : '';
     const zhId = isActive ? 'id="iv-card-zh"' : '';
     const timeId = isActive ? 'id="iv-card-time"' : '';
-    const isQ = item.isQuestion !== undefined ? item.isQuestion : isQuestionSentence(item.jp);
+    const escapedJp = escapeHtml(item.jp).replace(/'/g, "\\'");
+    const escapedZh = escapeHtml(item.zh).replace(/'/g, "\\'");
 
     html += `
-      <div class="interview-stream-card ${isActive ? 'active' : ''}" ${isCurrentRef} onclick="selectHistoricalQuestion('${escapeHtml(item.jp).replace(/'/g, "\\'")}', '${escapeHtml(item.zh).replace(/'/g, "\\'")}')" style="cursor:pointer;" title="點擊切換查看此句專屬回答">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <div class="interview-stream-card ${isActive ? 'active' : ''}" ${isCurrentRef} 
+           ondblclick="selectHistoricalQuestion('${escapedJp}', '${escapedZh}')" 
+           style="cursor:pointer;" 
+           title="💡 點兩下（雙擊）此句立即為您生成版本 A 與 B 推薦擬答">
+        <div class="iv-card-header-row">
           <div style="display:flex; align-items:center; gap:6px;">
-            <span class="iv-card-time" ${timeId}><span style="opacity:0.6;">⏱️</span> ${escapeHtml(item.time)}</span>
-            ${isQ ? '<span class="iv-q-pill">❓ 提問</span>' : ''}
+            <span class="iv-card-time" ${timeId}>${escapeHtml(item.time)}</span>
+            ${isActive ? '<span class="iv-q-pill">🎯 當前擬答</span>' : ''}
           </div>
-          <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('${escapeHtml(item.jp).replace(/'/g, "\\'")}', '${escapeHtml(item.zh).replace(/'/g, "\\'")}')" title="針對此句推薦回答">💡 依此句推薦回答</button>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="iv-dblclick-hint">🖱️ 雙擊擬答</span>
+            <button class="iv-card-action-btn" onclick="event.stopPropagation(); selectHistoricalQuestion('${escapedJp}', '${escapedZh}')" title="針對此句生成推薦回答">💡 依此句推薦回答</button>
+          </div>
         </div>
-        <div class="iv-card-jp" ${jpId}>「${escapeHtml(item.jp)}」</div>
+        <div class="iv-card-jp" ${jpId}>${escapeHtml(item.jp)}</div>
         <div class="iv-card-zh-wrap">
           <div class="iv-card-zh" ${zhId}>${escapeHtml(item.zh)}</div>
         </div>
@@ -17595,7 +17626,7 @@ function renderDialogueHistory() {
           <span class="iv-live-dot"></span>
           <span style="font-size:0.75rem; font-weight:700; color:#0284c7;">即時語音收音中...</span>
         </div>
-        <div class="iv-card-jp" style="color:#0369a1;">「${escapeHtml(InterviewEngine.activeInterimText)}」</div>
+        <div class="iv-card-jp" style="color:#0369a1; font-style:italic;">「${escapeHtml(InterviewEngine.activeInterimText)}」</div>
       </div>
     `;
   }
@@ -17604,14 +17635,17 @@ function renderDialogueHistory() {
   box.scrollTop = box.scrollHeight;
 }
 
-// 點擊歷史題目卡片回溯
+// 雙擊或點選歷史對話卡片：針對該句立即生成版本 A 與版本 B 擬答
 async function selectHistoricalQuestion(jp, zh) {
-  InterviewEngine.currentQuestion = jp;
-  InterviewEngine.currentQuestionZh = zh;
+  if (!jp || jp.trim().length < 2) return;
+  const cleanJp = jp.trim();
+  InterviewEngine.currentQuestion = cleanJp;
+  InterviewEngine.currentQuestionZh = zh || cleanJp;
   renderDialogueHistory();
-  showAnswerLoadingShimmer(jp);
-  InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(jp);
+  showAnswerLoadingShimmer(cleanJp);
+  InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(cleanJp);
   renderCurrentAnswers();
+  showToast('✨ 已鎖定該句，軍師已生成專屬雙版本擬答！', 'success');
 }
 
 // 顯示 AI 軍師生成中 Shimmer 動畫
@@ -18056,17 +18090,35 @@ function animateMetersActive(isActive) {
   }
 }
 
-// 處理新辨識出的對話語句 (加入累積串流、翻譯與智能問題判定)
+// 即時收音暫存沉澱為正式發言 (避免臨時語音停留未沉澱)
+function flushActiveInterimToHistory() {
+  if (InterviewEngine.silenceTimer) {
+    clearTimeout(InterviewEngine.silenceTimer);
+    InterviewEngine.silenceTimer = null;
+  }
+  const textToFlush = (InterviewEngine.speechBuffer || InterviewEngine.activeInterimText || '').trim();
+  InterviewEngine.speechBuffer = '';
+  InterviewEngine.activeInterimText = '';
+  animateMetersActive(false);
+
+  if (textToFlush.length >= 2) {
+    handleNewRecognizedUtterance(textToFlush);
+  } else {
+    renderDialogueHistory();
+  }
+}
+
+// 處理新辨識出的對話語句 (加入累積串流、翻譯並沉澱，不自動覆蓋右側回答)
 async function handleNewRecognizedUtterance(qJp) {
   if (!qJp || qJp.trim().length < 2) return;
   const cleanQ = qJp.trim();
 
-  // 若純粹是過短語助詞，不單獨成題
-  if (/^(えっと|あのー|あの|ええと|そうですね|はい)$/.test(cleanQ)) {
+  // 若純粹是過短單一語助詞，不單獨成行
+  if (/^(えっと|あのー|あの|ええと)$/.test(cleanQ)) {
     return;
   }
 
-  // 取得中文翻譯
+  // 取得中文翻譯 (優先查庫，其次透過 Google 翻譯 API)
   let qZh = '';
   if (InterviewEngine.qaDatabase[cleanQ]) {
     qZh = InterviewEngine.qaDatabase[cleanQ].zh;
@@ -18078,38 +18130,40 @@ async function handleNewRecognizedUtterance(qJp) {
     }
   }
 
-  // 智慧判斷此句是否具有提問意圖 (Question Intent)
+  // 智慧判斷此句是否具有提問意圖 (Question Intent Detection，保留標記供紀要與輔助提示)
   const isQuestion = isQuestionSentence(cleanQ);
 
-  // 加入歷史對話 (純淨 Transync AI 雙向對話紀錄，不標注考官或候選人)
-  const timeNow = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  // 計算時間戳記 (優先使用計時器時間 mm:ss，如 00:01, 00:13)
+  let timeStr = '00:01';
+  if (InterviewEngine.timerSeconds > 0) {
+    const mm = String(Math.floor(InterviewEngine.timerSeconds / 60)).padStart(2, '0');
+    const ss = String(InterviewEngine.timerSeconds % 60).padStart(2, '0');
+    timeStr = `${mm}:${ss}`;
+  } else {
+    timeStr = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+
+  // 加入歷史對話 (純淨 Transync AI 雙向對話紀錄，向下連續累積)
   InterviewEngine.dialogueHistory.push({
-    id: 'dh-' + Date.now(),
-    time: timeNow,
+    id: 'dh-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+    time: timeStr,
     jp: cleanQ,
     zh: qZh,
     isQuestion: isQuestion,
     isFinal: true
   });
 
-  // 重新渲染對話串流盒 (自動滾動至最底部)
+  // 重新渲染左側對話串流盒 (自動滾動至最底部)
   renderDialogueHistory();
 
-  // 若判定為提問，自動連動右側軍師生成推薦回答！若非提問（例如候選人自己的發言或一般附和），則保留當前回答不覆蓋
-  if (isQuestion) {
-    InterviewEngine.currentQuestion = cleanQ;
-    InterviewEngine.currentQuestionZh = qZh;
-    showAnswerLoadingShimmer(cleanQ);
-
-    InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(cleanQ);
-    renderCurrentAnswers();
-    showToast('✨ 偵測到提問，已為您自動更新推薦回答！', 'info');
-  }
+  // 注意：依使用者明確需求，不再依據句尾自動跳轉右側擬答，保持畫面絕對穩定！
+  // 使用者只要對想回答的那句話「按兩下（雙擊）」即可隨時生成雙版本擬答。
 }
 
 // 快速點選預設題目
 async function quickSelectQuestion(qJp) {
   await handleNewRecognizedUtterance(qJp);
+  showToast('已加入對話紀錄！請對該句子「按兩下（雙擊）」即可生成雙版本擬答', 'info');
 }
 
 // 手動模擬考官提問
@@ -18123,7 +18177,7 @@ async function testSimulateQuestion() {
   }
   input.value = '';
   await handleNewRecognizedUtterance(q);
-  showToast('已接收考官提問，軍師已生成專屬雙版本回答！', 'success');
+  showToast('已加入對話紀錄！請對該句子「按兩下（雙擊）」即可生成雙版本擬答', 'info');
 }
 
 // 開始/停止監聽
@@ -18265,6 +18319,10 @@ function startInterviewListening() {
 
       rec.onspeechend = () => {
         animateMetersActive(false);
+        // 說話暫停時立即觸發沉澱，避免卡在 interim 藍框中
+        if (InterviewEngine.activeInterimText || InterviewEngine.speechBuffer) {
+          flushActiveInterimToHistory();
+        }
       };
 
       rec.onresult = (event) => {
@@ -18279,31 +18337,22 @@ function startInterviewListening() {
           }
         }
 
-        if (interimTranscript) {
-          InterviewEngine.activeInterimText = (InterviewEngine.speechBuffer + ' ' + interimTranscript).trim();
-          renderDialogueHistory();
-        }
-
         if (finalChunk) {
           InterviewEngine.speechBuffer = (InterviewEngine.speechBuffer + ' ' + finalChunk).trim();
-          InterviewEngine.activeInterimText = InterviewEngine.speechBuffer;
-          renderDialogueHistory();
-
-          if (InterviewEngine.silenceTimer) clearTimeout(InterviewEngine.silenceTimer);
-
-          const isQ = isQuestionSentence(InterviewEngine.speechBuffer);
-          const delay = isQ ? 650 : 1200;
-
-          InterviewEngine.silenceTimer = setTimeout(async () => {
-            const fullUtterance = InterviewEngine.speechBuffer.trim();
-            InterviewEngine.speechBuffer = '';
-            InterviewEngine.activeInterimText = '';
-            animateMetersActive(false);
-            if (fullUtterance.length >= 2) {
-              await handleNewRecognizedUtterance(fullUtterance);
-            }
-          }, delay);
         }
+
+        const liveText = (InterviewEngine.speechBuffer + ' ' + interimTranscript).trim();
+        if (liveText) {
+          InterviewEngine.activeInterimText = liveText;
+          renderDialogueHistory();
+        }
+
+        if (InterviewEngine.silenceTimer) clearTimeout(InterviewEngine.silenceTimer);
+
+        // 停頓 750ms 自動沉澱為正式發言卡片，向下連續延伸
+        InterviewEngine.silenceTimer = setTimeout(() => {
+          flushActiveInterimToHistory();
+        }, 750);
       };
 
       rec.onerror = (e) => {
@@ -18318,6 +18367,10 @@ function startInterviewListening() {
       };
 
       rec.onend = () => {
+        // 辨識循環結束時，強制沉澱任何尚未送出的語音暫存
+        if (InterviewEngine.activeInterimText || InterviewEngine.speechBuffer) {
+          flushActiveInterimToHistory();
+        }
         if (InterviewEngine.isListening) {
           setTimeout(() => {
             if (InterviewEngine.isListening && InterviewEngine.recognition) {
@@ -18341,6 +18394,10 @@ function startInterviewListening() {
 
 function stopInterviewListening() {
   InterviewEngine.isListening = false;
+  
+  if (InterviewEngine.activeInterimText || InterviewEngine.speechBuffer) {
+    flushActiveInterimToHistory();
+  }
   
   const btn = document.getElementById('btn-toggle-interview-listen');
   const icon = document.getElementById('iv-listen-icon');
