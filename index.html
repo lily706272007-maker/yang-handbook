@@ -1234,6 +1234,91 @@
   }
 }
 
+/* 🎯 自選語言動態卡片網格微調 (1~2 國時維持視覺協調) */
+.broadcast-hexa-grid.count-1 {
+  grid-template-columns: 1fr !important;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.broadcast-hexa-grid.count-2 {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+@media (max-width: 600px) {
+  .broadcast-hexa-grid.count-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.bigscreen-hexa-grid.count-1 {
+  grid-template-columns: 1fr !important;
+  max-width: 650px;
+  margin: 0 auto;
+}
+.bigscreen-hexa-grid.count-2 {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+@media (max-width: 650px) {
+  .bigscreen-hexa-grid.count-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 🎯 語言勾選區專屬樣式 */
+.broadcast-lang-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+@media (max-width: 950px) {
+  .broadcast-lang-checkbox-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .broadcast-lang-checkbox-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.broadcast-lang-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+  transition: all 0.15s ease;
+}
+.broadcast-lang-checkbox-item:hover {
+  border-color: var(--primary);
+  background: rgba(184,75,41,0.03);
+}
+.broadcast-lang-checkbox-item.is-active {
+  border-color: var(--primary);
+  background: rgba(184,75,41,0.08);
+  color: var(--primary);
+}
+.broadcast-lang-checkbox-item input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  margin: 0;
+}
+.broadcast-lang-pill-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.broadcast-lang-pill-name {
+  white-space: nowrap;
+}
+
 .broadcast-lang-card {
   background: #fff;
   border: 1.5px solid var(--border);
@@ -2664,6 +2749,57 @@
 
       <!-- 輸入操作卡片 -->
       <div class="card" style="padding:14px; margin-bottom:14px; background:var(--bg-card); border:1.5px solid var(--border); border-radius:16px;">
+        
+        <!-- 🎯 語言自選核取方塊列 (可選 1 ~ 6 國) -->
+        <div class="broadcast-lang-selector-box" style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:10px 12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:0.86rem; font-weight:800; color:var(--primary);">🎯 自選欲翻譯語言：</span>
+              <span id="broadcast-selected-count-badge" style="font-size:0.75rem; font-weight:700; background:var(--primary); color:#fff; padding:1px 8px; border-radius:12px;">已選 6 國</span>
+              <span style="font-size:0.75rem; color:var(--muted);">（勾選 1~6 國，僅翻譯勾選語言以加快速度）</span>
+            </div>
+            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="setBroadcastLangPreset('all')" style="padding:2px 8px; font-size:0.75rem; font-weight:700;">✅ 全選 (6國)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="setBroadcastLangPreset('common')" style="padding:2px 8px; font-size:0.75rem; font-weight:700;">⭐ 常用 (日/英/韓)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="setBroadcastLangPreset('sea')" style="padding:2px 8px; font-size:0.75rem; font-weight:700;">🌴 東南亞 (尼/緬/越)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="setBroadcastLangPreset('ja_only')" style="padding:2px 8px; font-size:0.75rem; font-weight:700;">🇯🇵 僅日文</button>
+            </div>
+          </div>
+
+          <div class="broadcast-lang-checkbox-grid" id="broadcast-lang-checkbox-group">
+            <label class="broadcast-lang-checkbox-item is-active" id="lbl-broadcast-lang-ja">
+              <input type="checkbox" name="broadcast_lang" value="ja" checked onchange="onBroadcastLangSelectionChange()">
+              <span class="broadcast-lang-pill-flag">🇯🇵</span>
+              <span class="broadcast-lang-pill-name">日文 (ja)</span>
+            </label>
+            <label class="broadcast-lang-checkbox-item is-active" id="lbl-broadcast-lang-ne">
+              <input type="checkbox" name="broadcast_lang" value="ne" checked onchange="onBroadcastLangSelectionChange()">
+              <span class="broadcast-lang-pill-flag">🇳🇵</span>
+              <span class="broadcast-lang-pill-name">尼泊爾文 (ne)</span>
+            </label>
+            <label class="broadcast-lang-checkbox-item is-active" id="lbl-broadcast-lang-my">
+              <input type="checkbox" name="broadcast_lang" value="my" checked onchange="onBroadcastLangSelectionChange()">
+              <span class="broadcast-lang-pill-flag">🇲🇲</span>
+              <span class="broadcast-lang-pill-name">緬甸文 (my)</span>
+            </label>
+            <label class="broadcast-lang-checkbox-item is-active" id="lbl-broadcast-lang-vi">
+              <input type="checkbox" name="broadcast_lang" value="vi" checked onchange="onBroadcastLangSelectionChange()">
+              <span class="broadcast-lang-pill-flag">🇻🇳</span>
+              <span class="broadcast-lang-pill-name">越南文 (vi)</span>
+            </label>
+            <label class="broadcast-lang-checkbox-item is-active" id="lbl-broadcast-lang-en">
+              <input type="checkbox" name="broadcast_lang" value="en" checked onchange="onBroadcastLangSelectionChange()">
+              <span class="broadcast-lang-pill-flag">🇺🇸</span>
+              <span class="broadcast-lang-pill-name">英文 (en)</span>
+            </label>
+            <label class="broadcast-lang-checkbox-item is-active" id="lbl-broadcast-lang-ko">
+              <input type="checkbox" name="broadcast_lang" value="ko" checked onchange="onBroadcastLangSelectionChange()">
+              <span class="broadcast-lang-pill-flag">🇰🇷</span>
+              <span class="broadcast-lang-pill-name">韓文 (ko)</span>
+            </label>
+          </div>
+        </div>
+
         <div style="margin-bottom:10px;">
           <label style="font-size:0.82rem; font-weight:700; color:var(--primary); margin-bottom:6px; display:block;">
             ✏️ 輸入想要翻譯的中文事項：
@@ -2684,7 +2820,7 @@
             </button>
           </div>
           <div style="display:flex; gap:6px;">
-            <button class="btn btn-ghost btn-sm" onclick="copyAllHexaBroadcast()" style="font-weight:700;">
+            <button class="btn btn-ghost btn-sm" id="btn-broadcast-copy-all" onclick="copyAllHexaBroadcast()" style="font-weight:700;">
               📋 一鍵複製 6 國語言
             </button>
             <button class="btn btn-accent btn-sm" onclick="openBroadcastBigScreen()" style="font-weight:800;">
@@ -2699,7 +2835,7 @@
 
       <!-- 六國語言並排卡片網格 (3x2 Grid, 手機單欄) -->
       <div class="section-label">
-        <div class="section-label-left">🌐 六國語言同步翻譯卡片</div>
+        <div class="section-label-left" id="broadcast-cards-section-title">🌐 六國語言同步翻譯卡片</div>
         <span style="font-size:0.75rem; color:var(--muted);" id="broadcast-engine-badge">⚡ 極速雙引擎：毫秒級直譯 ＋ 智慧校準</span>
       </div>
 
@@ -15224,7 +15360,166 @@ let currentBroadcastData = null;
 let isBroadcastMicActive = false;
 let broadcastRecognition = null;
 
+// 🎯 支援的 6 國語言元資料配置
+const BROADCAST_LANG_META = {
+  ja: { code: 'ja', flag: '🇯🇵', name: '日本語（日文）', native: '日本語', shortName: '日文', color: '#b84b29', ttsLang: 'ja' },
+  ne: { code: 'ne', flag: '🇳🇵', name: '尼泊爾語（尼泊爾文）', native: 'नेपाली', shortName: '尼泊爾文', color: '#2e7d32', ttsLang: 'ne' },
+  my: { code: 'my', flag: '🇲🇲', name: '緬甸語（緬甸文）', native: 'မြန်မာ', shortName: '緬甸文', color: '#f57f17', ttsLang: 'my' },
+  vi: { code: 'vi', flag: '🇻🇳', name: '越南語（越南文）', native: 'Tiếng Việt', shortName: '越南文', color: '#d32f2f', ttsLang: 'vi' },
+  en: { code: 'en', flag: '🇺🇸', name: '英語（英文）', native: 'English', shortName: '英文', color: '#1976d2', ttsLang: 'en' },
+  ko: { code: 'ko', flag: '🇰🇷', name: '韓國語（韓文）', native: '한국어', shortName: '韓文', color: '#7b1fa2', ttsLang: 'ko' }
+};
+const ALL_BROADCAST_LANG_KEYS = ['ja', 'ne', 'my', 'vi', 'en', 'ko'];
+
+/**
+ * 取得當前使用者勾選的目標翻譯語言（1 到 6 國）
+ * 若無任何勾選，則預設回傳 ['ja']
+ */
+function getSelectedBroadcastLanguages() {
+  const checkboxes = document.querySelectorAll('input[name="broadcast_lang"]:checked');
+  if (checkboxes && checkboxes.length > 0) {
+    const list = Array.from(checkboxes).map(cb => cb.value).filter(val => ALL_BROADCAST_LANG_KEYS.includes(val));
+    if (list.length > 0) return list;
+  }
+  // 嘗試由 localStorage 讀取
+  try {
+    const saved = localStorage.getItem('yang_broadcast_selected_langs');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const filtered = parsed.filter(val => ALL_BROADCAST_LANG_KEYS.includes(val));
+        if (filtered.length > 0) return filtered;
+      }
+    }
+  } catch (e) {}
+  return ['ja', 'ne', 'my', 'vi', 'en', 'ko'];
+}
+
+function saveSelectedBroadcastLanguages(langs) {
+  try {
+    localStorage.setItem('yang_broadcast_selected_langs', JSON.stringify(langs));
+  } catch (e) {}
+}
+
+function onBroadcastLangSelectionChange() {
+  let selected = [];
+  const cbs = document.querySelectorAll('input[name="broadcast_lang"]');
+  cbs.forEach(cb => {
+    const parentLabel = cb.closest('.broadcast-lang-checkbox-item');
+    if (cb.checked) {
+      selected.push(cb.value);
+      if (parentLabel) parentLabel.classList.add('is-active');
+    } else {
+      if (parentLabel) parentLabel.classList.remove('is-active');
+    }
+  });
+
+  // 最少必須選 1 個語言，若全取消則預設恢復日文
+  if (selected.length === 0) {
+    const jaCb = document.querySelector('input[name="broadcast_lang"][value="ja"]');
+    if (jaCb) {
+      jaCb.checked = true;
+      const parentLabel = jaCb.closest('.broadcast-lang-checkbox-item');
+      if (parentLabel) parentLabel.classList.add('is-active');
+    }
+    selected = ['ja'];
+    showToast('請至少保留一種翻譯語言！已自動為您勾選日文', 'info');
+  }
+
+  saveSelectedBroadcastLanguages(selected);
+
+  // 更新已選語言計數 Badge
+  const countBadge = document.getElementById('broadcast-selected-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `已選 ${selected.length} 國`;
+  }
+
+  // 更新複製按鈕提示文字
+  const copyBtn = document.getElementById('btn-broadcast-copy-all');
+  if (copyBtn) {
+    copyBtn.textContent = `📋 一鍵複製 ${selected.length} 國語言`;
+  }
+
+  // 更新卡片網格標題
+  const titleEl = document.getElementById('broadcast-cards-section-title');
+  if (titleEl) {
+    titleEl.textContent = selected.length === 6 ? '🌐 六國語言同步翻譯卡片' : `🌐 多國同步翻譯卡片（已選 ${selected.length} 國）`;
+  }
+
+  // 如果當前已有翻譯結果，重新渲染網格以立即顯示/隱藏卡片
+  if (currentBroadcastData && currentBroadcastData.zh) {
+    renderHexaResults(currentBroadcastData);
+
+    // 檢查是否有未翻譯的語言，若有則背景自動為其補齊
+    const missingLangs = selected.filter(code => !currentBroadcastData[code] || currentBroadcastData[code] === currentBroadcastData.zh);
+    if (missingLangs.length > 0 && navigator.onLine) {
+      (async () => {
+        let updated = false;
+        for (const code of missingLangs) {
+          try {
+            const trans = await fetchFreeGoogleTranslate(currentBroadcastData.zh, code);
+            if (trans) {
+              currentBroadcastData[code] = trans;
+              updated = true;
+            }
+          } catch (e) {}
+        }
+        if (updated) {
+          renderHexaResults(currentBroadcastData);
+          saveHexaTranslationToCache(currentBroadcastData.zh, currentBroadcastData);
+        }
+      })();
+    }
+  }
+}
+
+function setBroadcastLangPreset(preset) {
+  let targets = [];
+  if (preset === 'all') {
+    targets = ['ja', 'ne', 'my', 'vi', 'en', 'ko'];
+  } else if (preset === 'common') {
+    targets = ['ja', 'en', 'ko'];
+  } else if (preset === 'sea') {
+    targets = ['ne', 'my', 'vi'];
+  } else if (preset === 'ja_only') {
+    targets = ['ja'];
+  }
+
+  const cbs = document.querySelectorAll('input[name="broadcast_lang"]');
+  cbs.forEach(cb => {
+    cb.checked = targets.includes(cb.value);
+  });
+  onBroadcastLangSelectionChange();
+  showToast(`已套用語言組合：${targets.map(c => BROADCAST_LANG_META[c].shortName).join('・')}`, 'info');
+}
+
+function initBroadcastLanguageSelector() {
+  const saved = getSelectedBroadcastLanguages();
+  const cbs = document.querySelectorAll('input[name="broadcast_lang"]');
+  if (cbs.length > 0) {
+    cbs.forEach(cb => {
+      cb.checked = saved.includes(cb.value);
+      const parentLabel = cb.closest('.broadcast-lang-checkbox-item');
+      if (parentLabel) {
+        if (cb.checked) parentLabel.classList.add('is-active');
+        else parentLabel.classList.remove('is-active');
+      }
+    });
+  }
+  const countBadge = document.getElementById('broadcast-selected-count-badge');
+  if (countBadge) countBadge.textContent = `已選 ${saved.length} 國`;
+
+  const copyBtn = document.getElementById('btn-broadcast-copy-all');
+  if (copyBtn) copyBtn.textContent = `📋 一鍵複製 ${saved.length} 國語言`;
+
+  const titleEl = document.getElementById('broadcast-cards-section-title');
+  if (titleEl) {
+    titleEl.textContent = saved.length === 6 ? '🌐 六國語言同步翻譯卡片' : `🌐 多國同步翻譯卡片（已選 ${saved.length} 國）`;
+  }
+}
+
 function renderBroadcastPage() {
+  initBroadcastLanguageSelector();
   renderHexaResults(currentBroadcastData);
 }
 
@@ -15274,16 +15569,18 @@ async function executeQuadTranslation(zhText) {
 }
 
 /**
- * ⚡ 現場六國同步翻譯核心引擎 (極速響應 + 0 標音純淨版)
+ * ⚡ 現場多國同步翻譯核心引擎 (極速響應 + 0 標音純淨版)
  * 1. 本地快取立即命中 (0ms)
  * 2. 智慧高頻職場範本模糊/關鍵字匹配 (0ms)
- * 3. 六國並行高速直譯引擎 (Promise.allSettled 200ms 秒出)
- * 4. 背景非阻塞 Gemini 丁寧體智慧潤飾 (不卡頓畫面)
+ * 3. 勾選語言並行高速直譯引擎 (僅翻譯所選 1~6 國，告別無效等待，Promise.allSettled 150ms 秒出)
+ * 4. 背景非阻塞 Gemini 丁寧體智慧潤飾 (僅精修所選語言，不卡頓畫面)
  */
 async function executeHexaTranslation(zhText) {
   const cleanZh = (zhText || '').trim();
   if (!cleanZh) return;
   const statusEl = document.getElementById('broadcast-status-banner');
+  const selectedLangs = getSelectedBroadcastLanguages();
+  const selectedLangNames = selectedLangs.map(c => BROADCAST_LANG_META[c].shortName).join('/');
 
   // 1. 本地快取 0 毫秒秒出
   if (HEXA_TRANSLATION_CACHE[cleanZh]) {
@@ -15294,9 +15591,9 @@ async function executeHexaTranslation(zhText) {
       statusEl.style.display = 'block';
       statusEl.style.background = 'rgba(56,142,60,0.1)';
       statusEl.style.color = '#2e7d32';
-      statusEl.innerHTML = `⚡ 本地快取瞬間秒出：<strong>${escapeHtml(cleanZh)}</strong>`;
+      statusEl.innerHTML = `⚡ 本地快取瞬間秒出：<strong>${escapeHtml(cleanZh)}</strong>（${selectedLangNames}）`;
     }
-    showToast('六國語言翻譯完成！', 'success');
+    showToast(`翻譯完成！（已套用 ${selectedLangs.length} 國快取）`, 'success');
     return;
   }
 
@@ -15321,56 +15618,57 @@ async function executeHexaTranslation(zhText) {
       statusEl.style.color = 'var(--primary)';
       statusEl.innerHTML = `⚡ 職場高頻範本精準秒出：<strong>${templateMatch.title}</strong>`;
     }
-    showToast('離線六國翻譯完成！', 'success');
+    showToast('離線多國翻譯完成！', 'success');
     return;
   }
 
-  // 3. 超高速並行 Google 雲端多國語言直譯引擎 (150~250ms 秒出，告別卡頓)
+  // 3. 超高速並行 Google 雲端直譯引擎 (⚡ 僅針對使用者勾選的 1~6 種語言翻譯，大幅節省時間與頻寬)
   if (statusEl) {
     statusEl.style.display = 'block';
     statusEl.style.background = 'rgba(184,75,41,0.08)';
     statusEl.style.color = 'var(--accent)';
-    statusEl.innerHTML = `⚡ 正在高速直譯六國語言【日/尼/緬/越/英/韓】…`;
+    statusEl.innerHTML = `⚡ 正在高速直譯所選 ${selectedLangs.length} 國語言【${selectedLangNames}】…`;
   }
 
   let fastCompleted = false;
 
   if (navigator.onLine) {
     try {
-      const fastPromise = Promise.allSettled([
-        fetchFreeGoogleTranslate(cleanZh, 'ja'),
-        fetchFreeGoogleTranslate(cleanZh, 'ne'),
-        fetchFreeGoogleTranslate(cleanZh, 'my'),
-        fetchFreeGoogleTranslate(cleanZh, 'vi'),
-        fetchFreeGoogleTranslate(cleanZh, 'en'),
-        fetchFreeGoogleTranslate(cleanZh, 'ko')
-      ]);
+      // ⚡ 只針對有勾選的語言發起請求，大幅節省網路往返時間與連線等待！
+      const targetPromises = selectedLangs.map(code => 
+        fetchFreeGoogleTranslate(cleanZh, code)
+          .then(text => ({ code, text }))
+          .catch(err => ({ code, text: '' }))
+      );
 
-      // 限制 2.5 秒超時，保證永不當住
-      const results = await Promise.race([
-        fastPromise,
+      const fastResults = await Promise.race([
+        Promise.allSettled(targetPromises),
         new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 2800))
       ]);
 
-      const jaText = results[0].status === 'fulfilled' && results[0].value ? results[0].value : '';
-      const neText = results[1].status === 'fulfilled' && results[1].value ? results[1].value : '';
-      const myText = results[2].status === 'fulfilled' && results[2].value ? results[2].value : '';
-      const viText = results[3].status === 'fulfilled' && results[3].value ? results[3].value : '';
-      const enText = results[4].status === 'fulfilled' && results[4].value ? results[4].value : '';
-      const koText = results[5].status === 'fulfilled' && results[5].value ? results[5].value : '';
+      const resultObj = {
+        zh: cleanZh,
+        ja: (currentBroadcastData && currentBroadcastData.ja) || '',
+        ne: (currentBroadcastData && currentBroadcastData.ne) || '',
+        my: (currentBroadcastData && currentBroadcastData.my) || '',
+        vi: (currentBroadcastData && currentBroadcastData.vi) || '',
+        en: (currentBroadcastData && currentBroadcastData.en) || '',
+        ko: (currentBroadcastData && currentBroadcastData.ko) || '',
+        isAi: true
+      };
 
-      if (jaText || enText || viText) {
+      let anySuccess = false;
+      fastResults.forEach(r => {
+        if (r.status === 'fulfilled' && r.value && r.value.code) {
+          const val = r.value.text || '';
+          if (val) anySuccess = true;
+          resultObj[r.value.code] = val || (r.value.code === 'ne' ? 'कृपया अनुवाद हेर्नुहोस्' : r.value.code === 'my' ? 'ဘာသာပြန်ချက်ကို ကြည့်ရှုပါ' : cleanZh);
+        }
+      });
+
+      if (anySuccess) {
         fastCompleted = true;
-        currentBroadcastData = {
-          zh: cleanZh,
-          ja: jaText || cleanZh,
-          ne: neText || 'कृपया अनुवाद हेर्नुहोस्',
-          my: myText || 'ဘာသာပြန်ချက်ကို ကြည့်ရှုပါ',
-          vi: viText || cleanZh,
-          en: enText || cleanZh,
-          ko: koText || cleanZh,
-          isAi: true
-        };
+        currentBroadcastData = resultObj;
         renderHexaResults(currentBroadcastData);
         saveHexaTranslationToCache(cleanZh, currentBroadcastData);
 
@@ -15378,67 +15676,67 @@ async function executeHexaTranslation(zhText) {
           statusEl.style.display = 'block';
           statusEl.style.background = 'rgba(56,142,60,0.1)';
           statusEl.style.color = '#2e7d32';
-          statusEl.innerHTML = `⚡ 六國同步翻譯瞬間秒出！（日・尼・緬・越・英・韓）`;
+          statusEl.innerHTML = `⚡ 所選 ${selectedLangs.length} 國語言同步翻譯瞬間秒出！（${selectedLangNames}）`;
         }
-        showToast('六國語言翻譯完成！', 'success');
+        showToast(`${selectedLangs.length} 國語言翻譯完成！`, 'success');
       }
     } catch (err) {
       console.warn('快速直譯引擎超時或異常，嘗試備援：', err);
     }
   }
 
-  // 4. 背景非阻塞 Gemini AI 丁寧體與尊待語精修 (不卡畫面，秒級非同步升級)
+  // 4. 背景非阻塞 Gemini AI 丁寧體與尊待語精修 (僅針對勾選語言精修，大幅縮短 Token 與回應耗時)
   const hasApiKey = (AppData && AppData.apiKey && AppData.apiKey.trim()) || HARDCODED_GEMINI_API_KEY;
   if (navigator.onLine && hasApiKey) {
     (async () => {
       try {
-        const prompt = `你是一位精通多國語言（繁體中文、日文、尼泊爾文 Nepali、緬甸文 Burmese、越南文 Vietnamese、英文 English、韓文 Korean）的專業職場翻譯專家。
-請將使用者輸入的中文內容「100% 忠實、精確直譯」為 6 國語言（純文字翻譯，嚴禁輸出任何發音標音、假名標註或羅馬拼音）。
-【日文特別要求（務必使用丁寧體，勿用常體）】：
-1. 請務必使用合適禮貌的「丁寧體」（です・ます調）。
-2. 例如感謝時「ありがとう」務必加上「ございます」（必須為「ありがとうございます」）；請託或指示時使用「〜してください」「〜をお願いします」；狀態陳述使用「〜です」「〜ます」。
-3. 語氣保持日本職場外場同事夥伴之間合適的禮貌程度（丁寧體）：嚴禁使用常體/タメ口。
-【韓文特別要求】：
-請使用標準職場禮貌尊待語（존댓말，如 ~해주세요, ~입니다）。
+        const langSchemaPrompts = selectedLangs.map(code => {
+          const m = BROADCAST_LANG_META[code];
+          return `"${code}": "${m.name}精確翻譯"`;
+        }).join(',\n  ');
+
+        let specialNote = '';
+        if (selectedLangs.includes('ja')) {
+          specialNote += `\n【日文特別要求（務必使用丁寧體，勿用常體）】：\n1. 請務必使用合適禮貌的「丁寧體」（です・ます調，如ありがとうございます、〜してください、〜です）。嚴禁使用常體/タメ口。\n2. 保持日本職場外場同事夥伴之間合適的禮貌程度。`;
+        }
+        if (selectedLangs.includes('ko')) {
+          specialNote += `\n【韓文特別要求】：請使用標準職場禮貌尊待語（존댓말，如 ~해주세요, ~입니다）。`;
+        }
+
+        const prompt = `你是一位精通多國語言的專業職場翻譯專家。
+請將使用者輸入的中文內容「100% 忠實、精確直譯」為以下所選的語言（純文字翻譯，嚴禁輸出任何發音標音、假名標註或羅馬拼音）。${specialNote}
 中文內容：「${cleanZh}」
 
 請嚴格輸出純 JSON 格式（不可包含 Markdown 或額外文字，嚴禁輸出任何標音或拼音）：
 {
   "zh": "${cleanZh.replace(/"/g, '\\"')}",
-  "ja": "日文丁寧體（です・ます調，如ありがとうございます）精確翻譯",
-  "ne": "नेपाली (標準尼泊爾文)",
-  "my": "မြန်မာဘာသာ (標準緬甸文)",
-  "vi": "Tiếng Việt (標準越南文)",
-  "en": "English standard workplace translation",
-  "ko": "한국어 (標準韓文丁寧體/존댓말)"
+  ${langSchemaPrompts}
 }`;
         const aiRes = await Promise.race([
           callGeminiApiUnified(prompt),
           new Promise((_, reject) => setTimeout(() => reject(new Error('AI timeout')), 4000))
         ]);
 
-        if (aiRes && aiRes.ja && aiRes.en) {
-          currentBroadcastData = {
-            zh: cleanZh,
-            ja: aiRes.ja,
-            ne: aiRes.ne || (currentBroadcastData ? currentBroadcastData.ne : ''),
-            my: aiRes.my || (currentBroadcastData ? currentBroadcastData.my : ''),
-            vi: aiRes.vi || (currentBroadcastData ? currentBroadcastData.vi : ''),
-            en: aiRes.en,
-            ko: aiRes.ko || (currentBroadcastData ? currentBroadcastData.ko : ''),
-            isAi: true
-          };
-          renderHexaResults(currentBroadcastData);
-          saveHexaTranslationToCache(cleanZh, currentBroadcastData);
-          if (statusEl) {
-            statusEl.style.display = 'block';
-            statusEl.style.background = 'rgba(56,142,60,0.1)';
-            statusEl.style.color = '#2e7d32';
-            statusEl.innerHTML = `✨ Gemini AI 禮貌體精修校準完成（日・尼・緬・越・英・韓 6 國直譯）`;
+        if (aiRes) {
+          let updatedAny = false;
+          selectedLangs.forEach(code => {
+            if (aiRes[code]) {
+              currentBroadcastData[code] = aiRes[code];
+              updatedAny = true;
+            }
+          });
+          if (updatedAny) {
+            renderHexaResults(currentBroadcastData);
+            saveHexaTranslationToCache(cleanZh, currentBroadcastData);
+            if (statusEl) {
+              statusEl.style.display = 'block';
+              statusEl.style.background = 'rgba(56,142,60,0.1)';
+              statusEl.style.color = '#2e7d32';
+              statusEl.innerHTML = `✨ Gemini AI 禮貌體精修校準完成（${selectedLangNames}）`;
+            }
           }
         }
       } catch (aiErr) {
-        // 背景精修異常時不打擾使用者，已顯示快速直譯結果
         console.log('Gemini background enhancement notice:', aiErr.message);
       }
     })();
@@ -15446,14 +15744,22 @@ async function executeHexaTranslation(zhText) {
 
   // 5. 離線狀態（完全無網路且快取無資料時之萬用展示卡）
   if (!fastCompleted && (!currentBroadcastData || currentBroadcastData.zh !== cleanZh)) {
-    currentBroadcastData = {
-      zh: cleanZh,
+    const offlineTemplates = {
       ja: `【連絡】${cleanZh}。よろしくお願いします。`,
       ne: `【जानकारी】 ${cleanZh}।`,
       my: `【အသိပေးချက်】 ${cleanZh}။`,
       vi: `【Thông báo】 ${cleanZh}. Xin cảm ơn!`,
       en: `[Notice] ${cleanZh}. Thank you!`,
-      ko: `【안내】 ${cleanZh}. 잘 부탁드립니다.`,
+      ko: `【안내】 ${cleanZh}. 잘 부탁드립니다.`
+    };
+    currentBroadcastData = {
+      zh: cleanZh,
+      ja: offlineTemplates.ja,
+      ne: offlineTemplates.ne,
+      my: offlineTemplates.my,
+      vi: offlineTemplates.vi,
+      en: offlineTemplates.en,
+      ko: offlineTemplates.ko,
       isAi: false
     };
     renderHexaResults(currentBroadcastData);
@@ -15461,9 +15767,9 @@ async function executeHexaTranslation(zhText) {
       statusEl.style.display = 'block';
       statusEl.style.background = 'rgba(92,61,30,0.08)';
       statusEl.style.color = 'var(--primary)';
-      statusEl.innerHTML = `📡 離線模式：已產出六國對照展示卡（連網後可獲得高精度即時翻譯）`;
+      statusEl.innerHTML = `📡 離線模式：已產出對照展示卡（連網後可獲得高精度即時翻譯）`;
     }
-    showToast('六國翻譯卡片已產出！', 'info');
+    showToast(`${selectedLangs.length} 國翻譯卡片已產出！`, 'info');
   }
 }
 
@@ -15476,126 +15782,48 @@ function renderHexaResults(data) {
   const grid = document.getElementById('broadcast-cards-grid');
   if (!grid) return;
 
+  const selectedLangs = getSelectedBroadcastLanguages();
+
+  // 動態設置 grid class 讓 1~2 國卡片顯示更協調
+  grid.className = `broadcast-quad-grid broadcast-hexa-grid count-${selectedLangs.length}`;
+
   if (!data || (!data.zh && !data.ja)) {
     grid.innerHTML = `
       <div style="grid-column: 1 / -1; background:#fff; border:1px dashed var(--border); border-radius:16px; padding:32px 16px; text-align:center; color:var(--muted);">
         <div style="font-size:2.2rem; margin-bottom:8px;">🌐</div>
         <div style="font-size:0.92rem; font-weight:700; color:var(--ink); margin-bottom:4px;">目前尚未輸入翻譯內容</div>
-        <div style="font-size:0.8rem; line-height:1.5;">請在上方輸入中文事項，點擊「🌐 立即同步翻譯」<br>即可在此即時並排展示【日文・尼泊爾文・緬甸文・越南文・英文・韓文】！</div>
+        <div style="font-size:0.8rem; line-height:1.5;">請在上方勾選欲翻譯的語言（已選 ${selectedLangs.length} 國），輸入中文事項後點擊「🌐 立即同步翻譯」！</div>
       </div>`;
     return;
   }
 
-  // 依使用者指定順序：1. 日文 ➔ 2. 尼泊爾文 ➔ 3. 緬甸文 ➔ 4. 越南文 ➔ 5. 英文 ➔ 6. 韓文
-  grid.innerHTML = `
-    <!-- 1. 🇯🇵 日本語（日文） -->
-    <div class="broadcast-lang-card" style="border-top:4px solid #b84b29;">
-      <div>
-        <div class="broadcast-lang-header" style="margin-bottom:8px;">
-          <span class="broadcast-lang-badge" style="color:#b84b29; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇯🇵</span> 日本語（日文）
-          </span>
+  // 僅渲染已勾選的語言卡片
+  grid.innerHTML = selectedLangs.map(code => {
+    const meta = BROADCAST_LANG_META[code];
+    const textVal = data[code] || '';
+    const isJa = code === 'ja';
+    const textClass = isJa ? 'broadcast-text-main ja-text' : 'broadcast-text-main';
+    const customStyle = !isJa ? 'style="font-size:1.15rem; line-height:1.7;"' : '';
+    return `
+      <!-- ${meta.flag} ${meta.name} -->
+      <div class="broadcast-lang-card" id="card-${code}" style="border-top:4px solid ${meta.color};">
+        <div>
+          <div class="broadcast-lang-header" style="margin-bottom:8px;">
+            <span class="broadcast-lang-badge" style="color:${meta.color}; font-weight:800; font-size:0.95rem;">
+              <span style="font-size:1.2rem;">${meta.flag}</span> ${meta.name}
+            </span>
+          </div>
+          <div class="${textClass}" ${customStyle}>
+            ${textVal}
+          </div>
         </div>
-        <div class="broadcast-text-main ja-text">
-          ${data.ja || ''}
-        </div>
-      </div>
-      <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ja || '')}', 'ja')">🔊 朗讀</button>
-        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('ja')">📋 複製</button>
-      </div>
-    </div>
-
-    <!-- 2. 🇳🇵 尼泊爾語（尼泊爾文） -->
-    <div class="broadcast-lang-card" style="border-top:4px solid #2e7d32;">
-      <div>
-        <div class="broadcast-lang-header" style="margin-bottom:8px;">
-          <span class="broadcast-lang-badge" style="color:#2e7d32; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇳🇵</span> 尼泊爾語（नेपाली）
-          </span>
-        </div>
-        <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
-          ${data.ne || ''}
+        <div class="broadcast-lang-actions">
+          <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(textVal)}', '${meta.ttsLang}')">🔊 朗讀</button>
+          <button class="btn btn-ghost btn-sm" onclick="copySingleLang('${code}')">📋 複製</button>
         </div>
       </div>
-      <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ne || '')}', 'ne')">🔊 朗讀</button>
-        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('ne')">📋 複製</button>
-      </div>
-    </div>
-
-    <!-- 3. 🇲🇲 緬甸語（緬甸文） -->
-    <div class="broadcast-lang-card" style="border-top:4px solid #f57f17;">
-      <div>
-        <div class="broadcast-lang-header" style="margin-bottom:8px;">
-          <span class="broadcast-lang-badge" style="color:#f57f17; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇲🇲</span> 緬甸語（မြန်မာ）
-          </span>
-        </div>
-        <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
-          ${data.my || ''}
-        </div>
-      </div>
-      <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.my || '')}', 'my')">🔊 朗讀</button>
-        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('my')">📋 複製</button>
-      </div>
-    </div>
-
-    <!-- 4. 🇻🇳 越南語（越南文） -->
-    <div class="broadcast-lang-card" style="border-top:4px solid #d32f2f;">
-      <div>
-        <div class="broadcast-lang-header" style="margin-bottom:8px;">
-          <span class="broadcast-lang-badge" style="color:#d32f2f; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇻🇳</span> 越南語（Tiếng Việt）
-          </span>
-        </div>
-        <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
-          ${data.vi || ''}
-        </div>
-      </div>
-      <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.vi || '')}', 'vi')">🔊 朗讀</button>
-        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('vi')">📋 複製</button>
-      </div>
-    </div>
-
-    <!-- 5. 🇺🇸 英語（英文） -->
-    <div class="broadcast-lang-card" style="border-top:4px solid #1976d2;">
-      <div>
-        <div class="broadcast-lang-header" style="margin-bottom:8px;">
-          <span class="broadcast-lang-badge" style="color:#1976d2; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇺🇸</span> 英語（English）
-          </span>
-        </div>
-        <div class="broadcast-text-main">
-          ${data.en || ''}
-        </div>
-      </div>
-      <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.en || '')}', 'en')">🔊 朗讀</button>
-        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('en')">📋 複製</button>
-      </div>
-    </div>
-
-    <!-- 6. 🇰🇷 韓國語（韓文） -->
-    <div class="broadcast-lang-card" style="border-top:4px solid #7b1fa2;">
-      <div>
-        <div class="broadcast-lang-header" style="margin-bottom:8px;">
-          <span class="broadcast-lang-badge" style="color:#7b1fa2; font-weight:800; font-size:0.95rem;">
-            <span style="font-size:1.2rem;">🇰🇷</span> 韓國語（한국어）
-          </span>
-        </div>
-        <div class="broadcast-text-main" style="font-size:1.15rem; line-height:1.7;">
-          ${data.ko || ''}
-        </div>
-      </div>
-      <div class="broadcast-lang-actions">
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(data.ko || '')}', 'ko')">🔊 朗讀</button>
-        <button class="btn btn-ghost btn-sm" onclick="copySingleLang('ko')">📋 複製</button>
-      </div>
-    </div>
-  `;
+    `;
+  }).join('');
 }
 
 function copySingleLang(langKey) {
@@ -15629,35 +15857,23 @@ function copyAllQuadBroadcast() {
 
 function copyAllHexaBroadcast() {
   if (!currentBroadcastData) return;
-  const fullText = `【🌐 現場六國同步翻譯】
-🇯🇵 日本語（日文）：
-${currentBroadcastData.ja || ''}
-
-🇳🇵 尼泊爾語（尼泊爾文）：
-${currentBroadcastData.ne || ''}
-
-🇲🇲 緬甸語（緬甸文）：
-${currentBroadcastData.my || ''}
-
-🇻🇳 越南語（越南文）：
-${currentBroadcastData.vi || ''}
-
-🇺🇸 英語（英文）：
-${currentBroadcastData.en || ''}
-
-🇰🇷 韓國語（韓文）：
-${currentBroadcastData.ko || ''}
-
-（中文原意：${currentBroadcastData.zh || ''}）`;
+  const selectedLangs = getSelectedBroadcastLanguages();
+  const parts = [`【🌐 現場多國同步翻譯】`];
+  selectedLangs.forEach(code => {
+    const meta = BROADCAST_LANG_META[code];
+    parts.push(`${meta.flag} ${meta.name}：\n${currentBroadcastData[code] || ''}`);
+  });
+  parts.push(`\n（中文原意：${currentBroadcastData.zh || ''}）`);
+  const fullText = parts.join('\n\n');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(fullText).then(() => {
-      showToast('已複製全部 6 國語言翻譯文字！', 'success');
+      showToast(`已複製所選 ${selectedLangs.length} 國語言翻譯文字！`, 'success');
     }).catch(() => {
-      showToast('已生成 6 國翻譯文字', 'info');
+      showToast(`已生成 ${selectedLangs.length} 國翻譯文字`, 'info');
     });
   } else {
-    showToast('已複製全部 6 國語言翻譯文字！', 'success');
+    showToast(`已複製所選 ${selectedLangs.length} 國語言翻譯文字！`, 'success');
   }
 }
 
@@ -15670,74 +15886,26 @@ function openBroadcastBigScreen() {
 
   if (preview) preview.textContent = currentBroadcastData.zh || '現場翻譯事項';
 
-  // 依使用者指定順序：1. 日文 ➔ 2. 尼泊爾文 ➔ 3. 緬甸文 ➔ 4. 越南文 ➔ 5. 英文 ➔ 6. 韓文
-  container.innerHTML = `
-    <!-- 1. 🇯🇵 日文大字卡 -->
-    <div class="bigscreen-card" style="border-left:6px solid #b84b29;">
-      <div class="bigscreen-card-title">
-        <span>🇯🇵 日本語（日文）</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ja || '')}', 'ja')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
-      </div>
-      <div class="bigscreen-card-content" style="font-family:var(--font-serif); color:var(--primary);">
-        ${currentBroadcastData.ja || ''}
-      </div>
-    </div>
+  const selectedLangs = getSelectedBroadcastLanguages();
+  container.className = `bigscreen-quad-grid bigscreen-hexa-grid count-${selectedLangs.length}`;
 
-    <!-- 2. 🇳🇵 尼泊爾文大字卡 -->
-    <div class="bigscreen-card" style="border-left:6px solid #2e7d32;">
-      <div class="bigscreen-card-title">
-        <span>🇳🇵 尼泊爾語（नेपाली）</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ne || '')}', 'ne')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
+  container.innerHTML = selectedLangs.map(code => {
+    const meta = BROADCAST_LANG_META[code];
+    const textVal = currentBroadcastData[code] || '';
+    const isJa = code === 'ja';
+    const fontStyle = isJa ? 'font-family:var(--font-serif); color:var(--primary);' : `color:${meta.color};`;
+    return `
+      <div class="bigscreen-card" style="border-left:6px solid ${meta.color};">
+        <div class="bigscreen-card-title">
+          <span>${meta.flag} ${meta.name}</span>
+          <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(textVal)}', '${meta.ttsLang}')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
+        </div>
+        <div class="bigscreen-card-content" style="${fontStyle}">
+          ${textVal}
+        </div>
       </div>
-      <div class="bigscreen-card-content" style="color:#1b5e20;">
-        ${currentBroadcastData.ne || ''}
-      </div>
-    </div>
-
-    <!-- 3. 🇲🇲 緬甸文大字卡 -->
-    <div class="bigscreen-card" style="border-left:6px solid #f57f17;">
-      <div class="bigscreen-card-title">
-        <span>🇲🇲 緬甸語（မြန်မာ）</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.my || '')}', 'my')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
-      </div>
-      <div class="bigscreen-card-content" style="color:#e65100;">
-        ${currentBroadcastData.my || ''}
-      </div>
-    </div>
-
-    <!-- 4. 🇻🇳 越南文大字卡 -->
-    <div class="bigscreen-card" style="border-left:6px solid #d32f2f;">
-      <div class="bigscreen-card-title">
-        <span>🇻🇳 越南語（Tiếng Việt）</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.vi || '')}', 'vi')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
-      </div>
-      <div class="bigscreen-card-content" style="color:#b71c1c;">
-        ${currentBroadcastData.vi || ''}
-      </div>
-    </div>
-
-    <!-- 5. 🇺🇸 英文大字卡 -->
-    <div class="bigscreen-card" style="border-left:6px solid #1976d2;">
-      <div class="bigscreen-card-title">
-        <span>🇺🇸 英語（English）</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.en || '')}', 'en')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
-      </div>
-      <div class="bigscreen-card-content" style="color:#0d47a1;">
-        ${currentBroadcastData.en || ''}
-      </div>
-    </div>
-
-    <!-- 6. 🇰🇷 韓文大字卡 -->
-    <div class="bigscreen-card" style="border-left:6px solid #7b1fa2;">
-      <div class="bigscreen-card-title">
-        <span>🇰🇷 韓國語（한국어）</span>
-        <button class="btn btn-ghost btn-sm" onclick="speakBroadcast('${escapeJs(currentBroadcastData.ko || '')}', 'ko')" style="padding:2px 8px; font-size:0.75rem;">🔊 朗讀</button>
-      </div>
-      <div class="bigscreen-card-content" style="color:#4a148c;">
-        ${currentBroadcastData.ko || ''}
-      </div>
-    </div>
-  `;
+    `;
+  }).join('');
 
   modal.classList.add('open');
   modal.classList.add('show');

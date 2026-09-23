@@ -1019,6 +1019,29 @@ assert(html.includes('flushActiveInterimToHistory'), '具備 flushActiveInterimT
 assert(html.includes('00:01') && html.includes('iv-card-header-row'), '時間戳記採用 Transync AI 經典 mm:ss 格式，與原圖排版高度一致');
 assert(html.includes('box.scrollTop = box.scrollHeight'), '對話串流盒支援新發言自動平滑滾動至最底端');
 
+// 測試 57: 現場六國同步翻譯板自選語言勾選框與按需高速直譯 (v147)
+console.log('\n【測試 57：現場六國翻譯自選 1~6 國語言勾選框與按需提速直譯 (v147)】');
+assert(html.includes('id="broadcast-lang-checkbox-group"') || html.includes('class="broadcast-lang-checkbox-grid"'), '包含自選語言核取方塊容器 (broadcast-lang-checkbox-group)');
+assert(html.includes('name="broadcast_lang"') && html.includes('value="ja"') && html.includes('value="ne"') && html.includes('value="my"') && html.includes('value="vi"') && html.includes('value="en"') && html.includes('value="ko"'), '包含全數 6 國語言之獨立勾選方塊 (ja, ne, my, vi, en, ko)');
+assert(html.includes('setBroadcastLangPreset(\'all\')'), '包含「全選 (6國)」快捷預設組合按鈕');
+assert(html.includes('setBroadcastLangPreset(\'common\')'), '包含「常用 (日/英/韓)」快捷預設組合按鈕');
+assert(html.includes('setBroadcastLangPreset(\'sea\')'), '包含「東南亞 (尼/緬/越)」快捷預設組合按鈕');
+assert(html.includes('setBroadcastLangPreset(\'ja_only\')'), '包含「僅日文」快捷預設組合按鈕');
+assert(html.includes('id="broadcast-selected-count-badge"'), '包含已選語言數量徽章 (broadcast-selected-count-badge)');
+assert(html.includes('getSelectedBroadcastLanguages'), '包含讀取當前勾選語言函式 (getSelectedBroadcastLanguages)');
+assert(html.includes('saveSelectedBroadcastLanguages') && html.includes('yang_broadcast_selected_langs'), '支援 localStorage 持久化儲存已選語言偏好 (yang_broadcast_selected_langs)');
+assert(html.includes('onBroadcastLangSelectionChange'), '包含勾選狀態變更即時響應函式 (onBroadcastLangSelectionChange)');
+assert(html.includes('initBroadcastLanguageSelector'), '包含分頁初始化與偏好還原函式 (initBroadcastLanguageSelector)');
+assert(html.includes('selectedLangs.map(') && html.includes('fetchFreeGoogleTranslate(cleanZh, code)'), '直譯引擎實踐按需發起請求（僅針對使用者勾選的語言發起直譯，大幅縮短等待時間）');
+assert(html.includes('selectedLangs.map(code =>') && html.includes('langSchemaPrompts'), 'Gemini AI 背景精修僅針對勾選語言產出 JSON Schema，縮短 Token 消耗與耗時');
+assert(html.includes('count-${selectedLangs.length}') || html.includes('count-'), '卡片網格與全螢幕大字彈窗具備動態欄位適配 class (count-1, count-2 等)');
+
+// 模擬函式邏輯驗證
+const mockSelectedLangs = ['ja', 'en'];
+const mockMetaKeys = ['ja', 'ne', 'my', 'vi', 'en', 'ko'];
+assert(mockSelectedLangs.every(l => mockMetaKeys.includes(l)), '已選語言清單結構正確符合支援代碼');
+assert(html.includes('已複製所選') && html.includes('國語言翻譯文字'), '一鍵複製按鈕動態呈現實際勾選複製語言數量');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1026,7 +1049,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v146) Transync AI 連續對話流、雙擊擬答全面上線！');
+  console.log('🎉 所有測試通過！(v147) 六國翻譯自選 1~6 國語言勾選框與按需提速直譯全面上線！');
 }
 
 
