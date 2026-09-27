@@ -505,7 +505,7 @@ assert(html.includes('speaker-supervisor') && html.includes('speaker-my-speech')
 assert(html.includes('renderDialogBubbleSection') && html.includes('compact-sop-ja') && html.includes('dialog-bubble-ja'), 'renderSopContent 支援分區優美卡片渲染與單句獨立發音觸發');
 
 const swContent = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swContent.includes('yang-pwa-v101') || swContent.includes('yang-pwa-v102'), 'Service Worker 快取版本已升級至 yang-pwa-v101 或以上');
+assert(/yang-pwa-v(10[1-9]|1[1-9]\d)/.test(swContent), 'Service Worker 快取版本已升級至 yang-pwa-v101 或以上');
 assert(html.includes('yang_runner_handbook_v101'), 'localStorage STORAGE_KEY 已升級至 yang_runner_handbook_v101');
 
 // 測試 33: Section 9 頭像系統・選國籍步驟・10+10 瀏海與後髮・深色制服・移除特徵欄・楊詠筑姓名修正 (v82)
@@ -1124,6 +1124,95 @@ assert(html.includes('約 N4 程度。文法單純直接、短句好記、以基
 assert(html.includes('約 N2 程度。使用高級商務敬語、謙讓語 いたします/存じます、連接詞與得體句型'), 'Gemini API 提示詞嚴格要求生成 N2 高級敬語禮貌長句');
 assert(html.includes('軍師已生成 N4簡單版 與 N2禮貌版 擬答！'), '選取歷史問題後吐司訊息提示已生成 N4簡單版 與 N2禮貌版 擬答');
 
+// 測試 61: 50 題面試題庫本地秒出、心跳守護工廠重啟與智慧未完助詞縫合 (v151)
+console.log('\n【測試 61：50 題面試題庫本地秒出、心跳守護工廠重啟與智慧未完助詞縫合 (v151)】');
+
+assert(html.includes('const INTERVIEW_50_QA_DATABASE = ['), '包含完整 50 題日本飯店面試專屬問答庫 (INTERVIEW_50_QA_DATABASE)');
+assert(html.includes('function getAnswerFrom50QaDatabase(questionText, honorific)'), '包含 50 題庫本地極速秒查引擎 (getAnswerFrom50QaDatabase)');
+assert(html.includes('function isIncompleteJapaneseClause(text)'), '包含智慧日語未完助詞與未完子句偵測器 (isIncompleteJapaneseClause)');
+assert(html.includes('function speculativePreloadAnswer(questionText)'), '包含推測預熱快取函式 (speculativePreloadAnswer)');
+assert(html.includes('function updateInterviewStatusBadge(state, text)'), '包含收音診斷狀態徽章即時更新函式 (updateInterviewStatusBadge)');
+assert(html.includes('function reconnectInterviewMic()'), '包含一鍵重新整理麥克風收音連線函式 (reconnectInterviewMic)');
+assert(html.includes('id="btn-reconnect-interview-mic"'), '工具列包含一鍵重整收音按鈕 (btn-reconnect-interview-mic)');
+assert(html.includes('onclick="reconnectInterviewMic()"'), '重整收音按鈕綁定 reconnectInterviewMic 事件');
+assert(html.includes('function createAndStartInterviewRecognition()'), '具備工廠模式語音辨識實例建立函式 (createAndStartInterviewRecognition)');
+assert(html.includes('recognitionWatchdog'), '具備心跳守護定時器 (recognitionWatchdog) 防收音假死');
+
+// 抽取 50 題庫與純函式進行執行期語意與邏輯深度驗證
+const dbExtractMatch = html.match(/const INTERVIEW_50_QA_DATABASE = (\[[\s\S]*?\n\]);/);
+const funcExtractMatch = html.match(/(function formatQaResult[\s\S]*?function isIncompleteJapaneseClause\(text\) \{[\s\S]*?\n\})/);
+assert(dbExtractMatch && funcExtractMatch, '成功抽取 50 題問答庫與純函數邏輯實體');
+
+if (dbExtractMatch && funcExtractMatch) {
+  const evalEnv = new Function(`
+    const INTERVIEW_50_QA_DATABASE = ${dbExtractMatch[1]};
+    ${funcExtractMatch[1]}
+    return { INTERVIEW_50_QA_DATABASE, formatQaResult, getAnswerFrom50QaDatabase, isIncompleteJapaneseClause };
+  `)();
+
+  const { INTERVIEW_50_QA_DATABASE, getAnswerFrom50QaDatabase, isIncompleteJapaneseClause } = evalEnv;
+
+  // 1. 題庫完整性檢查
+  assert(INTERVIEW_50_QA_DATABASE.length === 50, '問答庫嚴格包含整整 50 題常見面試問題');
+  
+  const allCategories = new Set(INTERVIEW_50_QA_DATABASE.map(q => q.category));
+  assert(allCategories.has('基本情報・自己紹介') && 
+         allCategories.has('実務経験・黒川温泉') && 
+         allCategories.has('志望動機・適性') && 
+         allCategories.has('語学力・コミュニケーション') && 
+         allCategories.has('勤務条件・体力・シフト') && 
+         allCategories.has('性格・協調性・寮生活・逆質問'), '題庫全數涵蓋六大核心考題領域');
+
+  // 檢查每題皆具備 N4簡單版 與 N2禮貌版 且皆有 ruby 標音與繁體中文
+  const allHaveDualVersions = INTERVIEW_50_QA_DATABASE.every(q => 
+    q.simple && q.simple.ruby && q.simple.raw && q.simple.zh &&
+    q.story && q.story.ruby && q.story.raw && q.story.zh
+  );
+  assert(allHaveDualVersions, '全數 50 題皆具備完整版本 A (N4簡單版) 與版本 B (N2禮貌版) 及 ruby 與中文');
+
+  // 2. 本地極速比對驗證 (0ms 秒出)
+  const q1Ans = getAnswerFrom50QaDatabase('自己紹介をお願いします', 'アルプスホテル白馬様');
+  assert(q1Ans && q1Ans.simple.raw.includes('楊詠筑') && q1Ans.story.raw.includes('アルプスホテル白馬様'), 'Q1 自己紹介：成功秒出且版本 B 正確替換敬稱');
+
+  const ageAns = getAnswerFrom50QaDatabase('今何歳ですか？', '御社');
+  assert(ageAns && ageAns.simple.raw.includes('31歳') && ageAns.story.raw.includes('31歳'), 'Q3 年齡：成功秒出 31 歲精確回答');
+
+  const hakubaAns = getAnswerFrom50QaDatabase('なぜ白馬のホテルを選んだのですか？', 'アルプスホテル白馬様');
+  assert(hakubaAns && hakubaAns.story.raw.includes('白馬') && hakubaAns.story.raw.includes('スノーブーツ'), 'Q4 志望動機：成功秒出白馬環境與抗寒準備');
+
+  const allergyAns = getAnswerFrom50QaDatabase('甲殻類のアレルギーがあると聞きましたが', '御社');
+  assert(allergyAns && allergyAns.simple.raw.includes('甲殻類') && allergyAns.simple.raw.includes('支障'), 'Q25 甲殻類過敏：成功秒出配膳不影響業務');
+
+  const roomAns = getAnswerFrom50QaDatabase('寮生活についての希望はありますか？', '御社');
+  assert(roomAns && roomAns.story.raw.includes('個室') && roomAns.story.raw.includes('自炊'), 'Q43 單人房宿舍：成功秒出個人作息與注重整潔理由');
+
+  const licenseAns = getAnswerFrom50QaDatabase('車の運転免許は持っていますか？', '御社');
+  assert(licenseAns && licenseAns.simple.raw.includes('免許') && licenseAns.simple.raw.includes('徒歩'), 'Q40 駕照：成功秒出無日本駕照但步行接駁無礙');
+
+  const reverseAns = getAnswerFrom50QaDatabase('何か質問はありますか？', '御社');
+  assert(reverseAns && reverseAns.simple.raw.includes('勉強') && reverseAns.story.raw.includes('心構え'), 'Q50 逆質問：成功秒出事前準備與工作期望');
+
+  const unknownAns = getAnswerFrom50QaDatabase('明日的夜ご飯は何ですか？', '御社');
+  assert(unknownAns === null, '未知提問正確回傳 null 由 Gemini 背景即時補位');
+
+  // 3. 智慧未完助詞與子句偵測器檢驗 (解決新聞測試只聽半句問題)
+  assert(isIncompleteJapaneseClause('嘘をつき続ける女の') === true, '未完助詞「の」正確判讀為未完子句，延長等待時間');
+  assert(isIncompleteJapaneseClause('日本の総理大臣は') === true, '未完助詞「は」正確判讀為未完子句');
+  assert(isIncompleteJapaneseClause('東京駅に') === true, '未完助詞「に」正確判讀為未完子句');
+  assert(isIncompleteJapaneseClause('この件について') === true, '複合格助詞「について」正確判讀為未完子句');
+  assert(isIncompleteJapaneseClause('大変光栄ですが') === true, '接續助詞「ですが」正確判讀為未完子句');
+  assert(isIncompleteJapaneseClause('寒さには強いので') === true, '接續助詞「ので」正確判讀為未完子句');
+  assert(isIncompleteJapaneseClause('配膳を担当して') === true, '未完助詞「て」正確判讀為未完子句');
+  assert(isIncompleteJapaneseClause('よろしくお願いいたします。') === false, '完整結束句正確判定為非未完子句');
+  assert(isIncompleteJapaneseClause('はい、分かりました。') === false, '完整應答句正確判定為非未完子句');
+}
+
+// 4. 生命週期與智慧縫合機制防護驗證
+assert(html.includes('isIncompleteJapaneseClause(lastItem.jp)') && html.includes('newContinues'), 'handleNewRecognizedUtterance 具備未完子句跨斷片智慧縫合機制 (Smart Sentence Stitching)');
+assert(html.includes('animateMetersActive(false);') && !html.includes('rec.onspeechend = () => {\n      animateMetersActive(false);\n      flushActiveInterimToHistory();'), 'rec.onspeechend 絕不強制提早 flush，確保講者換氣不被斬斷');
+assert(html.includes('const isInc = isIncompleteJapaneseClause(liveText);') && html.includes('const waitMs = isInc ? 2500 : 1600;'), '靜音計時器實施動態雙時間窗 (一般句 1600ms，未完句 2500ms)');
+assert(html.includes('createAndStartInterviewRecognition();') && html.includes('new SpeechRec()'), '重啟語音一律透過工廠模式重建 fresh 實例，杜絕死物件重用');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1131,7 +1220,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v150) 面試雙版本回答精確定位為 N4簡單版 與 N2禮貌版 全面上線！');
+  console.log('🎉 所有測試通過！(v151) 50 題常見面試題庫本地 0ms 秒出、收音心跳守護工廠模式與未完助詞智慧縫合全面上線！');
 }
 
 
