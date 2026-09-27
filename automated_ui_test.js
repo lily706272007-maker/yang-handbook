@@ -1228,6 +1228,94 @@ const evalRestaurantSemantic = new Function(`
 const restAns = evalRestaurantSemantic('どうやって私たちのレストランを選びますか？', 'アルプスホテル白馬様');
 assert(restAns && restAns.simple && restAns.simple.raw.includes('白馬') && restAns.simple.raw.includes('配膳'), '怎麼選擇我們的餐廳：直球回答白馬優美環境與黑川配膳經驗');
 
+
+// 測試 63: 日語終止形即時切句引擎（聽一句翻一句）、全域單一意圖原子化鎖定、非問句相槌覆誦與三大回答定制微操作 (v153)
+console.log('\n【測試 63：日語終止形即時切句引擎（聽一句翻一句）、全域單一意圖原子化鎖定、非問句相槌覆誦與三大回答定制微操作 (v153)】');
+
+// 1. 驗證日語終止形切句器 (splitJapaneseSentences)
+const splitFuncCode = html.slice(html.indexOf('function splitJapaneseSentences'), html.indexOf('function flushActiveInterimToHistory'));
+assert(splitFuncCode && splitFuncCode.length > 50, '包含日語終止形與句子邊界切片器函式 splitJapaneseSentences');
+
+const evalSplitter = new Function('isIncompleteJapaneseClause', splitFuncCode + '; return splitJapaneseSentences;')(t => {
+  if (!t) return false;
+  const s = t.trim();
+  return /(?:[はがのをにでともへよりて]|から|けど|けれど|ですが|なので|ても|でも|ば|について)$/.test(s);
+});
+
+const testSingle = evalSplitter('今日はよろしくお願いします。');
+assert(Array.isArray(testSingle) && testSingle.length === 1 && testSingle[0] === '今日はよろしくお願いします。', '單一句子正確保持完整單句');
+
+const testNews = evalSplitter('現在、東京では緊急事態宣言が出されています。また、飲食店の営業時間も短縮されています。');
+assert(testNews.length === 2 && testNews[0].includes('緊急事態宣言') && testNews[1].includes('短縮'), '新聞連續句成功依日文終止形邊界一刀切為 2 句，落實「聽一句翻一句」');
+
+const testNoPunct = evalSplitter('趣味は料理を作ることです 休みの日は散歩をします');
+assert(testNoPunct.length === 2 && testNoPunct[0].includes('料理') && testNoPunct[1].includes('散歩'), '無標點口語連續句依「です」終止形邊界精準切成 2 句');
+
+const testInc = evalSplitter('私の趣味についての');
+assert(testInc.length === 1 && testInc[0] === '私の趣味についての', '未完助詞句不予強制切割，交由未完助詞延遲防護');
+
+// 2. 語音辨識生命週期中聽一句翻一句與動態超速靜音計時器檢驗
+assert(html.includes('const actualWaitMs = (!isInc && hasTerminal) ? 450 : waitMs;'), '日文終止形邊界極速 450ms 切句計時器，杜絕整大段卡住');
+assert(html.includes('splitJapaneseSentences(InterviewEngine.speechBuffer)'), '語音緩衝區即時判定已成句並立即推入串流');
+assert(html.includes('splitJapaneseSentences(textToFlush)'), 'flushActiveInterimToHistory 支援多句序列化沉澱處理');
+
+// 3. 非問句意圖過濾：背景說明/新聞播報覆誦點頭（相槌 あいづち）
+const isQuestionFuncCode = html.slice(html.indexOf('function isQuestionSentence'), html.indexOf('function animateMetersActive'));
+const evalFullSemantic = new Function(`
+  ${isQuestionFuncCode};
+  ${semanticFuncMatch[0]};
+  return matchSemanticCandidateAnswer;
+`)();
+
+const newsAizuchi = evalFullSemantic('現在、東京では緊急事態宣言が出されています。', 'アルプスホテル白馬様');
+assert(newsAizuchi && newsAizuchi.isStatementAizuchi === true, '新聞播報正確辨識為非問句陳述');
+assert(newsAizuchi.raw.includes('承知いたしました') && !newsAizuchi.raw.includes('黒川温泉'), '新聞陳述提供得體相槌覆誦點頭，絕不再文不對題回答黑川跑單員');
+
+// 4. 全域單一意圖原子化鎖定驗證 (徹底解決問年齡答家鄉、問興趣答特長)
+const hobbyOnly = evalFullSemantic('趣味は何ですか？', '御社');
+assert(hobbyOnly.raw.includes('自炊') || hobbyOnly.raw.includes('料理'), '問趣味：精準鎖定自炊做料理');
+assert(!hobbyOnly.raw.includes('特技') && !hobbyOnly.raw.includes('声優') && !hobbyOnly.raw.includes('きれいな発音'), '問趣味：嚴格排他，絕不偷渡未問的特長或聲優發音');
+
+const skillOnly = evalFullSemantic('特技を教えてください', '御社');
+assert(skillOnly.raw.includes('挨拶') || skillOnly.raw.includes('フットワーク'), '問特技：精準鎖定親切問候與俐落行動');
+assert(!skillOnly.raw.includes('自炊') && !skillOnly.raw.includes('料理') && !skillOnly.raw.includes('神社'), '問特技：嚴格排他，絕不偷渡未問的興趣料理與神社');
+
+const originOnly = evalFullSemantic('ご出身はどちらですか？', '御社');
+assert(originOnly.raw.includes('台南') && !originOnly.raw.includes('成功大学') && !originOnly.raw.includes('31歳'), '問出身：純粹回答台灣台南，絕不牽扯學歷與年齡');
+
+const eduOnly = evalFullSemantic('大学での専攻は何ですか？', '御社');
+assert(eduOnly.raw.includes('成功大学') && !eduOnly.raw.includes('31歳'), '問學歷：純粹回答成功大學，絕不牽扯年齡與體力');
+
+const birthOnly = evalFullSemantic('生年月日を教えてください', '御社');
+assert(birthOnly.raw.includes('1995年1月6日') && !birthOnly.raw.includes('黒川温泉'), '問生年月日：純粹回答 1995年1月6日，絕不膨脹提黑川溫泉');
+
+// 5. 50 題庫 Q46 脫鉤清理驗證
+const evalEnv63 = new Function(`
+  const INTERVIEW_50_QA_DATABASE = ${dbExtractMatch[1]};
+  ${funcExtractMatch[1]}
+  return { INTERVIEW_50_QA_DATABASE, getAnswerFrom50QaDatabase };
+`)();
+const dbQ46 = evalEnv63.getAnswerFrom50QaDatabase('趣味について教えてください', '御社');
+assert(dbQ46 && dbQ46.simple.raw.includes('自炊') && !dbQ46.simple.raw.includes('特技'), '題庫 Q46：興趣純粹回答自炊做料理，已徹底移除特長污染');
+
+// 6. 三大回答定制微操作 UI 與機制驗證
+assert(html.includes('iv-style-variant-bar'), '包含 3 種風格切換標籤列 (.iv-style-variant-bar)');
+assert(html.includes('switchAnswerStyleVariant(\'direct\')') && html.includes('switchAnswerStyleVariant(\'work\')') && html.includes('switchAnswerStyleVariant(\'life\')'), '具備 3 種風格切換點選觸發');
+assert(html.includes('iv-exclude-section'), '包含智能剔除區塊 (.iv-exclude-section)');
+assert(html.includes('applyAnswerExclusion(\'特長・特技\')'), '具備快速剔除特長/特技標籤按鈕');
+assert(html.includes('applyAnswerExclusion(\'神社・御朱印\')'), '具備快速剔除神社/御朱印標籤按鈕');
+assert(html.includes('applyAnswerExclusion(\'黑川溫泉\')'), '具備快速剔除黑川溫泉標籤按鈕');
+assert(html.includes('clearAnswerExclusion()'), '具備重設排除條件函式');
+assert(html.includes('submitCustomExclusion()'), '具備自訂排除詞輸入提交功能');
+assert(html.includes('id="btn-regenerate-answer"'), '具備一鍵換個說法重新生成按鈕 (btn-regenerate-answer)');
+assert(html.includes('regenerateCurrentAnswer()'), '具備重新生成函式 regenerateCurrentAnswer');
+assert(html.includes('【絕對排除要求】：求職者特別要求回答中【絕對嚴格禁止提到】'), 'Gemini API 提示詞具備負向約束動態注入');
+assert(html.includes('InterviewEngine.activeStyleVariant = \'direct\';') && html.includes('InterviewEngine.activeExcludeText = \'\';'), '清空對話串流時重設風格與排除狀態');
+
+// 7. PWA Service Worker 升級至 v153 驗證
+const swV153Content = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
+assert(swV153Content.includes('yang-pwa-v153'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v153');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1235,10 +1323,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v152) 單一 N4 簡單版面試軍師全面上線，徹底移除版本A/B，AI 現場靈機應變極速響應！');
+  console.log('🎉 所有測試通過！(v153) 聽一句翻一句即時切句引擎、全域單一意圖原子化鎖定、非問句相槌覆誦與三大回答定制微操作全面就位！');
 }
-
-
-
-
-
