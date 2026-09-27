@@ -972,7 +972,7 @@ assert(html.includes('interview-meter-bar') && html.includes('interview-timer-di
 assert(html.includes('interview-buffer-bar') && html.includes('ご質問ありがとうございます。少し考えさせていただいてもよろしいでしょうか'), '頂部常駐萬用爭取思考時間之救命緩衝句 (interview-buffer-bar)');
 assert(html.includes('interview-grid') && html.includes('interview-col-left') && html.includes('interview-col-right'), '主體採用 1:1 雙欄佈局 (左欄即時日翻中聽譯，右欄 AI 軍師專屬回答)');
 assert(html.includes('interview-stream-box') && html.includes('iv-card-jp') && html.includes('iv-card-zh'), '左欄包含即時日語原文與繁體中文字幕串流容器');
-assert(html.includes('iv-ans-badge simple') && html.includes('iv-ans-badge story'), '右欄推薦回答同時提供「版本 A：簡單俐落版」與「版本 B：豐富故事版」');
+assert(html.includes('iv-ans-badge simple'), '右欄推薦回答提供「日文簡單版 (N4 程度)」聚焦擬答');
 assert(html.includes('iv-ans-ruby-body') && html.includes('ruby-align') && html.includes('iv-ans-zh-card'), '回答排版嚴格遵照上層振假名、中層日文敬語、下層粉框繁中翻譯卡片');
 assert(html.includes('btn-story-shrine') && html.includes('木造建築與 7 本御朱印'), '包含招牌故事快捷標籤：木造建築與 7 本御朱印');
 assert(html.includes('btn-story-kurokawa') && html.includes('黑川備料・補菜・設定'), '包含招牌故事快捷標籤：黑川備料・補菜・設定');
@@ -1082,7 +1082,7 @@ if (semanticFuncMatch) {
   assert(familyAns.simple.raw.includes('家族') || familyAns.simple.raw.includes('両親'), '家族提問：成功匹配雙親支持應答');
 
   const fallbackAns = evalSemantic('お気に入りの映画は何ですか？', '御社');
-  assert(fallbackAns.simple.raw.includes('お気に入りの映画 substance') || fallbackAns.simple.raw.includes('お気に入りの映画は何ですか？') || fallbackAns.simple.ruby.includes('お気に入りの映画は何ですか？'), '未預期提問：動態置入考官提問文字，確保非靜態死板內容');
+  assert(fallbackAns && fallbackAns.simple && fallbackAns.simple.raw.includes('黒川温泉') && fallbackAns.simple.raw.includes('笑顔'), '未預期提問：提供得體自然且契合候選人背景的應對內容，杜絕公式化套話');
 }
 
 // 測試 59: 初始狀態清空待命（無寫死問題）與面試歷史會話紀錄庫 (v149)
@@ -1111,18 +1111,15 @@ assert(html.includes('function clearInterviewTranscript()') &&
        html.includes('archiveCurrentInterviewSession(false)') && 
        html.includes('currentAnswers = null'), 'clearInterviewTranscript 在清空前先自動留存歷史，並徹底清空當前狀態與擬答');
 
-// 測試 60: 面試雙版本回答重塑為「日文簡單版 (N4 程度)」與「日文禮貌版 (N2 程度)」(v150)
-console.log('\n【測試 60：面試雙版本回答重塑為「日文簡單版 (N4 程度)」與「日文禮貌版 (N2 程度)」(v150)】');
-assert(html.includes('日文簡單版 N4 ＆ 日文禮貌版 N2'), '右欄頂部標題標示「日文簡單版 N4 ＆ 日文禮貌版 N2」');
-assert(html.includes('版本 A：日文簡單版 (N4 程度)'), '卡片 1 徽章明確標註「版本 A：日文簡單版 (N4 程度)」');
-assert(html.includes('版本 B：日文禮貌版 (N2 程度)'), '卡片 2 徽章明確標註「版本 B：日文禮貌版 (N2 程度)」');
-assert(html.includes('N4 文法・緊張不打結・好記安心說'), '版本 A 副標籤提示說明「N4 文法・緊張不打結・好記安心說」');
-assert(html.includes('N2 敬語・商務得體・展現日語實力'), '版本 B 副標籤提示說明「N2 敬語・商務得體・展現日語實力」');
-assert(html.includes('N4簡單 / N2禮貌'), '當前鎖定目標題目橫幅徽章標註「N4簡單 / N2禮貌」');
-assert(html.includes('版本 A (日文簡單版 N4)') && html.includes('版本 B (日文禮貌版 N2)'), '等待考官提問卡片引導說明提及版本 A (N4) 與版本 B (N2)');
-assert(html.includes('約 N4 程度。文法單純直接、短句好記、以基礎丁寧語 です/ます 表達'), 'Gemini API 提示詞嚴格要求生成 N4 簡單直接短句');
-assert(html.includes('約 N2 程度。使用高級商務敬語、謙讓語 いたします/存じます、連接詞與得體句型'), 'Gemini API 提示詞嚴格要求生成 N2 高級敬語禮貌長句');
-assert(html.includes('軍師已生成 N4簡單版 與 N2禮貌版 擬答！'), '選取歷史問題後吐司訊息提示已生成 N4簡單版 與 N2禮貌版 擬答');
+// 測試 60: 面試回答升級為「日文簡單版 (N4 程度)」聚焦單一版本 (v150/v152)
+console.log('\n【測試 60：面試回答升級為「日文簡單版 (N4 程度)」聚焦單一版本 (v150/v152)】');
+assert(html.includes('日文簡單版 N4'), '右欄頂部標題標示「日文簡單版 N4」');
+assert(html.includes('💡 日文簡單回答 (N4 程度)'), '卡片徽章明確標註「💡 日文簡單回答 (N4 程度)」');
+assert(html.includes('N4 文法・直球切題・好記安心說'), '副標籤提示說明「N4 文法・直球切題・好記安心說」');
+assert(html.includes('N4 簡單回答'), '當前鎖定目標題目橫幅徽章標註「N4 簡單回答」');
+assert(html.includes('日文簡單回答 (N4 程度)'), '等待考官提問卡片引導說明提及日文簡單回答 (N4 程度)');
+assert(html.includes('日文簡單版 (約 N4 程度)'), 'Gemini API 提示詞嚴格要求生成 N4 簡單直接短句');
+assert(html.includes('軍師已生成 N4 日文簡單版擬答！'), '選取歷史問題後吐司訊息提示已生成 N4 日文簡單版擬答');
 
 // 測試 61: 50 題面試題庫本地秒出、心跳守護工廠重啟與智慧未完助詞縫合 (v151)
 console.log('\n【測試 61：50 題面試題庫本地秒出、心跳守護工廠重啟與智慧未完助詞縫合 (v151)】');
@@ -1213,6 +1210,24 @@ assert(html.includes('animateMetersActive(false);') && !html.includes('rec.onspe
 assert(html.includes('const isInc = isIncompleteJapaneseClause(liveText);') && html.includes('const waitMs = isInc ? 2500 : 1600;'), '靜音計時器實施動態雙時間窗 (一般句 1600ms，未完句 2500ms)');
 assert(html.includes('createAndStartInterviewRecognition();') && html.includes('new SpeechRec()'), '重啟語音一律透過工廠模式重建 fresh 實例，杜絕死物件重用');
 
+// 測試 62: 聚焦單一版本「日文簡單回答 (N4 程度)」・移除版本A/B・AI現場靈機應變極速響應・徹底杜絕罐頭套話 (v152)
+console.log('\n【測試 62：聚焦單一版本「日文簡單回答 (N4 程度)」・移除版本A/B・AI現場靈機應變極速響應・徹底杜絕罐頭套話 (v152)】');
+
+assert(html.includes('function generateGeminiN4Answer(questionText, honorific)'), '具備專用單一 N4 簡單版現場生成函式 generateGeminiN4Answer');
+assert(!html.includes('🔰 版本 A：') && !html.includes('✨ 版本 B：'), '卡片介面徹底移除版本 A 與版本 B 標籤，落實單一卡片聚焦');
+assert(html.includes('gemini-flash-lite-latest') && html.includes('gemini-flash-latest'), 'GEMINI_MODELS 優先採用極速 gemini-flash-lite-latest 搭配多重備援');
+assert(html.includes('【嚴格禁止事項】：絕對嚴禁使用「〇〇についての質問、ありがとうございます」'), 'Gemini Prompt 嚴禁抄題目的罐頭套話，確保靈機應對');
+assert(html.includes('選[びぶんだ]|どうやって.*選|なぜ.*(選|ここ)|理由|きっかけ|レストラン|ホテル'), '智慧語意引擎包含餐廳/飯店選擇動機直球回答');
+assert(html.includes('generateGeminiN4Answer(cleanQ, honorific)'), 'speculativePreloadAnswer 預載調用現場 AI 靈機生成');
+
+// 驗證 matchSemanticCandidateAnswer 中新加入的餐廳/飯店選擇動機
+const evalRestaurantSemantic = new Function(`
+  ${semanticFuncMatch[0]};
+  return matchSemanticCandidateAnswer;
+`)();
+const restAns = evalRestaurantSemantic('どうやって私たちのレストランを選びますか？', 'アルプスホテル白馬様');
+assert(restAns && restAns.simple && restAns.simple.raw.includes('白馬') && restAns.simple.raw.includes('配膳'), '怎麼選擇我們的餐廳：直球回答白馬優美環境與黑川配膳經驗');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1220,7 +1235,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v151) 50 題常見面試題庫本地 0ms 秒出、收音心跳守護工廠模式與未完助詞智慧縫合全面上線！');
+  console.log('🎉 所有測試通過！(v152) 單一 N4 簡單版面試軍師全面上線，徹底移除版本A/B，AI 現場靈機應變極速響應！');
 }
 
 

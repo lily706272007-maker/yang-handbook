@@ -3207,7 +3207,7 @@
           <div class="interview-col-header">
             <div class="interview-col-title">
               <span class="interview-col-pill" style="background:#fef3c7; color:#92400e; border-color:#fcd34d;">AI 軍師</span>
-              <span>專屬推薦回答 (日文簡單版 N4 ＆ 日文禮貌版 N2)</span>
+              <span>專屬推薦回答 (日文簡單版 N4)</span>
             </div>
             <div class="interview-col-company" id="iv-target-company-badge" onclick="openModal('modal-interview-context')" title="點擊切換目標飯店與求人票">
               🏢 <span id="iv-current-company-name">THE ALPS HOTEL HAKUBA (アルプスホテル白馬様)</span> ✎
@@ -3222,7 +3222,7 @@
             <button class="iv-story-btn" id="btn-story-voice" onclick="applyStoryTag('voice')">🎙️ 聲優親和力與溫暖微笑</button>
           </div>
 
-          <!-- 回答卡片容器 (版本 A 日文簡單版 N4 & 版本 B 日文禮貌版 N2) -->
+          <!-- 回答卡片容器 (日文簡單版 N4) -->
           <div class="interview-answers-wrap" id="interview-answers-container">
             <!-- JS 動態注入回答卡片 -->
           </div>
@@ -9764,7 +9764,7 @@ function showPetDialog(msg) {
 
 const HARDCODED_GEMINI_API_KEY = DEFAULT_GEMINI_KEY;
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const GEMINI_MODELS = ['gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.7-flash'];
+const GEMINI_MODELS = ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.8-flash'];
 
 async function fetchFreeGoogleTranslate(text, targetLang) {
   if (!text || !text.trim()) return '';
@@ -18657,23 +18657,28 @@ const INTERVIEW_50_QA_DATABASE = [
 ];
 
 
-// 格式化 50 題庫輸出結果並動態套用公司尊稱
+// 格式化 50 題庫輸出結果並動態套用公司尊稱 (單一 N4 簡單版為主，兼容 simple/story)
 function formatQaResult(item, honorific) {
   const h = (honorific && honorific.split('/')[0].trim()) || '御社';
+  const simpleObj = {
+    ruby: item.simple.ruby.replace(/\[HONORIFIC\]/g, h),
+    raw: item.simple.raw.replace(/\[HONORIFIC\]/g, h),
+    zh: item.simple.zh
+  };
+  const storyObj = {
+    ruby: item.story.ruby.replace(/\[HONORIFIC\]/g, h),
+    raw: item.story.raw.replace(/\[HONORIFIC\]/g, h),
+    zh: item.story.zh
+  };
   return {
     id: item.id,
     question: item.question,
     questionZh: item.zh,
-    simple: {
-      ruby: item.simple.ruby.replace(/\[HONORIFIC\]/g, h),
-      raw: item.simple.raw.replace(/\[HONORIFIC\]/g, h),
-      zh: item.simple.zh
-    },
-    story: {
-      ruby: item.story.ruby.replace(/\[HONORIFIC\]/g, h),
-      raw: item.story.raw.replace(/\[HONORIFIC\]/g, h),
-      zh: item.story.zh
-    }
+    ruby: simpleObj.ruby,
+    raw: simpleObj.raw,
+    zh: simpleObj.zh,
+    simple: simpleObj,
+    story: storyObj
   };
 }
 
@@ -18732,7 +18737,20 @@ function speculativePreloadAnswer(questionText) {
   if (dbAns) {
     if (!InterviewEngine.answerCache) InterviewEngine.answerCache = {};
     InterviewEngine.answerCache[cleanQ] = dbAns;
+    return;
   }
+
+  // 非阻塞背景預熱調用 AI 靈機生成
+  generateGeminiN4Answer(cleanQ, honorific).then(aiAns => {
+    if (aiAns) {
+      if (!InterviewEngine.answerCache) InterviewEngine.answerCache = {};
+      InterviewEngine.answerCache[cleanQ] = aiAns;
+      if (InterviewEngine.currentQuestion === cleanQ) {
+        InterviewEngine.currentAnswers = aiAns;
+        renderCurrentAnswers();
+      }
+    }
+  }).catch(() => {});
 }
 
 // 介面即時收音診斷狀態徽章更新
@@ -19069,7 +19087,7 @@ function renderDialogueHistory() {
       <div class="interview-stream-card ${isActive ? 'active' : ''}" ${isCurrentRef} 
            ondblclick="selectHistoricalQuestionByIndex(${index})" 
            style="cursor:pointer;" 
-           title="💡 點兩下（雙擊）此句立即為您生成版本 A 與 B 推薦擬答">
+           title="💡 點兩下（雙擊）此句立即為您生成 N4 推薦擬答">
         <div class="iv-card-header-row">
           <div style="display:flex; align-items:center; gap:6px;">
             <span class="iv-card-time" ${timeId}>${escapeHtml(item.time)}</span>
@@ -19111,7 +19129,7 @@ function selectHistoricalQuestionByIndex(index) {
   selectHistoricalQuestion(item.jp, item.zh);
 }
 
-// 雙擊或點選歷史對話卡片：針對該句立即生成版本 A 與版本 B 擬答
+// 雙擊或點選歷史對話卡片：針對該句立即生成 N4 日文簡單版擬答
 async function selectHistoricalQuestion(jp, zh) {
   if (!jp || jp.trim().length < 2) return;
   const cleanJp = jp.trim();
@@ -19121,7 +19139,7 @@ async function selectHistoricalQuestion(jp, zh) {
   showAnswerLoadingShimmer(cleanJp);
   InterviewEngine.currentAnswers = await generateDynamicInterviewAnswers(cleanJp);
   renderCurrentAnswers();
-  showToast('✨ 已鎖定該句，軍師已生成 N4簡單版 與 N2禮貌版 擬答！', 'success');
+  showToast('✨ 已鎖定該句，軍師已生成 N4 日文簡單版擬答！', 'success');
 }
 
 // 顯示 AI 軍師生成中 Shimmer 動畫
@@ -19492,23 +19510,78 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 預設通用智慧合成回答 (動態帶入考官提問，確保即便 fallback 也完全客製化，並精準區分 N4簡單版 與 N2禮貌版)
-  const safeQ = questionText ? questionText.slice(0, 30) : '考官提問';
+  // 24. 志望理由・レストランやホテルの選び方・きっかけ・どうやって選んだか
+  if (/選[びぶんだ]|どうやって.*選|なぜ.*(選|ここ)|理由|きっかけ|レストラン|ホテル/.test(q)) {
+    const rRuby = '<ruby>白馬<rt>はくば</rt></ruby>の<ruby>美<rt>うつく</rt></ruby>しい<ruby>環境<rt>かんきょう</rt></ruby>と、' + honorific + 'のおもてなしに<ruby>強<rt>つよ</rt></ruby>く<ruby>惹<rt>ひ</rt></ruby>かれました。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>のレストランで<ruby>培<rt>つちか</rt></ruby>った<ruby>配膳<rt>はいぜん</rt></ruby>の<ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かして、<ruby>力<rt>ちから</rt></ruby>になりたいと<ruby>思<rt>おも</rt></ruby>い<ruby>選<rt>えら</rt></ruby>びました。';
+    const rRaw = '白馬の美しい環境と、' + honorific + 'のおもてなしに強く惹かれました。黒川温泉のレストランで培った配膳の経験を活かして、力になりたいと思い選びました。';
+    const rZh = '我深受白馬優美的環境與貴飯店溫暖的待客之道所吸引。希望能活用在黑川溫泉餐廳的配膳經驗為團隊貢獻，因此選擇了貴餐廳。';
+    return {
+      ruby: rRuby,
+      raw: rRaw,
+      zh: rZh,
+      simple: { ruby: rRuby, raw: rRaw, zh: rZh },
+      story: { ruby: rRuby, raw: rRaw, zh: rZh }
+    };
+  }
+
+  // 預設通用智慧應對 (自然切題，結合黑川外場配膳經驗與積極態度，絕不鸚鵡學舌套公式)
+  const defRuby = 'はい、<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>のレストランで<ruby>培<rt>つちか</rt></ruby>ったフットワークと<ruby>笑顔<rt>えがお</rt></ruby>を<ruby>活<rt>い</rt></ruby>かし、' + honorific + 'でもテキパキと<ruby>元気<rt>げんき</rt></ruby>に<ruby>貢献<rt>こうけん</rt></ruby>いたします。';
+  const defRaw = 'はい、黒川温泉のレストランで培ったフットワークと笑顔を活かし、' + honorific + 'でもテキパキと元気に貢献いたします。';
+  const defZh = '是的，我會發揮在黑川溫泉餐廳磨練出的敏捷身手與笑容，在貴飯店也手腳俐落、活力充沛地貢獻所能。';
   return {
-    simple: {
-      ruby: 'はい、「' + escapeHtml(safeQ) + '」についての質問、ありがとうございます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>での<ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かして、' + honorific + 'でも<ruby>元気<rt>げんき</rt></ruby>に<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>頑張<rt>がんば</rt></ruby>ります。',
-      raw: 'はい、「' + safeQ + '」についての質問、ありがとうございます。黒川温泉での経験を活かして、' + honorific + 'でも元気に一生懸命頑張ります。',
-      zh: '是的，關於「' + safeQ + '」非常感謝您的提問。我會活用在黑川溫泉的經驗，在貴飯店充滿活力地全力以赴努力。'
-    },
-    story: {
-      ruby: '「' + escapeHtml(safeQ) + '」についてご<ruby>質問<rt>しつもん</rt></ruby>いただき<ruby>心<rt>こころ</rt></ruby>より<ruby>感謝<rt>かんしゃ</rt></ruby><ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>った「<ruby>適応<rt>てきおう</rt></ruby><ruby>力<rt>りょく</rt></ruby>」とピーク<ruby>時<rt>じ</rt></ruby>の「スピード<ruby>感<rt>かん</rt></ruby>」を<ruby>最大限<rt>さいだいげん</rt></ruby>に<ruby>発揮<rt>はっき</rt></ruby>し、' + honorific + 'の<ruby>業務<rt>ぎょうむ</rt></ruby>に<ruby>貢献<rt>こうけん</rt></ruby>させていただきたく<ruby>存<rt>ぞん</rt></ruby>じます。',
-      raw: '「' + safeQ + '」についてご質問いただき心より感謝申し上げます。黒川温泉の現場で培った「適応力」とピーク時の「スピード感」を最大限に発揮し、' + honorific + 'の業務に貢献させていただきたく存じます。',
-      zh: '關於「' + safeQ + '」非常感謝您的提問。我定會全力發揮在黑川溫泉磨練出的高適應力與敏捷節奏，全力為貴飯店的各項業務貢獻心力。'
-    }
+    ruby: defRuby,
+    raw: defRaw,
+    zh: defZh,
+    simple: { ruby: defRuby, raw: defRaw, zh: defZh },
+    story: { ruby: defRuby, raw: defRaw, zh: defZh }
   };
 }
 
-// 動態產生專屬回答 (整合 50 題速查庫、會話快取、25+ 主題語意引擎與背景非同步 Gemini 強化)
+// 現場 AI 靈機應對引擎：專屬生成單一「日文簡單版 (N4 程度)」回答
+async function generateGeminiN4Answer(questionText, honorific) {
+  if (!questionText || questionText.trim().length === 0) return null;
+  const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : (typeof HARDCODED_GEMINI_API_KEY !== 'undefined' ? HARDCODED_GEMINI_API_KEY : '');
+  if (!key) return null;
+
+  const h = (honorific && honorific.split('/')[0].trim()) || '御社';
+  const jobSlipInfo = InterviewEngine.jobSlip ? `\n目標求人票備註與條件：${InterviewEngine.jobSlip}` : '';
+
+  const prompt = `你是台灣求職者「楊詠筑」（女性，1995年1月6日生，31歲，成功大學中文系輔修建築系，JLPT N2，打工度假特定活動簽證至2027年8月14日，目前在熊本黑川溫泉「優彩」旅館餐廳擔任外場Runner，負責出餐配膳、尖峰補菜、打烊清潔與明日設定，體力足腰耐寒好，曾任自由接案聲優，笑容溫暖親切，甲殼類蝦蟹過敏但完全不影響外場配膳工作，希望單人房宿舍注重自炊休養，無日本駕照但步行接駁無礙）的日文線上面試即時應對軍師。
+考官提問：「${questionText}」。
+應徵公司：${InterviewEngine.companyName} (${h})，應徵職種：${InterviewEngine.role}。${jobSlipInfo}
+
+【回答要求】：
+1. 只需要提供「日文簡單版 (約 N4 程度)」單一版本！
+2. 句子要短小、好記好唸、文法單純直接、使用基礎丁寧語（です/ます），讓求職者在緊張時能毫不結巴順暢回答。
+3. 【嚴格禁止事項】：絕對嚴禁使用「〇〇についての質問、ありがとうございます」等抄題目的空洞套話！必須直接回答問題核心，結合求職者的真實履歷（黑川外場經驗、體力、笑容、簽證等）與應徵職位現場靈機應變！
+4. 輸出標準 JSON 格式（日文漢字必須標註 HTML <ruby>漢字<rt>假名</rt></ruby> 標籤）：
+{
+  "ruby": "日文HTML含ruby標籤",
+  "raw": "純日文無HTML標籤",
+  "zh": "流暢繁體中文翻譯"
+}`;
+
+  try {
+    const parsed = await callGeminiApiUnified(prompt);
+    if (parsed && (parsed.ruby || (parsed.simple && parsed.simple.ruby))) {
+      const ruby = parsed.ruby || parsed.simple.ruby;
+      const raw = parsed.raw || parsed.simple.raw || (typeof stripRubyAndHtml === 'function' ? stripRubyAndHtml(ruby) : ruby.replace(/<[^>]*>/g, ''));
+      const zh = parsed.zh || (parsed.simple && parsed.simple.zh) || '';
+      return {
+        ruby,
+        raw,
+        zh,
+        simple: { ruby, raw, zh },
+        story: { ruby, raw, zh }
+      };
+    }
+  } catch (err) {
+    console.warn('generateGeminiN4Answer failed:', err);
+  }
+  return null;
+}
+
+// 動態產生專屬回答 (整合 50 題速查庫、會話快取、現場 AI 靈機應對與智慧語意兜底)
 async function generateDynamicInterviewAnswers(questionText) {
   if (!questionText || questionText.trim().length === 0) {
     return null;
@@ -19526,73 +19599,35 @@ async function generateDynamicInterviewAnswers(questionText) {
   const dbAns = getAnswerFrom50QaDatabase(cleanQ, honorific);
   if (dbAns) {
     InterviewEngine.answerCache[cleanQ] = dbAns;
+    // 背景非同步預熱現場 AI 強化版，若完成自動微調
+    generateGeminiN4Answer(cleanQ, honorific).then(aiAns => {
+      if (aiAns && InterviewEngine.currentQuestion === cleanQ) {
+        InterviewEngine.answerCache[cleanQ] = aiAns;
+        InterviewEngine.currentAnswers = aiAns;
+        renderCurrentAnswers();
+      }
+    }).catch(() => {});
     return dbAns;
   }
 
-  // 2. 檢查既有 qaDatabase
-  if (InterviewEngine.qaDatabase[cleanQ]) {
-    const dbItem = InterviewEngine.qaDatabase[cleanQ];
-    const tag = InterviewEngine.activeStoryTag;
-    const storyObj = (dbItem.story && dbItem.story[tag]) || (dbItem.story && dbItem.story.shrine) || dbItem.story || {};
-    const res = {
-      simple: {
-        ruby: (dbItem.simple.ruby || '').replace(/\[HONORIFIC\]/g, honorific),
-        raw: (dbItem.simple.raw || '').replace(/\[HONORIFIC\]/g, honorific),
-        zh: dbItem.simple.zh || ''
-      },
-      story: {
-        ruby: (storyObj.ruby || '').replace(/\[HONORIFIC\]/g, honorific),
-        raw: (storyObj.raw || '').replace(/\[HONORIFIC\]/g, honorific),
-        zh: storyObj.zh || ''
-      }
-    };
-    InterviewEngine.answerCache[cleanQ] = res;
-    return res;
+  // 2. 現場調用 AI 靈機應對 (Gemini 生成單一 N4 簡單版，結合履歷與求人票)
+  try {
+    const aiAns = await generateGeminiN4Answer(cleanQ, honorific);
+    if (aiAns) {
+      InterviewEngine.answerCache[cleanQ] = aiAns;
+      return aiAns;
+    }
+  } catch (err) {
+    console.warn('AI 現場生成失敗，使用智慧語意兜底:', err);
   }
 
-  // 3. 本地 25+ 主題語意引擎兜底 (0ms 秒出)
+  // 3. 本地智慧語意兜底 (無網路或 API 異常時的保險)
   const semanticAns = matchSemanticCandidateAnswer(cleanQ, honorific);
   InterviewEngine.answerCache[cleanQ] = semanticAns;
-
-  // 4. 背景非同步向 Gemini API 發起升級請求（不卡住 UI，生成完後無感升級）
-  triggerBackgroundGeminiAnswerUpgrade(cleanQ, honorific);
-
   return semanticAns;
 }
 
-// 背景非同步向 Gemini API 請求升級
-async function triggerBackgroundGeminiAnswerUpgrade(questionText, honorific) {
-  const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : (typeof HARDCODED_GEMINI_API_KEY !== 'undefined' ? HARDCODED_GEMINI_API_KEY : '');
-  if (!key) return;
-
-  try {
-    const prompt = `你是台灣求職者「楊詠筑」（女性，1995年1月6日生，31歲，成大中文輔建築，JLPT N2，聲音清晰親切如聲優，持有可通話日本手機門號 080-2853-5431，持有打工度假特定活動簽證至2027年8月14日，目前在熊本黑川溫泉優彩旅館餐廳負責外場配膳出餐補菜與清潔，熱愛木造建築與神社收集7本御朱印，甲殻類過敏，希望單人房）的日文線上面試即時應答軍師。
-當前面試官提問：「${questionText}」。應徵公司：${InterviewEngine.companyName} (${honorific})，應徵職種：${InterviewEngine.role}。
-請針對該具體問題，生成兩個「日文程度不同」的回答版本：
-版本 A (simple): 日文簡單版（約 N4 程度。文法單純直接、短句好記、以基礎丁寧語 です/ます 表達，在緊張或腦袋空白時能順暢脫口而出）
-版本 B (story): 日文禮貌版（約 N2 程度。使用高級商務敬語、謙讓語 いたします/存じます、連接詞與得體句型，充分展現 N2 日語實力與專業成熟度）
-請務必輸出標準 JSON 格式（日文部分漢字須標註 HTML <ruby>漢字<rt>よみ</rt></ruby> 標籤）：
-{
-  "simple": { "ruby": "HTML含ruby標籤", "raw": "純日文無HTML標籤", "zh": "繁體中文翻譯" },
-  "story": { "ruby": "HTML含ruby標籤", "raw": "純日文無HTML標籤", "zh": "繁體中文翻譯" }
-}`;
-    const parsed = await callGeminiApiUnified(prompt);
-    if (parsed && parsed.simple && parsed.story && parsed.simple.ruby && parsed.story.ruby) {
-      if (!InterviewEngine.answerCache) InterviewEngine.answerCache = {};
-      InterviewEngine.answerCache[questionText] = parsed;
-
-      // 若使用者仍停留在此題，更新畫面
-      if (InterviewEngine.currentQuestion === questionText) {
-        InterviewEngine.currentAnswers = parsed;
-        renderCurrentAnswers();
-      }
-    }
-  } catch (err) {
-    // 靜默容錯，不影響本地擬答
-  }
-}
-
-// 渲染回答卡片 (頂部具備當前鎖定考官題目橫幅與雙版本擬答：N4簡單版 ＆ N2禮貌版)
+// 渲染回答卡片 (頂部具備當前鎖定考官題目橫幅與單一核心「日文簡單回答 (N4 程度)」)
 function renderCurrentAnswers() {
   const container = document.getElementById('interview-answers-container');
   if (!container) return;
@@ -19603,7 +19638,7 @@ function renderCurrentAnswers() {
         <div style="font-size:2.2rem; margin-bottom:10px;">💡</div>
         <div style="font-weight:700; font-size:1.05rem; color:#334155; margin-bottom:8px;">等待考官提問中</div>
         <div style="font-size:0.85rem; line-height:1.6; max-width:420px; margin:0 auto; color:#64748b;">
-          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，系統將即時為您生成專屬的<strong>版本 A (日文簡單版 N4)</strong> 與<strong>版本 B (日文禮貌版 N2)</strong> 擬答。
+          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，AI 軍師將依據您的履歷與求人票需求，現場靈機應變為您生成好記好說的<strong>日文簡單回答 (N4 程度)</strong> 擬答。
         </div>
       </div>
     `;
@@ -19611,16 +19646,11 @@ function renderCurrentAnswers() {
   }
 
   const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
-  const tag = InterviewEngine.activeStoryTag;
   const ans = InterviewEngine.currentAnswers || matchSemanticCandidateAnswer(InterviewEngine.currentQuestion, honorific);
 
-  let simpleRuby = ans.simple.ruby;
-  let simpleRaw = ans.simple.raw;
-  let simpleZh = ans.simple.zh;
-
-  let storyRuby = ans.story.ruby;
-  let storyRaw = ans.story.raw;
-  let storyZh = ans.story.zh;
+  const ruby = ans.ruby || (ans.simple && ans.simple.ruby) || '';
+  const raw = ans.raw || (ans.simple && ans.simple.raw) || '';
+  const zh = ans.zh || (ans.simple && ans.simple.zh) || '';
 
   const targetJp = InterviewEngine.currentQuestion || '考官提問';
   const targetZh = InterviewEngine.currentQuestionZh || '';
@@ -19631,47 +19661,29 @@ function renderCurrentAnswers() {
       <span style="font-size:1.4rem; line-height:1; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1));">🎯</span>
       <div style="flex:1; min-width:0;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
-          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">當前針對考官題目生成雙程度擬答</span>
-          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">N4簡單 / N2禮貌</span>
+          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">當前考官題目</span>
+          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">N4 簡單回答</span>
         </div>
-        <div style="font-size:1rem; font-weight:800; color:#1e293b; line-height:1.4; word-break:break-word;">${escapeHtml(targetJp)}</div>
-        ${targetZh ? `<div style="font-size:0.85rem; color:#64748b; margin-top:2px;">▎${escapeHtml(targetZh)}</div>` : ''}
+        <div style="font-size:1.05rem; font-weight:800; color:#1e293b; line-height:1.4; word-break:break-word;">${escapeHtml(targetJp)}</div>
+        ${targetZh ? `<div style="font-size:0.85rem; color:#64748b; margin-top:3px;">▎${escapeHtml(targetZh)}</div>` : ''}
       </div>
     </div>
 
-    <!-- 卡片 1：版本 A 日文簡單版 (N4 程度) -->
-    <div class="interview-answer-card">
+    <!-- 單一核心推薦回答卡片：日文簡單回答 (N4 程度) -->
+    <div class="interview-answer-card" style="border:1.5px solid #e2e8f0; border-top:3.5px solid var(--accent); box-shadow:0 4px 16px rgba(0,0,0,0.06);">
       <div class="iv-ans-header">
-        <span class="iv-ans-badge simple">🔰 版本 A：日文簡單版 (N4 程度)</span>
-        <span class="iv-ans-tag-hint">N4 文法・緊張不打結・好記安心說</span>
+        <span class="iv-ans-badge simple" style="background:#e8f5e9; color:#2e7d32; border:1px solid #c8e6c9;">💡 日文簡單回答 (N4 程度)</span>
+        <span class="iv-ans-tag-hint">N4 文法・直球切題・好記安心說</span>
       </div>
-      <div class="iv-ans-ruby-body" id="ans-a-ruby">
-        ${simpleRuby}
+      <div class="iv-ans-ruby-body" id="ans-a-ruby" style="font-size:1.15rem; line-height:2.3; margin:14px 0 10px; color:#1e293b;">
+        ${ruby}
       </div>
-      <div class="iv-ans-zh-card">
-        ▎${escapeHtml(simpleZh)}
+      <div class="iv-ans-zh-card" style="background:#f8fafc; border-left:3px solid var(--primary); padding:10px 12px; border-radius:6px; font-size:0.88rem; color:#475569; line-height:1.6; margin-bottom:14px;">
+        ▎${escapeHtml(zh)}
       </div>
-      <div class="iv-ans-actions">
-        <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(simpleRaw)}')">🔊 試聽發音</button>
-        <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(simpleRaw)}')">📋 複製</button>
-      </div>
-    </div>
-
-    <!-- 卡片 2：版本 B 日文禮貌版 (N2 程度) -->
-    <div class="interview-answer-card">
-      <div class="iv-ans-header">
-        <span class="iv-ans-badge story">✨ 版本 B：日文禮貌版 (N2 程度)</span>
-        <span class="iv-ans-tag-hint">N2 敬語・商務得體・展現日語實力</span>
-      </div>
-      <div class="iv-ans-ruby-body" id="ans-b-ruby">
-        ${storyRuby}
-      </div>
-      <div class="iv-ans-zh-card">
-        ▎${escapeHtml(storyZh)}
-      </div>
-      <div class="iv-ans-actions">
-        <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(storyRaw)}')">🔊 試聽發音</button>
-        <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(storyRaw)}')">📋 複製</button>
+      <div class="iv-ans-actions" style="display:flex; gap:8px;">
+        <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(raw)}')">🔊 試聽發音</button>
+        <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(raw)}')">📋 複製回答</button>
       </div>
     </div>
   `;
