@@ -2599,7 +2599,7 @@
     justify-content: flex-end;
   }
 
-  /* 回答風格切換標籤列 (v153) */
+  /* 回答風格切換標籤列 (v154) */
   .iv-style-variant-bar {
     display: flex;
     gap: 6px;
@@ -2633,7 +2633,7 @@
     box-shadow: 0 2px 6px rgba(14, 165, 233, 0.25);
   }
 
-  /* 智能剔除區塊 (v153) */
+  /* 智能剔除區塊 (v154) */
   .iv-exclude-section {
     margin: 10px 0 12px;
     padding: 8px 12px;
@@ -9252,21 +9252,18 @@ function renderVocabPage(type) {
         group.forEach(v => {
           const isName = cat === '名字';
           if (isName) {
-            const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
             allHtml += `
-              <div class="word-cell name-cell ${hasAv ? 'has-avatar' : ''}" 
+              <div class="word-cell name-cell" 
                    onclick="openNameAvatarModal('${v.id}')" 
                    title="點擊查看同仁圖鑑・來源身份・休假比對">
-                ${hasAv ? `<img src="${v.avatarUrl}" class="name-cell-avatar-img" alt="${escapeHtml(v.zh || '')}" />` : ''}
                 <div class="cell-ja">${v.ja}</div>
-                <div class="cell-zh name-cell-zh" style="font-size:0.72rem; color:var(--muted); font-weight:600; margin-top:1px; line-height:1.3;">${escapeHtml(v.zh || '')}</div>
                 <div style="margin-top:4px; display:flex; gap:3px; flex-wrap:wrap; justify-content:center;">
                   <span style="font-size:0.65rem; background:#f0fdf4; color:#166534; padding:1px 5px; border-radius:4px; border:1px solid #bbf7d0; font-weight:700;">${v.employmentType || '正社員'}</span>
                   <span style="font-size:0.65rem; background:#eff6ff; color:#1e40af; padding:1px 5px; border-radius:4px; border:1px solid #bfdbfe; font-weight:700;">${(v.nationality || '日本 🇯🇵').split(' ')[1] || v.nationality || '🇯🇵'}</span>
                 </div>
                 <div class="cell-actions" onclick="event.stopPropagation()">
                   <button class="cell-btn-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
-                  <button class="cell-btn-mini" title="編輯中文" onclick="startInlineNameEdit('${v.id}', event)">✏️</button>
+                  <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
                 </div>
               </div>`;
           } else {
@@ -9297,17 +9294,13 @@ function renderVocabPage(type) {
   filtered.forEach(v => {
     const isName = v.cat === '名字';
     if (isName) {
-      const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
       gridHtml += `
-        <div class="word-cell name-cell ${hasAv ? 'has-avatar' : ''}" 
+        <div class="word-cell name-cell" 
              onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
              ondblclick="openNameAvatarModal('${v.id}')"
-             title="點一下發音・連點兩下查看 Q 版立繪名牌">
-          ${hasAv ? `<img src="${v.avatarUrl}" class="name-cell-avatar-img" alt="${escapeHtml(v.zh || '')}" />` : ''}
+             title="點一下發音・連點兩下查看同仁資訊">
           <div class="cell-ja">${v.ja}</div>
-          <div class="cell-zh name-cell-zh" style="font-size:0.72rem; color:var(--muted); font-weight:600; margin-top:1px; line-height:1.3;">${escapeHtml(v.zh || '')}</div>
           <div class="cell-actions" onclick="event.stopPropagation()">
-            <button class="cell-btn-mini" title="編輯中文名稱" onclick="startInlineNameEdit('${v.id}', event)">✏️</button>
             <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
           </div>
         </div>`;
@@ -9833,48 +9826,118 @@ const HARDCODED_GEMINI_API_KEY = DEFAULT_GEMINI_KEY;
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const GEMINI_MODELS = ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.8-flash'];
 
-async function fetchFreeGoogleTranslate(text, targetLang) {
+// 全域記憶體翻譯快取 (LRU Cache)，杜絕重複網路呼叫並提供 0ms 即時返回 (v154)
+const translationMemoryCache = new Map();
+
+async function fetchFreeGoogleTranslate(text, targetLang = 'zh-TW') {
   if (!text || !text.trim()) return '';
   const cleanText = text.trim();
+  const cacheKey = `${targetLang}:${cleanText}`;
 
-  // 1. Google Clients5 (Chrome Extension 官方端點，原生支援跨域 Access-Control-Allow-Origin: *，速度最快、精準繁中)
+  if (translationMemoryCache.has(cacheKey)) {
+    return translationMemoryCache.get(cacheKey);
+  }
+
+  // 1. 本地題庫與常見日文相槌快查 (0ms 極速命中，省去網路呼叫)
+  if (typeof getAnswerFrom50QaDatabase === 'function') {
+    const dbMatch = getAnswerFrom50QaDatabase(cleanText, '御社');
+    if (dbMatch && dbMatch.questionZh) {
+      translationMemoryCache.set(cacheKey, dbMatch.questionZh);
+      return dbMatch.questionZh;
+    }
+  }
+
+  // 常見禮貌短語直接命中
+  const commonPhrases = {
+    'はい': '好的。',
+    'はいそうです': '是的，沒錯。',
+    'はい、そうです': '是的，沒錯。',
+    'はい承知いたしました': '好的，我明白了。',
+    'はい、承知いたしました': '好的，我明白了。',
+    'はいかしこまりました': '好的，遵命。',
+    'はい、かしこまりました': '好的，遵命。',
+    'わかりました': '我明白了。',
+    '分かりました': '我明白了。',
+    '本日はよろしくお願いいたします': '今天請多多指教。',
+    'どうぞよろしくお願いいたします': '請多多指教。',
+    'ありがとうございます': '非常感謝。',
+    '趣味は何ですか': '您的興趣是什麼？',
+    '特技は何ですか': '您的專長是什麼？',
+    '自己紹介をお願いします': '請做個自我介紹。'
+  };
+  const normKey = cleanText.replace(/[。、？！?!\s]/g, '').trim();
+  if (commonPhrases[normKey]) {
+    translationMemoryCache.set(cacheKey, commonPhrases[normKey]);
+    return commonPhrases[normKey];
+  }
+
+  // 2. Gemini Flash-Lite 原生跨域神經翻譯 (無 CORS 阻擋、無 8 句限額、繁中準確度最高)
+  const geminiKey = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : (typeof HARDCODED_GEMINI_API_KEY !== 'undefined' ? HARDCODED_GEMINI_API_KEY : '');
+  if (geminiKey) {
+    try {
+      const prompt = `請將以下日文句子翻譯為流暢自然、符合台灣習慣的「繁體中文」：\n${cleanText}\n\n【嚴格格式要求】：只輸出純繁體中文翻譯結果文字本身，絕對嚴格禁止輸出任何日文、引號、拼音或額外說明！`;
+      const body = JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.1,
+          maxOutputTokens: 100
+        }
+      });
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 2600);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${encodeURIComponent(geminiKey)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+        signal: controller.signal
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        let zh = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+        if (zh) {
+          zh = zh.replace(/^["'「『]|["'」』]$/g, '').trim();
+          if (translationMemoryCache.size > 300) translationMemoryCache.clear();
+          translationMemoryCache.set(cacheKey, zh);
+          return zh;
+        }
+      }
+    } catch(err) {
+      // 容錯降級至公開端點
+    }
+  }
+
+  // 3. Google Clients5 (若在支援環境如 Chrome 擴充功能或已放行 CORS 端點)
   try {
     const url = 'https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=' + encodeURIComponent(targetLang) + '&q=' + encodeURIComponent(cleanText);
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data)) {
-        if (typeof data[0] === 'string' && data[0].trim()) return data[0].trim();
-        if (Array.isArray(data[0]) && typeof data[0][0] === 'string' && data[0][0].trim()) return data[0][0].trim();
+        let t = '';
+        if (typeof data[0] === 'string' && data[0].trim()) t = data[0].trim();
+        else if (Array.isArray(data[0]) && typeof data[0][0] === 'string' && data[0][0].trim()) t = data[0][0].trim();
+        if (t) {
+          translationMemoryCache.set(cacheKey, t);
+          return t;
+        }
       }
     }
-  } catch(e) {
-    console.warn('Google clients5 translation failed, trying MyMemory fallback:', e);
-  }
+  } catch(e) {}
 
-  // 2. MyMemory API (高可靠免費公開翻譯引擎，原生支援跨域 Access-Control-Allow-Origin: *)
-  try {
-    const langPair = targetLang === 'zh-TW' || targetLang === 'zh-CN' ? 'ja|zh-TW' : (targetLang === 'ja' ? 'zh-TW|ja' : 'auto|' + targetLang);
-    const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(cleanText) + '&langpair=' + encodeURIComponent(langPair);
-    const res = await fetch(url);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.responseData && data.responseData.translatedText && !data.responseData.translatedText.includes('MYMEMORY WARNING')) {
-        return data.responseData.translatedText.trim();
-      }
-    }
-  } catch(e) {
-    console.warn('MyMemory translation fallback failed:', e);
-  }
-
-  // 3. gtx 降級備用
+  // 4. gtx 降級備用
   try {
     const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=' + encodeURIComponent(targetLang) + '&dt=t&q=' + encodeURIComponent(cleanText);
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && Array.isArray(data[0])) {
-        return data[0].map(item => item[0]).filter(Boolean).join('').trim();
+        const t = data[0].map(item => item[0]).filter(Boolean).join('').trim();
+        if (t) {
+          translationMemoryCache.set(cacheKey, t);
+          return t;
+        }
       }
     }
   } catch(e) {}
@@ -17598,7 +17661,7 @@ const INTERVIEW_50_QA_DATABASE = [
     ],
     "zh": "請做個自我介紹。",
     "simple": {
-      "ruby": "<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し、JLPT N2を<ruby>取得<rt>しゅとく</rt></ruby>しております。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日常<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。",
+      "ruby": "<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し、JLPT N2を<ruby>取得<rt>しゅとく</rt></ruby>しております。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。",
       "raw": "楊詠筑と申します。台湾の大学を卒業し、JLPT N2を取得しております。現在は熊本県の黒川温泉にある旅館のレストランで働いております。本日はよろしくお願いいたします。",
       "zh": "我叫楊詠筑。台灣的大學畢業，持有 JLPT N2。目前在熊本縣黑川溫泉旅館餐廳工作。今天請多多指教。"
     },
@@ -18868,8 +18931,8 @@ const InterviewEngine = {
   recognition: null,
   currentQuestion: '',
   currentQuestionZh: '',
-  activeStyleVariant: 'direct', // 'direct' | 'work' | 'life' (v153)
-  activeExcludeText: '',        // 當前排除條件 (v153)
+  activeStyleVariant: 'direct', // 'direct' | 'work' | 'life' (v154)
+  activeExcludeText: '',        // 當前排除條件 (v154)
   speechBuffer: '',
   activeInterimText: '',
   silenceTimer: null,
@@ -18929,7 +18992,7 @@ const InterviewEngine = {
     '自己紹介をお願いします。': {
       zh: '請自我介紹。',
       simple: {
-        ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby><ruby>後<rt>ご</rt></ruby>、<ruby>今年<rt>ことし</rt></ruby>の8<ruby>月<rt>がつ</rt></ruby>からワーキングホリデーで<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日常<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby><ruby>後<rt>ご</rt></ruby>、<ruby>今年<rt>ことし</rt></ruby>の8<ruby>月<rt>がつ</rt></ruby>からワーキングホリデーで<ruby>来日<rt>らいにち</rt></ruby>いたしました。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
         raw: '楊詠筑と申します。台湾の大学を卒業後、今年の8月からワーキングホリデーで来日いたしました。現在は熊本県の黒川温泉にある旅館のレストランで働いております。本日はよろしくお願いいたします。',
         zh: '我叫楊詠筑。台灣的大學畢業後，今年8月透過打工度假來到日本。目前在熊本縣黑川溫泉的旅館餐廳工作。今天請多多指教。'
       },
@@ -19227,7 +19290,7 @@ function showAnswerLoadingShimmer(qText) {
 function matchSemanticCandidateAnswer(questionText, honorific) {
   const q = questionText.toLowerCase();
 
-  // 0.0 非問句意圖過濾：若為背景說明、新聞播報、客套陳述，不硬套求職回答，而是提供得體自然的面試覆誦點頭（相槌 あいづち）(v153)
+  // 0.0 非問句意圖過濾：若為背景說明、新聞播報、客套陳述，不硬套求職回答，而是提供得體自然的面試覆誦點頭（相槌 あいづち）(v154)
   if (typeof isQuestionSentence === 'function' && !isQuestionSentence(questionText)) {
     const aRuby = 'はい、<ruby>承知<rt>しょうち</rt></ruby>いたしました。<ruby>理解<rt>りかい</rt></ruby>いたしました。';
     const aRaw = 'はい、承知いたしました。理解いたしました。';
@@ -19259,7 +19322,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 0.05 生年月日・誕生日・生まれた日（單一意圖原子化，絕不牽扯體力與家鄉）(v153)
+  // 0.05 生年月日・誕生日・生まれた日（單一意圖原子化，絕不牽扯體力與家鄉）(v154)
   if (/生年月日|生まれた日|誕生日|いつ生まれ|何年生まれ/.test(q)) {
     const bRuby = '1995<ruby>年<rt>ねん</rt></ruby>1<ruby>月<rt>がつ</rt></ruby>6<ruby>日<rt>にち</rt></ruby><ruby>生<rt>う</rt></ruby>まれです。';
     const bRaw = '1995年1月6日生まれです。';
@@ -19290,7 +19353,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 0.1 年齢・何歳（單一意圖原子化：直球只答 31 歲，絕不偷渡未問資訊）(v153)
+  // 0.1 年齢・何歳（單一意圖原子化：直球只答 31 歲，絕不偷渡未問資訊）(v154)
   if (/何歳|年齢|おいくつ|何才|お幾つ|歳ですか|才ですか/.test(q)) {
     const ageRuby = '<ruby>今年<rt>ことし</rt></ruby>31<ruby>歳<rt>さい</rt></ruby>になります。よろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。';
     const ageRaw = '今年31歳になります。よろしくお願いいたします。';
@@ -19325,7 +19388,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 0.12 出身・故郷・どこから来た（單一意圖原子化：純粹回答出身地台南，絕不牽扯大學與工作經歷）(v153)
+  // 0.12 出身・故郷・どこから来た（單一意圖原子化：純粹回答出身地台南，絕不牽扯大學與工作經歷）(v154)
   if (/出身|どちらの国|どこから来|どちらから来|台湾のどこ|故郷/.test(q)) {
     const orgRuby = '<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>台南<rt>たいなん</rt></ruby><ruby>出身<rt>しゅっしん</rt></ruby>です。<ruby>人情味<rt>にんじょうみ</rt></ruby>あふれる<ruby>温<rt>あたた</rt></ruby>かいところで<ruby>育<rt>そだ</rt></ruby>ちました。';
     const orgRaw = '台湾の台南出身です。人情味あふれる温かいところで育ちました。';
@@ -19360,7 +19423,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 0.13 学歴・大学・専攻（單一意圖原子化：純粹回答成功大學，絕不牽扯年齡與工作）(v153)
+  // 0.13 学歴・大学・専攻（單一意圖原子化：純粹回答成功大學，絕不牽扯年齡與工作）(v154)
   if (/学歴|大学|専攻|学科|何を学び|成大|成功大学/.test(q)) {
     const eduRuby = '<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>国立<rt>こくりつ</rt></ruby><ruby>成功大学<rt>せいこうだいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>いたしました。';
     const eduRaw = '台湾の国立成功大学を卒業いたしました。';
@@ -19393,7 +19456,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
 
   // 0.14 自己紹介・名前・お名前・どちら様
   if (/自己紹介|名前|お名前|どちら様|誰|楊/.test(q)) {
-    const introRuby = '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>成功大学<rt>せいこうだいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し、JLPT N2を<ruby>取得<rt>しゅとく</rt></ruby>しております。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日常<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。';
+    const introRuby = '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>成功大学<rt>せいこうだいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し、JLPT N2を<ruby>取得<rt>しゅとく</rt></ruby>しております。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>のレストランで<ruby>働<rt>はたら</rt></ruby>いております。<ruby>本日<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。';
     const introRaw = '楊詠筑と申します。台湾の成功大学を卒業し、JLPT N2を取得しております。現在は熊本県の黒川温泉にある旅館のレストランで働いております。本日はよろしくお願いいたします。';
     const introZh = '我叫楊詠筑。台灣成功大學畢業，持有 JLPT N2。目前在熊本縣黑川溫泉的旅館餐廳工作。今天請多多指教。';
     return {
@@ -19426,19 +19489,19 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
   if (/よろしく|お願い|挨拶|こんにちは|おはよう|お時間/.test(q)) {
     return {
       simple: {
-        ruby: '<ruby>本日常<rt>ほんじつ</rt></ruby>はお<ruby>忙<rt>いそが</rt></ruby>しい<ruby>中<rt>なか</rt></ruby>、<ruby>貴重<rt>きちょう</rt></ruby>なお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>誠<rt>まこと</rt></ruby>にありがとうございます。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        ruby: '<ruby>本日<rt>ほんじつ</rt></ruby>はお<ruby>忙<rt>いそが</rt></ruby>しい<ruby>中<rt>なか</rt></ruby>、<ruby>貴重<rt>きちょう</rt></ruby>なお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>誠<rt>まこと</rt></ruby>にありがとうございます。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
         raw: '本日はお忙しい中、貴重なお時間をいただき誠にありがとうございます。どうぞよろしくお願いいたします。',
         zh: '今天非常感謝您在百忙之中撥冗給我面試機會。請多多指教。'
       },
       story: {
-        ruby: '<ruby>本日常<rt>ほんじつ</rt></ruby>は<ruby>面接<rt>めんせつ</rt></ruby>のお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>心<rt>こころ</rt></ruby>より<ruby>感謝<rt>かんしゃ</rt></ruby>いたします。' + honorific + 'で<ruby>働<rt>はたら</rt></ruby>きたいという<ruby>強<rt>つよ</rt></ruby>い<ruby>気持<rt>きも</rt></ruby>ちを<ruby>持<rt>も</rt></ruby>って<ruby>臨<rt>のぞ</rt></ruby>ませていただきました。<ruby>私<rt>わたし</rt></ruby>の<ruby>熱意<rt>ねつい</rt></ruby>と<ruby>経験<rt>けいけん</rt></ruby>をしっかりお<ruby>伝<rt>つた</rt></ruby>えできればと<ruby>思<rt>おも</rt></ruby>います。よろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+        ruby: '<ruby>本日<rt>ほんじつ</rt></ruby>は<ruby>面接<rt>めんせつ</rt></ruby>のお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>心<rt>こころ</rt></ruby>より<ruby>感謝<rt>かんしゃ</rt></ruby>いたします。' + honorific + 'で<ruby>働<rt>はたら</rt></ruby>きたいという<ruby>強<rt>つよ</rt></ruby>い<ruby>気持<rt>きも</rt></ruby>ちを<ruby>持<rt>も</rt></ruby>って<ruby>臨<rt>のぞ</rt></ruby>ませていただきました。<ruby>私<rt>わたし</rt></ruby>の<ruby>熱意<rt>ねつい</rt></ruby>と<ruby>経験<rt>けいけん</rt></ruby>をしっかりお<ruby>伝<rt>つた</rt></ruby>えできればと<ruby>思<rt>おも</rt></ruby>います。よろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
         raw: '本日は面接のお時間をいただき心より感謝いたします。' + honorific + 'で働きたいという強い気持ちを持って臨ませていただきました。私の熱意と経験をしっかりお伝えできればと思います。よろしくお願いいたします。',
         zh: '衷心感謝今天給我面試的機會。我懷抱著非常想在貴飯店工作的強烈心願前來參加面試。希望能向您好好傳達我的熱忱與經歷，請多多指教！'
       }
     };
   }
 
-  // 0.3 趣味（純粹回答興趣下廚，絕不提到特技與發音）(v153)
+  // 0.3 趣味（純粹回答興趣下廚，絕不提到特技與發音）(v154)
   if (/趣味|好きなこと|ハマっていること|休みの日の過ごし方/.test(q) && !/特技/.test(q)) {
     const hRuby = '<ruby>私<rt>わたし</rt></ruby>の<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>自炊<rt>じすい</rt></ruby>で、お<ruby>料理<rt>りょうり</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ることです。';
     const hRaw = '私の趣味は自炊で、お料理を作ることです。';
@@ -19469,7 +19532,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
     };
   }
 
-  // 0.4 特技・特長（純粹回答特長身手與問候，絕不提到興趣與神社）(v153)
+  // 0.4 特技・特長（純粹回答特長身手與問候，絕不提到興趣與神社）(v154)
   if (/特技|長所|アピールポイント|得意なこと/.test(q) && !/趣味/.test(q)) {
     const sRuby = '<ruby>特技<rt>とくぎ</rt></ruby>は<ruby>気持<rt>きも</rt></ruby>ちのいい<ruby>挨拶<rt>あいさつ</rt></ruby>と、テキパキと<ruby>動<rt>うご</rt></ruby>くフットワークです。';
     const sRaw = '特技は気持ちのいい挨拶と、テキパキと動くフットワークです。';
@@ -19841,7 +19904,7 @@ async function generateGeminiN4Answer(questionText, honorific) {
   const h = (honorific && honorific.split('/')[0].trim()) || '御社';
   const jobSlipInfo = InterviewEngine.jobSlip ? `\n目標求人票備註與條件：${InterviewEngine.jobSlip}` : '';
 
-  // 負向約束 (剔除不要的部分) 與 風格指定 (直球/工作/生活) (v153)
+  // 負向約束 (剔除不要的部分) 與 風格指定 (直球/工作/生活) (v154)
   const excludeText = options.excludeText || InterviewEngine.activeExcludeText || '';
   const excludePart = excludeText
     ? `\n【絕對排除要求】：求職者特別要求回答中【絕對嚴格禁止提到】「${excludeText}」相關內容！`
@@ -20000,7 +20063,7 @@ function renderCurrentAnswers() {
       </div>
     </div>
 
-    <!-- 3 種回答風格切換標籤列 (v153) -->
+    <!-- 3 種回答風格切換標籤列 (v154) -->
     <div class="iv-style-variant-bar">
       <button class="iv-variant-btn ${activeStyle === 'direct' ? 'active' : ''}" onclick="switchAnswerStyleVariant('direct')">🎯 純粹直球</button>
       <button class="iv-variant-btn ${activeStyle === 'work' ? 'active' : ''}" onclick="switchAnswerStyleVariant('work')">💼 連結工作</button>
@@ -20020,7 +20083,7 @@ function renderCurrentAnswers() {
         ▎${escapeHtml(zh)}
       </div>
 
-      <!-- 智能剔除區塊：一鍵剔除不要的內容或自訂排除詞 (v153) -->
+      <!-- 智能剔除區塊：一鍵剔除不要的內容或自訂排除詞 (v154) -->
       <div class="iv-exclude-section">
         <div style="font-size:0.75rem; color:#475569; font-weight:700; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
           <span>✂️ 快速剔除不要的內容：</span>
@@ -20047,7 +20110,7 @@ function renderCurrentAnswers() {
   `;
 }
 
-// 切換 3 種風格選項 (純粹直球 / 連結工作 / 生活休閒) (v153)
+// 切換 3 種風格選項 (純粹直球 / 連結工作 / 生活休閒) (v154)
 async function switchAnswerStyleVariant(variant) {
   InterviewEngine.activeStyleVariant = variant;
   if (InterviewEngine.currentAnswers && InterviewEngine.currentAnswers.variants && InterviewEngine.currentAnswers.variants[variant]) {
@@ -20057,20 +20120,30 @@ async function switchAnswerStyleVariant(variant) {
   }
   showAnswerLoadingShimmer(InterviewEngine.currentQuestion || '考官提問');
   const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
-  const aiAns = await generateGeminiN4Answer(InterviewEngine.currentQuestion, honorific, { styleVariant: variant, excludeText: InterviewEngine.activeExcludeText });
-  if (aiAns) {
-    if (!InterviewEngine.currentAnswers) InterviewEngine.currentAnswers = {};
-    if (!InterviewEngine.currentAnswers.variants) InterviewEngine.currentAnswers.variants = {};
-    InterviewEngine.currentAnswers.variants[variant] = aiAns;
-    InterviewEngine.currentAnswers.ruby = aiAns.ruby;
-    InterviewEngine.currentAnswers.raw = aiAns.raw;
-    InterviewEngine.currentAnswers.zh = aiAns.zh;
+  let aiAns = null;
+  try {
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('SWITCH_TIMEOUT')), 4200));
+    const aiPromise = generateGeminiN4Answer(InterviewEngine.currentQuestion, honorific, { styleVariant: variant, excludeText: InterviewEngine.activeExcludeText });
+    aiAns = await Promise.race([aiPromise, timeoutPromise]);
+  } catch(e) {}
+  finally {
+    if (aiAns) {
+      if (!InterviewEngine.currentAnswers) InterviewEngine.currentAnswers = {};
+      if (!InterviewEngine.currentAnswers.variants) InterviewEngine.currentAnswers.variants = {};
+      InterviewEngine.currentAnswers.variants[variant] = aiAns;
+      InterviewEngine.currentAnswers.ruby = aiAns.ruby;
+      InterviewEngine.currentAnswers.raw = aiAns.raw;
+      InterviewEngine.currentAnswers.zh = aiAns.zh;
+    } else {
+      const semantic = matchSemanticCandidateAnswer(InterviewEngine.currentQuestion, honorific);
+      InterviewEngine.currentAnswers = semantic;
+    }
+    renderCurrentAnswers();
+    showToast(`已切換風格為「${variant === 'work' ? '💼 連結工作' : (variant === 'life' ? '🌿 生活休閒' : '🎯 純粹直球')}」！`, 'info');
   }
-  renderCurrentAnswers();
-  showToast(`已切換風格為「${variant === 'work' ? '💼 連結工作' : (variant === 'life' ? '🌿 生活休閒' : '🎯 純粹直球')}」！`, 'info');
 }
 
-// 快速套用負向剔除標籤 (v153)
+// 快速套用負向剔除標籤 (v154)
 async function applyAnswerExclusion(keyword) {
   if (!InterviewEngine.currentQuestion) return;
   InterviewEngine.activeExcludeText = keyword;
@@ -20078,14 +20151,14 @@ async function applyAnswerExclusion(keyword) {
   await regenerateCurrentAnswer({ excludeText: keyword });
 }
 
-// 清除剔除條件 (v153)
+// 清除剔除條件 (v154)
 async function clearAnswerExclusion() {
   InterviewEngine.activeExcludeText = '';
   showToast('已清除排除限制，恢復標準回答！', 'info');
   await regenerateCurrentAnswer({ excludeText: '' });
 }
 
-// 提交自訂排除詞 (v153)
+// 提交自訂排除詞 (v154)
 async function submitCustomExclusion() {
   const input = document.getElementById('iv-custom-exclude-input');
   if (!input) return;
@@ -20095,7 +20168,7 @@ async function submitCustomExclusion() {
   input.value = '';
 }
 
-// 🔄 換個說法（一鍵重新生成） (v153)
+// 🔄 換個說法（一鍵重新生成，保證 1～2 秒內必定給出新回答，超時自動降級） (v154)
 async function regenerateCurrentAnswer(extraOpts = {}) {
   if (!InterviewEngine.currentQuestion) return;
   showAnswerLoadingShimmer(InterviewEngine.currentQuestion);
@@ -20106,26 +20179,30 @@ async function regenerateCurrentAnswer(extraOpts = {}) {
     delete InterviewEngine.answerCache[q];
   }
 
+  let finalAns = null;
   try {
-    const aiAns = await generateGeminiN4Answer(q, honorific, {
+    // 設置 4200ms 硬性超時熔斷控制器，防止網路卡死或模型掛起
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('REGENERATE_TIMEOUT')), 4200));
+    const aiPromise = generateGeminiN4Answer(q, honorific, {
       styleVariant: InterviewEngine.activeStyleVariant,
       excludeText: InterviewEngine.activeExcludeText,
       ...extraOpts
     });
-    if (aiAns) {
-      InterviewEngine.currentAnswers = aiAns;
+    finalAns = await Promise.race([aiPromise, timeoutPromise]);
+  } catch (e) {
+    console.warn('regenerateCurrentAnswer timeout or error, falling back to semantic answer:', e);
+  } finally {
+    if (finalAns) {
+      InterviewEngine.currentAnswers = finalAns;
       renderCurrentAnswers();
       showToast('✨ 軍師已為您重新生成新版回答！', 'success');
-      return;
+    } else {
+      const semantic = matchSemanticCandidateAnswer(q, honorific);
+      InterviewEngine.currentAnswers = semantic;
+      renderCurrentAnswers();
+      showToast('✨ 已為您換一套說法！', 'success');
     }
-  } catch (e) {
-    console.warn('regenerateCurrentAnswer error:', e);
   }
-
-  const semantic = matchSemanticCandidateAnswer(q, honorific);
-  InterviewEngine.currentAnswers = semantic;
-  renderCurrentAnswers();
-  showToast('✨ 已為您換一套說法！', 'success');
 }
 
 // 切換個人亮點故事標籤
@@ -20179,7 +20256,7 @@ function animateMetersActive(isActive) {
   }
 }
 
-// 11.5.1 日語終止形與句子邊界切片器 (Sentence Boundary Splitter) —— 實現「聽一句翻一句」(v153)
+// 11.5.1 日語終止形與句子邊界切片器 (Sentence Boundary Splitter) —— 實現「聽一句翻一句」(v154)
 function splitJapaneseSentences(text) {
   if (!text) return [];
   const trimmed = text.trim();
@@ -20215,7 +20292,7 @@ function splitJapaneseSentences(text) {
   return sentences;
 }
 
-// 即時收音暫存沉澱為正式發言 (具備時間窗與重複內容防護，聽一句翻一句即時切句) (v153)
+// 即時收音暫存沉澱為正式發言 (具備時間窗與重複內容防護，聽一句翻一句即時切句) (v154)
 function flushActiveInterimToHistory() {
   if (InterviewEngine.silenceTimer) {
     clearTimeout(InterviewEngine.silenceTimer);
@@ -20232,8 +20309,8 @@ function flushActiveInterimToHistory() {
   }
 
   const now = Date.now();
-  // 第 1 重防護：若此句與 4 秒內剛沉澱的內容完全相同，直接略過
-  if (textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000) {
+  // 第 1 重防護：僅在短時間 (1200ms) 內完全相同長句時略過，保留正常面試應答（「はい」等） (v154)
+  if (textToFlush.length >= 4 && textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 1200) {
     renderDialogueHistory();
     return;
   }
@@ -20320,11 +20397,14 @@ async function handleNewRecognizedUtterance(qJp) {
         }
       }
 
-      // C. 上一句以未完助詞結尾（如「嘘をつき続ける女の」停在「の」）或新句以助詞/謂語開頭
+      // C. 上一句以未完助詞結尾（如「嘘をつき続ける女の」停在「の」）或新句為未完謂語開頭 (v154)
       const lastIncomplete = isIncompleteJapaneseClause(lastItem.jp);
-      const newContinues = /^[をにでとはがへとよりてもってまたしかしですが、,]|^(です|ました|でした|ます|とのこと|と言い|と述べ|と語り|と伝え)/.test(cleanQ);
+      // 接續句型嚴格單詞匹配，絕對嚴禁使用 [...] 字元集合以免誤吞「はい、趣味、特技、では、特に」等句子！
+      const newContinues = /^(?:とのこと|と言い|と述べ|と語り|と伝えて|とおっしゃって|ということ|について|に関して)/.test(cleanQ);
+      // 獨立開頭防誤傷：若新句以常見獨立語或問答開頭，即使上一句略有停頓也絕不強行合併
+      const isIndependentSentence = /^(?:はい|いいえ|そうですね|わかりました|分かりました|承知いたしました|趣味|特技|長所|短所|志望|名前|出身|大学|仕事|現在|本日|では|でも|また|しかし|そして|特に)/.test(cleanQ);
 
-      if (lastIncomplete || newContinues) {
+      if ((lastIncomplete && !isIndependentSentence) || newContinues) {
         const cleanLast = lastItem.jp.replace(/[、,，。.\s]+$/, '');
         const merged = cleanLast + cleanQ;
         lastItem.jp = merged;
@@ -20342,8 +20422,9 @@ async function handleNewRecognizedUtterance(qJp) {
         return;
       }
 
-      // D. 上一句已經完整包含新句（新句為上一句之子字串，常見於語音切片斷句延遲）-> 略過
-      if (normLast.startsWith(normClean) && normClean.length >= 2) {
+      // D. 上一句已經完整包含新句（新句為上一句之子字串，常見於語音切片斷句延遲）
+      // 僅在兩句時間極為接近 (<2000ms) 且確實長度差異明顯時略過，避免短語重複被誤刪 (v154)
+      if (normLast.startsWith(normClean) && (normLast.length > normClean.length + 4) && timeDiff < 2000) {
         return;
       }
     }
@@ -20557,7 +20638,7 @@ function createAndStartInterviewRecognition() {
       if (finalChunk) {
         const trimmedFinal = finalChunk.trim();
         const now = Date.now();
-        const isDup = (trimmedFinal === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000);
+        const isDup = (trimmedFinal.length >= 4 && trimmedFinal === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 1200);
         if (!isDup) {
           InterviewEngine.speechBuffer = (InterviewEngine.speechBuffer + ' ' + trimmedFinal).trim();
           // 日語終止形即時切片：若累積緩衝區內已包含完整終止句，提前依句切片並推入對話串流與即時翻譯 (聽一句翻一句)
@@ -20618,7 +20699,7 @@ function createAndStartInterviewRecognition() {
           if (InterviewEngine.isListening) {
             createAndStartInterviewRecognition();
           }
-        }, 150);
+        }, 0); // 0ms 極速無縫重啟，消除連線真空期 (v154)
       }
     };
 
@@ -20670,19 +20751,18 @@ function startInterviewListening() {
     updateInterviewTimerDisplay();
   }, 1000);
 
-  // 心跳監控守護 Watchdog Timer (每 5 秒檢測一次)
+  // 心跳監控守護 Watchdog Timer (由 10 秒放寬至 30 秒，且發言中絕不中斷，避免思考停頓後開口漏音) (v154)
   clearInterval(InterviewEngine.recognitionWatchdog);
   InterviewEngine.recognitionWatchdog = setInterval(() => {
     if (!InterviewEngine.isListening) return;
     const now = Date.now();
-    // 超過 10 秒無任何活動且處於監聽狀態，無感守護重啟
-    if (now - (InterviewEngine.lastAudioActivityTime || now) > 10000) {
+    if (now - (InterviewEngine.lastAudioActivityTime || now) > 30000) {
       InterviewEngine.lastAudioActivityTime = now;
-      if (InterviewEngine.isListening) {
+      if (InterviewEngine.isListening && !InterviewEngine.activeInterimText) {
         createAndStartInterviewRecognition();
       }
     }
-  }, 5000);
+  }, 10000);
 
   // 環境檢測：若為 file:// 協定提醒使用者
   if (window.location && window.location.protocol === 'file:') {

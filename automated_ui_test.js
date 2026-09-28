@@ -518,7 +518,8 @@ assert(html.includes('who-bang-options-container') && html.includes('who-backhai
 assert(!html.includes('"beard"') && !html.includes('"beautyMark"'), '特徵欄位 beard / beautyMark 已從 DEFAULT_COLLEAGUE_TRAITS 移除');
 assert(html.includes('楊詠筑') && !html.includes('楊英筑'), '本人姓名已更正為楊詠筑（移除舊的楊英筑）');
 assert(html.includes('加治木') && !html.includes('加治木（支配人）'), '加治木名字卡已移除「支配人」標籤');
-assert(html.includes('startInlineNameEdit') && html.includes('name-cell-zh'), '名字卡具備中文標籤行內編輯功能 (startInlineNameEdit + name-cell-zh)');
+// v154 名字卡片去冗精簡：移除中文備註與小鉛筆，保留日文振假名與選單
+assert(!html.includes('name-cell-zh') && !html.includes('title="編輯中文名稱" onclick="startInlineNameEdit'), '名字卡依使用者需求去冗精簡，移除重複中文備註與小鉛筆');
 
 // 測試 34: 最新班表名單同步 (23位現職，7位離職清除，6位新加入，職稱徹底分離) (v82)
 // ...
@@ -692,7 +693,7 @@ assert(html.includes('ds_qa_conc_reply') && textContent.includes('アルコー�
 // 測試 42: 日文排版三合一智慧引擎（貼日出中/貼中出日/中日對照）與移除重複朗讀按鈕 (v92)
 console.log('\n【測試 42：日文排版三合一智慧引擎（貼日出中/貼中出日/中日對照）與移除重複朗讀按鈕 (v92)】');
 // 1. 雙引擎原生跨域免金鑰翻譯 (clients5 + MyMemory)
-assert(html.includes('clients5.google.com/translate_a/t?client=dict-chrome-ex') && html.includes('api.mymemory.translated.net/get'), '翻譯底層採用 Google Clients5 + MyMemory 雙引擎原生跨域 (CORS: *)，徹底解決行動端跨域取不到中文的問題');
+assert(html.includes('gemini-flash-lite-latest:generateContent') && html.includes('translationMemoryCache'), '翻譯底層升級為 Gemini Flash-Lite 原生跨域神經翻譯與全域記憶體快取 (v154)，徹底杜絕 8 句上限與生硬問題');
 
 // 2. 「貼日文出中文」：純日文輸入自動翻譯成繁體中文對照行
 assert(html.includes('processJapaneseOrMixedText') && html.includes("fetchFreeGoogleTranslate(pair.jp, 'zh-TW')"), '日文輸入模式保證自動呼叫雲端/本地翻譯生成繁體中文對照行');
@@ -1045,8 +1046,8 @@ assert(html.includes('已複製所選') && html.includes('國語言翻譯文字'
 // 測試 58: 語音三層防重複去重機制、年齡/生年月日擬答精準匹配與鎖定題目橫幅 (v148)
 console.log('\n【測試 58：語音三層防重複去重機制、年齡/生年月日擬答精準匹配與鎖定題目橫幅 (v148)】');
 assert(html.includes('lastFlushedText:') && html.includes('lastFlushedTime:'), 'InterviewEngine 具備 lastFlushedText 與 lastFlushedTime 狀態紀錄');
-assert(html.includes('textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000'), 'flushActiveInterimToHistory 具備 4 秒同句沉澱去重防護 (第 1 重)');
-assert(html.includes('trimmedFinal === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 4000'), 'rec.onresult finalChunk 具備已沉澱防重複累加防護 (第 2 重)');
+assert(html.includes('textToFlush.length >= 4 && textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 1200'), 'flushActiveInterimToHistory 具備 1.2 秒精準防重複且不誤殺短詞 (v154)');
+assert(html.includes('trimmedFinal.length >= 4 && trimmedFinal === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 1200'), 'rec.onresult finalChunk 具備 1.2 秒精準防重複且不誤殺短詞 (v154)');
 assert(html.includes('normClean === normLast') && html.includes('normClean.startsWith(normLast)'), 'handleNewRecognizedUtterance 具備歷史去重與 5 秒前綴就地延伸升級 (第 3 重)');
 assert(html.includes('function selectHistoricalQuestionByIndex(index)'), '具備安全索引對話卡片選取函式 selectHistoricalQuestionByIndex，杜絕引號跳脫異常');
 assert(html.includes('ondblclick="selectHistoricalQuestionByIndex(${index})"'), '對話歷史卡片雙擊與按鈕改以索引精確觸發擬答');
@@ -1313,9 +1314,45 @@ assert(html.includes('【絕對排除要求】：求職者特別要求回答中�
 assert(html.includes('InterviewEngine.activeStyleVariant = \'direct\';') && html.includes('InterviewEngine.activeExcludeText = \'\';'), '清空對話串流時重設風格與排除狀態');
 
 // 7. PWA Service Worker 升級至 v153 驗證
-const swV153Content = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swV153Content.includes('yang-pwa-v153'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v153');
+const swV154 = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
+assert(swV154.includes('yang-pwa-v154'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v154');
 
+
+// ============================================================================
+// 【測試 64】v154 核心升級專項驗證
+// 1. 徹底修復「本日常」錯字為「本日」
+// 2. 名字同仁圖鑑卡片去冗精簡 (無中文備註、無小鉛筆 ✏️、無人物立繪)
+// 3. 收音防跳句修復 (修正接續正則誤殺、30s 守護計時器、0ms 重連、1.2s 去重)
+// 4. 右側重新生成 4.2 秒熔斷與 finally 保底
+// 5. 左側即時翻譯全面升級 Gemini Flash-Lite 原生跨域翻譯與 LRU 快取
+// ============================================================================
+console.log('\n【測試 64】開始執行 v154 核心升級專項驗證...');
+
+// 1. 錯字修正驗證
+assert(!html.includes('本日常<rt>ほんじつ</rt>'), 'index.html 內完全無「本日常」錯字');
+assert(html.includes('本日<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。'), '自我介紹標準敬語正確使用「本日」');
+
+// 2. 名字卡片去冗精簡驗證
+assert(!html.includes('name-cell-zh'), '名字單字卡中徹底移除中文備註 (.name-cell-zh)');
+assert(!html.includes('title="編輯中文名稱"') && !html.includes('title="編輯中文"'), '名字單字卡中徹底移除小鉛筆圖案 (✏️)');
+assert(!html.includes('<img src="${v.avatarUrl}" class="name-cell-avatar-img"'), '名字單字卡中徹底移除人物插畫立繪圖片');
+assert(html.includes('<div class="cell-ja">${v.ja}</div>') && html.includes('global_vocab'), '名字單字卡僅保留純淨振假名漢字與選單點點');
+
+// 3. 收音防跳句修復驗證
+assert(!html.includes('const newContinues = /^[をにでとはがへとよりてもってまたしかしですが、,]'), '徹底移除舊有中括號字元集合接續正則，杜絕誤殺日文常見句首');
+assert(html.includes('isIndependentSentence'), '具備獨立開頭防誤傷保護，保護「はい、趣味、特技、では、特に」不被吞掉');
+assert(html.includes('createAndStartInterviewRecognition();') && html.includes('}, 0);'), 'onend 具備 0ms 極速無縫重連機制，消除收音真空期');
+assert(html.includes('30000') && html.includes('!InterviewEngine.activeInterimText'), '守護計時器延長至 30 秒且正在發言時絕不中斷');
+
+// 4. 右側重新生成 4.2 秒熔斷與 finally 渲染保底驗證
+assert(html.includes('REGENERATE_TIMEOUT') && html.includes('Promise.race'), 'regenerateCurrentAnswer 具備硬性超時熔斷控制器');
+assert(html.includes('SWITCH_TIMEOUT') && html.includes('Promise.race'), 'switchAnswerStyleVariant 具備超時熔斷控制器');
+assert(html.includes('finalAns') && html.includes('matchSemanticCandidateAnswer(q, honorific)'), 'regenerateCurrentAnswer 在 finally 區塊必定保底渲染，保證關閉 Shimmer 絕不無限轉圈');
+
+// 5. 左側即時翻譯升級驗證
+assert(html.includes('translationMemoryCache'), '具備全域記憶體翻譯快取 (translationMemoryCache)');
+assert(html.includes('gemini-flash-lite-latest:generateContent'), '支援 Gemini Flash-Lite 原生跨域神經翻譯，無 8 句額度上限與 CORS 阻擋');
+assert(html.includes('好的。') && html.includes('您的興趣是什麼？'), '常見日文相槌與問答具備 0ms 極速快查');
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1323,5 +1360,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v153) 聽一句翻一句即時切句引擎、全域單一意圖原子化鎖定、非問句相槌覆誦與三大回答定制微操作全面就位！');
+  console.log('🎉 所有測試通過！(v154) 收音防跳句修復、重新生成熔斷保底、Gemini Flash-Lite 高品質翻譯、本日常錯字修正、名字卡片去冗精簡全面就位！');
 }
