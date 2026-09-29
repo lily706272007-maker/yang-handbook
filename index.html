@@ -4243,25 +4243,20 @@
       <div class="who-raccoon-banner" style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:18px; text-align:left;">
         <img src="./photos/raccoon_pet.png" style="width:48px; height:48px; object-fit:contain; flex-shrink:0;" />
         <div style="flex:1;">
-          <div style="font-size:1.05rem; font-weight:800; color:var(--primary); font-family:var(--font-serif);" id="who-gender-title-text">
+          <div style="font-size:1.15rem; font-weight:800; color:var(--primary); font-family:var(--font-serif);" id="who-gender-title-text">
             性別を選択してください
-          </div>
-          <div style="font-size:0.82rem; color:var(--muted); margin-top:2px;" id="who-gender-desc-text">
-            請問是男生還是女生呢？請點選下方選項：
           </div>
         </div>
       </div>
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:18px;">
-        <button class="btn btn-outline" onclick="promptNationalityStep('female')" style="padding:20px 8px; border-radius:16px; border:2px solid #e91e63; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(233,30,99,0.04); cursor:pointer;">
-          <span style="font-size:2.6rem;">👧</span>
-          <span style="font-size:1.1rem; font-weight:800; color:#c2185b;">我是女生</span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場工作襯衫・日系髮型</span>
+        <button class="btn btn-outline" onclick="promptNationalityStep('female')" style="padding:22px 8px; border-radius:16px; border:2px solid #e91e63; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(233,30,99,0.04); cursor:pointer;">
+          <span style="font-size:2.8rem;">👧</span>
+          <span style="font-size:1.2rem; font-weight:800; color:#c2185b;">女性</span>
         </button>
-        <button class="btn btn-outline" onclick="promptNationalityStep('male')" style="padding:20px 8px; border-radius:16px; border:2px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; background:rgba(25,118,210,0.04); cursor:pointer;">
-          <span style="font-size:2.6rem;">👦</span>
-          <span style="font-size:1.1rem; font-weight:800; color:#1565c0;">我是男生</span>
-          <span style="font-size:0.72rem; color:var(--muted);">外場工作襯衫・俐落短髮</span>
+        <button class="btn btn-outline" onclick="promptNationalityStep('male')" style="padding:22px 8px; border-radius:16px; border:2px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(25,118,210,0.04); cursor:pointer;">
+          <span style="font-size:2.8rem;">👦</span>
+          <span style="font-size:1.2rem; font-weight:800; color:#1565c0;">男性</span>
         </button>
       </div>
 
@@ -14395,11 +14390,8 @@ function promptGenderStep(nameItem) {
   if (loadingScreen) loadingScreen.style.display = 'none';
   if (resultScreen) resultScreen.style.display = 'none';
 
-  const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
   const titleEl = document.getElementById('who-gender-title-text');
-  const descEl = document.getElementById('who-gender-desc-text');
   if (titleEl) titleEl.textContent = `性別を選択してください`;
-  if (descEl) descEl.textContent = `請問【${cleanName}】是男生還是女生呢？請點選下方選項：`;
 }
 
 // 6.8. 步驟 1.8: 選擇國籍 (日本、尼泊爾、越南、緬甸、台灣、中國 或 自訂輸入)

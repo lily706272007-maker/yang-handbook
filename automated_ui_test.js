@@ -1368,12 +1368,16 @@ console.log('\n【測試 65】開始執行 v155 外場同仁立繪生成與多�
 
 // 1. Service Worker v155 升級驗證
 const swV155 = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swV155.includes('yang-pwa-v155') || swV155.includes('yang-pwa-v156'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v155 或 yang-pwa-v156');
+const swVer155Match = swV155.match(/yang-pwa-v(\d+)/);
+assert(swVer155Match && parseInt(swVer155Match[1]) >= 155, 'Service Worker 快取版本已順暢升級至 yang-pwa-v155 或更高級版本');
 assert(swV155.includes('photos/avatar_sea_female_clean.jpg'), 'sw.js ASSETS 包含東南亞女性清爽立繪');
 assert(swV155.includes('photos/avatar_nepal_male_clean.jpg'), 'sw.js ASSETS 包含尼泊爾男性清爽立繪');
 assert(swV155.includes('photos/clean_restaurant_pixel_bg.jpg'), 'sw.js ASSETS 包含原版餐廳木地板背景');
 assert(!html.includes('${hasAv ? `<img src="${v.avatarUrl}"'), '名字選擇清單中徹底移除微縮人物肖像，杜絕小圖看不清楚');
 assert(html.includes('<span style="font-size:1.1rem;">👤</span>') && html.includes('selectExistingColleagueForAvatar'), '名字選擇清單統一使用極簡乾淨的 👤 圖示');
+assert(html.includes('女性</span>') && html.includes('男性</span>'), '性別按鈕標籤為純淨日文 (女性 / 男性)');
+assert(!html.includes('我是女生') && !html.includes('我是男生'), '徹底移除我是女生與我是男生的中文句子');
+assert(!html.includes('外場工作襯衫・日系髮型') && !html.includes('外場工作襯衫・俐落短髮'), '徹底移除不重要的外場工作襯衫髮型副標註');
 
 // 2. 實體圖檔與背景鎖定驗證
 const cleanAvatarFiles = [
