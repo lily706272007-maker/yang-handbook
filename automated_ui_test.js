@@ -1315,7 +1315,7 @@ assert(html.includes('InterviewEngine.activeStyleVariant = \'direct\';') && html
 
 // 7. PWA Service Worker 升級至 v153 驗證
 const swV154 = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swV154.includes('yang-pwa-v154'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v154');
+assert(swV154.includes('yang-pwa-v154') || swV154.includes('yang-pwa-v155'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v154 或 yang-pwa-v155');
 
 
 // ============================================================================
@@ -1353,6 +1353,129 @@ assert(html.includes('finalAns') && html.includes('matchSemanticCandidateAnswer(
 assert(html.includes('translationMemoryCache'), '具備全域記憶體翻譯快取 (translationMemoryCache)');
 assert(html.includes('gemini-flash-lite-latest:generateContent'), '支援 Gemini Flash-Lite 原生跨域神經翻譯，無 8 句額度上限與 CORS 阻擋');
 assert(html.includes('好的。') && html.includes('您的興趣是什麼？'), '常見日文相槌與問答具備 0ms 極速快查');
+
+// ============================================================================
+// 【測試 65】v155 外場同仁立繪生成與多語系標籤全流程專項驗證
+// 1. 50 大交友軟體風格休閒娛樂標籤多語系字典 (6 大分類、50 標籤、5 國母語全覆蓋)
+// 2. 國籍與母語動態映射 (🇳🇵/🇲🇲/🇻🇳/🇯🇵/🇹🇼)
+// 3. 步驟 1.9 標籤挑選介面與 12s AI 畫師生圖進度條
+// 4. 外場高階胸像立繪資產調度 (前手禮空手、黑襯衫、圍裙與國籍對應)
+// 5. 主管視角 (楊詠筑) 100% 繁體中文標籤卡片呈現
+// 6. PWA Service Worker 升級至 v155 快取驗證
+// ============================================================================
+console.log('\n【測試 65】開始執行 v155 外場同仁立繪生成與多語系標籤全流程專項驗證...');
+
+// 1. Service Worker v155 升級驗證
+const swV155 = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
+assert(swV155.includes('yang-pwa-v155'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v155');
+assert(swV155.includes('photos/avatar_sea_female_clean.jpg'), 'sw.js ASSETS 包含東南亞女性清爽立繪');
+assert(swV155.includes('photos/avatar_nepal_male_clean.jpg'), 'sw.js ASSETS 包含尼泊爾男性清爽立繪');
+assert(swV155.includes('photos/clean_restaurant_pixel_bg.jpg'), 'sw.js ASSETS 包含原版餐廳木地板背景');
+
+// 2. 實體圖檔與背景鎖定驗證
+const cleanAvatarFiles = [
+  'photos/avatar_eastasia_female_clean.jpg',
+  'photos/avatar_eastasia_male_clean.jpg',
+  'photos/avatar_nepal_female_clean.jpg',
+  'photos/avatar_nepal_male_clean.jpg',
+  'photos/avatar_sea_female_clean.jpg',
+  'photos/avatar_sea_male_clean.jpg',
+  'photos/clean_restaurant_pixel_bg.jpg'
+];
+cleanAvatarFiles.forEach(f => {
+  const p = path.join(__dirname, f);
+  assert(fs.existsSync(p), `實體立繪/背景檔案存在: ${f}`);
+  const stats = fs.statSync(p);
+  assert(stats.size > 10000, `檔案大小有效且大於 10KB: ${f} (${stats.size} bytes)`);
+});
+
+// 3. HTML DOM 結構驗證
+assert(html.includes('id="who-screen-hobbies"'), '包含步驟 1.9 標籤挑選介面 (#who-screen-hobbies)');
+assert(html.includes('id="who-hobbies-ai-progress-wrap"'), '包含 12s AI 畫師生圖等待進度條區塊');
+assert(html.includes('id="who-hobbies-progress-bar"'), '包含 AI 繪製動態進度條 (#who-hobbies-progress-bar)');
+assert(html.includes('id="who-hobbies-countdown-badge"'), '包含 AI 繪製倒數徽章 (#who-hobbies-countdown-badge)');
+assert(html.includes('id="who-hobbies-tags-container"'), '包含 50 大標籤網格容器 (#who-hobbies-tags-container)');
+assert(html.includes('id="who-result-hobbies-wrap"'), '成果畫面包含休閒標籤展示區塊 (#who-result-hobbies-wrap)');
+assert(html.includes('id="name-card-hobbies-section"'), '同仁名片彈窗包含休閒標籤專區 (#name-card-hobbies-section)');
+assert(html.includes('id="name-card-hobbies-grid"'), '同仁名片彈窗包含休閒標籤網格 (#name-card-hobbies-grid)');
+assert(html.includes('.who-hobby-pill'), 'CSS 包含標籤膠囊按鈕樣式 (.who-hobby-pill)');
+assert(html.includes('.colleague-hobby-badge'), 'CSS 包含主管視角同仁標籤徽章樣式 (.colleague-hobby-badge)');
+
+// 4. JavaScript 字典與多語系邏輯執行驗證 (抽取並動態執行)
+const jsExtractMatch = html.match(/const HOBBY_CATEGORIES_DATA = [\s\S]*?function generateTransparentChibiAvatar[\s\S]*?\n\}/);
+assert(jsExtractMatch, '成功抽取休閒標籤資料庫與立繪生成函式');
+
+const sandbox = {
+  console: console,
+  currentWhoTraits: {},
+  currentWhoState: {},
+  DEFAULT_COLLEAGUE_TRAITS: {}
+};
+const vm = require('vm');
+vm.createContext(sandbox);
+const codeToRun = `(function() {
+  ${jsExtractMatch[0]}
+  return {
+    HOBBY_CATEGORIES_DATA,
+    HOBBY_UI_TEXTS,
+    HOBBY_TAGS_DATA,
+    detectLanguageFromNationality,
+    generateTransparentChibiAvatar
+  };
+})()`;
+const evaluated = vm.runInContext(codeToRun, sandbox);
+
+const HOBBY_CATEGORIES_DATA = evaluated.HOBBY_CATEGORIES_DATA;
+const HOBBY_UI_TEXTS = evaluated.HOBBY_UI_TEXTS;
+const HOBBY_TAGS_DATA = evaluated.HOBBY_TAGS_DATA;
+const detectLanguageFromNationality = evaluated.detectLanguageFromNationality;
+const generateTransparentChibiAvatar = evaluated.generateTransparentChibiAvatar;
+
+assert(Array.isArray(HOBBY_CATEGORIES_DATA) && HOBBY_CATEGORIES_DATA.length === 6, '包含 6 大興趣分類');
+assert(Array.isArray(HOBBY_TAGS_DATA) && HOBBY_TAGS_DATA.length === 50, '字典精準包含整整 50 個交友軟體風格標籤');
+
+// 檢查 50 個標籤全數具備繁中、日、尼、緬、越 5 國母語
+const expectedLangs = ['zh', 'ja', 'ne', 'my', 'vi'];
+HOBBY_TAGS_DATA.forEach((tag, idx) => {
+  assert(tag.id, `標籤 #${idx} 具備 id`);
+  assert(tag.icon, `標籤 #${idx} (${tag.id}) 具備 icon`);
+  assert(tag.cat, `標籤 #${idx} (${tag.id}) 具備 category`);
+  expectedLangs.forEach(lang => {
+    assert(tag[lang] && tag[lang].trim().length > 0, `標籤 ${tag.id} 具備 ${lang} 語系翻譯: ${tag[lang]}`);
+  });
+});
+
+// 5. 國籍與母語映射邏輯驗證
+assert(detectLanguageFromNationality('尼泊爾 🇳🇵') === 'ne', '尼泊爾國籍映射為尼泊爾語 ne');
+assert(detectLanguageFromNationality('緬甸 🇲🇲') === 'my', '緬甸國籍映射為緬甸語 my');
+assert(detectLanguageFromNationality('越南 🇻🇳') === 'vi', '越南國籍映射為越南語 vi');
+assert(detectLanguageFromNationality('日本 🇯🇵') === 'ja', '日本國籍映射為日語 ja');
+assert(detectLanguageFromNationality('台灣 🇹🇼') === 'zh', '台灣國籍映射為繁體中文 zh');
+assert(detectLanguageFromNationality('中國 🇨🇳') === 'zh', '中國國籍映射為繁體中文 zh');
+assert(detectLanguageFromNationality('') === 'zh', '未指定國籍保底映射為繁體中文 zh');
+
+// 6. 立繪資源調度映射驗證
+const mockItem = { id: 'test_colleague' };
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'female', nationality: '越南 🇻🇳' }) === 'photos/avatar_sea_female_clean.jpg', '越南女性對應 avatar_sea_female_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'male', nationality: '越南 🇻🇳' }) === 'photos/avatar_sea_male_clean.jpg', '越南男性對應 avatar_sea_male_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'female', nationality: '緬甸 🇲🇲' }) === 'photos/avatar_sea_female_clean.jpg', '緬甸女性對應 avatar_sea_female_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'male', nationality: '緬甸 🇲🇲' }) === 'photos/avatar_sea_male_clean.jpg', '緬甸男性對應 avatar_sea_male_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'female', nationality: '尼泊爾 🇳🇵' }) === 'photos/avatar_nepal_female_clean.jpg', '尼泊爾女性對應 avatar_nepal_female_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'male', nationality: '尼泊爾 🇳🇵' }) === 'photos/avatar_nepal_male_clean.jpg', '尼泊爾男性對應 avatar_nepal_male_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'female', nationality: '日本 🇯🇵' }) === 'photos/avatar_eastasia_female_clean.jpg', '日本女性對應 avatar_eastasia_female_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'male', nationality: '日本 🇯🇵' }) === 'photos/avatar_eastasia_male_clean.jpg', '日本男性對應 avatar_eastasia_male_clean.jpg');
+assert(generateTransparentChibiAvatar(mockItem, null, { gender: 'male', nationality: '台灣 🇹🇼' }) === 'photos/avatar_eastasia_male_clean.jpg', '台灣男性對應 avatar_eastasia_male_clean.jpg');
+
+// 7. 主管視角 (楊詠筑) 繁體中文轉換驗證
+const testColleagueHobbies = ['c_ramen', 'c_coffee', 'h_anime'];
+const renderedZhBadges = testColleagueHobbies.map(tagId => {
+  const tag = HOBBY_TAGS_DATA.find(t => t.id === tagId);
+  return `${tag.icon} ${tag.zh}`;
+});
+assert(renderedZhBadges.includes('🍜 喜歡拉麵'), '標籤 c_ramen 正確轉換為繁中 🍜 喜歡拉麵');
+assert(renderedZhBadges.includes('☕ 跑咖探店'), '標籤 c_coffee 正確轉換為繁中 ☕ 跑咖探店');
+assert(renderedZhBadges.includes('🎌 動畫漫畫'), '標籤 h_anime 正確轉換為繁中 🎌 動畫漫畫');
+
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1360,5 +1483,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v154) 收音防跳句修復、重新生成熔斷保底、Gemini Flash-Lite 高品質翻譯、本日常錯字修正、名字卡片去冗精簡全面就位！');
+  console.log('🎉 所有測試通過！(v155) 外場同仁立繪生成與多語系標籤全流程（選名字、選性別、選國籍、選興趣標籤、12s AI畫師生圖等待、高階立繪揭曉、主管視角全繁中呈現）全面就位！');
 }

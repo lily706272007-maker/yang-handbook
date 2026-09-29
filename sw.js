@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yang-pwa-v154';
+const CACHE_NAME = 'yang-pwa-v155';
 const ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,13 @@ const ASSETS = [
   './photos/avatar_yang.png',
   './photos/basashi.jpg',
   './photos/akaushi.jpg',
+  './photos/clean_restaurant_pixel_bg.jpg',
+  './photos/avatar_sea_female_clean.jpg',
+  './photos/avatar_sea_male_clean.jpg',
+  './photos/avatar_nepal_female_clean.jpg',
+  './photos/avatar_nepal_male_clean.jpg',
+  './photos/avatar_eastasia_female_clean.jpg',
+  './photos/avatar_eastasia_male_clean.jpg',
   './apple-touch-icon-precomposed.png',
   './icons/tanuki.png',
   './icons/apple-touch-icon.png',

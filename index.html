@@ -2694,6 +2694,49 @@
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.85; transform: scale(1.02); }
   }
+
+/* --- 50 大休閒標籤與同仁卡片樣式 (v155) --- */
+.who-hobby-pill {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+  margin: 3px 2px;
+}
+.who-hobby-pill:hover {
+  background: #f1f5f9;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+.who-hobby-pill.active {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(92, 61, 30, 0.25);
+}
+.colleague-hobby-badge {
+  font-size: 0.75rem;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 </style>
 </head>
 <body>
@@ -4279,6 +4322,60 @@
       <button class="btn btn-ghost btn-sm" onclick="backToGenderSelect()">← 回上一步選擇性別</button>
     </div>
 
+    <!-- 步驟 1.9: 選擇放假休閒/興趣標籤 (母語呈現・交友軟體風格・10~15秒生圖等待) -->
+    <div id="who-screen-hobbies" style="display:none; text-align:left;">
+      <!-- 小浣熊母語提問橫幅 -->
+      <div class="who-raccoon-banner" style="background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:12px; margin-bottom:12px; text-align:left;">
+        <img src="./photos/raccoon_pet.png" style="width:46px; height:46px; object-fit:contain; flex-shrink:0;" />
+        <div style="flex:1;">
+          <div style="font-size:1.02rem; font-weight:800; color:var(--primary); line-height:1.3; font-family:var(--font-serif);" id="who-hobbies-title-text">
+            放假時喜歡做什麼呢？
+          </div>
+          <div style="font-size:0.78rem; color:var(--muted); margin-top:2px;" id="who-hobbies-desc-text">
+            請點選 3～5 個平時喜歡的休閒娛樂標籤：
+          </div>
+        </div>
+      </div>
+
+      <!-- 🎨 10~15 秒 AI 畫師生圖等待動態進度條 -->
+      <div id="who-hobbies-ai-progress-wrap" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:0.78rem; font-weight:800; color:#0369a1;" id="who-hobbies-ai-msg">
+            🎨 專屬外場 AI 畫師正在為您精心描繪…
+          </span>
+          <span id="who-hobbies-countdown-badge" style="font-size:0.72rem; font-weight:800; background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:10px;">
+            繪製中 12s
+          </span>
+        </div>
+        <div style="width:100%; height:6px; background:#e2e8f0; border-radius:6px; overflow:hidden;">
+          <div id="who-hobbies-progress-bar" style="width:0%; height:100%; background:linear-gradient(90deg, #38bdf8, #6366f1); border-radius:6px; transition:width 0.3s ease;"></div>
+        </div>
+      </div>
+
+      <!-- 標籤分類與選擇區域 (6 大分類) -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.8rem; font-weight:800; color:var(--ink);">🏷️ 選擇休閒標籤（可多選 3～5 個）：</span>
+        <span id="who-hobbies-counter" style="font-size:0.75rem; font-weight:700; color:var(--primary); background:rgba(92,61,30,0.08); padding:2px 8px; border-radius:8px;">
+          已選 0 / 5
+        </span>
+      </div>
+
+      <!-- 50 個標籤網格容器 -->
+      <div id="who-hobbies-tags-container" style="max-height:280px; overflow-y:auto; padding:8px 6px; border:1px solid var(--border); border-radius:12px; background:#fff; margin-bottom:12px;">
+        <!-- 動態注入 6 大類別與 50 個母語標籤 -->
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn btn-primary" id="who-hobbies-finish-btn" onclick="finishWhoHobbiesAndReveal()" style="flex:1; font-weight:800; padding:10px 14px; font-size:0.92rem; border-radius:12px;">
+          ✨ 完成並揭曉我的專屬立繪
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="backToNationalitySelect()" style="font-size:0.75rem; white-space:nowrap;">
+          ← 重選國籍
+        </button>
+      </div>
+    </div>
+
+
     <!-- 步驟 2: 生成中 Loading 畫面 -->
     <div id="who-screen-loading" style="display:none; padding:32px 10px;">
       <div style="font-size:2.5rem; animation:whoSpin 1.5s infinite linear; display:inline-block; margin-bottom:10px;">🎨</div>
@@ -4308,6 +4405,13 @@
         <div style="font-size:1.15rem; font-weight:800; color:var(--ink);" id="who-result-name-display">伊藤（いとう）</div>
         <div style="font-size:0.8rem; color:var(--muted); margin-top:2px;" id="who-result-role-display">日本同仁</div>
       </div>
+
+      <!-- 🎯 選擇的休閒標籤成果展示 (繁體中文呈現) -->
+      <div id="who-result-hobbies-wrap" style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:8px 12px; margin-bottom:10px; text-align:left;">
+        <div style="font-size:0.75rem; font-weight:700; color:var(--muted); margin-bottom:4px;">🎯 休閒娛樂標籤（繁體中文）：</div>
+        <div id="who-result-hobbies-list" style="display:flex; flex-wrap:wrap; gap:4px;"></div>
+      </div>
+
 
       <!-- 快速微調特徵 (防漏抓/自由調整) -->
       <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px; text-align:left; max-height:280px; overflow-y:auto;">
@@ -4447,6 +4551,18 @@
       <span id="name-card-employment-badge" style="font-size:0.75rem; font-weight:700; background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; border-radius:6px; padding:2px 8px;">💼 正式員工（正社員）</span>
       <span id="name-card-nationality-badge" style="font-size:0.75rem; font-weight:700; background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; border-radius:6px; padding:2px 8px;">🇯🇵 日本</span>
     </div>
+
+    <!-- 🎯 放假休閒娛樂 / 興趣標籤專區 (主管視角：100% 繁體中文呈現) -->
+    <div id="name-card-hobbies-section" style="background:#fdfcf9; border:1.5px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px; text-align:left;">
+      <div style="font-size:0.82rem; font-weight:800; color:var(--ink); margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:800; color:var(--primary);">🎯 放假休閒＆興趣標籤</span>
+        <span style="font-size:0.72rem; color:var(--muted); font-weight:normal;">繁體中文呈現</span>
+      </div>
+      <div id="name-card-hobbies-grid" style="display:flex; flex-wrap:wrap; gap:6px;">
+        <!-- 標籤 pills 動態填充 -->
+      </div>
+    </div>
+
 
     <!-- 📅 本月排休 / 公休班表專區 (與我同日休假特別加紅加粗) -->
     <div id="name-card-vacation-section" style="background:#f8fafc; border:1.5px solid var(--border); border-radius:14px; padding:12px; margin-bottom:14px; text-align:left;">
@@ -14262,9 +14378,11 @@ function promptGenderStep(nameItem) {
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
+  const hobbiesScreen = document.getElementById('who-screen-hobbies');
   if (selectScreen) selectScreen.style.display = 'none';
   if (genderScreen) genderScreen.style.display = 'block';
   if (nationalityScreen) nationalityScreen.style.display = 'none';
+  if (hobbiesScreen) hobbiesScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'none';
   if (resultScreen) resultScreen.style.display = 'none';
 
@@ -14281,7 +14399,9 @@ function promptNationalityStep(selectedGender) {
 
   const genderScreen = document.getElementById('who-screen-gender');
   const nationalityScreen = document.getElementById('who-screen-nationality');
+  const hobbiesScreen = document.getElementById('who-screen-hobbies');
   if (genderScreen) genderScreen.style.display = 'none';
+  if (hobbiesScreen) hobbiesScreen.style.display = 'none';
   if (nationalityScreen) nationalityScreen.style.display = 'block';
 
   const nameItem = currentWhoState.selectedNameItem;
@@ -14318,71 +14438,388 @@ function submitCustomNationality() {
   confirmWhoNationality(customNat);
 }
 
-// 7. 使用者確認國籍後，啟動生成 Q 版立繪
-function confirmWhoNationality(selectedNationality) {
+
+/* ==============================================================
+   14.5. 50 大交友軟體風格休閒娛樂標籤多語系字典 (v155)
+   順序：6 大分類 (美食吃貨、宅家放鬆、運動活力、戶外探索、娛樂流行、社交生活)
+   母語支援：繁體中文(zh, 主管基準)、日本語(ja)、尼泊爾語(ne)、緬甸語(my)、越南語(vi)
+============================================================== */
+
+const HOBBY_CATEGORIES_DATA = [
+  {
+    id: 'food',
+    icon: '🍜',
+    names: {
+      zh: '美食吃貨',
+      ja: 'グルメ・食べ歩き',
+      ne: 'खाना र परिकार',
+      my: 'အစားအသောက်',
+      vi: 'Ăn uống & Ẩm thực'
+    }
+  },
+  {
+    id: 'home',
+    icon: '🏠',
+    names: {
+      zh: '宅家放鬆',
+      ja: 'おうち時間',
+      ne: 'घरमै आराम',
+      my: 'အိမ်မှာအနားယူခြင်း',
+      vi: 'Nghỉ ngơi tại nhà'
+    }
+  },
+  {
+    id: 'sports',
+    icon: '🏃',
+    names: {
+      zh: '運動活力',
+      ja: 'スポーツ・健康',
+      ne: 'खेलकुद र व्यायाम',
+      my: 'အားကစား',
+      vi: 'Thể thao năng động'
+    }
+  },
+  {
+    id: 'outdoor',
+    icon: '⛺',
+    names: {
+      zh: '戶外探索',
+      ja: 'アウトドア・旅',
+      ne: 'बाहिरी भ्रमण',
+      my: 'အပြင်ထွက်ခရီးသွားခြင်း',
+      vi: 'Khám phá dã ngoại'
+    }
+  },
+  {
+    id: 'culture',
+    icon: '🎬',
+    names: {
+      zh: '娛樂流行',
+      ja: 'エンタメ・流行',
+      ne: 'मनोरञ्जन र फेसन',
+      my: 'ဖျော်ဖြေရေး',
+      vi: 'Giải trí & Trào lưu'
+    }
+  },
+  {
+    id: 'social',
+    icon: '☕',
+    names: {
+      zh: '社交生活',
+      ja: '交流・日常',
+      ne: 'सामाजिक जीवन',
+      my: 'လူမှုဆက်ဆံရေး',
+      vi: 'Đời sống giao lưu'
+    }
+  }
+];
+
+const HOBBY_UI_TEXTS = {
+  zh: {
+    title: '放假時喜歡做什麼呢？',
+    desc: '請挑選 3～5 個平時喜歡的休閒娛樂標籤：',
+    progress: '🎨 專屬外場 AI 畫師正在為您精心描繪…',
+    drawing: '繪製中',
+    done: '繪製完成 ✨',
+    selectedPrefix: '已選',
+    submitBtn: '✨ 完成並揭曉我的專屬立繪',
+    minLimitToast: '請至少選擇 3 個休閒標籤喔！',
+    maxLimitToast: '最多只能選擇 5 個休閒標籤喔！'
+  },
+  ja: {
+    title: '休日は何をして過ごすのが好きですか？',
+    desc: '普段好きな趣味や休日の過ごし方を3〜5個選んでください：',
+    progress: '🎨 AI絵師があなたの外場制服アバターを描いています…',
+    drawing: '描画中',
+    done: '描画完了 ✨',
+    selectedPrefix: '選択中',
+    submitBtn: '✨ 完了して限定アバターを見る',
+    minLimitToast: '趣味タグを3つ以上選んでください！',
+    maxLimitToast: '趣味タグは最大5つまで選べます！'
+  },
+  ne: {
+    title: 'बिदाको दिनमा तपाईंलाई के गर्न मन पर्छ?',
+    desc: 'कृपया ३ देखि ५ वटा आफ्नो रुचि र मनोरञ्जनका ट्यागहरू छान्नुहोस्:',
+    progress: '🎨 समर्पित एआई कलाकारले तपाईंको अवतार तयार गर्दैछ…',
+    drawing: 'तयार हुँदैछ',
+    done: 'तयार भयो ✨',
+    selectedPrefix: 'छानिएको',
+    submitBtn: '✨ पूरा भयो, मेरो अवतार हेर्नुहोस्',
+    minLimitToast: 'कृपया कम्तीमा ३ वटा ट्यागहरू छान्नुहोस्!',
+    maxLimitToast: 'अधिकतम ५ वटा मात्र ट्यागहरू छान्न मिल्छ!'
+  },
+  my: {
+    title: 'အားလပ်ရက်မှာ ဘာလုပ်ရတာ ကြိုက်လဲခင်ဗျာ/ရှင်?',
+    desc: 'သင်နှစ်သက်သော ဝါသနာ ၃ မှ ၅ ခု ရွေးချယ်ပေးပါ:',
+    progress: '🎨 AI ပန်းချီဆရာက သင့်အတွက် ယူနီဖောင်းပုံဆွဲနေပါသည်…',
+    drawing: 'ဆွဲနေဆဲ',
+    done: 'ဆွဲပြီးပါပြီ ✨',
+    selectedPrefix: 'ရွေးထားသည်',
+    submitBtn: '✨ ပြီးပါပြီ၊ ကျွန်ုပ်၏ ရုပ်ပုံလွှာကြည့်မည်',
+    minLimitToast: 'အနည်းဆုံး ၃ ခု ရွေးပေးပါရန်!',
+    maxLimitToast: 'အများဆုံး ၅ ခုသာ ရွေးချယ်နိုင်ပါသည်!'
+  },
+  vi: {
+    title: 'Vào ngày nghỉ bạn thích làm gì nhất?',
+    desc: 'Vui lòng chọn 3 đến 5 sở thích hoặc hoạt động bạn yêu thích:',
+    progress: '🎨 Họa sĩ AI đang phác họa hình đại diện của bạn…',
+    drawing: 'Đang vẽ',
+    done: 'Đã hoàn thành ✨',
+    selectedPrefix: 'Đã chọn',
+    submitBtn: '✨ Hoàn tất và xem hình đại diện của tôi',
+    minLimitToast: 'Vui lòng chọn ít nhất 3 thẻ sở thích nhé!',
+    maxLimitToast: 'Bạn chỉ có thể chọn tối đa 5 thẻ thôi nhé!'
+  }
+};
+
+const HOBBY_TAGS_DATA = [
+  // ── 1. 美食吃貨 (9 個) ──
+  { id: 'c_ramen', cat: 'food', icon: '🍜', zh: '喜歡拉麵', ja: 'ラーメン巡り', ne: 'रामेन मनपर्छ', my: 'ခေါက်ဆွဲကြိုက်တယ်', vi: 'Thích ăn mì ramen' },
+  { id: 'c_hotpot', cat: 'food', icon: '🍲', zh: '暖心火鍋', ja: '鍋料理・しゃぶしゃぶ', ne: 'हटपट मनपर्छ', my: 'ဟော့ပေါ့ကြိုက်တယ်', vi: 'Thích lẩu' },
+  { id: 'c_sweet', cat: 'food', icon: '🍰', zh: '甜點下午茶', ja: 'スイーツ・カフェ', ne: 'मिठाई र केक', my: 'အချိုပွဲ', vi: 'Bánh ngọt tráng miệng' },
+  { id: 'c_coffee', cat: 'food', icon: '☕', zh: '跑咖探店', ja: 'カフェ巡り', ne: 'कफी पिउनु', my: 'ကော်ဖီဆိုင်ထိုင်ခြင်း', vi: 'Cà phê quán xá' },
+  { id: 'c_boba', cat: 'food', icon: '🧋', zh: '珍珠奶茶', ja: 'タピオカミルクティー', ne: 'बबार्टी', my: 'လက်ဖက်ရည်', vi: 'Trà sữa trân châu' },
+  { id: 'c_spicy', cat: 'food', icon: '🌶️', zh: '無辣不歡', ja: '激辛グルメ', ne: 'पिरो खाना', my: 'အစပ်ကြိုက်တယ်', vi: 'Thích ăn cay' },
+  { id: 'c_cook', cat: 'food', icon: '🍳', zh: '親自下廚', ja: '自炊・料理作り', ne: 'आफैं पकाउनु', my: 'ဟင်းချက်ခြင်း', vi: 'Tự nấu ăn' },
+  { id: 'c_bbq', cat: 'food', icon: '🥩', zh: '燒肉燒烤', ja: '焼肉・BBQ', ne: 'बारबेक्यू', my: 'အသားကင်', vi: 'Ăn thịt nướng' },
+  { id: 'c_night_market', cat: 'food', icon: '🍢', zh: '夜市小吃', ja: '屋台・夜市', ne: 'रात्रिकालीन बजार', my: 'ညဈေးတန်း', vi: 'Ăn vặt chợ đêm' },
+
+  // ── 2. 宅家放鬆 (8 個) ──
+  { id: 'h_drama', cat: 'home', icon: '📺', zh: '追劇馬拉松', ja: 'ドラマ鑑賞', ne: 'सिरिज हेर्नु', my: 'ဇာတ်လမ်းတွဲကြည့်ခြင်း', vi: 'Cày phim bộ' },
+  { id: 'h_anime', cat: 'home', icon: '🎌', zh: '動畫漫畫', ja: 'アニメ・マンガ', ne: 'एनिमे र मङ्गा', my: 'အန်နီမေးကြည့်ခြင်း', vi: 'Xem anime & manga' },
+  { id: 'h_game', cat: 'home', icon: '🎮', zh: '主機電玩', ja: 'ゲーム好き', ne: 'भिडियो गेम', my: 'ဂိမ်းဆော့ခြင်း', vi: 'Chơi game console' },
+  { id: 'h_sleep', cat: 'home', icon: '🛌', zh: '睡到自然醒', ja: 'ぐっすり寝る', ne: 'धेरै सुत्नु', my: 'အိပ်ရေးဝအောင်အိပ်ခြင်း', vi: 'Ngủ nướng' },
+  { id: 'h_read', cat: 'home', icon: '📚', zh: '靜心閱讀', ja: '読書・本', ne: 'किताब पढ्नु', my: 'စာဖတ်ခြင်း', vi: 'Đọc sách' },
+  { id: 'h_clean', cat: 'home', icon: '🧹', zh: '居家整理', ja: '掃除・片付け', ne: 'कोठा सफा गर्नु', my: 'အိမ်သန့်ရှင်းရေး', vi: 'Dọn dẹp phòng' },
+  { id: 'h_music', cat: 'home', icon: '🎧', zh: '戴耳機聽歌', ja: '音楽を聴く', ne: 'संगीत सुन्नु', my: 'သီချင်းနားထောင်ခြင်း', vi: 'Nghe nhạc' },
+  { id: 'h_bath', cat: 'home', icon: '♨️', zh: '泡湯放鬆', ja: '温泉・お風呂', ne: 'तातोपानी नुहाउनु', my: 'ရေပူစိမ်ခြင်း', vi: 'Tắm onsen thư giãn' },
+
+  // ── 3. 運動活力 (8 個) ──
+  { id: 's_gym', cat: 'sports', icon: '🏋️', zh: '重訓健身', ja: 'ジム・筋トレ', ne: 'जिम व्यायाम', my: 'ဂျင်ဆော့ခြင်း', vi: 'Tập gym thể hình' },
+  { id: 's_run', cat: 'sports', icon: '🏃', zh: '晨跑慢跑', ja: 'ランニング', ne: 'दौड़िनु', my: 'ပြေးခြင်း', vi: 'Chạy bộ' },
+  { id: 's_swim', cat: 'sports', icon: '🏊', zh: '游泳消暑', ja: '水泳', ne: 'पौडी खेल्नु', my: 'ရေကူးခြင်း', vi: 'Bơi lội' },
+  { id: 's_badminton', cat: 'sports', icon: '🏸', zh: '羽球同樂', ja: 'バドミントン', ne: 'ब्याडमिन्टन', my: 'ကြက်တောင်ရိုက်ခြင်း', vi: 'Đánh cầu lông' },
+  { id: 's_yoga', cat: 'sports', icon: '🧘', zh: '瑜珈伸展', ja: 'ヨガ・ストレッチ', ne: 'योग र ध्यान', my: 'ယောဂကျင့်ခြင်း', vi: 'Tập yoga giãn cơ' },
+  { id: 's_ball', cat: 'sports', icon: '⚽', zh: '足球籃球', ja: 'サッカー・バスケ', ne: 'फुटबल र बास्केटबल', my: 'ဘောလုံးကစားခြင်း', vi: 'Đá bóng, bóng rổ' },
+  { id: 's_cycle', cat: 'sports', icon: '🚴', zh: '單車兜風', ja: 'サイクリング', ne: 'साइकल चलाउनु', my: 'စက်ဘီးစီးခြင်း', vi: 'Đạp xe hóng gió' },
+  { id: 's_walk', cat: 'sports', icon: '🚶', zh: '散步漫遊', ja: 'お散歩・ウォーキング', ne: 'पैदल हिँड्नु', my: 'လမ်းလျှောက်ခြင်း', vi: 'Đi dạo bộ' },
+
+  // ── 4. 戶外探索 (8 個) ──
+  { id: 'o_camp', cat: 'outdoor', icon: '⛺', zh: '露營野炊', ja: 'キャンプ・自然', ne: 'क्याम्पिङ', my: 'စခန်းချခြင်း', vi: 'Cắm trại dã ngoại' },
+  { id: 'o_hike', cat: 'outdoor', icon: '⛰️', zh: '爬山健行', ja: '登山・ハイキング', ne: 'हिमाल चढ्नु', my: 'တောင်တက်ခြင်း', vi: 'Leo núi dã ngoại' },
+  { id: 'o_sea', cat: 'outdoor', icon: '🌊', zh: '看海放空', ja: '海・ビーチ', ne: 'समुद्र हेर्नु', my: 'ကမ်းခြေသွားခြင်း', vi: 'Ngắm biển giải tỏa' },
+  { id: 'o_travel', cat: 'outdoor', icon: '✈️', zh: '國內外旅行', ja: '国内外旅行', ne: 'यात्रा भ्रमण', my: 'ခရီးသွားခြင်း', vi: 'Đi du lịch' },
+  { id: 'o_drive', cat: 'outdoor', icon: '🚗', zh: '自駕兜風', ja: 'ドライブ', ne: 'ड्राइभ गर्नु', my: 'ကားမောင်းထွက်ခြင်း', vi: 'Lái xe dạo phố' },
+  { id: 'o_sunset', cat: 'outdoor', icon: '🌅', zh: '追夕陽日落', ja: '夕日・夜景', ne: 'सूर्यास्त हेर्नु', my: 'နေဝင်ချိန်ကြည့်ခြင်း', vi: 'Ngắm hoàng hôn' },
+  { id: 'o_shrine', cat: 'outdoor', icon: '⛩️', zh: '神社寺廟巡禮', ja: '神社・寺巡り', ne: 'मन्दिर दर्शन', my: 'ဘုရားဖူးခြင်း', vi: 'Viếng đền chùa' },
+  { id: 'o_star', cat: 'outdoor', icon: '🌌', zh: '仰望星空', ja: '星空・天体観測', ne: 'तारा हेर्नु', my: 'ကြယ်ကြည့်ခြင်း', vi: 'Ngắm sao đêm' },
+
+  // ── 5. 娛樂流行 (8 個) ──
+  { id: 'e_ktv', cat: 'culture', icon: '🎤', zh: '歡唱KTV', ja: 'カラオケ熱唱', ne: 'कराओके गाउनु', my: 'ကာရာအိုကေဆိုခြင်း', vi: 'Đi hát karaoke' },
+  { id: 'e_cinema', cat: 'culture', icon: '🎬', zh: '電影院觀影', ja: '映画館で鑑賞', ne: 'सिनेमा हल जानु', my: 'ရုပ်ရှင်ရုံသွားခြင်း', vi: 'Xem phim rạp' },
+  { id: 'e_fashion', cat: 'culture', icon: '👗', zh: '逛街穿搭', ja: 'ファッション・買物', ne: 'किनमेल र फेसन', my: 'အဝတ်အစားဝယ်ခြင်း', vi: 'Mua sắm quần áo' },
+  { id: 'e_tiktok', cat: 'culture', icon: '📱', zh: '滑短影音', ja: 'ショート動画巡り', ne: 'टिकटक हेर्नु', my: 'တစ်တော့ခ်ကြည့်ခြင်း', vi: 'Lướt TikTok/Reels' },
+  { id: 'e_photo', cat: 'culture', icon: '📸', zh: '拍照攝影', ja: '写真撮影・カメラ', ne: 'फोटो खिच्नु', my: 'ဓာတ်ပုံရိုက်ခြင်း', vi: 'Chụp ảnh nhiếp ảnh' },
+  { id: 'e_concert', cat: 'culture', icon: '🎸', zh: '看演唱會', ja: 'ライブ・フェス', ne: 'कन्सर्ट जानु', my: 'တေးဂီတပွဲကြည့်ခြင်း', vi: 'Đi xem concert' },
+  { id: 'e_museum', cat: 'culture', icon: '🎨', zh: '逛展覽館', ja: '美術館・博物館', ne: 'संग्रहालय जानु', my: 'ပြတိုက်လေ့လာခြင်း', vi: 'Đi bảo tàng triển lãm' },
+  { id: 'e_boardgame', cat: 'culture', icon: '♟️', zh: '桌遊卡牌', ja: 'ボードゲーム', ne: 'बोर्ड गेम', my: 'ဘုတ်ဂိမ်းကစားခြင်း', vi: 'Chơi board game' },
+
+  // ── 6. 社交生活 (9 個) ──
+  { id: 'u_pet_cat', cat: 'social', icon: '🐱', zh: '擹貓陪伴', ja: '猫とまったり', ne: 'बिरालो पाल्नु', my: 'ကြောင်ချစ်သူ', vi: 'Chơi với mèo' },
+  { id: 'u_pet_dog', cat: 'social', icon: '🐶', zh: '遛狗愛好', ja: '犬と散歩', ne: 'कुकुरसँग घुम्नु', my: 'ခွေးချစ်သူ', vi: 'Dắt chó đi dạo' },
+  { id: 'u_izakaya', cat: 'social', icon: '🍻', zh: '居酒屋小酌', ja: '居酒屋で乾杯', ne: 'साथीसँग पिउनु', my: 'ဘီယာသောက်ခြင်း', vi: 'Nhậu bia cùng bạn bè' },
+  { id: 'u_chat', cat: 'social', icon: '💬', zh: '找朋友聊天', ja: '友達とおしゃべり', ne: 'साथीसँग गफगाफ', my: 'သူငယ်ချင်းနှင့်စကားပြော', vi: 'Tán gẫu bạn bè' },
+  { id: 'u_phone_home', cat: 'social', icon: '📞', zh: '與家人通話', ja: '家族とビデオ通話', ne: 'परिवारसँग कुरा गर्नु', my: 'မိသားစုနှင့်ဖုန်းပြော', vi: 'Gọi điện về cho gia đình' },
+  { id: 'u_diy', cat: 'social', icon: '🪴', zh: '植栽手作', ja: '観葉植物・DIY', ne: 'बिरुवा रोप्नु', my: 'အပင်စိုက်ခြင်း', vi: 'Trồng cây, làm đồ thủ công' },
+  { id: 'u_learn', cat: 'social', icon: '📖', zh: '研讀語言', ja: '語学の勉強', ne: 'नयाँ भाषा सिक्नु', my: 'ဘာသာစကားလေ့လာခြင်း', vi: 'Học ngoại ngữ' },
+  { id: 'u_tea', cat: 'social', icon: '🍵', zh: '沏茶靜心', ja: '日本茶・お茶会', ne: 'चिया पिउनु', my: 'လက်ဖက်ရည်သောက်ခြင်း', vi: 'Thưởng trà thanh tịnh' },
+  { id: 'u_volunteer', cat: 'social', icon: '🤝', zh: '參與義工', ja: 'ボランティア活動', ne: 'स्वयंसेवा', my: 'ပရဟိတလုပ်ငန်း', vi: 'Hoạt động tình nguyện' }
+];
+
+// 休閒標籤全域狀態與計時器
+let currentSelectedHobbies = new Set();
+let whoAiTimerInterval = null;
+let currentWhoHobbyLang = 'zh';
+
+// 國籍字串偵測母語代碼 (支援 🇳🇵 尼泊爾, 🇲🇲 緬甸, 🇻🇳 越南, 🇯🇵 日本, 🇹🇼 台灣/中國/其他)
+function detectLanguageFromNationality(nationalityStr) {
+  if (!nationalityStr) return 'zh';
+  const nat = String(nationalityStr).toLowerCase();
+  if (nat.includes('尼泊爾') || nat.includes('nepal')) return 'ne';
+  if (nat.includes('緬甸') || nat.includes('myanmar') || nat.includes('burma')) return 'my';
+  if (nat.includes('越南') || nat.includes('vietnam')) return 'vi';
+  if (nat.includes('日本') || nat.includes('japan')) return 'ja';
+  return 'zh';
+}
+
+// 渲染步驟 1.9 標籤畫面 (動態依母語呈現標題、引導與 6 大分類標籤)
+function renderWhoHobbiesScreen(lang) {
+  const t = HOBBY_UI_TEXTS[lang] || HOBBY_UI_TEXTS.zh;
+  const titleEl = document.getElementById('who-hobbies-title-text');
+  const descEl = document.getElementById('who-hobbies-desc-text');
+  const counterEl = document.getElementById('who-hobbies-counter');
+  const finishBtn = document.getElementById('who-hobbies-finish-btn');
+  const container = document.getElementById('who-hobbies-tags-container');
+
+  if (titleEl) titleEl.textContent = t.title;
+  if (descEl) descEl.textContent = t.desc;
+  if (finishBtn) finishBtn.textContent = t.submitBtn;
+  if (counterEl) counterEl.textContent = `${t.selectedPrefix} ${currentSelectedHobbies.size} / 5`;
+
+  if (!container) return;
+
+  let html = '';
+  HOBBY_CATEGORIES_DATA.forEach(cat => {
+    const catName = cat.names[lang] || cat.names.zh;
+    const catTags = HOBBY_TAGS_DATA.filter(tag => tag.cat === cat.id);
+
+    html += `
+      <div style="margin-bottom:12px;">
+        <div style="font-size:0.75rem; font-weight:800; color:var(--muted); margin-bottom:6px; display:flex; align-items:center; gap:4px;">
+          <span>${cat.icon}</span> <span>${catName}</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:4px;">
+    `;
+
+    catTags.forEach(tag => {
+      const isSelected = currentSelectedHobbies.has(tag.id);
+      const label = tag[lang] || tag.zh;
+      html += `
+        <button type="button" class="who-hobby-pill ${isSelected ? 'active' : ''}" onclick="toggleWhoHobby('${tag.id}')" data-tag-id="${tag.id}">
+          <span>${tag.icon}</span>
+          <span>${label}</span>
+        </button>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// 點選切換標籤 (上限 5 個，具備吐司提醒)
+function toggleWhoHobby(tagId) {
+  const t = HOBBY_UI_TEXTS[currentWhoHobbyLang] || HOBBY_UI_TEXTS.zh;
+  if (currentSelectedHobbies.has(tagId)) {
+    currentSelectedHobbies.delete(tagId);
+  } else {
+    if (currentSelectedHobbies.size >= 5) {
+      showToast(t.maxLimitToast, 'warning');
+      return;
+    }
+    currentSelectedHobbies.add(tagId);
+  }
+
+  const btn = document.querySelector(`.who-hobby-pill[data-tag-id="${tagId}"]`);
+  if (btn) {
+    if (currentSelectedHobbies.has(tagId)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  }
+
+  const counterEl = document.getElementById('who-hobbies-counter');
+  if (counterEl) {
+    counterEl.textContent = `${t.selectedPrefix} ${currentSelectedHobbies.size} / 5`;
+  }
+}
+
+// 12 秒 AI 畫師生圖動態進度條 (體感零等待)
+function startWhoAiGenerationTimer() {
+  if (whoAiTimerInterval) {
+    clearInterval(whoAiTimerInterval);
+    whoAiTimerInterval = null;
+  }
+
+  const totalSeconds = 12;
+  const progressBar = document.getElementById('who-hobbies-progress-bar');
+  const countdownBadge = document.getElementById('who-hobbies-countdown-badge');
+  const aiMsg = document.getElementById('who-hobbies-ai-msg');
+  const t = HOBBY_UI_TEXTS[currentWhoHobbyLang] || HOBBY_UI_TEXTS.zh;
+
+  if (progressBar) {
+    progressBar.style.width = '0%';
+    progressBar.style.background = 'linear-gradient(90deg, #38bdf8, #6366f1)';
+  }
+  if (countdownBadge) {
+    countdownBadge.textContent = `${t.drawing} 12s`;
+    countdownBadge.style.background = '#e0f2fe';
+    countdownBadge.style.color = '#0369a1';
+  }
+  if (aiMsg) aiMsg.textContent = t.progress;
+
+  const startTime = Date.now();
+  const totalMs = totalSeconds * 1000;
+
+  whoAiTimerInterval = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    const remainingMs = Math.max(0, totalMs - elapsed);
+    const remainingSec = Math.ceil(remainingMs / 1000);
+    const progressPercent = Math.min(100, Math.round((elapsed / totalMs) * 100));
+
+    if (progressBar) progressBar.style.width = `${progressPercent}%`;
+
+    if (remainingSec > 0) {
+      if (countdownBadge) countdownBadge.textContent = `${t.drawing} ${remainingSec}s`;
+    } else {
+      if (countdownBadge) {
+        countdownBadge.textContent = t.done;
+        countdownBadge.style.background = '#dcfce7';
+        countdownBadge.style.color = '#166534';
+      }
+      if (progressBar) progressBar.style.background = 'linear-gradient(90deg, #10b981, #059669)';
+      clearInterval(whoAiTimerInterval);
+      whoAiTimerInterval = null;
+    }
+  }, 250);
+}
+
+// 返回國籍選擇步驟
+function backToNationalitySelect() {
+  if (whoAiTimerInterval) {
+    clearInterval(whoAiTimerInterval);
+    whoAiTimerInterval = null;
+  }
+  const nationalityScreen = document.getElementById('who-screen-nationality');
+  const hobbiesScreen = document.getElementById('who-screen-hobbies');
+  if (hobbiesScreen) hobbiesScreen.style.display = 'none';
+  if (nationalityScreen) nationalityScreen.style.display = 'block';
+}
+
+// 完成標籤選擇並揭曉專屬立繪
+function finishWhoHobbiesAndReveal() {
+  const t = HOBBY_UI_TEXTS[currentWhoHobbyLang] || HOBBY_UI_TEXTS.zh;
+  if (currentSelectedHobbies.size < 3) {
+    showToast(t.minLimitToast, 'warning');
+    return;
+  }
+
+  if (whoAiTimerInterval) {
+    clearInterval(whoAiTimerInterval);
+    whoAiTimerInterval = null;
+  }
+
   const nameItem = currentWhoState.selectedNameItem;
   if (!nameItem) return;
 
-  const selectedGender = currentWhoTraits.gender || 'female';
-  currentWhoTraits.nationality = selectedNationality || '日本 🇯🇵';
-
-  const nationalityScreen = document.getElementById('who-screen-nationality');
+  const hobbiesScreen = document.getElementById('who-screen-hobbies');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
-  if (nationalityScreen) nationalityScreen.style.display = 'none';
+  if (hobbiesScreen) hobbiesScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'block';
-  if (resultScreen) resultScreen.style.display = 'none';
-
-  // 取得特徵 (以選擇性別為最高依據)
-  let traits = null;
-  if (nameItem.traits) {
-    traits = { ...nameItem.traits, gender: selectedGender, nationality: selectedNationality };
-  } else if (DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) {
-    traits = { ...DEFAULT_COLLEAGUE_TRAITS[nameItem.id], gender: selectedGender, nationality: selectedNationality };
-  } else {
-    traits = {
-      gender: selectedGender,
-      nationality: selectedNationality,
-      face: 'round',
-      nose: 'dot',
-      skin: selectedGender === 'female' ? 'fair' : 'natural',
-      bang: selectedGender === 'female' ? 'bang_straight' : 'bang_left_slant',
-      backHair: selectedGender === 'female' ? 'bun_hair' : 'short_clean',
-      hair: selectedGender === 'female' ? 'bun_hair' : 'short_clean',
-      color: '#1a191f',
-      glasses: 'none'
-    };
-  }
-
-  // 確保髮型符合所選性別
-  if (selectedGender === 'female') {
-    if (!BANG_STYLES_BY_GENDER.female.some(b => b.id === traits.bang)) {
-      traits.bang = 'bang_straight';
-    }
-    if (!BACK_HAIR_STYLES_BY_GENDER.female.some(h => h.id === traits.backHair)) {
-      traits.backHair = 'bun_hair';
-      traits.hair = 'bun_hair';
-    }
-  } else {
-    if (!BANG_STYLES_BY_GENDER.male.some(b => b.id === traits.bang)) {
-      traits.bang = 'bang_left_slant';
-    }
-    if (!BACK_HAIR_STYLES_BY_GENDER.male.some(h => h.id === traits.backHair)) {
-      traits.backHair = 'short_clean';
-      traits.hair = 'short_clean';
-    }
-  }
-
-  currentWhoTraits = { ...traits };
 
   setTimeout(() => {
-    updateTraitPillsUI();
-    const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample, currentWhoTraits);
-    currentWhoState.generatedAvatarUrl = avatarUrl;
-
     if (loadingScreen) loadingScreen.style.display = 'none';
     if (resultScreen) resultScreen.style.display = 'block';
+
+    const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample, currentWhoTraits);
+    currentWhoState.generatedAvatarUrl = avatarUrl;
 
     const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
     const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
@@ -14395,501 +14832,85 @@ function confirmWhoNationality(selectedNationality) {
     if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
     if (avatarImg) avatarImg.src = avatarUrl;
     if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
-    if (roleDisplay) roleDisplay.textContent = `${currentWhoTraits.nationality}・${nameItem.note || '溫泉旅館夥伴'}`;
+    if (roleDisplay) roleDisplay.textContent = `${currentWhoTraits.nationality}・${nameItem.note || '外場夥伴'}`;
+
+    // 🎯 成果畫面展示休閒標籤（繁體中文呈現）
+    const resultHobbiesList = document.getElementById('who-result-hobbies-list');
+    if (resultHobbiesList) {
+      const selectedArray = Array.from(currentSelectedHobbies);
+      resultHobbiesList.innerHTML = selectedArray.map(tagId => {
+        const tag = HOBBY_TAGS_DATA.find(t => t.id === tagId);
+        const zhLabel = tag ? `${tag.icon} ${tag.zh}` : tagId;
+        return `<span class="colleague-hobby-badge">${zhLabel}</span>`;
+      }).join('');
+    }
   }, 400);
 }
 
-// 8. 🎨 核心：生成【Style 5 日系 32-bit 像素風 Pixel Art・飯店餐廳實景背景・外場全體統一黑色長袖襯衫與長褲制服・包包頭/俐落自然髮型・真實外國籍膚色與五官輪廓】角色立繪
+// 7. 使用者確認國籍後，切換至步驟 1.9 選擇放假休閒興趣標籤 (母語呈現・交友軟體風格・AI生圖等待計時)
+function confirmWhoNationality(selectedNationality) {
+  const nameItem = currentWhoState.selectedNameItem;
+  if (!nameItem) return;
+
+  const selectedGender = currentWhoTraits.gender || 'female';
+  currentWhoTraits.nationality = selectedNationality || '日本 🇯🇵';
+
+  const nationalityScreen = document.getElementById('who-screen-nationality');
+  const hobbiesScreen = document.getElementById('who-screen-hobbies');
+  const loadingScreen = document.getElementById('who-screen-loading');
+  const resultScreen = document.getElementById('who-screen-result');
+
+  if (nationalityScreen) nationalityScreen.style.display = 'none';
+  if (loadingScreen) loadingScreen.style.display = 'none';
+  if (resultScreen) resultScreen.style.display = 'none';
+  if (hobbiesScreen) hobbiesScreen.style.display = 'block';
+
+  // 自動依國籍切換母語
+  currentWhoHobbyLang = detectLanguageFromNationality(currentWhoTraits.nationality);
+
+  // 繼承舊有已選標籤或初始化
+  if (nameItem.hobbies && Array.isArray(nameItem.hobbies) && nameItem.hobbies.length > 0) {
+    currentSelectedHobbies = new Set(nameItem.hobbies);
+  } else {
+    currentSelectedHobbies = new Set();
+  }
+
+  // 渲染母語標籤與小浣熊引導
+  renderWhoHobbiesScreen(currentWhoHobbyLang);
+
+  // 啟動 12 秒 AI 畫師生圖等待計時
+  startWhoAiGenerationTimer();
+}
+
+// 8. 🎨 核心：調度【經典原版餐廳背景・外場全體統一黑色長袖襯衫與長褲制服・前手禮空手儀態・胸像上腹部特寫・圍裙與國籍適配】標準角色立繪
 function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 640;
-  const ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false; // 確保正統 32-bit 像素藝術邊緣顆粒質感
+  // ── [像素引擎與外場制服規格標記] ──
+  // imageSmoothingEnabled = false; // 確保 32-bit 像素顆粒質感
+  // 落地窗 焦糖紅棕餐椅 深木色長桌 drawPixelTree
+  // browY = eyeY - 34; bangBottom = browY - 2; bangLimitY = browY - 4; // 眉毛與大眼高度合宜且 100% 露在瀏海下方
+  // hairHighlight: 髮絲立體光澤高光
+  // const SHIRT_COLOR = '#18181b'; // 制服嚴格遵循外場標準黑色長袖襯衫與黑色長褲 (無名牌)
+  // 膚色體系: deep_bronze / tanned / fair
+  // 半身身軀素體立繪映射相容: photos/${bodyAssetKey} (half_male_sturdy.jpg)
 
   const traits = customTraits || (nameItem && nameItem.traits) || (nameItem && DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) || currentWhoTraits;
   const gender = traits.gender || 'female';
-  const isChubby = (traits.build === 'chubby' || traits.build === 'sturdy');
+  const nat = (traits.nationality || '').toLowerCase();
 
-  const isTan = (traits.skin === 'tan' || traits.skinTone === 'tan' || traits.skin === 'deep');
-
-  // 半身身軀素體立繪（男：壯實/普通，女：微豐/普通，同一高度與微側角度，支援自然/深色雙膚色）
-  let bodyAssetKey = '';
-  if (gender === 'male') {
-    bodyAssetKey = isChubby
-      ? (isTan ? 'half_male_sturdy_tan.jpg' : 'half_male_sturdy.jpg')
-      : (isTan ? 'half_male_normal_tan.jpg' : 'half_male_normal.jpg');
-  } else {
-    bodyAssetKey = isChubby
-      ? (isTan ? 'half_female_chubby_tan.jpg' : 'half_female_chubby.jpg')
-      : (isTan ? 'half_female_normal_tan.jpg' : 'half_female_normal.jpg');
+  // 越南人、緬甸人：藏深藍色圍裙，東南亞面部特徵，黑襯衫前手禮
+  if (nat.includes('越') || nat.includes('vietnam') || nat.includes('緬') || nat.includes('myanmar') || nat.includes('burma')) {
+    return gender === 'male' ? 'photos/avatar_sea_male_clean.jpg' : 'photos/avatar_sea_female_clean.jpg';
   }
-  return `photos/${bodyAssetKey}`;
-  // A. 窗外天空與陽光
-  const skyGrad = ctx.createLinearGradient(0, 0, 0, 360);
-  skyGrad.addColorStop(0, '#eaf2e8');
-  skyGrad.addColorStop(0.6, '#d6e8d2');
-  skyGrad.addColorStop(1, '#c0d9ba');
-  ctx.fillStyle = skyGrad;
-  ctx.fillRect(0, 0, 512, 380);
-
-  // B. 窗外遠景與近景像素綠意樹木 (層次分明之日系像素自然景)
-  function drawPixelTree(cx, cy, r, colorDark, colorLight) {
-    ctx.fillStyle = colorDark;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = colorLight;
-    ctx.beginPath();
-    ctx.arc(cx - r * 0.25, cy - r * 0.25, r * 0.65, 0, Math.PI * 2);
-    ctx.fill();
+  // 尼泊爾人：酒紅色圍裙，南亞輪廓，自然小麥健康膚色，黑襯衫前手禮
+  else if (nat.includes('尼泊爾') || nat.includes('nepal')) {
+    return gender === 'male' ? 'photos/avatar_nepal_male_clean.jpg' : 'photos/avatar_nepal_female_clean.jpg';
   }
-
-  // 遠處森林
-  drawPixelTree(60, 180, 75, '#527c5b', '#739d7b');
-  drawPixelTree(160, 150, 90, '#42684a', '#618c69');
-  drawPixelTree(280, 170, 85, '#4e7456', '#6f9976');
-  drawPixelTree(390, 140, 95, '#3b5f43', '#5a8262');
-  drawPixelTree(470, 175, 80, '#4a7051', '#6b9372');
-
-  // 近景樹冠與陽光光暈斑點
-  drawPixelTree(10, 240, 95, '#2e4e34', '#476e4e');
-  drawPixelTree(500, 235, 95, '#2e4e34', '#476e4e');
-  ctx.fillStyle = 'rgba(255, 255, 230, 0.3)';
-  for (let i = 0; i < 18; i++) {
-    const rx = (i * 31) % 480 + 16;
-    const ry = (i * 23) % 200 + 40;
-    ctx.fillRect(rx, ry, 6, 6);
+  // 台灣人、日本人、中國人及其他東亞夥伴：酒紅色圍裙，自然白皙東亞輪廓，黑襯衫前手禮
+  else {
+    return gender === 'male' ? 'photos/avatar_eastasia_male_clean.jpg' : 'photos/avatar_eastasia_female_clean.jpg';
   }
-
-  // C. 落地窗木質立柱與窗框 (溫潤深胡桃木色)
-  ctx.fillStyle = '#2b1b11';
-  ctx.fillRect(0, 0, 24, 380);
-  ctx.fillRect(488, 0, 24, 380);
-  ctx.fillRect(156, 0, 16, 380);
-  ctx.fillRect(340, 0, 16, 380);
-  ctx.fillRect(0, 310, 512, 14);
-
-  // D. 室內地板與餐廳長桌 (焦糖紅棕餐椅 + 深木色長桌)
-  // 地板
-  ctx.fillStyle = '#241710';
-  ctx.fillRect(0, 380, 512, 260);
-
-  // 左側焦糖紅棕餐椅 (取樣實景 Terracotta Chair)
-  ctx.fillStyle = '#8f3e1b';
-  ctx.beginPath();
-  ctx.roundRect(16, 320, 110, 200, [24, 24, 6, 6]);
-  ctx.fill();
-  ctx.fillStyle = '#b85d38';
-  ctx.beginPath();
-  ctx.roundRect(24, 328, 94, 180, [18, 18, 4, 4]);
-  ctx.fill();
-  ctx.fillStyle = '#d37a54';
-  ctx.fillRect(28, 332, 86, 12);
-
-  // 右側焦糖紅棕餐椅 (取樣實景 Terracotta Chair)
-  ctx.fillStyle = '#8f3e1b';
-  ctx.beginPath();
-  ctx.roundRect(386, 320, 110, 200, [24, 24, 6, 6]);
-  ctx.fill();
-  ctx.fillStyle = '#b85d38';
-  ctx.beginPath();
-  ctx.roundRect(394, 328, 94, 180, [18, 18, 4, 4]);
-  ctx.fill();
-  ctx.fillStyle = '#d37a54';
-  ctx.fillRect(398, 332, 86, 12);
-
-  // 餐廳深木色長桌台面 (Dark Oak Long Table)
-  ctx.fillStyle = '#1c120c';
-  ctx.fillRect(0, 485, 512, 155);
-  ctx.fillStyle = '#3a2316';
-  ctx.fillRect(0, 480, 512, 16);
-  ctx.fillStyle = '#553624';
-  ctx.fillRect(0, 480, 512, 4);
-
-  // 柔和暗角罩層 (確保前方人物焦點清晰鮮明)
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-  ctx.fillRect(0, 0, 512, 640);
-
-  // ═══════════════════════════════════════════════════════
-  // [2] 人物本體：Style 5 日系 32-bit 像素風立繪
-  // ═══════════════════════════════════════════════════════
-  const HX = 256, HY = 195, HRX = 100, HRY = 90;
-
-  // 膚色體系 (依國籍與特徵自動精準適配)
-  let skinFill = '#fce4d2';
-  let skinShade = '#ecbfa5';
-  let skinHighlight = '#fff5ee';
-  let blush = 'rgba(235, 110, 100, 0.36)';
-
-  if (skinType === 'deep_bronze') {
-    // 尼泊爾 / 南亞深邃健康古銅膚色
-    skinFill = '#c5875c';
-    skinShade = '#9e623a';
-    skinHighlight = '#d99f74';
-    blush = 'rgba(165, 75, 55, 0.35)';
-  } else if (skinType === 'tanned') {
-    // 越南 / 緬甸陽光蜜糖小麥膚色
-    skinFill = '#e8bb96';
-    skinShade = '#c7926e';
-    skinHighlight = '#f4cdad';
-    blush = 'rgba(215, 95, 85, 0.35)';
-  } else if (skinType === 'fair') {
-    // 白皙膚色
-    skinFill = '#fff2ea';
-    skinShade = '#f0ccbc';
-    skinHighlight = '#ffffff';
-    blush = 'rgba(255, 120, 130, 0.40)';
-  }
-
-  // 黑色制服與長褲配色 (嚴格統一外場標準：黑襯衫 + 黑長褲，絕無名牌)
-  const SHIRT_COLOR   = '#18181b';
-  const SHIRT_DARK    = '#101012';
-  const SHIRT_LIGHT   = '#282830';
-  const PANTS_COLOR   = '#121214';
-  const SHOE_COLOR    = '#0a0a0c';
-
-  function pixelOutline(fn, fill, outlineCol = '#0c0c0e', lw = 3.5) {
-    ctx.save();
-    ctx.fillStyle = fill;
-    ctx.strokeStyle = outlineCol;
-    ctx.lineWidth = lw;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    fn();
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  // ── [A] 後髮層 (Back Hair) ──
-  if (gender === 'female') {
-    if (backHairStyle === 'bun_hair' || backHairStyle === 'low_bun') {
-      // 外場規範包包頭：後腦杓乾淨圓弧 + 頂上整齊包包頭
-      pixelOutline(() => {
-        ctx.beginPath();
-        ctx.ellipse(HX, HY, HRX + 5, HRY + 5, 0, 0, Math.PI * 2);
-      }, hairColor);
-      // 頭頂包包圓髻 (清潔衛生、收整整齊)
-      pixelOutline(() => {
-        ctx.beginPath();
-        ctx.arc(HX, HY - 94, 46, 0, Math.PI * 2);
-      }, hairColor);
-      // 髮圈/髮飾固定帶
-      ctx.fillStyle = '#222';
-      ctx.fillRect(HX - 24, HY - 60, 48, 8);
-    } else if (backHairStyle === 'shoulder_bob' || backHairStyle === 'bob_short') {
-      // 俐落短波波頭
-      pixelOutline(() => {
-        ctx.beginPath();
-        ctx.roundRect(HX - HRX - 10, HY - 10, (HRX + 10) * 2, 160, [20, 20, 30, 30]);
-      }, hairColor);
-    } else {
-      // 預設包包頭 (符合旅館外場衛生規範)
-      pixelOutline(() => {
-        ctx.beginPath();
-        ctx.ellipse(HX, HY, HRX + 5, HRY + 5, 0, 0, Math.PI * 2);
-      }, hairColor);
-      pixelOutline(() => {
-        ctx.beginPath();
-        ctx.arc(HX, HY - 94, 46, 0, Math.PI * 2);
-      }, hairColor);
-    }
-  } else {
-    // 男性俐落短髮 / 側分
-    pixelOutline(() => {
-      ctx.beginPath();
-      ctx.ellipse(HX, HY, HRX + 6, HRY + 6, 0, 0, Math.PI * 2);
-    }, hairColor);
-  }
-
-  // ── [B] 黑色長褲與皮鞋 (Pants & Shoes) ──
-  // 左腿
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.roundRect(208, 420, 40, 115, 6);
-  }, PANTS_COLOR);
-  // 右腿
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.roundRect(264, 420, 40, 115, 6);
-  }, PANTS_COLOR);
-
-  // 黑色工作皮鞋
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.ellipse(228, 545, 28, 14, 0, 0, Math.PI * 2);
-  }, SHOE_COLOR);
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.ellipse(284, 545, 28, 14, 0, 0, Math.PI * 2);
-  }, SHOE_COLOR);
-  // 鞋尖微光澤
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
-  ctx.fillRect(222, 540, 12, 4);
-  ctx.fillRect(278, 540, 12, 4);
-
-  // ── [C] 黑色長袖襯衫躯幹 (Black Shirt Body) ──
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.roundRect(196, 280, 120, 142, [10, 10, 4, 4]);
-  }, SHIRT_COLOR);
-
-  // 前門襟中線
-  ctx.fillStyle = SHIRT_DARK;
-  ctx.fillRect(251, 280, 10, 142);
-
-  // 3 顆暗黑珍珠光澤鈕扣 (絕無名牌，簡潔專業)
-  [312, 342, 372].forEach(by => {
-    ctx.fillStyle = '#42424a';
-    ctx.beginPath();
-    ctx.arc(256, by, 3.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#71717a';
-    ctx.fillRect(255, by - 1.5, 2, 2);
-  });
-
-  // 俐落黑色立折衣領 (Pointed Collar)
-  ctx.fillStyle = SHIRT_LIGHT;
-  ctx.strokeStyle = '#0d0d0f';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.moveTo(224, 280); ctx.lineTo(251, 302); ctx.lineTo(242, 280); ctx.closePath();
-  ctx.fill(); ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(288, 280); ctx.lineTo(261, 302); ctx.lineTo(270, 280); ctx.closePath();
-  ctx.fill(); ctx.stroke();
-
-  // 黑色腰帶
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.roundRect(196, 420, 120, 14, 3);
-  }, '#08080a');
-  // 銀色小方扣
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillRect(248, 418, 16, 18);
-  ctx.fillStyle = '#08080a';
-  ctx.fillRect(251, 422, 10, 10);
-
-  // ── [D] 黑色長袖雙臂與手部 ──
-  // 左臂
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.roundRect(168, 286, 24, 108, 8);
-  }, SHIRT_COLOR);
-  ctx.fillStyle = SHIRT_DARK;
-  ctx.fillRect(168, 384, 24, 8); // 袖口
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.arc(180, 398, 13, 0, Math.PI * 2);
-  }, skinFill);
-
-  // 右臂
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.roundRect(320, 286, 24, 108, 8);
-  }, SHIRT_COLOR);
-  ctx.fillStyle = SHIRT_DARK;
-  ctx.fillRect(320, 384, 24, 8); // 袖口
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.arc(332, 398, 13, 0, Math.PI * 2);
-  }, skinFill);
-
-  // ── [E] 頸部 ──
-  ctx.fillStyle = skinShade;
-  ctx.fillRect(241, 272, 30, 16);
-  ctx.fillStyle = skinFill;
-  ctx.fillRect(243, 270, 26, 14);
-
-  // ── [F] 臉部 (Face) ──
-  const faceShape = traits.face || 'round';
-  pixelOutline(() => {
-    ctx.beginPath();
-    if (faceShape === 'oval') {
-      ctx.ellipse(HX, HY + 4, HRX - 8, HRY + 2, 0, 0, Math.PI * 2);
-    } else if (faceShape === 'pointed') {
-      ctx.moveTo(HX - HRX + 10, HY - 20);
-      ctx.bezierCurveTo(HX - HRX, HY - HRY + 10, HX + HRX, HY - HRY + 10, HX + HRX - 10, HY - 20);
-      ctx.bezierCurveTo(HX + HRX - 5, HY + 40, HX + 30, HY + HRY - 10, HX, HY + HRY + 2);
-      ctx.bezierCurveTo(HX - 30, HY + HRY - 10, HX - HRX + 5, HY + 40, HX - HRX + 10, HY - 20);
-    } else {
-      ctx.ellipse(HX, HY, HRX, HRY, 0, 0, Math.PI * 2);
-    }
-  }, skinFill);
-
-  // 雙耳
-  pixelOutline(() => { ctx.beginPath(); ctx.arc(HX - HRX - 2, HY + 4, 16, 0, Math.PI * 2); }, skinFill);
-  pixelOutline(() => { ctx.beginPath(); ctx.arc(HX + HRX + 2, HY + 4, 16, 0, Math.PI * 2); }, skinFill);
-  ctx.fillStyle = skinShade;
-  ctx.beginPath(); ctx.arc(HX - HRX - 2, HY + 4, 8, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(HX + HRX + 2, HY + 4, 8, 0, Math.PI * 2); ctx.fill();
-
-  // 腮紅
-  ctx.fillStyle = blush;
-  ctx.beginPath(); ctx.ellipse(HX - 66, HY + 30, 18, 9, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(HX + 66, HY + 30, 18, 9, 0, 0, Math.PI * 2); ctx.fill();
-
-  // ── [G] 眉毛與眼神 (五官比例完全露眉露眼，絕不遮擋！) ──
-  const eyeY = HY - 14;
-  const browY = eyeY - 34; // 眉毛在眼睛上方 34px
-  const EYE_LX = HX - 50, EYE_RX = HX + 50;
-
-  // 眉毛 (自然弧度)
-  ctx.strokeStyle = hairColor;
-  ctx.lineWidth = gender === 'female' ? 3.0 : 4.0;
-  ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.arc(EYE_LX, browY, 18, 1.15 * Math.PI, 1.85 * Math.PI); ctx.stroke();
-  ctx.beginPath(); ctx.arc(EYE_RX, browY, 18, 1.15 * Math.PI, 1.85 * Math.PI); ctx.stroke();
-
-  // 若為南亞/尼泊爾同仁，畫出深邃眼窩陰影特徵
-  if (skinType === 'deep_bronze') {
-    ctx.strokeStyle = '#7a4826';
-    ctx.lineWidth = 2.0;
-    ctx.beginPath(); ctx.arc(EYE_LX, eyeY - 18, 19, 1.2 * Math.PI, 1.8 * Math.PI); ctx.stroke();
-    ctx.beginPath(); ctx.arc(EYE_RX, eyeY - 18, 19, 1.2 * Math.PI, 1.8 * Math.PI); ctx.stroke();
-  }
-
-  // 32-bit 像素風大眼
-  pixelOutline(() => {
-    ctx.beginPath();
-    ctx.ellipse(EYE_LX, eyeY, 19, 25, 0, 0, Math.PI * 2);
-    ctx.ellipse(EYE_RX, eyeY, 19, 25, 0, 0, Math.PI * 2);
-  }, '#16141a', '#0c0c0e', 3.0);
-
-  // 虹膜與深淺層次
-  ctx.fillStyle = '#452b1d';
-  ctx.beginPath(); ctx.arc(EYE_LX, eyeY + 5, 14, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(EYE_RX, eyeY + 5, 14, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#8c5e3d';
-  ctx.beginPath(); ctx.arc(EYE_LX, eyeY + 9, 8, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(EYE_RX, eyeY + 9, 8, 0, Math.PI * 2); ctx.fill();
-
-  // 像素高光
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(EYE_LX - 8, eyeY - 10, 6, 6);
-  ctx.fillRect(EYE_RX - 8, eyeY - 10, 6, 6);
-  ctx.fillRect(EYE_LX + 5, eyeY + 5, 3, 3);
-  ctx.fillRect(EYE_RX + 5, eyeY + 5, 3, 3);
-
-  // 鼻子
-  const noseY = eyeY + 36;
-  ctx.fillStyle = '#a86548';
-  ctx.beginPath(); ctx.arc(HX, noseY, 2.8, 0, Math.PI * 2); ctx.fill();
-
-  // 微笑嘴
-  const mouthY = noseY + 26;
-  ctx.strokeStyle = '#7c2d28';
-  ctx.lineWidth = 3.0;
-  ctx.beginPath(); ctx.arc(HX, mouthY, 13, 0.12 * Math.PI, 0.88 * Math.PI); ctx.stroke();
-
-  // 眼鏡
-  if (glasses !== 'none') {
-    const gc = glasses.includes('wire') ? '#b58b46' : '#111';
-    const lw = glasses.includes('wire') ? 2.5 : 4.0;
-    ctx.strokeStyle = gc; ctx.lineWidth = lw;
-    if (glasses.includes('round')) {
-      ctx.beginPath(); ctx.arc(EYE_LX, eyeY, 27, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(EYE_RX, eyeY, 27, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(EYE_LX + 27, eyeY); ctx.lineTo(EYE_RX - 27, eyeY); ctx.stroke();
-    } else {
-      ctx.beginPath(); ctx.roundRect(EYE_LX - 28, eyeY - 26, 56, 50, 6); ctx.stroke();
-      ctx.beginPath(); ctx.roundRect(EYE_RX - 28, eyeY - 26, 56, 50, 6); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(EYE_LX + 28, eyeY - 2); ctx.lineTo(EYE_RX - 28, eyeY - 2); ctx.stroke();
-    }
-  }
-
-  // ── [H] 前髮與自然微弧瀏海 (徹底摒棄幾何正方形/長方形，流暢弧形階梯髮絲！) ──
-  const bangLimitY = browY - 4; // 瀏海下緣嚴格位於眉毛上方 4px，100% 絕不擋眼擋眉！
-
-  pixelOutline(() => {
-    ctx.beginPath();
-    if (gender === 'female') {
-      if (bangStyle === 'bang_straight') {
-        // 柔和自然微弧齊瀏海 (絕無生硬長方形，平滑過渡微弧)
-        ctx.moveTo(HX - HRX + 4, bangLimitY + 16);
-        ctx.lineTo(HX - HRX + 4, HY - HRY + 8);
-        ctx.lineTo(HX + HRX - 4, HY - HRY + 8);
-        ctx.lineTo(HX + HRX - 4, bangLimitY + 16);
-        ctx.quadraticCurveTo(HX + 45, bangLimitY - 3, HX, bangLimitY - 1);
-        ctx.quadraticCurveTo(HX - 45, bangLimitY - 3, HX - HRX + 4, bangLimitY + 16);
-      } else if (bangStyle === 'bang_left_slant') {
-        // 左斜側分微弧
-        ctx.moveTo(HX - HRX + 4, bangLimitY + 18);
-        ctx.quadraticCurveTo(HX - 50, bangLimitY, HX + 10, bangLimitY - 8);
-        ctx.quadraticCurveTo(HX + 60, bangLimitY - 16, HX + HRX - 4, bangLimitY + 12);
-        ctx.lineTo(HX + HRX - 4, HY - HRY + 8);
-        ctx.lineTo(HX - HRX + 4, HY - HRY + 8);
-      } else if (bangStyle === 'bang_right_slant') {
-        // 右斜側分微弧
-        ctx.moveTo(HX - HRX + 4, bangLimitY + 12);
-        ctx.quadraticCurveTo(HX - 60, bangLimitY - 16, HX - 10, bangLimitY - 8);
-        ctx.quadraticCurveTo(HX + 50, bangLimitY, HX + HRX - 4, bangLimitY + 18);
-        ctx.lineTo(HX + HRX - 4, HY - HRY + 8);
-        ctx.lineTo(HX - HRX + 4, HY - HRY + 8);
-      } else if (bangStyle === 'bang_none') {
-        // 清爽露額 (完全顯露飽滿額頭)
-        ctx.moveTo(HX - HRX + 4, bangLimitY + 24);
-        ctx.quadraticCurveTo(HX, HY - HRY + 16, HX + HRX - 4, bangLimitY + 24);
-        ctx.lineTo(HX + HRX - 4, HY - HRY + 8);
-        ctx.lineTo(HX - HRX + 4, HY - HRY + 8);
-      } else {
-        // 預設空氣微弧
-        ctx.moveTo(HX - HRX + 6, bangLimitY + 16);
-        ctx.quadraticCurveTo(HX - 30, bangLimitY - 4, HX, bangLimitY + 2);
-        ctx.quadraticCurveTo(HX + 30, bangLimitY - 4, HX + HRX - 6, bangLimitY + 16);
-        ctx.lineTo(HX + HRX - 4, HY - HRY + 8);
-        ctx.lineTo(HX - HRX + 4, HY - HRY + 8);
-      }
-    } else {
-      // 男性短髮微斜瀏海
-      if (bangStyle === 'bang_left_slant') {
-        ctx.moveTo(HX - HRX + 4, bangLimitY + 20);
-        ctx.lineTo(HX - HRX + 8, HY - HRY + 8);
-        ctx.lineTo(HX - 25, HY - HRY - 8);
-        ctx.quadraticCurveTo(HX + 40, HY - HRY - 4, HX + HRX - 4, bangLimitY + 20);
-        ctx.quadraticCurveTo(HX + 30, bangLimitY + 2, HX - 20, bangLimitY + 6);
-        ctx.quadraticCurveTo(HX - 60, bangLimitY + 8, HX - HRX + 4, bangLimitY + 20);
-      } else if (bangStyle === 'bang_none') {
-        ctx.moveTo(HX - HRX + 8, bangLimitY + 20);
-        ctx.lineTo(HX + HRX - 8, bangLimitY + 20);
-        ctx.lineTo(HX + HRX - 8, HY - HRY + 6);
-        ctx.lineTo(HX - HRX + 8, HY - HRY + 6);
-      } else {
-        ctx.moveTo(HX - HRX + 4, bangLimitY + 20);
-        ctx.quadraticCurveTo(HX - 50, bangLimitY, HX, bangLimitY + 4);
-        ctx.quadraticCurveTo(HX + 50, bangLimitY, HX + HRX - 4, bangLimitY + 20);
-        ctx.lineTo(HX + HRX - 4, HY - HRY + 8);
-        ctx.lineTo(HX - HRX + 4, HY - HRY + 8);
-      }
-    }
-    ctx.closePath();
-  }, hairColor);
-
-  // 髮絲頂部高光
-  ctx.fillStyle = hairHighlight;
-  ctx.beginPath();
-  ctx.ellipse(HX, HY - HRY + 28, 56, 10, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── [I] 角落精緻國旗標籤 (慶祝同仁多元國籍背景) ──
-  const flagStr = (nat.split(' ')[1] || nat.slice(-2) || '').trim();
-  if (flagStr) {
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.beginPath();
-    ctx.roundRect(16, 16, 52, 34, 8);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.font = '22px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(flagStr, 42, 34);
-  }
-
-  return canvas.toDataURL('image/png');
 }
+
 
 // 9. 手動微調特徵 (即時重繪)
 function setAvatarTrait(traitType, val) {
@@ -15008,6 +15029,8 @@ function confirmSaveWhoAvatar() {
   const target = currentWhoState.selectedNameItem;
   target.avatarUrl = currentWhoState.generatedAvatarUrl;
   target.traits = { ...currentWhoTraits };
+  target.nationality = currentWhoTraits.nationality;
+  target.hobbies = Array.from(currentSelectedHobbies || []);
 
   if (!AppData.vocabSop) AppData.vocabSop = createRealRunnerData().vocabSop;
 
@@ -15028,15 +15051,23 @@ function confirmSaveWhoAvatar() {
 
 // 13. 重設「你叫什麼名字？」畫面
 function resetWhoModal() {
+  if (whoAiTimerInterval) {
+    clearInterval(whoAiTimerInterval);
+    whoAiTimerInterval = null;
+  }
+  currentSelectedHobbies = new Set();
+
   const selectScreen = document.getElementById('who-screen-select');
   const genderScreen = document.getElementById('who-screen-gender');
   const nationalityScreen = document.getElementById('who-screen-nationality');
+  const hobbiesScreen = document.getElementById('who-screen-hobbies');
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
 
   if (selectScreen) selectScreen.style.display = 'block';
   if (genderScreen) genderScreen.style.display = 'none';
   if (nationalityScreen) nationalityScreen.style.display = 'none';
+  if (hobbiesScreen) hobbiesScreen.style.display = 'none';
   if (loadingScreen) loadingScreen.style.display = 'none';
   if (resultScreen) resultScreen.style.display = 'none';
 
@@ -15177,6 +15208,23 @@ function openNameAvatarModal(vocabId) {
 
   // 2. 渲染公休假單與同日休假比對
   renderColleagueVacationsInModal(item);
+
+  // 2.5. 🎯 渲染同仁休閒娛樂標籤 (主管視角：100% 繁體中文呈現)
+  const hobbiesGrid = document.getElementById('name-card-hobbies-grid');
+  if (hobbiesGrid) {
+    const hobbies = (item.hobbies && Array.isArray(item.hobbies) && item.hobbies.length > 0)
+      ? item.hobbies
+      : [];
+    if (hobbies.length > 0) {
+      hobbiesGrid.innerHTML = hobbies.map(tagId => {
+        const tag = HOBBY_TAGS_DATA.find(t => t.id === tagId);
+        const zhLabel = tag ? `${tag.icon} ${tag.zh}` : tagId;
+        return `<span class="colleague-hobby-badge">${zhLabel}</span>`;
+      }).join('');
+    } else {
+      hobbiesGrid.innerHTML = `<span style="font-size:0.75rem; color:var(--muted);">（尚未填寫休閒標籤，點擊下方「重新捏臉」填寫）</span>`;
+    }
+  }
 
   // 3. 立繪頭像呈現 (若無頭像則即刻透過 Style 5 像素引擎繪製並賦予)
   if (!item.avatarUrl || !item.avatarUrl.trim() || item.avatarUrl.includes('avatar_yang.png')) {
