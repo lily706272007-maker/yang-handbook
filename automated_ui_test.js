@@ -1485,7 +1485,45 @@ assert(html.includes('autoSaveWhoAvatar'), '包含自動直接儲存函式 autoS
 assert(html.includes('rephotoAndRegenerateWhoAvatar'), '包含原處重新拍照生成函式 rephotoAndRegenerateWhoAvatar (v159)');
 assert(html.includes('resetAndRedoWhoModal'), '包含重填一次函式 resetAndRedoWhoModal (v159)');
 assert(html.includes('finishAndCloseWhoModal'), '包含完成關閉函式 finishAndCloseWhoModal (v159)');
-assert(html.includes('id="who-camera-capture-input"'), '包含手機自拍鏡頭觸發 input (capture=user) (v159)');
+assert(html.includes('id="who-camera-capture-input"'), '包含手機自拍鏡手動觸發 input (capture=user) (v159)');
+
+// 9. v160 智慧判斷國籍・真實班表身分精確歸屬・未拍照同仁絕不瞎湊假照片 (v160)
+console.log('\n【測試 47：v160 智慧判斷國籍・班表身分精確歸屬・未拍照同仁絕不套用假頭像】');
+const rosterMatch = html.match(/const ROSTER_EMPLOYMENT_TYPES = (\{[\s\S]*?\});/);
+assert(rosterMatch, '代碼中包含 ROSTER_EMPLOYMENT_TYPES 班表名冊');
+const rosterTypes = eval('(' + rosterMatch[1] + ')');
+
+assert(rosterTypes.vn_nagai_miyuki === '派遣社員', '長井美幸依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_morimoto === '派遣社員', '森本健太郎依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_tanaka_shoko === '派遣社員', '田中祥子依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_yamabe === '派遣社員', '山邊陸依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_umesh === '派遣社員', '烏梅什依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_riku_iku === '派遣社員', '陸郁依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_yang === '派遣社員', '楊詠筑依真實班表設定為派遣社員');
+assert(rosterTypes.vn_nagamori === '派遣社員', '長森愛實依真實班表設定為派遣社員');
+assert(rosterTypes.vn_morita === '派遣社員', '森田亨依真實班表設定為派遣社員');
+assert(rosterTypes.vn_biyo === '交換學生 / 實習生', '比約依真實班表設定為交換學生 / 實習生');
+assert(rosterTypes.vn_ryu_shiei === '交換學生 / 實習生', '劉思睿依真實班表設定為交換學生 / 實習生');
+assert(rosterTypes.vn_kajiki === '正社員', '加治木支配人設定為正社員');
+assert(rosterTypes.vn_sudo === '正社員', '須藤現場領導設定為正社員');
+assert(rosterTypes.vn_uchima === '正社員', '內間設定為正社員');
+
+// 測試姓名智慧判斷國籍
+const inferNatMatch = html.match(/function inferNationalityFromName\([\s\S]*?\n\}/);
+assert(inferNatMatch, '代碼中包含 inferNationalityFromName 函式');
+const inferNatFunc = new Function('return ' + inferNatMatch[0])();
+
+assert(inferNatFunc({ ja: '長井 美幸', zh: '長井 美幸' }) === '日本 🇯🇵', '長井美幸智慧判斷為日本國籍');
+assert(inferNatFunc({ ja: 'ビヨー', zh: '比約' }) === '尼泊爾 🇳🇵', 'ビヨー智慧判斷為尼泊爾國籍');
+assert(inferNatFunc({ ja: 'ハン', zh: '韓' }) === '越南 🇻🇳', 'ハン智慧判斷為越南國籍');
+assert(inferNatFunc({ ja: 'リュウ シエイ', zh: '劉思睿' }) === '中國 🇨🇳', '劉思睿智慧判斷為中國國籍');
+assert(inferNatFunc({ ja: '楊詠筑', zh: '楊詠筑' }) === '台灣 🇹🇼', '楊詠筑智慧判斷為台灣國籍');
+assert(inferNatFunc('佐藤') === '日本 🇯🇵', '純日文姓氏佐藤判斷為日本');
+
+// 測試未拍照同仁絕不自動瞎湊假照片
+assert(html.includes('尚未設定照片') && html.includes('該同仁尚未拍照或登錄個人形象'), '未拍照同仁在名牌卡片中顯示尚未設定照片高質感佔位');
+assert(html.includes('highlightInferredNationalityButton'), '包含國籍按鈕智慧判斷高亮標記函式');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v160'), 'sw.js 已正確更新為 v160');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1494,5 +1532,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v155) 外場同仁立繪生成與多語系標籤全流程（選名字、選性別、選國籍、選興趣標籤、12s AI畫師生圖等待、高階立繪揭曉、主管視角全繁中呈現）全面就位！');
+  console.log('🎉 所有測試通過！(v160) 智慧判斷國籍・真實班表名冊身分對齊・未拍照同仁乾淨無照片佔位全面就位！');
 }
