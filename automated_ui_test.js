@@ -256,12 +256,10 @@ assert(html.includes('generateTransparentChibiAvatar'), '包含 2.2 頭身純透
 assert(html.includes('openNameAvatarModal'), '包含雙擊開啟同仁獨立 Q 版名牌彈窗函式 (openNameAvatarModal)');
 assert(html.includes('DEFAULT_COLLEAGUE_TRAITS'), '包含各同仁預設專屬特徵字典 (DEFAULT_COLLEAGUE_TRAITS)');
 assert(html.includes('HAIR_STYLES_BY_GENDER'), '包含男女分流專屬髮型庫 (HAIR_STYLES_BY_GENDER)');
-assert(html.includes('trait-glasses-round_black') && html.includes('trait-glasses-square_black') && html.includes('trait-glasses-round_wire') && html.includes('trait-glasses-square_wire') && html.includes('trait-glasses-none'), '包含 5 大精準眼鏡選項 (圓黑框/方黑框/圓細框/方細框/無眼鏡)');
-assert(html.includes('trait-face-round') && html.includes('trait-face-square') && html.includes('trait-face-pointed'), '包含 5 大臉型輪廓選項');
-assert(html.includes('trait-nose-dot') && html.includes('trait-nose-straight') && html.includes('trait-nose-wide'), '包含 4 大鼻子輪廓特徵');
-assert(html.includes('trait-skin-fair') && html.includes('trait-skin-natural') && html.includes('trait-skin-tanned'), '包含 3 大膚色選項');
+// v159 依使用者指示徹底移除手動捏臉大框框，聚焦於自動化高階立繪與母語標籤
+assert(!html.includes('id="who-bang-options-container"') && !html.includes('trait-glasses-round_black'), '已徹底移除手動捏臉工房與眼鏡/髮型/臉型微調框 (v159)');
 assert(html.includes('playNameCardSpeech') && html.includes('playWhoResultSpeech'), '包含日文自我介紹發音播放函式 (100% 靜音保護)');
-assert(html.includes('setAvatarTrait') && html.includes('rephotoWhoDirectly'), '包含特徵快速微調與即時補拍重繪函式');
+assert(html.includes('autoSaveWhoAvatar') && html.includes('rephotoAndRegenerateWhoAvatar'), '包含自動直接儲存與重新拍照生成函式 (v159)');
 assert(html.includes('name-cell-avatar-img') && html.includes('has-avatar'), '名字卡片支援方形透明 Q 版頭像縮圖顯示');
 
 // 測試 19: 現場六國同步翻譯板（日文・尼泊爾文・緬甸文・越南文・英文・韓文）功能測試
@@ -891,12 +889,10 @@ assert(idxYakiEbi < idxYakiPiiman && idxYakiPiiman < idxYakiNinjin, '夕食炭�
 
 // 測試 51: 半身身軀素體架構 (腰部以上半身，免除高矮問題，聚焦男女與普通/微胖身材) (v103)
 console.log('\n【測試 51：半身身軀素體架構 (普通/微胖 × 男女，免除高矮複雜度)】');
-assert(html.includes('id="trait-build-normal"') && html.includes('id="trait-build-chubby"'), '包含半身身材按鈕：普通身材 (normal) 與 偏胖微豐 (chubby)');
+assert(!html.includes('id="trait-build-normal"'), '成果畫面已徹底移除手動身材微調按鈕 (v159)');
 assert(!html.includes('id="trait-height-tall"'), '已徹底移除身高控制 (半身構圖無需考慮高矮)');
-assert(html.includes("currentWhoTraits.build"), '狀態核心 currentWhoTraits 支援 build');
-assert(html.includes("half_male_sturdy.jpg") || html.includes("photos/${bodyAssetKey}"), '支援動態映射半身素體立繪檔案路徑');
-
-assert(html.includes('id="trait-skin-natural"') && html.includes('id="trait-skin-tan"'), '包含雙膚色切換按鈕：自然膚色 (natural) 與 深色暖膚 (tan)');
+assert(html.includes("currentWhoTraits.build") || html.includes("photos/${bodyAssetKey}") || html.includes("photos/avatar_eastasia_female_clean.jpg"), '支援立繪檔案路徑映射');
+assert(!html.includes('id="trait-skin-tan"'), '成果畫面已徹底移除手動膚色微調按鈕 (v159)');
 
 const expectedHalfBodyFiles = [
   'photos/half_male_normal.jpg',
@@ -1482,6 +1478,14 @@ const renderedZhBadges = testColleagueHobbies.map(tagId => {
 assert(renderedZhBadges.includes('🍜 喜歡拉麵'), '標籤 c_ramen 正確轉換為繁中 🍜 喜歡拉麵');
 assert(renderedZhBadges.includes('☕ 跑咖探店'), '標籤 c_coffee 正確轉換為繁中 ☕ 跑咖探店');
 assert(renderedZhBadges.includes('🎌 動畫漫畫'), '標籤 h_anime 正確轉換為繁中 🎌 動畫漫畫');
+
+// 8. v159 全新體驗升級驗證 (純黑髮無瑕立繪、徹底移除「本人」與捏臉大框、自動直接儲存、重新拍照不回首頁)
+assert(!html.includes('楊詠筑（本人）'), '楊詠筑已徹底移除（本人）字樣 (v159)');
+assert(html.includes('autoSaveWhoAvatar'), '包含自動直接儲存函式 autoSaveWhoAvatar (v159)');
+assert(html.includes('rephotoAndRegenerateWhoAvatar'), '包含原處重新拍照生成函式 rephotoAndRegenerateWhoAvatar (v159)');
+assert(html.includes('resetAndRedoWhoModal'), '包含重填一次函式 resetAndRedoWhoModal (v159)');
+assert(html.includes('finishAndCloseWhoModal'), '包含完成關閉函式 finishAndCloseWhoModal (v159)');
+assert(html.includes('id="who-camera-capture-input"'), '包含手機自拍鏡頭觸發 input (capture=user) (v159)');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);

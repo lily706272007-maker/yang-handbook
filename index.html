@@ -4408,100 +4408,26 @@
       </div>
 
 
-      <!-- 快速微調特徵 (防漏抓/自由調整) -->
-      <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px; text-align:left; max-height:280px; overflow-y:auto;">
-        <div style="font-size:0.8rem; font-weight:800; color:var(--primary); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-          <span>🎨 5 大層級 Q 版捏臉工房（即時重繪）：</span>
-          <button class="btn btn-ghost btn-sm" onclick="rephotoWhoDirectly()" style="font-size:0.72rem; padding:1px 6px;">📷 重新取樣</button>
-        </div>
-        
-        <!-- 1. 性別先決 -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">性別：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-female" onclick="setAvatarTrait('gender', 'female')" style="font-size:0.78rem; padding:3px 10px;">👧 女生</button>
-          <button class="btn btn-sm btn-ghost trait-pill-gender" id="trait-gender-male" onclick="setAvatarTrait('gender', 'male')" style="font-size:0.78rem; padding:3px 10px;">👦 男生</button>
-        </div>
-
-        <!-- 半身身形（普通身材 / 偏胖微豐，無需考慮身高） -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">身材：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-normal" onclick="setAvatarTrait('build', 'normal')" style="font-size:0.78rem; padding:3px 10px;">👔 普通身材</button>
-          <button class="btn btn-sm btn-ghost trait-pill-build" id="trait-build-chubby" onclick="setAvatarTrait('build', 'chubby')" style="font-size:0.78rem; padding:3px 10px;">🐻 偏胖微豐</button>
-        </div>
-
-        <!-- 膚色選擇（自然日本人膚色 / 深色暖膚：緬甸・越南・尼泊爾） -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">膚色：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-natural" onclick="setAvatarTrait('skin', 'natural')" style="font-size:0.78rem; padding:3px 10px;">🇯🇵 自然膚色 (一般/日籍)</button>
-          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-tan" onclick="setAvatarTrait('skin', 'tan')" style="font-size:0.78rem; padding:3px 10px;">🇲🇲 深色暖膚 (緬甸/越南/尼泊爾)</button>
-        </div>
-
-        <!-- 2. 臉型 -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">臉型：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-face" id="trait-face-round" onclick="setAvatarTrait('face', 'round')" style="font-size:0.75rem; padding:2px 8px;">圓潤臉</button>
-          <button class="btn btn-sm btn-ghost trait-pill-face" id="trait-face-oval" onclick="setAvatarTrait('face', 'oval')" style="font-size:0.75rem; padding:2px 8px;">鵝蛋臉</button>
-          <button class="btn btn-sm btn-ghost trait-pill-face" id="trait-face-square" onclick="setAvatarTrait('face', 'square')" style="font-size:0.75rem; padding:2px 8px;">稜角方臉</button>
-          <button class="btn btn-sm btn-ghost trait-pill-face" id="trait-face-pointed" onclick="setAvatarTrait('face', 'pointed')" style="font-size:0.75rem; padding:2px 8px;">瓜子尖臉</button>
-          <button class="btn btn-sm btn-ghost trait-pill-face" id="trait-face-chubby" onclick="setAvatarTrait('face', 'chubby')" style="font-size:0.75rem; padding:2px 8px;">肉肉臉</button>
-        </div>
-
-        <!-- 3. 鼻子 -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">鼻子：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-nose" id="trait-nose-dot" onclick="setAvatarTrait('nose', 'dot')" style="font-size:0.75rem; padding:2px 8px;">小圓點鼻</button>
-          <button class="btn btn-sm btn-ghost trait-pill-nose" id="trait-nose-straight" onclick="setAvatarTrait('nose', 'straight')" style="font-size:0.75rem; padding:2px 8px;">挺拔高鼻</button>
-          <button class="btn btn-sm btn-ghost trait-pill-nose" id="trait-nose-wide" onclick="setAvatarTrait('nose', 'wide')" style="font-size:0.75rem; padding:2px 8px;">寬厚肉鼻</button>
-          <button class="btn btn-sm btn-ghost trait-pill-nose" id="trait-nose-sharp" onclick="setAvatarTrait('nose', 'sharp')" style="font-size:0.75rem; padding:2px 8px;">俐落挺鼻</button>
-        </div>
-
-        <!-- 4. 膚色 -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">膚色：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-fair" onclick="setAvatarTrait('skin', 'fair')" style="font-size:0.75rem; padding:2px 8px;">⚪ 白皙</button>
-          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-natural" onclick="setAvatarTrait('skin', 'natural')" style="font-size:0.75rem; padding:2px 8px;">🟡 自然小麥</button>
-          <button class="btn btn-sm btn-ghost trait-pill-skin" id="trait-skin-tanned" onclick="setAvatarTrait('skin', 'tanned')" style="font-size:0.75rem; padding:2px 8px;">🟤 健康深色</button>
-        </div>
-
-        <!-- 5. 瀏海 (依性別動態渲染 10 款日系瀏海) -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">瀏海：</span>
-          <div id="who-bang-options-container" style="display:flex; gap:4px; flex-wrap:wrap;">
-            <!-- 動態填入瀏海按鈕 -->
-          </div>
-        </div>
-
-        <!-- 6. 後髮 (依性別動態渲染 10 款日系後髮) -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">後髮：</span>
-          <div id="who-backhair-options-container" style="display:flex; gap:4px; flex-wrap:wrap;">
-            <!-- 動態填入後髮按鈕 -->
-          </div>
-        </div>
-
-        <!-- 6. 髮色 (符合職場規範：自然黑與深棕) -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">髮色：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-black" onclick="setAvatarTrait('color', '#1a191f')" style="font-size:0.75rem; padding:2px 8px;">⬛ 自然黑</button>
-          <button class="btn btn-sm btn-ghost trait-pill-color" id="trait-color-darkbrown" onclick="setAvatarTrait('color', '#422b1d')" style="font-size:0.75rem; padding:2px 8px;">🟫 深棕色</button>
-        </div>
-
-        <!-- 7. 眼鏡 (5 大精準選項) -->
-        <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap;">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--muted); min-width:44px;">眼鏡：</span>
-          <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-round_black" onclick="setAvatarTrait('glasses', 'round_black')" style="font-size:0.75rem; padding:2px 8px;">👓 圓形黑框</button>
-          <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-square_black" onclick="setAvatarTrait('glasses', 'square_black')" style="font-size:0.75rem; padding:2px 8px;">👓 方形黑框</button>
-          <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-round_wire" onclick="setAvatarTrait('glasses', 'round_wire')" style="font-size:0.75rem; padding:2px 8px;">👓 圓形細框</button>
-          <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-square_wire" onclick="setAvatarTrait('glasses', 'square_wire')" style="font-size:0.75rem; padding:2px 8px;">👓 方形細框</button>
-          <button class="btn btn-sm btn-ghost trait-pill-glasses" id="trait-glasses-none" onclick="setAvatarTrait('glasses', 'none')" style="font-size:0.75rem; padding:2px 8px;">👀 無眼鏡</button>
-        </div>
+      <!-- 狀態提示（已自動儲存） -->
+      <div id="who-result-saved-hint" style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:10px; padding:6px 12px; margin-bottom:12px; font-size:0.75rem; color:#065f46; font-weight:700; display:inline-block;">
+        ✨ 已自動儲存至同仁圖鑑卡與名冊！
       </div>
 
-      <!-- 操作按鈕 -->
-      <div style="display:flex; justify-content:center; gap:8px;">
-        <button class="btn btn-primary btn-sm" style="font-weight:800; padding:8px 16px;" onclick="confirmSaveWhoAvatar()">💾 儲存至單字庫</button>
-        <button class="btn btn-ghost btn-sm" onclick="resetWhoModal()">🔄 重新選擇/拍照</button>
+      <!-- 操作按鈕 (重新拍照生成 / 重填一次 / 完成關閉) -->
+      <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="rephotoAndRegenerateWhoAvatar()" style="font-weight:700; border-color:var(--primary); color:var(--primary);">
+          📷 重新拍照生成
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="resetAndRedoWhoModal()" style="font-weight:700; color:var(--muted);">
+          🔄 重填一次
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="finishAndCloseWhoModal()" style="font-weight:800; padding:6px 18px;">
+          ✓ 完成
+        </button>
       </div>
+
+      <!-- 手機拍照/自拍鏡頭觸發 input (capture=user 直接開啟前鏡頭自拍) -->
+      <input type="file" id="who-camera-capture-input" accept="image/*" capture="user" style="display:none;" onchange="handleWhoCameraCapture(event)" />
     </div>
 
     <!-- 隱藏的靜默鏡頭元素 -->
@@ -7500,7 +7426,7 @@ function createRealRunnerData() {
     { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/9 (二)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
     { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/7 (日)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/24 (三)", "9/29 (一)"] },
-    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑（本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
+    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑", "cat": "名字", "imageUrl": "", "avatarUrl": "photos/avatar_eastasia_female_clean.jpg", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/26 (五)"] },
     { "id": "vn_ryu_shiei", "ja": "リュウ シエイ", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "交換學生 / 實習生（海外留學交流）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/10 (三)", "9/15 (一)", "9/21 (日)", "9/26 (五)", "9/29 (一)"] },
@@ -7525,7 +7451,7 @@ function createRealRunnerData() {
     { "id": "vs_seishain", "ja": "<ruby>正社員<rt>せいしゃいん</rt></ruby>", "kana": "せいしゃいん", "zh": "正職同仁 / 正社員", "cat": "職稱", "imageUrl": "", "note": "旅館正式員工 (如：川畑、ビム、ハン、須藤等)" },
     { "id": "vs_hakenshain", "ja": "<ruby>派遣社員<rt>はけんしゃいん</rt></ruby>", "kana": "はけんしゃいん", "zh": "派遣同仁 / 打工夥伴", "cat": "職稱", "imageUrl": "", "note": "外場派遣與打工夥伴 (如：小楊、長森、市石、森田等)" },
     { "id": "vs_intern", "ja": "インターン", "kana": "いんたーん", "zh": "海外實習生 (Intern)", "cat": "職稱", "imageUrl": "", "note": "大學及專門學校實習生 (如：プラティマ、エンティハ等)" },
-    { "id": "vs_runner", "ja": "ランナー", "kana": "らんなー", "zh": "傳菜人員 (Runner)", "cat": "職稱", "imageUrl": "", "note": "負責廚房與外場間菜餚運送（小楊本人職務）" },
+    { "id": "vs_runner", "ja": "ランナー", "kana": "らんなー", "zh": "傳菜人員 (Runner)", "cat": "職稱", "imageUrl": "", "note": "負責廚房與外場間菜餚運送（傳菜 Runner）" },
     { "id": "vs_leader", "ja": "リーダー", "kana": "りーだー", "zh": "組長 / 現場領班", "cat": "職稱", "imageUrl": "", "note": "餐廳現場值班負責人" },
     { "id": "vs_asapai", "ja": "<ruby>朝配<rt>あさは配</rt></ruby>", "kana": "あさは配", "zh": "朝食配膳人員 (朝配)", "cat": "職稱", "imageUrl": "", "note": "早餐時段配膳、傳菜與餐台備置人員" },
     { "id": "vs_yoruhai", "ja": "<ruby>夜配<rt>よるはい</rt></ruby>", "kana": "よるはい", "zh": "夕食配膳人員 (夜配)", "cat": "職稱", "imageUrl": "", "note": "晚餐時段配膳、出菜與傳菜補菜人員" },
@@ -14822,7 +14748,7 @@ function finishWhoHobbiesAndReveal() {
     const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample, currentWhoTraits);
     currentWhoState.generatedAvatarUrl = avatarUrl;
 
-    const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '');
+    const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
     const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
 
     const bubbleText = document.getElementById('who-result-bubble-text');
@@ -14845,6 +14771,9 @@ function finishWhoHobbiesAndReveal() {
         return `<span class="colleague-hobby-badge">${zhLabel}</span>`;
       }).join('');
     }
+
+    // 🌟 成果揭曉即時自動儲存至單字庫與圖鑑！
+    autoSaveWhoAvatar();
   }, 400);
 }
 
@@ -15019,12 +14948,12 @@ async function rephotoWhoDirectly() {
 // 11. 成果畫面點擊播放自我介紹 (100% 靜音保護，點擊才播放)
 function playWhoResultSpeech() {
   if (!currentWhoState.selectedNameItem) return;
-  const cleanName = (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '');
+  const cleanName = (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
   speakJapanese(`${cleanName}です。よろしくお願いします。`);
 }
 
-// 12. 確認儲存 Q 版人物形象至單字庫
-function confirmSaveWhoAvatar() {
+// 12. 🌟 自動直接儲存人物形象與休閒標籤至單字庫與圖鑑 (無需使用者手動儲存)
+function autoSaveWhoAvatar() {
   if (!currentWhoState.selectedNameItem || !currentWhoState.generatedAvatarUrl) return;
 
   const target = currentWhoState.selectedNameItem;
@@ -15044,10 +14973,77 @@ function confirmSaveWhoAvatar() {
 
   saveData(AppData);
   renderVocabPage('sop');
-  closeModal('modal-who-are-you');
+}
 
-  const cleanName = (target.zh || target.ja || '').replace(/<[^>]+>/g, '');
-  showToast(`🎉 已成功儲存 ${cleanName} 的專屬 Q 版形象！`, 'success');
+// 12.1. 📷 重新拍照生成：直接開啟鏡頭拍照或為當前同仁重新生成立繪，絕不跳回首頁！
+function rephotoAndRegenerateWhoAvatar() {
+  const nameItem = currentWhoState.selectedNameItem;
+  if (!nameItem) return;
+
+  const fileInput = document.getElementById('who-camera-capture-input');
+  if (fileInput) {
+    fileInput.value = '';
+    fileInput.click();
+  }
+}
+
+// 12.2. 處理鏡頭拍照回傳照片
+async function handleWhoCameraCapture(event) {
+  const file = event.target.files && event.target.files[0];
+  const nameItem = currentWhoState.selectedNameItem;
+  if (!nameItem) return;
+
+  const loadingScreen = document.getElementById('who-screen-loading');
+  const resultScreen = document.getElementById('who-screen-result');
+
+  if (resultScreen) resultScreen.style.display = 'none';
+  if (loadingScreen) {
+    loadingScreen.style.display = 'block';
+    const msg = loadingScreen.querySelector('div:nth-child(2)');
+    if (msg) msg.textContent = '📸 正在讀取新照片並為您重新描繪立繪…';
+  }
+
+  setTimeout(() => {
+    if (loadingScreen) loadingScreen.style.display = 'none';
+    if (resultScreen) resultScreen.style.display = 'block';
+
+    const avatarUrl = generateTransparentChibiAvatar(nameItem, null, currentWhoTraits);
+    currentWhoState.generatedAvatarUrl = avatarUrl;
+    const avatarImg = document.getElementById('who-result-avatar-img');
+    if (avatarImg) avatarImg.src = avatarUrl;
+
+    autoSaveWhoAvatar();
+    showToast('✨ 拍照成功！已為您即時重新描繪並儲存新形象！', 'success');
+  }, 700);
+}
+
+// 12.3. 🔄 重填一次：重置選擇並回到性別/國籍步驟重新填寫
+function resetAndRedoWhoModal() {
+  if (whoAiTimerInterval) {
+    clearInterval(whoAiTimerInterval);
+    whoAiTimerInterval = null;
+  }
+  currentSelectedHobbies = new Set();
+
+  if (currentWhoState.selectedNameItem) {
+    promptGenderStep(currentWhoState.selectedNameItem);
+  } else {
+    resetWhoModal();
+  }
+}
+
+// 12.4. ✓ 完成關閉按鈕
+function finishAndCloseWhoModal() {
+  autoSaveWhoAvatar();
+  closeModal('modal-who-are-you');
+  const cleanName = currentWhoState.selectedNameItem
+    ? (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim()
+    : '同仁';
+  showToast(`🎉 已完成【${cleanName}】的專屬外場形象與圖鑑設定！`, 'success');
+}
+
+function confirmSaveWhoAvatar() {
+  finishAndCloseWhoModal();
 }
 
 // 13. 重設「你叫什麼名字？」畫面
@@ -15171,7 +15167,7 @@ function openNameAvatarModal(vocabId) {
   const modal = document.getElementById('modal-name-avatar-card');
   if (!modal) return;
 
-  const cleanName = (item.zh || item.ja || '').replace(/<[^>]+>/g, '');
+  const cleanName = (item.zh || item.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
   const bubbleText = document.getElementById('name-card-bubble-text');
   const avatarImg = document.getElementById('name-card-avatar-img');
   const jaTitle = document.getElementById('name-card-ja-title');
@@ -15223,7 +15219,7 @@ function openNameAvatarModal(vocabId) {
         return `<span class="colleague-hobby-badge">${zhLabel}</span>`;
       }).join('');
     } else {
-      hobbiesGrid.innerHTML = `<span style="font-size:0.75rem; color:var(--muted);">（尚未填寫休閒標籤，點擊下方「重新捏臉」填寫）</span>`;
+      hobbiesGrid.innerHTML = `<span style="font-size:0.75rem; color:var(--muted);">（尚未填寫休閒標籤，點擊下方「更換形象」填寫）</span>`;
     }
   }
 
@@ -15243,7 +15239,7 @@ function openNameAvatarModal(vocabId) {
 
   if (jaTitle) jaTitle.innerHTML = item.ja || cleanName;
   if (zhTitle) zhTitle.textContent = `${item.kana || cleanName}（${item.sourceDesc || item.note || empType}）`;
-  if (rephotoBtn) rephotoBtn.innerHTML = `🎨 調整形象 / 重新捏臉`;
+  if (rephotoBtn) rephotoBtn.innerHTML = `🎨 重新拍照 / 更換形象`;
 
   modal.classList.add('open');
   modal.classList.add('show');
@@ -15251,21 +15247,7 @@ function openNameAvatarModal(vocabId) {
 
 function playNameCardSpeech() {
   if (!currentActiveCardItem) return;
-  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '');
-  speakJapanese(`${cleanName}です。よろしくお願いします。`);
-}
-
-function rephotoFromCard() {
-  closeModal('modal-name-avatar-card');
-  if (currentActiveCardItem) {
-    openWhoAreYouModal();
-    selectExistingColleagueForAvatar(currentActiveCardItem.id);
-  }
-}
-
-function playNameCardSpeech() {
-  if (!currentActiveCardItem) return;
-  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '');
+  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
   speakJapanese(`${cleanName}です。よろしくお願いします。`);
 }
 
