@@ -1315,7 +1315,8 @@ assert(html.includes('InterviewEngine.activeStyleVariant = \'direct\';') && html
 
 // 7. PWA Service Worker 升級至 v153 驗證
 const swV154 = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swV154.includes('yang-pwa-v154') || swV154.includes('yang-pwa-v155'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v154 或 yang-pwa-v155');
+const swVerMatch = swV154.match(/yang-pwa-v(\d+)/);
+assert(swVerMatch && parseInt(swVerMatch[1]) >= 154, 'Service Worker 快取版本已順暢升級至 yang-pwa-v154 或更高級版本');
 
 
 // ============================================================================
@@ -1367,10 +1368,12 @@ console.log('\n【測試 65】開始執行 v155 外場同仁立繪生成與多�
 
 // 1. Service Worker v155 升級驗證
 const swV155 = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf-8');
-assert(swV155.includes('yang-pwa-v155'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v155');
+assert(swV155.includes('yang-pwa-v155') || swV155.includes('yang-pwa-v156'), 'Service Worker 快取版本已順暢升級至 yang-pwa-v155 或 yang-pwa-v156');
 assert(swV155.includes('photos/avatar_sea_female_clean.jpg'), 'sw.js ASSETS 包含東南亞女性清爽立繪');
 assert(swV155.includes('photos/avatar_nepal_male_clean.jpg'), 'sw.js ASSETS 包含尼泊爾男性清爽立繪');
 assert(swV155.includes('photos/clean_restaurant_pixel_bg.jpg'), 'sw.js ASSETS 包含原版餐廳木地板背景');
+assert(!html.includes('${hasAv ? `<img src="${v.avatarUrl}"'), '名字選擇清單中徹底移除微縮人物肖像，杜絕小圖看不清楚');
+assert(html.includes('<span style="font-size:1.1rem;">👤</span>') && html.includes('selectExistingColleagueForAvatar'), '名字選擇清單統一使用極簡乾淨的 👤 圖示');
 
 // 2. 實體圖檔與背景鎖定驗證
 const cleanAvatarFiles = [

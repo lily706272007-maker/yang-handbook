@@ -7505,7 +7505,7 @@ function createRealRunnerData() {
     { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/9 (二)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
     { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/7 (日)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/24 (三)", "9/29 (一)"] },
-    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑（本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "./photos/avatar_yang.png", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
+    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑（本人）", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/26 (五)"] },
     { "id": "vn_ryu_shiei", "ja": "リュウ シエイ", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "交換學生 / 實習生（海外留學交流）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/10 (三)", "9/15 (一)", "9/21 (日)", "9/26 (五)", "9/29 (一)"] },
@@ -8119,6 +8119,16 @@ function loadAppData() {
     if (!data.apiKey || data.apiKey.includes('AQ.Ab8RN6JZ8') || data.apiKey.includes('L3Hhx9D6UDpw')) {
       data.apiKey = DEFAULT_GEMINI_KEY;
       saveAppData(data);
+    }
+    if (data.vocabSop && Array.isArray(data.vocabSop)) {
+      let cleaned = false;
+      data.vocabSop.forEach(v => {
+        if (v.avatarUrl && v.avatarUrl.includes('avatar_yang.png')) {
+          v.avatarUrl = '';
+          cleaned = true;
+        }
+      });
+      if (cleaned) saveAppData(data);
     }
     return data;
   } catch (e) {
@@ -14154,10 +14164,9 @@ function populateWhoColleaguesList() {
   }
 
   listEl.innerHTML = names.map(v => {
-    const hasAv = !!(v.avatarUrl && v.avatarUrl.trim());
     return `
       <button class="btn btn-ghost btn-sm" onclick="selectExistingColleagueForAvatar('${v.id}')" style="font-weight:700; font-size:0.85rem; padding:6px 4px; border:1px solid var(--border); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:#fff;">
-        ${hasAv ? `<img src="${v.avatarUrl}" style="width:30px; height:30px; object-fit:contain;" />` : `<span style="font-size:1.1rem;">👤</span>`}
+        <span style="font-size:1.1rem;">👤</span>
         <span style="font-family:var(--font-serif); line-height:1.6;">${v.ja || escapeHtml(v.kana || v.zh || '')}</span>
       </button>
     `;
