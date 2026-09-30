@@ -618,7 +618,7 @@ assert(html.includes('imageSmoothingEnabled = false'), '像素引擎啟用 image
 assert(html.includes('drawPixelTree') || html.includes('落地窗') || html.includes('焦糖紅棕'), '角色立繪背景取樣自飯店餐廳實景 (綠意落地窗與焦糖紅棕餐椅)');
 assert(html.includes('SHIRT_COLOR') && html.includes('#18181b'), '制服嚴格遵循外場標準黑色長袖襯衫與黑色長褲 (無名牌)');
 assert(html.includes('deep_bronze') && html.includes('tanned'), '包含南亞尼泊爾與東南亞外國同仁深邃古銅/小麥膚色配置');
-assert(html.includes('employmentType') && html.includes('正社員') && html.includes('派遣社員') && html.includes('交換學生 / 實習生'), '同仁名單與卡片完整呈現雇用身分來源 (正社員/派遣社員/交換學生實習生)');
+assert(html.includes('employmentType') && html.includes('正社員') && html.includes('派遣社員') && (html.includes('學生') || html.includes('交換學生 / 實習生')), '同仁名單與卡片完整呈現雇用身分來源 (正社員/派遣社員/學生)');
 assert(html.includes('nationality') && html.includes('尼泊爾 🇳🇵') && html.includes('越南 🇻🇳'), '名冊與圖鑑卡包含尼泊爾、越南、緬甸等外籍同仁國籍徽章');
 assert(html.includes('renderColleagueVacationsInModal') && html.includes('promptEditColleagueVacations'), '包含同仁排休班表渲染與編輯休假功能');
 assert(html.includes('same-day') && html.includes('#dc2626') && html.includes('同日休'), '與小楊同日休假之日期特別以紅字粗體、紅色邊框加紅加粗醒目標示');
@@ -1502,8 +1502,8 @@ assert(rosterTypes.vn_riku_iku === '派遣社員', '陸郁依真實班表精準�
 assert(rosterTypes.vn_yang === '派遣社員', '楊詠筑依真實班表設定為派遣社員');
 assert(rosterTypes.vn_nagamori === '派遣社員', '長森愛實依真實班表設定為派遣社員');
 assert(rosterTypes.vn_morita === '派遣社員', '森田亨依真實班表設定為派遣社員');
-assert(rosterTypes.vn_biyo === '交換學生 / 實習生', '比約依真實班表設定為交換學生 / 實習生');
-assert(rosterTypes.vn_ryu_shiei === '交換學生 / 實習生', '劉思睿依真實班表設定為交換學生 / 實習生');
+assert(rosterTypes.vn_biyo === '學生', '比約依最新需求簡化身分為學生');
+assert(rosterTypes.vn_ryu_shiei === '學生', '劉思睿依最新需求簡化身分為學生');
 assert(rosterTypes.vn_kajiki === '正社員', '加治木支配人設定為正社員');
 assert(rosterTypes.vn_sudo === '正社員', '須藤現場領導設定為正社員');
 assert(rosterTypes.vn_uchima === '正社員', '內間設定為正社員');
@@ -1572,7 +1572,38 @@ assert(formatColleagueRubyMarkup({ id: 'vn_biyo', ja: 'ビヨー' }).includes('<
 assert(formatColleagueRubyMarkup({ ja: 'マイケル' }).includes('<ruby>マイケル<rt>Maikeru</rt></ruby>'), '任意自訂片假名自動套用羅馬拼音標籤');
 assert(formatColleagueRubyMarkup({ ja: '<ruby>加治木<rt>かじき</rt></ruby>' }).includes('<ruby>加治木<rt>かじき</rt></ruby>'), '漢字姓名已有假名標音保持原樣');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v161'), 'sw.js 已正確更新為 v161');
+// 11. v162 移除姓名卡右上角喇叭與三點選單・單擊發音雙擊進詳細・編輯刪除移入詳細頁・身分簡化為「學生」 (v162)
+console.log('\n【測試 49：v162 移除姓名卡右上角圖示・單擊發音雙擊進詳細・詳細頁編輯刪除・身分簡化為學生】');
+const renderVocabMatch = html.match(/function renderVocabPage\([\s\S]*?\nfunction toggleGlobalVocabImg/);
+assert(renderVocabMatch, '代碼中包含 renderVocabPage 函式');
+const renderVocabSrc = renderVocabMatch[0];
+
+// 姓名卡徹底移除 cell-actions (無 🔊 喇叭按鈕與 ⋮ 三點選單)
+assert(!renderVocabSrc.includes('class="word-cell name-cell"\n                   onclick="openNameAvatarModal'), '姓名卡不再只有單純點擊開彈窗');
+assert(renderVocabSrc.includes('handleNameCellClick(event, \'${v.id}\''), '姓名卡綁定 handleNameCellClick');
+assert(renderVocabSrc.includes('ondblclick="openNameAvatarModal(\'${v.id}\')"'), '姓名卡支援雙擊快速進入詳細個人頁面');
+assert(!renderVocabSrc.includes('name-cell"[\\s\\S]*?<div class="cell-actions"'), '姓名卡網格內不包含 cell-actions 遮擋區域');
+
+// 測試 handleNameCellClick 函式存在且邏輯健全
+const handleNameClickMatch = html.match(/function handleNameCellClick\([\s\S]*?\n\}/);
+assert(handleNameClickMatch, '代碼中包含 handleNameCellClick 函式');
+assert(handleNameClickMatch[0].includes('openNameAvatarModal(id)'), 'handleNameCellClick 雙擊調用 openNameAvatarModal');
+assert(handleNameClickMatch[0].includes('speakJapanese(jaZh)'), 'handleNameCellClick 單擊調用 speakJapanese');
+
+// 測試詳細頁面包含編輯與刪除按鈕
+assert(html.includes('onclick="editColleagueFromCard()"'), '詳細彈窗中包含【✏️ 編輯同仁資料】按鈕');
+assert(html.includes('onclick="deleteColleagueFromCard()"'), '詳細彈窗中包含【🗑️ 刪除同仁】按鈕');
+
+// 測試 editColleagueFromCard 與 deleteColleagueFromCard 函式存在
+assert(html.includes('function editColleagueFromCard()'), '代碼中包含 editColleagueFromCard 函式');
+assert(html.includes('function deleteColleagueFromCard()'), '代碼中包含 deleteColleagueFromCard 函式');
+
+// 測試「交換學生 / 實習生」徹底簡化為「學生」
+assert(html.includes('vn_biyo: \'學生\''), '名冊中比約身分精準簡化為「學生」');
+assert(html.includes('vn_ryu_shiei: \'學生\''), '名冊中劉思睿身分精準簡化為「學生」');
+assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
+
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v162'), 'sw.js 已正確更新為 v162');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1581,5 +1612,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v161) 移除姓名上方人形剪影・片假名同仁姓名標註羅馬拼音全數就緒！');
+  console.log('🎉 所有測試通過！(v162) 姓名卡右上角圖示徹底移除、單擊發音雙擊詳情、詳細頁編輯刪除、身分簡化「學生」全數就緒！');
 }

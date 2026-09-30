@@ -4467,7 +4467,7 @@
       <div style="font-size:0.85rem; color:var(--muted); margin-top:2px;" id="name-card-zh-title">いとう（日本同仁）</div>
     </div>
 
-    <!-- 來源身份與國籍標籤 (正式員工 / 派遣員工 / 交換學生 / 實習生) -->
+    <!-- 來源身份與國籍標籤 (正式員工 / 派遣員工 / 學生) -->
     <div id="name-card-source-badges" style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
       <span id="name-card-employment-badge" style="font-size:0.75rem; font-weight:700; background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; border-radius:6px; padding:2px 8px;">💼 正式員工（正社員）</span>
       <span id="name-card-nationality-badge" style="font-size:0.75rem; font-weight:700; background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; border-radius:6px; padding:2px 8px;">🇯🇵 日本</span>
@@ -4499,9 +4499,19 @@
       </div>
     </div>
 
-    <div style="display:flex; justify-content:center; gap:8px;">
+    <div style="display:flex; justify-content:center; gap:8px; margin-bottom:10px;">
       <button class="btn btn-primary btn-sm" onclick="playNameCardSpeech()" style="font-weight:700;">🔊 朗讀自我介紹</button>
-      <button class="btn btn-ghost btn-sm" id="name-card-rephoto-btn" onclick="rephotoFromCard()">🎨 調整形象/重新捏臉</button>
+      <button class="btn btn-ghost btn-sm" id="name-card-rephoto-btn" onclick="rephotoFromCard()" style="font-weight:700; border:1px solid var(--border); border-radius:8px;">📷 拍照登錄/更換形象</button>
+    </div>
+
+    <!-- ✏️ 同仁資料管理操作按鈕 (編輯與刪除) -->
+    <div style="display:flex; justify-content:center; gap:10px; border-top:1px dashed var(--border); padding-top:12px; margin-top:4px;">
+      <button class="btn btn-ghost btn-sm" onclick="editColleagueFromCard()" style="font-weight:700; color:var(--ink); border:1px solid var(--border); border-radius:8px; padding:6px 14px; background:#fff;">
+        ✏️ 編輯同仁資料
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="deleteColleagueFromCard()" style="font-weight:700; color:#dc2626; border:1px solid #fecaca; border-radius:8px; padding:6px 14px; background:#fef2f2;">
+        🗑️ 刪除同仁
+      </button>
     </div>
   </div>
 </div>
@@ -4604,9 +4614,9 @@ const ROSTER_EMPLOYMENT_TYPES = {
   vn_morita: '派遣社員',
   vn_umesh: '派遣社員',
   vn_riku_iku: '派遣社員',
-  // 交換學生 / 實習生 (2位)
-  vn_biyo: '交換學生 / 實習生',
-  vn_ryu_shiei: '交換學生 / 實習生'
+  // 學生 (2位)
+  vn_biyo: '學生',
+  vn_ryu_shiei: '學生'
 };
 
 const ROSTER_SOURCE_DESCS = {
@@ -4633,9 +4643,9 @@ const ROSTER_SOURCE_DESCS = {
   vn_morita: '派遣員工（外場派遣夥伴）',
   vn_umesh: '派遣員工（外場派遣夥伴）',
   vn_riku_iku: '派遣員工（外場派遣夥伴）',
-  // 實習
-  vn_biyo: '海外實習生（大學技術研修）',
-  vn_ryu_shiei: '交換學生 / 實習生（海外留學交流）'
+  // 學生
+  vn_biyo: '海外技術研修（學生）',
+  vn_ryu_shiei: '海外留學交流（學生）'
 };
 
 // ── 🔤 片假名同仁姓名羅馬拼音標準對照表（名牌與圖鑑專用）──
@@ -7675,14 +7685,14 @@ function createRealRunnerData() {
     { "id": "vn_kajiki", "ja": "<ruby>加治木<rt>かじき</rt></ruby>", "kana": "かじき", "zh": "加治木", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "支配人", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員・支配人）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/10 (三)", "9/15 (一)", "9/19 (五)", "9/23 (二)", "9/27 (六)"] },
     { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場領導", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員 / 現場領導）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/20 (六)", "9/25 (四)"] },
     { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/12 (五)", "9/16 (二)", "9/21 (日)", "9/26 (五)"] },
-    { "id": "vn_biyo", "ja": "<ruby>ビヨー<rt>Biyo</rt></ruby>", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "海外實習生（大學技術研修）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/20 (六)", "9/24 (三)", "9/29 (一)"] },
+    { "id": "vn_biyo", "ja": "<ruby>ビヨー<rt>Biyo</rt></ruby>", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外技術研修（學生）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/20 (六)", "9/24 (三)", "9/29 (一)"] },
     { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/10 (三)", "9/14 (日)", "9/19 (五)", "9/24 (三)"] },
     { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/9 (二)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
     { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/7 (日)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/24 (三)", "9/29 (一)"] },
     { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑", "cat": "名字", "imageUrl": "", "avatarUrl": "photos/avatar_eastasia_female_clean.jpg", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/26 (五)"] },
-    { "id": "vn_ryu_shiei", "ja": "<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "交換學生 / 實習生（海外留學交流）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
+    { "id": "vn_ryu_shiei", "ja": "<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外留學交流（學生）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/10 (三)", "9/15 (一)", "9/21 (日)", "9/26 (五)", "9/29 (一)"] },
     { "id": "vn_morimoto", "ja": "<ruby>森本<rt>もりもと</rt></ruby><ruby>健太郎<rt>けんたろう</rt></ruby>", "kana": "もりもと けんたろう", "zh": "森本 健太郎", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/20 (六)", "9/25 (四)"] },
     { "id": "vn_tanaka_yuka", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>裕香<rt>ゆか</rt></ruby>", "kana": "たなか ゆか", "zh": "田中 裕香", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/12 (五)", "9/16 (二)", "9/22 (一)", "9/27 (六)"] },
@@ -8298,9 +8308,13 @@ function loadAppData() {
     if (data.vocabSop && Array.isArray(data.vocabSop)) {
       let cleaned = false;
       data.vocabSop.forEach(v => {
-        // 1. 同步最新真實班表雇用身分與來源描述 (長井、森本、田中祥子、山邊、烏梅什、陸郁等為派遣社員)
+        // 1. 同步最新真實班表雇用身分與來源描述 (長井、森本、田中祥子、山邊、烏梅什、陸郁等為派遣社員；比約、劉思睿為學生)
         if (ROSTER_EMPLOYMENT_TYPES[v.id] && v.employmentType !== ROSTER_EMPLOYMENT_TYPES[v.id]) {
           v.employmentType = ROSTER_EMPLOYMENT_TYPES[v.id];
+          cleaned = true;
+        }
+        if (v.employmentType && (v.employmentType.includes('交換學生') || v.employmentType.includes('實習生'))) {
+          v.employmentType = '學生';
           cleaned = true;
         }
         if (ROSTER_SOURCE_DESCS[v.id] && v.sourceDesc !== ROSTER_SOURCE_DESCS[v.id]) {
@@ -8854,6 +8868,35 @@ function handleWordCellClick(e, id, jaZh) {
   }
 }
 
+let nameCellClickTimer = null;
+let lastNameClickId = null;
+let lastNameClickTime = 0;
+
+// 同仁姓名卡互動：點一下發音・點兩下開啟詳細個人圖鑑頁面
+function handleNameCellClick(e, id, jaZh) {
+  if (e) e.stopPropagation();
+  const now = Date.now();
+  if (lastNameClickId === id && (now - lastNameClickTime) < 320) {
+    // 點兩下 (Double Click)：清除發音延遲計時器，直接進入詳細同仁圖鑑頁面
+    if (nameCellClickTimer) {
+      clearTimeout(nameCellClickTimer);
+      nameCellClickTimer = null;
+    }
+    lastNameClickId = null;
+    lastNameClickTime = 0;
+    openNameAvatarModal(id);
+  } else {
+    // 點一下 (Single Click)：延遲 210ms 唸出名字
+    lastNameClickId = id;
+    lastNameClickTime = now;
+    if (nameCellClickTimer) clearTimeout(nameCellClickTimer);
+    nameCellClickTimer = setTimeout(() => {
+      speakJapanese(jaZh);
+      nameCellClickTimer = null;
+    }, 210);
+  }
+}
+
 function openWordDetailModal(id) {
   let item = (AppData.vocabSop || []).find(v => v.id === id);
   if (!item) {
@@ -9248,13 +9291,11 @@ function renderSopContent() {
         if (isName) {
           html += `
             <div class="word-cell name-cell" 
-                 onclick="handleWordCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
-                 ondblclick="openWordDetailModal('${v.id}')"
-                 title="點一下發音・點兩下查看詳情">
+                 onclick="handleNameCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                 ondblclick="openNameAvatarModal('${v.id}')"
+                 title="點一下：唸出名字・點兩下：進入詳細頁面"
+                 style="cursor:pointer;">
               <div class="cell-ja">${v.ja}</div>
-              <div class="cell-actions" onclick="event.stopPropagation()">
-                <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'tab_vocab')">⋮</button>
-              </div>
             </div>`;
         } else {
           html += `
@@ -9582,16 +9623,14 @@ function renderVocabPage(type) {
             const empStyle = isSeishain ? 'background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe;' : (isHaken ? 'background:#fef3c7; color:#92400e; border:1px solid #fcd34d;' : 'background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;');
             allHtml += `
               <div class="word-cell name-cell" 
-                   onclick="openNameAvatarModal('${v.id}')" 
-                   title="點擊查看同仁圖鑑・來源身份・休假比對">
+                   onclick="handleNameCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+                   ondblclick="openNameAvatarModal('${v.id}')"
+                   title="點一下：唸出名字・點兩下：進入詳細頁面"
+                   style="cursor:pointer;">
                 <div class="cell-ja">${v.ja}</div>
                 <div style="margin-top:4px; display:flex; gap:3px; flex-wrap:wrap; justify-content:center;">
                   <span style="font-size:0.65rem; ${empStyle} padding:1px 5px; border-radius:4px; font-weight:700;">${empType}</span>
                   <span style="font-size:0.65rem; background:#f8fafc; color:#475569; padding:1px 5px; border-radius:4px; border:1px solid #e2e8f0; font-weight:700;">${nat.split(' ')[1] || nat}</span>
-                </div>
-                <div class="cell-actions" onclick="event.stopPropagation()">
-                  <button class="cell-btn-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
-                  <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
                 </div>
               </div>`;
           } else {
@@ -9629,16 +9668,14 @@ function renderVocabPage(type) {
       const empStyle = isSeishain ? 'background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe;' : (isHaken ? 'background:#fef3c7; color:#92400e; border:1px solid #fcd34d;' : 'background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;');
       gridHtml += `
         <div class="word-cell name-cell" 
-             onclick="openNameAvatarModal('${v.id}')" 
-             title="點擊查看同仁資訊・來源身份・休假比對">
+             onclick="handleNameCellClick(event, '${v.id}', '${escapeJs(v.ja || v.zh)}')" 
+             ondblclick="openNameAvatarModal('${v.id}')"
+             title="點一下：唸出名字・點兩下：進入詳細頁面"
+             style="cursor:pointer;">
           <div class="cell-ja">${v.ja}</div>
           <div style="margin-top:4px; display:flex; gap:3px; flex-wrap:wrap; justify-content:center;">
             <span style="font-size:0.65rem; ${empStyle} padding:1px 5px; border-radius:4px; font-weight:700;">${empType}</span>
             <span style="font-size:0.65rem; background:#f8fafc; color:#475569; padding:1px 5px; border-radius:4px; border:1px solid #e2e8f0; font-weight:700;">${nat.split(' ')[1] || nat}</span>
-          </div>
-          <div class="cell-actions" onclick="event.stopPropagation()">
-            <button class="cell-btn-mini" title="朗讀" onclick="speakJapanese('${escapeJs(v.ja || v.zh)}')">🔊</button>
-            <button class="cell-btn-mini" title="選單" onclick="openItemQuickMenuById('${v.id}', 'global_vocab')">⋮</button>
           </div>
         </div>`;
     } else {
@@ -14242,13 +14279,13 @@ const DEFAULT_COLLEAGUE_TRAITS = {
   'vn_kajiki': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'square_wire', employmentType: '正社員' },
   'vn_sudo': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'sharp', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'round_wire', employmentType: '正社員' },
   'vn_uchima': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'bob_short', color: '#422b1d', glasses: 'none', employmentType: '正社員' },
-  'vn_biyo': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'pointed', nose: 'straight', skin: 'deep_bronze', bang: 'bang_wavy', backHair: 'messy_curl', hair: 'wavy_short', color: '#1a191f', glasses: 'none', employmentType: '交換學生 / 實習生' },
+  'vn_biyo': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'pointed', nose: 'straight', skin: 'deep_bronze', bang: 'bang_wavy', backHair: 'messy_curl', hair: 'wavy_short', color: '#1a191f', glasses: 'none', employmentType: '學生' },
   'vn_sato': { gender: 'male', nationality: '日本 🇯🇵', face: 'round', nose: 'wide', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
   'vn_obata': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#422b1d', glasses: 'square_black', employmentType: '正社員' },
   'vn_koga': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_none', backHair: 'buzz_cut', hair: 'buzz_cut', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
   'vn_nagamori': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_side_fringe', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', employmentType: '派遣社員' },
   'vn_yamamoto_kano': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
-  'vn_ryu_shiei': { gender: 'male', nationality: '中國 🇨🇳', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '交換學生 / 實習生' },
+  'vn_ryu_shiei': { gender: 'male', nationality: '中國 🇨🇳', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '學生' },
   'vn_morita': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
   'vn_morimoto': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
   'vn_tanaka_yuka': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', employmentType: '正社員' },
@@ -15508,7 +15545,7 @@ function openNameAvatarModal(vocabId) {
   // 1. 來源與國籍徽章 (嚴格依據最新班表名冊)
   const empType = item.employmentType || ROSTER_EMPLOYMENT_TYPES[item.id] || '正社員';
   const nat = item.nationality || inferNationalityFromName(item);
-  const sourceDesc = item.sourceDesc || ROSTER_SOURCE_DESCS[item.id] || (empType.includes('派遣') ? '派遣員工（外場派遣夥伴）' : (empType.includes('實習') ? '交換學生 / 實習生' : '正式員工（正社員）'));
+  const sourceDesc = item.sourceDesc || ROSTER_SOURCE_DESCS[item.id] || (empType.includes('派遣') ? '派遣員工（外場派遣夥伴）' : ((empType.includes('實習') || empType.includes('學生')) ? '海外技術研修（學生）' : '正式員工（正社員）'));
 
   if (empBadge) {
     if (empType.includes('正社員')) {
@@ -15525,7 +15562,7 @@ function openNameAvatarModal(vocabId) {
       empBadge.style.background = '#f3e8ff';
       empBadge.style.color = '#6b21a8';
       empBadge.style.borderColor = '#d8b4fe';
-      empBadge.innerHTML = `🎓 交換學生 / 實習生`;
+      empBadge.innerHTML = `🎓 學生`;
     }
   }
 
@@ -15613,6 +15650,26 @@ function rephotoFromCard() {
   if (currentActiveCardItem) {
     openWhoAreYouModal();
     selectExistingColleagueForAvatar(currentActiveCardItem.id);
+  }
+}
+
+function editColleagueFromCard() {
+  if (!currentActiveCardItem) return;
+  const id = currentActiveCardItem.id;
+  closeModal('modal-name-avatar-card');
+  openModalVocab('sop', 'edit', id);
+}
+
+function deleteColleagueFromCard() {
+  if (!currentActiveCardItem) return;
+  const id = currentActiveCardItem.id;
+  const cleanName = getCleanColleagueName(currentActiveCardItem);
+  if (confirm(`確定要刪除同仁【${cleanName}】嗎？\n刪除後此同仁將自手帳單字庫與名單中移除。`)) {
+    closeModal('modal-name-avatar-card');
+    AppData.vocabSop = (AppData.vocabSop || []).filter(v => v.id !== id);
+    saveAppData(AppData);
+    renderVocabPage('sop');
+    showToast(`已刪除同仁【${cleanName}】`, 'success');
   }
 }
 
