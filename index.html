@@ -4638,6 +4638,167 @@ const ROSTER_SOURCE_DESCS = {
   vn_ryu_shiei: '交換學生 / 實習生（海外留學交流）'
 };
 
+// ── 🔤 片假名同仁姓名羅馬拼音標準對照表（名牌與圖鑑專用）──
+const ROSTER_KATAKANA_ROMAJI = {
+  vn_biyo: { ja: '<ruby>ビヨー<rt>Biyo</rt></ruby>', romaji: 'Biyo' },
+  vn_bim: { ja: '<ruby>ビム<rt>Bim</rt></ruby>', romaji: 'Bim' },
+  vn_han: { ja: '<ruby>ハン<rt>Han</rt></ruby>', romaji: 'Han' },
+  vn_umesh: { ja: '<ruby>ウメシュ<rt>Umesh</rt></ruby>', romaji: 'Umesh' },
+  vn_ryu_shiei: { ja: '<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>', romaji: 'Ryu Shiei' },
+  vn_riku_iku: { ja: '<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>', romaji: 'Riku Iku' }
+};
+
+// ── 🔠 片假名音節智慧轉譯羅馬拼音核心函式 ──
+function convertKatakanaToRomaji(text) {
+  if (!text || typeof text !== 'string') return '';
+  const clean = text.replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<[^>]+>/g, '').trim();
+  if (clean === 'ビヨー') return 'Biyo';
+  if (clean === 'ビム') return 'Bim';
+  if (clean === 'ハン') return 'Han';
+  if (clean === 'ウメシュ') return 'Umesh';
+  if (clean === 'リュウ シエイ' || clean === 'リュウ') return clean.includes(' ') ? 'Ryu Shiei' : 'Ryu';
+  if (clean === 'シエイ') return 'Shiei';
+  if (clean === 'リク イク' || clean === 'リク') return clean.includes(' ') ? 'Riku Iku' : 'Riku';
+  if (clean === 'イク') return 'Iku';
+
+  const multiMap = {
+    'キャ': 'kya', 'キュ': 'kyu', 'キョ': 'kyo',
+    'シャ': 'sha', 'シュ': 'shu', 'ショ': 'sho', 'シェ': 'she',
+    'チャ': 'cha', 'チュ': 'chu', 'チョ': 'cho', 'チェ': 'che',
+    'ニャ': 'nya', 'ニュ': 'nyu', 'ニョ': 'nyo',
+    'ヒャ': 'hya', 'ヒュ': 'hyu', 'ヒョ': 'hyo',
+    'ミャ': 'mya', 'ミュ': 'myu', 'ミョ': 'myo',
+    'リャ': 'rya', 'リュ': 'ryu', 'リョ': 'ryo',
+    'ギャ': 'gya', 'ギュ': 'gyu', 'ギョ': 'gyo',
+    'ジャ': 'ja', 'ジュ': 'ju', 'ジョ': 'jo', 'ジェ': 'je',
+    'ビャ': 'bya', 'ビュ': 'byu', 'ビョ': 'byo',
+    'ピャ': 'pya', 'ピュ': 'pyu', 'ピョ': 'pyo',
+    'ティ': 'ti', 'ディ': 'di', 'トゥ': 'tu', 'ドゥ': 'du',
+    'ファ': 'fa', 'フィ': 'fi', 'フェ': 'fe', 'フォ': 'fo',
+    'ウィ': 'wi', 'ウェ': 'we', 'ウォ': 'wo',
+    'ヴァ': 'va', 'ヴィ': 'vi', 'ヴ': 'vu', 'ヴェ': 've', 'ヴォ': 'vo',
+    'ツァ': 'tsa', 'ツィ': 'tsi', 'ツェ': 'tse', 'ツォ': 'tso',
+    'イェ': 'ye', 'シエ': 'shie'
+  };
+
+  const singleMap = {
+    'ア': 'a', 'イ': 'i', 'ウ': 'u', 'エ': 'e', 'オ': 'o',
+    'カ': 'ka', 'キ': 'ki', 'ク': 'ku', 'ケ': 'ke', 'コ': 'ko',
+    'サ': 'sa', 'シ': 'shi', 'ス': 'su', 'セ': 'se', 'ソ': 'so',
+    'タ': 'ta', 'チ': 'chi', 'ツ': 'tsu', 'テ': 'te', 'ト': 'to',
+    'ナ': 'na', 'ニ': 'ni', 'ヌ': 'nu', 'ネ': 'ne', 'ノ': 'no',
+    'ハ': 'ha', 'ヒ': 'hi', 'フ': 'fu', 'ヘ': 'he', 'ホ': 'ho',
+    'マ': 'ma', 'ミ': 'mi', 'ム': 'mu', 'メ': 'me', 'モ': 'mo',
+    'ヤ': 'ya', 'ユ': 'yu', 'ヨ': 'yo',
+    'ラ': 'ra', 'リ': 'ri', 'ル': 'ru', 'レ': 're', 'ロ': 'ro',
+    'ワ': 'wa', 'ヲ': 'o', 'ン': 'n',
+    'ガ': 'ga', 'ギ': 'gi', 'グ': 'gu', 'ゲ': 'ge', 'ゴ': 'go',
+    'ザ': 'za', 'ジ': 'ji', 'ズ': 'zu', 'ゼ': 'ze', 'ゾ': 'zo',
+    'ダ': 'da', 'ヂ': 'ji', 'ヅ': 'zu', 'デ': 'de', 'ド': 'do',
+    'バ': 'ba', 'ビ': 'bi', 'ブ': 'bu', 'ベ': 'be', 'ボ': 'bo',
+    'パ': 'pa', 'ピ': 'pi', 'プ': 'pu', 'ペ': 'pe', 'ポ': 'po',
+    'ァ': 'a', 'ィ': 'i', 'ゥ': 'u', 'ェ': 'e', 'ォ': 'o',
+    'ャ': 'ya', 'ュ': 'yu', 'ョ': 'yo', 'ヴ': 'vu'
+  };
+
+  return clean.split(/\s+/).map(word => {
+    let res = '';
+    let i = 0;
+    while (i < word.length) {
+      if (word[i] === 'ッ') {
+        const nextTwo = word.slice(i + 1, i + 3);
+        const nextOne = word[i + 1];
+        const nextRomaji = multiMap[nextTwo] || singleMap[nextOne] || '';
+        if (nextRomaji) {
+          res += nextRomaji[0] === 'c' ? 't' : nextRomaji[0];
+        }
+        i++;
+        continue;
+      }
+      if (word[i] === 'ー') {
+        i++;
+        continue;
+      }
+      const two = word.slice(i, i + 2);
+      if (multiMap[two]) {
+        res += multiMap[two];
+        i += 2;
+        continue;
+      }
+      if (singleMap[word[i]]) {
+        res += singleMap[word[i]];
+        i++;
+        continue;
+      }
+      res += word[i];
+      i++;
+    }
+    if (res.length > 0) {
+      return res.charAt(0).toUpperCase() + res.slice(1).toLowerCase();
+    }
+    return res;
+  }).join(' ');
+}
+
+// ── 🏷️ 同仁姓名 Ruby 標音生成輔助函式（漢字標假名、片假名標羅馬拼音）──
+function formatColleagueRubyMarkup(itemOrStr) {
+  if (!itemOrStr) return '';
+  let id = '';
+  let ja = '';
+  let zh = '';
+  let kana = '';
+  if (typeof itemOrStr === 'string') {
+    ja = itemOrStr;
+  } else {
+    id = itemOrStr.id || '';
+    ja = itemOrStr.ja || '';
+    zh = itemOrStr.zh || '';
+    kana = itemOrStr.kana || '';
+  }
+
+  // 1. 已知名冊優先使用標準羅馬拼音 ruby
+  if (id && ROSTER_KATAKANA_ROMAJI[id]) {
+    return ROSTER_KATAKANA_ROMAJI[id].ja;
+  }
+
+  // 2. 若已經包含 ruby 標籤且已有 rt 標音，直接返回
+  if (ja && ja.includes('<ruby>') && ja.includes('<rt>')) {
+    return ja;
+  }
+
+  const plainJa = ja.replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<[^>]+>/g, '').trim();
+
+  // 3. 判斷是否為片假名姓名（外國同仁）
+  const isKatakana = /^[ァ-ヶー\s]+$/.test(plainJa);
+  if (isKatakana && plainJa) {
+    const words = plainJa.split(/\s+/).filter(Boolean);
+    return words.map(w => {
+      const romaji = convertKatakanaToRomaji(w);
+      return `<ruby>${w}<rt>${romaji}</rt></ruby>`;
+    }).join(' ');
+  }
+
+  // 4. 漢字姓名但無 ruby 標籤（有 kana 則標假名）
+  const hasKanji = /[\u4e00-\u9fa5]/.test(plainJa);
+  if (hasKanji && kana && !kana.includes('<')) {
+    return `<ruby>${plainJa}<rt>${kana}</rt></ruby>`;
+  }
+
+  return escapeHtml(ja || zh || kana || '');
+}
+
+// ── 🧹 取得乾淨無 ruby 標籤與無標音之同仁姓名（避免 rt 內容串接）──
+function getCleanColleagueName(itemOrStr) {
+  if (!itemOrStr) return '';
+  let str = '';
+  if (typeof itemOrStr === 'string') {
+    str = itemOrStr;
+  } else {
+    str = itemOrStr.zh || itemOrStr.ja || itemOrStr.kana || '';
+  }
+  return str.replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
+}
+
 // ── 🌐 依姓名智慧判斷國籍（漢字姓氏/名、片假名發音特徵與已知同事精準映射）──
 function inferNationalityFromName(itemOrStr) {
   let str = '';
@@ -4648,7 +4809,7 @@ function inferNationalityFromName(itemOrStr) {
     id = itemOrStr.id || '';
     str = `${itemOrStr.zh || ''} ${itemOrStr.ja || ''} ${itemOrStr.kana || ''} ${itemOrStr.note || ''}`;
   }
-  str = str.replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
+  str = str.replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
 
   // 1. 已知名冊 ID 優先精確映射
   if (id === 'vn_yang' || /楊詠筑|詠筑/.test(str)) return '台灣 🇹🇼';
@@ -7514,22 +7675,22 @@ function createRealRunnerData() {
     { "id": "vn_kajiki", "ja": "<ruby>加治木<rt>かじき</rt></ruby>", "kana": "かじき", "zh": "加治木", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "支配人", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員・支配人）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/10 (三)", "9/15 (一)", "9/19 (五)", "9/23 (二)", "9/27 (六)"] },
     { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場領導", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員 / 現場領導）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/20 (六)", "9/25 (四)"] },
     { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/12 (五)", "9/16 (二)", "9/21 (日)", "9/26 (五)"] },
-    { "id": "vn_biyo", "ja": "ビヨー", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "海外實習生（大學技術研修）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/20 (六)", "9/24 (三)", "9/29 (一)"] },
+    { "id": "vn_biyo", "ja": "<ruby>ビヨー<rt>Biyo</rt></ruby>", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "海外實習生（大學技術研修）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/20 (六)", "9/24 (三)", "9/29 (一)"] },
     { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/10 (三)", "9/14 (日)", "9/19 (五)", "9/24 (三)"] },
     { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/9 (二)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
     { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/7 (日)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/24 (三)", "9/29 (一)"] },
     { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑", "cat": "名字", "imageUrl": "", "avatarUrl": "photos/avatar_eastasia_female_clean.jpg", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/26 (五)"] },
-    { "id": "vn_ryu_shiei", "ja": "リュウ シエイ", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "交換學生 / 實習生（海外留學交流）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
+    { "id": "vn_ryu_shiei", "ja": "<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "交換學生 / 實習生", "sourceDesc": "交換學生 / 實習生（海外留學交流）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
     { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/10 (三)", "9/15 (一)", "9/21 (日)", "9/26 (五)", "9/29 (一)"] },
     { "id": "vn_morimoto", "ja": "<ruby>森本<rt>もりもと</rt></ruby><ruby>健太郎<rt>けんたろう</rt></ruby>", "kana": "もりもと けんたろう", "zh": "森本 健太郎", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/20 (六)", "9/25 (四)"] },
     { "id": "vn_tanaka_yuka", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>裕香<rt>ゆか</rt></ruby>", "kana": "たなか ゆか", "zh": "田中 裕香", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/12 (五)", "9/16 (二)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_taniguchi_rie", "ja": "<ruby>谷口<rt>たにぐち</rt></ruby> <ruby>理恵<rt>りえ</rt></ruby>", "kana": "たにぐち りえ", "zh": "谷口 理惠", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/23 (二)"] },
-    { "id": "vn_bim", "ja": "ビム", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（特定技能正社員）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/22 (一)", "9/26 (五)"] },
-    { "id": "vn_han", "ja": "ハン", "kana": "はん", "zh": "涵 / 韓 (Han)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "越南 🇻🇳", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)", "9/30 (二)"] },
-    { "id": "vn_umesh", "ja": "ウメシュ", "kana": "うめしゅ", "zh": "烏梅什 (Umesh)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/28 (日)"] },
-    { "id": "vn_riku_iku", "ja": "リク イク", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "中國 🇨🇳", "vacations": ["9/4 (四)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
+    { "id": "vn_bim", "ja": "<ruby>ビム<rt>Bim</rt></ruby>", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（特定技能正社員）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/22 (一)", "9/26 (五)"] },
+    { "id": "vn_han", "ja": "<ruby>ハン<rt>Han</rt></ruby>", "kana": "はん", "zh": "涵 / 韓 (Han)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "越南 🇻🇳", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)", "9/30 (二)"] },
+    { "id": "vn_umesh", "ja": "<ruby>ウメシュ<rt>Umesh</rt></ruby>", "kana": "うめしゅ", "zh": "烏梅什 (Umesh)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/28 (日)"] },
+    { "id": "vn_riku_iku", "ja": "<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "中國 🇨🇳", "vacations": ["9/4 (四)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_tanaka_shoko", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>祥子<rt>しょうこ</rt></ruby>", "kana": "たなか しょうこ", "zh": "田中 祥子", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/19 (五)", "9/24 (三)"] },
     { "id": "vn_yamabe", "ja": "<ruby>山邊<rt>やまべ</rt></ruby><ruby>陸<rt>りく</rt></ruby>", "kana": "やまべ りく", "zh": "山邊 陸", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/27 (六)"] },
     { "id": "vn_nagai_miyuki", "ja": "<ruby>長井<rt>ながい</rt></ruby> <ruby>美幸<rt>みゆき</rt></ruby>", "kana": "ながい みゆき", "zh": "長井 美幸", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
@@ -8152,6 +8313,16 @@ function loadAppData() {
             v.avatarUrl = '';
             cleaned = true;
           }
+        }
+        // 3. 片假名同仁姓名全面標註羅馬拼音 (Biyo, Bim, Han, Umesh, Ryu, Shiei, Riku, Iku)
+        if (ROSTER_KATAKANA_ROMAJI[v.id]) {
+          if (v.ja !== ROSTER_KATAKANA_ROMAJI[v.id].ja) {
+            v.ja = ROSTER_KATAKANA_ROMAJI[v.id].ja;
+            cleaned = true;
+          }
+        } else if (v.cat === '名字' && /^[ァ-ヶー\s]+$/.test((v.ja || '').replace(/<rt>[\s\S]*?<\/rt>/g, '').replace(/<[^>]+>/g, '').trim()) && !v.ja.includes('<rt>')) {
+          v.ja = formatColleagueRubyMarkup(v);
+          cleaned = true;
         }
       });
       if (cleaned) saveAppData(data);
@@ -14204,10 +14375,10 @@ function populateWhoColleaguesList() {
   }
 
   listEl.innerHTML = names.map(v => {
+    const jaMarkup = formatColleagueRubyMarkup(v);
     return `
-      <button class="btn btn-ghost btn-sm" onclick="selectExistingColleagueForAvatar('${v.id}')" style="font-weight:700; font-size:0.85rem; padding:6px 4px; border:1px solid var(--border); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:#fff;">
-        <span style="font-size:1.1rem;">👤</span>
-        <span style="font-family:var(--font-serif); line-height:1.6;">${v.ja || escapeHtml(v.kana || v.zh || '')}</span>
+      <button class="btn btn-ghost btn-sm" onclick="selectExistingColleagueForAvatar('${v.id}')" style="font-weight:700; font-size:0.85rem; padding:8px 4px; border:1px solid var(--border); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#fff; min-height:48px;">
+        <span style="font-family:var(--font-serif); line-height:1.6; text-align:center;">${jaMarkup}</span>
       </button>
     `;
   }).join('');
@@ -14387,9 +14558,13 @@ function submitCustomColleagueName() {
   }
 
   const hasKanji = /[\u4e00-\u9fa5]/.test(rawName);
+  const isKatakana = /^[ァ-ヶー\s]+$/.test(rawName);
   let jaHtml = rawName;
   if (hasKanji && rawKana) {
     jaHtml = `<ruby>${rawName}<rt>${rawKana}</rt></ruby>`;
+  } else if (isKatakana) {
+    const romaji = (rawKana && /^[a-zA-Z\s]+$/.test(rawKana)) ? rawKana : convertKatakanaToRomaji(rawName);
+    jaHtml = formatColleagueRubyMarkup({ ja: rawName, kana: romaji });
   }
 
   const newItem = {
@@ -14451,7 +14626,7 @@ function promptNationalityStep(selectedGender) {
   if (nationalityScreen) nationalityScreen.style.display = 'block';
 
   const nameItem = currentWhoState.selectedNameItem;
-  const cleanName = nameItem ? (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim() : '夥伴';
+  const cleanName = nameItem ? getCleanColleagueName(nameItem) : '夥伴';
 
   // 💡 智慧依姓名判斷國籍
   const inferredNat = (nameItem && nameItem.nationality) || inferNationalityFromName(nameItem);
@@ -14901,7 +15076,7 @@ function finishWhoHobbiesAndReveal() {
     const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample, currentWhoTraits);
     currentWhoState.generatedAvatarUrl = avatarUrl;
 
-    const cleanName = (nameItem.zh || nameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
+    const cleanName = getCleanColleagueName(nameItem);
     const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
 
     const bubbleText = document.getElementById('who-result-bubble-text');
@@ -15101,7 +15276,7 @@ async function rephotoWhoDirectly() {
 // 11. 成果畫面點擊播放自我介紹 (100% 靜音保護，點擊才播放)
 function playWhoResultSpeech() {
   if (!currentWhoState.selectedNameItem) return;
-  const cleanName = (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
+  const cleanName = getCleanColleagueName(currentWhoState.selectedNameItem);
   speakJapanese(`${cleanName}です。よろしくお願いします。`);
 }
 
@@ -15191,7 +15366,7 @@ function finishAndCloseWhoModal() {
   autoSaveWhoAvatar();
   closeModal('modal-who-are-you');
   const cleanName = currentWhoState.selectedNameItem
-    ? (currentWhoState.selectedNameItem.zh || currentWhoState.selectedNameItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim()
+    ? getCleanColleagueName(currentWhoState.selectedNameItem)
     : '同仁';
   showToast(`🎉 已完成【${cleanName}】的專屬外場形象與圖鑑設定！`, 'success');
 }
@@ -15293,7 +15468,7 @@ function renderColleagueVacationsInModal(colleague) {
 function promptEditColleagueVacations() {
   if (!currentActiveCardItem) return;
   const currentList = Array.isArray(currentActiveCardItem.vacations) ? currentActiveCardItem.vacations.join(', ') : '';
-  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '');
+  const cleanName = getCleanColleagueName(currentActiveCardItem);
   const input = prompt(`請輸入【${cleanName}】的公休日期（以逗號分隔，例：9/4 (四), 9/8 (一), 9/15 (一)）：`, currentList);
   if (input !== null) {
     const newVac = input.split(/[,，、\n]+/).map(s => s.trim()).filter(Boolean);
@@ -15321,7 +15496,7 @@ function openNameAvatarModal(vocabId) {
   const modal = document.getElementById('modal-name-avatar-card');
   if (!modal) return;
 
-  const cleanName = (item.zh || item.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
+  const cleanName = getCleanColleagueName(item);
   const bubbleText = document.getElementById('name-card-bubble-text');
   const avatarImg = document.getElementById('name-card-avatar-img');
   const jaTitle = document.getElementById('name-card-ja-title');
@@ -15429,7 +15604,7 @@ function openNameAvatarModal(vocabId) {
 
 function playNameCardSpeech() {
   if (!currentActiveCardItem) return;
-  const cleanName = (currentActiveCardItem.zh || currentActiveCardItem.ja || '').replace(/<[^>]+>/g, '').replace(/（本人）|\(本人\)/g, '').trim();
+  const cleanName = getCleanColleagueName(currentActiveCardItem);
   speakJapanese(`${cleanName}です。よろしくお願いします。`);
 }
 

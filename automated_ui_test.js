@@ -1370,7 +1370,7 @@ assert(swV155.includes('photos/avatar_sea_female_clean.jpg'), 'sw.js ASSETS 包�
 assert(swV155.includes('photos/avatar_nepal_male_clean.jpg'), 'sw.js ASSETS 包含尼泊爾男性清爽立繪');
 assert(swV155.includes('photos/clean_restaurant_pixel_bg.jpg'), 'sw.js ASSETS 包含原版餐廳木地板背景');
 assert(!html.includes('${hasAv ? `<img src="${v.avatarUrl}"'), '名字選擇清單中徹底移除微縮人物肖像，杜絕小圖看不清楚');
-assert(html.includes('<span style="font-size:1.1rem;">👤</span>') && html.includes('selectExistingColleagueForAvatar'), '名字選擇清單統一使用極簡乾淨的 👤 圖示');
+assert(!html.includes('<span style="font-size:1.1rem;">👤</span>') && html.includes('selectExistingColleagueForAvatar'), '名字選擇清單已依指示徹底移除 👤 剪影圖示，回歸純淨姓名排版 (v161)');
 assert(html.includes('女性</span>') && html.includes('男性</span>'), '性別按鈕標籤為純淨日文 (女性 / 男性)');
 assert(!html.includes('我是女生') && !html.includes('我是男生'), '徹底移除我是女生與我是男生的中文句子');
 assert(!html.includes('外場工作襯衫・日系髮型') && !html.includes('外場工作襯衫・俐落短髮'), '徹底移除不重要的外場工作襯衫髮型副標註');
@@ -1523,7 +1523,56 @@ assert(inferNatFunc('佐藤') === '日本 🇯🇵', '純日文姓氏佐藤判�
 // 測試未拍照同仁絕不自動瞎湊假照片
 assert(html.includes('尚未設定照片') && html.includes('該同仁尚未拍照或登錄個人形象'), '未拍照同仁在名牌卡片中顯示尚未設定照片高質感佔位');
 assert(html.includes('highlightInferredNationalityButton'), '包含國籍按鈕智慧判斷高亮標記函式');
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v160'), 'sw.js 已正確更新為 v160');
+
+// 10. v161 移除姓名上方人形剪影・片假名同仁姓名標註羅馬拼音 (v161)
+console.log('\n【測試 48：v161 移除姓名上方人形剪影・片假名同仁姓名標註羅馬拼音】');
+const popWhoMatch = html.match(/function populateWhoColleaguesList\(\) \{([\s\S]*?)\n\}/);
+assert(popWhoMatch, '代碼中包含 populateWhoColleaguesList 函式');
+assert(!popWhoMatch[1].includes('👤'), '同仁名單點選按鈕中已徹底移除人形剪影 icon (👤)');
+assert(popWhoMatch[1].includes('formatColleagueRubyMarkup'), '按鈕使用 formatColleagueRubyMarkup 呈現精緻 Ruby 標音');
+
+// 測試片假名同仁羅馬拼音資料對齊
+assert(html.includes('<ruby>ビヨー<rt>Biyo</rt></ruby>'), 'ビヨー標註羅馬拼音 Biyo');
+assert(html.includes('<ruby>ビム<rt>Bim</rt></ruby>'), 'ビム標註羅馬拼音 Bim');
+assert(html.includes('<ruby>ハン<rt>Han</rt></ruby>'), 'ハン標註羅馬拼音 Han');
+assert(html.includes('<ruby>ウメシュ<rt>Umesh</rt></ruby>'), 'ウメシュ標註羅馬拼音 Umesh');
+assert(html.includes('<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>'), 'リュウ シエイ標註羅馬拼音 Ryu Shiei');
+assert(html.includes('<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>'), 'リク イク標註羅馬拼音 Riku Iku');
+
+// 測試 convertKatakanaToRomaji 函式
+const romajiFuncMatch = html.match(/function convertKatakanaToRomaji\([\s\S]*?\n\}/);
+assert(romajiFuncMatch, '代碼中包含 convertKatakanaToRomaji 核心轉譯函式');
+const convertKatakanaToRomaji = new Function('return ' + romajiFuncMatch[0])();
+
+assert(convertKatakanaToRomaji('ビヨー') === 'Biyo', 'ビヨー轉譯為 Biyo');
+assert(convertKatakanaToRomaji('ビム') === 'Bim', 'ビム轉譯為 Bim');
+assert(convertKatakanaToRomaji('ハン') === 'Han', 'ハン轉譯為 Han');
+assert(convertKatakanaToRomaji('ウメシュ') === 'Umesh', 'ウメシュ轉譯為 Umesh');
+assert(convertKatakanaToRomaji('リュウ シエイ') === 'Ryu Shiei', 'リュウ シエイ轉譯為 Ryu Shiei');
+assert(convertKatakanaToRomaji('リク イク') === 'Riku Iku', 'リク イク轉譯為 Riku Iku');
+assert(convertKatakanaToRomaji('マイケル') === 'Maikeru', '自訂片假名マイケル轉譯為 Maikeru');
+
+// 測試 formatColleagueRubyMarkup 函式
+const rubyFuncMatch = html.match(/function formatColleagueRubyMarkup\([\s\S]*?\n\}/);
+assert(rubyFuncMatch, '代碼中包含 formatColleagueRubyMarkup 函式');
+const formatColleagueRubyMarkup = new Function('ROSTER_KATAKANA_ROMAJI', 'convertKatakanaToRomaji', 'escapeHtml', 'return ' + rubyFuncMatch[0])(
+  {
+    vn_biyo: { ja: '<ruby>ビヨー<rt>Biyo</rt></ruby>', romaji: 'Biyo' },
+    vn_bim: { ja: '<ruby>ビム<rt>Bim</rt></ruby>', romaji: 'Bim' },
+    vn_han: { ja: '<ruby>ハン<rt>Han</rt></ruby>', romaji: 'Han' },
+    vn_umesh: { ja: '<ruby>ウメシュ<rt>Umesh</rt></ruby>', romaji: 'Umesh' },
+    vn_ryu_shiei: { ja: '<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>', romaji: 'Ryu Shiei' },
+    vn_riku_iku: { ja: '<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>', romaji: 'Riku Iku' }
+  },
+  convertKatakanaToRomaji,
+  (s) => s
+);
+
+assert(formatColleagueRubyMarkup({ id: 'vn_biyo', ja: 'ビヨー' }).includes('<ruby>ビヨー<rt>Biyo</rt></ruby>'), '已知名冊同仁比約取得標準 Biyo 標籤');
+assert(formatColleagueRubyMarkup({ ja: 'マイケル' }).includes('<ruby>マイケル<rt>Maikeru</rt></ruby>'), '任意自訂片假名自動套用羅馬拼音標籤');
+assert(formatColleagueRubyMarkup({ ja: '<ruby>加治木<rt>かじき</rt></ruby>' }).includes('<ruby>加治木<rt>かじき</rt></ruby>'), '漢字姓名已有假名標音保持原樣');
+
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v161'), 'sw.js 已正確更新為 v161');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1532,5 +1581,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v160) 智慧判斷國籍・真實班表名冊身分對齊・未拍照同仁乾淨無照片佔位全面就位！');
+  console.log('🎉 所有測試通過！(v161) 移除姓名上方人形剪影・片假名同仁姓名標註羅馬拼音全數就緒！');
 }
