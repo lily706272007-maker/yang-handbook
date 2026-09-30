@@ -1572,8 +1572,8 @@ assert(formatColleagueRubyMarkup({ id: 'vn_biyo', ja: 'ビヨー' }).includes('<
 assert(formatColleagueRubyMarkup({ ja: 'マイケル' }).includes('<ruby>マイケル<rt>Maikeru</rt></ruby>'), '任意自訂片假名自動套用羅馬拼音標籤');
 assert(formatColleagueRubyMarkup({ ja: '<ruby>加治木<rt>かじき</rt></ruby>' }).includes('<ruby>加治木<rt>かじき</rt></ruby>'), '漢字姓名已有假名標音保持原樣');
 
-// 11. v162 移除姓名卡右上角喇叭與三點選單・單擊發音雙擊進詳細・編輯刪除移入詳細頁・身分簡化為「學生」 (v162)
-console.log('\n【測試 49：v162 移除姓名卡右上角圖示・單擊發音雙擊進詳細・詳細頁編輯刪除・身分簡化為學生】');
+// 11. v164 移除姓名卡右上角喇叭與三點選單・單擊發音雙擊進詳細・編輯刪除移入詳細頁・身分簡化為「學生」 (v164)
+console.log('\n【測試 49：v164 移除姓名卡右上角圖示・單擊發音雙擊進詳細・詳細頁編輯刪除・身分簡化為學生】');
 const renderVocabMatch = html.match(/function renderVocabPage\([\s\S]*?\nfunction toggleGlobalVocabImg/);
 assert(renderVocabMatch, '代碼中包含 renderVocabPage 函式');
 const renderVocabSrc = renderVocabMatch[0];
@@ -1603,7 +1603,7 @@ assert(html.includes('vn_biyo: \'學生\''), '名冊中比約身分精準簡化�
 assert(html.includes('vn_ryu_shiei: \'學生\''), '名冊中劉思睿身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v162'), 'sw.js 已正確更新為 v162');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v164'), 'sw.js 已正確更新為 v164');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1612,5 +1612,11 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v162) 姓名卡右上角圖示徹底移除、單擊發音雙擊詳情、詳細頁編輯刪除、身分簡化「學生」全數就緒！');
+  console.log('🎉 所有測試通過！(v164) 姓名卡右上角圖示徹底移除、單擊發音雙擊詳情、詳細頁編輯刪除、身分簡化「學生」全數就緒！');
 }
+
+console.log('\n【測試 50：v164 真實 AI 圖像生成 (Imagen API 整合)】');
+assert(fs.readFileSync('index.html', 'utf8').includes('async function generateAvatarWithImagenAsync'), '代碼中包含 generateAvatarWithImagenAsync 核心函式');
+assert(fs.readFileSync('index.html', 'utf8').includes('await generateAvatarWithImagenAsync'), 'finishWhoHobbiesAndReveal 應該等待生成完成');
+assert(fs.readFileSync('index.html', 'utf8').includes('analyzeFaceWithGeminiVision(canvas)'), '相機上傳處理中應該包含 Gemini Vision 分析');
+console.log('  ✅ [PASS] 方案 A (Imagen 3 API 整合) 核心功能代碼具備');

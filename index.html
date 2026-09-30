@@ -15084,7 +15084,7 @@ function backToNationalitySelect() {
 }
 
 // 完成標籤選擇並揭曉專屬立繪
-function finishWhoHobbiesAndReveal() {
+async function finishWhoHobbiesAndReveal() {
   const t = HOBBY_UI_TEXTS[currentWhoHobbyLang] || HOBBY_UI_TEXTS.zh;
   if (currentSelectedHobbies.size < 3) {
     showToast(t.minLimitToast, 'warning');
@@ -15104,42 +15104,45 @@ function finishWhoHobbiesAndReveal() {
   const resultScreen = document.getElementById('who-screen-result');
 
   if (hobbiesScreen) hobbiesScreen.style.display = 'none';
-  if (loadingScreen) loadingScreen.style.display = 'block';
+  if (loadingScreen) {
+    loadingScreen.style.display = 'block';
+    const msg = loadingScreen.querySelector('div:nth-child(2)');
+    if (msg) msg.textContent = '🎨 正在呼叫 Imagen 3 模型為您生成專屬像素立繪... (約需 5-10 秒)';
+  }
 
-  setTimeout(() => {
-    if (loadingScreen) loadingScreen.style.display = 'none';
-    if (resultScreen) resultScreen.style.display = 'block';
+  const avatarUrl = await generateAvatarWithImagenAsync(nameItem, currentWhoTraits);
 
-    const avatarUrl = generateTransparentChibiAvatar(nameItem, currentWhoState.capturedSample, currentWhoTraits);
-    currentWhoState.generatedAvatarUrl = avatarUrl;
+  if (loadingScreen) loadingScreen.style.display = 'none';
+  if (resultScreen) resultScreen.style.display = 'block';
 
-    const cleanName = getCleanColleagueName(nameItem);
-    const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
+  currentWhoState.generatedAvatarUrl = avatarUrl;
 
-    const bubbleText = document.getElementById('who-result-bubble-text');
-    const avatarImg = document.getElementById('who-result-avatar-img');
-    const nameDisplay = document.getElementById('who-result-name-display');
-    const roleDisplay = document.getElementById('who-result-role-display');
+  const cleanName = getCleanColleagueName(nameItem);
+  const kanaStr = nameItem.kana && nameItem.kana !== cleanName ? `（${nameItem.kana}）` : '';
 
-    if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
-    if (avatarImg) avatarImg.src = avatarUrl;
-    if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
-    if (roleDisplay) roleDisplay.textContent = `${currentWhoTraits.nationality}・${nameItem.note || '外場夥伴'}`;
+  const bubbleText = document.getElementById('who-result-bubble-text');
+  const avatarImg = document.getElementById('who-result-avatar-img');
+  const nameDisplay = document.getElementById('who-result-name-display');
+  const roleDisplay = document.getElementById('who-result-role-display');
 
-    // 🎯 成果畫面展示休閒標籤（繁體中文呈現）
-    const resultHobbiesList = document.getElementById('who-result-hobbies-list');
-    if (resultHobbiesList) {
-      const selectedArray = Array.from(currentSelectedHobbies);
-      resultHobbiesList.innerHTML = selectedArray.map(tagId => {
-        const tag = HOBBY_TAGS_DATA.find(t => t.id === tagId);
-        const zhLabel = tag ? `${tag.icon} ${tag.zh}` : tagId;
-        return `<span class="colleague-hobby-badge">${zhLabel}</span>`;
-      }).join('');
-    }
+  if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
+  if (avatarImg) avatarImg.src = avatarUrl;
+  if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
+  if (roleDisplay) roleDisplay.textContent = `${currentWhoTraits.nationality}・${nameItem.note || '外場夥伴'}`;
 
-    // 🌟 成果揭曉即時自動儲存至單字庫與圖鑑！
-    autoSaveWhoAvatar();
-  }, 400);
+  // 🎯 成果畫面展示休閒標籤（繁體中文呈現）
+  const resultHobbiesList = document.getElementById('who-result-hobbies-list');
+  if (resultHobbiesList) {
+    const selectedArray = Array.from(currentSelectedHobbies);
+    resultHobbiesList.innerHTML = selectedArray.map(tagId => {
+      const tag = HOBBY_TAGS_DATA.find(t => t.id === tagId);
+      const zhLabel = tag ? `${tag.icon} ${tag.zh}` : tagId;
+      return `<span class="colleague-hobby-badge">${zhLabel}</span>`;
+    }).join('');
+  }
+
+  // 🌟 成果揭曉即時自動儲存至單字庫與圖鑑！
+  autoSaveWhoAvatar();
 }
 
 // 7. 使用者確認國籍後，切換至步驟 1.9 選擇放假休閒興趣標籤 (母語呈現・交友軟體風格・AI生圖等待計時)
@@ -15206,9 +15209,57 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   }
 }
 
+// 8.5 🎨 真實 AI：透過 Imagen 3 動態產生專屬像素立繪
+async function generateAvatarWithImagenAsync(nameItem, customTraits) {
+  const traits = customTraits || (nameItem && nameItem.traits) || (nameItem && DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) || currentWhoTraits;
+  const gender = traits.gender || 'female';
+  const nat = (traits.nationality || '').toLowerCase();
+  
+  let apronColor = "burgundy apron";
+  if (nat.includes('越') || nat.includes('vietnam') || nat.includes('緬') || nat.includes('myanmar') || nat.includes('burma')) {
+    apronColor = "dark blue apron";
+  }
+  
+  const promptText = `A 32-bit pixel art full-body character of a hotel restaurant staff. Gender: ${gender}. Face shape: ${traits.face}. Skin tone: ${traits.skin}. Hair style: ${traits.hair || traits.hairStyle} with ${traits.bang || traits.bangStyle} bangs (Color: ${traits.color || traits.hairColor}). Glasses: ${traits.glasses}. They are wearing a standard black long-sleeve uniform shirt with black trousers, and a ${apronColor}. They are doing a front hand bow. Pure white background.`;
+
+  const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : (typeof HARDCODED_GEMINI_API_KEY !== 'undefined' ? HARDCODED_GEMINI_API_KEY : '');
+  if (!key) {
+    console.warn("No API key for Imagen. Falling back to static image.");
+    return generateTransparentChibiAvatar(nameItem, null, traits);
+  }
+
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${encodeURIComponent(key)}`;
+    const body = JSON.stringify({
+      instances: [{ prompt: promptText }],
+      parameters: { sampleCount: 1, aspectRatio: "1:1" }
+    });
+    
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      if (data.predictions && data.predictions[0] && data.predictions[0].bytesBase64Encoded) {
+        return `data:image/jpeg;base64,${data.predictions[0].bytesBase64Encoded}`;
+      }
+    } else {
+      console.error("Imagen API error:", await res.text());
+    }
+  } catch (err) {
+    console.error("Imagen generation error:", err);
+  }
+  
+  console.warn("Imagen generation failed. Falling back to static image.");
+  return generateTransparentChibiAvatar(nameItem, null, traits);
+}
+
 
 // 9. 手動微調特徵 (即時重繪)
-function setAvatarTrait(traitType, val) {
+async function setAvatarTrait(traitType, val) {
   currentWhoTraits[traitType] = val;
   if (traitType === 'backHair') {
     currentWhoTraits.hair = val;
@@ -15238,10 +15289,20 @@ function setAvatarTrait(traitType, val) {
   updateTraitPillsUI();
 
   if (currentWhoState.selectedNameItem) {
-    const avatarUrl = generateTransparentChibiAvatar(currentWhoState.selectedNameItem, null, currentWhoTraits);
-    currentWhoState.generatedAvatarUrl = avatarUrl;
     const avatarImg = document.getElementById('who-result-avatar-img');
-    if (avatarImg) avatarImg.src = avatarUrl;
+    if (avatarImg) {
+      avatarImg.style.opacity = '0.4';
+      avatarImg.style.transition = 'opacity 0.3s';
+    }
+    
+    const avatarUrl = await generateAvatarWithImagenAsync(currentWhoState.selectedNameItem, currentWhoTraits);
+    currentWhoState.generatedAvatarUrl = avatarUrl;
+    
+    if (avatarImg) {
+      avatarImg.src = avatarUrl;
+      avatarImg.style.opacity = '1';
+    }
+    autoSaveWhoAvatar();
   }
 }
 
@@ -15357,7 +15418,7 @@ function rephotoAndRegenerateWhoAvatar() {
 async function handleWhoCameraCapture(event) {
   const file = event.target.files && event.target.files[0];
   const nameItem = currentWhoState.selectedNameItem;
-  if (!nameItem) return;
+  if (!nameItem || !file) return;
 
   const loadingScreen = document.getElementById('who-screen-loading');
   const resultScreen = document.getElementById('who-screen-result');
@@ -15366,21 +15427,61 @@ async function handleWhoCameraCapture(event) {
   if (loadingScreen) {
     loadingScreen.style.display = 'block';
     const msg = loadingScreen.querySelector('div:nth-child(2)');
-    if (msg) msg.textContent = '📸 正在讀取新照片並為您重新描繪立繪…';
+    if (msg) msg.textContent = '📸 正在讀取新照片並為您重新分析與生成立繪…';
   }
 
-  setTimeout(() => {
+  try {
+    // 1. 將上傳的圖片畫到 Canvas 上
+    const imgUrl = URL.createObjectURL(file);
+    const img = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = imgUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 480;
+    canvas.height = 480 * (img.height / img.width);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(imgUrl);
+
+    // 2. 呼叫 Gemini Vision 分析特徵
+    const aiTraits = await analyzeFaceWithGeminiVision(canvas);
+    if (aiTraits) {
+      if (aiTraits.gender) currentWhoTraits.gender = aiTraits.gender;
+      if (aiTraits.hairStyle) {
+        currentWhoTraits.backHair = aiTraits.hairStyle;
+        currentWhoTraits.hair = aiTraits.hairStyle;
+      }
+      if (aiTraits.bangStyle) currentWhoTraits.bang = aiTraits.bangStyle;
+      if (aiTraits.skin) currentWhoTraits.skin = aiTraits.skin;
+      if (aiTraits.hairColor) currentWhoTraits.color = aiTraits.hairColor;
+      if (aiTraits.glasses) currentWhoTraits.glasses = aiTraits.glasses;
+      if (aiTraits.face) currentWhoTraits.face = aiTraits.face;
+      if (typeof updateTraitPillsUI === 'function') updateTraitPillsUI();
+    }
+
+    // 3. 呼叫 Imagen 3 重新生圖
+    const avatarUrl = await generateAvatarWithImagenAsync(nameItem, currentWhoTraits);
+
     if (loadingScreen) loadingScreen.style.display = 'none';
     if (resultScreen) resultScreen.style.display = 'block';
 
-    const avatarUrl = generateTransparentChibiAvatar(nameItem, null, currentWhoTraits);
     currentWhoState.generatedAvatarUrl = avatarUrl;
     const avatarImg = document.getElementById('who-result-avatar-img');
     if (avatarImg) avatarImg.src = avatarUrl;
 
     autoSaveWhoAvatar();
     showToast('✨ 拍照成功！已為您即時重新描繪並儲存新形象！', 'success');
-  }, 700);
+
+  } catch (err) {
+    console.error("Camera capture error:", err);
+    if (loadingScreen) loadingScreen.style.display = 'none';
+    if (resultScreen) resultScreen.style.display = 'block';
+    showToast('❌ 照片處理失敗，請重試！', 'error');
+  }
 }
 
 // 12.3. 🔄 重填一次：重置選擇並回到性別/國籍步驟重新填寫
