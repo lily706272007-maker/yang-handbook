@@ -1621,7 +1621,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v165'), 'sw.js 已正確更新為 v165');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v166'), 'sw.js 已正確更新為 v166');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1630,7 +1630,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v165) 旅館真實出勤班表名冊與八月份公休全面更新完畢！');
+  console.log('🎉 所有測試通過！(v166) 旅館真實出勤班表名冊與十月份公休全面更新完畢！');
 }
 
 console.log('\n【測試 50：v164 真實 AI 圖像生成 (Imagen API 整合)】');
