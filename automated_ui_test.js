@@ -160,14 +160,14 @@ assert(html.includes('openModalItem'), '包含開啟條目編輯函式 (openModa
 assert(html.includes('submitItemForm'), '包含儲存條目函式 (submitItemForm)');
 assert(html.includes('deleteSopItem'), '包含刪除條目函式 (deleteSopItem)');
 
-// 測試 10: 名字五十音與特殊發音提取 (依據最新真實出勤班表 v82)
-console.log('\n【測試 10：名字五十音與特殊發音提取 (最新真實出勤班表 v82)】');
-assert(textContent.includes('加治木') && html.includes('かじき'), '同仁名：加治木 (かじき)');
+// 測試 10: 名字五十音與特殊發音提取 (依據最新真實出勤班表 v165)
+console.log('\n【測試 10：名字五十音與特殊發音提取 (最新真實出勤班表 v165)】');
+assert(textContent.includes('坂本') && html.includes('さかもと'), '同仁名：坂本 (さかもと)');
 assert(textContent.includes('須藤') && html.includes('すどう'), '同仁名：須藤 (すどう)');
-assert(textContent.includes('長森') && html.includes('ながもり'), '同仁名：長森 愛実 (ながもり まなみ)');
 assert(textContent.includes('山本') && html.includes('やまもと'), '同仁名：山本 香野 (やまもと かの)');
-assert(textContent.includes('森田') && html.includes('もりた'), '同仁名：森田 亨 (もりた とおる)');
-assert(textContent.includes('森本') && html.includes('もりもと'), '同仁名：森本 健太郎 (もりもと けんたろう)');
+assert(textContent.includes('大森') && html.includes('おおもり'), '同仁名：大森 志加 (おおもり しか)');
+assert(textContent.includes('小出') && html.includes('こいで'), '同仁名：小出 啓太 (こいで けいた)');
+assert(textContent.includes('只石') && html.includes('ただいし'), '同仁名：只石 潤三 (ただいし じゅんぞう)');
 assert(textContent.includes('川畑') && html.includes('かわばた'), '同仁名：川畑 (かわばた)');
 assert(textContent.includes('楊詠筑') && html.includes('よう えいちく'), '同仁名：楊詠筑 (よう えいちく・本人)');
 assert(html.includes('ビム') && html.includes('ハン') && html.includes('ウメシュ') && html.includes('リュウ'), '包含外籍與新同仁 (ビム/ハン/ウメシュ/リュウ)');
@@ -523,23 +523,23 @@ assert(!html.includes('name-cell-zh') && !html.includes('title="編輯中文名�
 // ...
 
 
-// 測試 34: 最新班表名單同步 (23位現職，7位離職清除，6位新加入，職稱徹底分離) (v82)
-console.log('\n【測試 34：最新班表名單同步 (23位在職，移除離職同仁，職位徹底分離) (v82)】');
-const retiredIds = ['vn_entiha', 'vn_phongnhung', 'vn_ichiishi', 'vn_nobetsu', 'vn_pratima', 'vn_ibaoyen', 'vn_hongyen'];
+// 測試 34: 最新班表名單同步 (25位在職，移除離職同仁，職位徹底分離) (v165)
+console.log('\n【測試 34：最新班表名單同步 (25位在職，移除離職同仁，職位徹底分離) (v165)】');
+const retiredIds = ['vn_entiha', 'vn_phongnhung', 'vn_ichiishi', 'vn_nobetsu', 'vn_pratima', 'vn_ibaoyen', 'vn_hongyen', 'vn_kajiki', 'vn_nagamori', 'vn_morita', 'vn_morimoto', 'vn_tanaka_shoko', 'vn_yamabe'];
 retiredIds.forEach(id => {
   assert(!html.includes(`id: "${id}"`) && !html.includes(`"${id}"`), `已徹底刪除離職員工 ${id}`);
 });
 const activeIds = [
-  'vn_kajiki', 'vn_sudo', 'vn_uchima', 'vn_biyo', 'vn_sato', 'vn_obata',
-  'vn_koga', 'vn_nagamori', 'vn_yang', 'vn_yamamoto_kano', 'vn_ryu_shiei',
-  'vn_morita', 'vn_morimoto', 'vn_tanaka_yuka', 'vn_taniguchi_rie', 'vn_bim',
-  'vn_han', 'vn_umesh', 'vn_riku_iku', 'vn_tanaka_shoko', 'vn_yamabe',
-  'vn_nagai_miyuki', 'vn_kawabata'
+  'vn_sakamoto', 'vn_sudo', 'vn_uchima', 'vn_biyo', 'vn_sato', 'vn_obata',
+  'vn_koga', 'vn_charmy', 'vn_rin', 'vn_yang', 'vn_yamamoto_kano', 'vn_omori_shika',
+  'vn_tanaka_yuka', 'vn_ryu_shiei', 'vn_taniguchi_rie', 'vn_bim', 'vn_han',
+  'vn_umesh', 'vn_riku_iku', 'vn_nagai_miyuki', 'vn_koide_keita', 'vn_tadaishi_junzo',
+  'vn_phong', 'vn_nga', 'vn_kawabata'
 ];
 activeIds.forEach(id => {
   assert(html.includes(id), `在職同仁 ${id} 存在於名冊中`);
 });
-assert(activeIds.length === 23, '最新在職同仁精確統計為 23 位');
+assert(activeIds.length === 25, '最新在職同仁精確統計為 25 位');
 
 // 測試 35: 朝夕食 7 大食物 SOP 分頁結構與時間節點規範 (v83)
 console.log('\n【測試 35：朝夕食 7 大食物 SOP 分頁結構・時間節點・交接規範 (v83)】');
@@ -1487,24 +1487,27 @@ assert(html.includes('resetAndRedoWhoModal'), '包含重填一次函式 resetAnd
 assert(html.includes('finishAndCloseWhoModal'), '包含完成關閉函式 finishAndCloseWhoModal (v159)');
 assert(html.includes('id="who-camera-capture-input"'), '包含手機自拍鏡手動觸發 input (capture=user) (v159)');
 
-// 9. v160 智慧判斷國籍・真實班表身分精確歸屬・未拍照同仁絕不瞎湊假照片 (v160)
-console.log('\n【測試 47：v160 智慧判斷國籍・班表身分精確歸屬・未拍照同仁絕不套用假頭像】');
+// 9. v165 智慧判斷國籍・真實班表身分精確歸屬・未拍照同仁絕不瞎湊假照片 (v165)
+console.log('\n【測試 47：v165 智慧判斷國籍・班表身分精確歸屬・未拍照同仁絕不套用假頭像】');
 const rosterMatch = html.match(/const ROSTER_EMPLOYMENT_TYPES = (\{[\s\S]*?\});/);
 assert(rosterMatch, '代碼中包含 ROSTER_EMPLOYMENT_TYPES 班表名冊');
 const rosterTypes = eval('(' + rosterMatch[1] + ')');
 
 assert(rosterTypes.vn_nagai_miyuki === '派遣社員', '長井美幸依真實班表精準設定為派遣社員');
-assert(rosterTypes.vn_morimoto === '派遣社員', '森本健太郎依真實班表精準設定為派遣社員');
-assert(rosterTypes.vn_tanaka_shoko === '派遣社員', '田中祥子依真實班表精準設定為派遣社員');
-assert(rosterTypes.vn_yamabe === '派遣社員', '山邊陸依真實班表精準設定為派遣社員');
-assert(rosterTypes.vn_umesh === '派遣社員', '烏梅什依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_yamamoto_kano === '派遣社員', '山本香野依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_omori_shika === '派遣社員', '大森志加依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_koide_keita === '派遣社員', '小出啓太依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_tadaishi_junzo === '派遣社員', '只石潤三依真實班表精準設定為派遣社員');
+assert(rosterTypes.vn_umesh === '正社員', '烏梅什依真實班表無填寫視同正社員歸屬為正社員');
 assert(rosterTypes.vn_riku_iku === '派遣社員', '陸郁依真實班表精準設定為派遣社員');
 assert(rosterTypes.vn_yang === '派遣社員', '楊詠筑依真實班表設定為派遣社員');
-assert(rosterTypes.vn_nagamori === '派遣社員', '長森愛實依真實班表設定為派遣社員');
-assert(rosterTypes.vn_morita === '派遣社員', '森田亨依真實班表設定為派遣社員');
-assert(rosterTypes.vn_biyo === '學生', '比約依最新需求簡化身分為學生');
-assert(rosterTypes.vn_ryu_shiei === '學生', '劉思睿依最新需求簡化身分為學生');
-assert(rosterTypes.vn_kajiki === '正社員', '加治木支配人設定為正社員');
+assert(rosterTypes.vn_biyo === '正社員', '比約依最新班表無填寫視同正社員歸屬為正社員');
+assert(rosterTypes.vn_charmy === '學生', '茶咪依最新需求身分為學生');
+assert(rosterTypes.vn_rin === '學生', '小琳依最新需求身分為學生');
+assert(rosterTypes.vn_phong === '學生', '小豐依最新需求身分為學生');
+assert(rosterTypes.vn_nga === '學生', '小雅依最新需求身分為學生');
+assert(rosterTypes.vn_ryu_shiei === '派遣社員', '劉思睿依班表綠色派遣區塊精準設定為派遣社員');
+assert(rosterTypes.vn_sakamoto === '正社員', '坂本總經理設定為正社員');
 assert(rosterTypes.vn_sudo === '正社員', '須藤現場領導設定為正社員');
 assert(rosterTypes.vn_uchima === '正社員', '內間設定為正社員');
 
@@ -1516,9 +1519,12 @@ const inferNatFunc = new Function('return ' + inferNatMatch[0])();
 assert(inferNatFunc({ ja: '長井 美幸', zh: '長井 美幸' }) === '日本 🇯🇵', '長井美幸智慧判斷為日本國籍');
 assert(inferNatFunc({ ja: 'ビヨー', zh: '比約' }) === '尼泊爾 🇳🇵', 'ビヨー智慧判斷為尼泊爾國籍');
 assert(inferNatFunc({ ja: 'ハン', zh: '韓' }) === '越南 🇻🇳', 'ハン智慧判斷為越南國籍');
+assert(inferNatFunc({ ja: 'チャーミー', zh: '茶咪' }) === '越南 🇻🇳', 'チャーミー智慧判斷為越南國籍');
+assert(inferNatFunc({ ja: 'リン', zh: '小琳' }) === '越南 🇻🇳', 'リン智慧判斷為越南國籍');
 assert(inferNatFunc({ ja: 'リュウ シエイ', zh: '劉思睿' }) === '中國 🇨🇳', '劉思睿智慧判斷為中國國籍');
 assert(inferNatFunc({ ja: '楊詠筑', zh: '楊詠筑' }) === '台灣 🇹🇼', '楊詠筑智慧判斷為台灣國籍');
 assert(inferNatFunc('佐藤') === '日本 🇯🇵', '純日文姓氏佐藤判斷為日本');
+assert(inferNatFunc('坂本') === '日本 🇯🇵', '純日文姓氏坂本判斷為日本');
 
 // 測試未拍照同仁絕不自動瞎湊假照片
 assert(html.includes('尚未設定照片') && html.includes('該同仁尚未拍照或登錄個人形象'), '未拍照同仁在名牌卡片中顯示尚未設定照片高質感佔位');
@@ -1538,6 +1544,10 @@ assert(html.includes('<ruby>ハン<rt>Han</rt></ruby>'), 'ハン標註羅馬拼�
 assert(html.includes('<ruby>ウメシュ<rt>Umesh</rt></ruby>'), 'ウメシュ標註羅馬拼音 Umesh');
 assert(html.includes('<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>'), 'リュウ シエイ標註羅馬拼音 Ryu Shiei');
 assert(html.includes('<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>'), 'リク イク標註羅馬拼音 Riku Iku');
+assert(html.includes('<ruby>チャーミー<rt>Charmy</rt></ruby>'), 'チャーミー標註羅馬拼音 Charmy');
+assert(html.includes('<ruby>リン<rt>Rin</rt></ruby>'), 'リン標註羅馬拼音 Rin');
+assert(html.includes('<ruby>フォン<rt>Phong</rt></ruby>'), 'フォン標註羅馬拼音 Phong');
+assert(html.includes('<ruby>ガー<rt>Nga</rt></ruby>'), 'ガー標註羅馬拼音 Nga');
 
 // 測試 convertKatakanaToRomaji 函式
 const romajiFuncMatch = html.match(/function convertKatakanaToRomaji\([\s\S]*?\n\}/);
@@ -1550,6 +1560,10 @@ assert(convertKatakanaToRomaji('ハン') === 'Han', 'ハン轉譯為 Han');
 assert(convertKatakanaToRomaji('ウメシュ') === 'Umesh', 'ウメシュ轉譯為 Umesh');
 assert(convertKatakanaToRomaji('リュウ シエイ') === 'Ryu Shiei', 'リュウ シエイ轉譯為 Ryu Shiei');
 assert(convertKatakanaToRomaji('リク イク') === 'Riku Iku', 'リク イク轉譯為 Riku Iku');
+assert(convertKatakanaToRomaji('チャーミー') === 'Charmy', 'チャーミー轉譯為 Charmy');
+assert(convertKatakanaToRomaji('リン') === 'Rin', 'リン轉譯為 Rin');
+assert(convertKatakanaToRomaji('フォン') === 'Phong', 'フォン轉譯為 Phong');
+assert(convertKatakanaToRomaji('ガー') === 'Nga', 'ガー轉譯為 Nga');
 assert(convertKatakanaToRomaji('マイケル') === 'Maikeru', '自訂片假名マイケル轉譯為 Maikeru');
 
 // 測試 formatColleagueRubyMarkup 函式
@@ -1562,7 +1576,11 @@ const formatColleagueRubyMarkup = new Function('ROSTER_KATAKANA_ROMAJI', 'conver
     vn_han: { ja: '<ruby>ハン<rt>Han</rt></ruby>', romaji: 'Han' },
     vn_umesh: { ja: '<ruby>ウメシュ<rt>Umesh</rt></ruby>', romaji: 'Umesh' },
     vn_ryu_shiei: { ja: '<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>', romaji: 'Ryu Shiei' },
-    vn_riku_iku: { ja: '<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>', romaji: 'Riku Iku' }
+    vn_riku_iku: { ja: '<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>', romaji: 'Riku Iku' },
+    vn_charmy: { ja: '<ruby>チャーミー<rt>Charmy</rt></ruby>', romaji: 'Charmy' },
+    vn_rin: { ja: '<ruby>リン<rt>Rin</rt></ruby>', romaji: 'Rin' },
+    vn_phong: { ja: '<ruby>フォン<rt>Phong</rt></ruby>', romaji: 'Phong' },
+    vn_nga: { ja: '<ruby>ガー<rt>Nga</rt></ruby>', romaji: 'Nga' }
   },
   convertKatakanaToRomaji,
   (s) => s
@@ -1599,11 +1617,11 @@ assert(html.includes('function editColleagueFromCard()'), '代碼中包含 editC
 assert(html.includes('function deleteColleagueFromCard()'), '代碼中包含 deleteColleagueFromCard 函式');
 
 // 測試「交換學生 / 實習生」徹底簡化為「學生」
-assert(html.includes('vn_biyo: \'學生\''), '名冊中比約身分精準簡化為「學生」');
-assert(html.includes('vn_ryu_shiei: \'學生\''), '名冊中劉思睿身分精準簡化為「學生」');
+assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生\''), '名冊中外籍實習同仁（茶咪、小琳等）身分精準簡化為「學生」');
+assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v164'), 'sw.js 已正確更新為 v164');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v165'), 'sw.js 已正確更新為 v165');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1612,7 +1630,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v164) 姓名卡右上角圖示徹底移除、單擊發音雙擊詳情、詳細頁編輯刪除、身分簡化「學生」全數就緒！');
+  console.log('🎉 所有測試通過！(v165) 旅館真實出勤班表名冊與八月份公休全面更新完畢！');
 }
 
 console.log('\n【測試 50：v164 真實 AI 圖像生成 (Imagen API 整合)】');

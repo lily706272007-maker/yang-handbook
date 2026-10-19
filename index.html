@@ -4589,63 +4589,67 @@ const STORAGE_KEY = 'yang_runner_handbook_v101';
 
 const DEFAULT_GEMINI_KEY = typeof atob === 'function' ? atob('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=') : Buffer.from('QVEuQWI4Uk42SUlZaDNkS3E0ZGpJYkpaVmhFUUZ0VnRlOU5QWVEtLTJzT1JSZk9Gbm4xb3c=', 'base64').toString();
 
-// ── 📋 旅館真實出勤班表 23 位在職同仁名冊雇用身分與來源定義 ──
+// ── 📋 旅館真實出勤班表 25 位在職同仁名冊雇用身分與來源定義 ──
 const ROSTER_EMPLOYMENT_TYPES = {
-  // 正社員 (12位)
-  vn_kajiki: '正社員',
+  // 正社員 (11位)
+  vn_sakamoto: '正社員',
   vn_sudo: '正社員',
   vn_uchima: '正社員',
+  vn_biyo: '正社員',
   vn_sato: '正社員',
   vn_obata: '正社員',
   vn_koga: '正社員',
-  vn_yamamoto_kano: '正社員',
-  vn_tanaka_yuka: '正社員',
-  vn_taniguchi_rie: '正社員',
   vn_bim: '正社員',
   vn_han: '正社員',
+  vn_umesh: '正社員',
   vn_kawabata: '正社員',
-  // 派遣社員 (班表綠色「派遣社員」區塊共9位：小楊、長森、長井、森田、森本、田中祥子、山邊、烏梅什、陸郁)
+  // 派遣社員 (10位)
   vn_yang: '派遣社員',
-  vn_nagamori: '派遣社員',
-  vn_nagai_miyuki: '派遣社員',
-  vn_morimoto: '派遣社員',
-  vn_tanaka_shoko: '派遣社員',
-  vn_yamabe: '派遣社員',
-  vn_morita: '派遣社員',
-  vn_umesh: '派遣社員',
+  vn_yamamoto_kano: '派遣社員',
+  vn_omori_shika: '派遣社員',
+  vn_tanaka_yuka: '派遣社員',
+  vn_ryu_shiei: '派遣社員',
+  vn_taniguchi_rie: '派遣社員',
   vn_riku_iku: '派遣社員',
-  // 學生 (2位)
-  vn_biyo: '學生',
-  vn_ryu_shiei: '學生'
+  vn_nagai_miyuki: '派遣社員',
+  vn_koide_keita: '派遣社員',
+  vn_tadaishi_junzo: '派遣社員',
+  // 學生 (4位)
+  vn_charmy: '學生',
+  vn_rin: '學生',
+  vn_phong: '學生',
+  vn_nga: '學生'
 };
 
 const ROSTER_SOURCE_DESCS = {
   // 正社員
-  vn_kajiki: '正式員工（正社員・支配人）',
+  vn_sakamoto: '正式員工（正社員・総支配人）',
   vn_sudo: '正式員工（正社員 / 現場領導）',
   vn_uchima: '正式員工（正社員）',
+  vn_biyo: '正式員工（正社員）',
   vn_sato: '正式員工（正社員）',
   vn_obata: '正式員工（正社員）',
   vn_koga: '正式員工（正社員）',
-  vn_yamamoto_kano: '正式員工（正社員）',
-  vn_tanaka_yuka: '正式員工（正社員）',
-  vn_taniguchi_rie: '正式員工（正社員）',
   vn_bim: '正式員工（特定技能正社員）',
   vn_han: '正式員工（正社員）',
+  vn_umesh: '正式員工（正社員）',
   vn_kawabata: '正式員工（正社員）',
   // 派遣
   vn_yang: '派遣員工（外場傳菜 Runner）',
-  vn_nagamori: '派遣員工（外場派遣夥伴）',
-  vn_nagai_miyuki: '派遣員工（外場派遣夥伴）',
-  vn_morimoto: '派遣員工（外場派遣夥伴）',
-  vn_tanaka_shoko: '派遣員工（外場派遣夥伴）',
-  vn_yamabe: '派遣員工（外場派遣夥伴）',
-  vn_morita: '派遣員工（外場派遣夥伴）',
-  vn_umesh: '派遣員工（外場派遣夥伴）',
+  vn_yamamoto_kano: '派遣員工（外場派遣夥伴）',
+  vn_omori_shika: '派遣員工（外場派遣夥伴）',
+  vn_tanaka_yuka: '派遣員工（外場派遣夥伴）',
+  vn_ryu_shiei: '派遣員工（外場派遣夥伴）',
+  vn_taniguchi_rie: '派遣員工（外場派遣夥伴）',
   vn_riku_iku: '派遣員工（外場派遣夥伴）',
+  vn_nagai_miyuki: '派遣員工（外場派遣夥伴）',
+  vn_koide_keita: '派遣員工（外場派遣夥伴）',
+  vn_tadaishi_junzo: '派遣員工（外場派遣夥伴）',
   // 學生
-  vn_biyo: '海外技術研修（學生）',
-  vn_ryu_shiei: '海外留學交流（學生）'
+  vn_charmy: '海外技術研修（學生）',
+  vn_rin: '海外技術研修（學生）',
+  vn_phong: '海外技術研修（學生）',
+  vn_nga: '海外技術研修（學生）'
 };
 
 // ── 🔤 片假名同仁姓名羅馬拼音標準對照表（名牌與圖鑑專用）──
@@ -4655,7 +4659,11 @@ const ROSTER_KATAKANA_ROMAJI = {
   vn_han: { ja: '<ruby>ハン<rt>Han</rt></ruby>', romaji: 'Han' },
   vn_umesh: { ja: '<ruby>ウメシュ<rt>Umesh</rt></ruby>', romaji: 'Umesh' },
   vn_ryu_shiei: { ja: '<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>', romaji: 'Ryu Shiei' },
-  vn_riku_iku: { ja: '<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>', romaji: 'Riku Iku' }
+  vn_riku_iku: { ja: '<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>', romaji: 'Riku Iku' },
+  vn_charmy: { ja: '<ruby>チャーミー<rt>Charmy</rt></ruby>', romaji: 'Charmy' },
+  vn_rin: { ja: '<ruby>リン<rt>Rin</rt></ruby>', romaji: 'Rin' },
+  vn_phong: { ja: '<ruby>フォン<rt>Phong</rt></ruby>', romaji: 'Phong' },
+  vn_nga: { ja: '<ruby>ガー<rt>Nga</rt></ruby>', romaji: 'Nga' }
 };
 
 // ── 🔠 片假名音節智慧轉譯羅馬拼音核心函式 ──
@@ -4670,6 +4678,10 @@ function convertKatakanaToRomaji(text) {
   if (clean === 'シエイ') return 'Shiei';
   if (clean === 'リク イク' || clean === 'リク') return clean.includes(' ') ? 'Riku Iku' : 'Riku';
   if (clean === 'イク') return 'Iku';
+  if (clean === 'チャーミー') return 'Charmy';
+  if (clean === 'リン') return 'Rin';
+  if (clean === 'フォン') return 'Phong';
+  if (clean === 'ガー') return 'Nga';
 
   const multiMap = {
     'キャ': 'kya', 'キュ': 'kyu', 'キョ': 'kyo',
@@ -4824,18 +4836,18 @@ function inferNationalityFromName(itemOrStr) {
   // 1. 已知名冊 ID 優先精確映射
   if (id === 'vn_yang' || /楊詠筑|詠筑/.test(str)) return '台灣 🇹🇼';
   if (id === 'vn_biyo' || id === 'vn_bim' || id === 'vn_umesh' || /ビヨー|ビム|ウメシュ|プラティマ|Biyo|Bim|Umesh|Pratima|尼泊爾/i.test(str)) return '尼泊爾 🇳🇵';
-  if (id === 'vn_han' || /ハン|フォンニュン|エンティハ|イバオイェン|ホンイェン|Han|Nguyen|越南/i.test(str)) return '越南 🇻🇳';
+  if (id === 'vn_han' || id === 'vn_charmy' || id === 'vn_rin' || id === 'vn_phong' || id === 'vn_nga' || /ハン|チャーミー|リン|フォン|ガー|Charmy|Rin|Phong|Nga|フォンニュン|エンティハ|イバオイェン|ホンイェン|Han|Nguyen|越南/i.test(str)) return '越南 🇻🇳';
   if (id === 'vn_ryu_shiei' || id === 'vn_riku_iku' || /リュウ|リク|劉思睿|陸郁|呂郁|中國|中国/i.test(str)) return '中國 🇨🇳';
 
   // 2. 日本旅館同仁姓名（常見日本姓氏與漢字名）
-  if (/(?:加治木|須藤|内間|佐藤|小幡|古賀|長森|山本|森田|森本|田中|谷口|山邊|長井|川畑|野別|市石|伊藤|渡邊|中村|小林|加藤|吉田|山田|佐佐木|山口|松本|井上|木村|清水|林|齊藤|斎藤|池田|橋本|阿部|石川|山崎|中島|美幸|愛実|香野|裕香|理恵|祥子|陸|健太郎|亨)/.test(str) || /[\u3040-\u309F]/.test(str)) {
+  if (/(?:坂本|須藤|内間|佐藤|小幡|古賀|山本|大森|田中|谷口|長井|小出|只石|川畑|加治木|長森|森田|森本|山邊|野別|市石|伊藤|渡邊|中村|小林|加藤|吉田|山田|佐佐木|山口|松本|井上|木村|清水|林|齊藤|斎藤|池田|橋本|阿部|石川|山崎|中島|美幸|愛実|香野|裕香|理恵|祥子|陸|健太郎|亨|志加|啓太|潤三)/.test(str) || /[\u3040-\u309F]/.test(str)) {
     return '日本 🇯🇵';
   }
 
   // 3. 片假名外國名字特徵
   if (/^[ァ-ヶー\s]+$/.test(str)) {
     if (/ビ|ウメ|プラ|ラム|クリ/.test(str)) return '尼泊爾 🇳🇵';
-    if (/ハン|ニュン|イェン|ティ/.test(str)) return '越南 🇻🇳';
+    if (/ハン|チャーミー|リン|フォン|ガー|ニュン|イェン|ティ/.test(str)) return '越南 🇻🇳';
   }
 
   // 預設為日本 🇯🇵（溫泉旅館絕大多數在地同事）
@@ -7682,36 +7694,38 @@ function createRealRunnerData() {
     { "id": "vt_15", "ja": "<ruby>掃除機<rt>そうじき</rt></ruby>", "zh": "吸塵器", "cat": "工具", "imageUrl": "", "note": "上司交代：打掃地板用" },
 
         // ── 👤 名字類 (依據最新班表重新統整：名字與職位分開，已離職者全數移除，完整包含來源身份、國籍與本月公休班表) ──
-    { "id": "vn_kajiki", "ja": "<ruby>加治木<rt>かじき</rt></ruby>", "kana": "かじき", "zh": "加治木", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "支配人", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員・支配人）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/10 (三)", "9/15 (一)", "9/19 (五)", "9/23 (二)", "9/27 (六)"] },
-    { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場領導", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員 / 現場領導）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/20 (六)", "9/25 (四)"] },
-    { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/12 (五)", "9/16 (二)", "9/21 (日)", "9/26 (五)"] },
-    { "id": "vn_biyo", "ja": "<ruby>ビヨー<rt>Biyo</rt></ruby>", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外技術研修（學生）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/20 (六)", "9/24 (三)", "9/29 (一)"] },
-    { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/10 (三)", "9/14 (日)", "9/19 (五)", "9/24 (三)"] },
-    { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/9 (二)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
-    { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
-    { "id": "vn_nagamori", "ja": "<ruby>長森<rt>ながもり</rt></ruby> <ruby>愛実<rt>まなみ</rt></ruby>", "kana": "ながもり まなみ", "zh": "長森 愛實", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/7 (日)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/24 (三)", "9/29 (一)"] },
-    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑", "cat": "名字", "imageUrl": "", "avatarUrl": "photos/avatar_eastasia_female_clean.jpg", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"] },
-    { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/26 (五)"] },
-    { "id": "vn_ryu_shiei", "ja": "<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外留學交流（學生）", "nationality": "中國 🇨🇳", "vacations": ["9/3 (三)", "9/8 (一)", "9/12 (五)", "9/15 (一)", "9/19 (五)", "9/25 (四)", "9/29 (一)"] },
-    { "id": "vn_morita", "ja": "<ruby>森田<rt>もりた</rt></ruby> <ruby>亨<rt>とおる</rt></ruby>", "kana": "もりた とおる", "zh": "森田 亨", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/10 (三)", "9/15 (一)", "9/21 (日)", "9/26 (五)", "9/29 (一)"] },
-    { "id": "vn_morimoto", "ja": "<ruby>森本<rt>もりもと</rt></ruby><ruby>健太郎<rt>けんたろう</rt></ruby>", "kana": "もりもと けんたろう", "zh": "森本 健太郎", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/20 (六)", "9/25 (四)"] },
-    { "id": "vn_tanaka_yuka", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>裕香<rt>ゆか</rt></ruby>", "kana": "たなか ゆか", "zh": "田中 裕香", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/12 (五)", "9/16 (二)", "9/22 (一)", "9/27 (六)"] },
-    { "id": "vn_taniguchi_rie", "ja": "<ruby>谷口<rt>たにぐち</rt></ruby> <ruby>理恵<rt>りえ</rt></ruby>", "kana": "たにぐち りえ", "zh": "谷口 理惠", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/23 (二)"] },
-    { "id": "vn_bim", "ja": "<ruby>ビム<rt>Bim</rt></ruby>", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（特定技能正社員）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/1 (一)", "9/5 (五)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/22 (一)", "9/26 (五)"] },
-    { "id": "vn_han", "ja": "<ruby>ハン<rt>Han</rt></ruby>", "kana": "はん", "zh": "涵 / 韓 (Han)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "越南 🇻🇳", "vacations": ["9/2 (二)", "9/7 (日)", "9/11 (四)", "9/16 (二)", "9/21 (日)", "9/25 (四)", "9/30 (二)"] },
-    { "id": "vn_umesh", "ja": "<ruby>ウメシュ<rt>Umesh</rt></ruby>", "kana": "うめしゅ", "zh": "烏梅什 (Umesh)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "尼泊爾 🇳🇵", "vacations": ["9/3 (三)", "9/7 (日)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/28 (日)"] },
-    { "id": "vn_riku_iku", "ja": "<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "中國 🇨🇳", "vacations": ["9/4 (四)", "9/9 (二)", "9/14 (日)", "9/18 (四)", "9/22 (一)", "9/27 (六)"] },
-    { "id": "vn_tanaka_shoko", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>祥子<rt>しょうこ</rt></ruby>", "kana": "たなか しょうこ", "zh": "田中 祥子", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/2 (二)", "9/6 (六)", "9/11 (四)", "9/15 (一)", "9/19 (五)", "9/24 (三)"] },
-    { "id": "vn_yamabe", "ja": "<ruby>山邊<rt>やまべ</rt></ruby><ruby>陸<rt>りく</rt></ruby>", "kana": "やまべ りく", "zh": "山邊 陸", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/8 (一)", "9/13 (六)", "9/17 (三)", "9/22 (一)", "9/27 (六)"] },
-    { "id": "vn_nagai_miyuki", "ja": "<ruby>長井<rt>ながい</rt></ruby> <ruby>美幸<rt>みゆき</rt></ruby>", "kana": "ながい みゆき", "zh": "長井 美幸", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["9/4 (四)", "9/8 (一)", "9/12 (五)", "9/16 (二)", "9/21 (日)", "9/25 (四)"] },
-    { "id": "vn_kawabata", "ja": "<ruby>川畑<rt>かわばた</rt></ruby>", "kana": "かわばた", "zh": "川畑", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["9/3 (三)", "9/8 (一)", "9/13 (六)", "9/18 (四)", "9/22 (一)", "9/28 (日)"] },
+    { "id": "vn_sakamoto", "ja": "<ruby>坂本<rt>さかもと</rt></ruby> <ruby>総支配人<rt>そうしはいにん</rt></ruby>", "kana": "さかもと そうしはいにん", "zh": "坂本 總經理", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "総支配人", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員・総支配人）", "nationality": "日本 🇯🇵", "vacations": [] },
+    { "id": "vn_sudo", "ja": "<ruby>須藤<rt>すどう</rt></ruby>", "kana": "すどう", "zh": "須藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場領導", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員 / 現場領導）", "nationality": "日本 🇯🇵", "vacations": ["8/5 (一)", "8/8 (四)", "8/11 (日)", "8/15 (四)", "8/19 (一)", "8/23 (五)", "8/26 (一)", "8/31 (六)"] },
+    { "id": "vn_uchima", "ja": "<ruby>内間<rt>うちま</rt></ruby>", "kana": "うちま", "zh": "內間", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["8/6 (二)", "8/9 (五)", "8/13 (二)", "8/17 (六)", "8/20 (二)", "8/22 (四)", "8/25 (日)", "8/28 (三)"] },
+    { "id": "vn_biyo", "ja": "<ruby>ビヨー<rt>Biyo</rt></ruby>", "kana": "びよー", "zh": "比約 (Biyo)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "尼泊爾 🇳🇵", "vacations": ["8/3 (六)", "8/4 (日)", "8/7 (三)", "8/10 (六)", "8/13 (二)", "8/17 (六)", "8/23 (五)", "8/29 (四)"] },
+    { "id": "vn_sato", "ja": "<ruby>佐藤<rt>さとう</rt></ruby>", "kana": "さとう", "zh": "佐藤", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["8/2 (五)", "8/5 (一)", "8/9 (五)", "8/13 (二)", "8/19 (一)", "8/24 (六)", "8/27 (二)", "8/30 (五)"] },
+    { "id": "vn_obata", "ja": "<ruby>小幡<rt>おばた</rt></ruby>", "kana": "おばた", "zh": "小幡", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": [] },
+    { "id": "vn_koga", "ja": "<ruby>古賀<rt>こが</rt></ruby>", "kana": "こが", "zh": "古賀", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": ["8/1 (四)", "8/6 (二)", "8/11 (日)", "8/18 (日)", "8/21 (三)", "8/22 (四)", "8/23 (五)", "8/29 (四)"] },
+    { "id": "vn_charmy", "ja": "<ruby>チャーミー<rt>Charmy</rt></ruby>", "kana": "ちゃーみー", "zh": "茶咪 (Charmy)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習 (學生)", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外技術研修（學生）", "nationality": "越南 🇻🇳", "vacations": ["8/3 (六)", "8/7 (三)", "8/11 (日)", "8/16 (五)", "8/20 (二)", "8/23 (五)", "8/27 (二)", "8/28 (三)"] },
+    { "id": "vn_rin", "ja": "<ruby>リン<rt>Rin</rt></ruby>", "kana": "りん", "zh": "小琳 (Rin)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習 (學生)", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外技術研修（學生）", "nationality": "越南 🇻🇳", "vacations": ["8/1 (四)", "8/5 (一)", "8/9 (五)", "8/13 (二)", "8/17 (六)", "8/21 (三)", "8/27 (二)", "8/28 (三)"] },
+    { "id": "vn_yang", "ja": "<ruby>楊<rt>よう</rt></ruby><ruby>詠筑<rt>えいちく</rt></ruby>", "kana": "よう えいちく", "zh": "楊詠筑", "cat": "名字", "imageUrl": "", "avatarUrl": "photos/avatar_eastasia_female_clean.jpg", "note": "傳菜 Runner", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場傳菜 Runner）", "nationality": "台灣 🇹🇼", "vacations": ["8/1 (四)", "8/5 (一)", "8/6 (二)", "8/7 (三)", "8/8 (四)", "8/12 (一)", "8/18 (日)", "8/22 (四)", "8/26 (一)", "8/30 (五)"] },
+    { "id": "vn_yamamoto_kano", "ja": "<ruby>山本<rt>やまもと</rt></ruby> <ruby>香野<rt>かの</rt></ruby>", "kana": "やまもと かの", "zh": "山本 香野", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/2 (五)", "8/7 (三)", "8/10 (六)", "8/15 (四)", "8/16 (五)", "8/21 (三)", "8/25 (日)", "8/29 (四)"] },
+    { "id": "vn_omori_shika", "ja": "<ruby>大森<rt>おおもり</rt></ruby> <ruby>志加<rt>しか</rt></ruby>", "kana": "おおもり しか", "zh": "大森 志加", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/14 (三)", "8/17 (六)", "8/20 (二)", "8/24 (六)", "8/25 (日)", "8/26 (一)", "8/31 (六)"] },
+    { "id": "vn_tanaka_yuka", "ja": "<ruby>田中<rt>たなか</rt></ruby> <ruby>裕香<rt>ゆか</rt></ruby>", "kana": "たなか ゆか", "zh": "田中 裕香", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/3 (六)", "8/7 (三)", "8/10 (六)", "8/14 (三)", "8/18 (日)", "8/21 (三)", "8/22 (四)", "8/28 (三)"] },
+    { "id": "vn_ryu_shiei", "ja": "<ruby>リュウ<rt>Ryu</rt></ruby> <ruby>シエイ<rt>Shiei</rt></ruby>", "kana": "りゅう しえい", "zh": "劉思睿 (Ryu)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "中國 🇨🇳", "vacations": ["8/3 (六)", "8/7 (三)", "8/10 (六)", "8/14 (三)", "8/20 (二)", "8/25 (日)", "8/29 (四)", "8/31 (六)"] },
+    { "id": "vn_taniguchi_rie", "ja": "<ruby>谷口<rt>たにぐち</rt></ruby> <ruby>理恵<rt>りえ</rt></ruby>", "kana": "たにぐち りえ", "zh": "谷口 理惠", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/1 (四)", "8/4 (日)", "8/5 (一)", "8/21 (三)", "8/24 (六)", "8/25 (日)", "8/26 (一)", "8/31 (六)"] },
+    { "id": "vn_bim", "ja": "<ruby>ビム<rt>Bim</rt></ruby>", "kana": "びむ", "zh": "比姆 (Bim)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（特定技能正社員）", "nationality": "尼泊爾 🇳🇵", "vacations": ["8/2 (五)", "8/6 (二)", "8/12 (一)", "8/20 (二)", "8/21 (三)", "8/22 (四)", "8/23 (五)", "8/24 (六)", "8/25 (日)", "8/26 (一)", "8/27 (二)"] },
+    { "id": "vn_han", "ja": "<ruby>ハン<rt>Han</rt></ruby>", "kana": "はん", "zh": "涵 / 韓 (Han)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "越南 🇻🇳", "vacations": ["8/5 (一)", "8/9 (五)", "8/14 (三)", "8/16 (五)", "8/20 (二)", "8/21 (三)", "8/22 (四)", "8/23 (五)", "8/24 (六)", "8/25 (日)", "8/26 (一)", "8/27 (二)", "8/30 (五)"] },
+    { "id": "vn_umesh", "ja": "<ruby>ウメシュ<rt>Umesh</rt></ruby>", "kana": "うめしゅ", "zh": "烏梅什 (Umesh)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場正職", "isForeign": true, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "尼泊爾 🇳🇵", "vacations": ["8/2 (五)", "8/6 (二)", "8/10 (六)", "8/16 (五)", "8/20 (二)", "8/21 (三)", "8/22 (四)", "8/23 (五)", "8/24 (六)", "8/25 (日)", "8/26 (一)", "8/27 (二)", "8/30 (五)"] },
+    { "id": "vn_riku_iku", "ja": "<ruby>リク<rt>Riku</rt></ruby> <ruby>イク<rt>Iku</rt></ruby>", "kana": "りく いく", "zh": "陸郁 / 呂郁 (Riku Iku)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": true, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "中國 🇨🇳", "vacations": ["8/2 (五)", "8/6 (二)", "8/10 (六)", "8/14 (三)", "8/16 (五)", "8/21 (三)", "8/26 (一)", "8/29 (四)"] },
+    { "id": "vn_nagai_miyuki", "ja": "<ruby>長井<rt>ながい</rt></ruby> <ruby>美幸<rt>みゆき</rt></ruby>", "kana": "ながい みゆき", "zh": "長井 美幸", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/4 (日)", "8/8 (四)", "8/11 (日)", "8/16 (五)", "8/21 (三)", "8/25 (日)", "8/29 (四)", "8/31 (六)"] },
+    { "id": "vn_koide_keita", "ja": "<ruby>小出<rt>こいで</rt></ruby> <ruby>啓太<rt>けいた</rt></ruby>", "kana": "こいで けいた", "zh": "小出 啓太", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/7 (三)", "8/12 (一)", "8/17 (六)", "8/22 (四)", "8/26 (一)", "8/31 (六)"] },
+    { "id": "vn_tadaishi_junzo", "ja": "<ruby>只石<rt>ただいし</rt></ruby> <ruby>潤三<rt>じゅんぞう</rt></ruby>", "kana": "ただいし じゅんぞう", "zh": "只石 潤三", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場夥伴", "isForeign": false, "employmentType": "派遣社員", "sourceDesc": "派遣員工（外場派遣夥伴）", "nationality": "日本 🇯🇵", "vacations": ["8/11 (日)", "8/15 (四)", "8/19 (一)", "8/23 (五)", "8/27 (二)"] },
+    { "id": "vn_phong", "ja": "<ruby>フォン<rt>Phong</rt></ruby>", "kana": "ふぉん", "zh": "小豐 (Phong)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習 (學生)", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外技術研修（學生）", "nationality": "越南 🇻🇳", "vacations": ["8/3 (六)", "8/6 (二)", "8/11 (日)", "8/16 (五)", "8/20 (二)", "8/25 (日)", "8/28 (三)", "8/29 (四)"] },
+    { "id": "vn_nga", "ja": "<ruby>ガー<rt>Nga</rt></ruby>", "kana": "がー", "zh": "小雅 (Nga)", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場實習 (學生)", "isForeign": true, "employmentType": "學生", "sourceDesc": "海外技術研修（學生）", "nationality": "越南 🇻🇳", "vacations": ["8/4 (日)", "8/8 (四)", "8/9 (五)", "8/13 (二)", "8/17 (六)", "8/22 (四)", "8/27 (二)", "8/31 (六)"] },
+    { "id": "vn_kawabata", "ja": "<ruby>川畑<rt>かわばた</rt></ruby>", "kana": "かわばた", "zh": "川畑", "cat": "名字", "imageUrl": "", "avatarUrl": "", "note": "外場擔當", "isForeign": false, "employmentType": "正社員", "sourceDesc": "正式員工（正社員）", "nationality": "日本 🇯🇵", "vacations": [] },
 
         // ── 💼 職稱與班表類 (依據班表雇用形態與館內職務編制，含最新CB補助、注文、準備與締め) ──
     { "id": "vs_cb_hojo", "ja": "CB<ruby>補助<rt>ほじょ</rt></ruby>", "kana": "しーびーほじょ", "zh": "CB補助（中央配膳與跑菜支援同仁）", "cat": "職稱", "imageUrl": "", "note": "負責配膳台出菜通報、餐盤備置與外場推車運送（小楊、山本、韓等同仁班表職位）" },
     { "id": "vs_cb_chumon", "ja": "CB<ruby>注文<rt>ちゅうもん</rt></ruby>", "kana": "しーびーちゅうもん", "zh": "CB注文擔當（料理點單通報主管）", "cat": "職稱", "imageUrl": "", "note": "掌握現場殘數、對講機叫菜與出餐順序排定（須藤、內間、山本）" },
     { "id": "vs_open_junbi", "ja": "オープン<ruby>準備<rt>じゅんび</rt></ruby>", "kana": "おーぷんじゅんび", "zh": "開門營業準備同仁", "cat": "職稱", "imageUrl": "", "note": "早晚開門前擺桌、餐台開爐、醬料配料填補之現場整備人員" },
     { "id": "vs_shime_kakunin", "ja": "<ruby>締<rt>し</rt></ruby>め / <ruby>最終確認<rt>さいしゅうかくにん</rt></ruby>", "kana": "しめ / さいしゅうかくにん", "zh": "打烊打掃 / 最終巡檢同仁", "cat": "職稱", "imageUrl": "", "note": "餐期結束後火源確認、餐台清潔、推車歸位與翌日交接巡檢" },
-    { "id": "vs_shihainin", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "kana": "しはいにん", "zh": "經理 / 總經理 (支配人)", "cat": "職稱", "imageUrl": "", "note": "旅館營運與管理最高主管 (如：加治木 支配人)" },
+    { "id": "vs_shihainin", "ja": "<ruby>支配人<rt>しはいにん</rt></ruby>", "kana": "しはいにん", "zh": "經理 / 總經理 (支配人)", "cat": "職稱", "imageUrl": "", "note": "旅館營運與管理最高主管 (如：坂本 総支配人)" },
     { "id": "vs_seishain", "ja": "<ruby>正社員<rt>せいしゃいん</rt></ruby>", "kana": "せいしゃいん", "zh": "正職同仁 / 正社員", "cat": "職稱", "imageUrl": "", "note": "旅館正式員工 (如：川畑、ビム、ハン、須藤等)" },
     { "id": "vs_hakenshain", "ja": "<ruby>派遣社員<rt>はけんしゃいん</rt></ruby>", "kana": "はけんしゃいん", "zh": "派遣同仁 / 打工夥伴", "cat": "職稱", "imageUrl": "", "note": "外場派遣與打工夥伴 (如：小楊、長森、長井、森田、森本、田中祥子、山邊等)" },
     { "id": "vs_intern", "ja": "インターン", "kana": "いんたーん", "zh": "海外實習生 (Intern)", "cat": "職稱", "imageUrl": "", "note": "大學及專門學校實習生 (如：プラティマ、エンティハ等)" },
@@ -8296,8 +8310,16 @@ function loadAppData() {
     }
     const data = JSON.parse(raw);
     // 嚴格校驗：若 tabs 不完整或未包含最新食材分類/同事平級指示/撤盤情境/最新班表名單/乾淨無斜線標音/蓮藕無誤植照片，強制以最新完整資料庫無痛覆蓋
-    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || !data.vocabSop.some(v => v.id === 'vn_kajiki') || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.tabs.some(t => t.id === 'tab_breakfast_sop') || !data.tabs.some(t => t.id === 'tab_dinner_sop') || !data.tabs.some(t => t.id === 'tab_akaushi_basashi') || !data.tabs.some(t => t.id === 'tab_drink_dessert_sop') || !data.vocabSop.some(v => v.id === 'vn_yamamoto_kano') || data.vocabSop.some(v => v.id === 'vn_entiha')) {
+    const retiredRosterIds = ['vn_kajiki', 'vn_nagamori', 'vn_morita', 'vn_morimoto', 'vn_tanaka_shoko', 'vn_yamabe'];
+    const newRosterIds = ['vn_sakamoto', 'vn_charmy', 'vn_rin', 'vn_omori_shika', 'vn_koide_keita', 'vn_tadaishi_junzo', 'vn_phong', 'vn_nga'];
+    const hasAnyRetired = retiredRosterIds.some(id => data.vocabSop && data.vocabSop.some(v => v.id === id));
+    const missingAnyNew = newRosterIds.some(id => !data.vocabSop || !data.vocabSop.some(v => v.id === id));
+
+    if (!data.tabs || !Array.isArray(data.tabs) || !data.vocabSop || data.vocabSop.length < 50 || !data.vocabSop.some(v => v.cat === '食材') || missingAnyNew || hasAnyRetired || !data.vocabSop.some(v => v.id === 'vs_sushi_madai') || !data.vocabSop.some(v => v.cat === '餐具') || !data.tabs.some(t => t.id === 'tab_colleague_tasks') || !data.tabs.some(t => t.id === 'tab_breakfast_sop') || !data.tabs.some(t => t.id === 'tab_dinner_sop') || !data.tabs.some(t => t.id === 'tab_akaushi_basashi') || !data.tabs.some(t => t.id === 'tab_drink_dessert_sop') || !data.vocabSop.some(v => v.id === 'vn_yamamoto_kano') || data.vocabSop.some(v => v.id === 'vn_entiha')) {
       const fresh = createRealRunnerData();
+      if (data.apiKey && !data.apiKey.includes('AQ.Ab8RN6JZ8') && !data.apiKey.includes('L3Hhx9D6UDpw')) {
+        fresh.apiKey = data.apiKey;
+      }
       saveAppData(fresh);
       return fresh;
     }
@@ -8307,8 +8329,9 @@ function loadAppData() {
     }
     if (data.vocabSop && Array.isArray(data.vocabSop)) {
       let cleaned = false;
+      const freshData = createRealRunnerData();
       data.vocabSop.forEach(v => {
-        // 1. 同步最新真實班表雇用身分與來源描述 (長井、森本、田中祥子、山邊、烏梅什、陸郁等為派遣社員；比約、劉思睿為學生)
+        // 1. 同步最新真實班表雇用身分與來源描述
         if (ROSTER_EMPLOYMENT_TYPES[v.id] && v.employmentType !== ROSTER_EMPLOYMENT_TYPES[v.id]) {
           v.employmentType = ROSTER_EMPLOYMENT_TYPES[v.id];
           cleaned = true;
@@ -8321,6 +8344,16 @@ function loadAppData() {
           v.sourceDesc = ROSTER_SOURCE_DESCS[v.id];
           cleaned = true;
         }
+        // 同步最新8月份排休班表
+        if (v.cat === '名字') {
+          const freshCol = freshData.vocabSop.find(f => f.id === v.id);
+          if (freshCol && Array.isArray(freshCol.vacations)) {
+            if (JSON.stringify(v.vacations) !== JSON.stringify(freshCol.vacations)) {
+              v.vacations = freshCol.vacations;
+              cleaned = true;
+            }
+          }
+        }
         // 2. 清理未拍照同仁被自動套上的假頭像 (僅小楊保留預設立繪；未拍照同仁絕不瞎湊照片)
         if (v.id !== 'vn_yang' && !v.customAvatarCreated) {
           if (v.avatarUrl && (v.avatarUrl.includes('avatar_eastasia_') || v.avatarUrl.includes('avatar_sea_') || v.avatarUrl.includes('avatar_nepal_') || v.avatarUrl.includes('avatar_yang.png'))) {
@@ -8328,7 +8361,7 @@ function loadAppData() {
             cleaned = true;
           }
         }
-        // 3. 片假名同仁姓名全面標註羅馬拼音 (Biyo, Bim, Han, Umesh, Ryu, Shiei, Riku, Iku)
+        // 3. 片假名同仁姓名全面標註羅馬拼音 (Biyo, Bim, Han, Umesh, Ryu, Shiei, Riku, Iku, Charmy, Rin, Phong, Nga)
         if (ROSTER_KATAKANA_ROMAJI[v.id]) {
           if (v.ja !== ROSTER_KATAKANA_ROMAJI[v.id].ja) {
             v.ja = ROSTER_KATAKANA_ROMAJI[v.id].ja;
@@ -14276,27 +14309,29 @@ function submitQuizAnswer(chosenIdx) {
 
 const DEFAULT_COLLEAGUE_TRAITS = {
   'vn_yang': { gender: 'female', nationality: '台灣 🇹🇼', face: 'round', nose: 'dot', skin: 'natural', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'square_black', employmentType: '派遣社員' },
-  'vn_kajiki': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'square_wire', employmentType: '正社員' },
+  'vn_sakamoto': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'square_wire', employmentType: '正社員' },
   'vn_sudo': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'sharp', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'round_wire', employmentType: '正社員' },
   'vn_uchima': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'bob_short', color: '#422b1d', glasses: 'none', employmentType: '正社員' },
-  'vn_biyo': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'pointed', nose: 'straight', skin: 'deep_bronze', bang: 'bang_wavy', backHair: 'messy_curl', hair: 'wavy_short', color: '#1a191f', glasses: 'none', employmentType: '學生' },
+  'vn_biyo': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'pointed', nose: 'straight', skin: 'deep_bronze', bang: 'bang_wavy', backHair: 'messy_curl', hair: 'wavy_short', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
   'vn_sato': { gender: 'male', nationality: '日本 🇯🇵', face: 'round', nose: 'wide', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
   'vn_obata': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#422b1d', glasses: 'square_black', employmentType: '正社員' },
   'vn_koga': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_none', backHair: 'buzz_cut', hair: 'buzz_cut', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
-  'vn_nagamori': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_side_fringe', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', employmentType: '派遣社員' },
-  'vn_yamamoto_kano': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
-  'vn_ryu_shiei': { gender: 'male', nationality: '中國 🇨🇳', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '學生' },
-  'vn_morita': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
-  'vn_morimoto': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
-  'vn_tanaka_yuka': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', employmentType: '正社員' },
-  'vn_taniguchi_rie': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_right_slant', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
+  'vn_charmy': { gender: 'female', nationality: '越南 🇻🇳', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'low_ponytail', hair: 'low_ponytail', color: '#1a191f', glasses: 'none', employmentType: '學生' },
+  'vn_rin': { gender: 'female', nationality: '越南 🇻🇳', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_side_fringe', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#422b1d', glasses: 'none', employmentType: '學生' },
+  'vn_yamamoto_kano': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
+  'vn_omori_shika': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'natural', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
+  'vn_tanaka_yuka': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#422b1d', glasses: 'none', employmentType: '派遣社員' },
+  'vn_ryu_shiei': { gender: 'male', nationality: '中國 🇨🇳', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
+  'vn_taniguchi_rie': { gender: 'female', nationality: '日本 🇯🇵', face: 'oval', nose: 'dot', skin: 'fair', bang: 'bang_right_slant', backHair: 'shoulder_bob', hair: 'shoulder_straight', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
   'vn_bim': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'oval', nose: 'straight', skin: 'deep_bronze', bang: 'bang_wavy', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
   'vn_han': { gender: 'female', nationality: '越南 🇻🇳', face: 'pointed', nose: 'dot', skin: 'tanned', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'square_wire', employmentType: '正社員' },
-  'vn_umesh': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'oval', nose: 'straight', skin: 'deep_bronze', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
+  'vn_umesh': { gender: 'male', nationality: '尼泊爾 🇳🇵', face: 'oval', nose: 'straight', skin: 'deep_bronze', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '正社員' },
   'vn_riku_iku': { gender: 'male', nationality: '中國 🇨🇳', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'short_clean', hair: 'short_clean', color: '#422b1d', glasses: 'round_black', employmentType: '派遣社員' },
-  'vn_tanaka_shoko': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'round_wire', employmentType: '派遣社員' },
-  'vn_yamabe': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'sharp', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
   'vn_nagai_miyuki': { gender: 'female', nationality: '日本 🇯🇵', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_side_fringe', backHair: 'low_ponytail', hair: 'low_ponytail', color: '#422b1d', glasses: 'none', employmentType: '派遣社員' },
+  'vn_koide_keita': { gender: 'male', nationality: '日本 🇯🇵', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '派遣社員' },
+  'vn_tadaishi_junzo': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'wide', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'square_black', employmentType: '派遣社員' },
+  'vn_phong': { gender: 'male', nationality: '越南 🇻🇳', face: 'oval', nose: 'straight', skin: 'natural', bang: 'bang_short', backHair: 'short_clean', hair: 'short_clean', color: '#1a191f', glasses: 'none', employmentType: '學生' },
+  'vn_nga': { gender: 'female', nationality: '越南 🇻🇳', face: 'round', nose: 'dot', skin: 'fair', bang: 'bang_straight', backHair: 'bun_hair', hair: 'bun_hair', color: '#1a191f', glasses: 'none', employmentType: '學生' },
   'vn_kawabata': { gender: 'male', nationality: '日本 🇯🇵', face: 'square', nose: 'straight', skin: 'natural', bang: 'bang_left_slant', backHair: 'side_part', hair: 'side_part', color: '#1a191f', glasses: 'none', employmentType: '正社員' }
 };
 
@@ -15556,7 +15591,7 @@ function renderColleagueVacationsInModal(colleague) {
 
   // 取得小楊（本人）的休假清單
   const yang = (AppData && AppData.vocabSop ? AppData.vocabSop.find(v => v.id === 'vn_yang') : null) || createRealRunnerData().vocabSop.find(v => v.id === 'vn_yang');
-  const myVacations = (yang && Array.isArray(yang.vacations)) ? yang.vacations : ["9/3 (三)", "9/7 (日)", "9/11 (四)", "9/15 (一)", "9/18 (四)", "9/22 (一)", "9/25 (四)", "9/29 (一)"];
+  const myVacations = (yang && Array.isArray(yang.vacations)) ? yang.vacations : ["8/1 (四)", "8/5 (一)", "8/6 (二)", "8/7 (三)", "8/8 (四)", "8/12 (一)", "8/18 (日)", "8/22 (四)", "8/26 (一)", "8/30 (五)"];
 
   const colVacations = (colleague && Array.isArray(colleague.vacations)) ? colleague.vacations : [];
 
