@@ -1833,16 +1833,17 @@ assert(html.includes('function drawPaperDollAvatar('), '包含全新日系純平
 assert(html.includes('id="who-paper-doll-studio"'), '成果區包含日系紙片娃娃換裝工房抽屜');
 assert(html.includes('id="paper-doll-drawer-content"'), '包含換裝紙片抽屜內容容器');
 
-// 3. 抽屜 4 大頁籤與換裝按鈕
-assert(html.includes('id="pd-tab-outfit"') && html.includes('id="pd-tab-hair"'), '抽屜包含工作服裝與髮型頁籤');
-assert(html.includes('id="pd-tab-face"') && html.includes('id="pd-tab-acc"'), '抽屜包含臉型膚色與配件名牌頁籤');
+// 3. 抽屜 5 大頁籤與換裝按鈕
+assert(html.includes('id="pd-tab-body"') && html.includes('id="pd-tab-hair"'), '抽屜包含身型膚色與髮型髮色頁籤');
+assert(html.includes('id="pd-tab-bang"') && html.includes('id="pd-tab-face"') && html.includes('id="pd-tab-acc"'), '抽屜包含前髮、五官臉型與配件名牌頁籤');
 
-// 4. 換公司核心：服裝紙片庫 (解套換公司重做問題)
-assert(html.includes('setPaperDollOutfit(\'black_shirt_burgundy_apron\')'), '支援黑襯衫＋酒紅圍裙');
-assert(html.includes('setPaperDollOutfit(\'black_shirt_navy_apron\')'), '支援黑襯衫＋藏青圍裙');
-assert(html.includes('setPaperDollOutfit(\'white_shirt_tie\')'), '支援飯店白襯衫＋領結 (換新飯店/餐廳專用)');
-assert(html.includes('setPaperDollOutfit(\'samue_wafuku\')'), '支援溫泉和風作務衣 (溫泉旅館專用)');
-assert(html.includes('setPaperDollOutfit(\'suit_vest\')'), '支援高級西裝背心');
+// 4. 身材、膚色、髮色與髮型庫驗證 (嚴格依據使用者最新要求)
+assert(html.includes("setPaperDollBody('slim')") && html.includes("setPaperDollBody('chubby')"), '支援胖、瘦兩種身材切換 (統一黑西裝白襯衫)');
+assert(html.includes("setPaperDollSkin('light')") && html.includes("setPaperDollSkin('deep')"), '支援淺膚色(日本/台灣)與深膚色(尼泊爾)兩種純平塗膚色');
+assert(html.includes("setPaperDollHairColor('black')") && html.includes("setPaperDollHairColor('brown')"), '支援自然墨黑與深栗咖啡兩種純平塗髮色');
+assert(html.includes("setPaperDollHairStyle('short_clean')") && html.includes("setPaperDollHairStyle('bun_high')"), '支援男女通用髮型紙片庫');
+assert(html.includes("setPaperDollBang('slant_left')") && html.includes("setPaperDollBang('straight')"), '支援前髮瀏海紙片庫');
+assert(html.includes("setPaperDollFaceShape('oval')") && html.includes("setPaperDollFaceShape('chubby_round')"), '支援鵝蛋臉、圓臉、微方臉、豐腴圓臉 4 款臉型');
 
 // 5. 互動函式驗證
 assert(html.includes('function renderCurrentPaperDollAvatar()'), '包含即時渲染並儲存紙片娃娃函式 renderCurrentPaperDollAvatar');
@@ -1892,16 +1893,35 @@ pdVm.createContext(pdSandbox);
 const runPdCode = `(${extractPaperDollCode[0]})`;
 const compiledDraw = pdVm.runInContext(runPdCode, pdSandbox);
 
-// 測試白襯衫領結 (新飯店換裝)
-const resWhiteTie = compiledDraw(mockCanvas, {
-  gender: 'female',
-  outfit: 'white_shirt_tie',
-  backHair: 'bun_hair',
-  bang: 'bang_straight',
-  skin: 'fair',
-  glasses: 'round'
+// 測試日系瘦身淺膚黑髮
+const resJpSlim = compiledDraw(mockCanvas, {
+  body: 'slim',
+  skin: 'light',
+  hairColor: 'black',
+  hair: 'short_clean',
+  bang: 'slant_left',
+  face: 'oval',
+  eye: 'standard_round',
+  brow: 'standard',
+  nose: 'angle_l',
+  mouth: 'smile'
 });
-assert(resWhiteTie === 'data:image/png;base64,mock_paper_doll', 'drawPaperDollAvatar 順暢執行並產出 Data URL');
+assert(resJpSlim === 'data:image/png;base64,mock_paper_doll', 'drawPaperDollAvatar 日本瘦身款順暢執行並產出 Data URL');
+
+// 測試尼泊爾微胖深膚深棕髮
+const resNepalChubby = compiledDraw(mockCanvas, {
+  body: 'chubby',
+  skin: 'deep',
+  hairColor: 'brown',
+  hair: 'bun_high',
+  bang: 'center_part',
+  face: 'chubby_round',
+  eye: 'smile',
+  brow: 'thick_curved',
+  nose: 'round_soft',
+  mouth: 'teeth_smile'
+});
+assert(resNepalChubby === 'data:image/png;base64,mock_paper_doll', 'drawPaperDollAvatar 尼泊爾豐腴款順暢執行並產出 Data URL');
 
 console.log('  ✅ [PASS] v175 日系純平塗紙片娃娃系統與生圖失敗明確化測試全數通過！');
 

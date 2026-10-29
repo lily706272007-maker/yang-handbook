@@ -4787,7 +4787,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div style="font-size:0.82rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:6px;">
             <span>🧸 日系紙片娃娃換裝工房</span>
-            <span style="font-size:0.68rem; background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:6px; font-weight:700;">純平塗・換公司零重做</span>
+            <span style="font-size:0.68rem; background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:6px; font-weight:700;">純平塗零陰影・黑西裝正裝</span>
           </div>
           <button class="btn btn-ghost btn-xs" onclick="togglePaperDollDrawer()" id="btn-toggle-paper-doll" style="font-size:0.72rem; color:var(--muted); padding:1px 6px;">
             收合/展開
@@ -4795,86 +4795,115 @@
         </div>
         
         <div id="paper-doll-drawer-content">
-          <!-- 分頁頁籤：👔 工作服裝 | 💇 髮型與瀏海 | 😊 臉型與膚色 | 👓 配件 -->
+          <!-- 分頁頁籤：👔 身材與膚色 | 💇 髮型與髮色 | ✂️ 前髮瀏海 | 👀 五官臉型 | 👓 配件名牌 -->
           <div style="display:flex; gap:4px; margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:6px; overflow-x:auto;">
-            <button class="btn btn-xs paper-doll-tab-btn active" id="pd-tab-outfit" onclick="switchPaperDollTab('outfit')" style="font-weight:700; font-size:0.75rem;">👔 工作服裝 (換裝)</button>
-            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-hair" onclick="switchPaperDollTab('hair')" style="font-weight:700; font-size:0.75rem;">💇 髮型與瀏海</button>
-            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-face" onclick="switchPaperDollTab('face')" style="font-weight:700; font-size:0.75rem;">😊 臉型與膚色</button>
+            <button class="btn btn-xs paper-doll-tab-btn active" id="pd-tab-body" onclick="switchPaperDollTab('body')" style="font-weight:700; font-size:0.75rem;">👔 身材與膚色</button>
+            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-hair" onclick="switchPaperDollTab('hair')" style="font-weight:700; font-size:0.75rem;">💇 髮型與髮色</button>
+            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-bang" onclick="switchPaperDollTab('bang')" style="font-weight:700; font-size:0.75rem;">✂️ 前髮瀏海</button>
+            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-face" onclick="switchPaperDollTab('face')" style="font-weight:700; font-size:0.75rem;">👀 五官與臉型</button>
             <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-acc" onclick="switchPaperDollTab('acc')" style="font-weight:700; font-size:0.75rem;">👓 配件與名牌</button>
           </div>
 
-          <!-- 頁籤 1: 👔 工作服裝 (換新公司核心！) -->
-          <div id="pd-panel-outfit" class="paper-doll-panel" style="display:block;">
-            <div style="font-size:0.7rem; color:var(--muted); margin-bottom:6px;">換到新公司時，直接換穿新制服紙片，臉孔與特徵 100% 完整保留：</div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-black_shirt_burgundy_apron" onclick="setPaperDollOutfit('black_shirt_burgundy_apron')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
-                🍷 黑襯衫＋酒紅圍裙
+          <!-- 頁籤 1: 👔 身材 (胖/瘦) ＆ 膚色 (淺/深) -->
+          <div id="pd-panel-body" class="paper-doll-panel" style="display:block;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">身形（全體統一黑色西裝＋白襯衫，無圍裙）：</div>
+            <div style="display:flex; gap:8px; margin-bottom:10px;">
+              <button class="btn btn-sm btn-ghost pd-body-btn" id="pd-body-slim" onclick="setPaperDollBody('slim')" style="font-size:0.75rem; flex:1;">
+                👔 瘦 (標準俐落身材)
               </button>
-              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-black_shirt_navy_apron" onclick="setPaperDollOutfit('black_shirt_navy_apron')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
-                🫐 黑襯衫＋藏青圍裙
+              <button class="btn btn-sm btn-ghost pd-body-btn" id="pd-body-chubby" onclick="setPaperDollBody('chubby')" style="font-size:0.75rem; flex:1;">
+                🐻 胖 (微豐厚實身材)
               </button>
-              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-white_shirt_tie" onclick="setPaperDollOutfit('white_shirt_tie')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
-                👔 飯店白襯衫＋領結
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">膚色（純平塗・嚴格 2 種）：</div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-sm btn-ghost pd-skin-btn" id="pd-skin-light" onclick="setPaperDollSkin('light')" style="font-size:0.75rem; flex:1;">
+                ⚪ 淺膚色 (普通日本人/台灣)
               </button>
-              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-samue_wafuku" onclick="setPaperDollOutfit('samue_wafuku')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
-                👘 溫泉和風作務衣
-              </button>
-              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-suit_vest" onclick="setPaperDollOutfit('suit_vest')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
-                🤵 高級西裝背心
+              <button class="btn btn-sm btn-ghost pd-skin-btn" id="pd-skin-deep" onclick="setPaperDollSkin('deep')" style="font-size:0.75rem; flex:1;">
+                🟤 深膚色 (尼泊爾夥伴)
               </button>
             </div>
           </div>
 
-          <!-- 頁籤 2: 💇 髮型與瀏海 -->
+          <!-- 頁籤 2: 💇 髮型與髮色 (不限男女，12 款通用) -->
           <div id="pd-panel-hair" class="paper-doll-panel" style="display:none;">
-            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">後髮紙片：</div>
-            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
-              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-bun_hair" onclick="setPaperDollHair('backHair', 'bun_hair')">🥟 外場包包頭</button>
-              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-short_clean" onclick="setPaperDollHair('backHair', 'short_clean')">✂️ 俐落短髮</button>
-              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-ponytail" onclick="setPaperDollHair('backHair', 'ponytail')">🐎 活力高馬尾</button>
-              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-shoulder_bob" onclick="setPaperDollHair('backHair', 'shoulder_bob')">💇 及肩波波</button>
-              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-long_straight" onclick="setPaperDollHair('backHair', 'long_straight')">✨ 氣質長直髮</button>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">髮色（嚴格 2 種純平塗）：</div>
+            <div style="display:flex; gap:8px; margin-bottom:10px;">
+              <button class="btn btn-sm btn-ghost pd-haircolor-btn" id="pd-haircolor-black" onclick="setPaperDollHairColor('black')" style="font-size:0.75rem; flex:1;">
+                🖤 自然墨黑
+              </button>
+              <button class="btn btn-sm btn-ghost pd-haircolor-btn" id="pd-haircolor-brown" onclick="setPaperDollHairColor('brown')" style="font-size:0.75rem; flex:1;">
+                🤎 深栗咖啡
+              </button>
             </div>
-            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">前髮瀏海紙片：</div>
-            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
-              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_straight" onclick="setPaperDollHair('bang', 'bang_straight')">✂️ 經典齊瀏海</button>
-              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_left_slant" onclick="setPaperDollHair('bang', 'bang_left_slant')">↙️ 俐落左斜</button>
-              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_right_slant" onclick="setPaperDollHair('bang', 'bang_right_slant')">↘️ 右斜瀏海</button>
-              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_center" onclick="setPaperDollHair('bang', 'bang_center')">🧚‍♀️ 八字中分</button>
-              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_wavy" onclick="setPaperDollHair('bang', 'bang_wavy')">🌊 紋理微捲</button>
-              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_none" onclick="setPaperDollHair('bang', 'bang_none')">🚫 無瀏海</button>
-            </div>
-            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">髮色：</div>
-            <div style="display:flex; gap:6px;">
-              <button class="btn btn-xs btn-ghost pd-haircolor-btn" id="pd-haircolor-black" onclick="setPaperDollHair('color', '#1e1b18')">🖤 自然墨黑</button>
-              <button class="btn btn-xs btn-ghost pd-haircolor-btn" id="pd-haircolor-brown" onclick="setPaperDollHair('color', '#3f271a')">🤎 深栗咖啡</button>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">髮型紙片庫（共 12 款，男女全體通用）：</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-short_clean" onclick="setPaperDollHairStyle('short_clean')">✂️ 俐落側分短髮 (原圖)</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-bun_high" onclick="setPaperDollHairStyle('bun_high')">🥟 外場規範高包包</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-bun_low" onclick="setPaperDollHairStyle('bun_low')">🥟 典雅低髮髻</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-ponytail" onclick="setPaperDollHairStyle('ponytail')">🐎 活力高馬尾</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-bob_shoulder" onclick="setPaperDollHairStyle('bob_shoulder')">💇 及肩內扣波波</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-straight_long" onclick="setPaperDollHairStyle('straight_long')">✨ 氣質長直披肩</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-short_textured" onclick="setPaperDollHairStyle('short_textured')">🌊 紋理微捲短髮</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-all_back" onclick="setPaperDollHairStyle('all_back')">👔 露額大背頭</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-center_part_short" onclick="setPaperDollHairStyle('center_part_short')">知性中分微彎</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-buzz_cut" onclick="setPaperDollHairStyle('buzz_cut')">⚡ 陽光俐落寸頭</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-pixie_cut" onclick="setPaperDollHairStyle('pixie_cut')">🍃 幹練精靈超短髮</button>
+              <button class="btn btn-xs btn-ghost pd-hair-btn" id="pd-hair-half_up" onclick="setPaperDollHairStyle('half_up')">👑 半扎公主頭</button>
             </div>
           </div>
 
-          <!-- 頁籤 3: 😊 臉型與膚色 (純平塗，零怪異陰影) -->
+          <!-- 頁籤 3: ✂️ 前髮瀏海 (6 款) -->
+          <div id="pd-panel-bang" class="paper-doll-panel" style="display:none;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">前髮瀏海紙片（6 款）：</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-slant_left" onclick="setPaperDollBang('slant_left')">↙️ 俐落左斜 (原圖)</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-straight" onclick="setPaperDollBang('straight')">✂️ 經典齊平瀏海</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-center_part" onclick="setPaperDollBang('center_part')">🧚‍♀️ 氣質八字中分</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-slant_right" onclick="setPaperDollBang('slant_right')">↘️ 右斜短碎瀏海</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-wavy" onclick="setPaperDollBang('wavy')">🌊 紋理隨性微捲</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-none" onclick="setPaperDollBang('none')">🚫 大光明露額髮際</button>
+            </div>
+          </div>
+
+          <!-- 頁籤 4: 👀 五官與臉型 -->
           <div id="pd-panel-face" class="paper-doll-panel" style="display:none;">
-            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">純平塗膚色（絕無對不上的陰影）：</div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">臉型紙片（4 款）：</div>
             <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
-              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-fair" onclick="setPaperDollFace('skin', 'fair')">🤍 白皙膚色</button>
-              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-natural" onclick="setPaperDollFace('skin', 'natural')">🇯🇵 自然暖膚 (日籍/一般)</button>
-              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-tan" onclick="setPaperDollFace('skin', 'tan')">🇲🇲 陽光小麥 (越南/緬甸)</button>
-              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-deep_bronze" onclick="setPaperDollFace('skin', 'deep_bronze')">🇳🇵 深邃古銅 (尼泊爾)</button>
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-oval" onclick="setPaperDollFaceShape('oval')">🥚 鵝蛋臉 (原圖)</button>
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-round" onclick="setPaperDollFaceShape('round')">🌕 圓潤臉</button>
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-square" onclick="setPaperDollFaceShape('square')">📐 微方臉</button>
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-chubby_round" onclick="setPaperDollFaceShape('chubby_round')">🐻 豐腴圓臉 (胖)</button>
             </div>
-            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">臉型：</div>
-            <div style="display:flex; gap:4px;">
-              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-oval" onclick="setPaperDollFace('face', 'oval')">🥚 鵝蛋臉</button>
-              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-round" onclick="setPaperDollFace('face', 'round')">🌕 圓潤臉</button>
-              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-square" onclick="setPaperDollFace('face', 'square')">📐 微方臉</button>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">眼型紙片（5 款）：</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
+              <button class="btn btn-xs btn-ghost pd-eye-btn" id="pd-eye-standard_round" onclick="setPaperDollEye('standard_round')">👀 陽光圓眼 (原圖)</button>
+              <button class="btn btn-xs btn-ghost pd-eye-btn" id="pd-eye-smile" onclick="setPaperDollEye('smile')">😊 瞇瞇笑眼</button>
+              <button class="btn btn-xs btn-ghost pd-eye-btn" id="pd-eye-double_eyelid" onclick="setPaperDollEye('double_eyelid')">✨ 雙眼皮大眼</button>
+              <button class="btn btn-xs btn-ghost pd-eye-btn" id="pd-eye-almond" onclick="setPaperDollEye('almond')">俐落杏仁眼</button>
+              <button class="btn btn-xs btn-ghost pd-eye-btn" id="pd-eye-droopy" onclick="setPaperDollEye('droopy')">溫柔垂眼</button>
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">眉毛（4 款）＆ 嘴巴（4 款）：</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">
+              <button class="btn btn-xs btn-ghost pd-brow-btn" id="pd-brow-standard" onclick="setPaperDollBrow('standard')">標準眉</button>
+              <button class="btn btn-xs btn-ghost pd-brow-btn" id="pd-brow-sword" onclick="setPaperDollBrow('sword')">英氣劍眉</button>
+              <button class="btn btn-xs btn-ghost pd-mouth-btn" id="pd-mouth-smile" onclick="setPaperDollMouth('smile')">親切微笑</button>
+              <button class="btn btn-xs btn-ghost pd-mouth-btn" id="pd-mouth-teeth_smile" onclick="setPaperDollMouth('teeth_smile')">露齒笑</button>
             </div>
           </div>
 
-          <!-- 頁籤 4: 👓 配件與名牌 -->
+          <!-- 頁籤 5: 👓 配件與名牌 -->
           <div id="pd-panel-acc" class="paper-doll-panel" style="display:none;">
             <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">眼鏡配件：</div>
             <div style="display:flex; gap:6px; margin-bottom:8px;">
               <button class="btn btn-xs btn-ghost pd-glasses-btn" id="pd-glasses-none" onclick="setPaperDollAcc('glasses', 'none')">🚫 無眼鏡</button>
               <button class="btn btn-xs btn-ghost pd-glasses-btn" id="pd-glasses-round" onclick="setPaperDollAcc('glasses', 'round')">👓 金屬細圓框</button>
               <button class="btn btn-xs btn-ghost pd-glasses-btn" id="pd-glasses-square" onclick="setPaperDollAcc('glasses', 'square')">🕶️ 經典黑方框</button>
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">胸前名札（自動佩戴）：</div>
+            <div style="font-size:0.75rem; color:#475569; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+              🏷️ 依同仁姓名自動雕刻卡扣名牌（如「佐藤」、「伊藤」、「ビヨー」等）
             </div>
           </div>
         </div>
@@ -15791,7 +15820,7 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
 }
 
 // 8.1 🎨 全新日系「純平塗紙片娃娃 (Paper Doll)」向量渲染引擎
-// 特色：純平塗 (Flat Clean Art)・零漸層・零怪異陰影・7 大圖層由後至前嚴格疊加・換裝換公司零成本！
+// 特色：純平塗 (Flat Clean Art)・零怪異陰影・同一套 0° 正視網格・全黑西裝正裝・胖瘦2種身材・淺深2種膚色・黑深棕2種髮色・12款髮型男女通用
 function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
   const canvas = (typeof targetCanvas === 'string') 
     ? document.getElementById(targetCanvas) 
@@ -15805,32 +15834,26 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
   ctx.clearRect(0, 0, size, size);
 
   const traits = customTraits || {};
-  const gender = traits.gender || 'female';
-  const skinType = traits.skin || (traits.nationality && traits.nationality.includes('尼泊爾') ? 'deep_bronze' : (traits.nationality && (traits.nationality.includes('越南') || traits.nationality.includes('緬甸')) ? 'tan' : 'natural'));
-  const faceShape = traits.face || 'oval';
-  const bangStyle = traits.bang || (gender === 'female' ? 'bang_straight' : 'bang_left_slant');
-  const backHairStyle = traits.backHair || traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
-  const hairColor = traits.color || '#1e1b18'; // 純平塗墨黑或深栗色
+  const skinKey = traits.skin === 'deep' || (traits.nationality && traits.nationality.includes('尼泊爾')) ? 'deep' : 'light';
+  const skinColor = skinKey === 'deep' ? '#b87e52' : '#fde2cd';
+  const blushColor = skinKey === 'deep' ? 'rgba(194, 65, 12, 0.35)' : 'rgba(251, 113, 133, 0.45)';
+
+  const hairKey = (traits.color === '#45281a' || traits.hairColor === 'brown') ? 'brown' : 'black';
+  const hairColor = hairKey === 'brown' ? '#45281a' : '#1c1917';
+
+  const bodyType = traits.body || 'slim'; // 'slim' or 'chubby'
+  const faceShape = traits.face || (bodyType === 'chubby' ? 'chubby_round' : 'oval');
+  const hairstyle = traits.hair || traits.backHair || 'short_clean';
+  const bangStyle = traits.bang || 'slant_left';
+  const eyeType = traits.eye || 'standard_round';
+  const browType = traits.brow || 'standard';
+  const noseType = traits.nose || 'angle_l';
+  const mouthType = traits.mouth || 'smile';
   const glasses = traits.glasses || 'none';
-  const outfit = traits.outfit || (traits.nationality && (traits.nationality.includes('越') || traits.nationality.includes('緬')) ? 'black_shirt_navy_apron' : 'black_shirt_burgundy_apron');
   const colleagueName = options.name || (traits.nameItem ? getCleanColleagueName(traits.nameItem) : (currentWhoState.selectedNameItem ? getCleanColleagueName(currentWhoState.selectedNameItem) : ''));
 
-  // 俐落輪廓黑線，純平塗色塊，無任何怪異漸層或光影陰影！
-  const OUTLINE_COLOR = '#262429';
+  const OUTLINE_COLOR = '#222026';
   const OUTLINE_WIDTH = Math.round(size * 0.009);
-
-  let SKIN_COLOR = '#fde2cd'; // 自然暖膚 (natural)
-  let BLUSH_COLOR = 'rgba(251, 113, 133, 0.45)'; // 清爽日系腮紅貼片
-  if (skinType === 'fair') {
-    SKIN_COLOR = '#fff0e5'; // 白皙
-    BLUSH_COLOR = 'rgba(253, 164, 175, 0.45)';
-  } else if (skinType === 'tan') {
-    SKIN_COLOR = '#e8bb96'; // 陽光小麥
-    BLUSH_COLOR = 'rgba(225, 29, 72, 0.35)';
-  } else if (skinType === 'deep_bronze') {
-    SKIN_COLOR = '#b87e52'; // 深邃古銅
-    BLUSH_COLOR = 'rgba(180, 83, 9, 0.3)';
-  }
 
   const scale = size / 512;
   ctx.save();
@@ -15850,20 +15873,19 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
     ctx.restore();
   }
 
-  // ── 【圖層 1：底層後髮 (Back Hair)】 ──
-  if (backHairStyle === 'bun_hair') {
-    // 外場整齊包包頭
+  // ── 【圖層 1：後髮 (Back Hair)】 ──
+  if (hairstyle === 'bun_high') {
     strokeAndFill(() => {
-      ctx.arc(256, 106, 42, 0, Math.PI * 2);
+      ctx.arc(256, 110, 42, 0, Math.PI * 2);
     }, hairColor);
     strokeAndFill(() => {
-      ctx.roundRect(232, 142, 48, 12, 6);
+      ctx.roundRect(232, 144, 48, 12, 6);
     }, '#be123c');
-  } else if (backHairStyle === 'low_bun') {
+  } else if (hairstyle === 'bun_low') {
     strokeAndFill(() => {
-      ctx.arc(256, 268, 44, 0, Math.PI * 2);
+      ctx.arc(256, 275, 42, 0, Math.PI * 2);
     }, hairColor);
-  } else if (backHairStyle === 'ponytail' || backHairStyle === 'high_ponytail') {
+  } else if (hairstyle === 'ponytail') {
     strokeAndFill(() => {
       ctx.moveTo(270, 120);
       ctx.bezierCurveTo(360, 110, 390, 180, 370, 260);
@@ -15873,31 +15895,24 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
     strokeAndFill(() => {
       ctx.roundRect(266, 128, 20, 12, 4);
     }, '#3b82f6');
-  } else if (backHairStyle === 'low_ponytail') {
+  } else if (hairstyle === 'bob_shoulder') {
     strokeAndFill(() => {
-      ctx.moveTo(250, 260);
-      ctx.bezierCurveTo(240, 320, 230, 370, 260, 420);
-      ctx.bezierCurveTo(280, 370, 270, 320, 262, 260);
-      ctx.closePath();
+      ctx.roundRect(165, 165, 182, 125, [30, 30, 40, 40]);
     }, hairColor);
-  } else if (backHairStyle === 'long_straight') {
+  } else if (hairstyle === 'straight_long') {
     strokeAndFill(() => {
       ctx.moveTo(170, 160);
-      ctx.bezierCurveTo(150, 240, 140, 330, 150, 430);
-      ctx.lineTo(200, 430);
+      ctx.bezierCurveTo(150, 240, 140, 330, 150, 440);
+      ctx.lineTo(200, 440);
       ctx.bezierCurveTo(190, 320, 195, 230, 210, 180);
       ctx.closePath();
     }, hairColor);
     strokeAndFill(() => {
       ctx.moveTo(342, 160);
-      ctx.bezierCurveTo(362, 240, 372, 330, 362, 430);
-      ctx.lineTo(312, 430);
+      ctx.bezierCurveTo(362, 240, 372, 330, 362, 440);
+      ctx.lineTo(312, 440);
       ctx.bezierCurveTo(322, 320, 317, 230, 302, 180);
       ctx.closePath();
-    }, hairColor);
-  } else if (backHairStyle === 'shoulder_bob' || backHairStyle === 'bob_short') {
-    strokeAndFill(() => {
-      ctx.roundRect(162, 160, 188, 120, [30, 30, 40, 40]);
     }, hairColor);
   } else {
     // 俐落短髮 / 預設後髮
@@ -15906,244 +15921,180 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
     }, hairColor);
   }
 
-  // ── 【圖層 2：素體層 (Base Body)】（脖子與兩側肩膀） ──
-  strokeAndFill(() => {
-    ctx.roundRect(234, 230, 44, 52, 6);
-  }, SKIN_COLOR);
+  // ── 【圖層 2：身體與黑色西裝 (Body & Black Suit)】 ──
+  const neckW = bodyType === 'chubby' ? 48 : 42;
+  const shoulderW = bodyType === 'chubby' ? 190 : 165;
 
   strokeAndFill(() => {
-    ctx.moveTo(150, 450);
-    ctx.lineTo(176, 280);
-    ctx.bezierCurveTo(205, 272, 234, 270, 256, 270);
-    ctx.bezierCurveTo(278, 270, 307, 272, 336, 280);
-    ctx.lineTo(362, 450);
+    ctx.roundRect(256 - neckW/2, 235, neckW, 58, 6);
+  }, skinColor);
+
+  // 西裝身體外廓 (高級純黑西裝外套)
+  strokeAndFill(() => {
+    ctx.moveTo(256 - shoulderW, 460);
+    ctx.lineTo(256 - shoulderW * 0.75, 290);
+    ctx.lineTo(256 - neckW * 0.6, 285);
+    ctx.lineTo(256 + neckW * 0.6, 285);
+    ctx.lineTo(256 + shoulderW * 0.75, 290);
+    ctx.lineTo(256 + shoulderW, 460);
     ctx.closePath();
-  }, SKIN_COLOR);
+  }, '#18181c');
 
-  // ── 【圖層 3：服裝紙片層 (Outfit / Uniform)】（換公司核心！） ──
-  if (outfit === 'white_shirt_tie') {
-    // 飯店高級白襯衫 + 黑色領結 (換新飯店/新西餐廳)
-    strokeAndFill(() => {
-      ctx.moveTo(172, 280);
-      ctx.lineTo(145, 450);
-      ctx.lineTo(367, 450);
-      ctx.lineTo(340, 280);
-      ctx.lineTo(290, 274);
-      ctx.lineTo(256, 292);
-      ctx.lineTo(222, 274);
-      ctx.closePath();
-    }, '#ffffff');
-    strokeAndFill(() => {
-      ctx.moveTo(220, 272);
-      ctx.lineTo(256, 304);
-      ctx.lineTo(240, 312);
-      ctx.lineTo(214, 280);
-      ctx.closePath();
-    }, '#f1f5f9');
-    strokeAndFill(() => {
-      ctx.moveTo(292, 272);
-      ctx.lineTo(256, 304);
-      ctx.lineTo(272, 312);
-      ctx.lineTo(298, 280);
-      ctx.closePath();
-    }, '#f1f5f9');
-    strokeAndFill(() => {
-      ctx.moveTo(256, 304);
-      ctx.lineTo(238, 294);
-      ctx.lineTo(238, 314);
-      ctx.closePath();
-    }, '#1e1b18');
-    strokeAndFill(() => {
-      ctx.moveTo(256, 304);
-      ctx.lineTo(274, 294);
-      ctx.lineTo(274, 314);
-      ctx.closePath();
-    }, '#1e1b18');
-    strokeAndFill(() => {
-      ctx.arc(256, 304, 5, 0, Math.PI * 2);
-    }, '#2d2d34');
-
-  } else if (outfit === 'samue_wafuku') {
-    // 溫泉旅館和風作務衣 (深青藍 + 淺米色交領)
-    strokeAndFill(() => {
-      ctx.moveTo(172, 280);
-      ctx.lineTo(145, 450);
-      ctx.lineTo(367, 450);
-      ctx.lineTo(340, 280);
-      ctx.closePath();
-    }, '#253549');
-    strokeAndFill(() => {
-      ctx.moveTo(206, 272);
-      ctx.lineTo(276, 360);
-      ctx.lineTo(262, 368);
-      ctx.lineTo(196, 280);
-      ctx.closePath();
-    }, '#f8fafc');
-    strokeAndFill(() => {
-      ctx.moveTo(306, 272);
-      ctx.lineTo(236, 360);
-      ctx.lineTo(248, 368);
-      ctx.lineTo(316, 280);
-      ctx.closePath();
-    }, '#f8fafc');
-
-  } else if (outfit === 'suit_vest') {
-    // 正式紳士西裝背心 (白襯衫內搭 + 碳灰外背心 + 酒紅領帶)
-    strokeAndFill(() => {
-      ctx.moveTo(172, 280);
-      ctx.lineTo(145, 450);
-      ctx.lineTo(367, 450);
-      ctx.lineTo(340, 280);
-      ctx.closePath();
-    }, '#ffffff');
-    strokeAndFill(() => {
-      ctx.moveTo(252, 290);
-      ctx.lineTo(260, 290);
-      ctx.lineTo(264, 360);
-      ctx.lineTo(256, 375);
-      ctx.lineTo(248, 360);
-      ctx.closePath();
-    }, '#991b1b');
-    strokeAndFill(() => {
-      ctx.moveTo(172, 280);
-      ctx.lineTo(145, 450);
-      ctx.lineTo(228, 450);
-      ctx.lineTo(234, 330);
-      ctx.lineTo(206, 280);
-      ctx.closePath();
-    }, '#262626');
-    strokeAndFill(() => {
-      ctx.moveTo(340, 280);
-      ctx.lineTo(367, 450);
-      ctx.lineTo(284, 450);
-      ctx.lineTo(278, 330);
-      ctx.lineTo(306, 280);
-      ctx.closePath();
-    }, '#262626');
-
-  } else {
-    // 經典外場制服：純黑長袖襯衫 + 國籍圍裙 (酒紅 / 藏青)
-    const apronBibColor = (outfit === 'black_shirt_navy_apron') ? '#1e3a5f' : '#881337';
-
-    strokeAndFill(() => {
-      ctx.moveTo(172, 280);
-      ctx.lineTo(145, 450);
-      ctx.lineTo(367, 450);
-      ctx.lineTo(340, 280);
-      ctx.closePath();
-    }, '#18181b');
-
-    strokeAndFill(() => {
-      ctx.moveTo(220, 272);
-      ctx.lineTo(256, 298);
-      ctx.lineTo(240, 306);
-      ctx.lineTo(214, 280);
-      ctx.closePath();
-    }, '#27272a');
-    strokeAndFill(() => {
-      ctx.moveTo(292, 272);
-      ctx.lineTo(256, 298);
-      ctx.lineTo(272, 306);
-      ctx.lineTo(298, 280);
-      ctx.closePath();
-    }, '#27272a');
-
-    strokeAndFill(() => {
-      ctx.roundRect(196, 316, 120, 134, [10, 10, 0, 0]);
-    }, apronBibColor);
-
-    strokeAndFill(() => {
-      ctx.roundRect(196, 284, 18, 36, 4);
-    }, apronBibColor);
-    strokeAndFill(() => {
-      ctx.roundRect(298, 284, 18, 36, 4);
-    }, apronBibColor);
-
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(206, 328);
-    ctx.lineTo(306, 328);
-    ctx.stroke();
-  }
-
-  // ── 【圖層 4：臉型素體與耳朵 (Face & Ears)】（純平塗・無陰影） ──
+  // 白襯衫三角領口
   strokeAndFill(() => {
-    ctx.ellipse(178, 192, 14, 20, 0, 0, Math.PI * 2);
-  }, SKIN_COLOR);
+    ctx.moveTo(256 - 30, 285);
+    ctx.lineTo(256 + 30, 285);
+    ctx.lineTo(256 + 22, 350);
+    ctx.lineTo(256, 370);
+    ctx.lineTo(256 - 22, 350);
+    ctx.closePath();
+  }, '#ffffff');
+
+  // 襯衫翻領
   strokeAndFill(() => {
-    ctx.ellipse(334, 192, 14, 20, 0, 0, Math.PI * 2);
-  }, SKIN_COLOR);
+    ctx.moveTo(256 - 32, 285);
+    ctx.lineTo(256, 320);
+    ctx.lineTo(256 - 16, 330);
+    ctx.lineTo(256 - 38, 295);
+    ctx.closePath();
+  }, '#e2e8f0', OUTLINE_COLOR, 2);
+  strokeAndFill(() => {
+    ctx.moveTo(256 + 32, 285);
+    ctx.lineTo(256, 320);
+    ctx.lineTo(256 + 16, 330);
+    ctx.lineTo(256 + 38, 295);
+    ctx.closePath();
+  }, '#e2e8f0', OUTLINE_COLOR, 2);
+
+  // 西裝V領翻領 (Black Blazer Lapel)
+  strokeAndFill(() => {
+    ctx.moveTo(256 - 40, 290);
+    ctx.lineTo(256 - 16, 370);
+    ctx.lineTo(256 - 40, 460);
+    ctx.lineTo(256 - 85, 460);
+    ctx.lineTo(256 - 76, 320);
+    ctx.closePath();
+  }, '#25252b');
+  strokeAndFill(() => {
+    ctx.moveTo(256 + 40, 290);
+    ctx.lineTo(256 + 16, 370);
+    ctx.lineTo(256 + 40, 460);
+    ctx.lineTo(256 + 85, 460);
+    ctx.lineTo(256 + 76, 320);
+    ctx.closePath();
+  }, '#25252b');
+
+  // ── 【圖層 3：臉型素體與耳朵 (Face Shape & Ears)】 ──
+  const earOffset = (faceShape === 'round' || faceShape === 'chubby_round') ? 78 : 72;
+  strokeAndFill(() => {
+    ctx.ellipse(256 - earOffset, 192, 14, 20, 0, 0, Math.PI * 2);
+  }, skinColor);
+  strokeAndFill(() => {
+    ctx.ellipse(256 + earOffset, 192, 14, 20, 0, 0, Math.PI * 2);
+  }, skinColor);
 
   if (faceShape === 'round') {
     strokeAndFill(() => {
       ctx.ellipse(256, 188, 76, 72, 0, 0, Math.PI * 2);
-    }, SKIN_COLOR);
+    }, skinColor);
+  } else if (faceShape === 'chubby_round') {
+    strokeAndFill(() => {
+      ctx.ellipse(256, 190, 84, 80, 0, 0, Math.PI * 2);
+    }, skinColor);
   } else if (faceShape === 'square') {
     strokeAndFill(() => {
       ctx.roundRect(182, 116, 148, 146, [50, 50, 40, 40]);
-    }, SKIN_COLOR);
+    }, skinColor);
   } else {
     // 預設鵝蛋臉
     strokeAndFill(() => {
       ctx.ellipse(256, 186, 70, 78, 0, 0, Math.PI * 2);
-    }, SKIN_COLOR);
+    }, skinColor);
   }
 
-  // 純平塗腮紅小圓片 (日系 Paper Doll 點綴)
+  // 腮紅貼片
   ctx.save();
-  ctx.fillStyle = BLUSH_COLOR;
+  ctx.fillStyle = blushColor;
   ctx.beginPath();
   ctx.ellipse(214, 206, 13, 7, 0, 0, Math.PI * 2);
   ctx.ellipse(298, 206, 13, 7, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
-  // ── 【圖層 5：五官表情 (Eyes, Brows, Smile)】 ──
+  // ── 【圖層 4：五官表情 (Brows, Eyes, Nose, Mouth)】 ──
+  // 眉毛
   ctx.save();
   ctx.strokeStyle = hairColor;
   ctx.lineWidth = 3.5;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(206, 164);
-  ctx.quadraticCurveTo(222, 158, 236, 165);
-  ctx.moveTo(276, 165);
-  ctx.quadraticCurveTo(290, 158, 306, 164);
+  if (browType === 'sword') {
+    ctx.moveTo(204, 168); ctx.lineTo(238, 160);
+    ctx.moveTo(274, 160); ctx.lineTo(308, 168);
+  } else {
+    ctx.moveTo(206, 164); ctx.quadraticCurveTo(222, 158, 236, 165);
+    ctx.moveTo(276, 165); ctx.quadraticCurveTo(290, 158, 306, 164);
+  }
   ctx.stroke();
   ctx.restore();
 
+  // 眼睛
   function drawEye(cx, cy) {
-    strokeAndFill(() => {
-      ctx.ellipse(cx, cy, 9, 13, 0, 0, Math.PI * 2);
-    }, '#18181b', OUTLINE_COLOR, 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(cx - 3, cy - 4, 3.8, 0, Math.PI * 2);
-    ctx.arc(cx + 2.5, cy + 4, 2, 0, Math.PI * 2);
-    ctx.fill();
-    if (gender === 'female') {
+    if (eyeType === 'smile') {
       ctx.strokeStyle = OUTLINE_COLOR;
-      ctx.lineWidth = 3;
-      ctx.lineCap = 'round';
+      ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.arc(cx, cy - 4, 12, 1.1 * Math.PI, 1.9 * Math.PI);
+      ctx.arc(cx, cy, 14, 1.1 * Math.PI, 1.9 * Math.PI);
       ctx.stroke();
+    } else {
+      strokeAndFill(() => {
+        ctx.ellipse(cx, cy, 9, 13, 0, 0, Math.PI * 2);
+      }, '#18181b', OUTLINE_COLOR, 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(cx - 3, cy - 4, 3.8, 0, Math.PI * 2);
+      ctx.arc(cx + 2.5, cy + 4, 2, 0, Math.PI * 2);
+      ctx.fill();
+      if (eyeType === 'double_eyelid') {
+        ctx.strokeStyle = OUTLINE_COLOR;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy - 12, 14, 1.2 * Math.PI, 1.8 * Math.PI);
+        ctx.stroke();
+      }
     }
   }
   drawEye(220, 188);
   drawEye(292, 188);
 
+  // 鼻子 (小L折角)
+  ctx.save();
+  ctx.strokeStyle = OUTLINE_COLOR;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(256, 204); ctx.lineTo(256, 214); ctx.lineTo(260, 214);
+  ctx.stroke();
+  ctx.restore();
+
+  // 嘴巴 (親切微笑)
   ctx.save();
   ctx.strokeStyle = '#991b1b';
   ctx.lineWidth = 3;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.arc(256, 222, 9, 0.15 * Math.PI, 0.85 * Math.PI);
-  ctx.stroke();
+  if (mouthType === 'teeth_smile') {
+    ctx.fillStyle = '#ffffff';
+    ctx.arc(256, 224, 10, 0, Math.PI);
+    ctx.fill();
+    ctx.stroke();
+  } else {
+    ctx.arc(256, 222, 9, 0.15 * Math.PI, 0.85 * Math.PI);
+    ctx.stroke();
+  }
   ctx.restore();
 
-  // ── 【圖層 6：前髮與瀏海 (Front Bangs & Hairline)】 ──
-  if (bangStyle === 'bang_straight') {
+  // ── 【圖層 5：前髮瀏海 (Front Bangs)】 ──
+  if (bangStyle === 'straight') {
     strokeAndFill(() => {
       ctx.moveTo(180, 170);
       ctx.bezierCurveTo(180, 110, 220, 100, 256, 100);
@@ -16159,25 +16110,7 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
       ctx.lineTo(210, 170);
       ctx.closePath();
     }, hairColor);
-  } else if (bangStyle === 'bang_left_slant') {
-    strokeAndFill(() => {
-      ctx.moveTo(180, 170);
-      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
-      ctx.bezierCurveTo(292, 100, 332, 108, 332, 170);
-      ctx.lineTo(324, 160);
-      ctx.quadraticCurveTo(260, 130, 196, 176);
-      ctx.closePath();
-    }, hairColor);
-  } else if (bangStyle === 'bang_right_slant') {
-    strokeAndFill(() => {
-      ctx.moveTo(180, 170);
-      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
-      ctx.bezierCurveTo(292, 100, 332, 108, 332, 170);
-      ctx.lineTo(316, 176);
-      ctx.quadraticCurveTo(252, 130, 188, 160);
-      ctx.closePath();
-    }, hairColor);
-  } else if (bangStyle === 'bang_center' || bangStyle === 'bang_side_fringe') {
+  } else if (bangStyle === 'center_part') {
     strokeAndFill(() => {
       ctx.moveTo(180, 175);
       ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
@@ -16192,18 +16125,7 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
       ctx.quadraticCurveTo(292, 136, 316, 175);
       ctx.closePath();
     }, hairColor);
-  } else if (bangStyle === 'bang_wavy') {
-    strokeAndFill(() => {
-      ctx.moveTo(180, 168);
-      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
-      ctx.bezierCurveTo(292, 100, 332, 108, 332, 168);
-      ctx.quadraticCurveTo(304, 140, 276, 162);
-      ctx.quadraticCurveTo(256, 136, 236, 162);
-      ctx.quadraticCurveTo(208, 140, 180, 168);
-      ctx.closePath();
-    }, hairColor);
-  } else {
-    // 無瀏海
+  } else if (bangStyle === 'none') {
     strokeAndFill(() => {
       ctx.moveTo(182, 155);
       ctx.bezierCurveTo(182, 108, 220, 100, 256, 100);
@@ -16211,9 +16133,19 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
       ctx.quadraticCurveTo(256, 126, 182, 155);
       ctx.closePath();
     }, hairColor);
+  } else {
+    // 俐落左斜瀏海 (如第二張圖標準款)
+    strokeAndFill(() => {
+      ctx.moveTo(180, 170);
+      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
+      ctx.bezierCurveTo(292, 100, 332, 108, 332, 170);
+      ctx.lineTo(324, 160);
+      ctx.quadraticCurveTo(260, 130, 196, 176);
+      ctx.closePath();
+    }, hairColor);
   }
 
-  // ── 【圖層 7：頂層配件 (Glasses & Name Tag)】 ──
+  // ── 【圖層 6：配件與名牌 (Glasses & Name Tag)】 ──
   if (glasses === 'round') {
     ctx.save();
     ctx.strokeStyle = '#d97706';
@@ -16221,42 +16153,31 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
     ctx.beginPath();
     ctx.arc(220, 188, 21, 0, Math.PI * 2);
     ctx.arc(292, 188, 21, 0, Math.PI * 2);
-    ctx.moveTo(241, 188);
-    ctx.lineTo(271, 188);
-    ctx.moveTo(199, 188);
-    ctx.lineTo(178, 184);
-    ctx.moveTo(313, 188);
-    ctx.lineTo(334, 184);
+    ctx.moveTo(241, 188); ctx.lineTo(271, 188);
     ctx.stroke();
     ctx.restore();
   } else if (glasses === 'square') {
     ctx.save();
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 4;
-    ctx.lineJoin = 'round';
     ctx.strokeRect(198, 172, 44, 32);
     ctx.strokeRect(270, 172, 44, 32);
     ctx.beginPath();
-    ctx.moveTo(242, 186);
-    ctx.lineTo(270, 186);
-    ctx.moveTo(198, 184);
-    ctx.lineTo(178, 182);
-    ctx.moveTo(314, 184);
-    ctx.lineTo(334, 182);
+    ctx.moveTo(242, 186); ctx.lineTo(270, 186);
     ctx.stroke();
     ctx.restore();
   }
 
-  // 胸前名牌紙片 (Name Tag / 名札)
+  // 胸前姓名名札
+  const tagX = 295, tagY = 360, tagW = 68, tagH = 24;
+  strokeAndFill(() => {
+    ctx.roundRect(tagX, tagY, tagW, tagH, 3);
+  }, '#ffffff', '#475569', 2);
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(tagX + 2, tagY + 2, 4, tagH - 4);
   if (colleagueName) {
-    const tagX = 282, tagY = 328, tagW = 76, tagH = 26;
-    strokeAndFill(() => {
-      ctx.roundRect(tagX, tagY, tagW, tagH, 4);
-    }, '#ffffff', '#334155', 2);
-    ctx.fillStyle = '#b45309';
-    ctx.fillRect(tagX + 2, tagY + 2, 4, tagH - 4);
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 12px sans-serif';
+    ctx.font = 'bold 11px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(colleagueName.substring(0, 4), tagX + tagW / 2 + 2, tagY + tagH / 2);
@@ -16264,6 +16185,56 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
 
   ctx.restore();
   return canvas.toDataURL('image/png');
+}
+
+// 8.2 🧸 紙片娃娃互動更新邏輯 (身材/膚色/髮型/髮色/前髮/五官)
+function setPaperDollBody(bodyType) {
+  currentWhoTraits.body = bodyType;
+  renderCurrentPaperDollAvatar();
+  showToast(bodyType === 'chubby' ? '🐻 已切換為偏胖厚實身材！' : '👔 已切換為標準俐落身材！', 'info');
+}
+
+function setPaperDollSkin(skinKey) {
+  currentWhoTraits.skin = skinKey;
+  renderCurrentPaperDollAvatar();
+  showToast(skinKey === 'deep' ? '🟤 已套用深膚色 (尼泊爾夥伴)' : '⚪ 已套用淺膚色 (普通日本人/台灣)', 'info');
+}
+
+function setPaperDollHairColor(colorKey) {
+  currentWhoTraits.color = colorKey === 'brown' ? '#45281a' : '#1c1917';
+  currentWhoTraits.hairColor = colorKey;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollHairStyle(hairId) {
+  currentWhoTraits.hair = hairId;
+  currentWhoTraits.backHair = hairId;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollBang(bangId) {
+  currentWhoTraits.bang = bangId;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollFaceShape(faceId) {
+  currentWhoTraits.face = faceId;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollEye(eyeId) {
+  currentWhoTraits.eye = eyeId;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollBrow(browId) {
+  currentWhoTraits.brow = browId;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollMouth(mouthId) {
+  currentWhoTraits.mouth = mouthId;
+  renderCurrentPaperDollAvatar();
 }
 
 // 8.5 🎨 真實 AI：透過 Imagen 3 動態產生專屬像素立繪 (生圖失敗絕不套用原始假照片，回傳 FAILED)
