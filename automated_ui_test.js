@@ -1622,7 +1622,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v172'), 'sw.js 已正確更新為 v172');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v173'), 'sw.js 已正確更新為 v173');
 
 // (測試統計已移至最末尾執行)
 
@@ -1802,6 +1802,14 @@ assert(html.includes('.typeset-dots-btn') && html.includes('font-size: 0.72rem;'
 
 console.log('  ✅ [PASS] v172 日文排版 7 大修復測試全數通過！');
 
+
+console.log('\n【測試 56：v173 二世古 26 題必考即時擬答按鈕即刻渲染修復】');
+assert(html.includes('renderFastQaChips()') && html.match(/function renderInterviewPage[\s\S]*?renderFastQaChips\(\)/), 'renderInterviewPage 函式內具備 renderFastQaChips() 呼叫');
+assert(html.includes('btn-fast-qa-intro') && html.includes('btn-fast-qa-start_date_nov27'), '#fast-qa-chips-container HTML 內已預先渲染 26 題按鈕，防止空容器或 JS 延遲');
+assert(html.includes('btn-fast-qa-rv_luggage_post') && html.includes('btn-fast-qa-inquire_start_date_nov27'), '包含行李先寄與代詢11/27按鈕');
+assert(html.match(/DOMContentLoaded[\s\S]*?renderFastQaChips\(\)/), 'DOMContentLoaded 包含 renderFastQaChips() 呼叫');
+console.log('  ✅ [PASS] v173 二世古 26 題按鈕即刻載入測試通過！');
+
 console.log('\n====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1809,5 +1817,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v172) 日文排版 7 大修復、注音全覆蓋、防錯位翻譯與列印全面上線！');
+  console.log('🎉 所有測試通過！(v173) 二世古 26 題即時擬答按鈕全面修復上線！');
 }

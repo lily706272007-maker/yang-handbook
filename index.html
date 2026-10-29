@@ -3506,7 +3506,57 @@
           <div class="fast-qa-hint">💡 聽得懂但不知如何口語回答時，直接點擊對應按鈕照著念即可！</div>
         </div>
         <div class="fast-qa-chips-container" id="fast-qa-chips-container">
-          <!-- 由 renderFastQaChips() 動態渲染 23 個中文分類按鈕 -->
+<div class="fast-qa-group">
+    <span class="fast-qa-group-label">🙋 基本開場</span>
+    <div class="fast-qa-group-chips">
+      <button class="fast-qa-chip" id="btn-fast-qa-intro" onclick="selectFastInterviewAnswer('intro')">【自我介紹】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-start_date" onclick="selectFastInterviewAnswer('start_date')">【到職時間】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-start_date_nov27" onclick="selectFastInterviewAnswer('start_date_nov27')">【11/27到任協調】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-inquire_start_date_nov27" onclick="selectFastInterviewAnswer('inquire_start_date_nov27')">【代詢11/27到任】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-visa" onclick="selectFastInterviewAnswer('visa')">【簽證效期】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-current_job" onclick="selectFastInterviewAnswer('current_job')">【現職工作】</button>
+    </div>
+  </div>
+  <div class="fast-qa-group">
+    <span class="fast-qa-group-label">⛷️ 應徵動機</span>
+    <div class="fast-qa-group-chips">
+      <button class="fast-qa-chip" id="btn-fast-qa-motivation" onclick="selectFastInterviewAnswer('motivation')">【應徵動機】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-cold_weather" onclick="selectFastInterviewAnswer('cold_weather')">【耐寒能力】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-day_off" onclick="selectFastInterviewAnswer('day_off')">【休假生活】</button>
+    </div>
+  </div>
+  <div class="fast-qa-group">
+    <span class="fast-qa-group-label">🍽️ 職務與能力</span>
+    <div class="fast-qa-group-chips">
+      <button class="fast-qa-chip" id="btn-fast-qa-role_service" onclick="selectFastInterviewAnswer('role_service')">【第一志願外場】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-role_kitchen" onclick="selectFastInterviewAnswer('role_kitchen')">【第二志願廚房】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-english" onclick="selectFastInterviewAnswer('english')">【英語接待】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-dishwasher" onclick="selectFastInterviewAnswer('dishwasher')">【洗碗機說明】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-strength" onclick="selectFastInterviewAnswer('strength')">【個人優勢】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-overtime" onclick="selectFastInterviewAnswer('overtime')">【加班排班】</button>
+    </div>
+  </div>
+  <div class="fast-qa-group">
+    <span class="fast-qa-group-label">💼 現場協作</span>
+    <div class="fast-qa-group-chips">
+      <button class="fast-qa-chip" id="btn-fast-qa-rush_handling" onclick="selectFastInterviewAnswer('rush_handling')">【忙碌應對】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-multinational" onclick="selectFastInterviewAnswer('multinational')">【多國合作】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-allergy" onclick="selectFastInterviewAnswer('allergy')">【甲殼類過敏】</button>
+      <button class="fast-qa-chip" id="btn-fast-qa-duration" onclick="selectFastInterviewAnswer('duration')">【工作期間】</button>
+    </div>
+  </div>
+  <div class="fast-qa-group">
+    <span class="fast-qa-group-label">❓ 逆質問</span>
+    <div class="fast-qa-group-chips">
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-rv_room" onclick="selectFastInterviewAnswer('rv_room')">【問宿舍個室】</button>
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-rv_distance" onclick="selectFastInterviewAnswer('rv_distance')">【問職場距離】</button>
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-rv_shopping" onclick="selectFastInterviewAnswer('rv_shopping')">【問超市採買】</button>
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-rv_luggage_post" onclick="selectFastInterviewAnswer('rv_luggage_post')">【行李先寄與代收】</button>
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-rv_ski_rental" onclick="selectFastInterviewAnswer('rv_ski_rental')">【問雪具租借】</button>
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-rv_ski_lesson" onclick="selectFastInterviewAnswer('rv_ski_lesson')">【問滑雪課程】</button>
+      <button class="fast-qa-chip highlight" id="btn-fast-qa-ending" onclick="selectFastInterviewAnswer('ending')">【結尾致謝】</button>
+    </div>
+  </div>
         </div>
       </div>
     </section>
@@ -19162,6 +19212,10 @@ function renderFastQaChips() {
   });
   container.innerHTML = html;
 }
+// 頁面載入時即刻呼叫
+if (typeof document !== 'undefined' && document.getElementById('fast-qa-chips-container')) {
+  renderFastQaChips();
+}
 
 // 點擊速查按鈕：0 毫秒極速載入該題日文擬答至右側 answer-container
 function selectFastInterviewAnswer(qaId) {
@@ -20887,6 +20941,7 @@ function renderInterviewPage() {
   renderDialogueHistory();
   renderCurrentAnswers();
   generateRandomReverseQuestions();
+  renderFastQaChips();
 }
 
 // 渲染對話串流盒 (Transync AI 風格：純粹雙向對話紀錄、時間戳記、中譯、雙擊生成擬答)
@@ -23405,6 +23460,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderVocabPage('sop');
   renderBroadcastPage();
   renderInterviewPage();
+  renderFastQaChips();
   initFloatingRaccoon();
 
   if ('speechSynthesis' in window) {
