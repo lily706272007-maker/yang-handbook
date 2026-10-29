@@ -2239,6 +2239,13 @@
     flex-direction: column;
     gap: 12px;
   }
+  
+  /* 歷史對話卡片防干擾樣式：拖曳選取文字時絕不複製按鈕與提示字眼 (v171) */
+  .iv-dblclick-hint, .iv-card-action-btn, .iv-q-pill, .interview-col-pill {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+
   .interview-stream-card {
     background: #fff;
     border: 1.5px solid #e2e8f0;
@@ -3402,8 +3409,10 @@
               <span class="interview-col-pill">ja ➔ zh</span>
               <span>即時對話・雙向聽譯</span>
             </div>
-            <div class="interview-col-actions">
+            <div class="interview-col-actions" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
               <span class="interview-live-indicator" id="iv-live-indicator">○ 待命</span>
+              <button class="btn btn-sm btn-primary" onclick="exportInterviewTranscriptTxt()" title="一鍵下載整場對話全文 .txt 檔案（Transync AI 乾淨格式）" style="font-weight:700;">📥 下載全文</button>
+              <button class="btn btn-sm btn-outline" onclick="copyCleanInterviewTranscript()" title="複製乾淨全文到剪貼簿（含時間戳・無雜訊）">📋 複製全文</button>
               <button class="btn btn-sm btn-outline" onclick="clearInterviewTranscript()" title="清空對話串流（前次內容自動存檔於歷史紀錄）">🗑️ 清空</button>
             </div>
           </div>
@@ -20594,6 +20603,94 @@ function renderDialogueHistory() {
   box.scrollTop = box.scrollHeight;
 }
 
+
+// 渡假打工與滑雪場面試實時後校正字典 (Post-ASR Lexicon Corrector) (v171)
+function correctJapaneseInterviewTerms(text) {
+  if (!text) return text;
+  return text
+    // 勤務形態・班表術語
+    .replace(/投資\s*勤務/g, '通し勤務')
+    .replace(/通し\s*勤務/g, '通し勤務')
+    .replace(/なかぬけ/g, '中抜け')
+    // 宿舍與生活相關
+    .replace(/(?:IBM|イーベア|イベア|相べや|あいべや)/gi, '相部屋')
+    .replace(/料費/g, '寮費')
+    .replace(/レオンの気力/g, '寮の距離')
+    .replace(/気力[。、\s]*腹いって/g, '距離、歩いて')
+    .replace(/腹いって/g, '歩いて')
+    .replace(/食費\s*は特に書かない/g, '食費は特にかからない')
+    // 地名與雪場專名
+    .replace(/ニセカンヌプリ/g, 'ニセコアンヌプリ')
+    .replace(/アンヌプリ/g, 'アンヌプリ')
+    // 旅館與人名
+    .replace(/かじきさん/g, '梶木さん')
+    .replace(/ゆうさい/g, '優彩');
+}
+
+// 格式化輸出 Transync AI 風格之純淨對話全文
+function formatCleanInterviewTranscript(items) {
+  if (!items || items.length === 0) return '';
+  let out = '';
+  items.forEach((item, idx) => {
+    out += `${item.time || '00:00'}\n`;
+    out += `${item.jp}\n`;
+    out += `${item.zh}\n\n`;
+  });
+  return out.trim();
+}
+
+// 📥 一鍵下載當前對話全文為 .txt 檔案 (Transync AI 格式)
+function exportInterviewTranscriptTxt() {
+  const history = InterviewEngine.dialogueHistory;
+  if (!history || history.length === 0) {
+    showToast('目前尚無監聽對話紀錄可匯出', 'info');
+    return;
+  }
+
+  const cleanBody = formatCleanInterviewTranscript(history);
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('zh-TW');
+  const timeStr = now.toLocaleTimeString('zh-TW', { hour12: false });
+  const comp = InterviewEngine.company || '面試對話紀錄';
+  const role = InterviewEngine.role || '業務';
+
+  const fileContent = `==================================================\n` +
+    `【楊の手帳】${comp} 即時監聽對話全文\n` +
+    `匯出日期：${dateStr} ${timeStr}\n` +
+    `應徵職務：${role}\n` +
+    `總句數：共 ${history.length} 句\n` +
+    `==================================================\n\n` +
+    cleanBody + `\n`;
+
+  const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const pad = (n) => String(n).padStart(2, '0');
+  const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  a.href = url;
+  a.download = `楊の手帳_面試監聽對話全文_${stamp}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // 同步複製一份純淨文字到剪貼簿方便貼到 LINE 或備忘錄
+  copyText(cleanBody);
+  showToast(`🎉 已成功下載全文（共 ${history.length} 句），並複製純文字至剪貼簿！`, 'success');
+}
+
+// 📋 一鍵複製純淨對話全文 (無任何按鈕文字雜訊)
+function copyCleanInterviewTranscript() {
+  const history = InterviewEngine.dialogueHistory;
+  if (!history || history.length === 0) {
+    showToast('目前尚無監聽對話紀錄可複製', 'info');
+    return;
+  }
+  const cleanBody = formatCleanInterviewTranscript(history);
+  copyText(cleanBody);
+  showToast(`📋 已複製乾淨對話全文（共 ${history.length} 句，Transync 格式）！`, 'success');
+}
+
 // 依據索引安全選取歷史對話卡片（完全防範特殊引號跳脫異常）
 function selectHistoricalQuestionByIndex(index) {
   const item = InterviewEngine.dialogueHistory[index];
@@ -21731,7 +21828,8 @@ function flushActiveInterimToHistory() {
 // 處理新辨識出的對話語句 (加入累積串流、翻譯並沉澱，支援多方角色獨立成卡)
 async function handleNewRecognizedUtterance(qJp) {
   if (!qJp || qJp.trim().length < 2) return;
-  const cleanQ = qJp.trim();
+  let cleanQ = qJp.trim();
+  cleanQ = correctJapaneseInterviewTerms(cleanQ);
 
   // 若純粹是過短單一語助詞，不單獨成行
   if (/^(えっと|あのー|あの|ええと)$/.test(cleanQ)) {
@@ -21823,23 +21921,12 @@ async function handleNewRecognizedUtterance(qJp) {
   // 智慧判斷此句是否具有提問意圖 (Question Intent Detection，保留標記供紀要與輔助提示)
   const isQuestion = isQuestionSentence(cleanQ);
 
-  // 取得中文翻譯 (歷史對話忠實呈現原句翻譯，解耦題庫，絕不霸道覆蓋原話)
+  // 取得中文翻譯：對話歷史必須 100% 忠實直譯對方實際講的話，絕不被題庫預設題目覆蓋！(v171)
   let qZh = '';
-  if (isQuestion && cleanQ.length >= 6) {
-    const dbMatch = getAnswerFrom50QaDatabase(cleanQ, InterviewEngine.companyHonorific);
-    if (dbMatch && dbMatch.questionZh) {
-      qZh = dbMatch.questionZh;
-    }
-  }
-  if (!qZh && InterviewEngine.qaDatabase[cleanQ]) {
-    qZh = InterviewEngine.qaDatabase[cleanQ].zh;
-  }
-  if (!qZh) {
-    try {
-      qZh = await fetchFreeGoogleTranslate(cleanQ, 'zh-TW') || cleanQ;
-    } catch (e) {
-      qZh = cleanQ;
-    }
+  try {
+    qZh = await fetchFreeGoogleTranslate(cleanQ, 'zh-TW') || cleanQ;
+  } catch (e) {
+    qZh = cleanQ;
   }
 
   // 若具備提問意圖，進行推測預熱快取

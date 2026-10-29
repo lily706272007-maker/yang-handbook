@@ -1622,7 +1622,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v170'), 'sw.js 已正確更新為 v170');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v171'), 'sw.js 已正確更新為 v171');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1656,7 +1656,7 @@ assert(html.includes('if (normQ.length < 5) return null;'), '50 題庫嚴格門�
 assert(html.includes('blacklistShort.test(normQ)'), '50 題庫包含常用應答詞與助詞黑名單保護');
 assert(html.includes('normQ.length >= 8 && normItemQ.length >= 8 && normItemQ.includes(normQ)'), '50 題庫反向包含必須雙方字元 >= 8');
 assert(html.includes('\'はい\': \'好的。\'') && html.includes('\'ので\': \'因為…\'') && html.includes('\'違います\': \'不是這樣的。\''), '常用短語包含 はい、ので、違います、お願いします 字面翻譯');
-assert(html.includes('if (isQuestion && cleanQ.length >= 6) {') && html.includes('getAnswerFrom50QaDatabase(cleanQ, InterviewEngine.companyHonorific)'), '歷史對話翻譯徹底與題庫解耦，非問句絕不被題庫題目覆蓋');
+assert(html.includes('對話歷史必須 100% 忠實直譯對方實際講的話，絕不被題庫預設題目覆蓋！'), '歷史對話翻譯徹底與題庫解耦，忠實直譯對方原話');
 assert(html.includes('id="btn-capture-tab-audio"') && html.includes('toggleTabAudioCapture'), '介面包含「🖥️ 擷取會議音訊」按鈕與控制函式');
 assert(html.includes('id="btn-dual-audio-guide"') && html.includes('openDualAudioGuideModal'), '介面包含「🎧 雙向收音指引」按鈕與控制函式');
 assert(html.includes('id="modal-dual-audio-guide"'), '包含雙向收音設定指南彈窗 (包含 Chrome 分頁、BlackHole 虛擬音效卡與外放喇叭指引)');
@@ -1710,3 +1710,40 @@ assert(getFastItem('start_date_nov27').ruby.includes('<ruby>赴任<rt>ふにん<
 assert(getFastItem('rv_luggage_post').ruby.includes('<ruby>宅配便<rt>たくはいびん</rt></ruby>'), '行李先寄標註正確 Ruby');
 
 console.log('  ✅ [PASS] v170 二世古 26 題緊急中文快捷按鈕條與雙層標音測試全數通過！');
+
+
+console.log('\n【測試 54：v171 一鍵下載對話全文・純淨 Transync 格式・ASR 雪場術語後校正・題庫解耦】');
+assert(html.includes('function exportInterviewTranscriptTxt()'), '包含一鍵下載對話全文函式 exportInterviewTranscriptTxt');
+assert(html.includes('function copyCleanInterviewTranscript()'), '包含一鍵複製純淨對話全文函式 copyCleanInterviewTranscript');
+assert(html.includes('function formatCleanInterviewTranscript('), '包含 Transync 格式化輸出函式 formatCleanInterviewTranscript');
+assert(html.includes('function correctJapaneseInterviewTerms('), '包含渡假打工與滑雪場 ASR 後校正字典函式 correctJapaneseInterviewTerms');
+assert(html.includes('onclick="exportInterviewTranscriptTxt()"'), '介面包含「📥 下載全文」操作按鈕');
+assert(html.includes('onclick="copyCleanInterviewTranscript()"'), '介面包含「📋 複製全文」操作按鈕');
+assert(html.includes('user-select: none !important'), 'CSS 包含防止選取按鈕與提示字眼的防污染規則');
+
+// 測試 ASR 術語後校正效果
+const asrFuncMatch = html.match(/function correctJapaneseInterviewTerms\(text\)\s*\{([\s\S]*?)\n\}/);
+assert(asrFuncMatch, '成功提取 correctJapaneseInterviewTerms 函式');
+const evalAsr = new Function('text', asrFuncMatch[1]);
+
+assert(evalAsr('投資勤務です') === '通し勤務です', '投資勤務 自動校正為 通し勤務 (直落班)');
+assert(evalAsr('IBMも大丈夫ですよね') === '相部屋も大丈夫ですよね', 'IBM 自動校正為 相部屋 (合宿宿舍)');
+assert(evalAsr('イーベアも大丈夫ですよね') === '相部屋も大丈夫ですよね', 'イーベア 自動校正為 相部屋');
+assert(evalAsr('ニセカンヌプリのスキー場') === 'ニセコアンヌプリのスキー場', 'ニセカンヌプリ 自動校正為 ニセコアンヌプリ');
+assert(evalAsr('料費の中に21500円') === '寮費の中に21500円', '料費 自動校正為 寮費');
+assert(evalAsr('食費 は特に書かない') === '食費は特にかからない', '食費 は特別書かない 自動校正為 食費は特にかからない');
+assert(evalAsr('腹いって何分くらいですか') === '歩いて何分くらいですか', '腹いって 自動校正為 歩いて');
+
+// 測試 Transync 格式化純淨度
+const fmtMatch = html.match(/function formatCleanInterviewTranscript\(items\)\s*\{([\s\S]*?)\n\}/);
+assert(fmtMatch, '成功提取 formatCleanInterviewTranscript 函式');
+const evalFmt = new Function('items', fmtMatch[1]);
+const sampleItems = [
+  { time: '00:07', jp: 'もしもし。お疲れさまです。', zh: '喂喂。辛苦了。' },
+  { time: '00:28', jp: '問題ないです。はい。', zh: '沒問題。好的。' }
+];
+const formatted = evalFmt(sampleItems);
+assert(formatted.includes('00:07\nもしもし。お疲れさまです。\n喂喂。辛苦了。'), '輸出嚴格遵照 Transync 時間戳+日文+繁中段落格式');
+assert(!formatted.includes('雙擊擬答') && !formatted.includes('推薦回答'), '格式化文本嚴格排他，絕不包含 UI 按鈕文字雜訊');
+
+console.log('  ✅ [PASS] v171 一鍵下載對話全文、ASR 後校正與格式化測試全數通過！');
