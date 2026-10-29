@@ -1622,7 +1622,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v174'), 'sw.js 已正確更新為 v174');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v175'), 'sw.js 已正確更新為 v175');
 
 // (測試統計已移至最末尾執行)
 
@@ -1819,6 +1819,92 @@ assert(html.includes('🏷️ 手動自訂讀音 [假名]'), '標音標籤按鈕
 assert(html.includes('系統已全自動標平假名與羅馬音'), '未反白文字時點擊自訂讀音按鈕提供親切說明');
 console.log('  ✅ [PASS] v174 語音即時同步與按鈕白話優化測試全數通過！');
 
+
+console.log('\n【測試 58：v175 全新日系純平塗紙片娃娃系統 ＆ 失敗絕不套用假原圖】');
+// 1. 失敗處理驗證
+assert(html.includes('id="who-avatar-failed-card"'), '包含生成失敗專屬紅框警示卡片容器');
+assert(html.includes('生成失敗'), '警示卡片包含醒目的「生成失敗」文字');
+assert(html.includes('未能自 AI 伺服器取得圖像<br>（已依要求絕不套用原始假照片）'), '明確標註絕不套用原始假照片');
+assert(html.includes("return 'FAILED';"), 'generateAvatarWithImagenAsync 失敗時嚴格回傳 FAILED，絕不偷塞假原圖');
+assert(!html.match(/generateAvatarWithImagenAsync[\s\S]*?return generateTransparentChibiAvatar/), 'generateAvatarWithImagenAsync 中徹底移除 generateTransparentChibiAvatar 回退');
+
+// 2. 紙片娃娃繪圖引擎驗證
+assert(html.includes('function drawPaperDollAvatar('), '包含全新日系純平塗紙片娃娃繪圖函式 drawPaperDollAvatar');
+assert(html.includes('id="who-paper-doll-studio"'), '成果區包含日系紙片娃娃換裝工房抽屜');
+assert(html.includes('id="paper-doll-drawer-content"'), '包含換裝紙片抽屜內容容器');
+
+// 3. 抽屜 4 大頁籤與換裝按鈕
+assert(html.includes('id="pd-tab-outfit"') && html.includes('id="pd-tab-hair"'), '抽屜包含工作服裝與髮型頁籤');
+assert(html.includes('id="pd-tab-face"') && html.includes('id="pd-tab-acc"'), '抽屜包含臉型膚色與配件名牌頁籤');
+
+// 4. 換公司核心：服裝紙片庫 (解套換公司重做問題)
+assert(html.includes('setPaperDollOutfit(\'black_shirt_burgundy_apron\')'), '支援黑襯衫＋酒紅圍裙');
+assert(html.includes('setPaperDollOutfit(\'black_shirt_navy_apron\')'), '支援黑襯衫＋藏青圍裙');
+assert(html.includes('setPaperDollOutfit(\'white_shirt_tie\')'), '支援飯店白襯衫＋領結 (換新飯店/餐廳專用)');
+assert(html.includes('setPaperDollOutfit(\'samue_wafuku\')'), '支援溫泉和風作務衣 (溫泉旅館專用)');
+assert(html.includes('setPaperDollOutfit(\'suit_vest\')'), '支援高級西裝背心');
+
+// 5. 互動函式驗證
+assert(html.includes('function renderCurrentPaperDollAvatar()'), '包含即時渲染並儲存紙片娃娃函式 renderCurrentPaperDollAvatar');
+assert(html.includes('function applyPaperDollFallback()'), '包含失敗一鍵轉紙片娃娃函式 applyPaperDollFallback');
+assert(html.includes('function togglePaperDollDrawer()'), '包含換裝抽屜收合展開函式 togglePaperDollDrawer');
+assert(html.includes('function switchPaperDollTab('), '包含換裝頁籤切換函式 switchPaperDollTab');
+
+// 6. 模擬執行 drawPaperDollAvatar 向量指令
+const mockCtxCalls = [];
+const mockCanvas = {
+  width: 0,
+  height: 0,
+  getContext: () => ({
+    save: () => mockCtxCalls.push('save'),
+    restore: () => mockCtxCalls.push('restore'),
+    scale: () => mockCtxCalls.push('scale'),
+    clearRect: () => mockCtxCalls.push('clearRect'),
+    beginPath: () => mockCtxCalls.push('beginPath'),
+    closePath: () => mockCtxCalls.push('closePath'),
+    fill: () => mockCtxCalls.push('fill'),
+    stroke: () => mockCtxCalls.push('stroke'),
+    arc: () => mockCtxCalls.push('arc'),
+    ellipse: () => mockCtxCalls.push('ellipse'),
+    moveTo: () => mockCtxCalls.push('moveTo'),
+    lineTo: () => mockCtxCalls.push('lineTo'),
+    quadraticCurveTo: () => mockCtxCalls.push('quadraticCurveTo'),
+    bezierCurveTo: () => mockCtxCalls.push('bezierCurveTo'),
+    roundRect: () => mockCtxCalls.push('roundRect'),
+    strokeRect: () => mockCtxCalls.push('strokeRect'),
+    fillRect: () => mockCtxCalls.push('fillRect'),
+    fillText: () => mockCtxCalls.push('fillText')
+  }),
+  toDataURL: () => 'data:image/png;base64,mock_paper_doll'
+};
+
+const extractPaperDollCode = html.match(/function drawPaperDollAvatar[\s\S]*?\n\}/);
+assert(extractPaperDollCode, '成功抽取 drawPaperDollAvatar 函式');
+
+const pdSandbox = {
+  document: { getElementById: () => null, createElement: () => mockCanvas },
+  getCleanColleagueName: () => '測試同仁',
+  currentWhoState: { selectedNameItem: { zh: '測試同仁' } },
+  console: console
+};
+const pdVm = require('vm');
+pdVm.createContext(pdSandbox);
+const runPdCode = `(${extractPaperDollCode[0]})`;
+const compiledDraw = pdVm.runInContext(runPdCode, pdSandbox);
+
+// 測試白襯衫領結 (新飯店換裝)
+const resWhiteTie = compiledDraw(mockCanvas, {
+  gender: 'female',
+  outfit: 'white_shirt_tie',
+  backHair: 'bun_hair',
+  bang: 'bang_straight',
+  skin: 'fair',
+  glasses: 'round'
+});
+assert(resWhiteTie === 'data:image/png;base64,mock_paper_doll', 'drawPaperDollAvatar 順暢執行並產出 Data URL');
+
+console.log('  ✅ [PASS] v175 日系純平塗紙片娃娃系統與生圖失敗明確化測試全數通過！');
+
 console.log('\n====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1826,5 +1912,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v174) 簡化說法語音同步更新與手動注音按鈕白話優化全面上線！');
+  console.log('🎉 所有測試通過！(v175) 全新日系純平塗紙片娃娃系統與生圖失敗明確化全面上線！');
 }

@@ -4746,8 +4746,22 @@
       </div>
 
       <!-- 方形純透明背景 Q 版人物容器 -->
-      <div class="who-avatar-square-frame" style="width:230px; height:230px; margin:0 auto 10px; background:radial-gradient(circle, rgba(92,61,30,0.06) 0%, rgba(255,255,255,0) 70%); border-radius:16px; display:flex; align-items:center; justify-content:center; padding:6px;">
+      <div class="who-avatar-square-frame" style="width:230px; height:230px; margin:0 auto 10px; background:radial-gradient(circle, rgba(92,61,30,0.06) 0%, rgba(255,255,255,0) 70%); border-radius:16px; display:flex; align-items:center; justify-content:center; padding:6px; position:relative;">
         <img id="who-result-avatar-img" src="" style="width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));" alt="Q版人物" />
+        <!-- ⚠️ 生成失敗專屬警示卡片 (絕不偷換成原圖) -->
+        <div id="who-avatar-failed-card" style="display:none; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; border:2px dashed #f87171; border-radius:14px; background:#fff1f2; padding:12px; text-align:center;">
+          <div style="font-size:2.2rem; line-height:1; margin-bottom:6px;">⚠️</div>
+          <div style="font-size:1.15rem; font-weight:900; color:#dc2626; letter-spacing:1px; margin-bottom:4px;">生成失敗</div>
+          <div style="font-size:0.75rem; color:#991b1b; line-height:1.4; margin-bottom:10px;">未能自 AI 伺服器取得圖像<br>（已依要求絕不套用原始假照片）</div>
+          <div style="display:flex; flex-direction:column; gap:6px; width:100%;">
+            <button class="btn btn-primary btn-xs" onclick="applyPaperDollFallback()" style="background:#0284c7; border-color:#0284c7; font-weight:800; padding:6px 10px;">
+              🧸 換成純平塗紙片娃娃 (0秒即時)
+            </button>
+            <button class="btn btn-outline btn-xs" onclick="retryGenerateAvatarWithImagen()" style="border-color:#dc2626; color:#dc2626; font-weight:700; padding:4px 8px;">
+              🔄 重新嘗試 AI 生成
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- 同仁資訊 -->
@@ -4766,6 +4780,104 @@
       <!-- 狀態提示（已自動儲存） -->
       <div id="who-result-saved-hint" style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:10px; padding:6px 12px; margin-bottom:12px; font-size:0.75rem; color:#065f46; font-weight:700; display:inline-block;">
         ✨ 已自動儲存至同仁圖鑑卡與名冊！
+      </div>
+
+      <!-- 🧸 全新日系純平塗「紙片娃娃」換裝工房 (換新公司換制服零成本・純平塗零怪異陰影) -->
+      <div id="who-paper-doll-studio" style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:10px 12px; margin-bottom:12px; text-align:left;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:0.82rem; font-weight:800; color:var(--primary); display:flex; align-items:center; gap:6px;">
+            <span>🧸 日系紙片娃娃換裝工房</span>
+            <span style="font-size:0.68rem; background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:6px; font-weight:700;">純平塗・換公司零重做</span>
+          </div>
+          <button class="btn btn-ghost btn-xs" onclick="togglePaperDollDrawer()" id="btn-toggle-paper-doll" style="font-size:0.72rem; color:var(--muted); padding:1px 6px;">
+            收合/展開
+          </button>
+        </div>
+        
+        <div id="paper-doll-drawer-content">
+          <!-- 分頁頁籤：👔 工作服裝 | 💇 髮型與瀏海 | 😊 臉型與膚色 | 👓 配件 -->
+          <div style="display:flex; gap:4px; margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:6px; overflow-x:auto;">
+            <button class="btn btn-xs paper-doll-tab-btn active" id="pd-tab-outfit" onclick="switchPaperDollTab('outfit')" style="font-weight:700; font-size:0.75rem;">👔 工作服裝 (換裝)</button>
+            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-hair" onclick="switchPaperDollTab('hair')" style="font-weight:700; font-size:0.75rem;">💇 髮型與瀏海</button>
+            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-face" onclick="switchPaperDollTab('face')" style="font-weight:700; font-size:0.75rem;">😊 臉型與膚色</button>
+            <button class="btn btn-xs paper-doll-tab-btn" id="pd-tab-acc" onclick="switchPaperDollTab('acc')" style="font-weight:700; font-size:0.75rem;">👓 配件與名牌</button>
+          </div>
+
+          <!-- 頁籤 1: 👔 工作服裝 (換新公司核心！) -->
+          <div id="pd-panel-outfit" class="paper-doll-panel" style="display:block;">
+            <div style="font-size:0.7rem; color:var(--muted); margin-bottom:6px;">換到新公司時，直接換穿新制服紙片，臉孔與特徵 100% 完整保留：</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-black_shirt_burgundy_apron" onclick="setPaperDollOutfit('black_shirt_burgundy_apron')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
+                🍷 黑襯衫＋酒紅圍裙
+              </button>
+              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-black_shirt_navy_apron" onclick="setPaperDollOutfit('black_shirt_navy_apron')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
+                🫐 黑襯衫＋藏青圍裙
+              </button>
+              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-white_shirt_tie" onclick="setPaperDollOutfit('white_shirt_tie')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
+                👔 飯店白襯衫＋領結
+              </button>
+              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-samue_wafuku" onclick="setPaperDollOutfit('samue_wafuku')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
+                👘 溫泉和風作務衣
+              </button>
+              <button class="btn btn-sm btn-ghost pd-outfit-btn" id="pd-outfit-suit_vest" onclick="setPaperDollOutfit('suit_vest')" style="font-size:0.75rem; justify-content:flex-start; text-align:left; padding:4px 8px;">
+                🤵 高級西裝背心
+              </button>
+            </div>
+          </div>
+
+          <!-- 頁籤 2: 💇 髮型與瀏海 -->
+          <div id="pd-panel-hair" class="paper-doll-panel" style="display:none;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">後髮紙片：</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
+              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-bun_hair" onclick="setPaperDollHair('backHair', 'bun_hair')">🥟 外場包包頭</button>
+              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-short_clean" onclick="setPaperDollHair('backHair', 'short_clean')">✂️ 俐落短髮</button>
+              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-ponytail" onclick="setPaperDollHair('backHair', 'ponytail')">🐎 活力高馬尾</button>
+              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-shoulder_bob" onclick="setPaperDollHair('backHair', 'shoulder_bob')">💇 及肩波波</button>
+              <button class="btn btn-xs btn-ghost pd-backhair-btn" id="pd-backhair-long_straight" onclick="setPaperDollHair('backHair', 'long_straight')">✨ 氣質長直髮</button>
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">前髮瀏海紙片：</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_straight" onclick="setPaperDollHair('bang', 'bang_straight')">✂️ 經典齊瀏海</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_left_slant" onclick="setPaperDollHair('bang', 'bang_left_slant')">↙️ 俐落左斜</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_right_slant" onclick="setPaperDollHair('bang', 'bang_right_slant')">↘️ 右斜瀏海</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_center" onclick="setPaperDollHair('bang', 'bang_center')">🧚‍♀️ 八字中分</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_wavy" onclick="setPaperDollHair('bang', 'bang_wavy')">🌊 紋理微捲</button>
+              <button class="btn btn-xs btn-ghost pd-bang-btn" id="pd-bang-bang_none" onclick="setPaperDollHair('bang', 'bang_none')">🚫 無瀏海</button>
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">髮色：</div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-xs btn-ghost pd-haircolor-btn" id="pd-haircolor-black" onclick="setPaperDollHair('color', '#1e1b18')">🖤 自然墨黑</button>
+              <button class="btn btn-xs btn-ghost pd-haircolor-btn" id="pd-haircolor-brown" onclick="setPaperDollHair('color', '#3f271a')">🤎 深栗咖啡</button>
+            </div>
+          </div>
+
+          <!-- 頁籤 3: 😊 臉型與膚色 (純平塗，零怪異陰影) -->
+          <div id="pd-panel-face" class="paper-doll-panel" style="display:none;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">純平塗膚色（絕無對不上的陰影）：</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
+              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-fair" onclick="setPaperDollFace('skin', 'fair')">🤍 白皙膚色</button>
+              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-natural" onclick="setPaperDollFace('skin', 'natural')">🇯🇵 自然暖膚 (日籍/一般)</button>
+              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-tan" onclick="setPaperDollFace('skin', 'tan')">🇲🇲 陽光小麥 (越南/緬甸)</button>
+              <button class="btn btn-xs btn-ghost pd-skin-btn" id="pd-skin-deep_bronze" onclick="setPaperDollFace('skin', 'deep_bronze')">🇳🇵 深邃古銅 (尼泊爾)</button>
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">臉型：</div>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-oval" onclick="setPaperDollFace('face', 'oval')">🥚 鵝蛋臉</button>
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-round" onclick="setPaperDollFace('face', 'round')">🌕 圓潤臉</button>
+              <button class="btn btn-xs btn-ghost pd-face-btn" id="pd-face-square" onclick="setPaperDollFace('face', 'square')">📐 微方臉</button>
+            </div>
+          </div>
+
+          <!-- 頁籤 4: 👓 配件與名牌 -->
+          <div id="pd-panel-acc" class="paper-doll-panel" style="display:none;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--muted); margin-bottom:4px;">眼鏡配件：</div>
+            <div style="display:flex; gap:6px; margin-bottom:8px;">
+              <button class="btn btn-xs btn-ghost pd-glasses-btn" id="pd-glasses-none" onclick="setPaperDollAcc('glasses', 'none')">🚫 無眼鏡</button>
+              <button class="btn btn-xs btn-ghost pd-glasses-btn" id="pd-glasses-round" onclick="setPaperDollAcc('glasses', 'round')">👓 金屬細圓框</button>
+              <button class="btn btn-xs btn-ghost pd-glasses-btn" id="pd-glasses-square" onclick="setPaperDollAcc('glasses', 'square')">🕶️ 經典黑方框</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 操作按鈕 (重新拍照生成 / 重填一次 / 完成關閉) -->
@@ -15578,13 +15690,26 @@ async function finishWhoHobbiesAndReveal() {
 
   const bubbleText = document.getElementById('who-result-bubble-text');
   const avatarImg = document.getElementById('who-result-avatar-img');
+  const failedCard = document.getElementById('who-avatar-failed-card');
   const nameDisplay = document.getElementById('who-result-name-display');
   const roleDisplay = document.getElementById('who-result-role-display');
 
   if (bubbleText) bubbleText.innerHTML = `${cleanName}です 🔊`;
-  if (avatarImg) avatarImg.src = avatarUrl;
   if (nameDisplay) nameDisplay.textContent = cleanName + kanaStr;
   if (roleDisplay) roleDisplay.textContent = `${currentWhoTraits.nationality}・${nameItem.note || '外場夥伴'}`;
+
+  // ⚠️ 嚴格規範：生圖失敗絕不套用原始假照片，顯示「生成失敗」卡片
+  if (avatarUrl === 'FAILED' || !avatarUrl) {
+    if (avatarImg) avatarImg.style.display = 'none';
+    if (failedCard) failedCard.style.display = 'flex';
+  } else {
+    if (failedCard) failedCard.style.display = 'none';
+    if (avatarImg) {
+      avatarImg.src = avatarUrl;
+      avatarImg.style.display = 'block';
+    }
+  }
+  updatePaperDollUI();
 
   // 🎯 成果畫面展示休閒標籤（繁體中文呈現）
   const resultHobbiesList = document.getElementById('who-result-hobbies-list');
@@ -15665,7 +15790,483 @@ function generateTransparentChibiAvatar(nameItem, sampleCanvas, customTraits) {
   }
 }
 
-// 8.5 🎨 真實 AI：透過 Imagen 3 動態產生專屬像素立繪
+// 8.1 🎨 全新日系「純平塗紙片娃娃 (Paper Doll)」向量渲染引擎
+// 特色：純平塗 (Flat Clean Art)・零漸層・零怪異陰影・7 大圖層由後至前嚴格疊加・換裝換公司零成本！
+function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
+  const canvas = (typeof targetCanvas === 'string') 
+    ? document.getElementById(targetCanvas) 
+    : (targetCanvas || document.createElement('canvas'));
+  if (!canvas) return '';
+
+  const size = options.size || 512;
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, size, size);
+
+  const traits = customTraits || {};
+  const gender = traits.gender || 'female';
+  const skinType = traits.skin || (traits.nationality && traits.nationality.includes('尼泊爾') ? 'deep_bronze' : (traits.nationality && (traits.nationality.includes('越南') || traits.nationality.includes('緬甸')) ? 'tan' : 'natural'));
+  const faceShape = traits.face || 'oval';
+  const bangStyle = traits.bang || (gender === 'female' ? 'bang_straight' : 'bang_left_slant');
+  const backHairStyle = traits.backHair || traits.hair || (gender === 'female' ? 'bun_hair' : 'short_clean');
+  const hairColor = traits.color || '#1e1b18'; // 純平塗墨黑或深栗色
+  const glasses = traits.glasses || 'none';
+  const outfit = traits.outfit || (traits.nationality && (traits.nationality.includes('越') || traits.nationality.includes('緬')) ? 'black_shirt_navy_apron' : 'black_shirt_burgundy_apron');
+  const colleagueName = options.name || (traits.nameItem ? getCleanColleagueName(traits.nameItem) : (currentWhoState.selectedNameItem ? getCleanColleagueName(currentWhoState.selectedNameItem) : ''));
+
+  // 俐落輪廓黑線，純平塗色塊，無任何怪異漸層或光影陰影！
+  const OUTLINE_COLOR = '#262429';
+  const OUTLINE_WIDTH = Math.round(size * 0.009);
+
+  let SKIN_COLOR = '#fde2cd'; // 自然暖膚 (natural)
+  let BLUSH_COLOR = 'rgba(251, 113, 133, 0.45)'; // 清爽日系腮紅貼片
+  if (skinType === 'fair') {
+    SKIN_COLOR = '#fff0e5'; // 白皙
+    BLUSH_COLOR = 'rgba(253, 164, 175, 0.45)';
+  } else if (skinType === 'tan') {
+    SKIN_COLOR = '#e8bb96'; // 陽光小麥
+    BLUSH_COLOR = 'rgba(225, 29, 72, 0.35)';
+  } else if (skinType === 'deep_bronze') {
+    SKIN_COLOR = '#b87e52'; // 深邃古銅
+    BLUSH_COLOR = 'rgba(180, 83, 9, 0.3)';
+  }
+
+  const scale = size / 512;
+  ctx.save();
+  ctx.scale(scale, scale);
+
+  function strokeAndFill(fn, fillColor, strokeColor = OUTLINE_COLOR, lw = OUTLINE_WIDTH) {
+    ctx.save();
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lw;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    fn();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── 【圖層 1：底層後髮 (Back Hair)】 ──
+  if (backHairStyle === 'bun_hair') {
+    // 外場整齊包包頭
+    strokeAndFill(() => {
+      ctx.arc(256, 106, 42, 0, Math.PI * 2);
+    }, hairColor);
+    strokeAndFill(() => {
+      ctx.roundRect(232, 142, 48, 12, 6);
+    }, '#be123c');
+  } else if (backHairStyle === 'low_bun') {
+    strokeAndFill(() => {
+      ctx.arc(256, 268, 44, 0, Math.PI * 2);
+    }, hairColor);
+  } else if (backHairStyle === 'ponytail' || backHairStyle === 'high_ponytail') {
+    strokeAndFill(() => {
+      ctx.moveTo(270, 120);
+      ctx.bezierCurveTo(360, 110, 390, 180, 370, 260);
+      ctx.bezierCurveTo(340, 240, 310, 190, 275, 160);
+      ctx.closePath();
+    }, hairColor);
+    strokeAndFill(() => {
+      ctx.roundRect(266, 128, 20, 12, 4);
+    }, '#3b82f6');
+  } else if (backHairStyle === 'low_ponytail') {
+    strokeAndFill(() => {
+      ctx.moveTo(250, 260);
+      ctx.bezierCurveTo(240, 320, 230, 370, 260, 420);
+      ctx.bezierCurveTo(280, 370, 270, 320, 262, 260);
+      ctx.closePath();
+    }, hairColor);
+  } else if (backHairStyle === 'long_straight') {
+    strokeAndFill(() => {
+      ctx.moveTo(170, 160);
+      ctx.bezierCurveTo(150, 240, 140, 330, 150, 430);
+      ctx.lineTo(200, 430);
+      ctx.bezierCurveTo(190, 320, 195, 230, 210, 180);
+      ctx.closePath();
+    }, hairColor);
+    strokeAndFill(() => {
+      ctx.moveTo(342, 160);
+      ctx.bezierCurveTo(362, 240, 372, 330, 362, 430);
+      ctx.lineTo(312, 430);
+      ctx.bezierCurveTo(322, 320, 317, 230, 302, 180);
+      ctx.closePath();
+    }, hairColor);
+  } else if (backHairStyle === 'shoulder_bob' || backHairStyle === 'bob_short') {
+    strokeAndFill(() => {
+      ctx.roundRect(162, 160, 188, 120, [30, 30, 40, 40]);
+    }, hairColor);
+  } else {
+    // 俐落短髮 / 預設後髮
+    strokeAndFill(() => {
+      ctx.ellipse(256, 188, 86, 92, 0, 0, Math.PI * 2);
+    }, hairColor);
+  }
+
+  // ── 【圖層 2：素體層 (Base Body)】（脖子與兩側肩膀） ──
+  strokeAndFill(() => {
+    ctx.roundRect(234, 230, 44, 52, 6);
+  }, SKIN_COLOR);
+
+  strokeAndFill(() => {
+    ctx.moveTo(150, 450);
+    ctx.lineTo(176, 280);
+    ctx.bezierCurveTo(205, 272, 234, 270, 256, 270);
+    ctx.bezierCurveTo(278, 270, 307, 272, 336, 280);
+    ctx.lineTo(362, 450);
+    ctx.closePath();
+  }, SKIN_COLOR);
+
+  // ── 【圖層 3：服裝紙片層 (Outfit / Uniform)】（換公司核心！） ──
+  if (outfit === 'white_shirt_tie') {
+    // 飯店高級白襯衫 + 黑色領結 (換新飯店/新西餐廳)
+    strokeAndFill(() => {
+      ctx.moveTo(172, 280);
+      ctx.lineTo(145, 450);
+      ctx.lineTo(367, 450);
+      ctx.lineTo(340, 280);
+      ctx.lineTo(290, 274);
+      ctx.lineTo(256, 292);
+      ctx.lineTo(222, 274);
+      ctx.closePath();
+    }, '#ffffff');
+    strokeAndFill(() => {
+      ctx.moveTo(220, 272);
+      ctx.lineTo(256, 304);
+      ctx.lineTo(240, 312);
+      ctx.lineTo(214, 280);
+      ctx.closePath();
+    }, '#f1f5f9');
+    strokeAndFill(() => {
+      ctx.moveTo(292, 272);
+      ctx.lineTo(256, 304);
+      ctx.lineTo(272, 312);
+      ctx.lineTo(298, 280);
+      ctx.closePath();
+    }, '#f1f5f9');
+    strokeAndFill(() => {
+      ctx.moveTo(256, 304);
+      ctx.lineTo(238, 294);
+      ctx.lineTo(238, 314);
+      ctx.closePath();
+    }, '#1e1b18');
+    strokeAndFill(() => {
+      ctx.moveTo(256, 304);
+      ctx.lineTo(274, 294);
+      ctx.lineTo(274, 314);
+      ctx.closePath();
+    }, '#1e1b18');
+    strokeAndFill(() => {
+      ctx.arc(256, 304, 5, 0, Math.PI * 2);
+    }, '#2d2d34');
+
+  } else if (outfit === 'samue_wafuku') {
+    // 溫泉旅館和風作務衣 (深青藍 + 淺米色交領)
+    strokeAndFill(() => {
+      ctx.moveTo(172, 280);
+      ctx.lineTo(145, 450);
+      ctx.lineTo(367, 450);
+      ctx.lineTo(340, 280);
+      ctx.closePath();
+    }, '#253549');
+    strokeAndFill(() => {
+      ctx.moveTo(206, 272);
+      ctx.lineTo(276, 360);
+      ctx.lineTo(262, 368);
+      ctx.lineTo(196, 280);
+      ctx.closePath();
+    }, '#f8fafc');
+    strokeAndFill(() => {
+      ctx.moveTo(306, 272);
+      ctx.lineTo(236, 360);
+      ctx.lineTo(248, 368);
+      ctx.lineTo(316, 280);
+      ctx.closePath();
+    }, '#f8fafc');
+
+  } else if (outfit === 'suit_vest') {
+    // 正式紳士西裝背心 (白襯衫內搭 + 碳灰外背心 + 酒紅領帶)
+    strokeAndFill(() => {
+      ctx.moveTo(172, 280);
+      ctx.lineTo(145, 450);
+      ctx.lineTo(367, 450);
+      ctx.lineTo(340, 280);
+      ctx.closePath();
+    }, '#ffffff');
+    strokeAndFill(() => {
+      ctx.moveTo(252, 290);
+      ctx.lineTo(260, 290);
+      ctx.lineTo(264, 360);
+      ctx.lineTo(256, 375);
+      ctx.lineTo(248, 360);
+      ctx.closePath();
+    }, '#991b1b');
+    strokeAndFill(() => {
+      ctx.moveTo(172, 280);
+      ctx.lineTo(145, 450);
+      ctx.lineTo(228, 450);
+      ctx.lineTo(234, 330);
+      ctx.lineTo(206, 280);
+      ctx.closePath();
+    }, '#262626');
+    strokeAndFill(() => {
+      ctx.moveTo(340, 280);
+      ctx.lineTo(367, 450);
+      ctx.lineTo(284, 450);
+      ctx.lineTo(278, 330);
+      ctx.lineTo(306, 280);
+      ctx.closePath();
+    }, '#262626');
+
+  } else {
+    // 經典外場制服：純黑長袖襯衫 + 國籍圍裙 (酒紅 / 藏青)
+    const apronBibColor = (outfit === 'black_shirt_navy_apron') ? '#1e3a5f' : '#881337';
+
+    strokeAndFill(() => {
+      ctx.moveTo(172, 280);
+      ctx.lineTo(145, 450);
+      ctx.lineTo(367, 450);
+      ctx.lineTo(340, 280);
+      ctx.closePath();
+    }, '#18181b');
+
+    strokeAndFill(() => {
+      ctx.moveTo(220, 272);
+      ctx.lineTo(256, 298);
+      ctx.lineTo(240, 306);
+      ctx.lineTo(214, 280);
+      ctx.closePath();
+    }, '#27272a');
+    strokeAndFill(() => {
+      ctx.moveTo(292, 272);
+      ctx.lineTo(256, 298);
+      ctx.lineTo(272, 306);
+      ctx.lineTo(298, 280);
+      ctx.closePath();
+    }, '#27272a');
+
+    strokeAndFill(() => {
+      ctx.roundRect(196, 316, 120, 134, [10, 10, 0, 0]);
+    }, apronBibColor);
+
+    strokeAndFill(() => {
+      ctx.roundRect(196, 284, 18, 36, 4);
+    }, apronBibColor);
+    strokeAndFill(() => {
+      ctx.roundRect(298, 284, 18, 36, 4);
+    }, apronBibColor);
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(206, 328);
+    ctx.lineTo(306, 328);
+    ctx.stroke();
+  }
+
+  // ── 【圖層 4：臉型素體與耳朵 (Face & Ears)】（純平塗・無陰影） ──
+  strokeAndFill(() => {
+    ctx.ellipse(178, 192, 14, 20, 0, 0, Math.PI * 2);
+  }, SKIN_COLOR);
+  strokeAndFill(() => {
+    ctx.ellipse(334, 192, 14, 20, 0, 0, Math.PI * 2);
+  }, SKIN_COLOR);
+
+  if (faceShape === 'round') {
+    strokeAndFill(() => {
+      ctx.ellipse(256, 188, 76, 72, 0, 0, Math.PI * 2);
+    }, SKIN_COLOR);
+  } else if (faceShape === 'square') {
+    strokeAndFill(() => {
+      ctx.roundRect(182, 116, 148, 146, [50, 50, 40, 40]);
+    }, SKIN_COLOR);
+  } else {
+    // 預設鵝蛋臉
+    strokeAndFill(() => {
+      ctx.ellipse(256, 186, 70, 78, 0, 0, Math.PI * 2);
+    }, SKIN_COLOR);
+  }
+
+  // 純平塗腮紅小圓片 (日系 Paper Doll 點綴)
+  ctx.save();
+  ctx.fillStyle = BLUSH_COLOR;
+  ctx.beginPath();
+  ctx.ellipse(214, 206, 13, 7, 0, 0, Math.PI * 2);
+  ctx.ellipse(298, 206, 13, 7, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // ── 【圖層 5：五官表情 (Eyes, Brows, Smile)】 ──
+  ctx.save();
+  ctx.strokeStyle = hairColor;
+  ctx.lineWidth = 3.5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(206, 164);
+  ctx.quadraticCurveTo(222, 158, 236, 165);
+  ctx.moveTo(276, 165);
+  ctx.quadraticCurveTo(290, 158, 306, 164);
+  ctx.stroke();
+  ctx.restore();
+
+  function drawEye(cx, cy) {
+    strokeAndFill(() => {
+      ctx.ellipse(cx, cy, 9, 13, 0, 0, Math.PI * 2);
+    }, '#18181b', OUTLINE_COLOR, 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(cx - 3, cy - 4, 3.8, 0, Math.PI * 2);
+    ctx.arc(cx + 2.5, cy + 4, 2, 0, Math.PI * 2);
+    ctx.fill();
+    if (gender === 'female') {
+      ctx.strokeStyle = OUTLINE_COLOR;
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(cx, cy - 4, 12, 1.1 * Math.PI, 1.9 * Math.PI);
+      ctx.stroke();
+    }
+  }
+  drawEye(220, 188);
+  drawEye(292, 188);
+
+  ctx.save();
+  ctx.strokeStyle = '#991b1b';
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(256, 222, 9, 0.15 * Math.PI, 0.85 * Math.PI);
+  ctx.stroke();
+  ctx.restore();
+
+  // ── 【圖層 6：前髮與瀏海 (Front Bangs & Hairline)】 ──
+  if (bangStyle === 'bang_straight') {
+    strokeAndFill(() => {
+      ctx.moveTo(180, 170);
+      ctx.bezierCurveTo(180, 110, 220, 100, 256, 100);
+      ctx.bezierCurveTo(292, 100, 332, 110, 332, 170);
+      ctx.lineTo(318, 170);
+      ctx.lineTo(306, 154);
+      ctx.lineTo(294, 170);
+      ctx.lineTo(280, 154);
+      ctx.lineTo(266, 170);
+      ctx.lineTo(252, 154);
+      ctx.lineTo(238, 170);
+      ctx.lineTo(224, 154);
+      ctx.lineTo(210, 170);
+      ctx.closePath();
+    }, hairColor);
+  } else if (bangStyle === 'bang_left_slant') {
+    strokeAndFill(() => {
+      ctx.moveTo(180, 170);
+      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
+      ctx.bezierCurveTo(292, 100, 332, 108, 332, 170);
+      ctx.lineTo(324, 160);
+      ctx.quadraticCurveTo(260, 130, 196, 176);
+      ctx.closePath();
+    }, hairColor);
+  } else if (bangStyle === 'bang_right_slant') {
+    strokeAndFill(() => {
+      ctx.moveTo(180, 170);
+      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
+      ctx.bezierCurveTo(292, 100, 332, 108, 332, 170);
+      ctx.lineTo(316, 176);
+      ctx.quadraticCurveTo(252, 130, 188, 160);
+      ctx.closePath();
+    }, hairColor);
+  } else if (bangStyle === 'bang_center' || bangStyle === 'bang_side_fringe') {
+    strokeAndFill(() => {
+      ctx.moveTo(180, 175);
+      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
+      ctx.lineTo(256, 136);
+      ctx.quadraticCurveTo(220, 136, 196, 175);
+      ctx.closePath();
+    }, hairColor);
+    strokeAndFill(() => {
+      ctx.moveTo(332, 175);
+      ctx.bezierCurveTo(332, 108, 292, 100, 256, 100);
+      ctx.lineTo(256, 136);
+      ctx.quadraticCurveTo(292, 136, 316, 175);
+      ctx.closePath();
+    }, hairColor);
+  } else if (bangStyle === 'bang_wavy') {
+    strokeAndFill(() => {
+      ctx.moveTo(180, 168);
+      ctx.bezierCurveTo(180, 108, 220, 100, 256, 100);
+      ctx.bezierCurveTo(292, 100, 332, 108, 332, 168);
+      ctx.quadraticCurveTo(304, 140, 276, 162);
+      ctx.quadraticCurveTo(256, 136, 236, 162);
+      ctx.quadraticCurveTo(208, 140, 180, 168);
+      ctx.closePath();
+    }, hairColor);
+  } else {
+    // 無瀏海
+    strokeAndFill(() => {
+      ctx.moveTo(182, 155);
+      ctx.bezierCurveTo(182, 108, 220, 100, 256, 100);
+      ctx.bezierCurveTo(292, 100, 330, 108, 330, 155);
+      ctx.quadraticCurveTo(256, 126, 182, 155);
+      ctx.closePath();
+    }, hairColor);
+  }
+
+  // ── 【圖層 7：頂層配件 (Glasses & Name Tag)】 ──
+  if (glasses === 'round') {
+    ctx.save();
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.arc(220, 188, 21, 0, Math.PI * 2);
+    ctx.arc(292, 188, 21, 0, Math.PI * 2);
+    ctx.moveTo(241, 188);
+    ctx.lineTo(271, 188);
+    ctx.moveTo(199, 188);
+    ctx.lineTo(178, 184);
+    ctx.moveTo(313, 188);
+    ctx.lineTo(334, 184);
+    ctx.stroke();
+    ctx.restore();
+  } else if (glasses === 'square') {
+    ctx.save();
+    ctx.strokeStyle = '#0f172a';
+    ctx.lineWidth = 4;
+    ctx.lineJoin = 'round';
+    ctx.strokeRect(198, 172, 44, 32);
+    ctx.strokeRect(270, 172, 44, 32);
+    ctx.beginPath();
+    ctx.moveTo(242, 186);
+    ctx.lineTo(270, 186);
+    ctx.moveTo(198, 184);
+    ctx.lineTo(178, 182);
+    ctx.moveTo(314, 184);
+    ctx.lineTo(334, 182);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // 胸前名牌紙片 (Name Tag / 名札)
+  if (colleagueName) {
+    const tagX = 282, tagY = 328, tagW = 76, tagH = 26;
+    strokeAndFill(() => {
+      ctx.roundRect(tagX, tagY, tagW, tagH, 4);
+    }, '#ffffff', '#334155', 2);
+    ctx.fillStyle = '#b45309';
+    ctx.fillRect(tagX + 2, tagY + 2, 4, tagH - 4);
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(colleagueName.substring(0, 4), tagX + tagW / 2 + 2, tagY + tagH / 2);
+  }
+
+  ctx.restore();
+  return canvas.toDataURL('image/png');
+}
+
+// 8.5 🎨 真實 AI：透過 Imagen 3 動態產生專屬像素立繪 (生圖失敗絕不套用原始假照片，回傳 FAILED)
 async function generateAvatarWithImagenAsync(nameItem, customTraits) {
   const traits = customTraits || (nameItem && nameItem.traits) || (nameItem && DEFAULT_COLLEAGUE_TRAITS[nameItem.id]) || currentWhoTraits;
   const gender = traits.gender || 'female';
@@ -15680,8 +16281,8 @@ async function generateAvatarWithImagenAsync(nameItem, customTraits) {
 
   const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : (typeof HARDCODED_GEMINI_API_KEY !== 'undefined' ? HARDCODED_GEMINI_API_KEY : '');
   if (!key) {
-    console.warn("No API key for Imagen. Falling back to static image.");
-    return generateTransparentChibiAvatar(nameItem, null, traits);
+    console.warn("No API key for Imagen. Generation failed.");
+    return 'FAILED';
   }
 
   try {
@@ -15709,8 +16310,123 @@ async function generateAvatarWithImagenAsync(nameItem, customTraits) {
     console.error("Imagen generation error:", err);
   }
   
-  console.warn("Imagen generation failed. Falling back to static image.");
-  return generateTransparentChibiAvatar(nameItem, null, traits);
+  console.warn("Imagen generation failed. Returning FAILED without fake stock fallback.");
+  return 'FAILED';
+}
+
+// 8.6 🧸 紙片娃娃專屬互動操作函式群
+function renderCurrentPaperDollAvatar() {
+  const avatarImg = document.getElementById('who-result-avatar-img');
+  const failedCard = document.getElementById('who-avatar-failed-card');
+  const targetItem = currentWhoState.selectedNameItem;
+
+  const dataUrl = drawPaperDollAvatar(null, currentWhoTraits, {
+    size: 512,
+    name: targetItem ? getCleanColleagueName(targetItem) : ''
+  });
+
+  currentWhoState.generatedAvatarUrl = dataUrl;
+  if (failedCard) failedCard.style.display = 'none';
+  if (avatarImg) {
+    avatarImg.src = dataUrl;
+    avatarImg.style.display = 'block';
+    avatarImg.style.opacity = '1';
+  }
+
+  updatePaperDollUI();
+  autoSaveWhoAvatar();
+  return dataUrl;
+}
+
+function applyPaperDollFallback() {
+  const dataUrl = renderCurrentPaperDollAvatar();
+  showToast('🧸 已為您切換至日系純平塗紙片娃娃形象！', 'success');
+}
+
+function retryGenerateAvatarWithImagen() {
+  finishWhoHobbiesAndReveal();
+}
+
+function togglePaperDollDrawer() {
+  const drawer = document.getElementById('paper-doll-drawer-content');
+  const btn = document.getElementById('btn-toggle-paper-doll');
+  if (drawer) {
+    const isHidden = drawer.style.display === 'none';
+    drawer.style.display = isHidden ? 'block' : 'none';
+    if (btn) btn.textContent = isHidden ? '收合' : '展開';
+  }
+}
+
+function switchPaperDollTab(tabId) {
+  document.querySelectorAll('.paper-doll-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.paper-doll-panel').forEach(p => p.style.display = 'none');
+
+  const activeBtn = document.getElementById('pd-tab-' + tabId);
+  const activePanel = document.getElementById('pd-panel-' + tabId);
+  if (activeBtn) activeBtn.classList.add('active');
+  if (activePanel) activePanel.style.display = 'block';
+}
+
+function setPaperDollOutfit(outfitId) {
+  currentWhoTraits.outfit = outfitId;
+  renderCurrentPaperDollAvatar();
+  showToast('👔 已更換工作服裝紙片！', 'info');
+}
+
+function setPaperDollHair(prop, val) {
+  currentWhoTraits[prop] = val;
+  if (prop === 'backHair') currentWhoTraits.hair = val;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollFace(prop, val) {
+  currentWhoTraits[prop] = val;
+  renderCurrentPaperDollAvatar();
+}
+
+function setPaperDollAcc(prop, val) {
+  currentWhoTraits[prop] = val;
+  renderCurrentPaperDollAvatar();
+}
+
+function updatePaperDollUI() {
+  // 服裝按鈕高亮
+  const curOutfit = currentWhoTraits.outfit || 'black_shirt_burgundy_apron';
+  document.querySelectorAll('.pd-outfit-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  document.getElementById('pd-outfit-' + curOutfit)?.classList.add('btn-primary');
+
+  // 後髮按鈕高亮
+  const curBackHair = currentWhoTraits.backHair || currentWhoTraits.hair || 'bun_hair';
+  document.querySelectorAll('.pd-backhair-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  document.getElementById('pd-backhair-' + curBackHair)?.classList.add('btn-primary');
+
+  // 瀏海按鈕高亮
+  const curBang = currentWhoTraits.bang || 'bang_straight';
+  document.querySelectorAll('.pd-bang-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  document.getElementById('pd-bang-' + curBang)?.classList.add('btn-primary');
+
+  // 髮色按鈕高亮
+  document.querySelectorAll('.pd-haircolor-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  if (currentWhoTraits.color === '#3f271a') {
+    document.getElementById('pd-haircolor-brown')?.classList.add('btn-primary');
+  } else {
+    document.getElementById('pd-haircolor-black')?.classList.add('btn-primary');
+  }
+
+  // 膚色按鈕高亮
+  const curSkin = currentWhoTraits.skin || 'natural';
+  document.querySelectorAll('.pd-skin-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  document.getElementById('pd-skin-' + curSkin)?.classList.add('btn-primary');
+
+  // 臉型按鈕高亮
+  const curFace = currentWhoTraits.face || 'oval';
+  document.querySelectorAll('.pd-face-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  document.getElementById('pd-face-' + curFace)?.classList.add('btn-primary');
+
+  // 眼鏡按鈕高亮
+  const curGlasses = currentWhoTraits.glasses || 'none';
+  document.querySelectorAll('.pd-glasses-btn').forEach(btn => btn.classList.remove('btn-primary'));
+  document.getElementById('pd-glasses-' + curGlasses)?.classList.add('btn-primary');
 }
 
 
@@ -15754,10 +16470,19 @@ async function setAvatarTrait(traitType, val) {
     const avatarUrl = await generateAvatarWithImagenAsync(currentWhoState.selectedNameItem, currentWhoTraits);
     currentWhoState.generatedAvatarUrl = avatarUrl;
     
-    if (avatarImg) {
-      avatarImg.src = avatarUrl;
-      avatarImg.style.opacity = '1';
+    const failedCard = document.getElementById('who-avatar-failed-card');
+    if (avatarUrl === 'FAILED' || !avatarUrl) {
+      if (avatarImg) avatarImg.style.display = 'none';
+      if (failedCard) failedCard.style.display = 'flex';
+    } else {
+      if (failedCard) failedCard.style.display = 'none';
+      if (avatarImg) {
+        avatarImg.src = avatarUrl;
+        avatarImg.style.display = 'block';
+        avatarImg.style.opacity = '1';
+      }
     }
+    updatePaperDollUI();
     autoSaveWhoAvatar();
   }
 }
@@ -15927,8 +16652,18 @@ async function handleWhoCameraCapture(event) {
 
     currentWhoState.generatedAvatarUrl = avatarUrl;
     const avatarImg = document.getElementById('who-result-avatar-img');
-    if (avatarImg) avatarImg.src = avatarUrl;
-
+    const failedCard = document.getElementById('who-avatar-failed-card');
+    if (avatarUrl === 'FAILED' || !avatarUrl) {
+      if (avatarImg) avatarImg.style.display = 'none';
+      if (failedCard) failedCard.style.display = 'flex';
+    } else {
+      if (failedCard) failedCard.style.display = 'none';
+      if (avatarImg) {
+        avatarImg.src = avatarUrl;
+        avatarImg.style.display = 'block';
+      }
+    }
+    updatePaperDollUI();
     autoSaveWhoAvatar();
     showToast('✨ 拍照成功！已為您即時重新描繪並儲存新形象！', 'success');
 
@@ -16150,7 +16885,7 @@ function openNameAvatarModal(vocabId) {
   // 3. 立繪頭像呈現：
   // 嚴格原則：只有本人（楊詠筑）或真正拍照/填寫過形象的同仁才有 avatarUrl
   // 未拍照、未填寫資料的同仁絕不瞎湊照片，直接顯示簡潔高質感的「尚未設定照片」預設佔位狀態！
-  const hasAvatar = !!(item.avatarUrl && item.avatarUrl.trim() && !item.avatarUrl.includes('avatar_yang.png'));
+  const hasAvatar = !!(item.avatarUrl && item.avatarUrl.trim() && item.avatarUrl !== 'FAILED' && !item.avatarUrl.includes('avatar_yang.png'));
 
   let avatarPlaceholder = document.getElementById('name-card-avatar-placeholder');
   if (!avatarPlaceholder) {
