@@ -3182,8 +3182,8 @@
             <button class="btn btn-secondary btn-sm" onclick="convertTypesetTone('colleague')" title="將日文重寫為同事之間的親切平級口吻">
               ✨ 轉為同事口語
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="insertRubyTagToInput()">
-              ＋ 標音標籤 (ruby)
+            <button class="btn btn-secondary btn-sm" onclick="insertRubyTagToInput()" title="選取輸入框文字後點擊，可手動為特定人名或生僻字自訂讀音（例：楊詠筑[ヤン ユンジュ]）">
+              🏷️ 手動自訂讀音 [假名]
             </button>
             <button class="btn btn-secondary btn-sm" onclick="toggleSlidersPanel()" id="btn-toggle-sliders">
               📐 排版微調
@@ -17398,10 +17398,16 @@ function insertRubyTagToInput() {
   const start = input.selectionStart;
   const end = input.selectionEnd;
   const val = input.value;
-  const sel = val.substring(start, end) || '漢字';
-  const tag = sel + '[かんじ]';
+  const sel = val.substring(start, end).trim();
+  if (!sel) {
+    showToast('💡 說明：系統已全自動標平假名與羅馬音！若有特殊人名/地名想自訂讀音，請先反白文字再按此鈕。', 'info');
+    return;
+  }
+  const tag = sel + '[請輸入讀音]';
   input.value = val.substring(0, start) + tag + val.substring(end);
   input.focus();
+  input.setSelectionRange(start + sel.length + 1, start + sel.length + 7);
+  showToast(`已為「${sel}」加上自訂讀音標記，請直接鍵入平假名！`, 'success');
 }
 
 function toggleSlidersPanel() {
@@ -18043,14 +18049,17 @@ function renderTypesetResult(data) {
     renderTypesetSegmentsToElement(jpLine, group.segments, showH, showR, showK);
     gEl.appendChild(jpLine);
 
-    // 句末三個小點點按鈕：不干擾視覺，點擊直接播放日語發音！
+    // 句末三個小點點按鈕：不干擾視覺，點擊直接播放日語發音 (動態讀取最新句子讀音)！
     const dotsBtn = document.createElement('button');
     dotsBtn.className = 'typeset-dots-btn';
     dotsBtn.title = '🔊 點擊播放日語發音 (長按或右鍵更多操作)';
     dotsBtn.textContent = '···';
     dotsBtn.onclick = (e) => {
       e.stopPropagation();
-      speakJapanese(fullReading);
+      const currentIdx = parseInt(gEl.dataset.groupIndex, 10);
+      const grpData = (!isNaN(currentIdx) && typesetLastData?.groups?.[currentIdx]) ? typesetLastData.groups[currentIdx] : group;
+      const textToSpeak = grpData?.reading_full || extractSpokenJapanese(jpLine.innerHTML) || fullReading;
+      speakJapanese(textToSpeak);
       dotsBtn.style.background = 'var(--primary)';
       dotsBtn.style.color = '#fff';
       setTimeout(() => {
@@ -18260,7 +18269,62 @@ function saveAllTypesetToVocab() {
   showToast(`⭐ 已將 ${count} 個句子全數收藏至單字庫「排版收藏」！`, 'success');
 }
 
-// 🌿 句型簡化神器：一鍵將困難語法轉換為 N4 極簡好開口「やさしい日本語」
+// 🔄 全域同步排版群組數據與語音發音綁定 (v174 核心修復：保證換簡化句後點···立即播放最新發音)
+function updateTypesetGroupDataAndAudio(g, segments, translation, readingFull) {
+  const jpEl = g.querySelector('.jp-line');
+  const dotsBtn = g.querySelector('.typeset-dots-btn');
+  let zhEl = g.querySelector('.zh-line');
+
+  const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
+  const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
+  const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
+
+  if (jpEl && segments) {
+    renderTypesetSegmentsToElement(jpEl, segments, showH, showR, showK);
+  }
+
+  if (zhEl) {
+    zhEl.textContent = translation || '';
+  } else if (translation) {
+    zhEl = document.createElement('span');
+    zhEl.className = 'zh-line';
+    zhEl.contentEditable = 'true';
+    zhEl.textContent = translation;
+    g.appendChild(zhEl);
+  }
+
+  const calculatedReading = readingFull || (segments ? segments.map(s => s.reading || s.text).join('') : '') || (jpEl ? extractSpokenJapanese(jpEl.innerHTML) : '');
+
+  // 1. 同步更新底層數據模型 typesetLastData 與 LocalStorage
+  const idx = parseInt(g.dataset.groupIndex, 10);
+  if (!isNaN(idx) && typesetLastData && typesetLastData.groups && typesetLastData.groups[idx]) {
+    typesetLastData.groups[idx] = {
+      segments: segments,
+      translation: translation || '',
+      reading_full: calculatedReading
+    };
+    try {
+      localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+    } catch(e) {}
+  }
+
+  // 2. 同步更新該行句末三點按鈕 (···) 的點擊發音綁定，100% 播放全新句子的讀音！
+  if (dotsBtn) {
+    dotsBtn.onclick = (e) => {
+      e.stopPropagation();
+      const currentReading = calculatedReading || (jpEl ? extractSpokenJapanese(jpEl.innerHTML) : '') || jpEl?.textContent.trim() || '';
+      speakJapanese(currentReading);
+      dotsBtn.style.background = 'var(--primary)';
+      dotsBtn.style.color = '#fff';
+      setTimeout(() => {
+        dotsBtn.style.background = '';
+        dotsBtn.style.color = '';
+      }, 800);
+    };
+  }
+}
+
+// 🌿 句型簡化神器：一鍵將困難語法轉換為 N4 極簡好開口「やさしい日本語」(v174 發音同步修復)
 async function simplifySingleTypesetGroup(g) {
   const jpEl = g.querySelector('.jp-line');
   if (!jpEl) return;
@@ -18292,20 +18356,8 @@ async function simplifySingleTypesetGroup(g) {
   try {
     const res = await callGeminiApiUnified(prompt);
     if (res && res.segments) {
-      const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
-      const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
-      const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
-      renderTypesetSegmentsToElement(jpEl, res.segments, showH, showR, showK);
-
-      let zhEl = g.querySelector('.zh-line');
-      if (!zhEl) {
-        zhEl = document.createElement('span');
-        zhEl.className = 'zh-line';
-        zhEl.contentEditable = 'true';
-        g.appendChild(zhEl);
-      }
-      zhEl.textContent = res.translation || '';
-      showToast('✨ 已換成極簡好開口的 N4 說法！', 'success');
+      updateTypesetGroupDataAndAudio(g, res.segments, res.translation || '', res.reading_full);
+      showToast('✨ 已換成極簡好開口的 N4 說法（語音已同步更新）！', 'success');
       return;
     }
   } catch (err) {
@@ -18333,20 +18385,8 @@ async function simplifySingleTypesetGroup(g) {
     parsed.translation = await fetchFreeGoogleTranslate(simplified, 'zh-TW');
   } catch(e) {}
 
-  const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
-  const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
-  const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
-  renderTypesetSegmentsToElement(jpEl, parsed.segments, showH, showR, showK);
-
-  let zhEl = g.querySelector('.zh-line');
-  if (!zhEl) {
-    zhEl = document.createElement('span');
-    zhEl.className = 'zh-line';
-    zhEl.contentEditable = 'true';
-    g.appendChild(zhEl);
-  }
-  zhEl.textContent = parsed.translation || '';
-  showToast('✨ 已換成極簡好開口的 N4 說法！', 'success');
+  updateTypesetGroupDataAndAudio(g, parsed.segments, parsed.translation || '', parsed.reading_full);
+  showToast('✨ 已換成極簡好開口的 N4 說法（語音已同步更新）！', 'success');
 }
 
 async function reprocessSingleTypesetGroup(g) {
@@ -18375,20 +18415,8 @@ async function reprocessSingleTypesetGroup(g) {
   try {
     const res = await callGeminiApiUnified(prompt);
     if (res && res.segments) {
-      const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
-      const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
-      const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
-      renderTypesetSegmentsToElement(jpEl, res.segments, showH, showR, showK);
-
-      let zhEl = g.querySelector('.zh-line');
-      if (!zhEl) {
-        zhEl = document.createElement('span');
-        zhEl.className = 'zh-line';
-        zhEl.contentEditable = 'true';
-        g.appendChild(zhEl);
-      }
-      zhEl.textContent = res.translation || '';
-      showToast('單句重新處理完成！', 'success');
+      updateTypesetGroupDataAndAudio(g, res.segments, res.translation || '', res.reading_full);
+      showToast('單句重新處理完成（語音已同步更新）！', 'success');
     }
   } catch (err) {
     showToast('處理失敗：' + err.message, 'error');

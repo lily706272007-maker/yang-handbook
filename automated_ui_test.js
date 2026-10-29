@@ -1622,7 +1622,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v173'), 'sw.js 已正確更新為 v173');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v174'), 'sw.js 已正確更新為 v174');
 
 // (測試統計已移至最末尾執行)
 
@@ -1810,6 +1810,15 @@ assert(html.includes('btn-fast-qa-rv_luggage_post') && html.includes('btn-fast-q
 assert(html.match(/DOMContentLoaded[\s\S]*?renderFastQaChips\(\)/), 'DOMContentLoaded 包含 renderFastQaChips() 呼叫');
 console.log('  ✅ [PASS] v173 二世古 26 題按鈕即刻載入測試通過！');
 
+
+console.log('\n【測試 57：v174 簡化說法語音即時同步更新 ＆ 自訂注音標籤按鈕白話優化】');
+assert(html.includes('function updateTypesetGroupDataAndAudio('), '包含排版群組數據與語音發音同步函式 updateTypesetGroupDataAndAudio');
+assert(html.match(/simplifySingleTypesetGroup[\s\S]*?updateTypesetGroupDataAndAudio/), 'simplifySingleTypesetGroup 調用 updateTypesetGroupDataAndAudio 確保換句後語音同步');
+assert(html.match(/reprocessSingleTypesetGroup[\s\S]*?updateTypesetGroupDataAndAudio/), 'reprocessSingleTypesetGroup 調用 updateTypesetGroupDataAndAudio 確保重新分析後語音同步');
+assert(html.includes('🏷️ 手動自訂讀音 [假名]'), '標音標籤按鈕改名為清晰直觀的「🏷️ 手動自訂讀音 [假名]」');
+assert(html.includes('系統已全自動標平假名與羅馬音'), '未反白文字時點擊自訂讀音按鈕提供親切說明');
+console.log('  ✅ [PASS] v174 語音即時同步與按鈕白話優化測試全數通過！');
+
 console.log('\n====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1817,5 +1826,5 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v173) 二世古 26 題即時擬答按鈕全面修復上線！');
+  console.log('🎉 所有測試通過！(v174) 簡化說法語音同步更新與手動注音按鈕白話優化全面上線！');
 }
