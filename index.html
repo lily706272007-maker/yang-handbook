@@ -4821,7 +4821,7 @@
                 ⚪ 淺膚色 (普通日本人/台灣)
               </button>
               <button class="btn btn-sm btn-ghost pd-skin-btn" id="pd-skin-deep" onclick="setPaperDollSkin('deep')" style="font-size:0.75rem; flex:1;">
-                🟤 深膚色 (尼泊爾夥伴)
+                🟤 蜜糖小麥色 (尼泊爾夥伴)
               </button>
             </div>
           </div>
@@ -15835,8 +15835,8 @@ function drawPaperDollAvatar(targetCanvas, customTraits, options = {}) {
 
   const traits = customTraits || {};
   const skinKey = traits.skin === 'deep' || (traits.nationality && traits.nationality.includes('尼泊爾')) ? 'deep' : 'light';
-  const skinColor = skinKey === 'deep' ? '#b87e52' : '#fde2cd';
-  const blushColor = skinKey === 'deep' ? 'rgba(194, 65, 12, 0.35)' : 'rgba(251, 113, 133, 0.45)';
+  const skinColor = skinKey === 'deep' ? '#e4b691' : '#fde2cd';
+  const blushColor = skinKey === 'deep' ? 'rgba(217, 119, 87, 0.4)' : 'rgba(251, 113, 133, 0.45)';
 
   const hairKey = (traits.color === '#45281a' || traits.hairColor === 'brown') ? 'brown' : 'black';
   const hairColor = hairKey === 'brown' ? '#45281a' : '#1c1917';
