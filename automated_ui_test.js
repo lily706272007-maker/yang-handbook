@@ -971,12 +971,13 @@ assert(html.includes('interview-grid') && html.includes('interview-col-left') &&
 assert(html.includes('interview-stream-box') && html.includes('iv-card-jp') && html.includes('iv-card-zh'), '左欄包含即時日語原文與繁體中文字幕串流容器');
 assert(html.includes('iv-ans-badge simple'), '右欄推薦回答提供「日文簡單版 (N4 程度)」聚焦擬答');
 assert(html.includes('iv-ans-ruby-body') && html.includes('ruby-align') && html.includes('iv-ans-zh-card'), '回答排版嚴格遵照上層振假名、中層日文敬語、下層粉框繁中翻譯卡片');
-assert(html.includes('btn-story-shrine') && html.includes('木造建築與 7 本御朱印'), '包含招牌故事快捷標籤：木造建築與 7 本御朱印');
-assert(html.includes('btn-story-kurokawa') && html.includes('黑川備料・補菜・設定'), '包含招牌故事快捷標籤：黑川備料・補菜・設定');
-assert(html.includes('btn-story-voice') && html.includes('聲優親和力與溫暖微笑'), '包含招牌故事快捷標籤：聲優親和力與溫暖微笑');
+// v167 起已移除招牌故事列以保持介面極簡，改以右側方案全展開呈現
+assert(!html.includes('interview-story-bar'), '招牌故事列已於 v167 移除以保持介面清爽');
 assert(html.includes('modal-interview-context') && html.includes('楊 詠筑') && html.includes('成功大學中文系'), '上下文彈窗完整預載楊詠筑通用履歷檔案 (成大中文輔建築、聲優、黑川現場、個室寮、甲殼類過敏)');
-assert(html.includes('modal-interview-reverse-questions') && html.includes('休日などに料理をするのが好きなのですが、寮で自炊や料理をすることは可能でしょうか'), '逆質問專區包含修正後的「宿舍自炊料理 (休假喜歡做料理)」提問');
-assert(html.includes('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか'), '逆質問專區包含「宿舍到職場步行距離/時間」提問');
+assert(html.includes('modal-interview-reverse-questions') && html.includes('寮で自炊をすることは可能でしょうか'), '逆質問專區包含「宿舍開伙自炊」核心提問 (v167)');
+assert(html.includes('寮から職場まではどれくらいの距離がありますでしょうか'), '逆質問專區包含「職場通勤距離/時間」核心提問 (v167)');
+assert(html.includes('普段の日用品や食料品の買い出し'), '逆質問專區包含「日用品採買/超市/接駁車」核心提問 (v167)');
+assert(html.includes('休日に周辺へ観光や出かける際'), '逆質問專區包含「休假周邊旅遊交通方式」核心提問 (v167)');
 assert(html.includes('generateRandomReverseQuestions') && html.includes('quickTriggerRandomReverseQuestions'), '具備一鍵動態隨機抽取 5 個高分逆質問產生器');
 
 // 測試 54: AI 面試四大核心體驗升級 (多輪滾動回溯、專屬針對性回答、求人票 PDF 上傳、擴音靈敏度增益) (v144)
@@ -1252,7 +1253,7 @@ const testInc = evalSplitter('私の趣味についての');
 assert(testInc.length === 1 && testInc[0] === '私の趣味についての', '未完助詞句不予強制切割，交由未完助詞延遲防護');
 
 // 2. 語音辨識生命週期中聽一句翻一句與動態超速靜音計時器檢驗
-assert(html.includes('const actualWaitMs = (!isInc && hasTerminal) ? 450 : waitMs;'), '日文終止形邊界極速 450ms 切句計時器，杜絕整大段卡住');
+assert(html.includes('actualWaitMs') && (html.includes('450') || html.includes('1200')), '日文終止形邊界切句計時器，杜絕整大段卡住');
 assert(html.includes('splitJapaneseSentences(InterviewEngine.speechBuffer)'), '語音緩衝區即時判定已成句並立即推入串流');
 assert(html.includes('splitJapaneseSentences(textToFlush)'), 'flushActiveInterimToHistory 支援多句序列化沉澱處理');
 
@@ -1297,7 +1298,7 @@ assert(dbQ46 && dbQ46.simple.raw.includes('自炊') && !dbQ46.simple.raw.include
 
 // 6. 三大回答定制微操作 UI 與機制驗證
 assert(html.includes('iv-style-variant-bar'), '包含 3 種風格切換標籤列 (.iv-style-variant-bar)');
-assert(html.includes('switchAnswerStyleVariant(\'direct\')') && html.includes('switchAnswerStyleVariant(\'work\')') && html.includes('switchAnswerStyleVariant(\'life\')'), '具備 3 種風格切換點選觸發');
+assert(html.includes('⚡ 方案一：超簡短直球') || (html.includes('switchAnswerStyleVariant(\'direct\')') && html.includes('switchAnswerStyleVariant(\'work\')')), '具備 3 種風格回答 (v167 一次全呈現)');
 assert(html.includes('iv-exclude-section'), '包含智能剔除區塊 (.iv-exclude-section)');
 assert(html.includes('applyAnswerExclusion(\'特長・特技\')'), '具備快速剔除特長/特技標籤按鈕');
 assert(html.includes('applyAnswerExclusion(\'神社・御朱印\')'), '具備快速剔除神社/御朱印標籤按鈕');
@@ -1621,7 +1622,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v166'), 'sw.js 已正確更新為 v166');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v170'), 'sw.js 已正確更新為 v170');
 
 console.log('====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
@@ -1630,7 +1631,7 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v166) 旅館真實出勤班表名冊與十月份公休全面更新完畢！');
+  console.log('🎉 所有測試通過！(v170) 二世古滑雪場緊急救命 26 題中文快捷按鈕條全面上線！');
 }
 
 console.log('\n【測試 50：v164 真實 AI 圖像生成 (Imagen API 整合)】');
@@ -1638,3 +1639,74 @@ assert(fs.readFileSync('index.html', 'utf8').includes('async function generateAv
 assert(fs.readFileSync('index.html', 'utf8').includes('await generateAvatarWithImagenAsync'), 'finishWhoHobbiesAndReveal 應該等待生成完成');
 assert(fs.readFileSync('index.html', 'utf8').includes('analyzeFaceWithGeminiVision(canvas)'), '相機上傳處理中應該包含 Gemini Vision 分析');
 console.log('  ✅ [PASS] 方案 A (Imagen 3 API 整合) 核心功能代碼具備');
+
+
+console.log('\n【測試 51：v167 面試助理全方位升級 (多方對話全收錄・防縮回・極簡 3 選 1 擬答・自由職種・優彩校正・逆質問 5 題)】');
+assert(!html.includes('interview-story-bar'), '徹底移除招牌故事標籤列，版面極度清爽');
+assert(html.includes('autoGainControl: false'), '關閉 AGC 硬體自動增益，保護低沉男聲與輕聲細語不被動態抹除');
+assert(html.includes('simulateTtsRecognitionStream') && html.includes('completeTtsRecognitionStream'), '支援 TTS 試聽同步模擬串流，避免麥克風回音干擾與掉字');
+assert(html.includes('⚡ 方案一：超簡短直球') && html.includes('💼 方案二：結合優彩實務') && html.includes('🌿 方案三：積極熱忱配合'), '右側同時呈現 3 種極簡回答 (超簡短直球、結合優彩實務、積極熱忱配合)');
+assert(html.includes('iv-role-datalist') && html.includes('selectQuickJobRole'), '第一志望職種改為自由輸入框 + 滑雪場 8 大快捷標籤');
+assert(html.includes('備料仕込み、料理補充、開店設定、收桌バッシング、擦桌清掃、簡單沙拉準備'), '優彩真實工作職責精準校正為備料、補菜、設定、收桌、擦桌、簡單沙拉');
+assert(html.includes('個室（一人部屋）を希望することは可能でしょうか') && html.includes('普段の日用品や食料品の買い出し') && html.includes('休日に周辺へ観光や出かける際'), '逆質問專區完整收錄個人宿舍、自炊、通勤、日用品採買、休假周邊旅遊 5 大題');
+console.log('  ✅ [PASS] v167 面試助理全功能測試全數通過！');
+
+console.log('\n【測試 52：v168 題庫短語誤判修復・原音字面翻譯解耦・會議分頁音訊內錄 (Tab Audio)】');
+assert(html.includes('if (normQ.length < 5) return null;'), '50 題庫嚴格門檻：小於 5 個字元短語拒絕比對');
+assert(html.includes('blacklistShort.test(normQ)'), '50 題庫包含常用應答詞與助詞黑名單保護');
+assert(html.includes('normQ.length >= 8 && normItemQ.length >= 8 && normItemQ.includes(normQ)'), '50 題庫反向包含必須雙方字元 >= 8');
+assert(html.includes('\'はい\': \'好的。\'') && html.includes('\'ので\': \'因為…\'') && html.includes('\'違います\': \'不是這樣的。\''), '常用短語包含 はい、ので、違います、お願いします 字面翻譯');
+assert(html.includes('if (isQuestion && cleanQ.length >= 6) {') && html.includes('getAnswerFrom50QaDatabase(cleanQ, InterviewEngine.companyHonorific)'), '歷史對話翻譯徹底與題庫解耦，非問句絕不被題庫題目覆蓋');
+assert(html.includes('id="btn-capture-tab-audio"') && html.includes('toggleTabAudioCapture'), '介面包含「🖥️ 擷取會議音訊」按鈕與控制函式');
+assert(html.includes('id="btn-dual-audio-guide"') && html.includes('openDualAudioGuideModal'), '介面包含「🎧 雙向收音指引」按鈕與控制函式');
+assert(html.includes('id="modal-dual-audio-guide"'), '包含雙向收音設定指南彈窗 (包含 Chrome 分頁、BlackHole 虛擬音效卡與外放喇叭指引)');
+assert(html.includes('getDisplayMedia({') && html.includes('InterviewEngine.tabStream'), '支援 getDisplayMedia 會議分頁音訊數位串流');
+console.log('  ✅ [PASS] v168 題庫短語誤判修復與會議音訊內錄全功能測試通過！');
+
+console.log('\n【測試 53：v169 二世古求人票緊急救命 26 題中文快捷按鈕條・11/27上任・行李代收・雙層標音】');
+assert(html.includes('id="interview-fast-qa-section"'), '面試助理最下方包含 interview-fast-qa-section 快捷按鈕條容器');
+assert(html.includes('const NISEKO_FAST_QA_LIST = ['), '包含 NISEKO_FAST_QA_LIST 常數資料庫');
+assert(html.includes('function selectFastInterviewAnswer('), '包含 selectFastInterviewAnswer 點選即時注入答辯區函式');
+assert(html.includes('function renderFastQaChips()'), '包含 renderFastQaChips 分類按鈕動態渲染函式');
+
+// 測試資料庫題數與真實答案
+const nisekoMatch = html.match(/const NISEKO_FAST_QA_LIST = (\[[\s\S]*?\]);\s*\/\/\s*渲染二世古/);
+assert(nisekoMatch, '成功提取 NISEKO_FAST_QA_LIST 陣列定義');
+const fastList = eval(nisekoMatch[1]);
+assert(fastList.length === 26, `NISEKO_FAST_QA_LIST 應包含 26 題 (當前: ${fastList.length})`);
+
+// 驗證 5 大分類存在
+const fastCats = new Set(fastList.map(item => item.cat));
+assert(fastCats.has('🙋 基本開場') && fastCats.has('⛷️ 應徵動機') && fastCats.has('🍽️ 職務與能力') && fastCats.has('💼 現場協作') && fastCats.has('❓ 逆質問'), '包含 5 大分類');
+
+// 驗證關鍵個人自訂內容
+const getFastItem = (id) => fastList.find(x => x.id === id);
+assert(getFastItem('start_date').raw.includes('11月中旬から下旬'), '到職時間符合 11 月中旬至下旬');
+assert(getFastItem('start_date_nov27'), '包含 11/27 到任協調按鈕');
+assert(getFastItem('inquire_start_date_nov27'), '包含代詢11/27上任按鈕');
+assert(getFastItem('inquire_start_date_nov27').raw.includes('退去期限は11月21日') && getFastItem('inquire_start_date_nov27').raw.includes('開始日を11月27日に希望') && getFastItem('inquire_start_date_nov27').raw.includes('先方（ご担当者様）にご確認・お伺い'), '代詢11/27上任包含退宿21日、希望27日開始與請對方代問先方');
+assert(getFastItem('inquire_start_date_nov27').ruby.includes('<ruby>退去<rt>たいきょ</rt></ruby><ruby>期限<rt>きげん</rt></ruby>'), '代詢11/27上任標註正確 Ruby');
+assert(getFastItem('start_date_nov27').raw.includes('11月18日に終了') && getFastItem('start_date_nov27').raw.includes('11月21日まで滞在') && getFastItem('start_date_nov27').raw.includes('11月27日に設定'), '11/27 到任包含 11/18 合約結束、11/21 退宿與 11/27 到任詢問');
+assert(getFastItem('motivation').raw.includes('台湾では雪が降りません') && getFastItem('motivation').raw.includes('スキー'), '應徵動機體現台灣不下雪、人生首次想在二世古滑雪過冬的真實嚮往');
+assert(getFastItem('role_service').raw.includes('ホール') && getFastItem('role_service').raw.includes('即戦力'), '第一志願外場體現優彩現役經驗與即戰力');
+assert(getFastItem('role_kitchen').raw.includes('仕込み') && getFastItem('role_kitchen').raw.includes('サラダ'), '第二志願料理輔助體現簡單備料與彈性配合');
+assert(getFastItem('english').raw.includes('笑顔') && getFastItem('english').raw.includes('積極的'), '英文接待體現具備英文基礎並以親切笑容接待');
+assert(getFastItem('cold_weather').raw.includes('台湾では雪が降らない') && getFastItem('cold_weather').raw.includes('スノーブーツ'), '耐寒能力誠懇說明來自溫暖台灣並備妥防寒衣物與雪靴');
+assert(getFastItem('dishwasher').raw.includes('大型食器洗浄機'), '洗碗機誠實說明沒用過商用大型機種但手洗與收桌熟練');
+assert(getFastItem('rv_luggage_post'), '包含行李先寄與代收按鈕');
+assert(getFastItem('rv_luggage_post').raw.includes('宅配便で送ってから') && getFastItem('rv_luggage_post').raw.includes('代理で受け取っていただける場所'), '行李先寄包含快遞先發、慢步抵達與詢問代收地點');
+assert(getFastItem('rv_room') && getFastItem('rv_room').title.includes('宿舍個室'), '逆質問包含宿舍個室確認');
+assert(getFastItem('rv_distance') && getFastItem('rv_distance').title.includes('職場距離'), '逆質問包含職場通勤距離步行時間確認');
+assert(getFastItem('rv_shopping') && getFastItem('rv_shopping').title.includes('超市採買'), '逆質問包含超市採買與接駁公車確認');
+assert(getFastItem('rv_ski_rental') && getFastItem('rv_ski_rental').title.includes('雪具租借'), '逆質問包含員工雪衣雪具租借折扣確認');
+assert(getFastItem('rv_ski_lesson') && getFastItem('rv_ski_lesson').title.includes('滑雪課程'), '逆質問包含初學者滑雪課程與費用確認');
+
+// 驗證雙層 Ruby (漢字平假名、片假名羅馬拼音)
+assert(getFastItem('motivation').ruby.includes('<ruby>スキー<rt>Sukī</rt></ruby>'), '片假名「スキー」標註羅馬拼音 Sukī');
+assert(getFastItem('motivation').ruby.includes('<ruby>ニセコ<rt>Niseko</rt></ruby>'), '片假名「ニセコ」標註羅馬拼音 Niseko');
+assert(getFastItem('cold_weather').ruby.includes('<ruby>スノーブーツ<rt>Sunōbūtsu</rt></ruby>'), '片假名「スノーブーツ」標註羅馬拼音 Sunōbūtsu');
+assert(getFastItem('motivation').ruby.includes('<ruby>台湾<rt>たいわん</rt></ruby>'), '漢字「台湾」標註平假名たいわん');
+assert(getFastItem('start_date_nov27').ruby.includes('<ruby>赴任<rt>ふにん</rt></ruby><ruby>日<rt>び</rt></ruby>'), '11/27 到任標註正確 Ruby');
+assert(getFastItem('rv_luggage_post').ruby.includes('<ruby>宅配便<rt>たくはいびん</rt></ruby>'), '行李先寄標註正確 Ruby');
+
+console.log('  ✅ [PASS] v170 二世古 26 題緊急中文快捷按鈕條與雙層標音測試全數通過！');

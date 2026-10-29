@@ -2463,15 +2463,6 @@
   }
 
   /* 右欄：個人故事快捷標籤 */
-  .interview-story-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1.5px dashed var(--border);
-  }
   .iv-story-btn {
     background: #f9fafb;
     border: 1.5px solid #e5e7eb;
@@ -2599,7 +2590,128 @@
     justify-content: flex-end;
   }
 
-  /* 回答風格切換標籤列 (v154) */
+  
+  /* ==========================================================
+     ⚡ 二世古實戰 26 題速查擬答按鈕列樣式 (v169)
+  ========================================================== */
+  .interview-fast-qa-section {
+    margin-top: 20px;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+  }
+  .fast-qa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px dashed #e2e8f0;
+  }
+  .fast-qa-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .fast-qa-badge {
+    background: #2563eb;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 3px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+  }
+  .fast-qa-title {
+    font-size: 0.96rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .fast-qa-hint {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .fast-qa-chips-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .fast-qa-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .fast-qa-group-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 6px 10px;
+    border-radius: 8px;
+    min-width: 95px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+  }
+  .fast-qa-group-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1;
+  }
+  .fast-qa-chip {
+    padding: 7px 13px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    border-radius: 20px;
+    border: 1.5px solid #cbd5e1;
+    background: #f8fafc;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+  }
+  .fast-qa-chip:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(59,130,246,0.15);
+  }
+  .fast-qa-chip.active {
+    background: #2563eb !important;
+    border-color: #1d4ed8 !important;
+    color: white !important;
+    box-shadow: 0 3px 10px rgba(37,99,235,0.3) !important;
+    transform: scale(1.02);
+  }
+  .fast-qa-chip.highlight {
+    border-color: #fcd34d;
+    background: #fffbeb;
+    color: #92400e;
+  }
+  .fast-qa-chip.highlight:hover {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #78350f;
+  }
+  .fast-qa-chip.highlight.active {
+    background: #f59e0b !important;
+    border-color: #d97706 !important;
+    color: white !important;
+  }
+
+/* 回答風格切換標籤列 (v154) */
   .iv-style-variant-bar {
     display: flex;
     gap: 6px;
@@ -3236,6 +3348,12 @@
           <button class="btn btn-sm btn-outline" id="btn-reconnect-interview-mic" onclick="reconnectInterviewMic()" title="若收音中斷或無反應，點此立即一鍵重新整理收音通道" style="border-radius:20px; font-size:0.78rem; padding:4px 10px; display:inline-flex; align-items:center; gap:4px; border-color:#cbd5e1; background:white; color:#475569;">
             <span>🔄</span> <span>重整收音</span>
           </button>
+          <button class="btn btn-sm" id="btn-capture-tab-audio" onclick="toggleTabAudioCapture()" title="透過 Chrome 分頁音訊共享，同時捕捉 Google Meet / Zoom / LINE 網頁版中考官的聲音" style="border-radius:20px; font-size:0.78rem; padding:4px 10px; display:inline-flex; align-items:center; gap:4px; border:1px solid #0284c7; background:#f0f9ff; color:#0369a1; font-weight:600;">
+            <span id="tab-audio-icon">🖥️</span> <span id="tab-audio-text">擷取會議音訊</span>
+          </button>
+          <button class="btn btn-sm" id="btn-dual-audio-guide" onclick="openDualAudioGuideModal()" title="查看線上面試如何完美收錄考官聲音教學" style="border-radius:20px; font-size:0.78rem; padding:4px 10px; display:inline-flex; align-items:center; gap:4px; border:1px solid #cbd5e1; background:white; color:#64748b;">
+            <span>🎧</span> <span>雙向收音指引</span>
+          </button>
           <div class="interview-timer" id="interview-timer-display">00:00:00</div>
         </div>
 
@@ -3324,21 +3442,98 @@
             </div>
           </div>
 
-          <!-- 個人亮點故事快速標籤 (Story Tags) -->
-          <div class="interview-story-bar">
-            <span style="font-size:0.76rem; font-weight:700; color:var(--muted);">招牌故事：</span>
-            <button class="iv-story-btn active" id="btn-story-shrine" onclick="applyStoryTag('shrine')">⛩️ 木造建築與 7 本御朱印</button>
-            <button class="iv-story-btn" id="btn-story-kurokawa" onclick="applyStoryTag('kurokawa')">🍱 黑川備料・補菜・設定</button>
-            <button class="iv-story-btn" id="btn-story-voice" onclick="applyStoryTag('voice')">🎙️ 聲優親和力與溫暖微笑</button>
-          </div>
-
-          <!-- 回答卡片容器 (日文簡單版 N4) -->
+          <!-- 回答卡片容器 (日文簡單版 N4 - 3 選 1) -->
           <div class="interview-answers-wrap" id="interview-answers-container">
-            <!-- JS 動態注入回答卡片 -->
+            <!-- JS 動態注入 3 種回答卡片 -->
           </div>
         </div>
       </div>
+
+      <!-- 底部常駐：北海道二世古實戰 26 題速查按鈕列 (v169 隨點隨念) -->
+      <div class="interview-fast-qa-section" id="interview-fast-qa-section">
+        <div class="fast-qa-header">
+          <div class="fast-qa-title-wrap">
+            <span class="fast-qa-badge">⚡ 二世古實戰速查</span>
+            <span class="fast-qa-title">26 題必考即時擬答（點擊立出日文・雙層讀音・隨點隨念）</span>
+          </div>
+          <div class="fast-qa-hint">💡 聽得懂但不知如何口語回答時，直接點擊對應按鈕照著念即可！</div>
+        </div>
+        <div class="fast-qa-chips-container" id="fast-qa-chips-container">
+          <!-- 由 renderFastQaChips() 動態渲染 23 個中文分類按鈕 -->
+        </div>
+      </div>
     </section>
+
+    <!-- 彈窗：線上面試雙向清晰收音設定指南 (Dual Audio Guide Modal) -->
+    <div class="modal-backdrop" id="modal-dual-audio-guide">
+      <div class="modal-content" style="max-width:680px;">
+        <div class="modal-header">
+          <h3 style="margin:0; font-size:1.1rem; color:var(--primary); display:flex; align-items:center; gap:8px;">
+            <span>🎧</span>
+            <span>線上面試雙向清晰收音（考官＋應試者）設定指南</span>
+          </h3>
+          <button class="modal-close" onclick="closeModal('modal-dual-audio-guide')">✕</button>
+        </div>
+        <div class="modal-body" style="max-height:75vh; overflow-y:auto; padding:18px;">
+          <!-- 核心痛點剖析 -->
+          <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:12px; padding:12px 14px; margin-bottom:16px;">
+            <div style="font-weight:700; font-size:0.86rem; color:#be123c; margin-bottom:4px;">🚨 為什麼面試時「考官聲音」常常收錄不到？</div>
+            <div style="font-size:0.8rem; color:#4c0519; line-height:1.6;">
+              • <strong>戴耳機時</strong>：考官的聲音直接送進您的耳機裡，外界空氣中根本沒有聲音，筆電麥克風只能聽到您自己講話。<br>
+              • <strong>沒戴耳機（喇叭播放）時</strong>：Mac 預設開啟「語音隔離 (Voice Isolation)」與回音消除，會強制把筆電喇叭放出來的考官聲音當成回音濾除！
+            </div>
+          </div>
+
+          <!-- 方案 A -->
+          <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <div style="font-weight:800; font-size:0.92rem; color:#0369a1;">🖥️ 方案 A：Chrome 會議分頁直接內錄（最推薦・免裝軟體）</div>
+              <span style="background:#0284c7; color:white; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:12px;">推薦度 ★★★★★</span>
+            </div>
+            <div style="font-size:0.8rem; color:#0f172a; line-height:1.6;">
+              適用於使用 <strong>Google Meet、LINE 網頁版、Zoom 網頁版</strong> 面試：<br>
+              1. 點擊頂部工具列的【<strong>🖥️ 擷取會議音訊</strong>】按鈕。<br>
+              2. 在彈出的分享視窗中，選擇【<strong>Chrome 分頁</strong>】並點選正在開會的面試分頁。<br>
+              3. <strong>關鍵一步</strong>：確認勾選視窗左下角的【<strong>分享分頁音訊 (Share tab audio)</strong>】後點擊分享！<br>
+              4. 考官聲音將以 100% 數位純音訊直接導入面試助理，無論戴不戴耳機都聽得清清楚楚！
+            </div>
+          </div>
+
+          <!-- 方案 B -->
+          <div style="background:#fdf4ff; border:1.5px solid #f5d0fe; border-radius:12px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <div style="font-weight:800; font-size:0.92rem; color:#7e22ce;">🔌 方案 B：獨立 App (Zoom 客戶端) + 戴耳機（專業無損虛擬音效卡）</div>
+              <span style="background:#9333ea; color:white; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:12px;">專業推薦 ★★★★★</span>
+            </div>
+            <div style="font-size:0.8rem; color:#0f172a; line-height:1.6;">
+              適用於面試官要求開啟 Zoom 獨立應用程式，且您習慣戴耳機：<br>
+              1. Mac 免費安裝虛擬音效卡 <strong>BlackHole 2ch</strong>（Windows 為 VB-CABLE）。<br>
+              2. 開啟 Mac「音訊 MIDI 設定」，點擊左下角 ＋ 號新增【<strong>多重輸出裝置</strong>】，同時勾選「您的耳機」與「BlackHole 2ch」。<br>
+              3. 將 Mac 系統聲音輸出選為此「多重輸出裝置」（這樣您耳機聽得到的聲音，BlackHole 也同時收到一份）。<br>
+              4. 到 Chrome 設定 ➔ 隱私權和安全性 ➔ 網站設定 ➔ 麥克風，將輸入裝置選擇為 <strong>BlackHole 2ch</strong>。<br>
+              5. 如此一來，面試助理便能同步數位內錄考官說話，和專業錄音軟體一模一樣！
+            </div>
+          </div>
+
+          <!-- 方案 C -->
+          <div style="background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:12px; padding:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <div style="font-weight:800; font-size:0.92rem; color:#334155;">🔊 方案 C：外放喇叭免耳機（關閉 Mac 語音隔離）</div>
+              <span style="background:#64748b; color:white; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:12px;">免設定</span>
+            </div>
+            <div style="font-size:0.8rem; color:#0f172a; line-height:1.6;">
+              若臨時無耳機，直接使用電腦喇叭放出考官聲音：<br>
+              1. 點擊 Mac 螢幕最右上角控制中心圖示 ➔ 點擊【<strong>麥克風模式</strong>】。<br>
+              2. <strong>重要</strong>：將預設的「語音隔離」改為【<strong>標準 (Standard)</strong>】（避免 macOS 主動抹殺考官聲音）。<br>
+              3. 適度調大筆電喇叭音量，面試助理底層已為您關閉回音消除，麥克風即可直接接收空氣中的考官發音。
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end;">
+          <button class="btn btn-sm btn-primary" onclick="closeModal('modal-dual-audio-guide')">我知道了</button>
+        </div>
+      </div>
+    </div>
 
     <!-- 彈窗：履歷與求人票設定 (Context Modal) -->
     <div class="modal-backdrop" id="modal-interview-context">
@@ -3354,7 +3549,7 @@
             <div style="font-size:0.8rem; color:#475569; line-height:1.6;">
               • <strong>姓名</strong>：楊 詠筑（よう えいちく） / 成功大學中文系（輔修建築）<br>
               • <strong>日語程度</strong>：JLPT N2 (在日中，打工度假簽證)<br>
-              • <strong>現職實務</strong>：黑川溫泉「優彩」餐廳現場業務（備料準備、尖峰快速補菜、打烊清潔與設定）<br>
+              • <strong>現職實務</strong>：黑川溫泉「優彩」餐廳現場業務（備料仕込み、料理補充、開店設定、收桌バッシング、擦桌清掃、簡單沙拉準備）<br>
               • <strong>文化特質</strong>：熱愛木造建築與神社文化，已收集 7 本御朱印，全日本皆能適應<br>
               • <strong>聲音特質</strong>：曾任自由接案聲優，咬字清晰、親和力高、笑容溫暖<br>
               • <strong>生活要求</strong>：希望單人寮、甲殼類（蝦蟹）過敏
@@ -3385,12 +3580,28 @@
             </div>
 
             <div class="form-group" style="margin-bottom:10px;">
-              <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:4px;">第一志望職種：</label>
-              <select id="iv-input-role" class="form-control">
-                <option value="レストランサービス" selected>レストランサービス (餐廳外場服務 / 配膳)</option>
-                <option value="調理補助">調理補助 (廚房後台協助)</option>
-                <option value="フロント">フロント (櫃台接待)</option>
-              </select>
+              <label style="font-size:0.8rem; font-weight:700; display:block; margin-bottom:4px;">第一志望職種 (可自由輸入或點選標籤)：</label>
+              <input type="text" id="iv-input-role" class="form-control" list="iv-role-datalist" placeholder="例如：リフト係、レンタル、レストラン、調理補助..." value="レストランサービス" />
+              <datalist id="iv-role-datalist">
+                <option value="リフト係 (索道/纜車運轉)">
+                <option value="スキーレンタル (雪具租借櫃台)">
+                <option value="レストランサービス (滑雪場餐廳外場)">
+                <option value="調理補助 (廚房備料/料理協助)">
+                <option value="フロント (飯店櫃台接待)">
+                <option value="客室清掃 (房務清潔)">
+                <option value="チケット販売 (雪場票務售票)">
+                <option value="パトロール・駐車場 (巡邏維護/停車場)">
+              </datalist>
+              <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:6px;">
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('リフト係')">🎿 リフト係</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('スキーレンタル')">⛷️ レンタル</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('レストランサービス')">🍽️ レストラン</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('調理補助')">🍳 調理補助</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('フロント')">🏨 フロント</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('客室清掃')">🛏️ 客室清掃</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('チケット販売')">🎫 チケット販売</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="selectQuickJobRole('パトロール・駐車場')">🅿️ 駐車場</button>
+              </div>
             </div>
 
             <div class="form-group">
@@ -3419,36 +3630,83 @@
             💡 當考官詢問 <code>「何かご質問はありますか？」</code>（有什麼問題想問我們嗎？）時，請從容挑選 1~2 題詢問：
           </div>
 
-          <!-- 區塊 1：生活與宿舍必備提問 (2 題) -->
-          <div style="font-weight:800; font-size:0.9rem; color:var(--ink); margin-bottom:10px;">🏠 宿舍生活與通勤提問 (必備專用)</div>
+          <!-- 區塊 1：🏠 宿舍生活・日常採買・周邊交通（精選必備 5 大常問逆質問） -->
+          <div style="font-weight:800; font-size:0.95rem; color:var(--ink); margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+            <span>🏠</span> 宿舍生活・日常採買・周邊交通 (精選常問 5 題)
+          </div>
           
-          <!-- 提問 1：自炊做料理 -->
+          <!-- 提問 1：個人宿舍與房型 -->
           <div class="iv-reverse-q-card">
-            <div class="iv-reverse-tag">🍳 宿舍自炊料理（個人休閒興趣）</div>
+            <div class="iv-reverse-tag">🛏️ 1. 個人宿舍與房型（申請單人房 / 幾人一間）</div>
             <div class="iv-ans-ruby-body">
-              <ruby>休日<rt>きゅうじつ</rt></ruby>などに<ruby>料理<rt>りょうり</rt></ruby>をするのが<ruby>好<rt>す</rt></ruby>きなのですが、<ruby>寮<rt>りょう</rt></ruby>で<ruby>自炊<rt>じすい</rt></ruby>や<ruby>料理<rt>りょうり</rt></ruby>をすることは<ruby>可能<rt>かのう</rt></ruby>でしょうか？
+              <ruby>寮<rt>りょう</rt></ruby>のお<ruby>部屋<rt>へや</rt></ruby>についてお<ruby>伺<rt>うかが</rt></ruby>いしたいのですが、<ruby>個室<rt>こしつ</rt></ruby>（<ruby>一人<rt>ひとり</rt></ruby><ruby>部屋<rt>べや</rt></ruby>）を<ruby>希望<rt>きぼう</rt></ruby>することは<ruby>可能<rt>かのう</rt></ruby>でしょうか？また、<ruby>基本的<rt>きほんてき</rt></ruby>には<ruby>何人<rt>なんにん</rt></ruby><ruby>部屋<rt>べや</rt></ruby>になりますでしょうか？
             </div>
             <div class="iv-ans-zh-card">
-              ▎休假時我自己蠻喜歡做做料理的，想請教一下在宿舍裡面是可以自己開伙做飯的嗎？
+              ▎想請教關於宿舍房間的事，有可能申請個人單人房（個室）嗎？另外，基本上會是幾個人一間房間呢？
             </div>
             <div class="iv-ans-actions">
-              <button class="btn btn-sm btn-outline" onclick="speakJapanese('休日などに料理をするのが好きなのですが、寮で自炊や料理をすることは可能でしょうか？')">🔊 試聽</button>
-              <button class="btn btn-sm btn-outline" onclick="copyText('休日などに料理をするのが好きなのですが、寮で自炊や料理をすることは可能でしょうか？')">📋 複製</button>
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('寮のお部屋についてお伺いしたいのですが、個室を希望することは可能でしょうか？また、基本的には何人部屋になりますでしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('寮のお部屋についてお伺いしたいのですが、個室（一人部屋）を希望することは可能でしょうか？また、基本的には何人部屋になりますでしょうか？')">📋 複製</button>
             </div>
           </div>
 
-          <!-- 提問 2：上班通勤距離 -->
+          <!-- 提問 2：宿舍自炊煮飯 -->
           <div class="iv-reverse-q-card">
-            <div class="iv-reverse-tag">🚶 通勤距離時間</div>
+            <div class="iv-reverse-tag">🍳 2. 宿舍開伙自炊（廚房與烹飪設備）</div>
             <div class="iv-ans-ruby-body">
-              <ruby>寮<rt>りょう</rt></ruby>から<ruby>職場<rt>しょくば</rt></ruby>までは、<ruby>徒歩<rt>とほ</rt></ruby>でどのくらいの<ruby>時間<rt>じかん</rt></ruby>がかかりますでしょうか？
+              <ruby>寮<rt>りょう</rt></ruby>で<ruby>自炊<rt>じすい</rt></ruby>をすることは<ruby>可能<rt>かのう</rt></ruby>でしょうか？キッチンや<ruby>調理<rt>ちょうり</rt></ruby><ruby>器具<rt>きぐ</rt></ruby>などの<ruby>設備<rt>せつび</rt></ruby>はございますでしょうか？
             </div>
             <div class="iv-ans-zh-card">
-              ▎想請教從宿舍到上班的地方，走路大約需要幾分鐘呢？
+              ▎想請教在宿舍裡面是可以自己開伙做飯的嗎？有共用廚房或調理器具等烹飪設備嗎？
             </div>
             <div class="iv-ans-actions">
-              <button class="btn btn-sm btn-outline" onclick="speakJapanese('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか？')">🔊 試聽</button>
-              <button class="btn btn-sm btn-outline" onclick="copyText('寮から職場までは、徒歩でどのくらいの時間がかかりますでしょうか？')">📋 複製</button>
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('寮で自炊をすることは可能でしょうか？キッチンや調理器具などの設備はございますでしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('寮で自炊をすることは可能でしょうか？キッチンや調理器具などの設備はございますでしょうか？')">📋 複製</button>
+            </div>
+          </div>
+
+          <!-- 提問 3：職場通勤距離與時間 -->
+          <div class="iv-reverse-q-card">
+            <div class="iv-reverse-tag">🚶 3. 職場通勤距離（步行時間 / 交通方式）</div>
+            <div class="iv-ans-ruby-body">
+              <ruby>寮<rt>りょう</rt></ruby>から<ruby>職場<rt>しょくば</rt></ruby>まではどれくらいの<ruby>距離<rt>きょり</rt></ruby>がありますでしょうか？<ruby>徒歩<rt>とほ</rt></ruby>で<ruby>何分<rt>なんぷん</rt></ruby>くらいかかりますでしょうか？
+            </div>
+            <div class="iv-ans-zh-card">
+              ▎想請教從宿舍到上班地點大概有多遠的距離？走路大約需要幾分鐘呢？
+            </div>
+            <div class="iv-ans-actions">
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('寮から職場まではどれくらいの距離がありますでしょうか？徒歩で何分くらいかかりますでしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('寮から職場まではどれくらいの距離がありますでしょうか？徒歩で何分くらいかかりますでしょうか？')">📋 複製</button>
+            </div>
+          </div>
+
+          <!-- 提問 4：生活用品採買、超市與接駁車 -->
+          <div class="iv-reverse-q-card">
+            <div class="iv-reverse-tag">🛒 4. 日常用品採買（附近超市 / 購物接駁車）</div>
+            <div class="iv-ans-ruby-body">
+              <ruby>普段<rt>ふだん</rt></ruby>の<ruby>日用品<rt>にちようひん</rt></ruby>や<ruby>食料品<rt>しょくりょうひん</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>出<rt>だ</rt></ruby>しはどうされていますでしょうか？<ruby>近<rt>ちか</rt></ruby>くにスーパーはありますか？また、<ruby>買<rt>か</rt></ruby>い<ruby>出<rt>だ</rt></ruby>し<ruby>用<rt>よう</rt></ruby>の<ruby>送迎<rt>そうげい</rt></ruby>バスなどはございますでしょうか？
+            </div>
+            <div class="iv-ans-zh-card">
+              ▎想請教同仁平時購買日用品或食材通常是怎麼去的呢？附近有超市嗎？或是會有前往超市的採買接駁車呢？
+            </div>
+            <div class="iv-ans-actions">
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('普段の日用品や食料品の買い出しはどうされていますでしょうか？近くにスーパーはありますか？また、買い出し用の送迎バスなどはございますでしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('普段の日用品や食料品の買い出しはどうされていますでしょうか？近くにスーパーはありますか？また、買い出し用の送迎バスなどはございますでしょうか？')">📋 複製</button>
+            </div>
+          </div>
+
+          <!-- 提問 5：休假周邊旅遊交通方式 -->
+          <div class="iv-reverse-q-card">
+            <div class="iv-reverse-tag">🚌 5. 周邊觀光旅遊（公車 / JR 電車 / 計程車）</div>
+            <div class="iv-ans-ruby-body">
+              <ruby>休日<rt>きゅうじつ</rt></ruby>に<ruby>周辺<rt>しゅうへん</rt></ruby>へ<ruby>観光<rt>かんこう</rt></ruby>や<ruby>出<rt>で</rt></ruby>かける<ruby>際<rt>さい</rt></ruby>、<ruby>移動<rt>いどう</rt></ruby>はバスが<ruby>便利<rt>べんり</rt></ruby>でしょうか？それともJR<ruby>電車<rt>でんしゃ</rt></ruby>やタクシーを<ruby>利用<rt>りよう</rt></ruby>することが<ruby>多<rt>おお</rt></ruby>いでしょうか？
+            </div>
+            <div class="iv-ans-zh-card">
+              ▎休假時如果想去周邊觀光或出遊，交通是搭公車比較方便呢？還是大家搭 JR 電車或計程車比較多呢？
+            </div>
+            <div class="iv-ans-actions">
+              <button class="btn btn-sm btn-outline" onclick="speakJapanese('休日に周辺へ観光や出かける際、移動はバスが便利でしょうか？それともJR電車やタクシーを利用することが多いでしょうか？')">🔊 試聽</button>
+              <button class="btn btn-sm btn-outline" onclick="copyText('休日に周辺へ観光や出かける際、移動はバスが便利でしょうか？それともJR電車やタクシーを利用することが多いでしょうか？')">📋 複製</button>
             </div>
           </div>
 
@@ -10062,6 +10320,49 @@ function speakEnglish(text) {
   window.speechSynthesis.speak(utt);
 }
 
+// 模擬 TTS 語音串流至面試即時對話框（避免麥克風自收喇叭回音導致掉字、截斷與縮回）
+function simulateTtsRecognitionStream(spokenText) {
+  if (typeof InterviewEngine === 'undefined' || !InterviewEngine.isListening) return;
+  InterviewEngine.isTtsPlaying = true;
+  if (typeof animateMetersActive === 'function') animateMetersActive(true);
+  InterviewEngine.speechBuffer = '';
+  InterviewEngine.activeInterimText = '';
+  if (InterviewEngine.ttsSimTimer) clearInterval(InterviewEngine.ttsSimTimer);
+  let idx = 0;
+  const step = Math.max(1, Math.floor(spokenText.length / 10));
+  InterviewEngine.ttsSimTimer = setInterval(() => {
+    idx += step;
+    if (idx >= spokenText.length) {
+      InterviewEngine.activeInterimText = spokenText;
+      clearInterval(InterviewEngine.ttsSimTimer);
+      InterviewEngine.ttsSimTimer = null;
+    } else {
+      InterviewEngine.activeInterimText = spokenText.slice(0, idx);
+    }
+    if (typeof renderDialogueHistory === 'function') {
+        if (typeof renderFastQaChips === 'function') renderFastQaChips();
+  renderDialogueHistory();
+    }
+  }, 80);
+}
+
+function completeTtsRecognitionStream(spokenText) {
+  if (typeof InterviewEngine === 'undefined') return;
+  if (InterviewEngine.ttsSimTimer) {
+    clearInterval(InterviewEngine.ttsSimTimer);
+    InterviewEngine.ttsSimTimer = null;
+  }
+  InterviewEngine.activeInterimText = '';
+  InterviewEngine.speechBuffer = '';
+  if (typeof animateMetersActive === 'function') animateMetersActive(false);
+  if (typeof handleNewRecognizedUtterance === 'function') {
+    handleNewRecognizedUtterance(spokenText);
+  }
+  setTimeout(() => {
+    InterviewEngine.isTtsPlaying = false;
+  }, 350);
+}
+
 function speakJapanese(text) {
   if (!('speechSynthesis' in window)) {
     showToast('您的瀏覽器不支援語音合成功能', 'error');
@@ -10080,6 +10381,21 @@ function speakJapanese(text) {
     const allVoices = window.speechSynthesis.getVoices();
     const voice = allVoices.find(v => (pref.voiceURI && v.voiceURI === pref.voiceURI) || (pref.voiceName && v.name === pref.voiceName));
     if (voice) utt.voice = voice;
+  }
+
+  // 若當前面試助理正在監聽中，同步即時文字串流與音量指示，杜絕回音截斷與掉字
+  if (typeof InterviewEngine !== 'undefined' && InterviewEngine.isListening) {
+    simulateTtsRecognitionStream(spokenText);
+    utt.onend = () => {
+      completeTtsRecognitionStream(spokenText);
+    };
+    utt.onerror = () => {
+      InterviewEngine.isTtsPlaying = false;
+      if (InterviewEngine.ttsSimTimer) {
+        clearInterval(InterviewEngine.ttsSimTimer);
+        InterviewEngine.ttsSimTimer = null;
+      }
+    };
   }
 
   window.speechSynthesis.cancel();
@@ -10245,29 +10561,37 @@ async function fetchFreeGoogleTranslate(text, targetLang = 'zh-TW') {
     return translationMemoryCache.get(cacheKey);
   }
 
-  // 1. 本地題庫與常見日文相槌快查 (0ms 極速命中，省去網路呼叫)
-  if (typeof getAnswerFrom50QaDatabase === 'function') {
-    const dbMatch = getAnswerFrom50QaDatabase(cleanText, '御社');
-    if (dbMatch && dbMatch.questionZh) {
-      translationMemoryCache.set(cacheKey, dbMatch.questionZh);
-      return dbMatch.questionZh;
-    }
-  }
-
-  // 常見禮貌短語直接命中
+  // 1. 常見禮貌短語與應答詞 0ms 瞬發精準命中（優先於任何網路請求與題庫，防止短語誤判）
   const commonPhrases = {
     'はい': '好的。',
+    'いいえ': '不是 / 沒有。',
+    '違います': '不是這樣的。',
+    'ので': '因為…',
+    'です': '是的。',
+    'ます': '是的。',
     'はいそうです': '是的，沒錯。',
     'はい、そうです': '是的，沒錯。',
     'はい承知いたしました': '好的，我明白了。',
     'はい、承知いたしました': '好的，我明白了。',
     'はいかしこまりました': '好的，遵命。',
     'はい、かしこまりました': '好的，遵命。',
+    'はいないです': '是的，沒有。',
+    'ないです': '沒有。',
+    '大丈夫です': '沒問題。',
+    '大丈夫そうですよ': '看起來沒問題喔。',
     'わかりました': '我明白了。',
     '分かりました': '我明白了。',
+    '了解です': '好的，了解。',
+    '了解いたしました': '好的，我明白了。',
+    'お願いします': '拜託了 / 請多多指教。',
+    'よろしくお願いいたします': '請多多指教。',
+    'よろしくお願いします': '請多多指教。',
     '本日はよろしくお願いいたします': '今天請多多指教。',
     'どうぞよろしくお願いいたします': '請多多指教。',
     'ありがとうございます': '非常感謝。',
+    'ありがとうございました': '非常感謝。',
+    'もしもし': '喂，聽得到嗎？',
+    '聞こえますか': '聽得到嗎？',
     '趣味は何ですか': '您的興趣是什麼？',
     '特技は何ですか': '您的專長是什麼？',
     '自己紹介をお願いします': '請做個自我介紹。'
@@ -18230,6 +18554,313 @@ function copyText(text) {
 // 涵蓋：基本資料、黑川溫泉實務、志望動機、語學力、勤務條件、性格寮生活與逆質問
 // 雙版本：版本 A (日文簡單版 N4 程度) ＆ 版本 B (日文禮貌版 N2 程度)
 // ==============================================================
+
+// ==============================================================
+// ⚡ 北海道二世古實戰 26 題速查擬答資料庫 (雙層標音：漢字平假名、片假名羅馬拼音) (v169)
+// ==============================================================
+const NISEKO_FAST_QA_LIST = [
+  // 🙋 基本開場 (6 題)
+  {
+    id: 'intro',
+    cat: '🙋 基本開場',
+    title: '【自我介紹】',
+    ruby: '<ruby>楊詠筑<rt>ヤンユンジュ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>台湾<rt>たいわん</rt></ruby>の<ruby>成功大学<rt>せいこうだいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し、JLPT N2を<ruby>取得<rt>しゅとく</rt></ruby>しております。<ruby>現在<rt>げんざい</rt></ruby>は<ruby>熊本県<rt>くまもとけん</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>にある<ruby>旅館<rt>りょかん</rt></ruby>「<ruby>優彩<rt>ゆうさい</rt></ruby>」の<ruby>レストラン<rt>Resutoran</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いております。<ruby>笑顔<rt>えがお</rt></ruby>と<ruby>元気<rt>げんき</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>に、<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>頑張<rt>がんば</rt></ruby>ります。<ruby>本日<rt>ほんじつ</rt></ruby>はよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+    raw: '楊詠筑と申します。台湾の成功大学を卒業し、JLPT N2を取得しております。現在は熊本県の黒川温泉にある旅館「優彩」のレストランで働いております。笑顔と元気を大切に、一生懸命頑張ります。本日はよろしくお願いいたします。',
+    zh: '我叫楊詠筑。畢業於台灣成功大學，持有 JLPT N2。目前在熊本縣黑川溫泉的旅館「優彩」餐廳工作。我非常注重笑容與朝氣，會全力以赴。今天請多多指教。'
+  },
+  {
+    id: 'start_date',
+    cat: '🙋 基本開場',
+    title: '【到職時間】',
+    ruby: '<ruby>現在<rt>げんざい</rt></ruby><ruby>勤務<rt>きんむ</rt></ruby>している<ruby>旅館<rt>りょかん</rt></ruby>（<ruby>優彩<rt>ゆうさい</rt></ruby>）の<ruby>契約<rt>けいやく</rt></ruby>は11<ruby>月<rt>がつ</rt></ruby>13<ruby>日<rt>にち</rt></ruby>までですが、<ruby>シフト<rt>Shifuto</rt></ruby>が18<ruby>日<rt>にち</rt></ruby>まで<ruby>入<rt>はい</rt></ruby>っており、<ruby>現在<rt>げんざい</rt></ruby>どちらになるか<ruby>確認<rt>かくにん</rt></ruby><ruby>調整<rt>ちょうせい</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めております。いずれにしましても、11<ruby>月<rt>がつ</rt></ruby><ruby>中旬<rt>ちゅうじゅん</rt></ruby>から<ruby>下旬<rt>げじゅん</rt></ruby>には<ruby>ニセコ<rt>Niseko</rt></ruby>へ<ruby>赴任<rt>ふにん</rt></ruby>し、<ruby>勤務<rt>きんむ</rt></ruby>を<ruby>開始<rt>かいし</rt></ruby>することが<ruby>可能<rt>かのう</rt></ruby>です。',
+    raw: '現在勤務している旅館（優彩）の契約は11月13日までですが、シフトが18日まで入っており、現在どちらになるか確認調整を進めております。いずれにしましても、11月中旬から下旬にはニセコへ赴任し、勤務を開始することが可能です。',
+    zh: '目前工作的旅館（優彩）合約到 11 月 13 日，但班表排到了 18 日，目前正在確認協調。但無論是哪一天，我都能在 11 月中旬到下旬抵達二世古開始上班。'
+  },
+  {
+    id: 'start_date_nov27',
+    cat: '🙋 基本開場',
+    title: '【11/27到任協調】',
+    ruby: '<ruby>現在<rt>げんざい</rt></ruby>の<ruby>旅館<rt>りょかん</rt></ruby>（<ruby>優彩<rt>ゆうさい</rt></ruby>）での<ruby>契約<rt>けいやく</rt></ruby>は11<ruby>月<rt>がつ</rt></ruby>18<ruby>日<rt>にち</rt></ruby>に<ruby>終了<rt>しゅうりょう</rt></ruby>し、<ruby>寮<rt>りょう</rt></ruby>には11<ruby>月<rt>がつ</rt></ruby>21<ruby>日<rt>にち</rt></ruby>まで<ruby>滞在<rt>たいざい</rt></ruby>できます。その<ruby>後<rt>あと</rt></ruby>、<ruby>荷物<rt>にもつ</rt></ruby>をまとめて<ruby>次<rt>つぎ</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>へ<ruby>向<rt>む</rt></ruby>かう<ruby>準備<rt>じゅんび</rt></ruby>をいたします。いろいろと<ruby>考<rt>かんが</rt></ruby>えまして、<ruby>貴社<rt>きしゃ</rt></ruby>への<ruby>赴任<rt>ふにん</rt></ruby><ruby>日<rt>び</rt></ruby>（<ruby>勤務<rt>きんむ</rt></ruby><ruby>開始<rt>かいし</rt></ruby><ruby>日<rt>び</rt></ruby>）を11<ruby>月<rt>がつ</rt></ruby>27<ruby>日<rt>にち</rt></ruby>に<ruby>設定<rt>せってい</rt></ruby>させていただくことは<ruby>可能<rt>かのう</rt></ruby>でしょうか？',
+    raw: '現在の旅館（優彩）での契約は11月18日に終了し、寮には11月21日まで滞在できます。その後、荷物をまとめて次の場所へ向かう準備をいたします。いろいろと考えまして、貴社への赴任日（勤務開始日）を11月27日に設定させていただくことは可能でしょうか？',
+    zh: '我目前在旅館（優彩）的合約到 11 月 18 日結束，宿舍可以住到 11 月 21 日，之後會收拾行李準備前往下一個地方。我思考評估後，想請問如果將前往貴公司上任（開始上班）的日期定在 11 月 27 日，請問這個時間是否方便呢？'
+  },
+  {
+    id: 'inquire_start_date_nov27',
+    cat: '🙋 基本開場',
+    title: '【代詢11/27到任】',
+    ruby: '<ruby>現在<rt>げんざい</rt></ruby>のお<ruby>仕事<rt>しごと</rt></ruby>は11<ruby>月<rt>がつ</rt></ruby>18<ruby>日<rt>にち</rt></ruby>に<ruby>終了<rt>しゅうりょう</rt></ruby>し、<ruby>寮<rt>りょう</rt></ruby>の<ruby>退去<rt>たいきょ</rt></ruby><ruby>期限<rt>きげん</rt></ruby>は11<ruby>月<rt>がつ</rt></ruby>21<ruby>日<rt>にち</rt></ruby>となっております。そのため、<ruby>次<rt>つぎ</rt></ruby>のお<ruby>仕事<rt>しごと</rt></ruby>の<ruby>開始<rt>かいし</rt></ruby><ruby>日<rt>び</rt></ruby>を11<ruby>月<rt>がつ</rt></ruby>27<ruby>日<rt>にち</rt></ruby>に<ruby>希望<rt>きぼう</rt></ruby>しております。この<ruby>日程<rt>にってい</rt></ruby>で<ruby>可能<rt>かのう</rt></ruby>かどうか、そちらから<ruby>先方<rt>せんぽう</rt></ruby>（ご<ruby>担当<rt>たんとう</rt></ruby><ruby>者<rt>しゃ</rt></ruby><ruby>様<rt>さま</rt></ruby>）にご<ruby>確認<rt>かくにん</rt></ruby>・お<ruby>伺<rt>うかが</rt></ruby>いいただくことはできますでしょうか？',
+    raw: '現在のお仕事は11月18日に終了し、寮の退去期限は11月21日となっております。そのため、次のお仕事の開始日を11月27日に希望しております。この日程で可能かどうか、そちらから先方（ご担当者様）にご確認・お伺いいただくことはできますでしょうか？',
+    zh: '我目前的工作是到 11 月 18 日結束，宿舍退租離開的最晚日期是 11 月 21 日，因此希望下一個工作的開始日期可以在 11 月 27 日。不知道您那邊能否幫我向對方（滑雪場/負責窗口）確認詢問這個日程是否可行呢？'
+  },
+  {
+    id: 'visa',
+    cat: '🙋 基本開場',
+    title: '【簽證效期】',
+    ruby: '<ruby>ワーキングホリデー<rt>Wākinguhoridē</rt></ruby>の「<ruby>特定<rt>とくてい</rt></ruby><ruby>活動<rt>かつどう</rt></ruby><ruby>ビザ<rt>Biza</rt></ruby>」を<ruby>所持<rt>しょじ</rt></ruby>しており、<ruby>在留<rt>ざいりゅう</rt></ruby><ruby>期限<rt>きげん</rt></ruby>は2027<ruby>年<rt>ねん</rt></ruby>8<ruby>月<rt>がつ</rt></ruby>14<ruby>日<rt>にち</rt></ruby>まで<ruby>有効<rt>ゆうこう</rt></ruby>です。<ruby>シーズン<rt>Sīzun</rt></ruby>を<ruby>通<rt>とお</rt></ruby>して<ruby>フルタイム<rt>Furutaimu</rt></ruby>で<ruby>安定<rt>あんてい</rt></ruby>して<ruby>働<rt>はたら</rt></ruby>くことができます。',
+    raw: 'ワーキングホリデーの「特定活動ビザ」を所持しており、在留期限は2027年8月14日まで有効です。シーズンを通してフルタイムで安定して働くことができます。',
+    zh: '我持有打工度假的「特定活動簽證」，在留期限到 2027 年 8 月 14 日。在整個雪季期間都能全職且穩定地工作。'
+  },
+  {
+    id: 'current_job',
+    cat: '🙋 基本開場',
+    title: '【現職工作】',
+    ruby: '<ruby>現在<rt>げんざい</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>「<ruby>優彩<rt>ゆうさい</rt></ruby>」では、<ruby>レストラン<rt>Resutoran</rt></ruby>の<ruby>ホール<rt>Hōru</rt></ruby><ruby>業務<rt>ぎょうむ</rt></ruby><ruby>全般<rt>ぜんぱん</rt></ruby>を<ruby>担当<rt>たんとう</rt></ruby>しております。<ruby>具体<rt>ぐたい</rt></ruby><ruby>的<rt>てき</rt></ruby>には、お<ruby>料理<rt>りょうり</rt></ruby>の<ruby>補充<rt>ほじゅう</rt></ruby>、<ruby>テーブルセッティング<rt>Tēburusettingu</rt></ruby>、<ruby>バッシング<rt>Basshingu</rt></ruby>、<ruby>テーブル<rt>Tēburu</rt></ruby>の<ruby>拭<rt>ふ</rt></ruby>き<ruby>掃除<rt>そうじ</rt></ruby>、<ruby>簡単<rt>かんたん</rt></ruby>な<ruby>サラダ<rt>Sarada</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>や<ruby>野菜<rt>やさい</rt></ruby>の<ruby>仕込<rt>しこ</rt></ruby>みなどを<ruby>行<rt>おこな</rt></ruby>っております。',
+    raw: '現在の黒川温泉「優彩」では、レストランのホール業務全般を担当しております。具体的には、お料理の補充、テーブルセッティング、バッシング、テーブルの拭き掃除、簡単なサラダの準備や野菜の仕込みなどを行っております。',
+    zh: '在目前的黑川溫泉「優彩」，我負責餐廳外場整體業務。具體包括：補充菜品、擺設餐桌、收桌撤盤、擦拭桌面、準備簡單沙拉與切蔬菜備料等。'
+  },
+
+  // ⛷️ 應徵動機 (3 題)
+  {
+    id: 'motivation',
+    cat: '⛷️ 應徵動機',
+    title: '【應徵動機】',
+    ruby: '<ruby>私<rt>わたし</rt></ruby>は<ruby>台湾<rt>たいわん</rt></ruby><ruby>出身<rt>しゅっしん</rt></ruby>で、<ruby>台湾<rt>たいわん</rt></ruby>では<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りません。これまで<ruby>スキー<rt>Sukī</rt></ruby>をしたことがなく、<ruby>人生<rt>じんせい</rt></ruby>の<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>経験<rt>けいけん</rt></ruby>としてぜひ<ruby>スキー<rt>Sukī</rt></ruby>に<ruby>挑戦<rt>ちょうせん</rt></ruby>してみたいと<ruby>思<rt>おも</rt></ruby>いました。また、<ruby>雪国<rt>ゆきぐに</rt></ruby>で<ruby>長<rt>なが</rt></ruby>い<ruby>冬<rt>ふゆ</rt></ruby>を<ruby>過<rt>す</rt></ruby>ごすこと<ruby>自体<rt>じたい</rt></ruby>が<ruby>私<rt>わたし</rt></ruby>にとって<ruby>素晴<rt>すばら</rt></ruby>しい<ruby>体験<rt>たいけん</rt></ruby>になると<ruby>感<rt>かん</rt></ruby>じ、こちらの<ruby>ニセコ<rt>Niseko</rt></ruby>に<ruby>応募<rt>おうぼ</rt></ruby>いたしました。',
+    raw: '私は台湾出身で、台湾では雪が降りません。これまでスキーをしたことがなく、人生の特別な経験としてぜひスキーに挑戦してみたいと思いました。また、雪国で長い冬を過ごすこと自体が私にとって素晴らしい体験になると感じ、こちらのニセコに応募いたしました。',
+    zh: '我來自台灣，台灣是不會下雪的地方。我以前從來沒有滑過雪，覺得這會是人生中非常特別的體驗，很希望能挑戰滑雪。而且能夠在雪國度過一整個冬天，對我來說也是非常棒的生活體驗，因此應徵了貴度假村。'
+  },
+  {
+    id: 'cold_weather',
+    cat: '⛷️ 應徵動機',
+    title: '【耐寒能力】',
+    ruby: '<ruby>台湾<rt>たいわん</rt></ruby>では<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>らないため、<ruby>実際<rt>じっさい</rt></ruby>の<ruby>雪<rt>ゆき</rt></ruby>の<ruby>寒<rt>さむ</rt></ruby>さを<ruby>経験<rt>けいけん</rt></ruby>したことがなく、<ruby>自分<rt>じぶん</rt></ruby>がどれくらい<ruby>寒<rt>さむ</rt></ruby>さに<ruby>強<rt>つよ</rt></ruby>いかはまだ<ruby>分<rt>わ</rt></ruby>かりません。ですが、<ruby>暖<rt>あたた</rt></ruby>かい<ruby>防寒着<rt>ぼうかんぎ</rt></ruby>や<ruby>スノーブーツ<rt>Sunōbūtsu</rt></ruby>などをしっかり<ruby>準備<rt>じゅんび</rt></ruby>してまいりますので、<ruby>体調<rt>たいちょう</rt></ruby><ruby>管理<rt>かんり</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて<ruby>元気<rt>げんき</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>きます。',
+    raw: '台湾では雪が降らないため、実際の雪の寒さを経験したことがなく、自分がどれくらい寒さに強いかはまだ分かりません。ですが、暖かい防寒着やスノーブーツなどをしっかり準備してまいりますので、体調管理に気をつけて元気に働きます。',
+    zh: '因為台灣不會下雪，我沒有真正體驗過下雪的寒冷，對自己的耐寒程度還不是那麼確定。但我會事先備妥保暖的防寒衣物與雪靴，做好健康管理，元氣滿滿地投入工作。'
+  },
+  {
+    id: 'day_off',
+    cat: '⛷️ 應徵動機',
+    title: '【休假生活】',
+    ruby: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は、ぜひ<ruby>スキー<rt>Sukī</rt></ruby>の<ruby>練習<rt>れんしゅう</rt></ruby>をしたいと<ruby>思<rt>おも</rt></ruby>っております。また、<ruby>ニセコ<rt>Niseko</rt></ruby>の<ruby>美<rt>うつく</rt></ruby>しい<ruby>雪景色<rt>ゆきげしき</rt></ruby>を<ruby>写真<rt>しゃしん</rt></ruby>に<ruby>撮<rt>と</rt></ruby>ったり、<ruby>周辺<rt>しゅうへん</rt></ruby>を<ruby>散策<rt>さんさく</rt></ruby>して<ruby>リフレッシュ<rt>Rifuresshu</rt></ruby>しながら、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>も<ruby>続<rt>つづ</rt></ruby>けたいです。',
+    raw: '休みの日は、ぜひスキーの練習をしたいと思っております。また、ニセコの美しい雪景色を写真に撮ったり、周辺を散策してリフレッシュしながら、日本語の勉強も続けたいです。',
+    zh: '休假的日子，我很希望能練習滑雪。另外也想拍攝二世古美麗的雪景、在周邊散步放鬆心情，並持續精進日語。'
+  },
+
+  // 🍽️ 職務與能力 (6 題)
+  {
+    id: 'role_service',
+    cat: '🍽️ 職務與能力',
+    title: '【第一志願外場】',
+    ruby: '<ruby>第一<rt>だいいち</rt></ruby><ruby>志望<rt>しぼう</rt></ruby>は<ruby>レストラン<rt>Resutoran</rt></ruby><ruby>サービス<rt>Sābisu</rt></ruby>（<ruby>ホール<rt>Hōru</rt></ruby>）です。<ruby>現在<rt>げんざい</rt></ruby>も<ruby>旅館<rt>りょかん</rt></ruby>の<ruby>レストラン<rt>Resutoran</rt></ruby>で<ruby>毎日<rt>まいにち</rt></ruby><ruby>接客<rt>せっきゃく</rt></ruby>や<ruby>配膳<rt>はいぜん</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>っておりますので、これまでの<ruby>経験<rt>けいけん</rt></ruby>をそのまま<ruby>活<rt>い</rt></ruby>かして、<ruby>初日<rt>しょにち</rt></ruby>から<ruby>即戦力<rt>そくせんりょく</rt></ruby>として<ruby>一番<rt>いちばん</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>現場<rt>げんば</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れることができると<ruby>考<rt>かんが</rt></ruby>えております。',
+    raw: '第一志望はレストランサービス（ホール）です。現在も旅館のレストランで毎日接客や配膳を行っておりますので、これまでの経験をそのまま活かして、初日から即戦力として一番早く現場に慣れることができると考えております。',
+    zh: '我的第一志願是餐廳外場（服務）。因為我目前在旅館餐廳也是每天做服務與配膳，能完全發揮現有的經驗，從第一天起就能作為即戰力最快進入狀況。'
+  },
+  {
+    id: 'role_kitchen',
+    cat: '🍽️ 職務與能力',
+    title: '【第二志願廚房】',
+    ruby: '<ruby>調理<rt>ちょうり</rt></ruby><ruby>補助<rt>ほじょ</rt></ruby>のお<ruby>仕事<rt>しごと</rt></ruby>も<ruby>可能<rt>かのう</rt></ruby>です。<ruby>現在<rt>げんざい</rt></ruby>の<ruby>職場<rt>しょくば</rt></ruby>でも<ruby>野菜<rt>やさい</rt></ruby>の<ruby>仕込<rt>しこ</rt></ruby>みや<ruby>簡単<rt>かんたん</rt></ruby>な<ruby>サラダ<rt>Sarada</rt></ruby><ruby>作<rt>づく</rt></ruby>りを<ruby>行<rt>おこな</rt></ruby>っておりますので、<ruby>ホール<rt>Hōru</rt></ruby>の<ruby>経験<rt>けいけん</rt></ruby>を<ruby>メイン<rt>Mein</rt></ruby>にしつつ、<ruby>厨房<rt>ちゅうぼう</rt></ruby>のお<ruby>手伝<rt>てづだ</rt></ruby>いが<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>際<rt>さい</rt></ruby>も<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>協力<rt>きょうりょく</rt></ruby>いたします。',
+    raw: '調理補助のお仕事も可能です。現在の職場でも野菜の仕込みや簡単なサラダ作りを行っておりますので、ホールの経験をメインにしつつ、厨房のお手伝いが必要な際も前向きに協力いたします。',
+    zh: '料理輔助的工作我也能配合。在目前的職場我也會幫忙切菜備料與製作簡單沙拉，雖然以外場經驗為主，但廚房若需要人手時我也非常樂意配合協助。'
+  },
+  {
+    id: 'english',
+    cat: '🍽️ 職務與能力',
+    title: '【英語接待】',
+    ruby: '<ruby>英語<rt>えいご</rt></ruby>での<ruby>接客<rt>せっきゃく</rt></ruby>も<ruby>対応<rt>たいおう</rt></ruby><ruby>可能<rt>かのう</rt></ruby>です。<ruby>ネイティブ<rt>Neitibu</rt></ruby>のように<ruby>ペラペラ<rt>Perapera</rt></ruby>というわけではありませんが、<ruby>日常<rt>にちじょう</rt></ruby><ruby>会話<rt>かいわ</rt></ruby>や<ruby>レストラン<rt>Resutoran</rt></ruby>での<ruby>基本<rt>きほん</rt></ruby><ruby>的<rt>てき</rt></ruby>なご<ruby>案内<rt>あんない</rt></ruby>、ご<ruby>注文<rt>ちゅうもん</rt></ruby>の<ruby>確認<rt>かくにん</rt></ruby>などは、<ruby>笑顔<rt>えがお</rt></ruby>で<ruby>積極<rt>せっきょく</rt></ruby><ruby>的<rt>てき</rt></ruby>に<ruby>コミュニケーション<rt>Komyunikēshon</rt></ruby>を<ruby>取<rt>と</rt></ruby>ることができます。',
+    raw: '英語での接客も対応可能です。ネイティブのようにペラペラというわけではありませんが、日常会話やレストランでの基本的なご案内、注文の確認などは、笑顔で積極的にコミュニケーションを取ることができます。',
+    zh: '英文接待我也能配合。雖然沒有到像母語者那樣流利，但日常對話以及餐廳內的基本帶位說明、點餐確認等，我都能帶著笑容主動積極地與客人溝通。'
+  },
+  {
+    id: 'dishwasher',
+    cat: '🍽️ 職務與能力',
+    title: '【洗碗機說明】',
+    ruby: '<ruby>業務<rt>ぎょうむ</rt></ruby><ruby>用<rt>よう</rt></ruby>の<ruby>大型<rt>おおがた</rt></ruby><ruby>食器<rt>しょっき</rt></ruby><ruby>洗浄<rt>せんじょう</rt></ruby><ruby>機<rt>き</rt></ruby>は<ruby>使<rt>つか</rt></ruby>った<ruby>経験<rt>けいけん</rt></ruby>がありませんが、<ruby>手洗<rt>てあら</rt></ruby>いや<ruby>片付<rt>かたづ</rt></ruby>けは<ruby>毎日<rt>まいにち</rt></ruby><ruby>行<rt>おこな</rt></ruby>っております。<ruby>操作<rt>そうさ</rt></ruby><ruby>方法<rt>ほうほう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えていただければ、すぐに<ruby>覚<rt>おぼ</rt></ruby>えて<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>対応<rt>たいおう</rt></ruby>いたします。',
+    raw: '業務用の大型食器洗浄機は使った経験がありませんが、手洗いや片付けは毎日行っております。操作方法を教えていただければ、すぐに覚えて丁寧に対応いたします。',
+    zh: '我沒有使用過商用大型洗碗機的經驗，但平時手洗與收拾整理每天都在做。只要教我操作方法，我會立刻學會並細心操作。'
+  },
+  {
+    id: 'strength',
+    cat: '🍽️ 職務與能力',
+    title: '【個人優勢】',
+    ruby: '<ruby>私<rt>わたし</rt></ruby>の<ruby>一番<rt>いちばん</rt></ruby>の<ruby>強<rt>つよ</rt></ruby>みは、<ruby>現役<rt>げんえき</rt></ruby>で<ruby>旅館<rt>りょかん</rt></ruby><ruby>レストラン<rt>Resutoran</rt></ruby><ruby>勤務<rt>きんむ</rt></ruby>をしているため、<ruby>未経験<rt>みけいけん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>よりも<ruby>早<rt>はや</rt></ruby>くお<ruby>仕事<rt>しごと</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れることができる<ruby>点<rt>てん</rt></ruby>です。また、お<ruby>客様<rt>きゃくさま</rt></ruby>にはいつも<ruby>明<rt>あか</rt></ruby>るい<ruby>笑顔<rt>えがお</rt></ruby>と<ruby>元気<rt>げんき</rt></ruby>な<ruby>声<rt>こえ</rt></ruby>で<ruby>接<rt>せっ</rt></ruby>し、<ruby>同僚<rt>どうりょう</rt></ruby><ruby>スタッフ<rt>Sutaffu</rt></ruby>とも<ruby>協調<rt>きょうちょう</rt></ruby><ruby>性<rt>せい</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>気持<rt>きも</rt></ruby>ちよく<ruby>連携<rt>れんけい</rt></ruby>できます。',
+    raw: '私の一番の強みは、現役で旅館レストラン勤務をしているため、未経験の方よりも早く仕事に慣れることができる点です。また、お客様にはいつも明るい笑顔と元気な声で接し、同僚スタッフとも協調性を持って気持ちよく連携できます。',
+    zh: '我最大的優勢，在於目前就在旅館餐廳現場工作，能比沒有經驗的人更快上手。此外，面對客人時我總能保持開朗笑容與元氣聲音，與同事之間也能保持良好協調性、融洽合作。'
+  },
+  {
+    id: 'overtime',
+    cat: '🍽️ 職務與能力',
+    title: '【加班排班】',
+    ruby: '<ruby>残業<rt>ざんぎょう</rt></ruby>や<ruby>シフト<rt>Shifuto</rt></ruby>の<ruby>変更<rt>へんこう</rt></ruby>は<ruby>全<rt>まった</rt></ruby>く<ruby>問題<rt>もんだい</rt></ruby>ございません。<ruby>スキー場<rt>Sukījō</rt></ruby>の<ruby>繁忙<rt>はんぼう</rt></ruby><ruby>期<rt>き</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わせて、<ruby>早出<rt>はやで</rt></ruby>や<ruby>残業<rt>ざんぎょう</rt></ruby>などもしっかり<ruby>協力<rt>きょうりょく</rt></ruby>いたします。',
+    raw: '残業やシフトの変更は全く問題ございません。スキー場の繁忙期に合わせて、早出や残業などもしっかり協力いたします。',
+    zh: '配合加班或輪班調整完全沒有問題。我會配合滑雪場旺季的步調，全力支援早班或加班。'
+  },
+
+  // 💼 現場協作 (4 題)
+  {
+    id: 'rush_handling',
+    cat: '💼 現場協作',
+    title: '【忙碌應對】',
+    ruby: '<ruby>混雑<rt>こんざつ</rt></ruby>した<ruby>時<rt>とき</rt></ruby>こそ<ruby>焦<rt>あせ</rt></ruby>らず、<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて「<ruby>優先<rt>ゆうせん</rt></ruby><ruby>順位<rt>じゅんい</rt></ruby>」を<ruby>考<rt>かんが</rt></ruby>えて<ruby>動<rt>うご</rt></ruby>くようにしています。また、<ruby>大<rt>おお</rt></ruby>きな<ruby>声<rt>こえ</rt></ruby>で<ruby>スタッフ<rt>Sutaffu</rt></ruby><ruby>同士<rt>どうし</rt></ruby><ruby>声<rt>こえ</rt></ruby>を<ruby>掛<rt>か</rt></ruby>け<ruby>合<rt>あ</rt></ruby>い、お<ruby>互<rt>たが</rt></ruby>いに<ruby>フォロー<rt>Forō</rt></ruby>し<ruby>合<rt>あ</rt></ruby>うことを<ruby>大切<rt>たいせつ</rt></ruby>にしています。',
+    raw: '混雑した時こそ焦らず、落ち着いて「優先順位」を考えて動くようにしています。また、大きな声でスタッフ同士声を掛け合い、お互いにフォローし合うことを大切にしています。',
+    zh: '越是忙碌的時候越不能慌張，我會保持冷靜並依照「優先順序」行動。同時我也很注重與同事之間大聲互相確認通報、彼此補位支援。'
+  },
+  {
+    id: 'multinational',
+    cat: '💼 現場協作',
+    title: '【多國合作】',
+    ruby: '<ruby>多国籍<rt>たこくせき</rt></ruby>な<ruby>スタッフ<rt>Sutaffu</rt></ruby>との<ruby>協力<rt>きょうりょく</rt></ruby>も<ruby>問題<rt>もんだい</rt></ruby>ありません。<ruby>現在<rt>げんざい</rt></ruby>の<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>でも、<ruby>ネパール<rt>Nepāru</rt></ruby>や<ruby>ベトナム<rt>Betonamu</rt></ruby>などの<ruby>外国人<rt>がいこくじん</rt></ruby><ruby>スタッフ<rt>Sutaffu</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>いており、お<ruby>互<rt>たが</rt></ruby>いを<ruby>尊重<rt>そんちょう</rt></ruby>しながら<ruby>チームワーク<rt>Chīmuwāku</rt></ruby><ruby>良<rt>よ</rt></ruby>く<ruby>業務<rt>ぎょうむ</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>っております。',
+    raw: '多国籍なスタッフとの協力も問題ありません。現在の黒川温泉でも、ネパールやベトナムなどの外国人スタッフと一緒に働いており、お互いを尊重しながらチームワーク良く業務を行っております。',
+    zh: '與多國籍同事合作完全沒問題。在目前的黑川溫泉，我也跟尼泊爾、越南等外國同事一起共事，彼此互相尊重且團隊默契良好。'
+  },
+  {
+    id: 'allergy',
+    cat: '💼 現場協作',
+    title: '【甲殼類過敏】',
+    ruby: '<ruby>甲殻<rt>こうかく</rt></ruby><ruby>類<rt>るい</rt></ruby>（エビ・カニ）の<ruby>アレルギー<rt>Arerugī</rt></ruby>がありますが、これは<ruby>自分<rt>じぶん</rt></ruby>が<ruby>食<rt>た</rt></ruby>べる<ruby>場合<rt>ばあい</rt></ruby>のみです。お<ruby>料理<rt>りょうり</rt></ruby>をお<ruby>盆<rt>ぼん</rt></ruby>に<ruby>載<rt>の</rt></ruby>せて<ruby>運<rt>はこ</rt></ruby>んだり、<ruby>配膳<rt>はいぜん</rt></ruby>したりする<ruby>接客<rt>せっきゃく</rt></ruby><ruby>業務<rt>ぎょうむ</rt></ruby>には<ruby>一切<rt>いっさい</rt></ruby><ruby>支障<rt>ししょう</rt></ruby>はございません。',
+    raw: '甲殻類（エビ・カニ）のアレルギーがありますが、これは自分が食べる場合のみです。お料理をお盆に載せて運んだり、配膳したりする接客業務には一切支障はございません。',
+    zh: '我有甲殼類（蝦蟹）過敏，但這僅限於我自己食用。端盤、出菜或外場服務等工作完全不受任何影響。'
+  },
+  {
+    id: 'duration',
+    cat: '💼 現場協作',
+    title: '【工作期間】',
+    ruby: '<ruby>スキー場<rt>Sukījō</rt></ruby>の<ruby>営業<rt>えいぎょう</rt></ruby><ruby>シーズン<rt>Sīzun</rt></ruby><ruby>終了<rt>しゅうりょう</rt></ruby>まで、3か<ruby>月<rt>げつ</rt></ruby>から<ruby>半年<rt>はんとし</rt></ruby><ruby>程度<rt>ていど</rt></ruby>の<ruby>フル<rt>Furu</rt></ruby><ruby>期間<rt>きかん</rt></ruby>でしっかり<ruby>働<rt>はたら</rt></ruby>きたいと<ruby>考<rt>かんが</rt></ruby>えております。',
+    raw: 'スキー場の営業シーズン終了まで、3ヶ月から半年程度のフル期間でしっかり働きたいと考えております。',
+    zh: '我希望能一路工作到滑雪場季末結束，穩定工作 3 個月到半年左右的完整期間。'
+  },
+
+  // ❓ 逆質問 (7 題)
+  {
+    id: 'rv_room',
+    cat: '❓ 逆質問',
+    title: '【問宿舍個室】',
+    ruby: '<ruby>寮<rt>りょう</rt></ruby>のお<ruby>部屋<rt>へや</rt></ruby>についてお<ruby>伺<rt>うかが</rt></ruby>いしたいのですが、お<ruby>部屋<rt>へや</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>に1<ruby>人<rt>り</rt></ruby><ruby>部屋<rt>べや</rt></ruby>（<ruby>個室<rt>こしつ</rt></ruby>）になりますでしょうか？お<ruby>仕事<rt>しごと</rt></ruby>の<ruby>後<rt>あと</rt></ruby>は、しっかり<ruby>自分<rt>じぶん</rt></ruby>の<ruby>プライベート<rt>Puraibēto</rt></ruby>な<ruby>空間<rt>くうかん</rt></ruby>で<ruby>休<rt>やす</rt></ruby>みたいと<ruby>考<rt>かんが</rt></ruby>えております。',
+    raw: '寮のお部屋についてお伺いしたいのですが、お部屋は本当に1人部屋（個室）になりますでしょうか？仕事の後は、しっかり自分のプライベートな空間で休みたいと考えております。',
+    zh: '想請教關於宿舍房間，真的會是一人一間（個室）嗎？因為我希望下班後能在屬於自己的私人空間好好休息。'
+  },
+  {
+    id: 'rv_distance',
+    cat: '❓ 逆質問',
+    title: '【問職場距離】',
+    ruby: '<ruby>寮<rt>りょう</rt></ruby>から<ruby>職場<rt>しょくば</rt></ruby>までの<ruby>距離<rt>きょり</rt></ruby>と、<ruby>徒歩<rt>とほ</rt></ruby>でだいたい<ruby>何分<rt>なんぷん</rt></ruby>くらいかかるかを<ruby>教<rt>おし</rt></ruby>えていただけますでしょうか？',
+    raw: '寮から職場までの距離と、徒歩でだいたい何分くらいかかるかを教えていただけますでしょうか？',
+    zh: '想請教從宿舍到上班地點大概多遠？走路大約需要幾分鐘呢？'
+  },
+  {
+    id: 'rv_shopping',
+    cat: '❓ 逆質問',
+    title: '【問超市採買】',
+    ruby: '<ruby>普段<rt>ふだん</rt></ruby>の<ruby>日用品<rt>にちようひん</rt></ruby>や<ruby>食料品<rt>しょくりょうひん</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>出<rt>だ</rt></ruby>しについて、<ruby>近<rt>ちか</rt></ruby>くに<ruby>スーパー<rt>Sūpā</rt></ruby>などはありますでしょうか？また、<ruby>買<rt>か</rt></ruby>い<ruby>出<rt>だ</rt></ruby>し<ruby>用<rt>よう</rt></ruby>の<ruby>送迎<rt>そうげい</rt></ruby><ruby>バス<rt>Basu</rt></ruby>などは<ruby>運行<rt>うんこう</rt></ruby>されていますでしょうか？',
+    raw: '普段の日用品や食料品の買い出しについて、近くにスーパーなどはありますでしょうか？また、買い出し用の送迎バスなどは運行されていますでしょうか？',
+    zh: '平時購買日用品或食材，附近有超市嗎？或是會有前往超市的採買接駁車呢？'
+  },
+  {
+    id: 'rv_luggage_post',
+    cat: '❓ 逆質問',
+    title: '【行李先寄與代收】',
+    ruby: '<ruby>赴任<rt>ふにん</rt></ruby>にあたり、<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>先<rt>さき</rt></ruby>に<ruby>宅配便<rt>たくはいびん</rt></ruby>で<ruby>送<rt>おく</rt></ruby>ってから、<ruby>自分<rt>じぶん</rt></ruby><ruby>自身<rt>じしん</rt></ruby>は<ruby>後<rt>あと</rt></ruby>から<ruby>移動<rt>いどう</rt></ruby>したいと<ruby>考<rt>かんが</rt></ruby>えております。<ruby>事前<rt>じぜん</rt></ruby>に<ruby>寮<rt>りょう</rt></ruby>や<ruby>職場<rt>しょくば</rt></ruby>へ<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>発送<rt>はっそう</rt></ruby>することは<ruby>可能<rt>かのう</rt></ruby>でしょうか？また、<ruby>届<rt>とど</rt></ruby>いた<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>代理<rt>だいり</rt></ruby>で<ruby>受<rt>う</rt></ruby>け<ruby>取<rt>と</rt></ruby>っていただける<ruby>場所<rt>ばしょ</rt></ruby>はございますでしょうか？',
+    raw: '赴任にあたり、荷物を先に宅配便で送ってから、自分自身は後から移動したいと考えております。事前に寮や職場へ荷物を発送することは可能でしょうか？また、届いた荷物を代理で受け取っていただける場所はございますでしょうか？',
+    zh: '關於前往上任，我想先把行李以宅配寄過去，自己隨後再慢慢移動過去。請問可以事先將行李寄送到宿舍或工作地點嗎？另外，那邊是否有可以幫忙代收包裹行李的地方呢？'
+  },
+  {
+    id: 'rv_ski_rental',
+    cat: '❓ 逆質問',
+    title: '【問雪具租借】',
+    ruby: '<ruby>休日<rt>きゅうじつ</rt></ruby>に<ruby>スキー<rt>Sukī</rt></ruby>をする<ruby>際<rt>さい</rt></ruby>、<ruby>スキーウェア<rt>Sukīwea</rt></ruby>や<ruby>道具<rt>どうぐ</rt></ruby>（<ruby>板<rt>いた</rt></ruby>・<ruby>ブーツ<rt>Būtsu</rt></ruby>など）は<ruby>レンタル<rt>Rentaru</rt></ruby>できますでしょうか？また、<ruby>スタッフ<rt>Sutaffu</rt></ruby><ruby>割引<rt>わりびき</rt></ruby>や<ruby>レンタル<rt>Rentaru</rt></ruby>の<ruby>費用<rt>ひよう</rt></ruby>について<ruby>教<rt>おし</rt></ruby>えていただけますでしょうか？',
+    raw: '休日にスキーをする際、スキーウェアや道具（板・ブーツなど）はレンタルできますでしょうか？また、スタッフ割引やレンタルの費用について教えていただけますでしょうか？',
+    zh: '休假想滑雪時，雪衣和裝備（雪板、雪靴等）可以租借嗎？另外想請問是否有員工折扣，以及費用大概如何計算？'
+  },
+  {
+    id: 'rv_ski_lesson',
+    cat: '❓ 逆質問',
+    title: '【問滑雪課程】',
+    ruby: '<ruby>スキー<rt>Sukī</rt></ruby>が<ruby>初<rt>はじ</rt></ruby>めてなのですが、<ruby>初心者<rt>しょしんしゃ</rt></ruby><ruby>向<rt>む</rt></ruby>けの<ruby>レッスン<rt>Ressun</rt></ruby>や<ruby>スクール<rt>Sukūru</rt></ruby>はありますでしょうか？また、<ruby>受講<rt>じゅこう</rt></ruby>する<ruby>場合<rt>ばあい</rt></ruby>の<ruby>費用<rt>ひよう</rt></ruby>なども<ruby>教<rt>おし</rt></ruby>えていただけますでしょうか？',
+    raw: 'スキーが初めてなのですが、初心者向けのレッスンやスクールはありますでしょうか？また、受講する場合の費用なども教えていただけますでしょうか？',
+    zh: '我是第一次滑雪，請問有提供給初學者的滑雪教學或課程嗎？如果要上的話費用大概如何計算呢？'
+  },
+  {
+    id: 'ending',
+    cat: '❓ 逆質問',
+    title: '【結尾致謝】',
+    ruby: '<ruby>本日<rt>ほんじつ</rt></ruby>はお<ruby>忙<rt>いそが</rt></ruby>しい<ruby>中<rt>なか</rt></ruby>、<ruby>面接<rt>めんせつ</rt></ruby>のお<ruby>時間<rt>じかん</rt></ruby>をいただき<ruby>本当<rt>ほんとう</rt></ruby>にありがとうございました。もしご<ruby>縁<rt>えん</rt></ruby>をいただけましたら、<ruby>笑顔<rt>えがお</rt></ruby>と<ruby>元気<rt>げんき</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>に、<ruby>全力<rt>ぜんりょく</rt></ruby>でお<ruby>仕事<rt>しごと</rt></ruby>に<ruby>貢献<rt>こうけん</rt></ruby>いたします。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。',
+    raw: '本日はお忙しい中、面接のお時間をいただき本当にありがとうございました。もしご縁をいただけましたら、笑顔と元気を大切に、全力でお仕事に貢献いたします。どうぞよろしくお願いいたします。',
+    zh: '非常感謝您今天在百忙之中抽空為我面試。如果有幸錄取，我一定會帶著笑容與活力，全力為團隊做出貢獻。請多多指教。'
+  }
+];
+
+// 渲染二世古 26 題速查按鈕
+function renderFastQaChips() {
+  const container = document.getElementById('fast-qa-chips-container');
+  if (!container || !Array.isArray(NISEKO_FAST_QA_LIST)) return;
+
+  const categories = ['🙋 基本開場', '⛷️ 應徵動機', '🍽️ 職務與能力', '💼 現場協作', '❓ 逆質問'];
+  let html = '';
+  categories.forEach(cat => {
+    const items = NISEKO_FAST_QA_LIST.filter(q => q.cat === cat);
+    if (items.length === 0) return;
+    html += '<div class="fast-qa-group">';
+    html += `<span class="fast-qa-group-label">${cat}</span>`;
+    html += '<div class="fast-qa-group-chips">';
+    items.forEach(item => {
+      const isReverse = cat.includes('逆質問');
+      const cls = isReverse ? 'fast-qa-chip highlight' : 'fast-qa-chip';
+      html += `<button class="${cls}" id="btn-fast-qa-${item.id}" onclick="selectFastInterviewAnswer('${item.id}')">${escapeHtml(item.title)}</button>`;
+    });
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// 點擊速查按鈕：0 毫秒極速載入該題日文擬答至右側 answer-container
+function selectFastInterviewAnswer(qaId) {
+  const item = NISEKO_FAST_QA_LIST.find(q => q.id === qaId);
+  if (!item) return;
+
+  // 1. 高亮選中的按鈕
+  document.querySelectorAll('.fast-qa-chip').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  const activeBtn = document.getElementById(`btn-fast-qa-${qaId}`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // 2. 設置 InterviewEngine 當前題目
+  InterviewEngine.currentQuestion = item.title;
+  InterviewEngine.currentQuestionZh = item.cat;
+
+  // 3. 渲染至右側 interview-answers-container
+  const container = document.getElementById('interview-answers-container');
+  if (container) {
+    const rawClean = item.raw || item.ruby.replace(/<[^>]*>/g, '');
+    container.innerHTML = `
+      <div class="iv-current-target-q-banner" style="background:linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border:1.5px solid #3b82f6; border-radius:12px; padding:12px 14px; margin-bottom:12px; box-shadow:0 3px 10px rgba(59, 130, 246, 0.15); display:flex; align-items:center; justify-content:space-between; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">⚡</span>
+          <div>
+            <div style="font-size:0.75rem; color:#1d4ed8; font-weight:700;">二世古實戰速查 · 當前選定回答</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#1e3a8a;">${item.cat}：${escapeHtml(item.title)}</div>
+          </div>
+        </div>
+        <span style="background:#2563eb; color:white; font-size:0.75rem; padding:4px 12px; border-radius:20px; font-weight:800; letter-spacing:0.02em;">即刻朗讀</span>
+      </div>
+
+      <div class="interview-answer-card" style="border:1.5px solid #bfdbfe; border-top:4px solid #2563eb; box-shadow:0 4px 16px rgba(37,99,235,0.08); margin-bottom:14px; padding:18px 20px; border-radius:14px; background:#ffffff;">
+        <div class="iv-ans-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span class="iv-ans-badge simple" style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-weight:800; padding:3px 10px; border-radius:6px; font-size:0.84rem;">🎯 專屬日文擬答 (雙層標音)</span>
+          <span class="iv-ans-tag-hint" style="font-size:0.78rem; color:#64748b;">漢字標平假名 · 片假名標羅馬拼音</span>
+        </div>
+        <div class="iv-ans-ruby-body" style="font-size:1.24rem; line-height:2.4; margin:14px 0 12px; color:#0f172a; font-family:var(--font-serif); letter-spacing:0.02em;">
+          ${item.ruby}
+        </div>
+        <div class="iv-ans-zh-card" style="background:#f8fafc; border-left:3.5px solid #2563eb; padding:10px 14px; border-radius:8px; font-size:0.9rem; color:#334155; line-height:1.6; margin-bottom:14px;">
+          <div style="font-weight:700; color:#1e293b; margin-bottom:4px; font-size:0.82rem;">▎繁體中文意涵：</div>
+          ${escapeHtml(item.zh)}
+        </div>
+        <div class="iv-ans-actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-sm btn-primary" onclick="speakJapanese('${escapeHtml(rawClean)}')" style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; font-size:0.84rem; font-weight:700;">🔊 試聽發音</button>
+          <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(rawClean)}')" style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; font-size:0.84rem;">📋 複製回答</button>
+          <span style="font-size:0.76rem; color:#64748b; margin-left:auto;">💡 直接看著上方振假名與羅馬拼音念出即可</span>
+        </div>
+      </div>
+    `;
+
+    const rightCol = document.querySelector('.interview-col-right');
+    if (rightCol) {
+      rightCol.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+
+
 const INTERVIEW_50_QA_DATABASE = [
   {
     "id": 1,
@@ -19368,7 +19999,7 @@ const INTERVIEW_50_QA_DATABASE = [
 ];
 
 
-// 格式化 50 題庫輸出結果並動態套用公司尊稱 (單一 N4 簡單版為主，兼容 simple/story)
+// 格式化 50 題庫輸出結果並動態套用公司尊稱 (支援 3 種極簡回答 direct, work, passion)
 function formatQaResult(item, honorific) {
   const h = (honorific && honorific.split('/')[0].trim()) || '御社';
   const simpleObj = {
@@ -19381,6 +20012,42 @@ function formatQaResult(item, honorific) {
     raw: item.story.raw.replace(/\[HONORIFIC\]/g, h),
     zh: item.story.zh
   };
+
+  const defaultWorkRuby = 'はい、<ruby>黒川温泉<rt>くろかわおんせん</rt></ruby>の「<ruby>優彩<rt>ゆうさい</rt></ruby>」での<ruby>仕込<rt>しこ</rt></ruby>みや<ruby>補充<rt>ほじゅう</rt></ruby>、バッシングの<ruby>経験<rt>けいけん</rt></ruby>を<ruby>活<rt>い</rt></ruby>かし、' + h + 'でもテキパキと<ruby>働<rt>はたら</rt></ruby>きます。';
+  const defaultWorkRaw = 'はい、黒川温泉の「優彩」での仕込みや補充、バッシングの経験を活かし、' + h + 'でもテキパキと働きます。';
+  const defaultWorkZh = '好的，我會發揮在黑川溫泉「優彩」備料、補菜與收桌整理的經驗，手腳俐落地投入工作。';
+
+  const defaultPassionRuby = 'はい、<ruby>体力<rt>たいりょく</rt></ruby>にはとても<ruby>自信<rt>じしん</rt></ruby>があり<ruby>寒<rt>さむ</rt></ruby>さにも<ruby>強<rt>つよ</rt></ruby>いので、<ruby>前向<rt>まえむ</rt></ruby>きに<ruby>明<rt>あか</rt></ruby>るく<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>ぐ</rt></ruby>みます！';
+  const defaultPassionRaw = 'はい、体力にはとても自信があり寒さにも強いので、前向きに明るく取り組みます！';
+  const defaultPassionZh = '好的，我對體力很有自信也很耐寒，會帶著笑容積極配合投入！';
+
+  let variants = item.variants;
+  if (variants) {
+    variants = {
+      direct: {
+        ruby: (variants.direct ? variants.direct.ruby : simpleObj.ruby).replace(/\[HONORIFIC\]/g, h),
+        raw: (variants.direct ? variants.direct.raw : simpleObj.raw).replace(/\[HONORIFIC\]/g, h),
+        zh: variants.direct ? variants.direct.zh : simpleObj.zh
+      },
+      work: {
+        ruby: (variants.work ? variants.work.ruby : defaultWorkRuby).replace(/\[HONORIFIC\]/g, h),
+        raw: (variants.work ? variants.work.raw : defaultWorkRaw).replace(/\[HONORIFIC\]/g, h),
+        zh: variants.work ? variants.work.zh : defaultWorkZh
+      },
+      passion: {
+        ruby: (variants.passion ? variants.passion.ruby : (variants.life ? variants.life.ruby : defaultPassionRuby)).replace(/\[HONORIFIC\]/g, h),
+        raw: (variants.passion ? variants.passion.raw : (variants.life ? variants.life.raw : defaultPassionRaw)).replace(/\[HONORIFIC\]/g, h),
+        zh: variants.passion ? variants.passion.zh : (variants.life ? variants.life.zh : defaultPassionZh)
+      }
+    };
+  } else {
+    variants = {
+      direct: simpleObj,
+      work: { ruby: defaultWorkRuby, raw: defaultWorkRaw, zh: defaultWorkZh },
+      passion: { ruby: defaultPassionRuby, raw: defaultPassionRaw, zh: defaultPassionZh }
+    };
+  }
+
   return {
     id: item.id,
     question: item.question,
@@ -19389,7 +20056,8 @@ function formatQaResult(item, honorific) {
     raw: simpleObj.raw,
     zh: simpleObj.zh,
     simple: simpleObj,
-    story: storyObj
+    story: storyObj,
+    variants: variants
   };
 }
 
@@ -19399,24 +20067,37 @@ function getAnswerFrom50QaDatabase(questionText, honorific) {
   const cleanQ = questionText.trim();
   const normQ = cleanQ.replace(/[\s\u3000。、？！?!]/g, '').toLowerCase();
 
+  // 1. 嚴格短語保護：字數太短 (<5) 或常見日常應答/助詞，絕不可反向匹配題庫（杜絕 はい 誤判為在留期限）
+  if (normQ.length < 5) return null;
+  const blacklistShort = /^(?:はい|いいえ|そうです|そうですね|わかりました|分かりました|了解です|了解いたしました|お願いします|よろしく|ので|です|ます|でした|ました|ありがとう|ありがとうございます|こんにちは|もしもし|違います|大丈夫です|ないです|はいないです)$/;
+  if (blacklistShort.test(normQ)) return null;
+
   for (let i = 0; i < INTERVIEW_50_QA_DATABASE.length; i++) {
     const item = INTERVIEW_50_QA_DATABASE[i];
     const normItemQ = item.question.replace(/[\s\u3000。、？！?!]/g, '').toLowerCase();
 
-    // 1. 完全一致或包含
-    if (normQ === normItemQ || normQ.includes(normItemQ) || normItemQ.includes(normQ)) {
+    // 完全一致 或 話語完整包含題庫題目 (例如: "それでは、志望動機を教えてください" 包含 "志望動機")
+    if (normQ === normItemQ || normQ.includes(normItemQ)) {
       return formatQaResult(item, honorific);
     }
 
-    // 2. 關鍵字正則匹配
+    // 只有在輸入與題目皆具備足夠長度 (>=8) 時，才允許題目反向包含輸入 (避免短詞誤撞題庫字串)
+    if (normQ.length >= 8 && normItemQ.length >= 8 && normItemQ.includes(normQ)) {
+      return formatQaResult(item, honorific);
+    }
+
+    // 關鍵字正則匹配 (排除短語干擾，關鍵字長度至少 3 字元)
     if (item.keywords && item.keywords.length > 0) {
       for (let k = 0; k < item.keywords.length; k++) {
-        try {
-          const reg = new RegExp(item.keywords[k], 'i');
-          if (reg.test(cleanQ) || reg.test(normQ)) {
-            return formatQaResult(item, honorific);
-          }
-        } catch(e) {}
+        const kw = item.keywords[k];
+        if (kw && kw.length >= 2) {
+          try {
+            const reg = new RegExp(kw, 'i');
+            if (reg.test(cleanQ) || reg.test(normQ)) {
+              return formatQaResult(item, honorific);
+            }
+          } catch(e) {}
+        }
       }
     }
   }
@@ -19484,6 +20165,83 @@ function updateInterviewStatusBadge(state, text) {
 }
 
 // 一鍵重新整理麥克風收音連線 (自主修復音訊卡住或假死)
+
+// 彈出雙向收音教學指南彈窗
+function openDualAudioGuideModal() {
+  openModal('modal-dual-audio-guide');
+}
+
+// 擷取會議分頁/系統音訊 (Tab Audio Share)
+async function toggleTabAudioCapture() {
+  if (InterviewEngine.tabStream) {
+    InterviewEngine.tabStream.getTracks().forEach(t => t.stop());
+    InterviewEngine.tabStream = null;
+    updateTabAudioCaptureUI(false);
+    showToast('已結束會議音訊擷取', 'info');
+    return;
+  }
+
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+      alert('您的瀏覽器不支援分頁音訊擷取，請使用電腦版 Google Chrome 瀏覽器。');
+      return;
+    }
+
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false
+      }
+    });
+
+    const audioTracks = stream.getAudioTracks();
+    if (!audioTracks || audioTracks.length === 0) {
+      stream.getTracks().forEach(t => t.stop());
+      alert('⚠️ 未偵測到音訊軌！\n\n在剛才的分享視窗中，請點選【Chrome 分頁】（例如 Google Meet 或 Zoom 分頁），並務必勾選左下角的【分享分頁音訊 (Share tab audio)】！');
+      return;
+    }
+
+    InterviewEngine.tabStream = stream;
+    updateTabAudioCaptureUI(true);
+    showToast('🎉 成功連線會議分頁音訊！考官聲音已數位連通', 'success');
+
+    audioTracks[0].onended = () => {
+      InterviewEngine.tabStream = null;
+      updateTabAudioCaptureUI(false);
+      showToast('會議分頁音訊分享已停止', 'info');
+    };
+  } catch (err) {
+    if (err.name !== 'NotAllowedError') {
+      console.warn('分頁音訊擷取異常:', err);
+      showToast('分頁音訊擷取取消或未授權', 'info');
+    }
+  }
+}
+
+// 更新會議音訊按鈕狀態
+function updateTabAudioCaptureUI(isActive) {
+  const icon = document.getElementById('tab-audio-icon');
+  const text = document.getElementById('tab-audio-text');
+  const btn = document.getElementById('btn-capture-tab-audio');
+  if (btn && icon && text) {
+    if (isActive) {
+      btn.style.background = '#dcfce7';
+      btn.style.borderColor = '#16a34a';
+      btn.style.color = '#15803d';
+      icon.textContent = '🟢';
+      text.textContent = '會議音訊連線中';
+    } else {
+      btn.style.background = '#f0f9ff';
+      btn.style.borderColor = '#0284c7';
+      btn.style.color = '#0369a1';
+      icon.textContent = '🖥️';
+      text.textContent = '擷取會議音訊';
+    }
+  }
+}
+
 function reconnectInterviewMic() {
   stopInterviewListening();
   showToast('正在重新整理麥克風收音通道...', 'info');
@@ -19495,6 +20253,7 @@ function reconnectInterviewMic() {
 
 const InterviewEngine = {
   isListening: false,
+  tabStream: null,
   audioSource: 'mic', // 'mic' | 'system' | 'sim'
   audioGainLevel: 2.0, // 1.0, 1.5, 2.0, 3.0
   audioContext: null,
@@ -20475,7 +21234,7 @@ function matchSemanticCandidateAnswer(questionText, honorific) {
   };
 }
 
-// 現場 AI 靈機應對引擎：專屬生成單一「日文簡單版 (N4 程度)」回答
+// 現場 AI 靈機應對引擎：一次生成 3 種極簡「日文回答 (N4 程度)」擬答供候選人現場秒選
 async function generateGeminiN4Answer(questionText, honorific) {
   const options = arguments[2] || {};
   if (!questionText || questionText.trim().length === 0) return null;
@@ -20485,54 +21244,81 @@ async function generateGeminiN4Answer(questionText, honorific) {
   const h = (honorific && honorific.split('/')[0].trim()) || '御社';
   const jobSlipInfo = InterviewEngine.jobSlip ? `\n目標求人票備註與條件：${InterviewEngine.jobSlip}` : '';
 
-  // 負向約束 (剔除不要的部分) 與 風格指定 (直球/工作/生活) (v154)
+  // 負向約束 (剔除不要的部分)
   const excludeText = options.excludeText || InterviewEngine.activeExcludeText || '';
   const excludePart = excludeText
     ? `\n【絕對排除要求】：求職者特別要求回答中【絕對嚴格禁止提到】「${excludeText}」相關內容！`
     : '';
 
-  const styleChoice = options.styleVariant || InterviewEngine.activeStyleVariant || 'direct';
-  const stylePart = (styleChoice === 'work')
-    ? '\n【指定風格】：在回答核心的同時，稍微連結到工作體力、團隊責任感或安心感（一句話以內）。'
-    : (styleChoice === 'life')
-      ? '\n【指定風格】：展現生活親和力、自炊生活調理或休閒放鬆（一句話以內）。'
-      : '\n【指定風格】：純粹直球回答！問什麼就 100% 只回答該問題核心，絕不多說一句無關內容。';
-
-  const prompt = `你是台灣求職者「楊詠筑」（女性，1995年1月6日生，31歲，成功大學中文系輔修建築系，JLPT N2，打工度假特定活動簽證至2027年8月14日，目前在熊本黑川溫泉「優彩」旅館餐廳擔任外場Runner，負責出餐配膳、尖峰補菜、打烊清潔與明日設定，體力足腰耐寒好，曾任自由接案聲優，笑容溫暖親切，甲殼類蝦蟹過敏但完全不影響外場配膳工作，希望單人房宿舍注重自炊休養，無日本駕照但步行接駁無礙）的日文線上面試即時應對軍師。
+  const prompt = `你是台灣求職者「楊詠筑」（女性，1995年1月6日生，31歲，成功大學中文系輔修建築系，JLPT N2，打工度假簽證至2027年8月14日，目前在熊本黑川溫泉「優彩」旅館餐廳工作，真實日常職責為：備料仕込み、尖峰料理補充、開店設定セッティング、收桌バッシング、擦桌清掃、簡單沙拉準備。手腳俐落、足腰耐寒好、笑容親切、甲殼類過敏不影響工作、注重單人房與自炊休養、無日本駕照但生活通勤無礙）的日文線上面試即時應對軍師。
 考官提問：「${questionText}」。
 應徵公司：${InterviewEngine.companyName} (${h})，應徵職種：${InterviewEngine.role}。${jobSlipInfo}
 
 【回答要求】：
-1. 只需要提供「日文簡單版 (約 N4 程度)」單一版本！
-2. 「直球單一回答（One-Question-One-Answer 原則）」：
-   - 考官問什麼，就 100% 只回答該問題核心！
-   - 若問年齡，只答年齡（嚴禁主動提家鄉、學校、體力）。
-   - 若問出身，只答出生地（嚴禁提年齡、學歷、經歷）。
-   - 若問興趣，只答興趣（嚴格禁止提到特技或特長）。
-   - 若問特技，只答特長（嚴格禁止提到興趣或神社）。
-   - 若問過敏，只答過敏體質（嚴禁提其他無關生活細節）。
-3. 句子要短小、好記好唸、文法單純直接、使用基礎丁寧語（です/ます），限 1～2 句以內（約 40～70 字），讓求職者在緊張時能毫不結巴順暢回答。
-4. 【嚴格禁止事項】：絕對嚴禁使用「〇〇についての質問、ありがとうございます」等抄題目的空洞套話！必須直接回答問題核心，結合求職者的真實履歷現場靈機應變！${excludePart}${stylePart}
-5. 輸出標準 JSON 格式（日文漢字必須標註 HTML <ruby>漢字<rt>假名</rt></ruby> 標籤）：
+請同時生成 3 種不同切入角度的「日文簡單版 (約 N4 程度)」擬答，讓求職者在緊張的面試現場能秒選秒讀、毫不結巴：
+
+1. 【direct（超簡短直球）】：
+   - 100% 只回答問題核心！問什麼答什麼，極簡 1～2 句（約 20～35 字）。文法極其簡單（です/ます）。
+2. 【work（結合優彩實務）】：
+   - 結合黑川「優彩」真實工作經驗（備料、補菜、開店設定、收桌バッシング、擦桌或簡單沙拉），展現手腳俐落與即戰力（約 30～50 字）。
+3. 【passion（積極熱忱配合）】：
+   - 展現耐寒好體力、樂意投入滑雪場工作、開朗親切笑容與高配合度（約 30～50 字）。
+
+【嚴格禁止事項】：絕對嚴禁使用「〇〇についての質問、ありがとうございます」等抄題目的空洞套話！必須直接回答問題核心！${excludePart}
+
+請輸出標準 JSON 格式（日文漢字必須標註 HTML <ruby>漢字<rt>假名</rt></ruby> 標籤）：
 {
-  "ruby": "日文HTML含ruby標籤",
-  "raw": "純日文無HTML標籤",
-  "zh": "流暢繁體中文翻譯"
+  "direct": {
+    "ruby": "日文HTML含ruby標籤（超簡短直球）",
+    "raw": "純日文無HTML標籤",
+    "zh": "流暢繁體中文翻譯"
+  },
+  "work": {
+    "ruby": "日文HTML含ruby標籤（結合優彩實務）",
+    "raw": "純日文無HTML標籤",
+    "zh": "流暢繁體中文翻譯"
+  },
+  "passion": {
+    "ruby": "日文HTML含ruby標籤（積極熱忱配合）",
+    "raw": "純日文無HTML標籤",
+    "zh": "流暢繁體中文翻譯"
+  }
 }`;
 
   try {
     const parsed = await callGeminiApiUnified(prompt);
-    if (parsed && (parsed.ruby || (parsed.simple && parsed.simple.ruby))) {
-      const ruby = parsed.ruby || parsed.simple.ruby;
-      const raw = parsed.raw || parsed.simple.raw || (typeof stripRubyAndHtml === 'function' ? stripRubyAndHtml(ruby) : ruby.replace(/<[^>]*>/g, ''));
-      const zh = parsed.zh || (parsed.simple && parsed.simple.zh) || '';
-      return {
-        ruby,
-        raw,
-        zh,
-        simple: { ruby, raw, zh },
-        story: { ruby, raw, zh }
+    if (parsed) {
+      // 容錯提取：支援新結構 { direct, work, passion } 與舊結構 { ruby, raw, zh }
+      let direct = parsed.direct || (parsed.variants && parsed.variants.direct) || parsed.simple || parsed;
+      let work = parsed.work || (parsed.variants && parsed.variants.work) || parsed.story || direct;
+      let passion = parsed.passion || (parsed.variants && (parsed.variants.passion || parsed.variants.life)) || direct;
+
+      const formatPart = (part) => {
+        if (!part) return null;
+        const ruby = part.ruby || '';
+        const raw = part.raw || (typeof stripRubyAndHtml === 'function' ? stripRubyAndHtml(ruby) : ruby.replace(/<[^>]*>/g, ''));
+        const zh = part.zh || '';
+        return { ruby, raw, zh };
       };
+
+      const d = formatPart(direct);
+      const w = formatPart(work) || d;
+      const p = formatPart(passion) || d;
+
+      if (d && d.ruby) {
+        return {
+          ruby: d.ruby,
+          raw: d.raw,
+          zh: d.zh,
+          simple: d,
+          story: w,
+          variants: {
+            direct: d,
+            work: w,
+            passion: p
+          }
+        };
+      }
     }
   } catch (err) {
     console.warn('generateGeminiN4Answer failed:', err);
@@ -20569,7 +21355,7 @@ async function generateDynamicInterviewAnswers(questionText) {
     return dbAns;
   }
 
-  // 2. 現場調用 AI 靈機應對 (Gemini 生成單一 N4 簡單版，結合履歷與求人票)
+  // 2. 現場調用 AI 靈機應對 (Gemini 生成 3 種極簡回答，結合履歷與求人票)
   try {
     const aiAns = await generateGeminiN4Answer(cleanQ, honorific);
     if (aiAns) {
@@ -20586,117 +21372,14 @@ async function generateDynamicInterviewAnswers(questionText) {
   return semanticAns;
 }
 
-// 渲染回答卡片 (頂部具備當前鎖定考官題目橫幅與單一核心「日文簡單回答 (N4 程度)」)
-function renderCurrentAnswers() {
-  const container = document.getElementById('interview-answers-container');
-  if (!container) return;
+// 渲染推薦回答卡片 (同時呈現 3 種極簡選擇：⚡ 超簡短直球 / 💼 結合優彩實務 / 🌿 積極熱忱配合)
 
-  if (!InterviewEngine.currentQuestion) {
-    container.innerHTML = `
-      <div class="interview-answer-card" style="border:2px dashed #cbd5e1; background:#f8fafc; text-align:center; padding:48px 20px; color:#64748b;">
-        <div style="font-size:2.2rem; margin-bottom:10px;">💡</div>
-        <div style="font-weight:700; font-size:1.05rem; color:#334155; margin-bottom:8px;">等待考官提問中</div>
-        <div style="font-size:0.85rem; line-height:1.6; max-width:420px; margin:0 auto; color:#64748b;">
-          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，AI 軍師將依據您的履歷與求人票需求，現場靈機應變為您生成好記好說的<strong>日文簡單回答 (N4 程度)</strong> 擬答。
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
-  const ans = InterviewEngine.currentAnswers || matchSemanticCandidateAnswer(InterviewEngine.currentQuestion, honorific);
-
-  const activeStyle = InterviewEngine.activeStyleVariant || 'direct';
-  let ruby = '';
-  let raw = '';
-  let zh = '';
-
-  if (ans.variants && ans.variants[activeStyle]) {
-    ruby = ans.variants[activeStyle].ruby;
-    raw = ans.variants[activeStyle].raw;
-    zh = ans.variants[activeStyle].zh;
-  } else if (ans.simple) {
-    ruby = ans.simple.ruby || ans.ruby || '';
-    raw = ans.simple.raw || ans.raw || '';
-    zh = ans.simple.zh || ans.zh || '';
-  } else {
-    ruby = ans.ruby || '';
-    raw = ans.raw || '';
-    zh = ans.zh || '';
-  }
-
-  const targetJp = InterviewEngine.currentQuestion || '考官提問';
-  const targetZh = InterviewEngine.currentQuestionZh || '';
-  const isStatement = ans.isStatementAizuchi || (typeof isQuestionSentence === 'function' && !isQuestionSentence(targetJp));
-
-  container.innerHTML = `
-    <!-- 當前鎖定目標考官問題提示橫幅 -->
-    <div class="iv-current-target-q-banner" style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1.5px solid #f59e0b; border-radius:10px; padding:12px 14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(245, 158, 11, 0.12); display:flex; align-items:flex-start; gap:10px; animation:ivFadeIn 0.3s ease-out;">
-      <span style="font-size:1.4rem; line-height:1; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1));">🎯</span>
-      <div style="flex:1; min-width:0;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
-          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">${isStatement ? '考官說明 / 陳述' : '當前考官題目'}</span>
-          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">${isStatement ? '說明/覆誦' : 'N4 簡單回答'}</span>
-        </div>
-        <div style="font-size:1.05rem; font-weight:800; color:#1e293b; line-height:1.4; word-break:break-word;">${escapeHtml(targetJp)}</div>
-        ${targetZh ? `<div style="font-size:0.85rem; color:#64748b; margin-top:3px;">▎${escapeHtml(targetZh)}</div>` : ''}
-      </div>
-    </div>
-
-    <!-- 3 種回答風格切換標籤列 (v154) -->
-    <div class="iv-style-variant-bar">
-      <button class="iv-variant-btn ${activeStyle === 'direct' ? 'active' : ''}" onclick="switchAnswerStyleVariant('direct')">🎯 純粹直球</button>
-      <button class="iv-variant-btn ${activeStyle === 'work' ? 'active' : ''}" onclick="switchAnswerStyleVariant('work')">💼 連結工作</button>
-      <button class="iv-variant-btn ${activeStyle === 'life' ? 'active' : ''}" onclick="switchAnswerStyleVariant('life')">🌿 生活休閒</button>
-    </div>
-
-    <!-- 單一核心推薦回答卡片：日文簡單回答 (N4 程度) -->
-    <div class="interview-answer-card" style="border:1.5px solid #e2e8f0; border-top:3.5px solid var(--accent); box-shadow:0 4px 16px rgba(0,0,0,0.06);">
-      <div class="iv-ans-header">
-        <span class="iv-ans-badge simple" style="background:#e8f5e9; color:#2e7d32; border:1px solid #c8e6c9;">${isStatement ? '🤝 日文得體覆誦（相槌 あいづち）' : '💡 日文簡單回答 (N4 程度)'}</span>
-        <span class="iv-ans-tag-hint">${isStatement ? '禮貌覆誦點頭・聽取說明・得體回應' : 'N4 文法・直球切題・好記安心說'}</span>
-      </div>
-      <div class="iv-ans-ruby-body" id="ans-a-ruby" style="font-size:1.15rem; line-height:2.3; margin:14px 0 10px; color:#1e293b;">
-        ${ruby}
-      </div>
-      <div class="iv-ans-zh-card" style="background:#f8fafc; border-left:3px solid var(--primary); padding:10px 12px; border-radius:6px; font-size:0.88rem; color:#475569; line-height:1.6; margin-bottom:10px;">
-        ▎${escapeHtml(zh)}
-      </div>
-
-      <!-- 智能剔除區塊：一鍵剔除不要的內容或自訂排除詞 (v154) -->
-      <div class="iv-exclude-section">
-        <div style="font-size:0.75rem; color:#475569; font-weight:700; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
-          <span>✂️ 快速剔除不要的內容：</span>
-          ${InterviewEngine.activeExcludeText ? `<span style="color:#e11d48; font-weight:700;">已排除：「${escapeHtml(InterviewEngine.activeExcludeText)}」 <a href="javascript:void(0)" onclick="clearAnswerExclusion()" style="color:#64748b; text-decoration:underline; margin-left:4px;">重設</a></span>` : ''}
-        </div>
-        <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
-          <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '特長・特技' ? 'active' : ''}" onclick="applyAnswerExclusion('特長・特技')">− 拿掉特長/特技</button>
-          <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '神社・御朱印' ? 'active' : ''}" onclick="applyAnswerExclusion('神社・御朱印')">− 不要提神社</button>
-          <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '黑川溫泉' ? 'active' : ''}" onclick="applyAnswerExclusion('黑川溫泉')">− 不要提黑川</button>
-          <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '更加簡短' ? 'active' : ''}" onclick="applyAnswerExclusion('更加簡短')">− 再更簡短</button>
-          <div style="display:flex; gap:4px; align-items:center; margin-left:auto;">
-            <input type="text" id="iv-custom-exclude-input" placeholder="自訂排除詞..." style="font-size:0.75rem; padding:3px 8px; border:1px solid #cbd5e1; border-radius:4px; width:95px;" onkeydown="if(event.key==='Enter') submitCustomExclusion()">
-            <button class="btn btn-xs btn-outline" onclick="submitCustomExclusion()" style="padding:2px 6px; font-size:0.75rem;">排除</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="iv-ans-actions" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <button class="btn btn-sm btn-primary" id="btn-regenerate-answer" onclick="regenerateCurrentAnswer()">🔄 換個說法</button>
-        <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(raw)}')">🔊 試聽發音</button>
-        <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(raw)}')">📋 複製回答</button>
-      </div>
-    </div>
-  `;
-}
-
-// 切換 3 種風格選項 (純粹直球 / 連結工作 / 生活休閒) (v154)
+// 切換 3 種風格選項 (純粹直球 / 連結工作 / 生活休閒) (相容保留)
 async function switchAnswerStyleVariant(variant) {
   InterviewEngine.activeStyleVariant = variant;
   if (InterviewEngine.currentAnswers && InterviewEngine.currentAnswers.variants && InterviewEngine.currentAnswers.variants[variant]) {
     renderCurrentAnswers();
-    showToast(`已切換風格為「${variant === 'work' ? '💼 連結工作' : (variant === 'life' ? '🌿 生活休閒' : '🎯 純粹直球')}」！`, 'info');
+    showToast('已切換風格為「' + (variant === 'work' ? '💼 連結工作' : (variant === 'life' ? '🌿 生活休閒' : '🎯 純粹直球')) + '」！', 'info');
     return;
   }
   showAnswerLoadingShimmer(InterviewEngine.currentQuestion || '考官提問');
@@ -20720,8 +21403,130 @@ async function switchAnswerStyleVariant(variant) {
       InterviewEngine.currentAnswers = semantic;
     }
     renderCurrentAnswers();
-    showToast(`已切換風格為「${variant === 'work' ? '💼 連結工作' : (variant === 'life' ? '🌿 生活休閒' : '🎯 純粹直球')}」！`, 'info');
+    showToast('已切換風格為「' + (variant === 'work' ? '💼 連結工作' : (variant === 'life' ? '🌿 生活休閒' : '🎯 純粹直球')) + '」！', 'info');
   }
+}
+
+function renderCurrentAnswers() {
+  const container = document.getElementById('interview-answers-container');
+  if (!container) return;
+
+  if (!InterviewEngine.currentQuestion) {
+    container.innerHTML = `
+      <div class="interview-answer-card" style="border:2px dashed #cbd5e1; background:#f8fafc; text-align:center; padding:48px 20px; color:#64748b;">
+        <div style="font-size:2.2rem; margin-bottom:10px;">💡</div>
+        <div style="font-weight:700; font-size:1.05rem; color:#334155; margin-bottom:8px;">等待考官提問中</div>
+        <div style="font-size:0.85rem; line-height:1.6; max-width:420px; margin:0 auto; color:#64748b;">
+          當左側對話出現考官日文問題時，您可以<strong>點兩下（雙擊）該句</strong>或點擊<strong>「依此句推薦回答」</strong>，AI 軍師將為您生成好記好說的<strong>日文簡單回答 (N4 程度)</strong> 擬答，現場同時呈現 3 種極簡回答供您直接選！
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const honorific = InterviewEngine.companyHonorific.split('/')[0].trim() || '御社';
+  const ans = InterviewEngine.currentAnswers || matchSemanticCandidateAnswer(InterviewEngine.currentQuestion, honorific);
+
+  const targetJp = InterviewEngine.currentQuestion || '考官提問';
+  const targetZh = InterviewEngine.currentQuestionZh || '';
+  const isStatement = ans.isStatementAizuchi || (typeof isQuestionSentence === 'function' && !isQuestionSentence(targetJp));
+
+  // 提取 3 種回答
+  const directObj = (ans.variants && ans.variants.direct) || ans.simple || ans;
+  const workObj = (ans.variants && ans.variants.work) || ans.story || ans;
+  const passionObj = (ans.variants && (ans.variants.passion || ans.variants.life)) || ans.story || ans;
+
+  // 定義 3 種方案的卡片資訊
+  const cards = [
+    {
+      key: 'direct',
+      badge: isStatement ? '🤝 日文得體覆誦（相槌 あいづち）' : '⚡ 方案一：超簡短直球 💡 日文簡單回答 (N4 程度)',
+      badgeStyle: 'background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;',
+      hint: isStatement ? '禮貌覆誦點頭・聽取說明・得體回應' : 'N4 文法・直球切題・好記安心說・秒回不卡詞',
+      topBorder: '#3b82f6',
+      obj: directObj
+    },
+    {
+      key: 'work',
+      badge: isStatement ? '💼 遵守配合' : '💼 方案二：結合優彩實務',
+      badgeStyle: 'background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;',
+      hint: isStatement ? '明確理解・落實注意' : '備料補菜・設定收桌・手腳俐落',
+      topBorder: '#10b981',
+      obj: workObj
+    },
+    {
+      key: 'passion',
+      badge: isStatement ? '🌿 溫暖感謝' : '🌿 方案三：積極熱忱配合',
+      badgeStyle: 'background:#fef3c7; color:#b45309; border:1px solid #fde68a;',
+      hint: isStatement ? '親切感謝說明' : '耐寒體力・樂意投入・活力笑容',
+      topBorder: '#f59e0b',
+      obj: passionObj
+    }
+  ];
+
+  let cardsHtml = '';
+  cards.forEach((c) => {
+    const ruby = c.obj.ruby || '';
+    const raw = c.obj.raw || (typeof stripRubyAndHtml === 'function' ? stripRubyAndHtml(ruby) : ruby.replace(/<[^>]*>/g, ''));
+    const zh = c.obj.zh || '';
+    cardsHtml += `
+      <div class="interview-answer-card" style="border:1.5px solid #e2e8f0; border-top:3.5px solid ${c.topBorder}; box-shadow:0 3px 12px rgba(0,0,0,0.04); margin-bottom:14px; padding:14px 16px; border-radius:10px; background:#ffffff;">
+        <div class="iv-ans-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="iv-ans-badge simple" style="${c.badgeStyle} font-weight:700; padding:2px 8px; border-radius:6px; font-size:0.8rem;">${c.badge}</span>
+          <span class="iv-ans-tag-hint" style="font-size:0.75rem; color:#64748b;">${c.hint}</span>
+        </div>
+        <div class="iv-ans-ruby-body" style="font-size:1.15rem; line-height:2.2; margin:10px 0 8px; color:#1e293b;">
+          ${ruby}
+        </div>
+        <div class="iv-ans-zh-card" style="background:#f8fafc; border-left:3px solid ${c.topBorder}; padding:8px 10px; border-radius:6px; font-size:0.86rem; color:#475569; line-height:1.5; margin-bottom:10px;">
+          ▎${escapeHtml(zh)}
+        </div>
+        <div class="iv-ans-actions" style="display:flex; gap:8px; align-items:center;">
+          <button class="btn btn-sm btn-outline" onclick="speakJapanese('${escapeHtml(raw)}')">🔊 試聽發音</button>
+          <button class="btn btn-sm btn-outline" onclick="copyText('${escapeHtml(raw)}')">📋 複製回答</button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = `
+    <!-- 當前鎖定目標考官問題提示橫幅 -->
+    <div class="iv-current-target-q-banner" style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1.5px solid #f59e0b; border-radius:10px; padding:12px 14px; margin-bottom:12px; box-shadow:0 2px 6px rgba(245, 158, 11, 0.12); display:flex; align-items:flex-start; gap:10px; animation:ivFadeIn 0.3s ease-out;">
+      <span style="font-size:1.4rem; line-height:1; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1));">🎯</span>
+      <div style="flex:1; min-width:0;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
+          <span style="font-size:0.75rem; font-weight:700; color:#b45309; text-transform:uppercase; letter-spacing:0.5px;">${isStatement ? '考官說明 / 陳述' : '當前考官題目'}</span>
+          <span style="font-size:0.7rem; background:#fbbf24; color:#78350f; font-weight:700; padding:1px 6px; border-radius:10px;">N4 簡單回答</span>
+        </div>
+        <div style="font-size:1.05rem; font-weight:800; color:#1e293b; line-height:1.4; word-break:break-word;">${escapeHtml(targetJp)}</div>
+        ${targetZh ? `<div style="font-size:0.85rem; color:#64748b; margin-top:3px;">▎${escapeHtml(targetZh)}</div>` : ''}
+      </div>
+    </div>
+
+    <!-- 3 張擬答卡片一次呈現 -->
+    ${cardsHtml}
+
+    <!-- 智能剔除與換一組控制列 -->
+    <div class="iv-exclude-section" style="margin-top:12px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+      <div style="font-size:0.75rem; color:#475569; font-weight:700; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+        <span>✂️ 快速剔除不要的內容：</span>
+        ${InterviewEngine.activeExcludeText ? `<span style="color:#e11d48; font-weight:700;">已排除：「${escapeHtml(InterviewEngine.activeExcludeText)}」 <a href="javascript:void(0)" onclick="clearAnswerExclusion()" style="color:#64748b; text-decoration:underline; margin-left:4px;">重設</a></span>` : ''}
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px;">
+        <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '特長・特技' ? 'active' : ''}" onclick="applyAnswerExclusion('特長・特技')">− 拿掉特長/特技</button>
+        <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '神社・御朱印' ? 'active' : ''}" onclick="applyAnswerExclusion('神社・御朱印')">− 不要提神社</button>
+        <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '黑川溫泉' ? 'active' : ''}" onclick="applyAnswerExclusion('黑川溫泉')">− 不要提黑川</button>
+        <button class="btn-exclude-chip ${InterviewEngine.activeExcludeText === '更加簡短' ? 'active' : ''}" onclick="applyAnswerExclusion('更加簡短')">− 再更簡短</button>
+        <div style="display:flex; gap:4px; align-items:center; margin-left:auto;">
+          <input type="text" id="iv-custom-exclude-input" placeholder="自訂排除詞..." style="font-size:0.75rem; padding:3px 8px; border:1px solid #cbd5e1; border-radius:4px; width:95px;" onkeydown="if(event.key==='Enter') submitCustomExclusion()">
+          <button class="btn btn-xs btn-outline" onclick="submitCustomExclusion()" style="padding:2px 6px; font-size:0.75rem;">排除</button>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn btn-sm btn-primary" id="btn-regenerate-answer" onclick="regenerateCurrentAnswer()" style="width:100%; max-width:280px; padding:7px 16px; font-weight:700;">🔄 換一組回答（重新生成 3 種全新擬答）</button>
+      </div>
+    </div>
+  `;
 }
 
 // 快速套用負向剔除標籤 (v154)
@@ -20749,7 +21554,7 @@ async function submitCustomExclusion() {
   input.value = '';
 }
 
-// 🔄 換個說法（一鍵重新生成，保證 1～2 秒內必定給出新回答，超時自動降級） (v154)
+// 🔄 換一組回答（一鍵重新生成 3 種全新擬答）
 async function regenerateCurrentAnswer(extraOpts = {}) {
   if (!InterviewEngine.currentQuestion) return;
   showAnswerLoadingShimmer(InterviewEngine.currentQuestion);
@@ -20762,10 +21567,8 @@ async function regenerateCurrentAnswer(extraOpts = {}) {
 
   let finalAns = null;
   try {
-    // 設置 4200ms 硬性超時熔斷控制器，防止網路卡死或模型掛起
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('REGENERATE_TIMEOUT')), 4200));
     const aiPromise = generateGeminiN4Answer(q, honorific, {
-      styleVariant: InterviewEngine.activeStyleVariant,
       excludeText: InterviewEngine.activeExcludeText,
       ...extraOpts
     });
@@ -20776,12 +21579,12 @@ async function regenerateCurrentAnswer(extraOpts = {}) {
     if (finalAns) {
       InterviewEngine.currentAnswers = finalAns;
       renderCurrentAnswers();
-      showToast('✨ 軍師已為您重新生成新版回答！', 'success');
+      showToast('✨ 軍師已為您重新生成 3 種全新擬答！', 'success');
     } else {
       const semantic = matchSemanticCandidateAnswer(q, honorific);
       InterviewEngine.currentAnswers = semantic;
       renderCurrentAnswers();
-      showToast('✨ 已為您換一套說法！', 'success');
+      showToast('✨ 已為您換一組全新擬答！', 'success');
     }
   }
 }
@@ -20873,31 +21676,46 @@ function splitJapaneseSentences(text) {
   return sentences;
 }
 
-// 即時收音暫存沉澱為正式發言 (具備時間窗與重複內容防護，聽一句翻一句即時切句) (v154)
+// 即時收音暫存沉澱為正式發言 (具備時間窗與重複內容防護，聽一句翻一句即時切句)
 function flushActiveInterimToHistory() {
   if (InterviewEngine.silenceTimer) {
     clearTimeout(InterviewEngine.silenceTimer);
     InterviewEngine.silenceTimer = null;
   }
-  const textToFlush = (InterviewEngine.speechBuffer || InterviewEngine.activeInterimText || '').trim();
-  InterviewEngine.speechBuffer = '';
-  InterviewEngine.activeInterimText = '';
+  const buf = (InterviewEngine.speechBuffer || '').trim();
+  const interim = (InterviewEngine.activeInterimText || '').trim();
+  // 智能選取最完整句子，絕不因 speechBuffer 為短字串而丟棄較長的 activeInterimText！
+  let textToFlush = buf;
+  if (interim.length > buf.length) {
+    textToFlush = interim;
+  } else if (!textToFlush) {
+    textToFlush = interim;
+  }
+  textToFlush = textToFlush.trim();
   animateMetersActive(false);
 
   if (!textToFlush || textToFlush.length < 2) {
+    InterviewEngine.speechBuffer = '';
+    InterviewEngine.activeInterimText = '';
     renderDialogueHistory();
     return;
   }
 
   const now = Date.now();
-  // 第 1 重防護：僅在短時間 (1200ms) 內完全相同長句時略過，保留正常面試應答（「はい」等） (v154)
+  // 僅在短時間 (1200ms) 內完全相同長句時略過
   if (textToFlush.length >= 4 && textToFlush === InterviewEngine.lastFlushedText && (now - (InterviewEngine.lastFlushedTime || 0)) < 1200) {
+    InterviewEngine.speechBuffer = '';
+    InterviewEngine.activeInterimText = '';
     renderDialogueHistory();
     return;
   }
 
   InterviewEngine.lastFlushedText = textToFlush;
   InterviewEngine.lastFlushedTime = now;
+
+  // 清空暫存，平滑交接為正式卡片，絕不閃退縮回
+  InterviewEngine.speechBuffer = '';
+  InterviewEngine.activeInterimText = '';
 
   // 聽一句翻一句：透過日文終止形邊界切片器，若包含多句則依序即時處理
   const sentences = splitJapaneseSentences(textToFlush);
@@ -20910,7 +21728,7 @@ function flushActiveInterimToHistory() {
   }
 }
 
-// 處理新辨識出的對話語句 (加入累積串流、翻譯並沉澱，第 3 重對話歷史去重與延伸就地升級，智慧未完助詞防護與語句無縫縫合)
+// 處理新辨識出的對話語句 (加入累積串流、翻譯並沉澱，支援多方角色獨立成卡)
 async function handleNewRecognizedUtterance(qJp) {
   if (!qJp || qJp.trim().length < 2) return;
   const cleanQ = qJp.trim();
@@ -20922,22 +21740,22 @@ async function handleNewRecognizedUtterance(qJp) {
 
   const now = Date.now();
 
-  // 與歷史紀錄最後一句進行比對與智慧縫合
+  // 與歷史紀錄最後一句進行比對與防重複處理
   if (InterviewEngine.dialogueHistory && InterviewEngine.dialogueHistory.length > 0) {
     const lastItem = InterviewEngine.dialogueHistory[InterviewEngine.dialogueHistory.length - 1];
     const normClean = cleanQ.replace(/[\s\u3000。、？！?!]/g, '');
     const normLast = (lastItem.jp || '').replace(/[\s\u3000。、？！?!]/g, '');
     const timeDiff = now - (lastItem.timestamp || 0);
 
-    // 1. 完全相同（含忽略標點後相同），直接視為重複辨識，略過
-    if (normClean === normLast) {
+    // 1. 完全相同（含忽略標點後相同），短時間 (1500ms) 內視為重複辨識，略過
+    if (normClean === normLast && timeDiff < 1500) {
       return;
     }
 
     // 2. 5.5 秒內的智慧無縫縫合 (Smart Sentence Stitching)
-    if (timeDiff < 5500) {
-      // A. 新句是上一句的後續前綴延伸（例如 interim 剛沉澱「今日は」，隨後 final 辨識出「今日はよろしくお願いします」）
-      if (normClean.startsWith(normLast) && normLast.length >= 2) {
+    const isIndependentSentence = /^(?:はい|いいえ|そうですね|わかりました|分かりました|承知いたしました|趣味|特技|長所|短所|志望|名前|出身|大学|仕事|現在|本日|では|でも|また|しかし|そして|特に)/.test(cleanQ);
+    if (timeDiff < 3000) {
+      if (normClean.startsWith(normLast) && normLast.length >= 2 && normClean.length > normLast.length) {
         lastItem.jp = cleanQ;
         lastItem.isQuestion = isQuestionSentence(cleanQ);
         lastItem.timestamp = now;
@@ -20953,13 +21771,13 @@ async function handleNewRecognizedUtterance(qJp) {
         return;
       }
 
-      // B. 重疊交錯消解 (Overlap Resolution: 如 上一句 "嘘をつき続ける女の" + 新句 "女の執念" -> "嘘をつき続ける女の執念")
+      // 重疊交錯消解：需至少 4 個字元，且排除常見助動詞/助詞（如 です/ます/した/ので/から），避免多方對話交錯時被強行合併
       let overlapMatched = false;
       const maxK = Math.min(lastItem.jp.length, cleanQ.length);
-      for (let k = maxK; k >= 2; k--) {
+      for (let k = maxK; k >= 4; k--) {
         const suffix = lastItem.jp.slice(-k);
         const prefix = cleanQ.slice(0, k);
-        if (suffix === prefix) {
+        if (suffix === prefix && !/^(?:です|ます|した|ので|から|こと|ない|ある|いる)$/.test(suffix)) {
           const merged = lastItem.jp.slice(0, -k) + cleanQ;
           lastItem.jp = merged;
           lastItem.isQuestion = isQuestionSentence(merged);
@@ -20978,14 +21796,11 @@ async function handleNewRecognizedUtterance(qJp) {
         }
       }
 
-      // C. 上一句以未完助詞結尾（如「嘘をつき続ける女の」停在「の」）或新句為未完謂語開頭 (v154)
+      // 智慧未完助詞防護與語句無縫縫合 (Smart Sentence Stitching)
       const lastIncomplete = isIncompleteJapaneseClause(lastItem.jp);
-      // 接續句型嚴格單詞匹配，絕對嚴禁使用 [...] 字元集合以免誤吞「はい、趣味、特技、では、特に」等句子！
-      const newContinues = /^(?:とのこと|と言い|と述べ|と語り|と伝えて|とおっしゃって|ということ|について|に関して)/.test(cleanQ);
-      // 獨立開頭防誤傷：若新句以常見獨立語或問答開頭，即使上一句略有停頓也絕不強行合併
-      const isIndependentSentence = /^(?:はい|いいえ|そうですね|わかりました|分かりました|承知いたしました|趣味|特技|長所|短所|志望|名前|出身|大学|仕事|現在|本日|では|でも|また|しかし|そして|特に)/.test(cleanQ);
-
-      if ((lastIncomplete && !isIndependentSentence) || newContinues) {
+      const newContinues = /^(?:とのこと|と言い|と述べ|と語り|と伝えて|とおっしゃって)/.test(cleanQ);
+      // 僅在明確為引號接續或同一發話者極短尾隨斷片 (<1200ms 且 <10 字) 時縫合，絕不跨角色吞併面試官或旁白
+      if (newContinues || (lastIncomplete && !isIndependentSentence && timeDiff < 1200 && cleanQ.length < 10)) {
         const cleanLast = lastItem.jp.replace(/[、,，。.\s]+$/, '');
         const merged = cleanLast + cleanQ;
         lastItem.jp = merged;
@@ -21002,32 +21817,30 @@ async function handleNewRecognizedUtterance(qJp) {
         archiveCurrentInterviewSession(false);
         return;
       }
-
-      // D. 上一句已經完整包含新句（新句為上一句之子字串，常見於語音切片斷句延遲）
-      // 僅在兩句時間極為接近 (<2000ms) 且確實長度差異明顯時略過，避免短語重複被誤刪 (v154)
-      if (normLast.startsWith(normClean) && (normLast.length > normClean.length + 4) && timeDiff < 2000) {
-        return;
-      }
     }
   }
 
-  // 取得中文翻譯 (優先查 50 題庫，其次查 qaDatabase，最後 Google 翻譯 API)
+  // 智慧判斷此句是否具有提問意圖 (Question Intent Detection，保留標記供紀要與輔助提示)
+  const isQuestion = isQuestionSentence(cleanQ);
+
+  // 取得中文翻譯 (歷史對話忠實呈現原句翻譯，解耦題庫，絕不霸道覆蓋原話)
   let qZh = '';
-  const dbMatch = getAnswerFrom50QaDatabase(cleanQ, InterviewEngine.companyHonorific);
-  if (dbMatch && dbMatch.questionZh) {
-    qZh = dbMatch.questionZh;
-  } else if (InterviewEngine.qaDatabase[cleanQ]) {
+  if (isQuestion && cleanQ.length >= 6) {
+    const dbMatch = getAnswerFrom50QaDatabase(cleanQ, InterviewEngine.companyHonorific);
+    if (dbMatch && dbMatch.questionZh) {
+      qZh = dbMatch.questionZh;
+    }
+  }
+  if (!qZh && InterviewEngine.qaDatabase[cleanQ]) {
     qZh = InterviewEngine.qaDatabase[cleanQ].zh;
-  } else {
+  }
+  if (!qZh) {
     try {
       qZh = await fetchFreeGoogleTranslate(cleanQ, 'zh-TW') || cleanQ;
     } catch (e) {
       qZh = cleanQ;
     }
   }
-
-  // 智慧判斷此句是否具有提問意圖 (Question Intent Detection，保留標記供紀要與輔助提示)
-  const isQuestion = isQuestionSentence(cleanQ);
 
   // 若具備提問意圖，進行推測預熱快取
   if (isQuestion) {
@@ -21103,7 +21916,7 @@ async function setupWebAudioBooster() {
       audio: {
         echoCancellation: false, // 關閉回音消除，避免外接喇叭擴音被演算法當成回音濾除
         noiseSuppression: false,  // 關閉過度抑制，保護語音頻率
-        autoGainControl: true     // 開啟硬體自動增益
+        autoGainControl: false    // 關閉硬體自動增益，防止聲音忽大忽小導致中間音量被壓縮抹除！
       }
     }).catch(err => {
       console.warn('getUserMedia non-fatal stream warning:', err);
@@ -21194,16 +22007,19 @@ function createAndStartInterviewRecognition() {
     };
 
     rec.onspeechstart = () => {
+      if (InterviewEngine.isTtsPlaying) return;
       InterviewEngine.lastAudioActivityTime = Date.now();
       animateMetersActive(true);
     };
 
     rec.onspeechend = () => {
+      if (InterviewEngine.isTtsPlaying) return;
       animateMetersActive(false);
       // 關鍵修復：絕不在此強制 flushActiveInterimToHistory，避免講者換氣或短暫停頓即遭截斷！
     };
 
     rec.onresult = (event) => {
+      if (InterviewEngine.isTtsPlaying) return; // 播放 TTS 語音時忽略麥克風回音
       InterviewEngine.lastAudioActivityTime = Date.now();
       animateMetersActive(true);
       let interimTranscript = '';
@@ -21251,7 +22067,7 @@ function createAndStartInterviewRecognition() {
       const isInc = isIncompleteJapaneseClause(liveText);
       const hasTerminal = /([でま]す|[でま]した|でしょうか|ですか|てください|ございます|ございません)[。！？?!]?$/.test(liveText.trim());
       const waitMs = isInc ? 2500 : 1600;
-      const actualWaitMs = (!isInc && hasTerminal) ? 450 : waitMs; // 終止形 450ms 極速切句
+      const actualWaitMs = hasTerminal ? 1200 : 2000; // 適度寬裕時間窗，避免換氣中斷
       InterviewEngine.silenceTimer = setTimeout(() => {
         flushActiveInterimToHistory();
       }, actualWaitMs);
@@ -22006,25 +22822,8 @@ async function handleJobSlipPdfUpload(input) {
     
     const inputRole = document.getElementById('iv-input-role');
     if (inputRole) {
-      let matchedIndex = -1;
-      const roleStr = InterviewEngine.role || '';
-      for (let i = 0; i < inputRole.options.length; i++) {
-        const optVal = inputRole.options[i].value;
-        if (roleStr === optVal || roleStr.includes(optVal) || (optVal === 'レストランサービス' && (roleStr.includes('レストラン') || roleStr.includes('配膳') || roleStr.includes('外場')))) {
-          matchedIndex = i;
-          break;
-        }
-      }
-      if (matchedIndex >= 0) {
-        inputRole.selectedIndex = matchedIndex;
-        InterviewEngine.role = inputRole.options[matchedIndex].value;
-      } else if (roleStr) {
-        // 自訂職缺選項動態加入並選取
-        const newOpt = document.createElement('option');
-        newOpt.value = roleStr;
-        newOpt.textContent = `${roleStr} (求人票解析)`;
-        newOpt.selected = true;
-        inputRole.appendChild(newOpt);
+      if (InterviewEngine.role) {
+        inputRole.value = InterviewEngine.role;
       }
     }
     
@@ -22074,6 +22873,15 @@ function updateCompanyHonorificPreview() {
     h = val + '様';
   }
   preview.textContent = `${h} / 御社`;
+}
+
+// 快捷選擇職種標籤
+function selectQuickJobRole(roleName) {
+  const inputRole = document.getElementById('iv-input-role');
+  if (inputRole) {
+    inputRole.value = roleName;
+    inputRole.focus();
+  }
 }
 
 // 儲存上下文設定
