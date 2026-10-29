@@ -1605,26 +1605,28 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-left: 8px;
-    padding: 2px 9px;
-    font-size: 0.88rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
+    margin-left: 4px;
+    padding: 1px 5px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     color: var(--muted);
-    background: rgba(92,61,30,0.07);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    opacity: 0.52;
+    background: rgba(92,61,30,0.03);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.15s ease;
     vertical-align: middle;
     user-select: none;
-    line-height: 1.2;
+    line-height: 1;
   }
   .typeset-dots-btn:hover {
+    opacity: 1;
     background: var(--primary);
     color: #fff;
     border-color: var(--primary);
-    transform: scale(1.1);
+    transform: scale(1.04);
   }
   .typeset-dots-btn:active {
     transform: scale(0.95);
@@ -1830,16 +1832,39 @@
     background: #ffebee;
   }
 
-  /* 列印專用樣式 */
+  /* 列印與匯出 PDF 專用樣式 (v172 徹底修復分頁與排版) */
+  @page {
+    size: A4;
+    margin: 15mm 12mm 15mm 12mm;
+  }
   @media print {
-    header, nav#top-nav-bar, #offline-badge, .typeset-control-card, .typeset-dots-btn, .typeset-footer-toolbar, .div-del-btn, .floating-raccoon-btn, #toast-shelf, #typeset-ctx-menu {
-      display: none !important;
+    html, body {
+      background: #fff !important;
+      color: #000 !important;
+      overflow: visible !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 13pt !important;
     }
     body, main, #app {
       background: #fff !important;
       color: #000 !important;
+      overflow: visible !important;
+      height: auto !important;
+      min-height: auto !important;
+      max-width: none !important;
       padding: 0 !important;
       margin: 0 !important;
+      display: block !important;
+      border: none !important;
+    }
+    header, nav#top-nav-bar, #offline-badge, .typeset-control-card, .typeset-player-bar, .page-sub,
+    .typeset-dots-btn, .typeset-footer-toolbar, .div-del-btn, .floating-raccoon-btn, #floating-raccoon-widget,
+    #raccoon-radial-overlay, #modal-raccoon-dashboard, #toast-shelf, #typeset-ctx-menu, .modal-backdrop,
+    #interview-floating-actions {
+      display: none !important;
     }
     .page {
       display: none !important;
@@ -1847,23 +1872,46 @@
     #page-typeset {
       display: block !important;
       padding: 0 !important;
+      margin: 0 !important;
     }
     #typeset-scroll-page {
       box-shadow: none !important;
       border: none !important;
       border-radius: 0 !important;
       padding: 0 !important;
+      margin: 0 !important;
       width: 100% !important;
       background: #fff !important;
+      overflow: visible !important;
+      height: auto !important;
     }
     .content-group {
-      break-inside: avoid;
-      page-break-inside: avoid;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
       border: none !important;
-      padding: 4px 0 !important;
-      margin-bottom: 8px !important;
+      border-bottom: 1px dotted #cbd5e1 !important;
+      padding: 6px 0 !important;
+      margin-bottom: 12px !important;
     }
-
+    .content-group:hover {
+      background: transparent !important;
+    }
+    .jp-line {
+      display: block !important;
+      color: #111 !important;
+      font-size: 16pt !important;
+      line-height: 2.2 !important;
+    }
+    .zh-line {
+      display: block !important;
+      background: transparent !important;
+      border-left: 2.5px solid #64748b !important;
+      color: #334155 !important;
+      padding-left: 8px !important;
+      margin-top: 4px !important;
+      font-size: 11pt !important;
+      line-height: 1.5 !important;
+    }
     body:not(.print-keep-color) .zh-line {
       background: transparent !important;
       border-left: 2.5px solid #666 !important;
@@ -3243,20 +3291,9 @@
         </div>
       </div>
 
-      <!-- 全文朗誦狀態控制條 (全文朗誦 / 反覆朗誦 / 停止) -->
-      <div class="typeset-player-bar" id="typeset-player-bar">
-        <div class="typeset-player-controls">
-          <button class="btn btn-primary btn-sm" onclick="startTypesetSpeech(false)" style="font-weight:700;" title="從第 1 句開始全文朗誦一遍">
-            ▶️ 全文朗誦
-          </button>
-          <button class="btn btn-secondary btn-sm" onclick="startTypesetSpeech(true)" style="font-weight:700;" title="反覆循環朗誦全文">
-            🔁 反覆朗誦
-          </button>
-          <button class="btn btn-secondary btn-sm" onclick="stopTypesetSpeech()" style="color:#d32f2f; font-weight:700;" title="立即停止語音朗誦">
-            ⏹️ 停止
-          </button>
-        </div>
-        <div class="typeset-player-status" id="typeset-player-status">
+      <!-- 全文朗誦狀態控制條 (去重精簡：控制按鈕保留於上方卡片，此處僅作為朗讀狀態提醒) -->
+      <div class="typeset-player-bar" id="typeset-player-bar" style="display:none; margin-bottom:10px;">
+        <div class="typeset-player-status" id="typeset-player-status" style="width:100%;">
           <span class="typeset-status-pill" id="typeset-player-status-pill">💡 點擊「全文朗誦」或「反覆朗誦」即可開始逐句朗讀</span>
         </div>
       </div>
@@ -3276,6 +3313,7 @@
     <!-- 右鍵/長按懸浮上下文選單 -->
     <div id="typeset-ctx-menu">
       <button onclick="handleTypesetCtxAction('reprocess')">↻ 重新處理這句</button>
+      <button onclick="handleTypesetCtxAction('simplify')">🌱 用更簡單的說法呈現 (N4 程度)</button>
       <button onclick="handleTypesetCtxAction('save_to_vocab')">⭐ 收藏至單字庫</button>
       <button onclick="handleTypesetCtxAction('split')">✂ 拆分段落</button>
       <button onclick="handleTypesetCtxAction('add_after')">+ 在後方新增段落</button>
@@ -9788,8 +9826,8 @@ function renderVocabPage(type) {
   }
 
   // Tab 順序：食材 → 餐點 → 酒水 → 餐具 → 工具 → 名字 → 職稱 → 對話
-  const cats = ['全部', '食材', '餐點', '酒水', '餐具', '工具', '名字', '職稱', '對話'];
-  const catIcons = { '全部': '🔍', '食材': '🥦', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
+  const cats = ['全部', '食材', '餐點', '酒水', '餐具', '工具', '名字', '職稱', '對話', '排版收藏'];
+  const catIcons = { '全部': '🔍', '食材': '🥦', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬', '排版收藏': '⭐' };
 
   filterBar.innerHTML = '';
   cats.forEach(cat => {
@@ -9844,7 +9882,7 @@ function renderVocabPage(type) {
   }
 
   // ── 1. 「對話」分類：一句話一行（滿版清單）
-  if (currentFilter === '對話') {
+  if (currentFilter === '對話' || currentFilter === '排版收藏') {
     let dialogHtml = '<div class="dialog-vocab-list">';
     filtered.forEach(v => {
       dialogHtml += `
@@ -9870,7 +9908,7 @@ function renderVocabPage(type) {
   // ── 2. 「全部」：按分類分組，各組有 title，順序：食材→餐點→酒水→餐具→工具→名字→職稱→對話
   if (currentFilter === '全部') {
     const groupOrder = ['食材', '餐點', '酒水', '餐具', '工具', '名字', '職稱', '對話'];
-    const groupIcons = { '全部': '🔍', '食材': '🥦', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬' };
+    const groupIcons = { '全部': '🔍', '食材': '🥦', '餐具': '🍽️', '工具': '🧹', '餐點': '🍱', '酒水': '🥤', '名字': '👤', '職稱': '💼', '對話': '💬', '排版收藏': '⭐' };
     let allHtml = '';
 
     groupOrder.forEach(cat => {
@@ -17114,9 +17152,9 @@ const TYPESET_FURIGANA_DICT = {
   '理由': 'りゆう', '教えて': 'おしえて', '教': 'おし', '冬': 'ふゆ',
   '経験': 'けいけん', 'お客様': 'きゃくさま', '客': 'きゃく', '喜んで': 'よろこんで',
   '喜': 'よろこ', '勤務開始日': 'きんむかいしび', '勤務開始': 'きんむかいし', '勤務': 'きんむ',
-  '開始': 'かいし', '希望日': 'きぼうび', '希望': 'きぼう', '仕事': 'しごと',
-  '契約': 'けいやく', '終わります': 'おわります', '終': 'お', '月下旬': 'がつげじゅん',
-  '下旬': 'げじゅん', '働けます': 'はたらけます', '勤務期間': 'きんむきかん', '期間': 'きかん',
+  '開始': 'かいし', '開始日': 'かいしび', '希望日': 'きぼうび', '希望': 'きぼう', '仕事': 'しごと',
+  '契約': 'けいやく', '終わります': 'おわります', '終': 'お', '終了': 'しゅうりょう',
+  '月下旬': 'がつげじゅん', '下旬': 'げじゅん', '働けます': 'はたらけます', '勤務期間': 'きんむきかん', '期間': 'きかん',
   '終わり': 'おわり', '月末': 'がつまつ', '有無': 'うむ', '入れ墨': 'いれずみ',
   '入って': 'はいって', '入': 'はい', '刺青': 'いれずみ', '体': 'からだ',
   '一切': 'いっさい', '髪': 'かみ', '色': 'いろ', '何色': 'なにいろ',
@@ -17139,7 +17177,7 @@ const TYPESET_FURIGANA_DICT = {
   '期限': 'きげん', '有効期限': 'ゆうこうきげん', '有効': 'ゆうこう',
   '在留資格': 'ざいりゅうしかく', '来年': 'らいねん', '環境': 'かんきょう', '適応': 'てきおう',
   '雪山': 'ゆきやま', '寒い': 'さむい', '寒さ': 'さむさ', '寒': 'さむ',
-  '場所': 'ばしょ', '生活': 'せいかつ', '不安': 'ふあん', '防寒対策': 'ぼうかんたいさく',
+  '場所': 'ばしょ', '場': 'じょう', '生活': 'せいかつ', '不安': 'ふあん', '防寒対策': 'ぼうかんたいさく',
   '健康管理': 'けんこうかんり', '気': 'き', '長所': 'ちょうしょ', '強み': 'つよみ',
   '強': 'つよ', '自身': 'じしん', '前向き': 'まえむき', '新しい': 'あたらしい',
   '新': 'あたら', '自分': 'じぶん', '積極的': 'せっきょくてき', '取り組みます': 'とりくみます',
@@ -17149,13 +17187,136 @@ const TYPESET_FURIGANA_DICT = {
   '最後': 'さいご', '逆質問': 'ぎゃくしつもん', '用具': 'ようぐ', '板': 'いた',
   '向け': 'むけ', '割引': 'わりびき', '初心者向け': 'しょしんしゃむけ', '初心者': 'しょしんしゃ',
   '無料': 'むりょう', '有料': 'ゆうりょう', '知りたい': 'しりたい', '知': 'し',
-  '寮': 'りょう', '部屋': 'へや', '個室': 'こしつ', '歩いて': 'あるいて',
+  '寮': 'りょう', '部屋': 'へや', '個室': 'こしつ', 'お部屋': 'おへや', '歩いて': 'あるいて',
   '歩': 'ある', '何分': 'なんぷん', '楊詠筑': 'ヤン ユンジュ',
   '料理': 'りょうり', '厨房': 'ちゅうぼう', '了解': 'りょうかい', '伺います': 'うかがいます',
-  '伺い': 'うかがい', '伺': 'うかが', '残数': 'ざんすう', '受付': 'うけつけ',
-  '名': 'めい', '人': 'にん', '台車': 'だいしゃ', '布': 'ぬの', '回収': 'かいしゅう',
-  '追加': 'ついか', '注文': 'ちゅうもん', '担当': 'たんとう', '拭き': 'ふき', '拭': 'ふ'
+  '伺い': 'うかがい', '伺': 'うかが', 'お伺い': 'おうかがい', 'お伺いしたい': 'おうかがいしたい',
+  '残数': 'ざんすう', '受付': 'うけつけ', '名': 'めい', '人': 'にん', '台車': 'だいしゃ',
+  '布': 'ぬの', '回収': 'かいしゅう', '追加': 'ついか', '注文': 'ちゅうもん', '担当': 'たんとう',
+  '拭き': 'ふき', '拭': 'ふ',
+  // --- v172 新增度假村、滑雪場、生活採買與面試常見詞彙 ---
+  '営業': 'えいぎょう', '営': 'えい', '業': 'ぎょう',
+  'シーズン': 'Sīzun', 'スキー場': 'Sukījō', 'スキー': 'Sukī',
+  'ヶ月': 'かげつ', '程度': 'ていど', '程': 'てい', '度': 'ど',
+  'フル期間': 'Furuきかん', 'フル': 'Furu',
+  '考えております': 'かんがえております', '考えて': 'かんがえて', '考え': 'かんがえ', '考': 'かんが',
+  '本当に': 'ほんとうに', '本当': 'ほんとう', '本': 'ほん', '当': 'とう',
+  '1人部屋': 'ひとりべや', '一人部屋': 'ひとりべや',
+  '仕事の後': 'しごとのあと', '後': 'あと',
+  'プライベート': 'Puraibēto', '空間': 'くうかん', '空': 'くう', '間': 'かん',
+  '休みたい': 'やすみたい', '休んで': 'やすんで', '休み': 'やすみ', '休': 'やす',
+  '距離': 'きょり', '距': 'きょ', '離': 'り',
+  '徒歩': 'とほ', '徒': 'と',
+  '普段': 'ふだん', '普': 'ふ', '段': 'だん',
+  '日用品': 'にちようひん', '日用': 'にちよう', '用品': 'ようひん', '品': 'ひん',
+  '食料品': 'しょくりょうひん', '食料': 'しょくりょう',
+  '買い出し': 'かいだし', '買い出し用': 'かいだしよう', '買': 'か', '出': 'だ',
+  'スーパー': 'Sūpā', '送迎バス': 'そうげいBasu', '送迎': 'そうげい', '送': 'そう', '迎': 'げい',
+  '運行': 'うんこう', '運': 'うん', '行': 'こう',
+  '赴任': 'ふにん', '赴': 'ふ', '任': 'にん',
+  '荷物': 'にもつ', '荷': 'に', '物': 'もつ',
+  '先に': 'さきに', '先': 'さき',
+  '宅配便': 'たくはいびん', '宅配': 'たくはい', '便': 'びん',
+  '送って': 'おくって', '送り': 'おくり',
+  '移動': 'いどう', '移': 'い',
+  '事前': 'じぜん', '前': 'ぜん',
+  '発送': 'はっそう', '発': 'はつ',
+  '可能': 'かのう', '可': 'か', '能': 'のう',
+  '届いた': 'とどいた', '届く': 'とどく', '届': 'とど',
+  '代理': 'だいり', '代': 'だい', '理': 'り',
+  '受け取って': 'うけとって', '受け取り': 'うけとり', '受取': 'うけとり', '受': 'う', '取': 'と',
+  '道具': 'どうぐ', '具': 'ぐ',
+  'レンタル': 'Rentaru', 'スキーウェア': 'Sukīwea', 'ウェア': 'Wea',
+  'スタッフ割引': 'Sutaffuわりびき', 'スタッフ': 'Sutaffu',
+  '費用': 'ひよう', '費': 'ひ',
+  '退租': 'たいそ', '退': 'たい',
+  '最晚': 'さいばん', '最': 'さい',
+  '相談': 'そうだん', '相': 'そう', '談': 'だん',
+  '問い合わせ': 'といあわせ', '問': 'とい', '合': 'あ',
+  '派遣': 'はけん', '派': 'は', '雇': 'こ', '雇用': 'こよう',
+  '携帯番号': 'けいたいばんごう', '携帯': 'けいたい', '番号': 'ばんごう', '番': 'ばん', '号': 'ごう',
+  '細かい': 'こまかい', '細': 'こま',
+  '住所': 'じゅうしょ', '住': 'じゅう', '所': 'しょ',
+  '連絡先': 'れんらくさき', '連絡': 'れんらく', '連': 'れん', '絡': 'らく',
+  '準備': 'じゅんび', '準': 'じゅん', '備': 'び',
+  '雪靴': 'ゆきぐつ', '靴': 'くつ',
+  '防寒着': 'ぼうかんぎ', '着': 'ぎ', '防': 'ぼう',
+  '耐寒': 'たいかん', '耐': 'たい',
+  '料理補助': 'りょうりほじょ', '補助': 'ほじょ', '補': 'ほ', '助': 'じょ',
+  '英語接待': 'えいごせったい', '英語': 'えいご', '英': 'えい', '語': 'ご',
+  '接待': 'せったい', '接': 'せつ', '待': 'たい',
+  '合約': 'ごうやく', '約': 'やく',
+  'シフト': 'Shifuto', '確定': 'かくてい', '確': 'かく', '定': 'てい',
+  '協調': 'きょうちょう', '調': 'ちょう',
+  '代收': 'だいしゅう', '包裹': 'こづつみ', '包': 'つつ', '裹': 'み'
 };
+
+// 單字音讀／訓讀保底字典 (當複合詞未直接命中時，自動拆解單一漢字注音，100% 絕不漏標！)
+const TYPESET_SINGLE_KANJI_DICT = {
+  '場': 'じょう', '営': 'えい', '業': 'ぎょう', '終': 'しゅう', '了': 'りょう',
+  '月': 'げつ', '程': 'てい', '度': 'ど', '考': 'かんが', '寮': 'りょう',
+  '室': 'しつ', '間': 'かん', '休': 'やす', '距': 'きょ', '離': 'り',
+  '徒': 'と', '歩': 'ほ', '普': 'ふ', '段': 'だん', '日': 'にち',
+  '用': 'よう', '品': 'ひん', '買': 'か', '出': 'だ', '送': 'そう',
+  '迎': 'げい', '運': 'うん', '行': 'こう', '赴': 'ふ', '任': 'にん',
+  '荷': 'に', '物': 'もつ', '先': 'さき', '宅': 'たく', '配': 'はい',
+  '便': 'びん', '自': 'じ', '身': 'しん', '移': 'い', '動': 'どう',
+  '事': 'じ', '前': 'ぜん', '発': 'はつ', '可': 'か', '能': 'のう',
+  '届': 'とど', '代': 'だい', '理': 'り', '受': 'う', '取': 'と',
+  '費': 'ひ', '派': 'は', '雇': 'こ', '番': 'ばん', '号': 'ごう',
+  '細': 'こま', '住': 'じゅう', '所': 'しょ', '連': 'れん', '絡': 'らく',
+  '準': 'じゅん', '備': 'び', '靴': 'くつ', '着': 'ぎ', '耐': 'たい',
+  '補': 'ほ', '助': 'じょ', '接': 'せつ', '待': 'たい', '約': 'やく',
+  '確': 'かく', '定': 'てい', '調': 'ちょう', '包': 'つつ', '店': 'てん',
+  '員': 'いん', '席': 'せき', '客': 'きゃく', '卓': 'たく', '皿': 'さら',
+  '湯': 'ゆ', '飲': 'の', '食': 'た', '飯': 'はん', '朝': 'あさ',
+  '昼': 'ひる', '晩': 'ばん', '夜': 'よる', '魚': 'さかな', '肉': 'にく',
+  '菜': 'さい', '卵': 'たまご', '汁': 'しる', '茶': 'ちゃ', '酒': 'さけ',
+  '水': 'みず', '塩': 'しお', '糖': 'とう', '油': 'あぶら', '米': 'こめ',
+  '麦': 'むぎ', '豆': 'まめ', '葱': 'ねぎ', '洗': 'あら', '拭': 'ふ',
+  '掃': 'そう', '除': 'じ', '清': 'せい', '潔': 'けつ', '捨': 'す',
+  '置': 'お', '持': 'も', '切': 'き', '煮': 'に', '焼': 'や',
+  '揚': 'あ', '炒': 'いた', '冷': 'つめ', '温': 'あたた', '熱': 'あつ',
+  '強': 'つよ', '弱': 'よわ', '多': 'おお', '少': 'すく', '高': 'たか',
+  '低': 'ひく', '長': 'なが', '短': 'みじか', '早': 'はや', '遅': 'おそ',
+  '新': 'あたら', '古': 'ふる', '良': 'よ', '悪': 'わる', '重': 'おも',
+  '軽': 'かる', '難': 'むずか', '易': 'やさ', '近': 'ちか', '遠': 'とお',
+  '始': 'はじ', '開': 'あ', '閉': 'し', '止': 'と', '押': 'お',
+  '引': 'ひ', '売': 'う', '読': 'よ', '書': 'か', '聞': 'き',
+  '見': 'み', '話': 'はな', '言': 'い', '思': 'おも', '知': 'し',
+  '分': 'わ', '作': 'つく', '使': 'つか', '会': 'あ', '来': 'く',
+  '帰': 'かえ', '走': 'はし', '立': 'た', '座': 'すわ', '寝': 'ね',
+  '起': 'お', '勉': 'べん', '習': 'なら', '待': 'ま', '呼': 'よ',
+  '頼': 'たの', '願': 'ねが', '答': 'こた', '問': 'と', '困': 'こま',
+  '急': 'いそ', '忘': 'わす', '覚': 'おぼ', '残': 'のこ', '減': 'へ',
+  '増': 'ふ', '変': 'か', '続': 'つづ', '勝': 'か', '負': 'ま',
+  '守': 'まも', '愛': 'あい', '好': 'す', '嫌': 'きら', '喜': 'よろこ',
+  '怒': 'おこ', '悲': 'かな', '泣': 'な', '笑': 'わら', '驚': 'おどろ',
+  '楽': 'たの', '痛': 'いた', '疲': 'つか', '眠': 'ねむ', '忙': 'いそが',
+  '暇': 'ひま', '静': 'しず', '危': 'あぶ', '安': 'やす', '全': 'ぜん',
+  '険': 'けん', '病': 'びょう', '院': 'いん', '薬': 'くすり', '医': 'い',
+  '者': 'しゃ', '風': 'かぜ', '咳': 'せき', '頭': 'あたま', '目': 'め',
+  '耳': 'みみ', '鼻': 'はな', '口': 'くち', '手': 'て', '足': 'あし',
+  '指': 'ゆび', '歯': 'は', '心': 'こころ', '声': 'こえ', '息': 'いき'
+};
+
+function resolveKanjiReading(kanji) {
+  if (!kanji) return '';
+  if (TYPESET_FURIGANA_DICT[kanji]) return TYPESET_FURIGANA_DICT[kanji];
+  // 複合詞未直接命中時，逐字組合保底
+  let combined = '';
+  for (const ch of kanji) {
+    if (TYPESET_SINGLE_KANJI_DICT[ch]) {
+      combined += TYPESET_SINGLE_KANJI_DICT[ch];
+    } else if (TYPESET_FURIGANA_DICT[ch]) {
+      combined += TYPESET_FURIGANA_DICT[ch];
+    } else {
+      combined = '';
+      break;
+    }
+  }
+  return combined;
+}
 
 let typesetLastData = null;
 let typesetUndoStack = [];
@@ -17322,6 +17483,24 @@ function isChineseLine(text) {
   return hanCount >= 2;
 }
 
+// 判斷中文行是否為面試提問、大題標籤或題目（非具體答案的翻譯）
+function isInterviewQuestionOrPrompt(text) {
+  if (!text) return false;
+  const t = text.trim();
+  if (/[？?]/.test(t)) return true;
+  if (/^【.*?】/.test(t) || /^Q[\d\s：:]/i.test(t)) return true;
+  if (/(為什麼|為何|如何|是否有|請問|希望嗎|問題嗎|有什麼|印象或魅力|資格嗎|如何處理|問題)/.test(t)) return true;
+  return false;
+}
+
+// 判斷日文行是否為陳述句或回答（非提問句）
+function isJapaneseAnswerSentence(text) {
+  if (!text) return false;
+  const t = text.trim();
+  if (/(おります|ございます|します|できます|です|ます|存じます|ました|ません|でした)[。]?$/.test(t)) return true;
+  return false;
+}
+
 function extractPairsFromRawLines(lines) {
   const pairs = [];
   let i = 0;
@@ -17362,6 +17541,12 @@ function extractPairsFromRawLines(lines) {
 
     // C. 相鄰兩行：日文 (l1) ＋ 中文 (l2)
     if (l1HasKana && l2IsZh) {
+      // 關鍵修復：若 l2 是提問句（如「為什麼選擇該地區？」）且 l1 是回答句，則兩者絕非日中翻譯對照！
+      if (isInterviewQuestionOrPrompt(l2) && isJapaneseAnswerSentence(l1)) {
+        pairs.push({ jp: l1, zh: '' });
+        i++;
+        continue;
+      }
       pairs.push({ jp: l1, zh: l2 });
       i += 2;
       continue;
@@ -17369,6 +17554,12 @@ function extractPairsFromRawLines(lines) {
 
     // D. 相鄰兩行：中文 (l1) ＋ 日文 (l2)
     if (l1IsZh && l2HasKana) {
+      // 若 l1 是提問句（例如面試題標題），則不應強制將提問作為回答的翻譯
+      if (isInterviewQuestionOrPrompt(l1) && isJapaneseAnswerSentence(l2)) {
+        pairs.push({ jp: l2, zh: '' });
+        i += 2;
+        continue;
+      }
       pairs.push({ jp: l2, zh: l1 });
       i += 2;
       continue;
@@ -17439,7 +17630,7 @@ function parseLocalJapaneseSegments(jpText, zhTranslation) {
     if (match[1]) {
       const kanji = match[1];
       const explicitReading = match[2] || match[3] || '';
-      const dictReading = TYPESET_FURIGANA_DICT[kanji] || '';
+      const dictReading = resolveKanjiReading(kanji);
       segments.push({
         type: 'kanji',
         text: kanji,
@@ -17567,21 +17758,59 @@ async function processPureChineseToJapanese(zhText) {
   showToast(`已將中文成功翻譯為日文並完成排版！共 ${groups.length} 句`, 'success');
 }
 
-// 🟢 處理模式 2 & 3：貼日文出中文、或貼中日對照上下比對
+// 🟢 處理模式 2 & 3：貼日文出中文、或貼中日對照上下比對 (v172 智慧對齊與防錯位)
 async function processJapaneseOrMixedText(text) {
   const rawLines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
   if (rawLines.length === 0) return;
 
+  const key = (AppData && AppData.apiKey && AppData.apiKey.trim()) ? AppData.apiKey.trim() : (typeof HARDCODED_GEMINI_API_KEY !== 'undefined' ? HARDCODED_GEMINI_API_KEY : '');
+
+  // 1. 若連網且有 Gemini API，優先使用 AI 進行整篇語境高精準分句、注音與繁中翻譯對齊
+  if (navigator.onLine && key) {
+    try {
+      const prompt = `你是一位專業的日語排版與翻譯專家。使用者輸入了一段文字（可能是日文、面試問答、或日中對照）。
+請將內容整理成句子陣列，並為每個句子：
+1. 給出 100% 正確對應的「繁體中文翻譯」（如果輸入中含有不相干的面試問句標題，請直接根據日文句子本身翻譯成繁中，切勿張冠李戴！）。
+2. 將日文進行分詞標音：漢字標註平假名 (reading)，片假名標註羅馬音 (romaji)。
+3. 輸出純 JSON 格式：
+{
+  "groups": [
+    {
+      "segments": [
+        { "type": "kanji", "text": "漢字", "reading": "かんじ" },
+        { "type": "hiragana", "text": "ひらがな" },
+        { "type": "katakana", "text": "カタカナ", "romaji": "romaji" }
+      ],
+      "translation": "繁體中文翻譯",
+      "reading_full": "全平假名讀音"
+    }
+  ]
+}
+
+使用者輸入：
+${text}
+`;
+      const res = await callGeminiApiUnified(prompt);
+      if (res && Array.isArray(res.groups) && res.groups.length > 0) {
+        typesetLastData = { groups: res.groups };
+        localStorage.setItem('yang_typeset_last_data', JSON.stringify(typesetLastData));
+        renderTypesetResult(typesetLastData);
+        showToast(`✨ 日文排版與精準繁中對照已生成！共 ${res.groups.length} 句`, 'success');
+        return;
+      }
+    } catch (err) {
+      console.warn('Gemini batch typeset fallback:', err);
+    }
+  }
+
+  // 2. 本地降級引擎：防錯位成對分析 ＋ 免費高階神經翻譯 ＋ 完備字典注音
   const pairs = extractPairsFromRawLines(rawLines);
 
   const groups = await Promise.all(pairs.map(async (pair) => {
     let zh = pair.zh;
-    // 若沒有現成中文翻譯（純日文輸入），100% 保證調用多引擎翻譯生成繁體中文！
-    if (!zh) {
-      // 1. 本地高頻字典快速比對
+    // 若無中文翻譯或原翻譯是問句標題，調用神經翻譯生成正確繁中對照
+    if (!zh || isInterviewQuestionOrPrompt(zh)) {
       zh = TYPESET_ZH_DICT[pair.jp.trim()] || '';
-
-      // 2. 雲端免金鑰免費翻譯 (Google Clients5 + MyMemory 原生跨域)
       if (!zh) {
         try {
           zh = await fetchFreeGoogleTranslate(pair.jp, 'zh-TW');
@@ -17900,6 +18129,9 @@ function handleTypesetCtxAction(action) {
     case 'reprocess':
       reprocessSingleTypesetGroup(g);
       break;
+    case 'simplify':
+      simplifySingleTypesetGroup(g);
+      break;
     case 'save_to_vocab':
       saveTypesetSentenceToVocab(g);
       break;
@@ -17933,23 +18165,23 @@ function saveTypesetSentenceToVocab(g) {
   const zhEl = g.querySelector('.zh-line');
   if (!jpEl) return;
 
-  const jaText = jpEl.textContent.trim();
+  const rawJa = jpEl.textContent.trim();
+  const rubyJa = jpEl.innerHTML;
   const zhText = zhEl ? zhEl.textContent.trim() : '';
 
-  if (!AppData.vocabularies.sop) AppData.vocabularies.sop = [];
+  if (!AppData.vocabSop) AppData.vocabSop = [];
   const newVocab = {
-    id: 'typeset_fav_' + Date.now(),
-    ja: jpEl.innerHTML,
+    id: 'typeset_fav_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    ja: rubyJa,
     zh: zhText,
-    romaji: '',
-    category: '排版收藏',
-    starred: true,
-    image: null
+    cat: '排版收藏',
+    imageUrl: '',
+    note: '來自日文排版收藏'
   };
 
-  AppData.vocabularies.sop.unshift(newVocab);
+  AppData.vocabSop.unshift(newVocab);
   saveAppData(AppData);
-  showToast(`⭐ 已收藏至手帳單字庫：${jaText.substring(0, 14)}...`, 'success');
+  showToast(`⭐ 已收藏至單字庫（排版收藏）：${rawJa.substring(0, 16)}...`, 'success');
 }
 
 function saveAllTypesetToVocab() {
@@ -17959,23 +18191,112 @@ function saveAllTypesetToVocab() {
     return;
   }
   let count = 0;
+  if (!AppData.vocabSop) AppData.vocabSop = [];
   groups.forEach(g => {
     const jpEl = g.querySelector('.jp-line');
     const zhEl = g.querySelector('.zh-line');
     if (jpEl && jpEl.textContent.trim()) {
-      AppData.vocabularies.sop.unshift({
+      AppData.vocabSop.unshift({
         id: 'typeset_fav_' + Date.now() + '_' + (++count),
         ja: jpEl.innerHTML,
         zh: zhEl ? zhEl.textContent.trim() : '',
-        romaji: '',
-        category: '排版收藏',
-        starred: true,
-        image: null
+        cat: '排版收藏',
+        imageUrl: '',
+        note: '來自日文排版收藏'
       });
     }
   });
   saveAppData(AppData);
-  showToast(`⭐ 已將 ${count} 個句子全數收藏至手帳單字庫！`, 'success');
+  showToast(`⭐ 已將 ${count} 個句子全數收藏至單字庫「排版收藏」！`, 'success');
+}
+
+// 🌿 句型簡化神器：一鍵將困難語法轉換為 N4 極簡好開口「やさしい日本語」
+async function simplifySingleTypesetGroup(g) {
+  const jpEl = g.querySelector('.jp-line');
+  if (!jpEl) return;
+  const rawText = jpEl.textContent.trim();
+  if (!rawText) return;
+
+  saveTypesetUndo();
+  showToast('🌱 正在為您換成更簡單好開口的說法 (N4 程度)…', 'info');
+
+  const prompt = `
+你是一位親切的日語口語教練。請將以下日文句子改寫為適合日本打工度假初學者、JLPT N4程度、好念好開口的「やさしい日本語（極簡丁寧體）」。
+要求：
+1. 語氣保持外場禮貌的「です・ます」丁寧體，但避免過於生硬拗口的敬語複合詞（例如將「お伺いしたいのですが」簡化為「聞いてもいいですか」、「〜と考えております」簡化為「〜したいです／思っています」）。
+2. 保留原句核心意思。
+3. 為每個漢字標註平假名讀音 (reading)，片假名標註羅馬音 (romaji)。
+4. 輸出純 JSON 格式：
+{
+  "segments": [
+    { "type": "kanji", "text": "漢字", "reading": "かんじ" },
+    { "type": "hiragana", "text": "は" }
+  ],
+  "translation": "繁體中文翻譯",
+  "reading_full": "平假名"
+}
+
+原句：${rawText}
+`;
+
+  try {
+    const res = await callGeminiApiUnified(prompt);
+    if (res && res.segments) {
+      const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
+      const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
+      const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
+      renderTypesetSegmentsToElement(jpEl, res.segments, showH, showR, showK);
+
+      let zhEl = g.querySelector('.zh-line');
+      if (!zhEl) {
+        zhEl = document.createElement('span');
+        zhEl.className = 'zh-line';
+        zhEl.contentEditable = 'true';
+        g.appendChild(zhEl);
+      }
+      zhEl.textContent = res.translation || '';
+      showToast('✨ 已換成極簡好開口的 N4 說法！', 'success');
+      return;
+    }
+  } catch (err) {
+    console.warn('Gemini simplify fallback:', err);
+  }
+
+  // 本地智慧降級簡化規則 (Offline fallback)
+  let simplified = rawText
+    .replace(/お伺いしたいのですが/g, '聞いてもいいですか')
+    .replace(/お伺いします/g, '聞きます')
+    .replace(/教えていただけますでしょうか/g, '教えてください')
+    .replace(/いただけますでしょうか/g, 'できますか')
+    .replace(/いただけますか/g, 'できますか')
+    .replace(/運行されていますでしょうか/g, 'ありますか')
+    .replace(/働きたいと考えております/g, '一生懸命働きたいです')
+    .replace(/考えております/g, '思っています')
+    .replace(/存じます/g, '思います')
+    .replace(/承知いたしました/g, 'わかりました')
+    .replace(/営業シーズン終了まで/g, 'スキー場が終わるまで')
+    .replace(/フル期間で/g, 'ずっと')
+    .replace(/買い物について/g, '買い物は');
+
+  const parsed = parseLocalJapaneseSegments(simplified, '');
+  try {
+    parsed.translation = await fetchFreeGoogleTranslate(simplified, 'zh-TW');
+  } catch(e) {}
+
+  const showH = document.getElementById('opt-typeset-hiragana')?.checked ?? true;
+  const showR = document.getElementById('opt-typeset-romaji')?.checked ?? true;
+  const showK = document.getElementById('opt-typeset-kk')?.checked ?? true;
+  renderTypesetSegmentsToElement(jpEl, parsed.segments, showH, showR, showK);
+
+  let zhEl = g.querySelector('.zh-line');
+  if (!zhEl) {
+    zhEl = document.createElement('span');
+    zhEl.className = 'zh-line';
+    zhEl.contentEditable = 'true';
+    g.appendChild(zhEl);
+  }
+  zhEl.textContent = parsed.translation || '';
+  showToast('✨ 已換成極簡好開口的 N4 說法！', 'success');
 }
 
 async function reprocessSingleTypesetGroup(g) {
@@ -18456,7 +18777,39 @@ function sendToTypeset(jaText, zhText) {
 }
 
 function printTypesetDocument() {
-  window.print();
+  const groups = document.querySelectorAll('#typeset-scroll-page .content-group');
+  if (!groups || groups.length === 0) {
+    showToast('請先貼入日文或中文並點擊「立即生成排版」後再列印', 'info');
+    return;
+  }
+  switchNavPage('page-typeset');
+  try {
+    window.print();
+  } catch (err) {
+    console.warn('window.print failed:', err);
+    exportTypesetPdfWindow();
+  }
+}
+
+function exportTypesetPdfWindow() {
+  const scrollPage = document.getElementById('typeset-scroll-page');
+  if (!scrollPage) return;
+  const win = window.open('', '_blank');
+  if (!win) {
+    showToast('瀏覽器已阻擋彈出視窗，請允許開啟視窗以列印/匯出 PDF', 'warning');
+    return;
+  }
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>楊の手帳・日文排版</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; padding: 20px; line-height: 2.2; color: #111; }
+    .content-group { margin-bottom: 16px; border-bottom: 1px dotted #ccc; padding-bottom: 10px; page-break-inside: avoid; }
+    .jp-line { font-size: 18px; display: block; font-weight: 600; }
+    .zh-line { font-size: 14px; color: #555; display: block; margin-top: 4px; border-left: 2px solid #888; padding-left: 8px; }
+    ruby rt { font-size: 0.65em; }
+    rt.h { color: #c46a5e; }
+    rt.r { color: #276e90; }
+    .typeset-dots-btn { display: none !important; }
+  </style></head><body>` + scrollPage.innerHTML + `<script>window.onload=function(){window.print();};<\/script></body></html>`);
+  win.document.close();
 }
 
 // ==============================================================

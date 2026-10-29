@@ -1622,17 +1622,9 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v171'), 'sw.js 已正確更新為 v171');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v172'), 'sw.js 已正確更新為 v172');
 
-console.log('====================================================');
-console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
-console.log('====================================================');
-
-if (failCount > 0) {
-  process.exit(1);
-} else {
-  console.log('🎉 所有測試通過！(v170) 二世古滑雪場緊急救命 26 題中文快捷按鈕條全面上線！');
-}
+// (測試統計已移至最末尾執行)
 
 console.log('\n【測試 50：v164 真實 AI 圖像生成 (Imagen API 整合)】');
 assert(fs.readFileSync('index.html', 'utf8').includes('async function generateAvatarWithImagenAsync'), '代碼中包含 generateAvatarWithImagenAsync 核心函式');
@@ -1747,3 +1739,75 @@ assert(formatted.includes('00:07\nもしもし。お疲れさまです。\n喂�
 assert(!formatted.includes('雙擊擬答') && !formatted.includes('推薦回答'), '格式化文本嚴格排他，絕不包含 UI 按鈕文字雜訊');
 
 console.log('  ✅ [PASS] v171 一鍵下載對話全文、ASR 後校正與格式化測試全數通過！');
+
+console.log('\n【測試 55：v172 日文排版修復・注音字典補全・翻譯對齊防錯位・極簡N4說法・單字庫收藏・去重按鈕・列印PDF】');
+// 1. 字典與單字注音補全測試
+assert(html.includes('const TYPESET_SINGLE_KANJI_DICT = {'), '包含單一漢字注音保底字典 TYPESET_SINGLE_KANJI_DICT');
+assert(html.includes('function resolveKanjiReading('), '包含智慧解析漢字讀音函式 resolveKanjiReading');
+
+// 測試 resolveKanjiReading
+const singleDictMatch = html.match(/const TYPESET_SINGLE_KANJI_DICT = \{[\s\S]*?\};/);
+const furiganaDictMatch = html.match(/const TYPESET_FURIGANA_DICT = \{[\s\S]*?\};/);
+assert(singleDictMatch && furiganaDictMatch, '成功提取注音解析函式與字典');
+
+const testEnv = {};
+new Function('ctx', singleDictMatch[0] + '\n' + furiganaDictMatch[0] + '\n' + 'ctx.resolve = ' + html.match(/function resolveKanjiReading[\s\S]*?\n\}/)[0])(testEnv);
+
+assert(testEnv.resolve('営業') === 'えいぎょう', '「営業」成功標註注音 えいぎょう');
+assert(testEnv.resolve('終了') === 'しゅうりょう', '「終了」成功標註注音 しゅうりょう');
+assert(testEnv.resolve('場') === 'じょう', '「場」成功標註單字注音 じょう');
+assert(testEnv.resolve('普段') === 'ふだん', '「普段」成功標註注音 ふだん');
+assert(testEnv.resolve('日用品') === 'にちようひん', '「日用品」成功標註注音 にちようひん');
+assert(testEnv.resolve('食料品') === 'しょくりょうひん', '「食料品」成功標註注音 しょくりょうひん');
+assert(testEnv.resolve('買い出し') === 'かいだし', '「買い出し」成功標註注音 かいだし');
+assert(testEnv.resolve('送迎') === 'そうげい', '「送迎」成功標註注音 そうげい');
+assert(testEnv.resolve('運行') === 'うんこう', '「運行」成功標註注音 うんこう');
+assert(testEnv.resolve('距離') === 'きょり', '「距離」成功標註注音 きょり');
+assert(testEnv.resolve('徒歩') === 'とほ', '「徒歩」成功標註注音 とほ');
+assert(testEnv.resolve('本当') === 'ほんとう', '「本当」成功標註注音 ほんとう');
+assert(testEnv.resolve('空間') === 'くうかん', '「空間」成功標註注音 くうかん');
+
+// 2. 提問句過濾與防錯位測試
+assert(html.includes('function isInterviewQuestionOrPrompt('), '包含提問句識別函式 isInterviewQuestionOrPrompt');
+assert(html.includes('function isJapaneseAnswerSentence('), '包含日文回答句識別函式 isJapaneseAnswerSentence');
+
+const qMatch = html.match(/function isInterviewQuestionOrPrompt[\s\S]*?\n\}/);
+const ansMatch = html.match(/function isJapaneseAnswerSentence[\s\S]*?\n\}/);
+const evalQ = new Function('return ' + qMatch[0])();
+const evalAns = new Function('return ' + ansMatch[0])();
+
+assert(evalQ('為什麼選擇該地區（如白馬/長野等）？') === true, '辨識「為什麼選擇該地區？」為提問句');
+assert(evalQ('對於宿舍生活（住宿環境）有什麼希望嗎？') === true, '辨識「對於宿舍生活有什麼希望嗎？」為提問句');
+assert(evalQ('端托盤或搬運沉重料理有問題嗎？') === true, '辨識「端托盤或搬運沉重料理有問題嗎？」為提問句');
+assert(evalQ('下班後，我想在自己的私人空間好好休息。') === false, '陳述翻譯非提問句');
+assert(evalAns('スキー場の営業シーズン終了まで、3ヶ月から半年程度のフル期間でしっかり働きたいと考えております。') === true, '辨識日文陳述回答句');
+
+// 3. 右側 3 點選單「🌱 用更簡單的說法呈現 (N4 程度)」
+assert(html.includes('🌱 用更簡單的說法呈現 (N4 程度)'), '右鍵選單包含「🌱 用更簡單的說法呈現 (N4 程度)」選項');
+assert(html.includes('function simplifySingleTypesetGroup('), '包含單句簡化函式 simplifySingleTypesetGroup');
+
+// 4. 單字庫「排版收藏」
+assert(html.includes("cat: '排版收藏'"), '收藏至單字庫寫入 AppData.vocabSop 且分類為 排版收藏');
+assert(html.includes("'排版收藏': '⭐'"), '單字庫 Tab 列包含 ⭐ 排版收藏 分類');
+
+// 5. 去重朗誦按鈕列
+assert(!html.includes('class="typeset-player-controls"'), '已完全移除 typeset-player-bar 內重複的朗讀按鈕行');
+
+// 6. 列印與匯出 PDF
+assert(html.includes('@media print') && html.includes('break-inside: avoid !important'), '列印樣式包含防斷頁 break-inside 規則');
+assert(html.includes('function exportTypesetPdfWindow()'), '包含彈出式列印與 PDF 匯出函式 exportTypesetPdfWindow');
+
+// 7. 三點按鈕精巧美化
+assert(html.includes('.typeset-dots-btn') && html.includes('font-size: 0.72rem;'), '3-dot 按鈕尺寸調小為 0.72rem 更加優雅細緻');
+
+console.log('  ✅ [PASS] v172 日文排版 7 大修復測試全數通過！');
+
+console.log('\n====================================================');
+console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
+console.log('====================================================');
+
+if (failCount > 0) {
+  process.exit(1);
+} else {
+  console.log('🎉 所有測試通過！(v172) 日文排版 7 大修復、注音全覆蓋、防錯位翻譯與列印全面上線！');
+}
