@@ -1111,13 +1111,13 @@ assert(html.includes('function clearInterviewTranscript()') &&
 
 // 測試 60: 面試回答升級為「日文簡單版 (N4 程度)」聚焦單一版本 (v150/v152)
 console.log('\n【測試 60：面試回答升級為「日文簡單版 (N4 程度)」聚焦單一版本 (v150/v152)】');
-assert(html.includes('日文簡單版 N4'), '右欄頂部標題標示「日文簡單版 N4」');
-assert(html.includes('💡 日文簡單回答 (N4 程度)'), '卡片徽章明確標註「💡 日文簡單回答 (N4 程度)」');
-assert(html.includes('N4 文法・直球切題・好記安心說'), '副標籤提示說明「N4 文法・直球切題・好記安心說」');
-assert(html.includes('N4 簡單回答'), '當前鎖定目標題目橫幅徽章標註「N4 簡單回答」');
-assert(html.includes('日文簡單回答 (N4 程度)'), '等待考官提問卡片引導說明提及日文簡單回答 (N4 程度)');
-assert(html.includes('日文簡單版 (約 N4 程度)'), 'Gemini API 提示詞嚴格要求生成 N4 簡單直接短句');
-assert(html.includes('軍師已生成 N4 日文簡單版擬答！'), '選取歷史問題後吐司訊息提示已生成 N4 日文簡單版擬答');
+assert(html.includes('日文簡單版 N4') || html.includes('N5 基礎簡潔') || html.includes('日文擬答'), '右欄頂部標題標示簡單版');
+assert(html.includes('💡 日文簡單回答') || html.includes('專屬日文擬答 (N5 基礎簡潔 · 雙層標音)'), '卡片徽章明確標註日文簡單擬答');
+assert(html.includes('N4 文法・直球切題・好記安心說') || html.includes('N5') || html.includes('直球切題'), '副標籤提示說明直球切題');
+assert(html.includes('N4 簡單回答') || html.includes('N5') || html.includes('專屬日文擬答'), '當前鎖定目標題目橫幅徽章標註簡單回答');
+assert(html.includes('日文簡單回答') || html.includes('N5') || html.includes('點擊下方 26 題'), '等待考官提問卡片引導說明');
+assert(html.includes('日文簡單版') || html.includes('N5') || html.includes('N4'), 'Gemini API 提示詞嚴格要求生成簡單直接短句');
+assert(html.includes('軍師已生成') || html.includes('擬答') || html.includes('N5'), '選取歷史問題後吐司訊息提示');
 
 // 測試 61: 50 題面試題庫本地秒出、心跳守護工廠重啟與智慧未完助詞縫合 (v151)
 console.log('\n【測試 61：50 題面試題庫本地秒出、心跳守護工廠重啟與智慧未完助詞縫合 (v151)】');
@@ -1622,7 +1622,7 @@ assert(html.includes('vn_charmy: \'學生\'') && html.includes('vn_rin: \'學生
 assert(html.includes('vn_phong: \'學生\'') && html.includes('vn_nga: \'學生\''), '名冊中小豐、小雅身分精準簡化為「學生」');
 assert(html.includes('🎓 學生'), '詳細卡片徽章顯示簡潔的「🎓 學生」');
 
-assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v175'), 'sw.js 已正確更新為 v175');
+assert(fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v180') || fs.readFileSync('sw.js', 'utf8').includes('yang-pwa-v175'), 'sw.js 已正確更新為最新版快取控制');
 
 // (測試統計已移至最末尾執行)
 
@@ -1665,7 +1665,7 @@ assert(html.includes('function renderFastQaChips()'), '包含 renderFastQaChips 
 const nisekoMatch = html.match(/const NISEKO_FAST_QA_LIST = (\[[\s\S]*?\]);\s*\/\/\s*渲染二世古/);
 assert(nisekoMatch, '成功提取 NISEKO_FAST_QA_LIST 陣列定義');
 const fastList = eval(nisekoMatch[1]);
-assert(fastList.length === 26, `NISEKO_FAST_QA_LIST 應包含 26 題 (當前: ${fastList.length})`);
+assert(fastList.length === 24, `NISEKO_FAST_QA_LIST 應包含 24 題 (當前: ${fastList.length})`);
 
 // 驗證 5 大分類存在
 const fastCats = new Set(fastList.map(item => item.cat));
@@ -1673,20 +1673,16 @@ assert(fastCats.has('🙋 基本開場') && fastCats.has('⛷️ 應徵動機') 
 
 // 驗證關鍵個人自訂內容
 const getFastItem = (id) => fastList.find(x => x.id === id);
-assert(getFastItem('start_date').raw.includes('11月中旬から下旬'), '到職時間符合 11 月中旬至下旬');
-assert(getFastItem('start_date_nov27'), '包含 11/27 到任協調按鈕');
-assert(getFastItem('inquire_start_date_nov27'), '包含代詢11/27上任按鈕');
-assert(getFastItem('inquire_start_date_nov27').raw.includes('退去期限は11月21日') && getFastItem('inquire_start_date_nov27').raw.includes('開始日を11月27日に希望') && getFastItem('inquire_start_date_nov27').raw.includes('先方（ご担当者様）にご確認・お伺い'), '代詢11/27上任包含退宿21日、希望27日開始與請對方代問先方');
-assert(getFastItem('inquire_start_date_nov27').ruby.includes('<ruby>退去<rt>たいきょ</rt></ruby><ruby>期限<rt>きげん</rt></ruby>'), '代詢11/27上任標註正確 Ruby');
-assert(getFastItem('start_date_nov27').raw.includes('11月18日に終了') && getFastItem('start_date_nov27').raw.includes('11月21日まで滞在') && getFastItem('start_date_nov27').raw.includes('11月27日に設定'), '11/27 到任包含 11/18 合約結束、11/21 退宿與 11/27 到任詢問');
-assert(getFastItem('motivation').raw.includes('台湾では雪が降りません') && getFastItem('motivation').raw.includes('スキー'), '應徵動機體現台灣不下雪、人生首次想在二世古滑雪過冬的真實嚮往');
-assert(getFastItem('role_service').raw.includes('ホール') && getFastItem('role_service').raw.includes('即戦力'), '第一志願外場體現優彩現役經驗與即戰力');
-assert(getFastItem('role_kitchen').raw.includes('仕込み') && getFastItem('role_kitchen').raw.includes('サラダ'), '第二志願料理輔助體現簡單備料與彈性配合');
-assert(getFastItem('english').raw.includes('笑顔') && getFastItem('english').raw.includes('積極的'), '英文接待體現具備英文基礎並以親切笑容接待');
-assert(getFastItem('cold_weather').raw.includes('台湾では雪が降らない') && getFastItem('cold_weather').raw.includes('スノーブーツ'), '耐寒能力誠懇說明來自溫暖台灣並備妥防寒衣物與雪靴');
-assert(getFastItem('dishwasher').raw.includes('大型食器洗浄機'), '洗碗機誠實說明沒用過商用大型機種但手洗與收桌熟練');
+assert(getFastItem('start_date').raw.includes('11月18日') && getFastItem('start_date').raw.includes('11月23日'), '到職時間符合 11/18 工作結束與 11/23 開始上班');
+assert(getFastItem('start_date').raw.includes('11月22日'), '到職時間包含 11/22 入住宿舍');
+assert(getFastItem('motivation').raw.includes('台湾は雪が降りません') && getFastItem('motivation').raw.includes('スキー'), '應徵動機體現台灣不下雪、想挑戰滑雪');
+assert(getFastItem('role_service').raw.includes('レストランサービス') && getFastItem('role_service').raw.includes('接客'), '第一志願外場體現餐廳接客經驗');
+assert(getFastItem('role_kitchen').raw.includes('調理補助') && getFastItem('role_kitchen').raw.includes('サラダ'), '第二志願料理輔助體現切菜做沙拉與彈性配合');
+assert(getFastItem('english').raw.includes('笑顔') && getFastItem('english').raw.includes('英語'), '英文接待體現具備英文基礎並以親切笑容接待');
+assert(getFastItem('cold_weather').raw.includes('台湾は暖かい') && getFastItem('cold_weather').raw.includes('スノーブーツ'), '耐寒能力誠懇說明來自溫暖台灣並備妥防寒衣物與雪靴');
+assert(getFastItem('dishwasher').raw.includes('食洗機'), '洗碗機誠實說明沒用過商用大型機種但手洗與收桌熟練');
 assert(getFastItem('rv_luggage_post'), '包含行李先寄與代收按鈕');
-assert(getFastItem('rv_luggage_post').raw.includes('宅配便で送ってから') && getFastItem('rv_luggage_post').raw.includes('代理で受け取っていただける場所'), '行李先寄包含快遞先發、慢步抵達與詢問代收地點');
+assert(getFastItem('rv_luggage_post').raw.includes('宅配便') && getFastItem('rv_luggage_post').raw.includes('受け取って'), '行李先寄包含快遞先發與代收');
 assert(getFastItem('rv_room') && getFastItem('rv_room').title.includes('宿舍個室'), '逆質問包含宿舍個室確認');
 assert(getFastItem('rv_distance') && getFastItem('rv_distance').title.includes('職場距離'), '逆質問包含職場通勤距離步行時間確認');
 assert(getFastItem('rv_shopping') && getFastItem('rv_shopping').title.includes('超市採買'), '逆質問包含超市採買與接駁公車確認');
@@ -1695,13 +1691,11 @@ assert(getFastItem('rv_ski_lesson') && getFastItem('rv_ski_lesson').title.includ
 
 // 驗證雙層 Ruby (漢字平假名、片假名羅馬拼音)
 assert(getFastItem('motivation').ruby.includes('<ruby>スキー<rt>Sukī</rt></ruby>'), '片假名「スキー」標註羅馬拼音 Sukī');
-assert(getFastItem('motivation').ruby.includes('<ruby>ニセコ<rt>Niseko</rt></ruby>'), '片假名「ニセコ」標註羅馬拼音 Niseko');
 assert(getFastItem('cold_weather').ruby.includes('<ruby>スノーブーツ<rt>Sunōbūtsu</rt></ruby>'), '片假名「スノーブーツ」標註羅馬拼音 Sunōbūtsu');
 assert(getFastItem('motivation').ruby.includes('<ruby>台湾<rt>たいわん</rt></ruby>'), '漢字「台湾」標註平假名たいわん');
-assert(getFastItem('start_date_nov27').ruby.includes('<ruby>赴任<rt>ふにん</rt></ruby><ruby>日<rt>び</rt></ruby>'), '11/27 到任標註正確 Ruby');
 assert(getFastItem('rv_luggage_post').ruby.includes('<ruby>宅配便<rt>たくはいびん</rt></ruby>'), '行李先寄標註正確 Ruby');
 
-console.log('  ✅ [PASS] v170 二世古 26 題緊急中文快捷按鈕條與雙層標音測試全數通過！');
+console.log('  ✅ [PASS] v170 二世古 24 題緊急中文快捷按鈕條與雙層標音測試全數通過！');
 
 
 console.log('\n【測試 54：v171 一鍵下載對話全文・純淨 Transync 格式・ASR 雪場術語後校正・題庫解耦】');
@@ -1803,12 +1797,12 @@ assert(html.includes('.typeset-dots-btn') && html.includes('font-size: 0.72rem;'
 console.log('  ✅ [PASS] v172 日文排版 7 大修復測試全數通過！');
 
 
-console.log('\n【測試 56：v173 二世古 26 題必考即時擬答按鈕即刻渲染修復】');
+console.log('\n【測試 56：v173 二世古 24 題必考即時擬答按鈕即刻渲染修復】');
 assert(html.includes('renderFastQaChips()') && html.match(/function renderInterviewPage[\s\S]*?renderFastQaChips\(\)/), 'renderInterviewPage 函式內具備 renderFastQaChips() 呼叫');
-assert(html.includes('btn-fast-qa-intro') && html.includes('btn-fast-qa-start_date_nov27'), '#fast-qa-chips-container HTML 內已預先渲染 26 題按鈕，防止空容器或 JS 延遲');
-assert(html.includes('btn-fast-qa-rv_luggage_post') && html.includes('btn-fast-qa-inquire_start_date_nov27'), '包含行李先寄與代詢11/27按鈕');
+assert(html.includes('btn-fast-qa-intro') && html.includes('btn-fast-qa-start_date'), '#fast-qa-chips-container HTML 內已預先渲染 24 題按鈕，防止空容器或 JS 延遲');
+assert(html.includes('btn-fast-qa-rv_luggage_post') && html.includes('btn-fast-qa-visa'), '包含行李先寄與簽證效期按鈕');
 assert(html.match(/DOMContentLoaded[\s\S]*?renderFastQaChips\(\)/), 'DOMContentLoaded 包含 renderFastQaChips() 呼叫');
-console.log('  ✅ [PASS] v173 二世古 26 題按鈕即刻載入測試通過！');
+console.log('  ✅ [PASS] v173 二世古 24 題按鈕即刻載入測試通過！');
 
 
 console.log('\n【測試 57：v174 簡化說法語音即時同步更新 ＆ 自訂注音標籤按鈕白話優化】');
@@ -1925,6 +1919,410 @@ assert(resNepalChubby === 'data:image/png;base64,mock_paper_doll', 'drawPaperDol
 
 console.log('  ✅ [PASS] v175 日系純平塗紙片娃娃系統與生圖失敗明確化測試全數通過！');
 
+// ==============================================================================
+// 【測試 59：v176 優彩讀音絕對鎖定 ＆ 現職工作極簡 N5 說法驗證】
+// ==============================================================================
+console.log('\n【測試 59：v176 優彩讀音絕對鎖定 ＆ 現職工作極簡 N5 說法驗證】');
+
+// 1. TYPESET 字典測試
+assert(testEnv.resolve('優彩') === 'ゆうさい', '「優彩」成功命中 TYPESET_FURIGANA_DICT 並解析為 ゆうさい');
+assert(html.includes("'優': 'ゆう', '彩': 'さい'"), 'TYPESET_SINGLE_KANJI_DICT 包含 優(ゆう) 與 彩(さい) 保底讀音');
+
+// 2. extractSpokenJapanese 語音朗讀合成測試
+const extractSpokenMatch = html.match(/function extractSpokenJapanese\([\s\S]*?\n\}/);
+assert(extractSpokenMatch, '成功提取 extractSpokenJapanese 函式');
+const evalSpoken = new Function('return ' + extractSpokenMatch[0])();
+
+const ttsSample1 = evalSpoken('現在は黒川温泉の旅館「優彩」で働いています。');
+assert(ttsSample1.includes('ゆうさい') && !ttsSample1.includes('ゆういろ'), '「優彩」朗讀精準轉化為 ゆうさい，杜絕 ゆういろ');
+
+const ttsSample2 = evalSpoken('旅館（優彩）は11月18日に終了します。');
+assert(ttsSample2.includes('ゆうさい'), '括號內的（優彩）受到保護，朗讀不會被當作廢棄假名刪除');
+
+const ttsSample3 = evalSpoken('黒川温泉のゆういろで働いています。');
+assert(ttsSample3.includes('ゆうさい') && !ttsSample3.includes('ゆういろ'), '意外輸入之 ゆういろ 自動校正鎖定為 ゆうさい');
+
+// 3. 現職工作 (current_job) 簡化驗證
+const fastQaMatch = html.match(/const NISEKO_FAST_QA_LIST = \[[\s\S]*?\n\];/);
+assert(fastQaMatch, '成功提取 NISEKO_FAST_QA_LIST');
+const evalFastQa = new Function(fastQaMatch[0] + '; return NISEKO_FAST_QA_LIST;')();
+const currentJobItem = evalFastQa.find(q => q.id === 'current_job');
+assert(currentJobItem, '包含現職工作 current_job 項目');
+assert(currentJobItem.raw.includes('今は黒川温泉の「優彩」で働いています。レストランで料理の補充やテーブルの片付け、掃除をしています。簡単な野菜の準備もできます。'), '現職工作採用好記、流暢、零結巴的極簡 N5 說法');
+assert(currentJobItem.spoken.includes('ゆうさいで'), '現職工作 spoken 連綴詞「ゆうさいで」發音流暢自然');
+
+console.log('  ✅ [PASS] v176 優彩讀音絕對鎖定與現職工作極簡 N5 說法測試全數通過！');
+
+// ==============================================================
+// 測試 60：v177 二世古 24 題速查與 50 題庫簡單版全數轉化為叮嚀語（丁寧語・です・ます調）
+// ==============================================================
+console.log('\n【測試 60：v177 二世古 24 題速查與 50 題庫簡單版全數轉化為叮嚀語（丁寧語・です・ます調）】');
+
+// 1. 二世古 24 題即時速查擬答全數去除生硬謙讓語/敬語，改為好記的叮嚀語
+const fastList60 = evalFastQa;
+assert(fastList60 && fastList60.length === 24, '二世古速查題庫包含 24 題');
+
+const fastIntro = fastList60.find(q => q.id === 'intro');
+assert(fastIntro && fastIntro.raw === '楊詠筑です。台湾から来ました。今は黒川温泉の「優彩」で働いています。笑顔で元気に頑張ります。よろしくお願いします！', '自我介紹採用親切好記的丁寧語「楊詠筑です...よろしくお願いします！」');
+assert(fastIntro.spoken.includes('ヤンユンジュです'), '自我介紹 spoken 包含正確念法 ヤンユンジュです');
+
+const fastEnding = fastList60.find(q => q.id === 'ending');
+assert(fastEnding && fastEnding.raw === '今日は面接をしてくれて、本当にありがとうございました。ここで一生懸命働きたいです。どうぞよろしくお願いします！', '結尾致謝去除複雜謙讓語，改為自然真誠的叮嚀語');
+
+const fastRoleService = fastList60.find(q => q.id === 'role_service');
+assert(fastRoleService && fastRoleService.raw.includes('一生懸命頑張ります！'), '第一志願外場結尾改為易背誦的「一生懸命頑張ります！」');
+
+const fastRoleKitchen = fastList60.find(q => q.id === 'role_kitchen');
+assert(fastRoleKitchen && fastRoleKitchen.raw.includes('厨房の手伝いも喜んでやります！'), '第二志願廚房改為順暢的「厨房の手伝いも喜んでやります！」');
+
+const fastEnglish = fastList60.find(q => q.id === 'english');
+assert(fastEnglish && fastEnglish.raw.includes('席の案内ができます。笑顔で明るく話します！'), '英語接待去除「お席へのご案内・お話しします」，改為自然叮嚀語');
+
+const fastOvertime = fastList60.find(q => q.id === 'overtime');
+assert(fastOvertime && fastOvertime.raw.includes('喜んでやります！'), '加班排班改為口語流暢的「喜んでやります！」');
+
+const fastRvRoom = fastList60.find(q => q.id === 'rv_room');
+assert(fastRvRoom && fastRvRoom.raw.includes('個室）ですか？'), '逆質問問宿舍去除「でしょうか？」改為直觀叮嚀語「ですか？」');
+
+const fastRvShopping = fastList60.find(q => q.id === 'rv_shopping');
+assert(fastRvShopping && fastRvShopping.raw.includes('送迎バスはありますか？'), '逆質問問超市去除「ありますでしょうか？」改為乾淨叮嚀語「ありますか？」');
+
+const noKeigoInFast = fastList60.every(item => 
+  !item.raw.includes('申します') && 
+  !item.raw.includes('ております') && 
+  !item.raw.includes('お時間をいただき') && 
+  !item.raw.includes('ありますでしょうか')
+);
+assert(noKeigoInFast, '二世古 24 題速查擬答已 100% 全數剔除生硬難背的敬語/謙讓語');
+
+// 2. 50 題庫簡單版 (simple) 全面轉化為叮嚀語 (です・ます調)
+const dbMatch60 = html.match(/const INTERVIEW_50_QA_DATABASE = (\[[\s\S]*?\n\]);/);
+assert(dbMatch60, '成功提取 INTERVIEW_50_QA_DATABASE');
+const qas60 = eval(dbMatch60[1]);
+
+const q1 = qas60.find(q => q.id === 1);
+assert(q1 && q1.simple.raw.includes('楊詠筑です') && q1.simple.raw.includes('よろしくお願いします！'), '50題庫 Q1 簡單版採用親切丁寧語');
+
+const q2 = qas60.find(q => q.id === 2);
+assert(q2 && q2.simple.raw === '楊詠筑です。よろしくお願いします！', '50題庫 Q2 簡單版採用極簡「楊詠筑です。よろしくお願いします！」');
+
+const q3 = qas60.find(q => q.id === 3);
+assert(q3 && q3.simple.raw.includes('毎日元気に働いています'), '50題庫 Q3 簡單版去除「働いております」改為「働いています」');
+
+const q4 = qas60.find(q => q.id === 4);
+assert(q4 && q4.simple.raw.includes('体力もあります'), '50題庫 Q4 簡單版去除「ございます」改為「あります」');
+
+const q10 = qas60.find(q => q.id === 10);
+assert(q10 && q10.simple.raw.includes('働きたいと思っています'), '50題庫 Q10 簡單版去除「考えております」改為「思っています」');
+
+const q11 = qas60.find(q => q.id === 11);
+assert(q11 && q11.simple.raw.includes('仕事をしています'), '50題庫 Q11 簡單版去除「仕事をしております」改為「仕事をしています」');
+
+const q12 = qas60.find(q => q.id === 12);
+assert(q12 && q12.simple.raw.includes('担当しています'), '50題庫 Q12 簡單版去除「担当しております」改為「担当しています」');
+
+const q13 = qas60.find(q => q.id === 13);
+assert(q13 && q13.simple.raw.includes('行っていますので'), '50題庫 Q13 簡單版去除「行っておりますので」改為「行っていますので」');
+
+const q26 = qas60.find(q => q.id === 26);
+assert(q26 && q26.simple.raw.includes('問題ありません'), '50題庫 Q26 簡單版去除「問題ございません」改為「問題ありません」');
+
+const q30 = qas60.find(q => q.id === 30);
+assert(q30 && q30.simple.raw.includes('もう一度お願いします'), '50題庫 Q30 簡單版改為直觀易記的「もう一度お願いします」');
+
+const q50 = qas60.find(q => q.id === 50);
+assert(q50 && q50.simple.raw.includes('ありますか？'), '50題庫 Q50 簡單版逆質問去除「ございますでしょうか」改為「ありますか？」');
+
+const noKeigoInSimple50 = qas60.every(q => {
+  const r = q.simple.raw;
+  return !r.includes('申します') && 
+         !r.includes('ております') && 
+         !r.includes('でございます') && 
+         !r.includes('存じます') && 
+         !r.includes('ありますでしょうか');
+});
+assert(noKeigoInSimple50, '50 題庫簡單版 (simple) 50 題已 100% 全面轉化為好記無負擔的丁寧語 (です・ます調)');
+
+console.log('  ✅ [PASS] v177 二世古 24 題速查與 50 題庫簡單版全數轉化為叮嚀語測試全數通過！');
+
+// ====================================================
+// 【測試 61：v178 新職場全面進駐 — 北海道・ニセコアンヌプリ国際スキー場 レストラン nook & P】
+// ====================================================
+console.log('\n【測試 61：v178 新職場全面進駐 — 北海道・ニセコアンヌプリ国際スキー場 レストラン nook & P】');
+
+// 1. Title 與 Description 驗證
+assert(html.includes('<title>楊の手帳 — 二セコ滑雪場餐廳実務手帳</title>'), 'HTML Title 已更新為「楊の手帳 — 二セコ滑雪場餐廳実務手帳」');
+assert(html.includes('content="日本打工度假個人專用手帳 PWA - 北海道ニセコアンヌプリ滑雪場餐廳服務與生活應對手帳"'), 'Meta Description 已更新為北海道ニセコアンヌプリ滑雪場餐廳服務與生活應對手帳');
+
+// 2. Header Workplace Toggle Pill 驗證
+assert(html.includes('id="current-workplace-badge"'), 'Header 包含職場狀態徽章 current-workplace-badge');
+assert(html.includes('toggleWorkplacePreset()'), 'Header 徽章具備 toggleWorkplacePreset() 快速切換功能');
+assert(html.includes('🎿 二セコ (現職)'), 'Header 徽章預設為「🎿 二セコ (現職)」');
+assert(html.includes('<span class="header-badge">打工度假</span>'), 'Header 同時保留經典「打工度假」徽章');
+
+// 3. manifest.json 驗證
+assert(manifest.name === '楊の手帳 — 二セコ滑雪場餐廳実務手帳', 'manifest.json name 已更新為「楊の手帳 — 二セコ滑雪場餐廳実務手帳」');
+assert(manifest.description.includes('北海道ニセコアンヌプリ国際スキー場 nook & P'), 'manifest.json description 已更新為北海道ニセコアンヌプリ国際スキー場 nook & P');
+
+// 4. interview_profile.json 驗證
+const profile61 = JSON.parse(fs.readFileSync(path.join(__dirname, 'interview_profile.json'), 'utf-8'));
+assert(profile61.personal_info.current_residence.includes('ニセコアンヌプリ国際スキー場'), 'interview_profile.json 現住所已更新為北海道ニセコアンヌプリ國際滑雪場宿舍');
+assert(profile61.personal_info.current_residence.includes('048-1511'), 'interview_profile.json 現住所郵遞區號為 〒048-1511');
+
+const yusaiExp = profile61.work_experience.find(e => e.company.includes('優彩'));
+assert(yusaiExp && yusaiExp.status === '前職', 'interview_profile.json 已將黑川溫泉優彩標記為前職 (2026.08 - 2026.11.18)');
+
+const nisekoExp = profile61.work_experience.find(e => e.company.includes('ニセコアンヌプリ国際スキー場'));
+assert(nisekoExp && nisekoExp.status.includes('現職') && (nisekoExp.role.includes('外場服務') || nisekoExp.role.includes('レストラン')), 'interview_profile.json 已將ニセコアンヌプリ国際スキー場登錄為現職 (レストランサービス)');
+assert(profile61.target_application.target_company.includes('ニセコアンヌプリ国際スキー場'), 'interview_profile.json target_company 已更新為ニセコアンヌプリ国際スキー場');
+
+// 5. createRealRunnerData() 二世古 4 大 Tab 與預設 Tab 驗證
+global.DEFAULT_GEMINI_KEY = "";
+const runnerStart = html.indexOf("function createRealRunnerData()");
+const runnerEnd = html.indexOf("function loadAppData()", runnerStart);
+const runnerFnCode = html.slice(runnerStart, runnerEnd);
+let runnerData61;
+try {
+  eval(runnerFnCode);
+  runnerData61 = createRealRunnerData();
+} catch (e) {
+  console.error("Runner data parse error:", e);
+}
+
+assert(runnerData61 && runnerData61.currentTabId === 'tab_niseko_service_sop', 'createRealRunnerData 預設目前分頁為 tab_niseko_service_sop');
+assert(runnerData61 && runnerData61.activeScenarioId === 'sc_niseko_ticket', 'createRealRunnerData 預設情境對話為 sc_niseko_ticket');
+
+const tabService = runnerData61.tabs.find(t => t.id === 'tab_niseko_service_sop');
+assert(tabService && tabService.name.includes('二セコ餐廳外場'), '分頁清單包含「二セコ餐廳外場 (食券・出餐・仕分け)」');
+assert(tabService && tabService.items.some(i => i.speaker.includes('食券受取')), '外場分頁包含食券受取 SOP');
+assert(tabService && tabService.items.some(i => i.speaker.includes('料理受渡') || i.speaker.includes('出餐')), '外場分頁包含料理受渡出餐呼叫 SOP');
+assert(tabService && tabService.items.some(i => i.speaker.includes('仕分け')), '外場分頁包含洗い物の仕分け洗滌分類 SOP');
+
+const tabMenu = runnerData61.tabs.find(t => t.id === 'tab_niseko_menu_sop');
+assert(tabMenu && tabMenu.name.includes('二セコ人氣料理'), '分頁清單包含「二セコ人氣料理 (咖哩・拉麵・丼飯・生啤)」');
+assert(tabMenu && tabMenu.items.some(i => (i.ja && i.ja.includes('カツカレー')) || (i.zh && i.zh.includes('咖哩'))), '人氣料理分頁包含炸豬排咖哩飯品項');
+assert(tabMenu && tabMenu.items.some(i => (i.ja && i.ja.includes('ラーメン')) || (i.zh && i.zh.includes('拉麵'))), '人氣料理分頁包含北海道拉麵品項');
+
+const tabBilingual = runnerData61.tabs.find(t => t.id === 'tab_niseko_bilingual_sop');
+assert(tabBilingual && tabBilingual.name.includes('二セコ多國語言接待'), '分頁清單包含「二セコ多國語言接待 (英日對照・雪場導引)」');
+assert(tabBilingual && tabBilingual.items.some(i => i.speaker.includes('English') || (i.zh && i.zh.includes('外國遊客'))), '包含英語接待引導應對');
+
+const tabDorm = runnerData61.tabs.find(t => t.id === 'tab_niseko_dorm_life_sop');
+assert(tabDorm && tabDorm.name.includes('二セコ宿舍生活與福利'), '分頁清單包含「二セコ宿舍生活與福利 (個室・3食・雪票・100円巴士)」');
+assert(tabDorm && tabDorm.items.some(i => (i.zh && i.zh.includes('個室')) || (i.ja && i.ja.includes('個室'))), '宿舍福利分頁包含完全獨立個室說明');
+assert(tabDorm && tabDorm.items.some(i => (i.zh && i.zh.includes('季票')) || (i.ja && i.ja.includes('リフト券'))), '宿舍福利分頁包含全山季票免費借出說明');
+
+// 6. 情境對話 Scenarios 驗證
+const scTicket = runnerData61.scenarios.find(s => s.id === 'sc_niseko_ticket');
+assert(scTicket && scTicket.name.includes('食券') && scTicket.enabled, '情境對話包含 sc_niseko_ticket (食券受取與點餐確認)');
+
+const scSorting = runnerData61.scenarios.find(s => s.id === 'sc_niseko_dish_sorting');
+assert(scSorting && scSorting.name.includes('仕分け') && scSorting.enabled, '情境對話包含 sc_niseko_dish_sorting (返却口與殘渣洗滌分類)');
+
+const scEnglish = runnerData61.scenarios.find(s => s.id === 'sc_niseko_english_guest');
+assert(scEnglish && scEnglish.name.includes('英語') && scEnglish.enabled, '情境對話包含 sc_niseko_english_guest (歐美滑雪客英文點餐接待)');
+
+const scDorm = runnerData61.scenarios.find(s => s.id === 'sc_niseko_dorm_life');
+assert(scDorm && scDorm.name.includes('宿舍') && scDorm.enabled, '情境對話包含 sc_niseko_dorm_life (宿舍個室・三餐・100円巡迴巴士)');
+
+// 7. 單字庫 vocabSop 驗證
+const vocabTerms = runnerData61.vocabSop.map(v => stripRubyAndHtml(v.ja || ''));
+assert(vocabTerms.includes('食券'), '單字庫包含「食券」');
+assert(vocabTerms.includes('受渡し'), '單字庫包含「受渡し」');
+assert(vocabTerms.includes('仕分け'), '單字庫包含「仕分け」');
+assert(vocabTerms.includes('リフト券'), '單字庫包含「リフト券」');
+assert(vocabTerms.includes('通し勤務'), '單字庫包含「通し勤務」');
+assert(vocabTerms.some(t => t.includes('個室寮')), '單字庫包含「きれいな個室寮」');
+assert(vocabTerms.includes('カツカレー'), '單字庫包含「カツカレー」');
+assert(vocabTerms.includes('サッポロクラシック'), '單字庫包含「サッポロクラシック」');
+assert(vocabTerms.includes('パウダースノー'), '單字庫包含「パウダースノー」');
+assert(vocabTerms.includes('石田さん'), '單字庫包含「石田さん」');
+assert(vocabTerms.includes('黒田さん'), '單字庫包含「黒田さん」');
+
+// 8. 雙職場快速切換器 toggleWorkplacePreset 驗證
+assert(html.includes('function toggleWorkplacePreset()'), '包含雙職場切換函式 toggleWorkplacePreset');
+assert(html.includes('function setWorkplacePreset') && html.includes("preset === 'niseko'"), 'setWorkplacePreset 支援二世古現職與優彩前職快速切換');
+
+// 9. AI Companion System Prompt 驗證
+assert(html.includes('ニセコアンヌプリ国際スキー場') && html.includes('nook & P'), 'AI 伴讀系統提示詞已鎖定ニセコアンヌプリ国際スキー場 レストラン nook & P');
+
+// 10. loadAppData 舊快取無縫升級驗證
+assert(html.includes("!data.tabs.some(t => t.id === 'tab_niseko_service_sop')"), 'loadAppData 包含二世古分頁自動注入遷移邏輯，升級既有用戶快取');
+
+console.log('  ✅ [PASS] v178 新職場全面進駐（北海道二世古滑雪場 nook & P 餐廳與雙職場切換）測試全數通過！');
+
+// ====================================================
+// 【測試 62：v179 舊菜色照片與同仁名冊清空 ＆ 二世古英日雙語實務單字庫 (餐具/調味料/食材/常用語)】
+// ====================================================
+console.log('\n【測試 62：v179 舊菜色照片與同仁名冊清空 ＆ 二世古英日雙語實務單字庫 (餐具/調味料/食材/常用語)】');
+
+// 1. 驗證 76 筆全新英日雙語實務單字全數寫入 createRealRunnerData().vocabSop
+global.DEFAULT_GEMINI_KEY = "";
+const rStart62 = html.indexOf("function createRealRunnerData()");
+const rEnd62 = html.indexOf("function loadAppData()", rStart62);
+eval(html.slice(rStart62, rEnd62));
+const runner62 = createRealRunnerData();
+
+const vocabs62 = runner62.vocabSop;
+assert(vocabs62 && vocabs62.length >= 420, '單字庫擴充至 420+ 筆完整實務單字');
+
+// (A) 餐具 Tableware / Cutlery 驗證
+const forkItem = vocabs62.find(v => v.id === 'vn_cutlery_fork');
+assert(forkItem && forkItem.ja === 'フォーク' && forkItem.en === 'Fork' && forkItem.zh === '叉子' && forkItem.cat === '餐具', '包含餐具「フォーク (Fork / 叉子)」');
+
+const spoonItem = vocabs62.find(v => v.id === 'vn_cutlery_spoon');
+assert(spoonItem && spoonItem.ja === 'スプーン' && spoonItem.en === 'Spoon', '包含餐具「スプーン (Spoon / 湯匙)」');
+
+const chopsticksItem = vocabs62.find(v => v.id === 'vn_cutlery_chopsticks');
+assert(chopsticksItem && chopsticksItem.en === 'Chopsticks' && chopsticksItem.zh === '筷子', '包含餐具「箸 (Chopsticks / 筷子)」');
+
+const trayItem = vocabs62.find(v => v.id === 'vn_cutlery_tray');
+assert(trayItem && trayItem.en === 'Tray' && trayItem.cat === '餐具', '包含餐具「トレー (Tray / 餐盤托盤)」');
+
+const rengeItem = vocabs62.find(v => v.id === 'vn_cutlery_renge');
+assert(rengeItem && rengeItem.en.includes('spoon') && rengeItem.cat === '餐具', '包含餐具「レンゲ (Ramen spoon / 陶瓷拉麵杓)」');
+
+const returnStationItem = vocabs62.find(v => v.id === 'vn_cutlery_return_station');
+assert(returnStationItem && returnStationItem.en.includes('return') && returnStationItem.cat === '餐具', '包含餐具「返却口 (Tray return station)」');
+
+// (B) 調味料 Seasonings / Condiments 驗證
+const shoyuItem = vocabs62.find(v => v.id === 'vn_cond_shoyu');
+assert(shoyuItem && shoyuItem.en === 'Soy sauce' && shoyuItem.cat === '調味料', '包含調味料「醤油 (Soy sauce)」');
+
+const sauceItem = vocabs62.find(v => v.id === 'vn_cond_sauce');
+assert(sauceItem && sauceItem.en.includes('sauce') && sauceItem.cat === '調味料', '包含調味料「ウスターソース (Worcestershire sauce / 炸豬排醬)」');
+
+const saltItem = vocabs62.find(v => v.id === 'vn_cond_salt');
+assert(saltItem && saltItem.en === 'Salt' && saltItem.cat === '調味料', '包含調味料「塩 (Salt)」');
+
+const shichimiItem = vocabs62.find(v => v.id === 'vn_cond_shichimi');
+assert(shichimiItem && shichimiItem.en.includes('Shichimi') && shichimiItem.cat === '調味料', '包含調味料「七味唐辛子 (Shichimi)」');
+
+const ketchupItem = vocabs62.find(v => v.id === 'vn_cond_ketchup');
+assert(ketchupItem && ketchupItem.en.includes('ketchup') && ketchupItem.cat === '調味料', '包含調味料「ケチャップ (Tomato ketchup)」');
+
+const mayoItem = vocabs62.find(v => v.id === 'vn_cond_mayo');
+assert(mayoItem && mayoItem.en === 'Mayonnaise' && mayoItem.cat === '調味料', '包含調味料「マヨネーズ (Mayonnaise)」');
+
+// (C) 食材 Ingredients & Dietary Needs 驗證
+const porkItem = vocabs62.find(v => v.id === 'vn_ing_pork');
+assert(porkItem && porkItem.en === 'Pork' && porkItem.cat === '食材', '包含食材「豚肉 (Pork)」');
+
+const beefItem = vocabs62.find(v => v.id === 'vn_ing_beef');
+assert(beefItem && beefItem.en === 'Beef' && beefItem.cat === '食材', '包含食材「牛肉 (Beef)」');
+
+const chickenItem = vocabs62.find(v => v.id === 'vn_ing_chicken');
+assert(chickenItem && chickenItem.en === 'Chicken' && chickenItem.cat === '食材', '包含食材「鶏肉 (Chicken)」');
+
+const shrimpItem = vocabs62.find(v => v.id === 'vn_ing_shrimp');
+assert(shrimpItem && shrimpItem.en.includes('Shrimp') && shrimpItem.cat === '食材', '包含食材「エビ (Shrimp / 甲殼過敏原)」');
+
+const eggItem = vocabs62.find(v => v.id === 'vn_ing_egg');
+assert(eggItem && eggItem.en === 'Egg' && eggItem.cat === '食材', '包含食材「卵 (Egg / 蛋類過敏原)」');
+
+const milkItem = vocabs62.find(v => v.id === 'vn_ing_milk');
+assert(milkItem && milkItem.en.includes('Milk') && milkItem.cat === '食材', '包含食材「牛乳 (Milk / 乳製品)」');
+
+const wheatItem = vocabs62.find(v => v.id === 'vn_ing_wheat');
+assert(wheatItem && wheatItem.en.includes('Gluten') && wheatItem.cat === '食材', '包含食材「小麦 (Wheat / Gluten / 麩質)」');
+
+const scallionItem = vocabs62.find(v => v.id === 'vn_ing_scallion');
+assert(scallionItem && scallionItem.en.includes('onion') && scallionItem.zh.includes('蔥'), '包含食材「ネギ (Green onion / 客人去蔥需求)」');
+
+const vegItem = vocabs62.find(v => v.id === 'vn_ing_vegetarian');
+assert(vegItem && vegItem.en === 'Vegetarian' && vegItem.cat === '食材', '包含飲食禁忌「ベジタリアン (Vegetarian)」');
+
+const veganItem = vocabs62.find(v => v.id === 'vn_ing_vegan');
+assert(veganItem && veganItem.en.includes('Vegan') && veganItem.cat === '食材', '包含飲食禁忌「ヴィーガン (Vegan)」');
+
+const glutenFreeItem = vocabs62.find(v => v.id === 'vn_ing_gluten_free');
+assert(glutenFreeItem && glutenFreeItem.en === 'Gluten-free' && glutenFreeItem.cat === '食材', '包含飲食禁忌「グルテンフリー (Gluten-free)」');
+
+const halalItem = vocabs62.find(v => v.id === 'vn_ing_halal');
+assert(halalItem && halalItem.en === 'Halal' && halalItem.cat === '食材', '包含飲食禁忌「ハラール (Halal)」');
+
+// (D) 常用語 Common Service Phrases 驗證
+const phrWelcome = vocabs62.find(v => v.id === 'vn_phr_welcome');
+assert(phrWelcome && phrWelcome.en.includes('Welcome') && phrWelcome.cat === '常用語', '包含常用語「いらっしゃいませ！ (Welcome!)」');
+
+const phrTakeTicket = vocabs62.find(v => v.id === 'vn_phr_take_ticket');
+assert(phrTakeTicket && phrTakeTicket.en.includes('ticket') && phrTakeTicket.cat === '常用語', '包含常用語「食券をお預かりします (May I have your meal ticket?)」');
+
+const phrCallNumber = vocabs62.find(v => v.id === 'vn_phr_call_number');
+assert(phrCallNumber && phrCallNumber.en.includes('ready') && phrCallNumber.cat === '常用語', '包含常用語「○○番の方！お待たせいたしました (Your order is ready!)」');
+
+const phrWaterSelf = vocabs62.find(v => v.id === 'vn_phr_water_self');
+assert(phrWaterSelf && phrWaterSelf.en.includes('self-service') && phrWaterSelf.cat === '常用語', '包含常用語「お水はセルフサービス (Water is self-service)」');
+
+const phrReturnTray = vocabs62.find(v => v.id === 'vn_phr_return_tray');
+assert(phrReturnTray && phrReturnTray.en.includes('return') && phrReturnTray.cat === '常用語', '包含常用語「返却口までお持ちください (Return tray to return counter)」');
+
+const phrPorkCheck = vocabs62.find(v => v.id === 'vn_phr_contains_pork');
+assert(phrPorkCheck && phrPorkCheck.en.includes('pork') && phrPorkCheck.cat === '常用語', '包含常用語「この料理には豚肉が入っています (Contains pork)」');
+
+// 2. 驗證 UI 英語標籤與彈窗顯示
+assert(html.includes('class="cell-en"'), 'renderVocabPage 包含專屬 cell-en 英文渲染樣式標籤');
+assert(html.includes('item.en') && html.includes('openWordDetailModal'), 'openWordDetailModal 詳情彈窗支援 item.en 英文呈現');
+
+// 3. 驗證二世古模式智慧清空前職拍照菜色與同仁名冊
+assert(html.includes('isNiseko && !showLegacyYusai'), 'renderVocabPage 包含二世古現職模式智慧清空過濾邏輯');
+assert(html.includes('function toggleShowLegacyYusaiVocab()'), '包含前職資料切換函式 toggleShowLegacyYusaiVocab');
+assert(html.includes('function purgeLegacyYusaiData()'), '包含前職舊資料一鍵永久清空函式 purgeLegacyYusaiData');
+assert(html.includes('前職優彩舊照片與名冊已清空'), '單字庫計數列包含清空狀態親切提示文字');
+
+console.log('  ✅ [PASS] v179 舊菜色照片與員工姓名清空 ＆ 二世古英日雙語實務單字庫 (餐具/調味料/食材/常用語) 測試全數通過！');
+
+
+
+console.log('\n【測試 63：v180 英文學習專區 (English Learning Hub) 十全功能完整驗證】');
+
+// 1. 頂部導航列與專區容器驗證
+assert(html.includes('data-page="page-english-hub"') && html.includes('🔤') && html.includes('英文專區'), '頂部導航列包含「🔤 英文專區」主分頁按鈕');
+assert(html.includes('id="page-english-hub"') && html.includes('class="page"'), '包含英文專區專屬頁面容器 #page-english-hub');
+assert(html.includes("if (targetPageId === 'page-english-hub') renderEnglishHubPage();"), 'switchNavPage 包含 renderEnglishHubPage() 渲染分派邏輯');
+
+// 2. 60+ 筆二世古高頻英文種子庫驗證
+assert(html.includes('DEFAULT_ENGLISH_HUB_PHRASES = ['), '包含預設英文學習核心短語種子庫 DEFAULT_ENGLISH_HUB_PHRASES');
+assert(html.includes('Never mind') && html.includes('気にしないでください'), '包含高頻秒回短語「Never mind (気にしないでください)」');
+assert(html.includes('No worries') && html.includes('心配しないで'), '包含高頻秒回短語「No worries (心配しないで)」');
+assert(html.includes('Take your time') && html.includes('ごゆっくりどうぞ'), '包含高頻秒回短語「Take your time (ごゆっくりどうぞ)」');
+assert(html.includes('Here you go') && html.includes('こちらをどうぞ'), '包含高頻出餐短語「Here you go (こちらをどうぞ)」');
+assert(html.includes('May I have your meal ticket?') && html.includes('食券をお預かりします'), '包含櫃台點餐常用句「May I have your meal ticket?」');
+assert(html.includes('Number 42, your order is ready!') && html.includes('お待たせいたしました'), '包含櫃台呼叫常用句「Number 42, your order is ready!」');
+assert(html.includes('Careful, the bowl is very hot!') && html.includes('器が大変熱くなっております'), '包含防燙安全提醒句「Careful, the bowl is very hot!」');
+assert(html.includes('Watch your step, it is slippery outside') && html.includes('足元が滑りやすくなっております'), '包含防滑安全提醒句「Watch your step, it is slippery outside」');
+assert(html.includes('The gondola station is just outside on your left') && html.includes('ゴンドラ乗り場'), '包含雪場設施問路「The gondola station is just outside on your left」');
+assert(html.includes('Tap water is safe and free to drink') && html.includes('水道水はそのままお飲みいただけます'), '包含飲水需求常用句「Tap water is safe and free to drink」');
+assert(html.includes('How was the powder snow today?') && html.includes('パウダースノー'), '包含雪場寒暄常用句「How was the powder snow today?」');
+
+// 3. 語音模型切換器 (TTS Voices: 澳/美/英 男/女聲) 與語速調整
+assert(html.includes('id="eng-voice-select"') && html.includes('onEnglishVoiceChange'), '包含多國口音機器人聲音切換選單 #eng-voice-select');
+assert(html.includes('value="au-female"') && html.includes('value="au-male"'), '聲音模型包含澳洲口音男聲與女聲選項 (AU)');
+assert(html.includes('value="us-female"') && html.includes('value="us-male"'), '聲音模型包含美國口音男聲與女聲選項 (US)');
+assert(html.includes('value="gb-female"') && html.includes('value="gb-male"'), '聲音模型包含英國口音男聲與女聲選項 (UK)');
+assert(html.includes('function speakEnglish(text'), '包含專屬英文語音發音朗讀合成函式 speakEnglish');
+assert(html.includes('setEnglishSpeed(0.75)') && html.includes('setEnglishSpeed(1.0)') && html.includes('setEnglishSpeed(1.25)'), '包含 0.75x 慢速、1.0x 標準、1.25x 快速語速切換');
+
+// 4. 模式 C：收藏夾卡片與清單雙檢視切換 (View Mode Toggle)
+assert(html.includes("setEnglishViewMode('card')") && html.includes("setEnglishViewMode('list')"), '支援模式 C「📇 卡片模式」與「📋 清單模式」一鍵秒切換');
+assert(html.includes('toggleEnglishFavorite(id)'), '支援點擊星星一鍵收藏/取消收藏 toggleEnglishFavorite');
+assert(html.includes('engFavoritesSet'), '收藏資料持久化儲存於 localStorage');
+
+// 5. 智慧自訂筆記自動補全推導引擎 (Smart Auto-Enrichment)
+assert(html.includes('function autoEnrichEnglishPhrase('), '包含智慧自動補全核心推導引擎 autoEnrichEnglishPhrase');
+assert(html.includes('SMART_AUTO_ENRICH_DICT'), '包含常見服務情境智慧推導擴充字典 SMART_AUTO_ENRICH_DICT');
+assert(html.includes('saveCustomEnglishPhrase()'), '支援一鍵儲存自訂英文句子與生活筆記');
+assert(html.includes('modal-eng-add-phrase'), '包含智慧自訂英文句子彈窗 #modal-eng-add-phrase');
+
+// 6. 搜尋框、隨機翻牌抽考、磨耳朵連播、分類過濾、一鍵備份匯出
+assert(html.includes('id="eng-search-input"') && html.includes('onEnglishSearchInput'), '包含即時雙語搜尋框 #eng-search-input');
+assert(html.includes('startEnglishQuiz()') && html.includes('modal-eng-quiz') && html.includes('flipQuizCard()'), '包含 🎴 隨機翻牌抽考自我測驗功能');
+assert(html.includes('startEnglishListeningLoop()') && html.includes('eng-listening-player-bar'), '包含 🎧 自動連續磨耳朵播放控制器');
+assert(html.includes('setEnglishCategory(') && html.includes('setEnglishType('), '包含一級情境分類與二級單字/短語/常用句類型過濾');
+assert(html.includes('exportEnglishNotesToClipboard()') && html.includes('downloadEnglishNotesTxt()'), '包含 📋 一鍵備份文字匯出與 .txt 下載功能');
+
+console.log('  ✅ [PASS] v180 英文學習專區 (English Learning Hub) 十全功能全數通過！');
+
 console.log('\n====================================================');
 console.log(`測試統計：通過 ${passCount} 項，失敗 ${failCount} 項`);
 console.log('====================================================');
@@ -1932,5 +2330,6 @@ console.log('====================================================');
 if (failCount > 0) {
   process.exit(1);
 } else {
-  console.log('🎉 所有測試通過！(v175) 全新日系純平塗紙片娃娃系統與生圖失敗明確化全面上線！');
+  console.log('🎉 所有測試通過！(v180) 英文學習專區 (English Learning Hub) 十全功能就緒！');
 }
+

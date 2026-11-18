@@ -1,7 +1,7 @@
 {
-  "name": "楊の手帳 — 優彩傳菜人員実務手帳",
+  "name": "楊の手帳 — 二セコ滑雪場餐廳実務手帳",
   "short_name": "楊の手帳",
-  "description": "熊本優彩溫泉旅館傳菜人員實務手帳 PWA",
+  "description": "北海道ニセコアンヌプリ国際スキー場 nook & P 餐廳服務與生活實務手帳 PWA",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#F2E9DA",
@@ -26,7 +26,9 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "utilities"],
+  "categories": [
+    "education",
+    "utilities"
+  ],
   "lang": "zh-TW"
 }
-
